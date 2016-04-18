@@ -32,13 +32,14 @@
 
         private BencodedDictionary DecodeDictionary(BencodedDictionary result)
         {
-            position++;
+            int start = position++;
 
             while (data[position] != 'e')
             {
                 result.Add(DecodeText(), Decode());
             }
 
+            result.SetSource(data, start, position);
             position++;
 
             return result;

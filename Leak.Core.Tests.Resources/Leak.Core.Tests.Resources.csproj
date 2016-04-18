@@ -37,10 +37,10 @@
     <Compile Include="Files.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\ubuntu-15.10-desktop-amd64.iso.torrent" />
+    <EmbeddedResource Include="Data\e046bca3bc837053d1609ef33d623ee5c5af7300.torrent" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\e046bca3bc837053d1609ef33d623ee5c5af7300.torrent" />
+    <EmbeddedResource Include="Data\3f19b149f53a50e14fc0b79926a391896eabab6f.torrent" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,7 +11,7 @@ namespace Leak.Core.Tests.Resources
 
         static Files()
         {
-            Ubuntu = GetFile("ubuntu-15.10-desktop-amd64.iso.torrent");
+            Ubuntu = GetFile("3f19b149f53a50e14fc0b79926a391896eabab6f.torrent");
             NeuralNetworks = GetFile("e046bca3bc837053d1609ef33d623ee5c5af7300.torrent");
         }
 

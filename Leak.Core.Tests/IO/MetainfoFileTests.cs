@@ -11,16 +11,17 @@ namespace Leak.Core.Tests.IO
     {
         [Test]
         [TestCaseSource(typeof(MetainfoFileFixture), "Trackers")]
-        public void ShouldGetAllTrackers(MetainfoFileTrackerCase source)
+        public void ShouldHaveSomeTrackers(MetainfoFileTrackerCase source)
         {
             MetainfoFile file = new MetainfoFile(source.Torrent);
+            IEnumerable<string> trackers = file.Trackers.Select(x => x.Uri);
 
-            source.Trackers.Should().BeSubsetOf(file.Trackers);
+            source.Trackers.Should().BeSubsetOf(trackers);
         }
 
         [Test]
         [TestCaseSource(typeof(MetainfoFileFixture), "Names")]
-        public void ShouldGetAllNames(MetainfoFileNameCase source)
+        public void ShouldHaveSomeNames(MetainfoFileNameCase source)
         {
             MetainfoFile file = new MetainfoFile(source.Torrent);
             IEnumerable<string> names = file.Entries.Select(x => x.Name);
@@ -35,6 +36,15 @@ namespace Leak.Core.Tests.IO
             MetainfoFile file = new MetainfoFile(source.Torrent);
 
             file.Entries.Should().HaveCount(source.Count);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(MetainfoFileFixture), "Hashes")]
+        public void ShouldHaveRightHashes(MetainfoFileHashCase source)
+        {
+            MetainfoFile file = new MetainfoFile(source.Torrent);
+
+            file.Hash.Should().Equal(source.Hash);
         }
     }
 }

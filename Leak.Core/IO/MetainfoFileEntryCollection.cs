@@ -15,7 +15,7 @@ namespace Leak.Core.IO
 
         public IEnumerator<MetainfoFileEntry> GetEnumerator()
         {
-            return data.Find("files", files => GetEnumerator(files));
+            return data.Find("files", GetEnumerator);
         }
 
         private IEnumerator<MetainfoFileEntry> GetEnumerator(BencodedValue files)

@@ -50,6 +50,7 @@
     <Compile Include="Encoding\BencoderFixture.cs" />
     <Compile Include="Encoding\BencoderTests.cs" />
     <Compile Include="IO\MetainfoFileCountCase.cs" />
+    <Compile Include="IO\MetainfoFileHashCase.cs" />
     <Compile Include="IO\MetainfoFileNameCase.cs" />
     <Compile Include="IO\MetainfoFileTests.cs" />
     <Compile Include="IO\MetainfoFileFixture.cs" />

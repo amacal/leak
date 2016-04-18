@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Encoding;
+using System.Security.Cryptography;
 
 namespace Leak.Core.IO
 {
@@ -11,17 +12,36 @@ namespace Leak.Core.IO
             this.data = Bencoder.Decode(data);
         }
 
-        public string[] Trackers
+        public byte[] Hash
         {
             get
             {
-                return new[] { data.Find("announce", node => node.ToText()) };
+                return data.Find("info", GetHash);
+            }
+        }
+
+        public MetainfoFileTrackerCollection Trackers
+        {
+            get
+            {
+                return new MetainfoFileTrackerCollection(data);
             }
         }
 
         public MetainfoFileEntryCollection Entries
         {
-            get { return new MetainfoFileEntryCollection(data.Find("info", x => x)); }
+            get
+            {
+                return data.Find("info", x => new MetainfoFileEntryCollection(x));
+            }
+        }
+
+        private byte[] GetHash(BencodedValue value)
+        {
+            using (HashAlgorithm algorithm = SHA1.Create())
+            {
+                return algorithm.ComputeHash(value.ToHex());
+            }
         }
     }
 }

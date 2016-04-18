@@ -44,6 +44,9 @@
     <Compile Include="IO\MetainfoFile.cs" />
     <Compile Include="IO\MetainfoFileEntry.cs" />
     <Compile Include="IO\MetainfoFileEntryCollection.cs" />
+    <Compile Include="IO\MetainfoFileTracker.cs" />
+    <Compile Include="IO\MetainfoFileTrackerCollection.cs" />
+    <Compile Include="IO\MetainfoFileTrackerProtocol.cs" />
     <Compile Include="Net\TrackerClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
