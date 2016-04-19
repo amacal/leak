@@ -94,15 +94,19 @@
                 position = position + 1;
             }
 
-            if (position > 0)
+            int start = position + 1;
+
+            if (length > 0)
             {
                 value = System.Text.Encoding.ASCII.GetString(data, position + 1, length);
                 position = position + length;
             }
 
+            BencodedText result = new BencodedText(value);
+            result.SetSource(data, start, position);
             position++;
 
-            return new BencodedText(value);
+            return result;
         }
     }
 }

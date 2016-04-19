@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C5760143-0CFC-4638-AF74-069D1A8985D6}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{CACD0BC5-0483-400D-8A0E-24648693C26F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Core</RootNamespace>
-    <AssemblyName>Leak.Core</AssemblyName>
+    <RootNamespace>Leak</RootNamespace>
+    <AssemblyName>Leak</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,26 +35,18 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Encoding\BencodedArray.cs" />
-    <Compile Include="Encoding\BencodedDictionary.cs" />
-    <Compile Include="Encoding\BencodedNumber.cs" />
-    <Compile Include="Encoding\BencodedText.cs" />
-    <Compile Include="Encoding\BencodedValue.cs" />
-    <Compile Include="Encoding\Bencoder.cs" />
-    <Compile Include="Encoding\BencoderExtensions.cs" />
-    <Compile Include="Encoding\BencoderDecoder.cs" />
-    <Compile Include="IO\MetainfoFile.cs" />
-    <Compile Include="IO\MetainfoFileEntry.cs" />
-    <Compile Include="IO\MetainfoFileEntryCollection.cs" />
-    <Compile Include="IO\MetainfoFileTracker.cs" />
-    <Compile Include="IO\MetainfoFileTrackerCollection.cs" />
-    <Compile Include="IO\MetainfoFileTrackerProtocol.cs" />
-    <Compile Include="Net\PeerClient.cs" />
-    <Compile Include="Net\TrackerClient.cs" />
-    <Compile Include="Net\TrackerResonse.cs" />
-    <Compile Include="Net\TrackerResponsePeer.cs" />
-    <Compile Include="Net\TrackerResponsePeerCollection.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Core.Tests.Resources\Leak.Core.Tests.Resources.csproj">
+      <Project>{e5245772-b33b-41e2-ba59-11e8269b2c2b}</Project>
+      <Name>Leak.Core.Tests.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Core\Leak.Core.csproj">
+      <Project>{c5760143-0cfc-4638-af74-069d1a8985d6}</Project>
+      <Name>Leak.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
