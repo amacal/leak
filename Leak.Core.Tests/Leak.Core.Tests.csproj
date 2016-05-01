@@ -52,9 +52,13 @@
     <Compile Include="IO\MetainfoFileCountCase.cs" />
     <Compile Include="IO\MetainfoFileHashCase.cs" />
     <Compile Include="IO\MetainfoFileNameCase.cs" />
+    <Compile Include="IO\MetainfoFilePieceCase.cs" />
     <Compile Include="IO\MetainfoFileTests.cs" />
     <Compile Include="IO\MetainfoFileFixture.cs" />
     <Compile Include="IO\MetainfoFileTrackerCase.cs" />
+    <Compile Include="IO\TorrentDirectoryTests.cs" />
+    <Compile Include="Net\PeerCryptographyTests.cs" />
+    <Compile Include="Net\PeerNegotiatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

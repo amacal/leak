@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Encoding\BencodedArray.cs" />
@@ -42,12 +43,50 @@
     <Compile Include="Encoding\BencoderExtensions.cs" />
     <Compile Include="Encoding\BencoderDecoder.cs" />
     <Compile Include="IO\MetainfoFile.cs" />
-    <Compile Include="IO\MetainfoFileEntry.cs" />
-    <Compile Include="IO\MetainfoFileEntryCollection.cs" />
-    <Compile Include="IO\MetainfoFileTracker.cs" />
-    <Compile Include="IO\MetainfoFileTrackerCollection.cs" />
-    <Compile Include="IO\MetainfoFileTrackerProtocol.cs" />
+    <Compile Include="IO\MetainfoEntry.cs" />
+    <Compile Include="IO\MetainfoEntryCollection.cs" />
+    <Compile Include="IO\MetainfoPiece.cs" />
+    <Compile Include="IO\MetainfoPieceCollection.cs" />
+    <Compile Include="IO\MetainfoTracker.cs" />
+    <Compile Include="IO\MetainfoTrackerCollection.cs" />
+    <Compile Include="IO\MetainfoTrackerProtocol.cs" />
+    <Compile Include="IO\TorrentBlock.cs" />
+    <Compile Include="IO\TorrentBlockBitfield.cs" />
+    <Compile Include="IO\TorrentBlockCollection.cs" />
+    <Compile Include="IO\TorrentDirectory.cs" />
+    <Compile Include="IO\TorrentFile.cs" />
+    <Compile Include="IO\TorrentFileCollection.cs" />
+    <Compile Include="IO\TorrentPiece.cs" />
+    <Compile Include="IO\TorrentPieceCollection.cs" />
+    <Compile Include="IO\TorrentPieceQueue.cs" />
+    <Compile Include="IO\TorrentPieceView.cs" />
+    <Compile Include="IO\TorrentRepository.cs" />
+    <Compile Include="Net\Peer.cs" />
+    <Compile Include="Net\PeerBitfield.cs" />
+    <Compile Include="Net\PeerBuffer.cs" />
+    <Compile Include="Net\PeerCallbackBase.cs" />
+    <Compile Include="Net\PeerChannelBase.cs" />
+    <Compile Include="Net\PeerNegotiatorAware.cs" />
     <Compile Include="Net\PeerClient.cs" />
+    <Compile Include="Net\PeerCallback.cs" />
+    <Compile Include="Net\PeerCollection.cs" />
+    <Compile Include="Net\PeerChannel.cs" />
+    <Compile Include="Net\PeerCredentials.cs" />
+    <Compile Include="Net\PeerCryptography.cs" />
+    <Compile Include="Net\PeerDescription.cs" />
+    <Compile Include="Net\PeerEndpoint.cs" />
+    <Compile Include="Net\PeerHandshake.cs" />
+    <Compile Include="Net\PeerHave.cs" />
+    <Compile Include="Net\PeerInterested.cs" />
+    <Compile Include="Net\PeerListener.cs" />
+    <Compile Include="Net\PeerMessage.cs" />
+    <Compile Include="Net\PeerMessageFactory.cs" />
+    <Compile Include="Net\PeerNegotiator.cs" />
+    <Compile Include="Net\PeerPiece.cs" />
+    <Compile Include="Net\PeerRequest.cs" />
+    <Compile Include="Net\PeerSocket.cs" />
+    <Compile Include="Net\PeerStatus.cs" />
+    <Compile Include="Net\PeerUnchoke.cs" />
     <Compile Include="Net\TrackerClient.cs" />
     <Compile Include="Net\TrackerResonse.cs" />
     <Compile Include="Net\TrackerResponsePeer.cs" />

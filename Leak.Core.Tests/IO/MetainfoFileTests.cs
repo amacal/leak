@@ -46,5 +46,16 @@ namespace Leak.Core.Tests.IO
 
             file.Hash.Should().Equal(source.Hash);
         }
+
+        [Test]
+        [TestCaseSource(typeof(MetainfoFileFixture), "Pieces")]
+        public void ShouldHaveRightPieces(MetainfoFilePieceCase source)
+        {
+            MetainfoFile file = new MetainfoFile(source.Torrent);
+
+            file.Pieces.Size.Should().Equals(source.Size);
+            file.Pieces.Count.Should().Be(source.Count);
+            file.Pieces.Should().HaveCount(source.Count);
+        }
     }
 }

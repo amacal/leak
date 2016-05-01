@@ -26,6 +26,11 @@ namespace Leak.Core.Encoding
             return AllTexts(value).FirstOrDefault();
         }
 
+        public static long ToNumber(this BencodedValue value)
+        {
+            return ((BencodedNumber)value).Value;
+        }
+
         public static BencodedValue[] AllItems(this BencodedValue value)
         {
             return AllItems(new List<BencodedValue>(), value as BencodedArray).ToArray();

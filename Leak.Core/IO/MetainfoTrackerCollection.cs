@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 namespace Leak.Core.IO
 {
-    public class MetainfoFileTrackerCollection : IEnumerable<MetainfoFileTracker>
+    public class MetainfoTrackerCollection : IEnumerable<MetainfoTracker>
     {
         private readonly BencodedValue data;
 
-        public MetainfoFileTrackerCollection(BencodedValue data)
+        public MetainfoTrackerCollection(BencodedValue data)
         {
             this.data = data;
         }
 
-        public IEnumerator<MetainfoFileTracker> GetEnumerator()
+        public IEnumerator<MetainfoTracker> GetEnumerator()
         {
             ICollection<string> result = new HashSet<string>();
 
@@ -42,7 +42,7 @@ namespace Leak.Core.IO
 
             foreach (string uri in result)
             {
-                yield return new MetainfoFileTracker(uri);
+                yield return new MetainfoTracker(uri);
             }
         }
 

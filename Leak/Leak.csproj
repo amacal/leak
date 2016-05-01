@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,10 +40,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Core.Tests.Resources\Leak.Core.Tests.Resources.csproj">
-      <Project>{e5245772-b33b-41e2-ba59-11e8269b2c2b}</Project>
-      <Name>Leak.Core.Tests.Resources</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Core\Leak.Core.csproj">
       <Project>{c5760143-0cfc-4638-af74-069d1a8985d6}</Project>
       <Name>Leak.Core</Name>

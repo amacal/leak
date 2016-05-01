@@ -19,7 +19,10 @@ namespace Leak.Core.Net
 
             for (int i = 0; i < bytes.Length; i += 6)
             {
-                yield return new TrackerResponsePeer(bytes, i);
+                if (bytes[i + 4] > 0 && bytes[i + 5] > 0)
+                {
+                    yield return new TrackerResponsePeer(bytes, i);
+                }
             }
         }
 

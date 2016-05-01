@@ -4,26 +4,34 @@ using System.IO;
 
 namespace Leak.Core.IO
 {
-    public class MetainfoFileEntry
+    public class MetainfoEntry
     {
         private readonly BencodedValue data;
 
-        public MetainfoFileEntry(BencodedValue data)
+        public MetainfoEntry(BencodedValue data)
         {
             this.data = data;
         }
 
         public string Name
         {
-            get { return GetInSingleFileMode() ?? GetInMultipleFileMode(); }
+            get { return GetNameInSingleFileMode() ?? GetNameInMultipleFileMode(); }
         }
 
-        private string GetInSingleFileMode()
+        public long Size
+        {
+            get
+            {
+                return data.Find("length", x => x.ToNumber());
+            }
+        }
+
+        private string GetNameInSingleFileMode()
         {
             return data.Find("name", x => x.ToText());
         }
 
-        private string GetInMultipleFileMode()
+        private string GetNameInMultipleFileMode()
         {
             return data.Find("path", path =>
             {

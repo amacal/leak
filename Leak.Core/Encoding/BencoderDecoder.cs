@@ -63,7 +63,7 @@
         {
             position++;
 
-            int value = 0;
+            long value = 0;
             bool minus = false;
 
             if (data[position] == '-')
@@ -78,9 +78,14 @@
                 position = position + 1;
             }
 
+            if (minus == true)
+            {
+                value = -value;
+            }
+
             position++;
 
-            return new BencodedNumber();
+            return new BencodedNumber(value);
         }
 
         private BencodedText DecodeText()

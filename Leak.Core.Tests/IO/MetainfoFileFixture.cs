@@ -86,6 +86,25 @@ namespace Leak.Core.Tests.IO
             };
         }
 
+        public static IEnumerable<MetainfoFilePieceCase> Pieces()
+        {
+            yield return new MetainfoFilePieceCase
+            {
+                Name = "ubuntu",
+                Torrent = Files.Ubuntu,
+                Size = 512 * 1024,
+                Count = 2248
+            };
+
+            yield return new MetainfoFilePieceCase
+            {
+                Name = "neural-networks",
+                Torrent = Files.NeuralNetworks,
+                Size = 1024 * 1024,
+                Count = 6295
+            };
+        }
+
         private static byte[] ToBytes(string value)
         {
             byte[] result = new byte[value.Length / 2];

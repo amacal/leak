@@ -4,31 +4,31 @@ using System.Collections.Generic;
 
 namespace Leak.Core.IO
 {
-    public class MetainfoFileEntryCollection : IEnumerable<MetainfoFileEntry>
+    public class MetainfoEntryCollection : IEnumerable<MetainfoEntry>
     {
         private readonly BencodedValue data;
 
-        public MetainfoFileEntryCollection(BencodedValue data)
+        public MetainfoEntryCollection(BencodedValue data)
         {
             this.data = data;
         }
 
-        public IEnumerator<MetainfoFileEntry> GetEnumerator()
+        public IEnumerator<MetainfoEntry> GetEnumerator()
         {
             return data.Find("files", GetEnumerator);
         }
 
-        private IEnumerator<MetainfoFileEntry> GetEnumerator(BencodedValue files)
+        private IEnumerator<MetainfoEntry> GetEnumerator(BencodedValue files)
         {
             if (files == null)
             {
-                yield return new MetainfoFileEntry(data);
+                yield return new MetainfoEntry(data);
                 yield break;
             }
 
             foreach (BencodedValue value in files.AllItems())
             {
-                yield return new MetainfoFileEntry(value);
+                yield return new MetainfoEntry(value);
             }
         }
 

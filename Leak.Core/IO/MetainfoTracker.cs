@@ -1,10 +1,10 @@
 ﻿namespace Leak.Core.IO
 {
-    public class MetainfoFileTracker
+    public class MetainfoTracker
     {
         private readonly string uri;
 
-        public MetainfoFileTracker(string uri)
+        public MetainfoTracker(string uri)
         {
             this.uri = uri;
         }
@@ -14,20 +14,20 @@
             get { return uri; }
         }
 
-        public MetainfoFileTrackerProtocol Protocol
+        public MetainfoTrackerProtocol Protocol
         {
             get
             {
                 if (uri.StartsWith("udp://"))
-                    return MetainfoFileTrackerProtocol.Udp;
+                    return MetainfoTrackerProtocol.Udp;
 
                 if (uri.StartsWith("http://"))
-                    return MetainfoFileTrackerProtocol.Http;
+                    return MetainfoTrackerProtocol.Http;
 
                 if (uri.StartsWith("https://"))
-                    return MetainfoFileTrackerProtocol.Https;
+                    return MetainfoTrackerProtocol.Https;
 
-                return MetainfoFileTrackerProtocol.Unknown;
+                return MetainfoTrackerProtocol.Unknown;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Leak.Core.IO
 {
-    public enum MetainfoFileTrackerProtocol
+    public enum MetainfoTrackerProtocol
     {
         Http,
         Https,

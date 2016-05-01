@@ -20,19 +20,27 @@ namespace Leak.Core.IO
             }
         }
 
-        public MetainfoFileTrackerCollection Trackers
+        public MetainfoTrackerCollection Trackers
         {
             get
             {
-                return new MetainfoFileTrackerCollection(data);
+                return new MetainfoTrackerCollection(data);
             }
         }
 
-        public MetainfoFileEntryCollection Entries
+        public MetainfoEntryCollection Entries
         {
             get
             {
-                return data.Find("info", x => new MetainfoFileEntryCollection(x));
+                return data.Find("info", x => new MetainfoEntryCollection(x));
+            }
+        }
+
+        public MetainfoPieceCollection Pieces
+        {
+            get
+            {
+                return data.Find("info", x => new MetainfoPieceCollection(x));
             }
         }
 
