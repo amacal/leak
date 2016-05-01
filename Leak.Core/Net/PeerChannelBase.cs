@@ -32,8 +32,6 @@ namespace Leak.Core.Net
                             id = message[4];
                         }
 
-                        //Console.WriteLine($"received; message={id}; length={length}; buffer={message.Length}");
-
                         switch (id)
                         {
                             case 0:
@@ -74,7 +72,6 @@ namespace Leak.Core.Net
             byte[] bytes = message.ToBytes();
 
             Socket.Send(bytes);
-            //Console.WriteLine($"sent interested");
         }
     }
 }

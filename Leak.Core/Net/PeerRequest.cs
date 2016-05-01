@@ -23,6 +23,11 @@
             get { return offset; }
         }
 
+        public int Length
+        {
+            get { return length; }
+        }
+
         public override PeerMessage GetMessage()
         {
             byte[] data = new byte[17];
@@ -37,7 +42,10 @@
             data[10] = (byte)((offset >> 16) & 255);
             data[11] = (byte)((offset >> 8) & 255);
             data[12] = (byte)(offset & 255);
-            data[15] = 0x40;
+            data[13] = (byte)((length >> 24) & 255);
+            data[14] = (byte)((length >> 16) & 255);
+            data[15] = (byte)((length >> 8) & 255);
+            data[16] = (byte)(length & 255);
 
             return new PeerMessage(data);
         }

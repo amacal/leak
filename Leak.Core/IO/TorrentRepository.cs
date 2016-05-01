@@ -52,9 +52,19 @@ namespace Leak.Core.IO
                 }
             }
 
-            Parallel.ForEach(new[] { 0, 1, 2, 3 }, index =>
+            int[] indices = new[] { 0, 1, 2, 3 };
+            ParallelOptions options = new ParallelOptions
             {
-                foreach (DataBlock target in AllBlocks(index, 4))
+                MaxDegreeOfParallelism = indices.Length
+            };
+
+            int completed = 0, failed = 0;
+            int total = directory.Pieces.Count;
+            int step = Math.Max(total / 1000, 1);
+
+            Parallel.ForEach(indices, options, index =>
+            {
+                foreach (DataBlock target in AllBlocks(index, indices.Length))
                 {
                     using (HashAlgorithm algorithm = SHA1.Create())
                     {
@@ -71,18 +81,31 @@ namespace Leak.Core.IO
                             }
                         }
 
-                        if (equals)
+                        lock (pieces)
                         {
-                            pieces[target.Piece.Index] = true;
-
-                            foreach (TorrentBlock block in target.Piece.Blocks)
+                            if (equals)
                             {
-                                blocks.Set(block);
+                                pieces[target.Piece.Index] = true;
+
+                                foreach (TorrentBlock block in target.Piece.Blocks)
+                                {
+                                    blocks.Set(block);
+                                }
                             }
+                            else
+                            {
+                                failed++;
+                            }
+
+                            completed++;
                         }
-                        else
+
+                        if (completed % step == 0)
                         {
-                            Console.WriteLine($"Reschedule {target.Piece.Index}");
+                            lock (typeof(Console))
+                            {
+                                Console.Write("\rCompleted: {0:D5}, failed: {1:D5}, total: {2:D5}", completed, failed, total);
+                            }
                         }
                     }
                 }
@@ -91,6 +114,7 @@ namespace Leak.Core.IO
             });
 
             GC.Collect();
+            Console.WriteLine();
         }
 
         private IEnumerable<DataBlock> AllBlocks(int index, int count)
@@ -102,42 +126,39 @@ namespace Leak.Core.IO
             {
                 offset = 0;
 
-                foreach (TorrentFile file in directory.Files)
+                if (piece.Index % count == index)
                 {
-                    if (file.Offset <= piece.Offset + piece.Size && piece.Offset < file.Offset + file.Size)
+                    foreach (TorrentFile file in directory.Files)
                     {
-                        int availableInBuffer = data.Length - offset;
-                        long acceptableByFile = file.Offset + file.Size - piece.Offset;
-                        long fileOffset = piece.Offset - file.Offset;
-
-                        if (acceptableByFile < availableInBuffer)
+                        if (file.Offset <= piece.Offset + piece.Size && piece.Offset < file.Offset + file.Size)
                         {
-                            availableInBuffer = (int)acceptableByFile;
-                        }
+                            int availableInBuffer = data.Length - offset;
+                            long acceptableByFile = file.Offset + file.Size - piece.Offset;
+                            long fileOffset = piece.Offset - file.Offset;
 
-                        if (fileOffset < 0)
-                        {
-                            fileOffset = 0;
-                        }
+                            if (acceptableByFile < availableInBuffer)
+                            {
+                                availableInBuffer = (int)acceptableByFile;
+                            }
 
-                        if (piece.Index % count == index)
-                        {
+                            if (fileOffset < 0)
+                            {
+                                fileOffset = 0;
+                            }
+
                             lock (this)
                             {
-                                using (FileStream stream = File.OpenRead(file.Path))
+                                using (FileStream stream = File.Open(file.Path, FileMode.Open, FileAccess.Read, FileShare.Read))
                                 {
                                     stream.Seek(fileOffset, SeekOrigin.Begin);
                                     stream.Read(data, offset, availableInBuffer);
                                 }
                             }
+
+                            offset += availableInBuffer;
                         }
-
-                        offset += availableInBuffer;
                     }
-                }
 
-                if (piece.Index % count == index)
-                {
                     yield return new DataBlock
                     {
                         Piece = piece,
@@ -229,6 +250,8 @@ namespace Leak.Core.IO
         private class DataBlock
         {
             public TorrentPiece Piece { get; set; }
+
+            public TorrentFile File { get; set; }
 
             public byte[] Data { get; set; }
         }
