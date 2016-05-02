@@ -53,7 +53,7 @@ namespace Leak
                 {
                 }
 
-                Thread.Sleep(TimeSpan.FromMinutes(60));
+                Thread.Sleep(TimeSpan.FromMinutes(10));
             }
         }
 

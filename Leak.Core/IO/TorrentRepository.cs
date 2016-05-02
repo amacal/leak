@@ -109,11 +109,9 @@ namespace Leak.Core.IO
                         }
                     }
                 }
-
-                GC.Collect();
             });
 
-            GC.Collect();
+            Console.Write("\rCompleted: {0:D5}, failed: {1:D5}, total: {2:D5}", completed, failed, total);
             Console.WriteLine();
         }
 
@@ -204,7 +202,7 @@ namespace Leak.Core.IO
                 if (file.Offset <= block.Offset + block.Size && block.Offset < file.Offset + file.Size)
                 {
                     int available = data.Length - offset;
-                    long acceptable = file.Offset + file.Size - block.Offset;
+                    long acceptable = file.Offset + file.Size - block.Offset - offset;
                     long fileOffset = block.Offset - file.Offset;
 
                     if (acceptable < available)
