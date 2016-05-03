@@ -131,7 +131,7 @@ namespace Leak.Core.IO
                         if (file.Offset <= piece.Offset + piece.Size && piece.Offset < file.Offset + file.Size)
                         {
                             int availableInBuffer = data.Length - offset;
-                            long acceptableByFile = file.Offset + file.Size - piece.Offset;
+                            long acceptableByFile = file.Offset + file.Size - piece.Offset - offset;
                             long fileOffset = piece.Offset - file.Offset;
 
                             if (acceptableByFile < availableInBuffer)

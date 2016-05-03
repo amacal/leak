@@ -1,4 +1,7 @@
-﻿namespace Leak.Core.IO
+﻿using System.Linq;
+using System.Text;
+
+namespace Leak.Core.IO
 {
     public class TorrentFile
     {
@@ -20,7 +23,7 @@
 
         public string Path
         {
-            get { return System.IO.Path.Combine(directory, source.Name); }
+            get { return GetSafePath(source.Name); }
         }
 
         public long Offset
@@ -31,6 +34,26 @@
         public long Size
         {
             get { return source.Size; }
+        }
+
+        private string GetSafePath(string value)
+        {
+            StringBuilder builder = new StringBuilder();
+            char[] invalid = System.IO.Path.GetInvalidFileNameChars();
+
+            foreach (char character in value)
+            {
+                if (character == System.IO.Path.DirectorySeparatorChar)
+                {
+                    builder.Append(character);
+                }
+                else if (invalid.Contains(character) == false)
+                {
+                    builder.Append(character);
+                }
+            }
+
+            return System.IO.Path.Combine(directory, builder.ToString());
         }
     }
 }

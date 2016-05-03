@@ -25,12 +25,12 @@ namespace Leak
 
             while (repository.Completed.Count() != repository.Directory.Pieces.Count)
             {
-                try
+                foreach (MetainfoTracker tracker in metainfo.Trackers.Where(TrackerClientFactory.IsSupported))
                 {
-                    foreach (MetainfoTracker tracker in metainfo.Trackers.Where(x => x.Protocol == MetainfoTrackerProtocol.Http))
+                    try
                     {
-                        TrackerClient client = new TrackerClient(tracker.Uri);
-                        TrackerResonse response = client.Announce(metainfo.Hash);
+                        TrackerClient client = TrackerClientFactory.Create(tracker);
+                        TrackerResonse response = client.Announce(handshake);
 
                         foreach (TrackerResponsePeer peer in response.Peers)
                         {
@@ -48,9 +48,10 @@ namespace Leak
 
                         Thread.Sleep(TimeSpan.FromMinutes(1));
                     }
-                }
-                catch
-                {
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
 
                 Thread.Sleep(TimeSpan.FromMinutes(10));
@@ -129,15 +130,22 @@ namespace Leak
                     TorrentPiece next = pending.Intersect(available).Except(queue).Except(repository.Completed).FirstOrDefault();
                     string description = channel.Description.ToString().PadRight(10).Substring(0, 5);
 
-                    if (next != null && queue.Count() < 10)
+                    if (next != null)
                     {
-                        queue.Add(next);
-                        Console.WriteLine($"{description} - requested: {next.Index}; pending: {pending.Count()}; completed: {repository.Completed.Count()}; available: {available.Count()}; queue: {queue.Count()}");
-
-                        foreach (TorrentBlock block in next.Blocks)
+                        if (queue.Count() < 10)
                         {
-                            channel.Send(new PeerRequest(next.Index, (int)(block.Offset - next.Offset), block.Size));
+                            queue.Add(next);
+                            Console.WriteLine($"{description} - requested: {next.Index}; pending: {pending.Count()}; completed: {repository.Completed.Count()}; available: {available.Count()}; queue: {queue.Count()}");
+
+                            foreach (TorrentBlock block in next.Blocks)
+                            {
+                                channel.Send(new PeerRequest(next.Index, (int)(block.Offset - next.Offset), block.Size));
+                            }
                         }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{description} - requested: null; pending: {pending.Count()}; completed: {repository.Completed.Count()}; available: {available.Count()}; queue: {queue.Count()}");
                     }
                 }
             }

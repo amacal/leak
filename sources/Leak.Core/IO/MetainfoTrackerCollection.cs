@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Encoding;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,7 +34,10 @@ namespace Leak.Core.IO
                 {
                     foreach (string text in node.AllTexts())
                     {
-                        result.Add(text);
+                        if (Uri.IsWellFormedUriString(text, UriKind.Absolute))
+                        {
+                            result.Add(text);
+                        }
                     }
                 }
 
@@ -42,7 +46,7 @@ namespace Leak.Core.IO
 
             foreach (string uri in result)
             {
-                yield return new MetainfoTracker(uri);
+                yield return new MetainfoTracker(new Uri(uri, UriKind.Absolute));
             }
         }
 

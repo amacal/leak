@@ -34,6 +34,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bytes.cs" />
     <Compile Include="Encoding\BencodedArray.cs" />
     <Compile Include="Encoding\BencodedDictionary.cs" />
     <Compile Include="Encoding\BencodedNumber.cs" />
@@ -87,10 +88,19 @@
     <Compile Include="Net\PeerSocket.cs" />
     <Compile Include="Net\PeerStatus.cs" />
     <Compile Include="Net\PeerUnchoke.cs" />
+    <Compile Include="Net\HttpTrackerClient.cs" />
     <Compile Include="Net\TrackerClient.cs" />
+    <Compile Include="Net\TrackerClientFactory.cs" />
+    <Compile Include="Net\HttpTrackerResonse.cs" />
+    <Compile Include="Net\HttpTrackerResponsePeer.cs" />
+    <Compile Include="Net\HttpTrackerResponsePeerCollection.cs" />
     <Compile Include="Net\TrackerResonse.cs" />
     <Compile Include="Net\TrackerResponsePeer.cs" />
     <Compile Include="Net\TrackerResponsePeerCollection.cs" />
+    <Compile Include="Net\UdpTrackerClient.cs" />
+    <Compile Include="Net\UdpTrackerResponse.cs" />
+    <Compile Include="Net\UdpTrackerResponsePeer.cs" />
+    <Compile Include="Net\UdpTrackerResponsePeerCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

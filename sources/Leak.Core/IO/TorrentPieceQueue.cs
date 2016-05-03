@@ -27,7 +27,7 @@ namespace Leak.Core.IO
         {
             foreach (var entry in pieces)
             {
-                if (entry.Value.AddMinutes(2) > DateTime.Now)
+                if (entry.Value.AddMinutes(5) > DateTime.Now)
                 {
                     yield return entry.Key;
                 }

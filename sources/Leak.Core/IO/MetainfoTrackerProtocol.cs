@@ -3,7 +3,6 @@
     public enum MetainfoTrackerProtocol
     {
         Http,
-        Https,
         Udp,
         Unknown
     }

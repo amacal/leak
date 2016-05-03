@@ -1,15 +1,17 @@
-﻿namespace Leak.Core.IO
+﻿using System;
+
+namespace Leak.Core.IO
 {
     public class MetainfoTracker
     {
-        private readonly string uri;
+        private readonly Uri uri;
 
-        public MetainfoTracker(string uri)
+        public MetainfoTracker(Uri uri)
         {
             this.uri = uri;
         }
 
-        public string Uri
+        public Uri Uri
         {
             get { return uri; }
         }
@@ -18,14 +20,11 @@
         {
             get
             {
-                if (uri.StartsWith("udp://"))
+                if (uri.Scheme.Equals("udp", StringComparison.OrdinalIgnoreCase))
                     return MetainfoTrackerProtocol.Udp;
 
-                if (uri.StartsWith("http://"))
+                if (uri.Scheme.Equals("http", StringComparison.OrdinalIgnoreCase))
                     return MetainfoTrackerProtocol.Http;
-
-                if (uri.StartsWith("https://"))
-                    return MetainfoTrackerProtocol.Https;
 
                 return MetainfoTrackerProtocol.Unknown;
             }

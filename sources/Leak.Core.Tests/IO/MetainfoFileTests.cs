@@ -14,7 +14,7 @@ namespace Leak.Core.Tests.IO
         public void ShouldHaveSomeTrackers(MetainfoFileTrackerCase source)
         {
             MetainfoFile file = new MetainfoFile(source.Torrent);
-            IEnumerable<string> trackers = file.Trackers.Select(x => x.Uri);
+            IEnumerable<string> trackers = file.Trackers.Select(x => x.Uri.ToString());
 
             source.Trackers.Should().BeSubsetOf(trackers);
         }

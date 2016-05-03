@@ -39,7 +39,7 @@ Target "ExecuteTests" (fun _ ->
 
 Target "CreatePackage" (fun _ ->
      !! "build/release/*.*" -- "build/release/*.pdb"
-        |> Zip "build/release" "build/package/leak-1.0.zip"
+        |> Zip "build/release" "build/package/leak-1.1.zip"
 )
 
 Target "Default" (fun _ ->
