@@ -19,6 +19,7 @@ namespace Leak
 
             PeerListener listener = new PeerListener(callback);
             PeerHandshake handshake = new PeerHandshake(metainfo.Hash, metainfo.Hash);
+            PeerNegotiator negotiator = PeerNegotiatorFactory.Create(handshake);
 
             repository.Initialize();
             listener.Start(handshake);
@@ -36,13 +37,20 @@ namespace Leak
                         {
                             if (callback.Peers.Contains(peer) == false)
                             {
-                                lock (callback)
+                                try
                                 {
-                                    Console.WriteLine($"Connecting to {peer.Host}");
-                                    new PeerClient(callback, peer.Host, peer.Port).Start(handshake);
-                                }
+                                    lock (callback)
+                                    {
+                                        Console.WriteLine($"Connecting to {peer.Host}:{peer.Port}");
+                                        new PeerClient(callback, peer.Host, peer.Port).Start(negotiator);
+                                    }
 
-                                Thread.Sleep(TimeSpan.FromSeconds(1));
+                                    Thread.Sleep(TimeSpan.FromSeconds(1));
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"{peer.Host}:{peer.Port} {ex.Message}");
+                                }
                             }
                         }
 

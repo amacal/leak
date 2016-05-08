@@ -4,15 +4,15 @@ namespace Leak.Core.Net
 {
     public interface PeerNegotiatorAware
     {
-        void Receive(Action<PeerMessage> message);
+        void Receive(Func<PeerMessage, bool> predicate, Action<PeerMessage> callback);
 
         void Send(PeerMessageFactory data);
 
         void Handle(PeerHandshake handshake);
 
-        void Remove(PeerMessage message);
+        void Remove(int length);
 
-        void Continue();
+        void Continue(Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove);
 
         void Terminate();
     }

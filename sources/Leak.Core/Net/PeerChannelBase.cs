@@ -1,9 +1,23 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace Leak.Core.Net
 {
     public abstract class PeerChannelBase : PeerChannel
     {
+        protected Func<PeerMessage, PeerMessage> Receiver;
+
+        protected Func<PeerMessage, PeerMessage> Sender;
+
+        protected Action<PeerBuffer, int> Remove;
+
+        protected PeerChannelBase()
+        {
+            Receiver = x => x;
+            Sender = x => x;
+            Remove = (buffer, count) => buffer.Remove(count);
+        }
+
         protected abstract Socket Socket { get; }
 
         protected abstract PeerCallback Callback { get; }
@@ -14,6 +28,8 @@ namespace Leak.Core.Net
         {
             try
             {
+                message = Receiver.Invoke(message);
+
                 if (message.Length == 0)
                 {
                     Callback.OnTerminate(this);
@@ -51,7 +67,7 @@ namespace Leak.Core.Net
                                 break;
                         }
 
-                        Buffer.Remove(length + 4);
+                        Remove(Buffer, length + 4);
                         Buffer.ReceiveOrCallback(Socket, OnMessage);
 
                         return;
@@ -68,7 +84,7 @@ namespace Leak.Core.Net
 
         public override void Send(PeerMessageFactory data)
         {
-            PeerMessage message = data.GetMessage();
+            PeerMessage message = Sender.Invoke(data.GetMessage());
             byte[] bytes = message.ToBytes();
 
             Socket.Send(bytes);

@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bytes.cs" />
+    <Compile Include="BytesExtensions.cs" />
     <Compile Include="Encoding\BencodedArray.cs" />
     <Compile Include="Encoding\BencodedDictionary.cs" />
     <Compile Include="Encoding\BencodedNumber.cs" />
@@ -62,11 +63,18 @@
     <Compile Include="IO\TorrentPieceQueue.cs" />
     <Compile Include="IO\TorrentPieceView.cs" />
     <Compile Include="IO\TorrentRepository.cs" />
+    <Compile Include="Net\EncryptedPeerNegotiator.cs" />
     <Compile Include="Net\Peer.cs" />
     <Compile Include="Net\PeerBitfield.cs" />
     <Compile Include="Net\PeerBuffer.cs" />
     <Compile Include="Net\PeerCallbackBase.cs" />
     <Compile Include="Net\PeerChannelBase.cs" />
+    <Compile Include="Net\PeerCryptoHandshake.cs" />
+    <Compile Include="Net\PeerCryptoHash.cs" />
+    <Compile Include="Net\PeerCryptoPayload.cs" />
+    <Compile Include="Net\PeerKeyExchange.cs" />
+    <Compile Include="Net\PeerMessageExtensions.cs" />
+    <Compile Include="Net\PeerNegotiator.cs" />
     <Compile Include="Net\PeerNegotiatorAware.cs" />
     <Compile Include="Net\PeerClient.cs" />
     <Compile Include="Net\PeerCallback.cs" />
@@ -82,7 +90,10 @@
     <Compile Include="Net\PeerListener.cs" />
     <Compile Include="Net\PeerMessage.cs" />
     <Compile Include="Net\PeerMessageFactory.cs" />
-    <Compile Include="Net\PeerNegotiator.cs" />
+    <Compile Include="Net\PeerNegotiatorExtensions.cs" />
+    <Compile Include="Net\PeerNegotiatorFactory.cs" />
+    <Compile Include="Net\PeerNegotiatorReceive.cs" />
+    <Compile Include="Net\PlainPeerNegotiator.cs" />
     <Compile Include="Net\PeerPiece.cs" />
     <Compile Include="Net\PeerRequest.cs" />
     <Compile Include="Net\PeerSocket.cs" />
@@ -102,6 +113,7 @@
     <Compile Include="Net\UdpTrackerResponsePeer.cs" />
     <Compile Include="Net\UdpTrackerResponsePeerCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RC4.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace Leak.Core
 {
@@ -37,6 +38,39 @@ namespace Leak.Core
                 return value - 'a' + 10;
 
             return 0;
+        }
+
+        public static byte[] Hash(string text, params byte[][] parts)
+        {
+            byte[] input = System.Text.Encoding.ASCII.GetBytes(text);
+
+            foreach (byte[] data in parts)
+            {
+                Append(ref input, data);
+            }
+
+            using (SHA1 algorithm = SHA1.Create())
+            {
+                return algorithm.ComputeHash(input);
+            }
+        }
+
+        public static void Append(ref byte[] data, byte[] input)
+        {
+            Array.Resize(ref data, data.Length + input.Length);
+            Array.Copy(input, 0, data, data.Length - input.Length, input.Length);
+        }
+
+        public static byte[] Xor(byte[] left, byte[] right)
+        {
+            byte[] data = new byte[left.Length];
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = (byte)(left[i] ^ right[i]);
+            }
+
+            return data;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace Leak.Core.Net
 {
-    public class PeerClient : PeerChannelBase
+    public class PeerClient : PeerChannelBase, PeerNegotiatorAware
     {
         private readonly Socket socket;
         private readonly PeerCallback callback;
@@ -42,19 +42,19 @@ namespace Leak.Core.Net
             get { return callback; }
         }
 
-        public void Start(PeerHandshake handshake)
+        public void Start(PeerNegotiator negotiator)
         {
-            socket.BeginConnect(host, port, OnConnected, handshake);
+            socket.BeginConnect(host, port, OnConnected, negotiator);
         }
 
         private void OnConnected(IAsyncResult result)
         {
+            PeerNegotiator negotiator = (PeerNegotiator)result.AsyncState;
+
             try
             {
                 socket.EndConnect(result);
-
-                Send(result.AsyncState as PeerHandshake);
-                buffer.Receive(socket, OnHandshake);
+                negotiator.Active(this);
             }
             catch (SocketException)
             {
@@ -66,21 +66,55 @@ namespace Leak.Core.Net
         {
         }
 
-        private void OnHandshake(PeerMessage message)
+        void PeerNegotiatorAware.Receive(Func<PeerMessage, bool> predicate, Action<PeerMessage> callback)
         {
-            if (message.Length == 0)
-            {
-                callback.OnTerminate(this);
-                return;
-            }
+            Action<PeerMessage> onMessage = null;
 
-            if (message.Length >= message[0] + 49)
+            onMessage = message =>
             {
-                callback.OnHandshake(this, new PeerHandshake(message));
-                buffer.Remove(message[0] + 49);
-            }
+                if (predicate.Invoke(message))
+                {
+                    callback.Invoke(message);
+                }
+                else
+                {
+                    buffer.Receive(socket, onMessage);
+                }
+            };
+
+            buffer.ReceiveOrCallback(socket, onMessage);
+        }
+
+        void PeerNegotiatorAware.Send(PeerMessageFactory data)
+        {
+            PeerMessage message = data.GetMessage();
+            byte[] bytes = message.ToBytes();
+
+            Socket.Send(bytes);
+        }
+
+        void PeerNegotiatorAware.Handle(PeerHandshake handshake)
+        {
+            callback.OnHandshake(this, handshake);
+        }
+
+        void PeerNegotiatorAware.Remove(int length)
+        {
+            buffer.Remove(length);
+        }
+
+        void PeerNegotiatorAware.Continue(Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove)
+        {
+            this.Receiver = decrypt;
+            this.Sender = encrypt;
+            this.Remove = remove;
 
             buffer.ReceiveOrCallback(socket, OnMessage);
+        }
+
+        void PeerNegotiatorAware.Terminate()
+        {
+            Callback.OnTerminate(this);
         }
 
         private class ClientDescription : PeerDescription

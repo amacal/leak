@@ -6,6 +6,8 @@ namespace Leak.Core.Net
 
     public class PeerHandshake : PeerMessageFactory
     {
+        public static readonly int MinSize = 1;
+
         private readonly string description;
         private readonly byte[] hash;
         private readonly byte[] peer;
@@ -29,6 +31,11 @@ namespace Leak.Core.Net
             {
                 this.peer[i] = (byte)((this.peer[i] + 1) % 256);
             }
+        }
+
+        public static int GetSize(PeerMessage message)
+        {
+            return message[0] + 49;
         }
 
         public byte[] Hash
