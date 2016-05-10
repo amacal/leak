@@ -88,17 +88,17 @@ namespace Leak.Core.Tests.Net
 
             private void Tick(object state)
             {
-                timer.Change(-1, 3);
+                timer.Change(-1, 1);
 
                 input.Trigger();
                 output.Trigger();
 
-                timer.Change(0, 3);
+                timer.Change(0, 1);
             }
 
             public void Flush()
             {
-                int count = 2000;
+                int count = 5000;
 
                 while (count > 0 && (input.IsEmpty() == false || output.IsEmpty() == false))
                 {
@@ -199,17 +199,13 @@ namespace Leak.Core.Tests.Net
                 this.data = data;
             }
 
-            public void Continue(Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove)
+            public void Continue(PeerHandshake handshake, Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove)
             {
                 output.Push(encrypt.Invoke(new PeerMessage(data)).ToBytes());
 
                 input.Receive(
                     x => x.Length >= 3,
-                    x => onContinue.Invoke(decrypt.Invoke(new PeerMessage(x)).ToBytes()));
-            }
-
-            public void Handle(PeerHandshake handshake)
-            {
+                    x => { onContinue.Invoke(decrypt.Invoke(new PeerMessage(x)).ToBytes()); input.Remove(x.Length); });
             }
 
             public void Receive(Func<PeerMessage, bool> predicate, Action<PeerMessage> callback)

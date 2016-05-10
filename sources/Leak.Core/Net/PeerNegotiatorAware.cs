@@ -8,11 +8,9 @@ namespace Leak.Core.Net
 
         void Send(PeerMessageFactory data);
 
-        void Handle(PeerHandshake handshake);
-
         void Remove(int length);
 
-        void Continue(Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove);
+        void Continue(PeerHandshake handshake, Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove);
 
         void Terminate();
     }

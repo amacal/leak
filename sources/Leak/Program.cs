@@ -22,7 +22,7 @@ namespace Leak
             PeerNegotiator negotiator = PeerNegotiatorFactory.Create(handshake);
 
             repository.Initialize();
-            listener.Start(handshake);
+            listener.Start(negotiator);
 
             while (repository.Completed.Count() != repository.Directory.Pieces.Count)
             {
@@ -140,7 +140,7 @@ namespace Leak
 
                     if (next != null)
                     {
-                        if (queue.Count() < 10)
+                        if (queue.Count() < 32)
                         {
                             queue.Add(next);
                             Console.WriteLine($"{description} - requested: {next.Index}; pending: {pending.Count()}; completed: {repository.Completed.Count()}; available: {available.Count()}; queue: {queue.Count()}");

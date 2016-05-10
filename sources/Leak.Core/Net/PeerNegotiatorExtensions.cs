@@ -29,9 +29,9 @@ namespace Leak.Core.Net
             context.Send(new Encryptor(data, key));
         }
 
-        public static void Continue(this PeerNegotiatorAware context)
+        public static void Continue(this PeerNegotiatorAware context, PeerHandshake handshake)
         {
-            context.Continue(x => x, x => x, (buffer, count) => buffer.Remove(count));
+            context.Continue(handshake, x => x, x => x, (buffer, count) => buffer.Remove(count));
         }
 
         private class Encryptor : PeerMessageFactory

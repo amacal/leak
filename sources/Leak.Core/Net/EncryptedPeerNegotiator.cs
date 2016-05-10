@@ -73,8 +73,7 @@ namespace Leak.Core.Net
                                     receiverKey.Skip(size);
                                     channel.Remove(size);
 
-                                    channel.Continue(x => x.Encrypt(initiatorKey), x => x.Decrypt(receiverKey.Clone()), (buffer, count) => { buffer.Remove(count); receiverKey.Skip(count); });
-                                    channel.Handle(handshake);
+                                    channel.Continue(handshake, x => x.Encrypt(initiatorKey), x => x.Decrypt(receiverKey.Clone()), (buffer, count) => { buffer.Remove(count); receiverKey.Skip(count); });
                                 });
                             });
                         });
@@ -145,11 +144,15 @@ namespace Leak.Core.Net
 
                                         channel.Receive(size, handshakeMessage =>
                                         {
+                                            decryptor = initiatorKey.Clone();
+                                            decrypted = handshakeMessage.Decrypt(decryptor);
+                                            PeerHandshake received = new PeerHandshake(decrypted);
+
                                             initiatorKey.Skip(size);
                                             channel.Remove(size);
 
                                             channel.Send(handshake, receiverKey);
-                                            channel.Continue(x => x.Encrypt(receiverKey), x => x.Decrypt(initiatorKey.Clone()), (buffer, count) => { buffer.Remove(count); receiverKey.Skip(count); });
+                                            channel.Continue(received, x => x.Encrypt(receiverKey), x => x.Decrypt(initiatorKey.Clone()), (buffer, count) => { buffer.Remove(count); initiatorKey.Skip(count); });
                                         });
                                     });
                                 });

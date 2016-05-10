@@ -26,9 +26,8 @@
                     return;
                 }
 
-                channel.Handle(new PeerHandshake(message));
                 channel.Remove(message[0] + 49);
-                channel.Continue();
+                channel.Continue(new PeerHandshake(message));
             });
         }
 
@@ -49,9 +48,8 @@
                 }
 
                 channel.Send(handshake);
-                channel.Handle(new PeerHandshake(message));
                 channel.Remove(message[0] + 49);
-                channel.Continue();
+                channel.Continue(new PeerHandshake(message));
             });
         }
     }

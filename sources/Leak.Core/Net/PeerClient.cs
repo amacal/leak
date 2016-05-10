@@ -93,22 +93,18 @@ namespace Leak.Core.Net
             Socket.Send(bytes);
         }
 
-        void PeerNegotiatorAware.Handle(PeerHandshake handshake)
-        {
-            callback.OnHandshake(this, handshake);
-        }
-
         void PeerNegotiatorAware.Remove(int length)
         {
             buffer.Remove(length);
         }
 
-        void PeerNegotiatorAware.Continue(Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove)
+        void PeerNegotiatorAware.Continue(PeerHandshake handshake, Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove)
         {
             this.Receiver = decrypt;
             this.Sender = encrypt;
             this.Remove = remove;
 
+            callback.OnHandshake(this, handshake);
             buffer.ReceiveOrCallback(socket, OnMessage);
         }
 
