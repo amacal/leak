@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Leak.Core
 {
@@ -35,7 +36,7 @@ namespace Leak.Core
                 return value - 'a' + 10;
 
             if (value >= 'A' && value <= 'F')
-                return value - 'a' + 10;
+                return value - 'A' + 10;
 
             return 0;
         }
@@ -71,6 +72,18 @@ namespace Leak.Core
             }
 
             return data;
+        }
+
+        public static string ToString(byte[] data)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (byte item in data)
+            {
+                builder.Append(item.ToString("x2"));
+            }
+
+            return builder.ToString();
         }
     }
 }

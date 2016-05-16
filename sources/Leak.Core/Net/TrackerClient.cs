@@ -2,6 +2,6 @@
 {
     public abstract class TrackerClient
     {
-        public abstract TrackerResonse Announce(PeerHandshake handshake);
+        public abstract TrackerResonse Announce(PeerAnnounce announce);
     }
 }

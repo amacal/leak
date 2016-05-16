@@ -65,6 +65,9 @@
     <Compile Include="IO\TorrentRepository.cs" />
     <Compile Include="Net\EncryptedPeerNegotiator.cs" />
     <Compile Include="Net\Peer.cs" />
+    <Compile Include="Net\PeerAnnounce.cs" />
+    <Compile Include="Net\PeerAnnounceConfiguration.cs" />
+    <Compile Include="Net\PeerAnnounceConfigurator.cs" />
     <Compile Include="Net\PeerBitfield.cs" />
     <Compile Include="Net\PeerBuffer.cs" />
     <Compile Include="Net\PeerCallbackBase.cs" />

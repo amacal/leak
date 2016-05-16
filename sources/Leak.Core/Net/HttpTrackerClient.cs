@@ -13,18 +13,25 @@ namespace Leak.Core.Net
             this.uri = uri;
         }
 
-        public override TrackerResonse Announce(PeerHandshake handshake)
+        public override TrackerResonse Announce(PeerAnnounce announce)
         {
             byte[] data;
             StringBuilder request = new StringBuilder();
 
-            string hash = Encode(handshake.Hash);
-            string peer = Encode(handshake.Peer);
+            string hash = Encode(announce.Handshake.Hash);
+            string peer = Encode(announce.Handshake.Peer);
+            string address = null;
 
             request.Append($"{uri}?");
             request.Append($"info_hash={hash}&");
             request.Append($"peer_id={peer}&");
-            request.Append($"port=8080&");
+
+            if (address != null)
+            {
+                request.Append($"ip={address}& ");
+            }
+
+            request.Append($"port={announce.Port}&");
             request.Append($"uploaded=0&");
             request.Append($"downloaded=0&");
             request.Append($"left=0&");
