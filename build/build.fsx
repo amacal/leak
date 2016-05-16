@@ -15,7 +15,7 @@ Target "Restore" (fun _ ->
     "NUnit.Runners"
         |> NugetInstall (fun p ->
             { p with
-                OutputDirectory = "./build"})
+                OutputDirectory = "./build/tools"})
 )
 
 Target "BuildApp" (fun _ ->
@@ -32,26 +32,26 @@ Target "BuildTests" (fun _ ->
 
 Target "ExecuteTests" (fun _ ->
     !! ("build/tests/*.Tests.dll")
-        |> NUnit3 (fun p -> 
+        |> NUnit3 (fun p ->
             { p with
-                ToolPath = findToolInSubPath "nunit3-console.exe" "build" })
+                ToolPath = findToolInSubPath "nunit3-console.exe" "build/tools" })
 )
 
 Target "CreatePackage" (fun _ ->
-     !! "build/release/*.*" -- "build/release/*.pdb"
-        |> Zip "build/release" "build/package/leak-1.1.zip"
+     !! "build/release/*.*" -- "build/release/*.pdb" -- "build/release/*.xml"
+        |> Zip "build/release" ("build/package/leak-" + (getBuildParamOrDefault "version" "dev") + ".zip")
 )
 
 Target "Default" (fun _ ->
     trace "Build completed."
 )
 
-"Clean" 
+"Clean"
     ==> "Restore"
     ==> "BuildApp"
     ==> "BuildTests"
     ==> "ExecuteTests"
     ==> "CreatePackage"
-    ==> "Default"    
+    ==> "Default"
 
 RunTargetOrDefault "Default"

@@ -1,4 +1,5 @@
-Invoke-WebRequest "http://nuget.org/nuget.exe" -OutFile "$PSScriptRoot\build\nuget.exe"
+New-Item -ItemType Directory -Force -Path "$PSScriptRoot\build\tools"
+Invoke-WebRequest "http://nuget.org/nuget.exe" -OutFile "$PSScriptRoot\build\tools\nuget.exe"
 
-& "$PSScriptRoot\build\nuget.exe" "Install" "FAKE" "-OutputDirectory" "build" "-ExcludeVersion"
-& "$PSScriptRoot\build\FAKE\tools\Fake.exe" "$PSScriptRoot\build\build.fsx"
+& "$PSScriptRoot\build\tools\nuget.exe" "Install" "FAKE" "-OutputDirectory" "build\tools" "-ExcludeVersion"
+& "$PSScriptRoot\build\tools\FAKE\tools\Fake.exe" "$PSScriptRoot\build\build.fsx" version=$args
