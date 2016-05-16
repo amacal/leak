@@ -11,6 +11,7 @@ namespace Leak
         public CommandFactory()
         {
             this.commands = new List<Command>();
+            this.commands.Add(new AnalyzeCommand());
             this.commands.Add(new AnnounceCommand());
             this.commands.Add(new DownloadCommand());
         }
