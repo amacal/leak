@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿using System;
+
+namespace Leak.Core.Net
 {
     public class UdpTrackerResponse : TrackerResonse
     {
@@ -9,6 +11,11 @@
         {
             this.data = data;
             this.count = count;
+        }
+
+        public override TimeSpan Interval
+        {
+            get { return TimeSpan.FromSeconds(data[10] * 256 + data[11]); }
         }
 
         public override TrackerResponsePeerCollection Peers

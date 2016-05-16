@@ -40,17 +40,19 @@ namespace Leak.Commands
                     }
                 });
 
-                Console.WriteLine($"Announcing {task.Hash}.");
+                Console.WriteLine($"Announcing {Bytes.ToString(task.Hash)}.");
 
                 foreach (MetainfoTracker tracker in task.Trackers.Where(TrackerClientFactory.IsSupported))
                 {
                     Console.WriteLine($"  {tracker.Uri}");
-                    Announce(tracker, announce, geo, publish);
+                    TimeSpan interval = Announce(tracker, announce, geo, publish);
+
+                    Console.WriteLine($"  {tracker.Uri}; next annouce within {Math.Round(interval.TotalMinutes)} minutes.");
                 }
             }
         }
 
-        private static void Announce(MetainfoTracker tracker, PeerAnnounce announce, Geo geo, Action<string, object> publish)
+        private static TimeSpan Announce(MetainfoTracker tracker, PeerAnnounce announce, Geo geo, Action<string, object> publish)
         {
             try
             {
@@ -63,7 +65,7 @@ namespace Leak.Commands
                 foreach (TrackerResponsePeer peer in response.Peers)
                 {
                     GeoData location = geo.Find(peer.Host);
-                    string country = location?.Code ?? String.Empty;
+                    string country = location?.Code ?? "  ";
                     HashSet<string> collection;
 
                     if (peers.TryGetValue(country, out collection) == false)
@@ -90,10 +92,13 @@ namespace Leak.Commands
                 {
                     Console.WriteLine($"    {entry.Key}: {entry.Value.Count}");
                 }
+
+                return response.Interval;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"    {ex.Message}");
+                return TimeSpan.FromMinutes(15);
             }
         }
     }
