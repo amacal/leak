@@ -25,12 +25,27 @@ namespace Leak.Commands
         private void Download(DownloadTask task, ArgumentCollection arguments)
         {
             TorrentRepository repository = new TorrentRepository(task.Destination);
-            Callback callback = new Callback(repository);
+            PCallback callback = new PCallback(repository);
+            PeerHandshakePayload handshake = new PeerHandshakePayload(task.Metainfo.Hash, task.Metainfo.Hash);
+            PeerNegotiator negotiator = new PeerNegotiatorEncrypted(with =>
+            {
+            });
 
-            PeerListener listener = new PeerListener(callback);
-            PeerHandshake handshake = new PeerHandshake(task.Metainfo.Hash, task.Metainfo.Hash);
+            PeerListener listener = new PeerListener(with =>
+            {
+                with.Port = 8080;
+                with.Callback = new CCallback(callback);
+                with.Negotiator = negotiator;
+                with.Hashes = new PeerNegotiatorHashCollection();
+            });
 
-            PeerNegotiator negotiator = PeerNegotiatorFactory.Create(handshake);
+            PeerClientFactory factory = new PeerClientFactory(with =>
+            {
+                with.Hash = task.Metainfo.Hash;
+                with.Callback = new CCallback(callback);
+                with.Negotiator = negotiator;
+            });
+
             PeerAnnounce announce = new PeerAnnounce(handshake, with =>
             {
                 if (arguments.Has("ip-address"))
@@ -43,7 +58,7 @@ namespace Leak.Commands
 
             if (arguments.Has("enable-listening"))
             {
-                listener.Start(negotiator);
+                listener.Listen();
             }
 
             while (repository.Completed.Count() != repository.Directory.Pieces.Count)
@@ -64,7 +79,7 @@ namespace Leak.Commands
                                     lock (callback)
                                     {
                                         Console.WriteLine($"Connecting to {peer.Host}:{peer.Port}");
-                                        new PeerClient(callback, peer.Host, peer.Port).Start(negotiator);
+                                        factory.Connect(peer.Host, peer.Port);
                                     }
 
                                     Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -88,21 +103,44 @@ namespace Leak.Commands
             }
         }
 
-        private class Callback : PeerCallbackBase
+        private class CCallback : PeerNegotiatorCallback
+        {
+            private readonly PCallback callback;
+
+            public CCallback(PCallback callback)
+            {
+                this.callback = callback;
+            }
+
+            public void OnConnect(PeerConnection connection)
+            {
+            }
+
+            public void OnTerminate(PeerConnection connection)
+            {
+            }
+
+            public void OnHandshake(PeerConnection connection, PeerHandshake handshake)
+            {
+                handshake.Accept(callback);
+            }
+        }
+
+        private class PCallback : PeerCallbackBase
         {
             private readonly TorrentRepository repository;
             private readonly TorrentPieceQueue queue;
 
-            public Callback(TorrentRepository repository)
+            public PCallback(TorrentRepository repository)
                 : base(repository.Directory.Pieces)
             {
                 this.repository = repository;
                 this.queue = new TorrentPieceQueue();
             }
 
-            public override void OnHandshake(PeerChannel channel, PeerHandshake handshake)
+            public override void OnAttached(PeerChannel channel)
             {
-                base.OnHandshake(channel, handshake);
+                base.OnAttached(channel);
                 channel.Send(new PeerInterested());
             }
 

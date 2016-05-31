@@ -6,12 +6,12 @@ namespace Leak.Core.Net
     {
         private readonly PeerChannel channel;
         private readonly TorrentPieceCollection pieces;
-        private readonly PeerHandshake handshake;
+        private readonly PeerHandshakePayload handshake;
 
         private PeerEndpoint local;
         private PeerEndpoint remote;
 
-        public Peer(PeerChannel channel, TorrentPieceCollection pieces, PeerHandshake handshake)
+        public Peer(PeerChannel channel, TorrentPieceCollection pieces, PeerHandshakePayload handshake)
         {
             this.channel = channel;
             this.pieces = pieces;

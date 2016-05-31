@@ -4,34 +4,29 @@ namespace Leak.Core.Net
 {
     public static class PeerNegotiatorExtensions
     {
-        public static void Receive(this PeerNegotiatorAware context, int size, Action<PeerMessage> callback)
+        public static void Receive(this PeerConnection connection, int size, Action<PeerMessage> callback)
         {
             Func<PeerMessage, bool> predicate = message =>
             {
                 return message.Length >= size;
             };
 
-            context.Receive(predicate, callback);
+            connection.Receive(predicate, callback);
         }
 
-        public static void Receive(this PeerNegotiatorAware context, Action<PeerMessage> callback)
+        public static void Receive(this PeerConnection connection, Action<PeerMessage> callback)
         {
             Func<PeerMessage, bool> predicate = message =>
             {
                 return true;
             };
 
-            context.Receive(predicate, callback);
+            connection.Receive(predicate, callback);
         }
 
-        public static void Send(this PeerNegotiatorAware context, PeerMessageFactory data, RC4 key)
+        public static void Send(this PeerConnection connection, PeerMessageFactory data, RC4 key)
         {
-            context.Send(new Encryptor(data, key));
-        }
-
-        public static void Continue(this PeerNegotiatorAware context, PeerHandshake handshake)
-        {
-            context.Continue(handshake, x => x, x => x, (buffer, count) => buffer.Remove(count));
+            connection.Send(new Encryptor(data, key));
         }
 
         private class Encryptor : PeerMessageFactory

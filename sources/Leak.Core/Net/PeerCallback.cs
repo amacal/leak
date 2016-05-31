@@ -2,13 +2,9 @@
 {
     public abstract class PeerCallback
     {
-        public abstract void OnStart(PeerChannel channel);
-
-        public abstract void OnStop(PeerChannel channel);
+        public abstract void OnAttached(PeerChannel channel);
 
         public abstract void OnTerminate(PeerChannel channel);
-
-        public abstract void OnHandshake(PeerChannel channel, PeerHandshake handshake);
 
         public abstract void OnKeepAlive(PeerChannel channel);
 

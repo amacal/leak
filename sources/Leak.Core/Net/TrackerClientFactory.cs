@@ -11,6 +11,11 @@ namespace Leak.Core.Net
                 || tracker.Protocol == MetainfoTrackerProtocol.Udp;
         }
 
+        public static TrackerClient Create(string tracker)
+        {
+            return Create(new MetainfoTracker(new Uri(tracker)));
+        }
+
         public static TrackerClient Create(MetainfoTracker tracker)
         {
             switch (tracker.Protocol)

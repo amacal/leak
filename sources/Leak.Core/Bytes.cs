@@ -74,6 +74,18 @@ namespace Leak.Core
             return data;
         }
 
+        public static bool Equals(byte[] left, byte[] right)
+        {
+            if (left.Length != right.Length)
+                return false;
+
+            for (int i = 0; i < left.Length; i++)
+                if (left[i] != right[i])
+                    return false;
+
+            return true;
+        }
+
         public static string ToString(byte[] data)
         {
             StringBuilder builder = new StringBuilder();

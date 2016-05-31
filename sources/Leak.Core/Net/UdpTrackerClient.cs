@@ -33,7 +33,7 @@ namespace Leak.Core.Net
             Array.Copy(Bytes.Parse("0000000000010000"), 0, request, 64, 8);
             Array.Copy(Bytes.Parse("00000001"), 0, request, 80, 4);
             Array.Copy(Bytes.Parse("ffff"), 0, request, 92, 2);
-            Array.Copy(Bytes.Parse("1f91"), 0, request, 96, 2);
+            Array.Copy(Bytes.Parse("1f90"), 0, request, 96, 2);
 
             if (announce.Address != null)
             {

@@ -7,116 +7,76 @@ namespace Leak.Core.Net
     public class PeerListener
     {
         private readonly Socket socket;
-        private readonly PeerCallback callback;
+        private readonly PeerListenerConfiguration configuration;
 
-        public PeerListener(PeerCallback callback)
+        public PeerListener(Action<PeerListenerConfiguration> callback)
         {
-            this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            this.callback = callback;
+            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            configuration = new PeerListenerConfiguration
+            {
+                Port = 8080
+            };
+
+            callback.Invoke(configuration);
         }
 
-        public void Start(PeerNegotiator negotiator)
+        public void Listen()
         {
-            socket.Bind(new IPEndPoint(IPAddress.Any, 8080));
+            socket.Bind(new IPEndPoint(IPAddress.Any, configuration.Port));
             socket.Listen(1000);
-            socket.BeginAccept(OnAccepted, negotiator);
+            socket.BeginAccept(OnAccepted, null);
+        }
+
+        public void Stop()
+        {
+            socket.Disconnect(true);
         }
 
         private void OnAccepted(IAsyncResult result)
         {
             try
             {
-                PeerNegotiator negotiator = result.AsyncState as PeerNegotiator;
                 Socket endpoint = socket.EndAccept(result);
+                PeerNegotiator negotiator = configuration.Negotiator;
 
-                PeerBuffer buffer = new PeerBuffer(40000);
-                Channel channel = new Channel(endpoint, buffer, callback);
+                PeerConnection connection = new PeerConnection(endpoint);
+                PeerNegotiatable negotiable = new PeerNegotiatable(connection, configuration);
 
-                negotiator.Passive(channel);
+                negotiator.Passive(negotiable);
             }
             catch (SocketException)
             {
             }
         }
 
-        private class Channel : PeerChannelBase, PeerNegotiatorAware
+        private class PeerNegotiatable : PeerNegotiatorPassiveContext
         {
-            private readonly Socket socket;
-            private readonly PeerCallback callback;
-            private readonly PeerBuffer buffer;
+            private readonly PeerConnection connection;
+            private readonly PeerListenerConfiguration configuration;
 
-            public Channel(Socket socket, PeerBuffer buffer, PeerCallback callback)
+            public PeerNegotiatable(PeerConnection connection, PeerListenerConfiguration configuration)
             {
-                this.socket = socket;
-                this.buffer = buffer;
-                this.callback = callback;
+                this.connection = connection;
+                this.configuration = configuration;
             }
 
-            public override PeerDescription Description
+            public PeerConnection Connection
             {
-                get { return new ClientDescription(socket.RemoteEndPoint); }
+                get { return connection; }
             }
 
-            protected override Socket Socket
+            public PeerNegotiatorHashCollection Hashes
             {
-                get { return socket; }
+                get { return configuration.Hashes; }
             }
 
-            protected override PeerBuffer Buffer
+            public void Continue(PeerHandshakePayload handshake, PeerConnection connection)
             {
-                get { return buffer; }
+                configuration.Callback.OnHandshake(connection, new PeerHandshake(connection, handshake));
             }
 
-            protected override PeerCallback Callback
+            public void Terminate()
             {
-                get { return callback; }
-            }
-
-            void PeerNegotiatorAware.Receive(Func<PeerMessage, bool> predicate, Action<PeerMessage> callback)
-            {
-                Action<PeerMessage> onMessage = null;
-
-                onMessage = message =>
-                {
-                    if (predicate.Invoke(message))
-                    {
-                        callback.Invoke(message);
-                    }
-                    else
-                    {
-                        buffer.Receive(socket, onMessage);
-                    }
-                };
-
-                buffer.ReceiveOrCallback(socket, onMessage);
-            }
-
-            void PeerNegotiatorAware.Send(PeerMessageFactory data)
-            {
-                PeerMessage message = data.GetMessage();
-                byte[] bytes = message.ToBytes();
-
-                Socket.Send(bytes);
-            }
-
-            void PeerNegotiatorAware.Remove(int length)
-            {
-                buffer.Remove(length);
-            }
-
-            void PeerNegotiatorAware.Continue(PeerHandshake handshake, Func<PeerMessage, PeerMessage> encrypt, Func<PeerMessage, PeerMessage> decrypt, Action<PeerBuffer, int> remove)
-            {
-                this.Receiver = decrypt;
-                this.Sender = encrypt;
-                this.Remove = remove;
-
-                callback.OnHandshake(this, handshake);
-                buffer.ReceiveOrCallback(socket, OnMessage);
-            }
-
-            void PeerNegotiatorAware.Terminate()
-            {
-                Callback.OnTerminate(this);
             }
         }
 

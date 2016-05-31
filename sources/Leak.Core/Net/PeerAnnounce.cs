@@ -4,16 +4,16 @@ namespace Leak.Core.Net
 {
     public class PeerAnnounce
     {
-        private readonly PeerHandshake handshake;
+        private readonly PeerHandshakePayload handshake;
         private readonly PeerAnnounceConfiguration configuration;
 
-        public PeerAnnounce(PeerHandshake handshake)
+        public PeerAnnounce(PeerHandshakePayload handshake)
         {
             this.handshake = handshake;
             this.configuration = GetDefaultConfiguration();
         }
 
-        public PeerAnnounce(PeerHandshake handshake, Action<PeerAnnounceConfigurator> with)
+        public PeerAnnounce(PeerHandshakePayload handshake, Action<PeerAnnounceConfigurator> with)
         {
             PeerAnnounceConfiguration configuration = GetDefaultConfiguration();
             PeerAnnounceConfigurator configurator = new PeerAnnounceConfigurator();
@@ -33,7 +33,7 @@ namespace Leak.Core.Net
             };
         }
 
-        public PeerHandshake Handshake
+        public PeerHandshakePayload Handshake
         {
             get { return handshake; }
         }

@@ -2,54 +2,54 @@
 {
     public class PlainPeerNegotiator : PeerNegotiator
     {
-        private readonly PeerHandshake handshake;
+        private readonly PeerHandshakePayload handshake;
 
-        public PlainPeerNegotiator(PeerHandshake handshake)
+        public PlainPeerNegotiator(PeerHandshakePayload handshake)
         {
             this.handshake = handshake;
         }
 
-        public override void Active(PeerNegotiatorAware channel)
+        public void Active(PeerNegotiatorActiveContext context)
         {
-            channel.Send(handshake);
-            channel.Receive(message =>
+            context.Connection.Send(handshake);
+            context.Connection.Receive(message =>
             {
                 if (message.Length == 0)
                 {
-                    channel.Terminate();
+                    context.Terminate();
                     return;
                 }
 
                 if (message.Length < message[0] + 49)
                 {
-                    channel.Terminate();
+                    context.Terminate();
                     return;
                 }
 
-                channel.Remove(message[0] + 49);
-                channel.Continue(new PeerHandshake(message));
+                context.Connection.Remove(message[0] + 49);
+                context.Continue(new PeerHandshakePayload(message), context.Connection);
             });
         }
 
-        public override void Passive(PeerNegotiatorAware channel)
+        public void Passive(PeerNegotiatorPassiveContext context)
         {
-            channel.Receive(message =>
+            context.Connection.Receive(message =>
             {
                 if (message.Length == 0)
                 {
-                    channel.Terminate();
+                    context.Terminate();
                     return;
                 }
 
                 if (message.Length < message[0] + 49)
                 {
-                    channel.Terminate();
+                    context.Terminate();
                     return;
                 }
 
-                channel.Send(handshake);
-                channel.Remove(message[0] + 49);
-                channel.Continue(new PeerHandshake(message));
+                context.Connection.Send(handshake);
+                context.Connection.Remove(message[0] + 49);
+                context.Continue(new PeerHandshakePayload(message), context.Connection);
             });
         }
     }

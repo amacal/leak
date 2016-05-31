@@ -1,64 +1,40 @@
-﻿using System;
-
-namespace Leak.Core.Net
+﻿namespace Leak.Core.Net
 {
-    using Encoding = System.Text.Encoding;
-
-    public class PeerHandshake : PeerMessageFactory
+    public class PeerHandshake
     {
-        public static readonly int MinSize = 1;
+        private readonly PeerConnection connection;
+        private readonly PeerHandshakePayload payload;
 
-        private readonly string description;
-        private readonly byte[] hash;
-        private readonly byte[] peer;
-
-        public PeerHandshake(byte[] hash, byte[] peer)
+        public PeerHandshake(PeerConnection connection, PeerHandshakePayload handshake)
         {
-            this.description = "BitTorrent protocol";
-            this.hash = hash;
-            this.peer = peer;
-        }
-
-        public PeerHandshake(PeerMessage message)
-        {
-            int length = message[0];
-
-            this.description = Encoding.ASCII.GetString(message.ToBytes(1, length));
-            this.hash = message.ToBytes(1 + length, 20);
-            this.peer = message.ToBytes(21 + length, 20);
-
-            for (int i = 0; i < 20; i++)
-            {
-                this.peer[i] = (byte)((this.peer[i] + 1) % 256);
-            }
-        }
-
-        public static int GetSize(PeerMessage message)
-        {
-            return message[0] + 49;
+            this.connection = connection;
+            this.payload = handshake;
         }
 
         public byte[] Hash
         {
-            get { return hash; }
+            get { return payload.Hash; }
         }
 
         public byte[] Peer
         {
-            get { return peer; }
+            get { return payload.Peer; }
         }
 
-        public override PeerMessage GetMessage()
+        public void Accept(PeerCallback callback)
         {
-            byte[] data = new byte[49 + description.Length];
+            PeerListenerChannel channel = new PeerListenerChannel(connection, callback);
+            PeerMessageLoop loop = new PeerMessageLoop(channel, connection, with =>
+            {
+                with.Callback = callback;
+            });
 
-            data[0] = (byte)description.Length;
+            callback.OnAttached(channel);
+            channel.Start(loop);
+        }
 
-            Array.Copy(Encoding.ASCII.GetBytes(description), 0, data, 1, description.Length);
-            Array.Copy(hash, 0, data, data.Length - 40, 20);
-            Array.Copy(peer, 0, data, data.Length - 20, 20);
-
-            return new PeerMessage(data);
+        public void Reject()
+        {
         }
     }
 }

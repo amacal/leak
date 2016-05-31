@@ -1,9 +1,9 @@
 ﻿namespace Leak.Core.Net
 {
-    public abstract class PeerNegotiator
+    public interface PeerNegotiator
     {
-        public abstract void Active(PeerNegotiatorAware channel);
+        void Active(PeerNegotiatorActiveContext context);
 
-        public abstract void Passive(PeerNegotiatorAware channel);
+        void Passive(PeerNegotiatorPassiveContext context);
     }
 }

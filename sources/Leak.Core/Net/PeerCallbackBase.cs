@@ -18,24 +18,12 @@ namespace Leak.Core.Net
             get { return peers; }
         }
 
-        public override void OnStart(PeerChannel channel)
-        {
-        }
-
-        public override void OnStop(PeerChannel channel)
+        public override void OnAttached(PeerChannel channel)
         {
         }
 
         public override void OnTerminate(PeerChannel channel)
         {
-        }
-
-        public override void OnHandshake(PeerChannel channel, PeerHandshake handshake)
-        {
-            lock (this)
-            {
-                peers.Add(new Peer(channel, pieces, handshake));
-            }
         }
 
         public override void OnKeepAlive(PeerChannel channel)
