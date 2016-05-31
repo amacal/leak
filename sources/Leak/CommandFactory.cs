@@ -13,6 +13,7 @@ namespace Leak
             this.commands = new List<Command>();
             this.commands.Add(new AnalyzeCommand());
             this.commands.Add(new AnnounceCommand());
+            this.commands.Add(new CheckExtensionsCommand());
             this.commands.Add(new DownloadCommand());
         }
 

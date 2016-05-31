@@ -4,38 +4,26 @@ namespace Leak.Core.Net
 {
     public class PeerAnnounce
     {
-        private readonly PeerHandshakePayload handshake;
         private readonly PeerAnnounceConfiguration configuration;
 
-        public PeerAnnounce(PeerHandshakePayload handshake)
+        public PeerAnnounce(Action<PeerAnnounceConfiguration> configurer)
         {
-            this.handshake = handshake;
-            this.configuration = GetDefaultConfiguration();
-        }
-
-        public PeerAnnounce(PeerHandshakePayload handshake, Action<PeerAnnounceConfigurator> with)
-        {
-            PeerAnnounceConfiguration configuration = GetDefaultConfiguration();
-            PeerAnnounceConfigurator configurator = new PeerAnnounceConfigurator();
-
-            with.Invoke(configurator);
-            configurator.Apply(configuration);
-
-            this.handshake = handshake;
-            this.configuration = configuration;
-        }
-
-        private static PeerAnnounceConfiguration GetDefaultConfiguration()
-        {
-            return new PeerAnnounceConfiguration
+            configuration = new PeerAnnounceConfiguration
             {
                 Port = 8080
             };
+
+            configurer.Invoke(configuration);
         }
 
-        public PeerHandshakePayload Handshake
+        public byte[] Hash
         {
-            get { return handshake; }
+            get { return configuration.Hash; }
+        }
+
+        public byte[] Peer
+        {
+            get { return configuration.Peer; }
         }
 
         public byte[] Address

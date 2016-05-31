@@ -38,6 +38,10 @@ namespace Leak.Core.Net
             }
         }
 
+        public override void OnInterested(PeerChannel channel, PeerInterested message)
+        {
+        }
+
         public override void OnHave(PeerChannel channel, PeerHave message)
         {
             lock (this)

@@ -26,7 +26,6 @@ namespace Leak.Commands
         {
             TorrentRepository repository = new TorrentRepository(task.Destination);
             PCallback callback = new PCallback(repository);
-            PeerHandshakePayload handshake = new PeerHandshakePayload(task.Metainfo.Hash, task.Metainfo.Hash);
             PeerNegotiator negotiator = new PeerNegotiatorEncrypted(with =>
             {
             });
@@ -46,8 +45,11 @@ namespace Leak.Commands
                 with.Negotiator = negotiator;
             });
 
-            PeerAnnounce announce = new PeerAnnounce(handshake, with =>
+            PeerAnnounce announce = new PeerAnnounce(with =>
             {
+                with.Hash = task.Metainfo.Hash;
+                with.Peer = task.Metainfo.Hash;
+
                 if (arguments.Has("ip-address"))
                 {
                     with.SetAddress(arguments.GetString("ip-address"));

@@ -6,6 +6,8 @@
 
         PeerConnection Connection { get; }
 
+        PeerHandshakeOptions Options { get; }
+
         void Continue(PeerHandshakePayload handshake, PeerConnection connection);
 
         void Terminate();

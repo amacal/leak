@@ -10,6 +10,8 @@
 
         public abstract void OnUnchoke(PeerChannel channel, PeerUnchoke message);
 
+        public abstract void OnInterested(PeerChannel channel, PeerInterested message);
+
         public abstract void OnHave(PeerChannel channel, PeerHave message);
 
         public abstract void OnBitfield(PeerChannel channel, PeerBitfield message);

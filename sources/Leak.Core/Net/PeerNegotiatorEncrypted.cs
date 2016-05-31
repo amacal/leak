@@ -62,7 +62,7 @@ namespace Leak.Core.Net
                         {
                             receiverKey.Skip(size);
                             context.Connection.Remove(size);
-                            context.Connection.Send(new PeerHandshakePayload(context.Hash, context.Hash), initiatorKey);
+                            context.Connection.Send(new PeerHandshakePayload(context.Hash, context.Hash, context.Options), initiatorKey);
 
                             context.Connection.Receive(PeerHandshakePayload.MinSize, handshakeMessagePeek =>
                             {
@@ -166,7 +166,7 @@ namespace Leak.Core.Net
                                             initiatorKey.Skip(size);
                                             context.Connection.Remove(size);
 
-                                            context.Connection.Send(received, receiverKey);
+                                            context.Connection.Send(new PeerHandshakePayload(matched, matched, context.Options), receiverKey);
                                             context.Continue(received, context.Connection.StartEncryption(receiverKey, initiatorKey));
                                         });
                                     });

@@ -58,7 +58,7 @@
     <Compile Include="IO\MetainfoFileTrackerCase.cs" />
     <Compile Include="IO\TorrentDirectoryTests.cs" />
     <Compile Include="Net\PeerCryptographyTests.cs" />
-    <Compile Include="Net\EncryptedPeerNegotiatorTests.cs" />
+    <Compile Include="Net\PeerNegotiatorEncryptedTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RC4Tests.cs" />
   </ItemGroup>

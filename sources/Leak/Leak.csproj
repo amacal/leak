@@ -54,10 +54,13 @@
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
     <Compile Include="Commands\AnnounceCommand.cs" />
+    <Compile Include="Commands\CheckExtensionsTask.cs" />
+    <Compile Include="Commands\CheckExtensionsTaskFactory.cs" />
     <Compile Include="Commands\DownloadCommand.cs" />
     <Compile Include="Commands\AnnounceTaskFactory.cs" />
     <Compile Include="Commands\DownloadTask.cs" />
     <Compile Include="Commands\DownloadTaskFactory.cs" />
+    <Compile Include="Commands\CheckExtensionsCommand.cs" />
     <Compile Include="EventProcessorConfiguration.cs" />
     <Compile Include="EventProcessorConfigurator.cs" />
     <Compile Include="EventProcessor.cs" />

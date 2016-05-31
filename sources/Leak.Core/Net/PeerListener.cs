@@ -65,6 +65,11 @@ namespace Leak.Core.Net
                 get { return connection; }
             }
 
+            public PeerHandshakeOptions Options
+            {
+                get { return PeerHandshakeOptions.None; }
+            }
+
             public PeerNegotiatorHashCollection Hashes
             {
                 get { return configuration.Hashes; }

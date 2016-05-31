@@ -63,13 +63,14 @@
     <Compile Include="IO\TorrentPieceQueue.cs" />
     <Compile Include="IO\TorrentPieceView.cs" />
     <Compile Include="IO\TorrentRepository.cs" />
+    <Compile Include="Net\PeerHandshakeOptions.cs" />
     <Compile Include="Net\PeerNegotiatorHashCollection.cs" />
     <Compile Include="Net\PeerNegotiatorPassiveContext.cs" />
     <Compile Include="Net\PeerNegotiatorEncrypted.cs" />
     <Compile Include="Net\Peer.cs" />
     <Compile Include="Net\PeerAnnounce.cs" />
     <Compile Include="Net\PeerAnnounceConfiguration.cs" />
-    <Compile Include="Net\PeerAnnounceConfigurator.cs" />
+    <Compile Include="Net\PeerAnnounceExtensions.cs" />
     <Compile Include="Net\PeerBitfield.cs" />
     <Compile Include="Net\PeerBuffer.cs" />
     <Compile Include="Net\PeerBufferConfiguration.cs" />

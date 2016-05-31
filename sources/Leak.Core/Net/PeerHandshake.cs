@@ -21,6 +21,11 @@
             get { return payload.Peer; }
         }
 
+        public PeerHandshakeOptions Options
+        {
+            get { return payload.Options; }
+        }
+
         public void Accept(PeerCallback callback)
         {
             PeerListenerChannel channel = new PeerListenerChannel(connection, callback);

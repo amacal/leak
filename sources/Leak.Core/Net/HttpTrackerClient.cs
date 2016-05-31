@@ -18,8 +18,8 @@ namespace Leak.Core.Net
             byte[] data;
             StringBuilder request = new StringBuilder();
 
-            string hash = Encode(announce.Handshake.Hash);
-            string peer = Encode(announce.Handshake.Peer);
+            string hash = Encode(announce.Hash);
+            string peer = Encode(announce.Peer);
             string address = null;
 
             request.Append($"{uri}?");

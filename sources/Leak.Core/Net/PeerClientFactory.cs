@@ -5,26 +5,26 @@ namespace Leak.Core.Net
 {
     public class PeerClientFactory
     {
-        private readonly Socket socket;
-        private readonly PeerConnection connection;
         private readonly PeerClientConfiguration configuration;
 
         public PeerClientFactory(Action<PeerClientConfiguration> configurer)
         {
-            this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            this.configuration = new PeerClientConfiguration();
-
-            configurer.Invoke(this.configuration);
-            this.connection = new PeerConnection(socket);
+            configuration = new PeerClientConfiguration();
+            configurer.Invoke(configuration);
         }
 
         public void Connect(string host, int port)
         {
-            socket.BeginConnect(host, port, OnConnected, null);
+            Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+            socket.BeginConnect(host, port, OnConnected, socket);
         }
 
         private void OnConnected(IAsyncResult result)
         {
+            Socket socket = (Socket)result.AsyncState;
+            PeerConnection connection = new PeerConnection(socket);
+
             try
             {
                 PeerNegotiator negotiator = configuration.Negotiator;
@@ -60,6 +60,11 @@ namespace Leak.Core.Net
             public PeerConnection Connection
             {
                 get { return connection; }
+            }
+
+            public PeerHandshakeOptions Options
+            {
+                get { return PeerHandshakeOptions.None; }
             }
 
             public void Continue(PeerHandshakePayload handshake, PeerConnection connection)

@@ -50,6 +50,10 @@ namespace Leak.Core.Net
                                 configuration.Callback.OnUnchoke(channel, new PeerUnchoke());
                                 break;
 
+                            case 2:
+                                configuration.Callback.OnInterested(channel, new PeerInterested());
+                                break;
+
                             case 5:
                                 configuration.Callback.OnBitfield(channel, new PeerBitfield(message));
                                 break;

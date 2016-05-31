@@ -27,8 +27,8 @@ namespace Leak.Core.Net
 
             Array.Copy(Bytes.Parse("00000001"), 0, request, 8, 4);
             Array.Copy(transaction, 0, request, 12, 4);
-            Array.Copy(announce.Handshake.Hash, 0, request, 16, 20);
-            Array.Copy(announce.Handshake.Peer, 0, request, 36, 20);
+            Array.Copy(announce.Hash, 0, request, 16, 20);
+            Array.Copy(announce.Peer, 0, request, 36, 20);
 
             Array.Copy(Bytes.Parse("0000000000010000"), 0, request, 64, 8);
             Array.Copy(Bytes.Parse("00000001"), 0, request, 80, 4);

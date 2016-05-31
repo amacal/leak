@@ -31,9 +31,11 @@ namespace Leak.Commands
 
             foreach (AnnounceTask task in AnnounceTaskFactory.Find(arguments))
             {
-                PeerHandshakePayload handshake = new PeerHandshakePayload(task.Hash, task.Hash);
-                PeerAnnounce announce = new PeerAnnounce(handshake, with =>
+                PeerAnnounce announce = new PeerAnnounce(with =>
                 {
+                    with.Hash = task.Hash;
+                    with.Peer = task.Hash;
+
                     if (arguments.Has("ip-address"))
                     {
                         with.SetAddress(arguments.GetString("ip-address"));
@@ -82,7 +84,7 @@ namespace Leak.Commands
                 {
                     publish.Invoke("announce", new
                     {
-                        hash = Bytes.ToString(announce.Handshake.Hash),
+                        hash = Bytes.ToString(announce.Hash),
                         tracker = tracker.Uri.ToString(),
                         peers = hosts.ToArray()
                     });

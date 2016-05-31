@@ -9,12 +9,16 @@ namespace Leak.Core.Net
         public static readonly int MinSize = 1;
 
         private readonly string description;
+        private readonly PeerHandshakeOptions options;
+
         private readonly byte[] hash;
         private readonly byte[] peer;
 
-        public PeerHandshakePayload(byte[] hash, byte[] peer)
+        public PeerHandshakePayload(byte[] hash, byte[] peer, PeerHandshakeOptions options)
         {
             this.description = "BitTorrent protocol";
+            this.options = options;
+
             this.hash = hash;
             this.peer = peer;
         }
@@ -24,6 +28,7 @@ namespace Leak.Core.Net
             int length = message[0];
 
             this.description = Encoding.ASCII.GetString(message.ToBytes(1, length));
+            this.options = (PeerHandshakeOptions)(message[8 + length] + (message[7 + length] << 8) + (message[6 + length] << 16));
             this.hash = message.ToBytes(9 + length, 20);
             this.peer = message.ToBytes(29 + length, 20);
         }
@@ -41,6 +46,11 @@ namespace Leak.Core.Net
         public byte[] Peer
         {
             get { return peer; }
+        }
+
+        public PeerHandshakeOptions Options
+        {
+            get { return options; }
         }
 
         public override PeerMessage GetMessage()

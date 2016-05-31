@@ -9,7 +9,7 @@ using System.Threading;
 namespace Leak.Core.Tests.Net
 {
     [TestFixture]
-    public class EncryptedPeerNegotiatorTests
+    public class PeerNegotiatorEncryptedTests
     {
         private Socket iSocket;
         private Socket lSocket;
@@ -96,6 +96,11 @@ namespace Leak.Core.Tests.Net
             public PeerConnection Connection
             {
                 get { return connection; }
+            }
+
+            public PeerHandshakeOptions Options
+            {
+                get { return PeerHandshakeOptions.None; }
             }
 
             public PeerNegotiatorHashCollection Hashes
