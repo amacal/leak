@@ -14,7 +14,7 @@ namespace Leak.Core.Net
 
         public override IEnumerator<TrackerResponsePeer> GetEnumerator()
         {
-            byte[] bytes = data.ToHex();
+            byte[] bytes = data.Data.GetBytes();
 
             for (int i = 0; i < bytes.Length; i += 6)
             {

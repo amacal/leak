@@ -1,117 +1,188 @@
-﻿namespace Leak.Core.Encoding
+﻿using System.Collections.Generic;
+using System.IO;
+
+namespace Leak.Core.Encoding
 {
-    internal class BencoderDecoder
+    public class BencoderDecoder
     {
-        private byte[] data;
-        private int position;
-
-        public BencoderDecoder(byte[] data)
+        public byte[] Encode(BencodedValue data)
         {
-            this.data = data;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                this.Encode(stream, data);
+                return stream.ToArray();
+            }
         }
 
-        public BencodedValue Decode()
+        private void Encode(MemoryStream stream, BencodedValue data)
         {
-            if (data[position] == 'd')
+            if (data.Dictionary != null)
             {
-                return DecodeDictionary(new BencodedDictionary());
-            }
+                this.Write(stream, "d");
 
-            if (data[position] == 'l')
+                foreach (BencodedEntry entry in data.Dictionary)
+                {
+                    this.Encode(stream, entry.Key);
+                    this.Encode(stream, entry.Value);
+                }
+
+                this.Write(stream, "e");
+            }
+            else if (data.Array != null)
             {
-                return DecodeArray(new BencodedArray());
-            }
+                this.Write(stream, "l");
 
-            if (data[position] == 'i')
+                foreach (BencodedValue item in data.Array)
+                {
+                    this.Encode(stream, item);
+                }
+
+                this.Write(stream, "e");
+            }
+            else if (data.Text != null)
             {
-                return DecodeNumber();
+                this.Write(stream, data.Text.Length.ToString());
+                this.Write(stream, ":");
+                this.Write(stream, data.Text.GetBytes());
             }
-
-            return DecodeText();
+            else
+            {
+                this.Write(stream, "i");
+                this.Write(stream, data.Number.ToString());
+                this.Write(stream, "e");
+            }
         }
 
-        private BencodedDictionary DecodeDictionary(BencodedDictionary result)
+        private void Write(Stream stream, string data)
         {
-            int start = position++;
+            byte[] bytes = new byte[data.Length];
 
-            while (data[position] != 'e')
+            for (int i = 0; i < bytes.Length; i++)
             {
-                result.Add(DecodeText(), Decode());
+                bytes[i] = (byte)data[i];
             }
 
-            result.SetSource(data, start, position);
-            position++;
-
-            return result;
+            stream.Write(bytes, 0, bytes.Length);
         }
 
-        private BencodedArray DecodeArray(BencodedArray result)
+        private void Write(Stream stream, byte[] data)
         {
-            position++;
-
-            while (data[position] != 'e')
-            {
-                result.Add(Decode());
-            }
-
-            position++;
-
-            return result;
+            stream.Write(data, 0, data.Length);
         }
 
-        private BencodedNumber DecodeNumber()
+        public BencodedValue Decode(byte[] data)
         {
-            position++;
-
-            long value = 0;
-            bool minus = false;
-
-            if (data[position] == '-')
-            {
-                minus = true;
-                position = position + 1;
-            }
-
-            while (data[position] >= '0' && data[position] <= '9')
-            {
-                value = 10 * value + data[position] - '0';
-                position = position + 1;
-            }
-
-            if (minus == true)
-            {
-                value = -value;
-            }
-
-            position++;
-
-            return new BencodedNumber(value);
+            int position = 0;
+            return this.Decode(data, ref position);
         }
 
-        private BencodedText DecodeText()
+        private BencodedValue Decode(byte[] data, ref int position)
         {
+            switch (data[position])
+            {
+                case 0x69:
+                    position++;
+                    return this.DecodeInteger(data, ref position);
+
+                case 0x64:
+                    position++;
+                    return this.DecodeDictionary(data, ref position);
+
+                case 0x6c:
+                    position++;
+                    return this.DecodeArray(data, ref position);
+
+                case 0x30:
+                case 0x31:
+                case 0x32:
+                case 0x33:
+                case 0x34:
+                case 0x35:
+                case 0x36:
+                case 0x37:
+                case 0x38:
+                case 0x39:
+                    return this.DecodeString(data, ref position);
+            }
+
+            return new BencodedValue();
+        }
+
+        private BencodedValue DecodeString(byte[] data, ref int position)
+        {
+            int offset = 0;
             int length = 0;
-            string value = "";
 
-            while (data[position] >= '0' && data[position] <= '9')
+            while (data[position] != 0x3a)
             {
-                length = 10 * length + data[position] - '0';
-                position = position + 1;
+                length = length * 10 + (data[position++] - 0x30);
             }
 
-            int start = position + 1;
+            offset = position + 1;
+            position = position + length + 1;
 
-            if (length > 0)
+            return new BencodedValue
             {
-                value = System.Text.Encoding.ASCII.GetString(data, position + 1, length);
-                position = position + length;
+                Data = new BencodedData(data, offset, length),
+                Text = new BencodedText(new BencodedData(data, offset, length))
+            };
+        }
+
+        private BencodedValue DecodeInteger(byte[] data, ref int position)
+        {
+            int offset = position;
+            long number = 0L;
+
+            while (data[position] != 0x65)
+            {
+                number = number * 10 + (data[position++] - 0x30);
             }
 
-            BencodedText result = new BencodedText(value);
-            result.SetSource(data, start, position);
             position++;
+            return new BencodedValue
+            {
+                Data = new BencodedData(data, offset, position - offset),
+                Number = new BencodedNumber(number)
+            };
+        }
 
-            return result;
+        private BencodedValue DecodeArray(byte[] data, ref int position)
+        {
+            int offset = position;
+            List<BencodedValue> array = new List<BencodedValue>();
+
+            while (data[position] != 0x65)
+            {
+                array.Add(this.Decode(data, ref position));
+            }
+
+            position++;
+            return new BencodedValue
+            {
+                Data = new BencodedData(data, offset, position - offset),
+                Array = array.ToArray()
+            };
+        }
+
+        private BencodedValue DecodeDictionary(byte[] data, ref int position)
+        {
+            int offset = position - 1;
+            List<BencodedEntry> entries = new List<BencodedEntry>();
+
+            while (data[position] != 0x65)
+            {
+                BencodedValue key = Decode(data, ref position);
+                BencodedValue value = Decode(data, ref position);
+
+                entries.Add(new BencodedEntry { Key = key, Value = value });
+            }
+
+            position++;
+            return new BencodedValue
+            {
+                Data = new BencodedData(data, offset, position - offset),
+                Dictionary = entries.ToArray()
+            };
         }
     }
 }

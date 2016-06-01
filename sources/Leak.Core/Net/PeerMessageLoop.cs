@@ -61,6 +61,13 @@ namespace Leak.Core.Net
                             case 7:
                                 configuration.Callback.OnPiece(channel, new PeerPiece(message));
                                 break;
+
+                            case 20:
+                                configuration.Callback.OnExtended(channel, new PeerExtended(message));
+                                break;
+
+                            default:
+                                break;
                         }
 
                         connection.Remove(length + 4);

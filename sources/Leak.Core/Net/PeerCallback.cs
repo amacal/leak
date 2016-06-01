@@ -17,5 +17,7 @@
         public abstract void OnBitfield(PeerChannel channel, PeerBitfield message);
 
         public abstract void OnPiece(PeerChannel channel, PeerPiece message);
+
+        public abstract void OnExtended(PeerChannel channel, PeerExtended message);
     }
 }

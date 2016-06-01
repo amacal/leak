@@ -8,14 +8,15 @@ namespace Leak.Core.Encoding
     {
         public static T Find<T>(this BencodedValue value, string name, Func<BencodedValue, T> selector)
         {
-            return Find(value as BencodedDictionary, name, selector);
-        }
-
-        private static T Find<T>(this BencodedDictionary value, string name, Func<BencodedValue, T> selector)
-        {
-            if (value != null)
+            if (value != null && value.Dictionary != null)
             {
-                return selector.Invoke(value.Find(name));
+                foreach (BencodedEntry entry in value.Dictionary)
+                {
+                    if (entry.Key.Text != null && entry.Key.Text.GetString() == name)
+                    {
+                        return selector.Invoke(entry.Value);
+                    }
+                }
             }
 
             return selector.Invoke(null);
@@ -28,19 +29,19 @@ namespace Leak.Core.Encoding
 
         public static long ToNumber(this BencodedValue value)
         {
-            return ((BencodedNumber)value).Value;
+            return value.Number.ToInt64();
         }
 
         public static BencodedValue[] AllItems(this BencodedValue value)
         {
-            return AllItems(new List<BencodedValue>(), value as BencodedArray).ToArray();
+            return AllItems(new List<BencodedValue>(), value.Array).ToArray();
         }
 
-        private static List<BencodedValue> AllItems(List<BencodedValue> result, BencodedArray array)
+        private static List<BencodedValue> AllItems(List<BencodedValue> result, BencodedValue[] array)
         {
             if (array != null)
             {
-                foreach (BencodedValue value in array.Items)
+                foreach (BencodedValue value in array)
                 {
                     result.Add(value);
                 }
@@ -56,35 +57,35 @@ namespace Leak.Core.Encoding
 
         private static List<string> AllKeys(List<string> output, BencodedValue value)
         {
-            AllKeys(output, value as BencodedDictionary);
-            AllKeys(output, value as BencodedArray);
+            AllKeys(output, value.Dictionary);
+            AllKeys(output, value.Array);
 
             return output;
         }
 
-        private static void AllKeys(List<string> output, BencodedArray array)
+        private static void AllKeys(List<string> output, BencodedValue[] array)
         {
             if (array != null)
             {
-                foreach (BencodedValue value in array.Items)
+                foreach (BencodedValue value in array)
                 {
                     AllKeys(output, value);
                 }
             }
         }
 
-        private static void AllKeys(List<string> output, BencodedDictionary dictionary)
+        private static void AllKeys(List<string> output, BencodedEntry[] dictionary)
         {
             if (dictionary != null)
             {
-                foreach (BencodedText text in dictionary.Keys)
+                foreach (BencodedEntry entry in dictionary)
                 {
-                    output.Add(text.Value);
+                    output.Add(entry.Key.ToString());
                 }
 
-                foreach (BencodedValue value in dictionary.Values)
+                foreach (BencodedEntry entry in dictionary)
                 {
-                    AllKeys(output, value);
+                    AllKeys(output, entry.Value);
                 }
             }
         }
@@ -96,9 +97,12 @@ namespace Leak.Core.Encoding
 
         private static List<string> AllTexts(List<string> output, BencodedValue value)
         {
-            AllTexts(output, value as BencodedText);
-            AllTexts(output, value as BencodedDictionary);
-            AllTexts(output, value as BencodedArray);
+            if (value != null)
+            {
+                AllTexts(output, value.Text);
+                AllTexts(output, value.Dictionary);
+                AllTexts(output, value.Array);
+            }
 
             return output;
         }
@@ -107,28 +111,28 @@ namespace Leak.Core.Encoding
         {
             if (text != null)
             {
-                output.Add(text.Value);
+                output.Add(text.GetString());
             }
         }
 
-        private static void AllTexts(List<string> output, BencodedArray array)
+        private static void AllTexts(List<string> output, BencodedValue[] array)
         {
             if (array != null)
             {
-                foreach (BencodedValue value in array.Items)
+                foreach (BencodedValue value in array)
                 {
                     AllTexts(output, value);
                 }
             }
         }
 
-        private static void AllTexts(List<string> output, BencodedDictionary dictionary)
+        private static void AllTexts(List<string> output, BencodedEntry[] dictionary)
         {
             if (dictionary != null)
             {
-                foreach (BencodedValue value in dictionary.Values)
+                foreach (BencodedEntry entry in dictionary)
                 {
-                    AllTexts(output, value);
+                    AllTexts(output, entry.Value);
                 }
             }
         }

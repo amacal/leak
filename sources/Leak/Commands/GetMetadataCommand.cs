@@ -1,5 +1,4 @@
-﻿using Leak.Core;
-using Leak.Core.IO;
+﻿using Leak.Core.IO;
 using Leak.Core.Net;
 using Pargos;
 using System;
@@ -8,22 +7,22 @@ using System.Threading;
 
 namespace Leak.Commands
 {
-    public class CheckExtensionsCommand : Command
+    public class GetMetadataCommand : Command
     {
         public override string Name
         {
-            get { return "check-extensions"; }
+            get { return "get-metadata"; }
         }
 
         public override void Execute(ArgumentCollection arguments)
         {
             foreach (CheckExtensionsTask task in CheckExtensionsTaskFactory.Find(arguments))
             {
-                Check(task, arguments);
+                GetMetadata(task, arguments);
             }
         }
 
-        private void Check(CheckExtensionsTask task, ArgumentCollection arguments)
+        private void GetMetadata(CheckExtensionsTask task, ArgumentCollection arguments)
         {
             PeerNegotiator negotiator = new PeerNegotiatorEncrypted(with =>
             {
@@ -34,6 +33,7 @@ namespace Leak.Commands
                 with.Hash = task.Hash;
                 with.Callback = new NegotiatorCallback();
                 with.Negotiator = negotiator;
+                with.Options = PeerHandshakeOptions.Extended;
             });
 
             PeerAnnounce announce = new PeerAnnounce(with =>
@@ -95,15 +95,49 @@ namespace Leak.Commands
 
             public void OnHandshake(PeerConnection connection, PeerHandshake handshake)
             {
-                string peer = Bytes.ToString(handshake.Peer);
-                string options = String.Join(", ", Enum.GetValues(typeof(PeerHandshakeOptions)).Cast<PeerHandshakeOptions>().Where(x => x != PeerHandshakeOptions.None).Where(x => handshake.Options.HasFlag(x)).Select(x => x.ToString()));
-
-                lock (typeof(Console))
+                if (handshake.Options.HasFlag(PeerHandshakeOptions.Extended))
                 {
-                    Console.WriteLine($"peer='{peer}'; options={options}");
+                    handshake.Accept(new DownloadCallback());
                 }
+            }
+        }
 
-                handshake.Reject();
+        private class DownloadCallback : PeerCallback
+        {
+            public override void OnAttached(PeerChannel channel)
+            {
+            }
+
+            public override void OnBitfield(PeerChannel channel, PeerBitfield message)
+            {
+            }
+
+            public override void OnHave(PeerChannel channel, PeerHave message)
+            {
+            }
+
+            public override void OnInterested(PeerChannel channel, PeerInterested message)
+            {
+            }
+
+            public override void OnKeepAlive(PeerChannel channel)
+            {
+            }
+
+            public override void OnPiece(PeerChannel channel, PeerPiece message)
+            {
+            }
+
+            public override void OnTerminate(PeerChannel channel)
+            {
+            }
+
+            public override void OnUnchoke(PeerChannel channel, PeerUnchoke message)
+            {
+            }
+
+            public override void OnExtended(PeerChannel channel, PeerExtended message)
+            {
             }
         }
     }

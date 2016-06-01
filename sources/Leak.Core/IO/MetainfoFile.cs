@@ -48,7 +48,7 @@ namespace Leak.Core.IO
         {
             using (HashAlgorithm algorithm = SHA1.Create())
             {
-                return algorithm.ComputeHash(value.ToHex());
+                return algorithm.ComputeHash(value.Data.GetBytes());
             }
         }
     }

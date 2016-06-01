@@ -61,6 +61,9 @@
     <Compile Include="Commands\DownloadTask.cs" />
     <Compile Include="Commands\DownloadTaskFactory.cs" />
     <Compile Include="Commands\CheckExtensionsCommand.cs" />
+    <Compile Include="Commands\GetMetadataCommand.cs" />
+    <Compile Include="Commands\GetMetadataTask.cs" />
+    <Compile Include="Commands\GetMetadataTaskFactory.cs" />
     <Compile Include="EventProcessorConfiguration.cs" />
     <Compile Include="EventProcessorConfigurator.cs" />
     <Compile Include="EventProcessor.cs" />

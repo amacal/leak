@@ -28,7 +28,7 @@ namespace Leak.Core.Net
             try
             {
                 PeerNegotiator negotiator = configuration.Negotiator;
-                PeerNegotiatable negotiable = new PeerNegotiatable(configuration.Hash, connection, configuration.Callback);
+                PeerNegotiatable negotiable = new PeerNegotiatable(connection, configuration);
 
                 socket.EndConnect(result);
                 negotiator.Active(negotiable);
@@ -41,20 +41,18 @@ namespace Leak.Core.Net
 
         private class PeerNegotiatable : PeerNegotiatorActiveContext
         {
-            private readonly byte[] hash;
             private readonly PeerConnection connection;
-            private readonly PeerNegotiatorCallback callback;
+            private readonly PeerClientConfiguration configuration;
 
-            public PeerNegotiatable(byte[] hash, PeerConnection connection, PeerNegotiatorCallback callback)
+            public PeerNegotiatable(PeerConnection connection, PeerClientConfiguration configuration)
             {
-                this.hash = hash;
                 this.connection = connection;
-                this.callback = callback;
+                this.configuration = configuration;
             }
 
             public byte[] Hash
             {
-                get { return hash; }
+                get { return configuration.Hash; }
             }
 
             public PeerConnection Connection
@@ -64,12 +62,12 @@ namespace Leak.Core.Net
 
             public PeerHandshakeOptions Options
             {
-                get { return PeerHandshakeOptions.None; }
+                get { return configuration.Options; }
             }
 
             public void Continue(PeerHandshakePayload handshake, PeerConnection connection)
             {
-                callback.OnHandshake(connection, new PeerHandshake(connection, handshake));
+                configuration.Callback.OnHandshake(connection, new PeerHandshake(connection, handshake));
             }
 
             public void Terminate()

@@ -1,26 +1,25 @@
-﻿using System;
-
-namespace Leak.Core.Encoding
+﻿namespace Leak.Core.Encoding
 {
-    public abstract class BencodedValue
+    public class BencodedValue
     {
-        private byte[] data;
-        private int start;
-        private int end;
+        public BencodedData Data { get; set; }
 
-        public void SetSource(byte[] data, int start, int end)
+        public BencodedText Text { get; set; }
+
+        public BencodedNumber Number { get; set; }
+
+        public BencodedValue[] Array { get; set; }
+
+        public BencodedEntry[] Dictionary { get; set; }
+
+        public override string ToString()
         {
-            this.data = data;
-            this.start = start;
-            this.end = end;
-        }
+            if (Text != null)
+            {
+                return Text.GetString();
+            }
 
-        public byte[] ToHex()
-        {
-            byte[] result = new byte[end - start + 1];
-            Array.Copy(data, start, result, 0, result.Length);
-
-            return result;
+            return base.ToString();
         }
     }
 }

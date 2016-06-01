@@ -7,5 +7,7 @@
         public PeerNegotiatorCallback Callback { get; set; }
 
         public PeerNegotiator Negotiator { get; set; }
+
+        public PeerHandshakeOptions Options { get; set; }
     }
 }

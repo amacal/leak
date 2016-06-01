@@ -4,7 +4,7 @@
     {
         public static BencodedValue Decode(byte[] data)
         {
-            return new BencoderDecoder(data).Decode();
+            return new BencoderDecoder().Decode(data);
         }
     }
 }

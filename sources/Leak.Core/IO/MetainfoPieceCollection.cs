@@ -31,7 +31,7 @@ namespace Leak.Core.IO
 
         private int GetCount(BencodedValue pieces)
         {
-            return pieces.ToHex().Length / 20;
+            return pieces.Data.Length / 20;
         }
 
         public IEnumerator<MetainfoPiece> GetEnumerator()
@@ -41,7 +41,7 @@ namespace Leak.Core.IO
 
         private IEnumerator<MetainfoPiece> GetEnumerator(BencodedValue pieces)
         {
-            byte[] bytes = pieces.ToHex();
+            byte[] bytes = pieces.Data.GetBytes();
 
             for (int i = 0; i < bytes.Length; i += 20)
             {

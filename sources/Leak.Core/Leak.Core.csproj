@@ -36,8 +36,8 @@
   <ItemGroup>
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
-    <Compile Include="Encoding\BencodedArray.cs" />
-    <Compile Include="Encoding\BencodedDictionary.cs" />
+    <Compile Include="Encoding\BencodedData.cs" />
+    <Compile Include="Encoding\BencodedEntry.cs" />
     <Compile Include="Encoding\BencodedNumber.cs" />
     <Compile Include="Encoding\BencodedText.cs" />
     <Compile Include="Encoding\BencodedValue.cs" />
@@ -63,6 +63,7 @@
     <Compile Include="IO\TorrentPieceQueue.cs" />
     <Compile Include="IO\TorrentPieceView.cs" />
     <Compile Include="IO\TorrentRepository.cs" />
+    <Compile Include="Net\PeerExtended.cs" />
     <Compile Include="Net\PeerHandshakeOptions.cs" />
     <Compile Include="Net\PeerNegotiatorHashCollection.cs" />
     <Compile Include="Net\PeerNegotiatorPassiveContext.cs" />

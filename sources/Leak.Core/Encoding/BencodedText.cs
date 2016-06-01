@@ -1,17 +1,27 @@
 ﻿namespace Leak.Core.Encoding
 {
-    public class BencodedText : BencodedValue
+    public class BencodedText
     {
-        private readonly string value;
+        private readonly BencodedData data;
 
-        public BencodedText(string value)
+        public BencodedText(BencodedData data)
         {
-            this.value = value;
+            this.data = data;
         }
 
-        public string Value
+        public int Length
         {
-            get { return value; }
+            get { return data.Length; }
+        }
+
+        public string GetString()
+        {
+            return System.Text.Encoding.ASCII.GetString(data.GetBytes()); ;
+        }
+
+        public byte[] GetBytes()
+        {
+            return data.GetBytes();
         }
     }
 }

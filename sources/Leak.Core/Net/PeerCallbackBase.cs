@@ -61,5 +61,9 @@ namespace Leak.Core.Net
         public override void OnPiece(PeerChannel channel, PeerPiece message)
         {
         }
+
+        public override void OnExtended(PeerChannel channel, PeerExtended message)
+        {
+        }
     }
 }

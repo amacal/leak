@@ -1,6 +1,6 @@
 ﻿namespace Leak.Core.Encoding
 {
-    public class BencodedNumber : BencodedValue
+    public class BencodedNumber
     {
         private readonly long value;
 
@@ -9,9 +9,9 @@
             this.value = value;
         }
 
-        public long Value
+        public long ToInt64()
         {
-            get { return value; }
+            return value;
         }
     }
 }

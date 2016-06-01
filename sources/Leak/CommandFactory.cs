@@ -15,6 +15,7 @@ namespace Leak
             this.commands.Add(new AnnounceCommand());
             this.commands.Add(new CheckExtensionsCommand());
             this.commands.Add(new DownloadCommand());
+            this.commands.Add(new GetMetadataCommand());
         }
 
         public Command Create(string name)
