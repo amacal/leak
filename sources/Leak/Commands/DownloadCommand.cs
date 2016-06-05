@@ -198,7 +198,7 @@ namespace Leak.Commands
                     TorrentPieceView available = Peers.ByChannel(channel).Available;
 
                     TorrentPiece next = pending.Intersect(available).Except(queue).Except(repository.Completed).FirstOrDefault();
-                    string description = channel.Description.ToString().PadRight(10).Substring(0, 5);
+                    string description = channel.Name.PadRight(10).Substring(0, 5);
 
                     if (next != null)
                     {

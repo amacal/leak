@@ -18,6 +18,6 @@
 
         public abstract void OnPiece(PeerChannel channel, PeerPiece message);
 
-        public abstract void OnExtended(PeerChannel channel, PeerExtended message);
+        public abstract void OnExtended(PeerChannel channel, PeerExtended extended);
     }
 }

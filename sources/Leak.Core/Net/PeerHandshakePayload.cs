@@ -55,9 +55,11 @@ namespace Leak.Core.Net
 
         public override PeerMessage GetMessage()
         {
-            byte[] data = new byte[49 + description.Length];
+            int length = description.Length;
+            byte[] data = new byte[49 + length];
 
-            data[0] = (byte)description.Length;
+            data[0] = (byte)length;
+            data[1 + length + 5] = (byte)((((uint)options) / 256 / 256) % 256);
 
             Array.Copy(Encoding.ASCII.GetBytes(description), 0, data, 1, description.Length);
             Array.Copy(hash, 0, data, data.Length - 40, 20);

@@ -52,6 +52,7 @@
     <Compile Include="IO\MetainfoTracker.cs" />
     <Compile Include="IO\MetainfoTrackerCollection.cs" />
     <Compile Include="IO\MetainfoTrackerProtocol.cs" />
+    <Compile Include="Net\PeerExtendedMetadataReject.cs" />
     <Compile Include="IO\TorrentBlock.cs" />
     <Compile Include="IO\TorrentBlockBitfield.cs" />
     <Compile Include="IO\TorrentBlockCollection.cs" />
@@ -64,6 +65,16 @@
     <Compile Include="IO\TorrentPieceView.cs" />
     <Compile Include="IO\TorrentRepository.cs" />
     <Compile Include="Net\PeerExtended.cs" />
+    <Compile Include="Net\PeerExtendedCallback.cs" />
+    <Compile Include="Net\PeerExtendedConfiguration.cs" />
+    <Compile Include="Net\PeerExtendedExtensions.cs" />
+    <Compile Include="Net\PeerExtendedMapping.cs" />
+    <Compile Include="Net\PeerExtendedMappingConfiguration.cs" />
+    <Compile Include="Net\PeerExtendedMappingExtensions.cs" />
+    <Compile Include="Net\PeerExtendedMetadataCallback.cs" />
+    <Compile Include="Net\PeerExtendedMetadataData.cs" />
+    <Compile Include="Net\PeerExtendedMetadataExtensions.cs" />
+    <Compile Include="Net\PeerExtendedMetadataRequest.cs" />
     <Compile Include="Net\PeerHandshakeOptions.cs" />
     <Compile Include="Net\PeerNegotiatorHashCollection.cs" />
     <Compile Include="Net\PeerNegotiatorPassiveContext.cs" />

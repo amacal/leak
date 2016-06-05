@@ -1,9 +1,9 @@
 ﻿namespace Leak.Core.Net
 {
-    public abstract class PeerChannel
+    public interface PeerChannel
     {
-        public abstract PeerDescription Description { get; }
+        string Name { get; }
 
-        public abstract void Send(PeerMessageFactory data);
+        void Send(PeerMessageFactory data);
     }
 }

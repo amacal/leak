@@ -6,6 +6,8 @@ namespace Leak.Commands
     {
         public byte[] Hash { get; set; }
 
+        public string Output { get; set; }
+
         public MetainfoTracker[] Trackers { get; set; }
     }
 }

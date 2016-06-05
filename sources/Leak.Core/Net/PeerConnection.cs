@@ -42,6 +42,11 @@ namespace Leak.Core.Net
             });
         }
 
+        public string Remote
+        {
+            get { return socket.RemoteEndPoint.ToString(); }
+        }
+
         public void Receive(Action<PeerMessage> callback)
         {
             buffer.Receive(callback);

@@ -31,6 +31,7 @@ namespace Leak.Core.Net
                 PeerNegotiatable negotiable = new PeerNegotiatable(connection, configuration);
 
                 socket.EndConnect(result);
+                configuration.Callback.OnConnect(connection);
                 negotiator.Active(negotiable);
             }
             catch (SocketException)

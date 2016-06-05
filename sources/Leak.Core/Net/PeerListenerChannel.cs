@@ -11,12 +11,12 @@
             this.callback = callback;
         }
 
-        public override PeerDescription Description
+        public string Name
         {
-            get { return null; }
+            get { return connection.Remote; }
         }
 
-        public override void Send(PeerMessageFactory data)
+        public void Send(PeerMessageFactory data)
         {
             connection.Send(data.GetMessage());
         }

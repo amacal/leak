@@ -20,7 +20,7 @@ namespace Leak.Core.Net
 
         public bool Contains(TrackerResponsePeer peer)
         {
-            return items.Any(x => x.Channel.Description.Host == peer.Host);
+            return items.Any(x => x.Channel.Name == peer.Host);
         }
 
         public Peer ByChannel(PeerChannel channel)

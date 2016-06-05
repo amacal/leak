@@ -13,6 +13,13 @@
             this.length = length;
         }
 
+        public BencodedData(string value)
+        {
+            this.offset = 0;
+            this.data = System.Text.Encoding.ASCII.GetBytes(value);
+            this.length = System.Text.Encoding.ASCII.GetByteCount(value);
+        }
+
         public int Length
         {
             get { return length; }

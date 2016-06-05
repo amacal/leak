@@ -4,6 +4,11 @@
     {
         private readonly BencodedData data;
 
+        public BencodedText(string value)
+        {
+            this.data = new BencodedData(value);
+        }
+
         public BencodedText(BencodedData data)
         {
             this.data = data;

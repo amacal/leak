@@ -42,6 +42,7 @@ namespace Leak.Core.Net
                 PeerConnection connection = new PeerConnection(endpoint);
                 PeerNegotiatable negotiable = new PeerNegotiatable(connection, configuration);
 
+                configuration.Callback.OnConnect(connection);
                 negotiator.Passive(negotiable);
             }
             catch (SocketException)
@@ -67,7 +68,7 @@ namespace Leak.Core.Net
 
             public PeerHandshakeOptions Options
             {
-                get { return PeerHandshakeOptions.None; }
+                get { return configuration.Options; }
             }
 
             public PeerNegotiatorHashCollection Hashes
