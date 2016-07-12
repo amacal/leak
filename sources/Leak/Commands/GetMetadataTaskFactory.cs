@@ -3,7 +3,6 @@ using Leak.Core.IO;
 using Pargos;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Leak.Commands
 {
@@ -30,7 +29,7 @@ namespace Leak.Commands
                 {
                     Hash = hash,
                     Trackers = trackers.ToArray(),
-                    Output = Path.Combine(arguments.GetString("output"), value.ToLower() + ".tmp")
+                    Output = arguments.GetString("output")
                 };
             }
         }

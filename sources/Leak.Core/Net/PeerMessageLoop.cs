@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 using System.Net.Sockets;
 
 namespace Leak.Core.Net
 {
-    public class PeerMessageLoop
+    public class PeerMessageLoop : NetworkIncomingMessageHandler
     {
         private readonly PeerChannel channel;
-        private readonly PeerConnection connection;
+        private readonly NetworkConnection connection;
         private readonly PeerMessageLoopConfiguration configuration;
 
-        public PeerMessageLoop(PeerChannel channel, PeerConnection connection, Action<PeerMessageLoopConfiguration> with)
+        public PeerMessageLoop(PeerChannel channel, NetworkConnection connection, Action<PeerMessageLoopConfiguration> with)
         {
             this.channel = channel;
             this.connection = connection;
@@ -18,7 +19,7 @@ namespace Leak.Core.Net
             with.Invoke(configuration);
         }
 
-        public void Process(PeerMessage message)
+        public void OnMessage(NetworkIncomingMessage message)
         {
             try
             {
@@ -70,19 +71,29 @@ namespace Leak.Core.Net
                                 break;
                         }
 
-                        connection.Remove(length + 4);
-                        connection.ReceiveOrCallback(Process);
+                        message.Acknowledge(length + 4);
+                        connection.Receive(this);
 
                         return;
                     }
                 }
 
-                connection.Receive(Process);
+                message.Continue(this);
             }
             catch (SocketException)
             {
                 configuration.Callback.OnTerminate(channel);
             }
+        }
+
+        public void OnException(Exception ex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnDisconnected()
+        {
+            throw new NotImplementedException();
         }
     }
 }

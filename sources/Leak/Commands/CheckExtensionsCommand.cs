@@ -5,6 +5,7 @@ using Pargos;
 using System;
 using System.Linq;
 using System.Threading;
+using Leak.Core.Network;
 
 namespace Leak.Commands
 {
@@ -85,15 +86,15 @@ namespace Leak.Commands
 
         private class NegotiatorCallback : PeerNegotiatorCallback
         {
-            public void OnConnect(PeerConnection connection)
+            public void OnConnect(NetworkConnection connection)
             {
             }
 
-            public void OnTerminate(PeerConnection connection)
+            public void OnTerminate(NetworkConnection connection)
             {
             }
 
-            public void OnHandshake(PeerConnection connection, PeerHandshake handshake)
+            public void OnHandshake(NetworkConnection connection, PeerHandshake handshake)
             {
                 string peer = Bytes.ToString(handshake.Peer);
                 string options = String.Join(", ", Enum.GetValues(typeof(PeerHandshakeOptions)).Cast<PeerHandshakeOptions>().Where(x => x != PeerHandshakeOptions.None).Where(x => handshake.Options.HasFlag(x)).Select(x => x.ToString()));

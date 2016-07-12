@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Net
 {
@@ -27,12 +28,12 @@ namespace Leak.Core.Net
                 RC4 initiatorKey = new RC4(Bytes.Hash("keyA", secret, context.Hash), 1024);
                 RC4 receiverKey = new RC4(Bytes.Hash("keyB", secret, context.Hash), 1024);
 
-                context.Connection.Remove(96);
+                keyExchangeMessage.Acknowledge(96);
                 context.Connection.Send(new PeerCryptoHash(secret, context.Hash));
                 context.Connection.Send(new PeerCryptoPayload(), initiatorKey);
                 context.Connection.Send(new PeerCryptoHandshake(), initiatorKey);
 
-                Func<PeerMessage, bool> hasCrypto = message =>
+                Func<NetworkIncomingMessage, bool> hasCrypto = message =>
                 {
                     RC4 decryptor = receiverKey.Clone();
                     byte[] synchronize = PeerCryptoPayload.GetVerification();
@@ -51,17 +52,17 @@ namespace Leak.Core.Net
                     byte[] encrypted = synchronize.Encrypt(decryptor);
                     int offset = Find(cryptoMessageSync.ToBytes(), encrypted);
 
-                    context.Connection.Remove(offset);
+                    cryptoMessageSync.Acknowledge(offset);
                     context.Connection.Receive(PeerCryptoPayload.MinimumSize, cryptoMessagePeek =>
                     {
                         decryptor = receiverKey.Clone();
-                        PeerMessage decrypted = cryptoMessagePeek.Decrypt(decryptor);
+                        NetworkIncomingMessage decrypted = cryptoMessagePeek.Decrypt(decryptor);
                         int size = PeerCryptoPayload.GetSize(decrypted);
 
                         context.Connection.Receive(size, cryptoMessage =>
                         {
                             receiverKey.Skip(size);
-                            context.Connection.Remove(size);
+                            cryptoMessage.Acknowledge(size);
                             context.Connection.Send(new PeerHandshakePayload(context.Hash, context.Hash, context.Options), initiatorKey);
 
                             context.Connection.Receive(PeerHandshakePayload.MinSize, handshakeMessagePeek =>
@@ -77,7 +78,7 @@ namespace Leak.Core.Net
                                     PeerHandshakePayload received = new PeerHandshakePayload(decrypted);
 
                                     receiverKey.Skip(size);
-                                    context.Connection.Remove(size);
+                                    handshakeMessage.Acknowledge(size);
 
                                     context.Continue(received, context.Connection.StartEncryption(initiatorKey, receiverKey));
                                 });
@@ -95,10 +96,10 @@ namespace Leak.Core.Net
                 PeerKeyExchange exchange = new PeerKeyExchange(keyExchangeMessage);
                 byte[] secret = PeerCryptography.Secret(configuration.Credentials, exchange.Key);
 
-                context.Connection.Remove(96);
+                keyExchangeMessage.Acknowledge(96);
                 context.Connection.Send(new PeerKeyExchange(configuration.Credentials));
 
-                Func<PeerMessage, bool> hasHashes = message =>
+                Func<NetworkIncomingMessage, bool> hasHashes = message =>
                 {
                     byte[] synchronize = PeerCryptoHash.GetHash(secret);
                     int offset = Find(message.ToBytes(), synchronize);
@@ -123,11 +124,11 @@ namespace Leak.Core.Net
                     RC4 initiatorKey = new RC4(Bytes.Hash("keyA", secret, matched), 1024);
                     RC4 receiverKey = new RC4(Bytes.Hash("keyB", secret, matched), 1024);
 
-                    context.Connection.Remove(offset + 40);
+                    hashMessage.Acknowledge(offset + 40);
                     context.Connection.Receive(PeerCryptoPayload.MinimumSize, cryptoMessagePeek =>
                     {
                         RC4 decryptor = initiatorKey.Clone();
-                        PeerMessage decrypted = cryptoMessagePeek.Decrypt(decryptor);
+                        NetworkIncomingMessage decrypted = cryptoMessagePeek.Decrypt(decryptor);
                         int size = PeerCryptoPayload.GetSize(decrypted);
 
                         context.Connection.Receive(size, cryptoMessage =>
@@ -137,7 +138,7 @@ namespace Leak.Core.Net
                             PeerCryptoPayload cryptoPayload = new PeerCryptoPayload(decrypted);
 
                             initiatorKey.Skip(size);
-                            context.Connection.Remove(size);
+                            cryptoMessage.Acknowledge(size);
 
                             context.Connection.Receive(PeerCryptoHandshake.MinimumSize, cryptoHandshakeMessagePeek =>
                             {
@@ -148,7 +149,7 @@ namespace Leak.Core.Net
                                 context.Connection.Receive(size, cryptoHandshakeMessage =>
                                 {
                                     initiatorKey.Skip(size);
-                                    context.Connection.Remove(size);
+                                    cryptoHandshakeMessage.Acknowledge(size);
                                     context.Connection.Send(new PeerCryptoPayload(), receiverKey);
 
                                     context.Connection.Receive(PeerHandshakePayload.MinSize, handshakeMessagePeek =>
@@ -164,7 +165,7 @@ namespace Leak.Core.Net
                                             PeerHandshakePayload received = new PeerHandshakePayload(decrypted);
 
                                             initiatorKey.Skip(size);
-                                            context.Connection.Remove(size);
+                                            handshakeMessage.Acknowledge(size);
 
                                             context.Connection.Send(new PeerHandshakePayload(matched, matched, context.Options), receiverKey);
                                             context.Continue(received, context.Connection.StartEncryption(receiverKey, initiatorKey));

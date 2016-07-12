@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerRequest : PeerMessageFactory
     {
@@ -28,7 +30,7 @@
             get { return length; }
         }
 
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
             byte[] data = new byte[17];
 
@@ -47,7 +49,7 @@
             data[15] = (byte)((length >> 8) & 255);
             data[16] = (byte)(length & 255);
 
-            return new PeerMessage(data);
+            return new NetworkOutgoingMessage(data);
         }
     }
 }

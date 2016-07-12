@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerCryptoHash : PeerMessageFactory
     {
@@ -31,14 +33,14 @@
             get { return xor; }
         }
 
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
             byte[] payload = new byte[0];
 
             Bytes.Append(ref payload, hash);
             Bytes.Append(ref payload, xor);
 
-            return new PeerMessage(payload);
+            return new NetworkOutgoingMessage(payload);
         }
     }
 }

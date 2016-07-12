@@ -1,10 +1,12 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerUnchoke : PeerMessageFactory
     {
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
-            return new PeerMessage(0x00, 0x00, 0x00, 0x01, 0x01);
+            return new NetworkOutgoingMessage(0x00, 0x00, 0x00, 0x01, 0x01);
         }
     }
 }

@@ -55,6 +55,36 @@ namespace Leak.Core.Net
             configuration.Bencoded(request);
         }
 
+        public static void MetadataData(this PeerExtendedConfiguration configuration, Action<PeerExtendedMetadataData> configurer)
+        {
+            PeerExtendedMetadataData metadata = new PeerExtendedMetadataData();
+            configurer.Invoke(metadata);
+
+            BencodedValue request = new BencodedValue
+            {
+                Dictionary = new[]
+                {
+                    new BencodedEntry
+                    {
+                        Key = new BencodedValue { Text = new BencodedText("msg_type") },
+                        Value = new BencodedValue { Number = new BencodedNumber(1) }
+                    },
+                    new BencodedEntry
+                    {
+                        Key = new BencodedValue { Text = new BencodedText("piece") },
+                        Value = new BencodedValue { Number = new BencodedNumber(metadata.Piece) }
+                    },
+                    new BencodedEntry
+                    {
+                        Key = new BencodedValue { Text = new BencodedText("total_size") },
+                        Value = new BencodedValue { Number = new BencodedNumber(metadata.TotalSize) }
+                    }
+                }
+            };
+
+            configuration.Bencoded(request, metadata.Data);
+        }
+
         public static void HandleMetadata(this PeerExtended message, PeerChannel channel, Action<PeerExtendedMetadataCallback> configurer)
         {
             PeerExtendedMetadataCallback callback = new PeerExtendedMetadataCallback();

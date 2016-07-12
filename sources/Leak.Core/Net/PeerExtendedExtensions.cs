@@ -10,6 +10,17 @@ namespace Leak.Core.Net
             configuration.Content = Bencoder.Encode(value);
         }
 
+        public static void Bencoded(this PeerExtendedConfiguration configuration, BencodedValue value, byte[] data)
+        {
+            byte[] bencoded = Bencoder.Encode(value);
+            int length = bencoded.Length;
+
+            Array.Resize(ref bencoded, length + data.Length);
+            Array.Copy(data, 0, bencoded, length, data.Length);
+
+            configuration.Content = bencoded;
+        }
+
         public static void Handshake(this PeerExtendedConfiguration configuration, PeerExtendedMapping mapping)
         {
             configuration.Id = 0;

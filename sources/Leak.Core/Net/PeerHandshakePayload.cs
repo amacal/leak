@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Net
 {
@@ -23,7 +24,7 @@ namespace Leak.Core.Net
             this.peer = peer;
         }
 
-        public PeerHandshakePayload(PeerMessage message)
+        public PeerHandshakePayload(NetworkIncomingMessage message)
         {
             int length = message[0];
 
@@ -33,7 +34,7 @@ namespace Leak.Core.Net
             this.peer = message.ToBytes(29 + length, 20);
         }
 
-        public static int GetSize(PeerMessage message)
+        public static int GetSize(NetworkIncomingMessage message)
         {
             return message[0] + 49;
         }
@@ -53,7 +54,7 @@ namespace Leak.Core.Net
             get { return options; }
         }
 
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
             int length = description.Length;
             byte[] data = new byte[49 + length];
@@ -65,7 +66,7 @@ namespace Leak.Core.Net
             Array.Copy(hash, 0, data, data.Length - 40, 20);
             Array.Copy(peer, 0, data, data.Length - 20, 20);
 
-            return new PeerMessage(data);
+            return new NetworkOutgoingMessage(data);
         }
     }
 }

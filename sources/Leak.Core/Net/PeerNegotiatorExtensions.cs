@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Net
 {
     public static class PeerNegotiatorExtensions
     {
-        public static void Receive(this PeerConnection connection, int size, Action<PeerMessage> callback)
+        public static void Receive(this NetworkConnection connection, int size, Action<NetworkIncomingMessage> callback)
         {
-            Func<PeerMessage, bool> predicate = message =>
+            Func<NetworkIncomingMessage, bool> predicate = message =>
             {
                 return message.Length >= size;
             };
@@ -14,9 +15,9 @@ namespace Leak.Core.Net
             connection.Receive(predicate, callback);
         }
 
-        public static void Receive(this PeerConnection connection, Action<PeerMessage> callback)
+        public static void Receive(this NetworkConnection connection, Action<NetworkIncomingMessage> callback)
         {
-            Func<PeerMessage, bool> predicate = message =>
+            Func<NetworkIncomingMessage, bool> predicate = message =>
             {
                 return true;
             };
@@ -24,7 +25,7 @@ namespace Leak.Core.Net
             connection.Receive(predicate, callback);
         }
 
-        public static void Send(this PeerConnection connection, PeerMessageFactory data, RC4 key)
+        public static void Send(this NetworkConnection connection, PeerMessageFactory data, RC4 key)
         {
             connection.Send(new Encryptor(data, key));
         }
@@ -40,7 +41,7 @@ namespace Leak.Core.Net
                 this.key = key;
             }
 
-            public override PeerMessage GetMessage()
+            public override NetworkOutgoingMessage GetMessage()
             {
                 return decrypted.GetMessage().Encrypt(key);
             }

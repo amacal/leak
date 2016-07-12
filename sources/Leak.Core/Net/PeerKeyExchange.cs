@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Net
 {
@@ -13,7 +14,7 @@ namespace Leak.Core.Net
             this.padding = credentials.Padding;
         }
 
-        public PeerKeyExchange(PeerMessage message)
+        public PeerKeyExchange(NetworkIncomingMessage message)
         {
             this.key = message.ToBytes(0, 96);
             this.padding = message.ToBytes(96);
@@ -29,14 +30,14 @@ namespace Leak.Core.Net
             get { return padding; }
         }
 
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
             byte[] data = new byte[key.Length + padding.Length];
 
             Array.Copy(key, 0, data, 0, key.Length);
             Array.Copy(padding, 0, data, key.Length, padding.Length);
 
-            return new PeerMessage(data);
+            return new NetworkOutgoingMessage(data);
         }
     }
 }

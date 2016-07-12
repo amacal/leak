@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Net
 {
@@ -12,7 +13,7 @@ namespace Leak.Core.Net
             configurer.Invoke(configuration);
         }
 
-        public PeerExtended(PeerMessage message)
+        public PeerExtended(NetworkIncomingMessage message)
         {
             configuration = new PeerExtendedConfiguration
             {
@@ -36,7 +37,7 @@ namespace Leak.Core.Net
             get { return configuration.Content.Length; }
         }
 
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
             int length = configuration.Content.Length + 2;
             byte[] data = new byte[4 + length];
@@ -50,7 +51,7 @@ namespace Leak.Core.Net
 
             Array.Copy(configuration.Content, 0, data, 6, configuration.Content.Length);
 
-            return new PeerMessage(data);
+            return new NetworkOutgoingMessage(data);
         }
     }
 }

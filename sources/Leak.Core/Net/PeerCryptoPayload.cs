@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerCryptoPayload : PeerMessageFactory
     {
@@ -15,7 +17,7 @@
             this.padding = new byte[0];
         }
 
-        public PeerCryptoPayload(PeerMessage message)
+        public PeerCryptoPayload(NetworkIncomingMessage message)
         {
             this.options = message[11];
 
@@ -28,7 +30,7 @@
             get { return verification; }
         }
 
-        public static int GetSize(PeerMessage message)
+        public static int GetSize(NetworkIncomingMessage message)
         {
             return 14 + GetPaddingSize(message);
         }
@@ -38,12 +40,12 @@
             return Bytes.Parse("0000000000000000");
         }
 
-        private static int GetPaddingSize(PeerMessage message)
+        private static int GetPaddingSize(NetworkIncomingMessage message)
         {
             return message[12] * 256 + message[13];
         }
 
-        public override PeerMessage GetMessage()
+        public override NetworkOutgoingMessage GetMessage()
         {
             byte[] payload = new byte[0];
 
@@ -51,7 +53,7 @@
             Bytes.Append(ref payload, Bytes.Parse("00000002"));
             Bytes.Append(ref payload, Bytes.Parse("0000"));
 
-            return new PeerMessage(payload);
+            return new NetworkOutgoingMessage(payload);
         }
     }
 }

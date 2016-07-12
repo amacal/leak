@@ -1,14 +1,16 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public interface PeerNegotiatorPassiveContext
     {
-        PeerConnection Connection { get; }
+        NetworkConnection Connection { get; }
 
         PeerHandshakeOptions Options { get; }
 
         PeerNegotiatorHashCollection Hashes { get; }
 
-        void Continue(PeerHandshakePayload handshake, PeerConnection connection);
+        void Continue(PeerHandshakePayload handshake, NetworkConnection connection);
 
         void Terminate();
     }

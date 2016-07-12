@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using Leak.Core.Network;
 
 namespace Leak.Core.Net
 {
@@ -23,7 +24,7 @@ namespace Leak.Core.Net
         private void OnConnected(IAsyncResult result)
         {
             Socket socket = (Socket)result.AsyncState;
-            PeerConnection connection = new PeerConnection(socket);
+            NetworkConnection connection = new NetworkConnection(socket, NetworkConnectionDirection.Outgoing);
 
             try
             {
@@ -42,10 +43,10 @@ namespace Leak.Core.Net
 
         private class PeerNegotiatable : PeerNegotiatorActiveContext
         {
-            private readonly PeerConnection connection;
+            private readonly NetworkConnection connection;
             private readonly PeerClientConfiguration configuration;
 
-            public PeerNegotiatable(PeerConnection connection, PeerClientConfiguration configuration)
+            public PeerNegotiatable(NetworkConnection connection, PeerClientConfiguration configuration)
             {
                 this.connection = connection;
                 this.configuration = configuration;
@@ -56,7 +57,7 @@ namespace Leak.Core.Net
                 get { return configuration.Hash; }
             }
 
-            public PeerConnection Connection
+            public NetworkConnection Connection
             {
                 get { return connection; }
             }
@@ -66,7 +67,7 @@ namespace Leak.Core.Net
                 get { return configuration.Options; }
             }
 
-            public void Continue(PeerHandshakePayload handshake, PeerConnection connection)
+            public void Continue(PeerHandshakePayload handshake, NetworkConnection connection)
             {
                 configuration.Callback.OnHandshake(connection, new PeerHandshake(connection, handshake));
             }

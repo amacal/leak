@@ -26,7 +26,7 @@
                     return;
                 }
 
-                context.Connection.Remove(message[0] + 49);
+                message.Acknowledge(message[0] + 49);
                 context.Continue(new PeerHandshakePayload(message), context.Connection);
             });
         }
@@ -48,7 +48,7 @@
                 }
 
                 context.Connection.Send(handshake);
-                context.Connection.Remove(message[0] + 49);
+                message.Acknowledge(message[0] + 49);
                 context.Continue(new PeerHandshakePayload(message), context.Connection);
             });
         }

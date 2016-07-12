@@ -1,11 +1,13 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerHandshake
     {
-        private readonly PeerConnection connection;
+        private readonly NetworkConnection connection;
         private readonly PeerHandshakePayload payload;
 
-        public PeerHandshake(PeerConnection connection, PeerHandshakePayload handshake)
+        public PeerHandshake(NetworkConnection connection, PeerHandshakePayload handshake)
         {
             this.connection = connection;
             this.payload = handshake;
@@ -28,7 +30,7 @@
 
         public void Accept(PeerCallback callback)
         {
-            PeerListenerChannel channel = new PeerListenerChannel(connection, callback);
+            PeerChannelImpl channel = new PeerChannelImpl(connection, callback, payload.Hash);
             PeerMessageLoop loop = new PeerMessageLoop(channel, connection, with =>
             {
                 with.Callback = callback;

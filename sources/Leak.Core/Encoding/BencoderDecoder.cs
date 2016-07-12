@@ -45,11 +45,17 @@ namespace Leak.Core.Encoding
                 this.Write(stream, ":");
                 this.Write(stream, data.Text.GetBytes());
             }
-            else
+            else if (data.Number != null)
             {
                 this.Write(stream, "i");
                 this.Write(stream, data.Number.ToString());
                 this.Write(stream, "e");
+            }
+            else
+            {
+                this.Write(stream, data.Data.Length.ToString());
+                this.Write(stream, ":");
+                this.Write(stream, data.Data.GetBytes());
             }
         }
 

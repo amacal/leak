@@ -1,13 +1,10 @@
-﻿using Leak.Core;
-using Leak.Core.IO;
+﻿using Leak.Core.IO;
 using Leak.Core.Net;
 using Pargos;
 using System;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
+using Leak.Core.Network;
 
 namespace Leak.Commands
 {
@@ -28,10 +25,16 @@ namespace Leak.Commands
 
         private void GetMetadata(GetMetadataTask task, ArgumentCollection arguments)
         {
-            using (FileStream file = File.Open(task.Output, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+            MetainfoRepository repository = new MetainfoRepository(with =>
             {
-                file.SetLength(0);
-            }
+                with.Directory(directory =>
+                {
+                    directory.Location = task.Output;
+                    directory.Include("*.torrent");
+                });
+            });
+
+            repository.Register(task.Hash);
 
             PeerNegotiator negotiator = new PeerNegotiatorEncrypted(with =>
             {
@@ -40,7 +43,7 @@ namespace Leak.Commands
             PeerClientFactory factory = new PeerClientFactory(with =>
             {
                 with.Hash = task.Hash;
-                with.Callback = new NegotiatorCallback(task.Output);
+                with.Callback = new NegotiatorCallback(repository);
                 with.Negotiator = negotiator;
                 with.Options = PeerHandshakeOptions.Extended;
             });
@@ -48,7 +51,7 @@ namespace Leak.Commands
             PeerListener listener = new PeerListener(with =>
             {
                 with.Port = 8080;
-                with.Callback = new NegotiatorCallback(task.Output);
+                with.Callback = new NegotiatorCallback(repository);
                 with.Negotiator = negotiator;
                 with.Options = PeerHandshakeOptions.Extended;
                 with.Hashes = new PeerNegotiatorHashCollection(task.Hash);
@@ -108,30 +111,30 @@ namespace Leak.Commands
 
         private class NegotiatorCallback : PeerNegotiatorCallback
         {
-            private readonly string output;
+            private readonly MetainfoRepository repository;
 
-            public NegotiatorCallback(string output)
+            public NegotiatorCallback(MetainfoRepository repository)
             {
-                this.output = output;
+                this.repository = repository;
             }
 
-            public void OnConnect(PeerConnection connection)
+            public void OnConnect(NetworkConnection connection)
             {
                 Console.WriteLine($"Connected to {connection.Remote}.");
             }
 
-            public void OnTerminate(PeerConnection connection)
+            public void OnTerminate(NetworkConnection connection)
             {
             }
 
-            public void OnHandshake(PeerConnection connection, PeerHandshake handshake)
+            public void OnHandshake(NetworkConnection connection, PeerHandshake handshake)
             {
                 Console.WriteLine($"Handshake with {connection.Remote}.");
 
                 if (handshake.Options.HasFlag(PeerHandshakeOptions.Extended))
                 {
                     Console.WriteLine($"Accepted {connection.Remote}.");
-                    handshake.Accept(new DownloadCallback(output, handshake.Hash));
+                    handshake.Accept(new DownloadCallback(repository, handshake.Hash));
                 }
             }
         }
@@ -139,16 +142,16 @@ namespace Leak.Commands
         private class DownloadCallback : PeerCallback
         {
             private readonly byte[] hash;
-            private readonly string output;
+            private readonly MetainfoRepository repository;
 
             private readonly PeerExtendedMapping mapping;
             private PeerExtendedMapping outgoing;
             private static int received = -1;
 
-            public DownloadCallback(string output, byte[] hash)
+            public DownloadCallback(MetainfoRepository repository, byte[] hash)
             {
                 this.hash = hash;
-                this.output = output;
+                this.repository = repository;
 
                 this.mapping = new PeerExtendedMapping(with =>
                 {
@@ -208,23 +211,14 @@ namespace Leak.Commands
             {
                 outgoing = mapping;
 
-                bool exists = false;
                 byte? id = outgoing.FindId("ut_metadata");
                 int? size = outgoing.GetInt32("metadata_size");
 
                 if (id != null && size != null)
                 {
-                    lock (typeof(DownloadCallback))
+                    lock (repository)
                     {
-                        if (exists = File.Exists(output))
-                        {
-                            using (FileStream file = File.Open(output, FileMode.Open, FileAccess.Write, FileShare.None))
-                            {
-                                file.SetLength(size.Value);
-                            }
-                        }
-
-                        if (exists)
+                        if (repository.IsCompleted(hash) == false)
                         {
                             channel.Send(new PeerExtended(with =>
                             {
@@ -273,36 +267,11 @@ namespace Leak.Commands
             {
                 Console.WriteLine($"Handling metadata piece {message.Piece} with {channel.Name}.");
 
-                lock (typeof(DownloadCallback))
+                lock (repository)
                 {
-                    if (File.Exists(output))
+                    if (repository.IsCompleted(hash) == false)
                     {
-                        using (FileStream file = File.Open(output, FileMode.Open, FileAccess.Write, FileShare.None))
-                        {
-                            file.Seek(message.Piece * 16384, SeekOrigin.Begin);
-                            file.Write(message.Data, 0, message.Data.Length);
-                        }
-
-                        bool completed = false;
-                        byte[] data = File.ReadAllBytes(output);
-
-                        using (SHA1 algorithm = SHA1.Create())
-                        {
-                            completed = Bytes.Equals(algorithm.ComputeHash(data), hash);
-                        }
-
-                        if (completed)
-                        {
-                            File.Delete(output);
-
-                            using (FileStream file = File.Open(Path.ChangeExtension(output, "torrent"), FileMode.Create, FileAccess.Write, FileShare.None))
-                            {
-                                file.Write(Encoding.ASCII.GetBytes("d4:info"), 0, 7);
-                                file.Write(data, 0, data.Length);
-                                file.Write(Encoding.ASCII.GetBytes("e"), 0, 1);
-                            }
-                        }
-                        else
+                        if (repository.SetData(hash, message.Piece, message.Data) == false)
                         {
                             received = Math.Max(received, message.Piece);
 

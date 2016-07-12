@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using Leak.Core.Network;
 
 namespace Leak.Core.Net
 {
-    public class PeerListener
+    public class PeerListener : IDisposable
     {
         private readonly Socket socket;
         private readonly PeerListenerConfiguration configuration;
@@ -29,7 +30,16 @@ namespace Leak.Core.Net
 
         public void Stop()
         {
-            socket.Disconnect(true);
+            if (socket.Connected)
+            {
+                socket.Disconnect(true);
+            }
+        }
+
+        public void Dispose()
+        {
+            socket.Close();
+            socket.Dispose();
         }
 
         private void OnAccepted(IAsyncResult result)
@@ -39,7 +49,7 @@ namespace Leak.Core.Net
                 Socket endpoint = socket.EndAccept(result);
                 PeerNegotiator negotiator = configuration.Negotiator;
 
-                PeerConnection connection = new PeerConnection(endpoint);
+                NetworkConnection connection = new NetworkConnection(endpoint, NetworkConnectionDirection.Incoming);
                 PeerNegotiatable negotiable = new PeerNegotiatable(connection, configuration);
 
                 configuration.Callback.OnConnect(connection);
@@ -48,20 +58,23 @@ namespace Leak.Core.Net
             catch (SocketException)
             {
             }
+            catch (ObjectDisposedException)
+            {
+            }
         }
 
         private class PeerNegotiatable : PeerNegotiatorPassiveContext
         {
-            private readonly PeerConnection connection;
+            private readonly NetworkConnection connection;
             private readonly PeerListenerConfiguration configuration;
 
-            public PeerNegotiatable(PeerConnection connection, PeerListenerConfiguration configuration)
+            public PeerNegotiatable(NetworkConnection connection, PeerListenerConfiguration configuration)
             {
                 this.connection = connection;
                 this.configuration = configuration;
             }
 
-            public PeerConnection Connection
+            public NetworkConnection Connection
             {
                 get { return connection; }
             }
@@ -76,7 +89,7 @@ namespace Leak.Core.Net
                 get { return configuration.Hashes; }
             }
 
-            public void Continue(PeerHandshakePayload handshake, PeerConnection connection)
+            public void Continue(PeerHandshakePayload handshake, NetworkConnection connection)
             {
                 configuration.Callback.OnHandshake(connection, new PeerHandshake(connection, handshake));
             }

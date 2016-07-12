@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerBitfield
     {
@@ -11,7 +13,7 @@
             this.data = new byte[(size - 1) / 8 + 1];
         }
 
-        public PeerBitfield(PeerMessage message)
+        public PeerBitfield(NetworkIncomingMessage message)
         {
             this.size = message.Length * 8;
             this.data = message.ToBytes(5, message.Length - 5);

@@ -1,11 +1,13 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public interface PeerNegotiatorCallback
     {
-        void OnConnect(PeerConnection connection);
+        void OnConnect(NetworkConnection connection);
 
-        void OnTerminate(PeerConnection connection);
+        void OnTerminate(NetworkConnection connection);
 
-        void OnHandshake(PeerConnection connection, PeerHandshake handshake);
+        void OnHandshake(NetworkConnection connection, PeerHandshake handshake);
     }
 }

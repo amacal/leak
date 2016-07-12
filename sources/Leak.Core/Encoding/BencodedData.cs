@@ -6,6 +6,13 @@
         private readonly int offset;
         private readonly int length;
 
+        public BencodedData(byte[] data)
+        {
+            this.data = data;
+            this.offset = 0;
+            this.length = data.Length;
+        }
+
         public BencodedData(byte[] data, int offset, int length)
         {
             this.data = data;

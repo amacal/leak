@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public class PeerPiece
     {
@@ -6,7 +8,7 @@
         private readonly int offset;
         private readonly byte[] data;
 
-        public PeerPiece(PeerMessage message)
+        public PeerPiece(NetworkIncomingMessage message)
         {
             int length = message[3] + message[2] * 256 + message[1] * 256 * 256;
 

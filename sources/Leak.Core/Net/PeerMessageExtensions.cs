@@ -1,15 +1,17 @@
-﻿namespace Leak.Core.Net
+﻿using Leak.Core.Network;
+
+namespace Leak.Core.Net
 {
     public static class PeerMessageExtensions
     {
-        public static PeerMessage Encrypt(this PeerMessage message, RC4 key)
+        public static NetworkOutgoingMessage Encrypt(this NetworkOutgoingMessage message, RC4 key)
         {
-            return new PeerMessage(key.Encrypt(message.ToBytes()));
+            return new NetworkOutgoingMessage(key.Encrypt(message.ToBytes()));
         }
 
-        public static PeerMessage Decrypt(this PeerMessage message, RC4 key)
+        public static NetworkIncomingMessage Decrypt(this NetworkIncomingMessage message, RC4 key)
         {
-            return new PeerMessage(key.Decrypt(message.ToBytes()));
+            return new NetworkIncomingMessage(message, key.Decrypt(message.ToBytes()));
         }
     }
 }

@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Net
 {
     public static class PeerConnectionExtensions
     {
-        public static void Send(this PeerConnection connection, PeerMessageFactory factory)
+        public static void Send(this NetworkConnection connection, PeerMessageFactory factory)
         {
             connection.Send(factory.GetMessage());
         }
 
-        public static void Receive(this PeerConnection connection, Func<PeerMessage, bool> predicate, Action<PeerMessage> callback)
+        public static void Receive(this NetworkConnection connection, Func<NetworkIncomingMessage, bool> predicate, Action<NetworkIncomingMessage> callback)
         {
-            Action<PeerMessage> onMessage = null;
+            Action<NetworkIncomingMessage> onMessage = null;
 
             onMessage = message =>
             {
@@ -21,20 +22,45 @@ namespace Leak.Core.Net
                 }
                 else
                 {
-                    connection.Receive(onMessage);
+                    message.Continue(new InlineHandler(onMessage));
                 }
             };
 
-            connection.ReceiveOrCallback(onMessage);
+            connection.Receive(onMessage);
         }
 
-        public static PeerConnection StartEncryption(this PeerConnection connection, RC4 encryptKey, RC4 decryptKey)
+        public static NetworkConnection StartEncryption(this NetworkConnection connection, RC4 encryptKey, RC4 decryptKey)
         {
-            return new PeerConnection(connection, with =>
+            return new NetworkConnection(connection, with =>
             {
-                with.Encrypt = encryptKey.Encrypt;
-                with.Decrypt = decryptKey.Decrypt;
+                //with.Encryptor = encryptKey.Encrypt;
+                //with.Decryptor = decryptKey.Decrypt;
             });
+        }
+
+        private class InlineHandler : NetworkIncomingMessageHandler
+        {
+            private readonly Action<NetworkIncomingMessage> handler;
+
+            public InlineHandler(Action<NetworkIncomingMessage> handler)
+            {
+                this.handler = handler;
+            }
+
+            public void OnMessage(NetworkIncomingMessage message)
+            {
+                handler.Invoke(message);
+            }
+
+            public void OnException(Exception ex)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnDisconnected()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

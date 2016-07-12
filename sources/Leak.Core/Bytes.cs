@@ -15,6 +15,14 @@ namespace Leak.Core
             return data;
         }
 
+        public static void Extend(ref byte[] array, int size)
+        {
+            if (array.Length < size)
+            {
+                Array.Resize(ref array, size);
+            }
+        }
+
         public static byte[] Parse(string value)
         {
             byte[] result = new byte[value.Length / 2];
@@ -53,6 +61,14 @@ namespace Leak.Core
             using (SHA1 algorithm = SHA1.Create())
             {
                 return algorithm.ComputeHash(input);
+            }
+        }
+
+        public static byte[] Hash(byte[] data)
+        {
+            using (SHA1 algorithm = SHA1.Create())
+            {
+                return algorithm.ComputeHash(data);
             }
         }
 

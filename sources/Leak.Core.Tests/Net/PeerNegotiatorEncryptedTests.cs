@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Leak.Core.Net;
+using Leak.Core.Network;
 using NUnit.Framework;
 using System;
 using System.Net;
@@ -28,7 +29,7 @@ namespace Leak.Core.Tests.Net
             lSocket.Close();
         }
 
-        [Test, Timeout(8000)]
+        [Test, Timeout(1000)]
         public void CanTransferSomeDataAfterNegotiation()
         {
             byte[] response = null;
@@ -49,10 +50,10 @@ namespace Leak.Core.Tests.Net
             lSocket.BeginAccept(x =>
             {
                 Socket rSocket = lSocket.EndAccept(x);
-                PeerConnection rConnection = new PeerConnection(rSocket);
+                NetworkConnection rConnection = new NetworkConnection(rSocket, NetworkConnectionDirection.Incoming);
                 Context rContext = new Context(hash, rConnection, connection =>
                 {
-                    connection.ReceiveOrCallback(message =>
+                    connection.Receive(message =>
                     {
                         response = message.ToBytes();
                         semaphore.Release();
@@ -63,10 +64,10 @@ namespace Leak.Core.Tests.Net
             }, null);
 
             iSocket.Connect(endpoint);
-            PeerConnection iConnection = new PeerConnection(iSocket);
+            NetworkConnection iConnection = new NetworkConnection(iSocket, NetworkConnectionDirection.Outgoing);
             Context iContext = new Context(hash, iConnection, connection =>
             {
-                connection.Send(new PeerMessage(request));
+                connection.Send(new NetworkOutgoingMessage(request));
             });
 
             negotiator.Active(iContext);
@@ -78,10 +79,10 @@ namespace Leak.Core.Tests.Net
         private class Context : PeerNegotiatorActiveContext, PeerNegotiatorPassiveContext
         {
             private readonly byte[] hash;
-            private readonly PeerConnection connection;
-            private readonly Action<PeerConnection> callback;
+            private readonly NetworkConnection connection;
+            private readonly Action<NetworkConnection> callback;
 
-            public Context(byte[] hash, PeerConnection connection, Action<PeerConnection> callback)
+            public Context(byte[] hash, NetworkConnection connection, Action<NetworkConnection> callback)
             {
                 this.connection = connection;
                 this.callback = callback;
@@ -93,7 +94,7 @@ namespace Leak.Core.Tests.Net
                 get { return hash; }
             }
 
-            public PeerConnection Connection
+            public NetworkConnection Connection
             {
                 get { return connection; }
             }
@@ -108,7 +109,7 @@ namespace Leak.Core.Tests.Net
                 get { return new PeerNegotiatorHashCollection(hash); }
             }
 
-            public void Continue(PeerHandshakePayload handshake, PeerConnection connection)
+            public void Continue(PeerHandshakePayload handshake, NetworkConnection connection)
             {
                 callback.Invoke(connection);
             }
