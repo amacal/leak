@@ -9,7 +9,7 @@ using System.Threading;
 namespace Leak.Core.Tests.Network
 {
     [TestFixture]
-    public class NetworkConnectionTests
+    public class NetworkTests
     {
         [Test]
         public void CanSendAndReceiveData()
@@ -24,7 +24,7 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
 
                 byte[] payload = { 1, 2, 3 };
-                NetworkOutgoingMessage outgoing = new NetworkOutgoingMessage(payload);
+                NetworkOutgoingMessageBytes outgoing = new NetworkOutgoingMessageBytes(payload);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -49,8 +49,8 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
                 NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
 
-                NetworkOutgoingMessage part1 = new NetworkOutgoingMessage(1, 2);
-                NetworkOutgoingMessage part2 = new NetworkOutgoingMessage(3);
+                NetworkOutgoingMessageBytes part1 = new NetworkOutgoingMessageBytes(1, 2);
+                NetworkOutgoingMessageBytes part2 = new NetworkOutgoingMessageBytes(3);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -78,7 +78,7 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
                 NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
 
-                active.Send(new NetworkOutgoingMessage(1, 2, 3, 4, 5, 6));
+                active.Send(new NetworkOutgoingMessageBytes(1, 2, 3, 4, 5, 6));
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -158,7 +158,7 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
 
                 active = new NetworkConnection(active, with => with.Encryptor = new IncrementalEncryptor());
-                NetworkOutgoingMessage outgoing = new NetworkOutgoingMessage(1, 2, 3);
+                NetworkOutgoingMessageBytes outgoing = new NetworkOutgoingMessageBytes(1, 2, 3);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -184,7 +184,7 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
 
                 passive = new NetworkConnection(passive, with => with.Decryptor = new DecrementalDecryptor());
-                NetworkOutgoingMessage outgoing = new NetworkOutgoingMessage(2, 3, 4);
+                NetworkOutgoingMessageBytes outgoing = new NetworkOutgoingMessageBytes(2, 3, 4);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -209,7 +209,7 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
                 NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
 
-                active.Send(new NetworkOutgoingMessage(1, 2, 3, 5, 6, 7));
+                active.Send(new NetworkOutgoingMessageBytes(1, 2, 3, 5, 6, 7));
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {

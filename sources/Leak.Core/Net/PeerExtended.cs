@@ -37,7 +37,7 @@ namespace Leak.Core.Net
             get { return configuration.Content.Length; }
         }
 
-        public override NetworkOutgoingMessage GetMessage()
+        public override NetworkOutgoingMessageBytes GetMessage()
         {
             int length = configuration.Content.Length + 2;
             byte[] data = new byte[4 + length];
@@ -51,7 +51,7 @@ namespace Leak.Core.Net
 
             Array.Copy(configuration.Content, 0, data, 6, configuration.Content.Length);
 
-            return new NetworkOutgoingMessage(data);
+            return new NetworkOutgoingMessageBytes(data);
         }
     }
 }

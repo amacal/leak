@@ -76,13 +76,20 @@ namespace Leak.Core.Network
         /// <param name="handler">An instance of the incoming message handler.</param>
         public void Receive(NetworkIncomingMessageHandler handler)
         {
-            if (offset + length >= configuration.Size)
+            try
             {
-                socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
+                if (offset + length >= configuration.Size)
+                {
+                    socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
+                }
+                else
+                {
+                    socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                }
             }
-            else
+            catch (SocketException ex)
             {
-                socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                handler.OnException(ex);
             }
         }
 
@@ -106,7 +113,7 @@ namespace Leak.Core.Network
 
         private void OnReceived(IAsyncResult result)
         {
-            var callback = (NetworkIncomingMessageHandler)result.AsyncState;
+            var handler = (NetworkIncomingMessageHandler)result.AsyncState;
 
             try
             {
@@ -117,16 +124,16 @@ namespace Leak.Core.Network
                     Decrypt(offset, received);
                     length += received;
 
-                    callback.OnMessage(new NetworkIncomingMessage(this));
+                    handler.OnMessage(new NetworkIncomingMessage(this));
                 }
                 else
                 {
-                    callback.OnDisconnected();
+                    handler.OnDisconnected();
                 }
             }
             catch (SocketException ex)
             {
-                callback.OnException(ex);
+                handler.OnException(ex);
             }
         }
 

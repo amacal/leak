@@ -65,7 +65,9 @@
     <Compile Include="LeakExtensionsTests.cs" />
     <Compile Include="LeakMetadataTests.cs" />
     <Compile Include="LeakNegotiationTests.cs" />
-    <Compile Include="Network\NetworkConnectionTests.cs" />
+    <Compile Include="Negotiator\NegotiatorTests.cs" />
+    <Compile Include="NetworkContainer.cs" />
+    <Compile Include="Network\NetworkTests.cs" />
     <Compile Include="Net\PeerCryptographyTests.cs" />
     <Compile Include="Net\PeerNegotiatorEncryptedTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

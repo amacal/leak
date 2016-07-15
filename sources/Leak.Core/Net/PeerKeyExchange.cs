@@ -30,14 +30,14 @@ namespace Leak.Core.Net
             get { return padding; }
         }
 
-        public override NetworkOutgoingMessage GetMessage()
+        public override NetworkOutgoingMessageBytes GetMessage()
         {
             byte[] data = new byte[key.Length + padding.Length];
 
             Array.Copy(key, 0, data, 0, key.Length);
             Array.Copy(padding, 0, data, key.Length, padding.Length);
 
-            return new NetworkOutgoingMessage(data);
+            return new NetworkOutgoingMessageBytes(data);
         }
     }
 }

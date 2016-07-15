@@ -26,7 +26,7 @@ namespace Leak.Core.Tests.Integration.Network
                 connection.Direction.Should().Be(NetworkConnectionDirection.Outgoing);
                 connection.Remote.Should().Be("93.184.216.34");
 
-                connection.Send(new NetworkOutgoingMessage(System.Text.Encoding.ASCII.GetBytes(Request)));
+                connection.Send(new NetworkOutgoingMessageBytes(System.Text.Encoding.ASCII.GetBytes(Request)));
                 connection.Receive(handler);
 
                 handler.Ready.WaitOne(TimeSpan.FromMinutes(1));

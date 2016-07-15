@@ -94,6 +94,7 @@ namespace Leak.Core.Network
 
         /// <summary>
         /// Sends the outgoing message to the remote endpoint.
+        /// Sending always blocks and is executed in the current thread.
         /// </summary>
         /// <param name="message">An instance of the outgoing message.</param>
         public void Send(NetworkOutgoingMessage message)
@@ -102,6 +103,12 @@ namespace Leak.Core.Network
             byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
 
             socket.Send(encrypted);
+        }
+
+        public void Close()
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
         }
     }
 }

@@ -4,9 +4,9 @@ namespace Leak.Core.Net
 {
     public class PeerInterested : PeerMessageFactory
     {
-        public override NetworkOutgoingMessage GetMessage()
+        public override NetworkOutgoingMessageBytes GetMessage()
         {
-            return new NetworkOutgoingMessage(0x00, 0x00, 0x00, 0x01, 0x02);
+            return new NetworkOutgoingMessageBytes(0x00, 0x00, 0x00, 0x01, 0x02);
         }
     }
 }

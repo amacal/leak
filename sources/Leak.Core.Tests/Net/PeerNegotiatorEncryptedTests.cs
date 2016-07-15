@@ -67,7 +67,7 @@ namespace Leak.Core.Tests.Net
             NetworkConnection iConnection = new NetworkConnection(iSocket, NetworkConnectionDirection.Outgoing);
             Context iContext = new Context(hash, iConnection, connection =>
             {
-                connection.Send(new NetworkOutgoingMessage(request));
+                connection.Send(new NetworkOutgoingMessageBytes(request));
             });
 
             negotiator.Active(iContext);

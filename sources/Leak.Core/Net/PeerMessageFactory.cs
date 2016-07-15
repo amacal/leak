@@ -4,6 +4,6 @@ namespace Leak.Core.Net
 {
     public abstract class PeerMessageFactory
     {
-        public abstract NetworkOutgoingMessage GetMessage();
+        public abstract NetworkOutgoingMessageBytes GetMessage();
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Leak.Core.Network;
 
-namespace Leak.Core.Net
+namespace Leak.Core.Negotiator
 {
-    public class PeerCryptoHash : PeerMessageFactory
+    public class HandshakeCryptoHashMessage : NetworkOutgoingMessage
     {
         private readonly byte[] hash;
         private readonly byte[] xor;
 
-        public PeerCryptoHash(byte[] secret, byte[] hash)
+        public HandshakeCryptoHashMessage(byte[] secret, byte[] hash)
         {
             this.hash = GetHash(secret);
             this.xor = GetXor(secret, hash);
@@ -23,24 +23,14 @@ namespace Leak.Core.Net
             return Bytes.Xor(Bytes.Hash("req2", hash), Bytes.Hash("req3", secret));
         }
 
-        public byte[] Hash
+        public int Length
         {
-            get { return hash; }
+            get { return hash.Length + xor.Length; }
         }
 
-        public byte[] Xor
+        public byte[] ToBytes()
         {
-            get { return xor; }
-        }
-
-        public override NetworkOutgoingMessageBytes GetMessage()
-        {
-            byte[] payload = new byte[0];
-
-            Bytes.Append(ref payload, hash);
-            Bytes.Append(ref payload, xor);
-
-            return new NetworkOutgoingMessageBytes(payload);
+            return Bytes.Concatenate(hash, xor);
         }
     }
 }

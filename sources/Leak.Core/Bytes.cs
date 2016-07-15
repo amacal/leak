@@ -72,6 +72,18 @@ namespace Leak.Core
             }
         }
 
+        public static byte[] Concatenate(params byte[][] data)
+        {
+            byte[] result = new byte[0];
+
+            foreach (byte[] array in data)
+            {
+                Append(ref result, array);
+            }
+
+            return result;
+        }
+
         public static void Append(ref byte[] data, byte[] input)
         {
             Array.Resize(ref data, data.Length + input.Length);
@@ -112,6 +124,30 @@ namespace Leak.Core
             }
 
             return builder.ToString();
+        }
+
+        public static int Find(byte[] data, byte[] pattern)
+        {
+            for (int i = 0; i < data.Length - pattern.Length; i++)
+            {
+                bool success = true;
+
+                for (int j = 0; j < pattern.Length; j++)
+                {
+                    if (data[j + i] != pattern[j])
+                    {
+                        success = false;
+                        break;
+                    }
+                }
+
+                if (success)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Leak.Core.Network;
 
-namespace Leak.Core.Net
+namespace Leak.Core.Negotiator
 {
-    public class PeerCryptoHandshake : PeerMessageFactory
+    public class HandshakeCryptoMessage : NetworkOutgoingMessage
     {
         public static readonly int MinimumSize = 2;
 
@@ -11,9 +11,14 @@ namespace Leak.Core.Net
             return 2 + message[0] * 256 + message[1];
         }
 
-        public override NetworkOutgoingMessageBytes GetMessage()
+        public int Length
         {
-            return new NetworkOutgoingMessageBytes(Bytes.Parse("0000"));
+            get { return 2; }
+        }
+
+        public byte[] ToBytes()
+        {
+            return Bytes.Parse("0000");
         }
     }
 }

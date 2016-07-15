@@ -30,7 +30,7 @@ namespace Leak.Core.Net
             get { return length; }
         }
 
-        public override NetworkOutgoingMessage GetMessage()
+        public override NetworkOutgoingMessageBytes GetMessage()
         {
             byte[] data = new byte[17];
 
@@ -49,7 +49,7 @@ namespace Leak.Core.Net
             data[15] = (byte)((length >> 8) & 255);
             data[16] = (byte)(length & 255);
 
-            return new NetworkOutgoingMessage(data);
+            return new NetworkOutgoingMessageBytes(data);
         }
     }
 }

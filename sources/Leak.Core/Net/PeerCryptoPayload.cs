@@ -45,7 +45,7 @@ namespace Leak.Core.Net
             return message[12] * 256 + message[13];
         }
 
-        public override NetworkOutgoingMessage GetMessage()
+        public override NetworkOutgoingMessageBytes GetMessage()
         {
             byte[] payload = new byte[0];
 
@@ -53,7 +53,7 @@ namespace Leak.Core.Net
             Bytes.Append(ref payload, Bytes.Parse("00000002"));
             Bytes.Append(ref payload, Bytes.Parse("0000"));
 
-            return new NetworkOutgoingMessage(payload);
+            return new NetworkOutgoingMessageBytes(payload);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Leak.Core.Net
                 this.key = key;
             }
 
-            public override NetworkOutgoingMessage GetMessage()
+            public override NetworkOutgoingMessageBytes GetMessage()
             {
                 return decrypted.GetMessage().Encrypt(key);
             }
