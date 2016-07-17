@@ -1,29 +1,31 @@
-﻿namespace Leak.Core.Negotiator
+﻿using Leak.Core.Common;
+
+namespace Leak.Core.Negotiator
 {
     public class Handshake
     {
-        private readonly HandshakePeer local;
-        private readonly HandshakePeer remote;
-        private readonly HandshakeHash hash;
+        private readonly PeerHash local;
+        private readonly PeerHash remote;
+        private readonly FileHash hash;
 
-        public Handshake(HandshakePeer local, HandshakePeer remote, HandshakeHash hash)
+        public Handshake(PeerHash local, PeerHash remote, FileHash hash)
         {
             this.local = local;
             this.remote = remote;
             this.hash = hash;
         }
 
-        public HandshakePeer Local
+        public PeerHash Local
         {
             get { return local; }
         }
 
-        public HandshakePeer Remote
+        public PeerHash Remote
         {
             get { return remote; }
         }
 
-        public HandshakeHash Hash
+        public FileHash Hash
         {
             get { return hash; }
         }

@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Network;
 using System;
+using Leak.Core.Common;
 
 namespace Leak.Core.Negotiator
 {
@@ -8,11 +9,11 @@ namespace Leak.Core.Negotiator
         public static readonly int MinSize = 1;
         public static readonly string ProtocolName = "BitTorrent protocol";
 
-        private readonly HandshakePeer peer;
-        private readonly HandshakeHash hash;
+        private readonly PeerHash peer;
+        private readonly FileHash hash;
         private readonly HandshakeOptions options;
 
-        public HandshakeMessage(HandshakePeer peer, HandshakeHash hash, HandshakeOptions options)
+        public HandshakeMessage(PeerHash peer, FileHash hash, HandshakeOptions options)
         {
             this.peer = peer;
             this.hash = hash;

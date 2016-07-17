@@ -1,6 +1,8 @@
 ﻿using Leak.Core.Network;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Leak.Core.Tests
 {
@@ -39,6 +41,24 @@ namespace Leak.Core.Tests
 
             if (connections.ContainsKey(passive) == false)
                 connections.Add(passive, new NetworkConnection(sockets[passive], NetworkConnectionDirection.Incoming));
+        }
+
+        public void ConnectTo(string active, string host, int port)
+        {
+            sockets.ConnectTo(active, host, port);
+
+            if (connections.ContainsKey(active) == false)
+                connections.Add(active, new NetworkConnection(sockets[active], NetworkConnectionDirection.Outgoing));
+        }
+
+        public async Task<NetworkConnection> Listen(string passive, int port)
+        {
+            Socket socket = await sockets.Listen(passive, port);
+
+            if (connections.ContainsKey(passive) == false)
+                connections.Add(passive, new NetworkConnection(socket, NetworkConnectionDirection.Incoming));
+
+            return connections[passive];
         }
 
         public void Dispose()

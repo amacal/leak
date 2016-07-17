@@ -5,7 +5,7 @@ namespace Leak.Core.Negotiator
 {
     public interface HandshakeNegotiatorContext
     {
-        void OnHandshake(NetworkConnection connection, Handshake handshake);
+        void OnHandshake(NetworkConnection negotiated, Handshake handshake);
 
         void OnException(Exception ex);
 

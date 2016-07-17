@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Leak.Core.Tests
 {
@@ -51,6 +52,26 @@ namespace Leak.Core.Tests
 
             actives[active].Connect(new IPEndPoint(IPAddress.Loopback, 8080));
             connected.Add(passive, passives[passive].Accept());
+        }
+
+        public void ConnectTo(string active, string host, int port)
+        {
+            actives[active].Connect(new DnsEndPoint(host, port));
+        }
+
+        public Task<Socket> Listen(string passive, int port)
+        {
+            TaskCompletionSource<Socket> completion = new TaskCompletionSource<Socket>();
+
+            passives[passive].Bind(new IPEndPoint(IPAddress.Loopback, 8080));
+            passives[passive].Listen(1);
+
+            passives[passive].BeginAccept(result =>
+            {
+                completion.SetResult(passives[passive].EndAccept(result));
+            }, this);
+
+            return completion.Task;
         }
 
         public void Dispose()

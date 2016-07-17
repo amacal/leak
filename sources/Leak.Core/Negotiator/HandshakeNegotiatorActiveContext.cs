@@ -1,10 +1,12 @@
-﻿namespace Leak.Core.Negotiator
+﻿using Leak.Core.Common;
+
+namespace Leak.Core.Negotiator
 {
     public interface HandshakeNegotiatorActiveContext : HandshakeNegotiatorContext
     {
-        HandshakePeer Peer { get; }
+        PeerHash Peer { get; }
 
-        HandshakeHash Hash { get; }
+        FileHash Hash { get; }
 
         HandshakeOptions Options { get; }
     }

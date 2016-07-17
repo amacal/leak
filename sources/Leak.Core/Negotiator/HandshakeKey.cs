@@ -1,4 +1,5 @@
-﻿using Leak.Core.Network;
+﻿using Leak.Core.Common;
+using Leak.Core.Network;
 
 namespace Leak.Core.Negotiator
 {
@@ -11,7 +12,7 @@ namespace Leak.Core.Negotiator
             inner = key;
         }
 
-        public HandshakeKey(HandshakeKeyOwnership ownership, byte[] secret, HandshakeHash hash)
+        public HandshakeKey(HandshakeKeyOwnership ownership, byte[] secret, FileHash hash)
         {
             switch (ownership)
             {

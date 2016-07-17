@@ -2,14 +2,14 @@
 {
     public class HandshakeRejection
     {
-        private readonly HandshakeHashMatch match;
+        private readonly HandshakeMatch match;
 
-        public HandshakeRejection(HandshakeHashMatch match)
+        public HandshakeRejection(HandshakeMatch match)
         {
             this.match = match;
         }
 
-        public HandshakeHashMatch Match
+        public HandshakeMatch Match
         {
             get { return match; }
         }

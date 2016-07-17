@@ -1,4 +1,5 @@
-﻿using Leak.Core.Net;
+﻿using Leak.Core.Common;
+using Leak.Core.Net;
 using Leak.Core.Network;
 
 namespace Leak.Core.Negotiator
@@ -10,7 +11,7 @@ namespace Leak.Core.Negotiator
         private readonly PeerCredentials credentials;
         private readonly HandshakeKeyContainer keys;
 
-        private HandshakeHash found;
+        private FileHash found;
 
         public HandshakeNegotiatorPassive(NetworkConnection connection, HandshakeNegotiatorPassiveContext context)
         {
@@ -51,7 +52,7 @@ namespace Leak.Core.Negotiator
             int offset = Bytes.Find(message.ToBytes(), synchronize);
 
             byte[] bytes = message.ToBytes(offset + 20, 20);
-            HandshakeHashMatch match = new HandshakeHashMatch(keys.Secret, bytes);
+            HandshakeMatch match = new HandshakeMatch(keys.Secret, bytes);
 
             found = context.Hashes.Find(match);
 

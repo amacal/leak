@@ -36,6 +36,23 @@
   <ItemGroup>
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
+    <Compile Include="Collector\PeerCollectorCallback.cs" />
+    <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
+    <Compile Include="Collector\PeerCollectorCallbackToNothing.cs" />
+    <Compile Include="Collector\PeerCollectorConfiguration.cs" />
+    <Compile Include="Collector\PeerCollectorStorage.cs" />
+    <Compile Include="Collector\PeerCollectorStorageEntry.cs" />
+    <Compile Include="Collector\PeerCollectorToConnector.cs" />
+    <Compile Include="Collector\PeerCollectorToListener.cs" />
+    <Compile Include="Collector\PeerCollector.cs" />
+    <Compile Include="Collector\PeerCollectorToLoop.cs" />
+    <Compile Include="Collector\PeerCollectorView.cs" />
+    <Compile Include="Connector\PeerConnector.cs" />
+    <Compile Include="Connector\PeerConnectorCallback.cs" />
+    <Compile Include="Connector\PeerConnectorCallbackToNothing.cs" />
+    <Compile Include="Connector\PeerConnectorConfiguration.cs" />
+    <Compile Include="Connector\PeerConnectorHandshake.cs" />
+    <Compile Include="Connector\PeerConnectorNegotiatorContext.cs" />
     <Compile Include="Encoding\BencodedData.cs" />
     <Compile Include="Encoding\BencodedEntry.cs" />
     <Compile Include="Encoding\BencodedNumber.cs" />
@@ -82,6 +99,31 @@
     <Compile Include="LeakConfigurationTorrentCollection.cs" />
     <Compile Include="LeakConfigurationExtensions.cs" />
     <Compile Include="LeakDataExtensions.cs" />
+    <Compile Include="Listener\PeerListener.cs" />
+    <Compile Include="Listener\PeerListenerCallback.cs" />
+    <Compile Include="Listener\PeerListenerCallbackToNothing.cs" />
+    <Compile Include="Listener\PeerListenerConfiguration.cs" />
+    <Compile Include="Listener\PeerListenerNegotiatorContext.cs" />
+    <Compile Include="Listener\PeerListenerHandshake.cs" />
+    <Compile Include="Loop\ConnectionLoop.cs" />
+    <Compile Include="Loop\ConnectionLoopCallback.cs" />
+    <Compile Include="Loop\ConnectionLoopCallbackBase.cs" />
+    <Compile Include="Loop\ConnectionLoopCallbackToNothing.cs" />
+    <Compile Include="Loop\ConnectionLoopChannel.cs" />
+    <Compile Include="Loop\ConnectionLoopConfiguration.cs" />
+    <Compile Include="Loop\ConnectionLoopConnection.cs" />
+    <Compile Include="Loop\ConnectionLoopConnectionContext.cs" />
+    <Compile Include="Loop\ConnectionLoopConnectionToBytes.cs" />
+    <Compile Include="Loop\ConnectionLoopHandler.cs" />
+    <Compile Include="Loop\ConnectionLoopHandshake.cs" />
+    <Compile Include="Loop\ConnectionLoopHandshakeToConnector.cs" />
+    <Compile Include="Loop\ConnectionLoopHandshakeToListener.cs" />
+    <Compile Include="Loop\ConnectionLoopMessage.cs" />
+    <Compile Include="Messages\BitfieldMessage.cs" />
+    <Compile Include="Messages\InterestedMessage.cs" />
+    <Compile Include="Messages\KeepAliveMessage.cs" />
+    <Compile Include="Messages\PieceMessage.cs" />
+    <Compile Include="Messages\UnchokeMessage.cs" />
     <Compile Include="Negotiator\Handshake.cs" />
     <Compile Include="Negotiator\HandshakeConnectionEncryptedMessage.cs" />
     <Compile Include="Negotiator\HandshakeConnectionToBytes.cs" />
@@ -92,15 +134,16 @@
     <Compile Include="Negotiator\HandshakeCryptoHashMessage.cs" />
     <Compile Include="Negotiator\HandshakeCryptoPayload.cs" />
     <Compile Include="Negotiator\HandshakeCryptoPayloadMessage.cs" />
-    <Compile Include="Negotiator\HandshakeHash.cs" />
-    <Compile Include="Negotiator\HandshakeHashCollection.cs" />
-    <Compile Include="Negotiator\HandshakeHashMatch.cs" />
+    <Compile Include="Common\FileHash.cs" />
+    <Compile Include="Common\FileHashCollection.cs" />
+    <Compile Include="Negotiator\HandshakeMatch.cs" />
     <Compile Include="Negotiator\HandshakeKey.cs" />
     <Compile Include="Negotiator\HandshakeKeyExchange.cs" />
     <Compile Include="Negotiator\HandshakeKeyExchangeMessage.cs" />
     <Compile Include="Negotiator\HandshakeKeyContainer.cs" />
     <Compile Include="Negotiator\HandshakeKeyOwnership.cs" />
     <Compile Include="Negotiator\HandshakeKeyScope.cs" />
+    <Compile Include="Negotiator\HandshakeMatchExtensions.cs" />
     <Compile Include="Negotiator\HandshakeMessage.cs" />
     <Compile Include="Negotiator\HandshakeNegotiatorActive.cs" />
     <Compile Include="Negotiator\HandshakeNegotiatorActiveContext.cs" />
@@ -108,7 +151,7 @@
     <Compile Include="Negotiator\HandshakeNegotiatorPassive.cs" />
     <Compile Include="Negotiator\HandshakeNegotiatorPassiveContext.cs" />
     <Compile Include="Negotiator\HandshakeOptions.cs" />
-    <Compile Include="Negotiator\HandshakePeer.cs" />
+    <Compile Include="Common\PeerHash.cs" />
     <Compile Include="Negotiator\HandshakeRejection.cs" />
     <Compile Include="Network\NetworkBufferDecryptor.cs" />
     <Compile Include="Network\NetworkBufferDecryptorToNothing.cs" />
@@ -216,6 +259,7 @@
     <Compile Include="RC4.cs" />
     <Compile Include="StreamExtensions.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
