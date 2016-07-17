@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Encoding
+﻿namespace Leak.Core.Bencoding
 {
     public class BencodedData
     {

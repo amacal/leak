@@ -1,5 +1,5 @@
-﻿using Leak.Core.Encoding;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Leak.Core.Bencoding;
 
 namespace Leak.Core.Net
 {

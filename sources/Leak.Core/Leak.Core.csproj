@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
+    <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
     <Compile Include="Collector\PeerCollectorCallbackToNothing.cs" />
@@ -53,14 +54,14 @@
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
     <Compile Include="Connector\PeerConnectorHandshake.cs" />
     <Compile Include="Connector\PeerConnectorNegotiatorContext.cs" />
-    <Compile Include="Encoding\BencodedData.cs" />
-    <Compile Include="Encoding\BencodedEntry.cs" />
-    <Compile Include="Encoding\BencodedNumber.cs" />
-    <Compile Include="Encoding\BencodedText.cs" />
-    <Compile Include="Encoding\BencodedValue.cs" />
-    <Compile Include="Encoding\Bencoder.cs" />
-    <Compile Include="Encoding\BencoderExtensions.cs" />
-    <Compile Include="Encoding\BencoderDecoder.cs" />
+    <Compile Include="Bencoding\BencodedData.cs" />
+    <Compile Include="Bencoding\BencodedEntry.cs" />
+    <Compile Include="Bencoding\BencodedNumber.cs" />
+    <Compile Include="Bencoding\BencodedText.cs" />
+    <Compile Include="Bencoding\BencodedValue.cs" />
+    <Compile Include="Bencoding\Bencoder.cs" />
+    <Compile Include="Bencoding\BencoderExtensions.cs" />
+    <Compile Include="Bencoding\BencoderDecoder.cs" />
     <Compile Include="IO\MetainfoFile.cs" />
     <Compile Include="IO\MetainfoEntry.cs" />
     <Compile Include="IO\MetainfoEntryCollection.cs" />
@@ -124,6 +125,10 @@
     <Compile Include="Messages\KeepAliveMessage.cs" />
     <Compile Include="Messages\PieceMessage.cs" />
     <Compile Include="Messages\UnchokeMessage.cs" />
+    <Compile Include="Metadata\Metainfo.cs" />
+    <Compile Include="Metadata\MetainfoFile.cs" />
+    <Compile Include="Metadata\MetainfoEntry.cs" />
+    <Compile Include="Metadata\MetainfoHash.cs" />
     <Compile Include="Negotiator\Handshake.cs" />
     <Compile Include="Negotiator\HandshakeConnectionEncryptedMessage.cs" />
     <Compile Include="Negotiator\HandshakeConnectionToBytes.cs" />
@@ -257,6 +262,10 @@
     <Compile Include="Net\UdpTrackerResponsePeerCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RC4.cs" />
+    <Compile Include="Repository\ResourceRepository.cs" />
+    <Compile Include="Repository\ResourceRepositoryBitfield.cs" />
+    <Compile Include="Repository\ResourceRepositoryStream.cs" />
+    <Compile Include="Retriever\ResourceRetriever.cs" />
     <Compile Include="StreamExtensions.cs" />
   </ItemGroup>
   <ItemGroup />

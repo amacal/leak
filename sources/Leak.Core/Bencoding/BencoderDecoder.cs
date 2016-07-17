@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Leak.Core.Encoding
+namespace Leak.Core.Bencoding
 {
     public class BencoderDecoder
     {

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Leak.Core.Encoding;
+using Leak.Core.Bencoding;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Encoding

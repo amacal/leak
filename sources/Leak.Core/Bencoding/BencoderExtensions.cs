@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Leak.Core.Encoding
+namespace Leak.Core.Bencoding
 {
     public static class BencoderExtensions
     {
