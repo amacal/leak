@@ -37,6 +37,13 @@
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
     <Compile Include="Client\PeerClient.cs" />
+    <Compile Include="Client\PeerClientCallback.cs" />
+    <Compile Include="Client\PeerClientCallbackBase.cs" />
+    <Compile Include="Client\PeerClientCallbackToNothing.cs" />
+    <Compile Include="Client\PeerClientConfiguration.cs" />
+    <Compile Include="Client\PeerClientStorage.cs" />
+    <Compile Include="Client\PeerClientStorageEntry.cs" />
+    <Compile Include="Client\PeerClientToCollector.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
     <Compile Include="Collector\PeerCollectorCallbackToNothing.cs" />
@@ -126,6 +133,7 @@
     <Compile Include="Messages\PieceMessage.cs" />
     <Compile Include="Messages\UnchokeMessage.cs" />
     <Compile Include="Metadata\Metainfo.cs" />
+    <Compile Include="Metadata\MetainfoFactory.cs" />
     <Compile Include="Metadata\MetainfoFile.cs" />
     <Compile Include="Metadata\MetainfoEntry.cs" />
     <Compile Include="Metadata\MetainfoHash.cs" />
@@ -267,6 +275,13 @@
     <Compile Include="Repository\ResourceRepositoryStream.cs" />
     <Compile Include="Retriever\ResourceRetriever.cs" />
     <Compile Include="StreamExtensions.cs" />
+    <Compile Include="Tracker\TrackerAnnounce.cs" />
+    <Compile Include="Tracker\TrackerAnnounceConfiguration.cs" />
+    <Compile Include="Tracker\TrackerClient.cs" />
+    <Compile Include="Tracker\TrackerClientFactory.cs" />
+    <Compile Include="Tracker\TrackerClientToHttp.cs" />
+    <Compile Include="Tracker\TrackerClientToUdp.cs" />
+    <Compile Include="Tracker\TrackerPeer.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

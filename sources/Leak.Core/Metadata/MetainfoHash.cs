@@ -2,5 +2,9 @@
 {
     public class MetainfoHash
     {
+        public byte[] ToBytes()
+        {
+            return new byte[20];
+        }
     }
 }
