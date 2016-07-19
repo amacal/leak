@@ -41,7 +41,7 @@ namespace Leak.Core.Collector
         public void Add(ConnectionLoopChannel channel)
         {
             peers[channel.Peer].Channel = channel;
-            configuration.Callback.OnConnected(channel.Peer);
+            configuration.Callback.OnConnected(channel.Peer, channel.Hash);
         }
 
         public void Remove(PeerHash peer)

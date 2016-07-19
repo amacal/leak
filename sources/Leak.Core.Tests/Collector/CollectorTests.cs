@@ -66,15 +66,15 @@ namespace Leak.Core.Tests.Collector
                 get { return connected; }
             }
 
-            public override void OnConnected(PeerHash hash)
+            public override void OnConnected(PeerHash peer, FileHash hash)
             {
-                connected.Add(hash);
+                connected.Add(peer);
                 onReady.Set();
             }
 
-            public override void OnDisconnected(PeerHash hash)
+            public override void OnDisconnected(PeerHash peer)
             {
-                connected.Remove(hash);
+                connected.Remove(peer);
             }
         }
     }

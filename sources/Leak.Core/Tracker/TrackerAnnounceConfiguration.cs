@@ -7,5 +7,7 @@ namespace Leak.Core.Tracker
         public FileHash Hash { get; set; }
 
         public PeerHash Peer { get; set; }
+
+        public int Port { get; set; }
     }
 }

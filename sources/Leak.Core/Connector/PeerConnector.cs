@@ -32,16 +32,22 @@ namespace Leak.Core.Connector
 
         private void OnConnected(IAsyncResult result)
         {
-            Socket socket = (Socket)result.AsyncState;
-            socket.EndConnect(result);
+            try
+            {
+                Socket socket = (Socket)result.AsyncState;
+                socket.EndConnect(result);
 
-            NetworkConnection connection = new NetworkConnection(socket, NetworkConnectionDirection.Outgoing);
-            configuration.Callback.OnConnected(connection);
+                NetworkConnection connection = new NetworkConnection(socket, NetworkConnectionDirection.Outgoing);
+                configuration.Callback.OnConnected(connection);
 
-            PeerConnectorNegotiatorContext context = new PeerConnectorNegotiatorContext(configuration, connection);
-            HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(connection, context);
+                PeerConnectorNegotiatorContext context = new PeerConnectorNegotiatorContext(configuration, connection);
+                HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(connection, context);
 
-            negotiator.Execute();
+                negotiator.Execute();
+            }
+            catch (SocketException)
+            {
+            }
         }
     }
 }

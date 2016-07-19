@@ -1,6 +1,6 @@
-﻿using Leak.Core.Network;
+﻿using Leak.Core.Common;
+using Leak.Core.Network;
 using System;
-using Leak.Core.Common;
 
 namespace Leak.Core.Negotiator
 {
@@ -23,6 +23,14 @@ namespace Leak.Core.Negotiator
         public static int GetSize(NetworkIncomingMessage message)
         {
             return message[0] + 49;
+        }
+
+        public static PeerHash GetPeer(NetworkIncomingMessage message)
+        {
+            int length = message[0];
+            byte[] data = message.ToBytes(29 + length, 20);
+
+            return new PeerHash(data);
         }
 
         public int Length

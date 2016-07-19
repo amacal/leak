@@ -7,5 +7,7 @@ namespace Leak.Core.Client
         public PeerHash Peer { get; set; }
 
         public string Destination { get; set; }
+
+        public PeerClientCallback Callback { get; set; }
     }
 }

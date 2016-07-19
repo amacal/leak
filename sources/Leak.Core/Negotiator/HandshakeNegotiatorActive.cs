@@ -1,4 +1,5 @@
-﻿using Leak.Core.Net;
+﻿using Leak.Core.Common;
+using Leak.Core.Net;
 using Leak.Core.Network;
 
 namespace Leak.Core.Negotiator
@@ -102,7 +103,8 @@ namespace Leak.Core.Negotiator
             NetworkIncomingMessage decrypted = decryptor.Decrypt(message);
 
             int size = HandshakeMessage.GetSize(decrypted);
-            Handshake handshake = new Handshake(context.Peer, context.Peer, context.Hash);
+            PeerHash peer = HandshakeMessage.GetPeer(decrypted);
+            Handshake handshake = new Handshake(context.Peer, peer, context.Hash);
 
             message.Acknowledge(size);
             keys.Remote.Acknowledge(size);

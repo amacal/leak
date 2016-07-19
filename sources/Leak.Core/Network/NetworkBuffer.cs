@@ -121,9 +121,16 @@ namespace Leak.Core.Network
 
                 if (received > 0)
                 {
-                    Decrypt(offset, received);
-                    length += received;
+                    if (offset + length >= configuration.Size)
+                    {
+                        Decrypt(offset + length - configuration.Size, received);
+                    }
+                    else
+                    {
+                        Decrypt(offset + length, received);
+                    }
 
+                    length += received;
                     handler.OnMessage(new NetworkIncomingMessage(this));
                 }
                 else
@@ -139,6 +146,11 @@ namespace Leak.Core.Network
 
         public void Remove(int bytes)
         {
+            if (bytes > length)
+            {
+                throw new InvalidOperationException();
+            }
+
             offset = (offset + bytes) % configuration.Size;
             length = length - bytes;
         }

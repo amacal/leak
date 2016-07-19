@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
+using Leak.Core.Messages;
 
 namespace Leak.Core.Client
 {
@@ -14,9 +15,14 @@ namespace Leak.Core.Client
             this.storage = storage;
         }
 
-        public override void OnConnected(PeerHash hash)
+        public override void OnConnected(PeerHash peer, FileHash hash)
         {
-            base.OnConnected(hash);
+            storage.AddPeer(hash, peer);
+        }
+
+        public override void OnBitfield(PeerHash peer, BitfieldMessage message)
+        {
+            storage.AddBitfield(peer, new Bitfield());
         }
     }
 }

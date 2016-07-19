@@ -1,5 +1,9 @@
 ﻿using Leak.Core.Client;
+using Leak.Core.Common;
+using Leak.Core.Messages;
 using Leak.Core.Metadata;
+using System;
+using System.Threading;
 
 namespace Leak
 {
@@ -19,9 +23,24 @@ namespace Leak
             PeerClient client = new PeerClient(with =>
             {
                 with.Destination = destination;
+                with.Callback = new Callback();
             });
 
             client.Start(MetainfoFactory.FromFile(source));
+            Thread.Sleep(TimeSpan.FromHours(1));
+        }
+    }
+
+    public class Callback : PeerClientCallbackBase
+    {
+        public override void OnPeerConnected(Metainfo metainfo, PeerHash peer)
+        {
+            Console.WriteLine($"Connected to {peer}.");
+        }
+
+        public override void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
+        {
+            Console.WriteLine($"Bitfield received from {peer}.");
         }
     }
 }

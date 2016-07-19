@@ -18,7 +18,8 @@ namespace Leak.Core.Client
             this.configuration = new PeerClientConfiguration
             {
                 Peer = PeerHash.Random(),
-                Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create)
+                Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create),
+                Callback = new PeerClientCallbackToNothing()
             };
 
             configurer.Invoke(configuration);
@@ -63,6 +64,7 @@ namespace Leak.Core.Client
 
                 foreach (TrackerPeer peer in announce.Peers)
                 {
+                    //connector.ConnectTo("95.211.81.154", 58694);
                     connector.ConnectTo(peer.Host, peer.Port);
                 }
             }

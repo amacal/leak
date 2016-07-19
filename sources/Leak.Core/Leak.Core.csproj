@@ -43,6 +43,7 @@
     <Compile Include="Client\PeerClientConfiguration.cs" />
     <Compile Include="Client\PeerClientStorage.cs" />
     <Compile Include="Client\PeerClientStorageEntry.cs" />
+    <Compile Include="Client\PeerClientStorageEntryCollection.cs" />
     <Compile Include="Client\PeerClientToCollector.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Loop\ConnectionLoopHandshakeToConnector.cs" />
     <Compile Include="Loop\ConnectionLoopHandshakeToListener.cs" />
     <Compile Include="Loop\ConnectionLoopMessage.cs" />
+    <Compile Include="Messages\Bitfield.cs" />
     <Compile Include="Messages\BitfieldMessage.cs" />
     <Compile Include="Messages\InterestedMessage.cs" />
     <Compile Include="Messages\KeepAliveMessage.cs" />

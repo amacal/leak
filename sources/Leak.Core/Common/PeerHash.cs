@@ -26,6 +26,11 @@
             return other != null && Bytes.Equals(other.value, value);
         }
 
+        public override string ToString()
+        {
+            return Bytes.ToString(value);
+        }
+
         public static PeerHash Random()
         {
             return new PeerHash(Bytes.Random(20));

@@ -129,7 +129,8 @@ namespace Leak.Core.Negotiator
             NetworkIncomingMessage decrypted = decryptor.Decrypt(message);
 
             int size = HandshakeMessage.GetSize(decrypted);
-            Handshake handshake = new Handshake(context.Peer, context.Peer, found);
+            PeerHash peer = HandshakeMessage.GetPeer(decrypted);
+            Handshake handshake = new Handshake(context.Peer, peer, found);
 
             message.Acknowledge(size);
             keys.Remote.Acknowledge(size);

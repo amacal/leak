@@ -5,18 +5,18 @@ namespace Leak.Core.Collector
 {
     public interface PeerCollectorCallback
     {
-        void OnConnected(PeerHash hash);
+        void OnConnected(PeerHash peer, FileHash hash);
 
-        void OnDisconnected(PeerHash hash);
+        void OnDisconnected(PeerHash peer);
 
-        void OnKeepAlive(PeerHash hash, KeepAliveMessage message);
+        void OnKeepAlive(PeerHash peer, KeepAliveMessage message);
 
-        void OnUnchoke(PeerHash hash, UnchokeMessage message);
+        void OnUnchoke(PeerHash peer, UnchokeMessage message);
 
-        void OnInterested(PeerHash hash, InterestedMessage message);
+        void OnInterested(PeerHash peer, InterestedMessage message);
 
-        void OnBitfield(PeerHash hash, BitfieldMessage message);
+        void OnBitfield(PeerHash peer, BitfieldMessage message);
 
-        void OnPiece(PeerHash hash, PieceMessage message);
+        void OnPiece(PeerHash peer, PieceMessage message);
     }
 }

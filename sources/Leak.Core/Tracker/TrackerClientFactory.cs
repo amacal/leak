@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Tracker
+﻿using System;
+
+namespace Leak.Core.Tracker
 {
     public class TrackerClientFactory
     {
@@ -7,7 +9,10 @@
             if (uri.StartsWith("http://"))
                 return new TrackerClientToHttp(uri);
 
-            return null;
+            if (uri.StartsWith("udp://"))
+                return new TrackerClientToUdp();
+
+            throw new NotSupportedException("The tracker type is not supported.");
         }
     }
 }

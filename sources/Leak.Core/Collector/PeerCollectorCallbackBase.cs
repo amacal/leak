@@ -5,31 +5,31 @@ namespace Leak.Core.Collector
 {
     public abstract class PeerCollectorCallbackBase : PeerCollectorCallback
     {
-        public virtual void OnConnected(PeerHash hash)
+        public virtual void OnConnected(PeerHash peer, FileHash hash)
         {
         }
 
-        public virtual void OnDisconnected(PeerHash hash)
+        public virtual void OnDisconnected(PeerHash peer)
         {
         }
 
-        public virtual void OnKeepAlive(PeerHash hash, KeepAliveMessage message)
+        public virtual void OnKeepAlive(PeerHash peer, KeepAliveMessage message)
         {
         }
 
-        public virtual void OnUnchoke(PeerHash hash, UnchokeMessage message)
+        public virtual void OnUnchoke(PeerHash peer, UnchokeMessage message)
         {
         }
 
-        public virtual void OnInterested(PeerHash hash, InterestedMessage message)
+        public virtual void OnInterested(PeerHash peer, InterestedMessage message)
         {
         }
 
-        public virtual void OnBitfield(PeerHash hash, BitfieldMessage message)
+        public virtual void OnBitfield(PeerHash peer, BitfieldMessage message)
         {
         }
 
-        public virtual void OnPiece(PeerHash hash, PieceMessage message)
+        public virtual void OnPiece(PeerHash peer, PieceMessage message)
         {
         }
     }
