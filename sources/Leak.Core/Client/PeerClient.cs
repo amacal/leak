@@ -41,7 +41,6 @@ namespace Leak.Core.Client
         {
             storage.Register(metainfo, collector.CreateView());
             storage.GetRepository(metainfo.Data.Hash).Initialize();
-            storage.GetRetriever(metainfo.Data.Hash);
         }
 
         private void Connect(MetainfoFile metainfo)

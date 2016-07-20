@@ -37,12 +37,12 @@ namespace Leak.Core.Collector
 
         public override void OnBitfield(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            configuration.Callback.OnBitfield(channel.Peer, new BitfieldMessage());
+            configuration.Callback.OnBitfield(channel.Peer, new BitfieldMessage(message.ToBytes()));
         }
 
         public override void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            configuration.Callback.OnPiece(channel.Peer, new PieceMessage());
+            configuration.Callback.OnPiece(channel.Peer, new PieceMessage(message.ToBytes()));
         }
 
         public override void OnException(ConnectionLoopChannel channel, Exception ex)

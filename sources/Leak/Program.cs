@@ -35,12 +35,22 @@ namespace Leak
     {
         public override void OnPeerConnected(Metainfo metainfo, PeerHash peer)
         {
-            Console.WriteLine($"Connected to {peer}.");
+            Console.WriteLine($"Connected to {peer}");
         }
 
         public override void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
         {
-            Console.WriteLine($"Bitfield received from {peer}.");
+            Console.WriteLine($"Bitfield received from {peer}; total={bitfield.Length}; completed={bitfield.Completed}");
+        }
+
+        public override void OnPeerUnchoked(Metainfo metainfo, PeerHash peer)
+        {
+            Console.WriteLine($"Unchoke received from {peer}");
+        }
+
+        public override void OnPieceReceived(Metainfo metainfo, PeerHash peer, Piece piece)
+        {
+            Console.WriteLine($"Piece received from {peer}; index={piece.Index}; offset={piece.Offset}; size={piece.Size}");
         }
     }
 }

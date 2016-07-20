@@ -25,9 +25,34 @@ namespace Leak.Core.Metadata
         {
             BencodedValue info = value.Find("info", x => x);
             FileHash hash = ComputeHash(info.Data);
-            MetainfoEntry[] entries = FindEntries(info);
 
-            return new Metainfo(hash, entries);
+            MetainfoEntry[] entries = FindEntries(info);
+            MetainfoHash[] pieces = FindPieces(info);
+            MetainfoProperties properties = FindProperties(info, entries, pieces);
+
+            return new Metainfo(hash, entries, pieces, properties);
+        }
+
+        private static MetainfoProperties FindProperties(BencodedValue value, MetainfoEntry[] entries, MetainfoHash[] pieces)
+        {
+            long totalSize = entries.Sum(x => x.Size);
+            int pieceSize = value.Find("piece length", x => (int)x.ToNumber());
+            int blocks = (int)(pieces.Length * (totalSize / pieceSize) - totalSize % pieceSize / 32 / 1024 + 1);
+
+            return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blocks, 32 * 1024);
+        }
+
+        private static MetainfoHash[] FindPieces(BencodedValue value)
+        {
+            byte[] data = value.Find("pieces", x => x.Data.GetBytes());
+            List<MetainfoHash> pieces = new List<MetainfoHash>();
+
+            for (int i = 0; i < data.Length / 20; i += 20)
+            {
+                pieces.Add(new MetainfoHash(Bytes.Copy(data, i * 20, 20)));
+            }
+
+            return pieces.ToArray();
         }
 
         private static MetainfoEntry[] FindEntries(BencodedValue value)

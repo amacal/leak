@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Leak.Core.Network
+﻿namespace Leak.Core.Network
 {
     /// <summary>
     /// Describes the incoming message requested be the caller.
@@ -59,9 +57,7 @@ namespace Leak.Core.Network
         /// <returns>A requested array of bytes.</returns>
         public byte[] ToBytes(int offset)
         {
-            byte[] result = new byte[data.Length - offset];
-            Array.Copy(data, offset, result, 0, result.Length);
-            return result;
+            return Bytes.Copy(data, offset);
         }
 
         /// <summary>
@@ -72,9 +68,7 @@ namespace Leak.Core.Network
         /// <returns>A requested array of bytes.</returns>
         public byte[] ToBytes(int offset, int count)
         {
-            byte[] result = new byte[count];
-            Array.Copy(data, offset, result, 0, result.Length);
-            return result;
+            return Bytes.Copy(data, offset, count);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Messages;
 
 namespace Leak.Core.Loop
 {
@@ -26,6 +27,16 @@ namespace Leak.Core.Loop
         public FileHash Hash
         {
             get { return handshake.Hash; }
+        }
+
+        public void Send(InterestedMessage message)
+        {
+            connection.Send(message);
+        }
+
+        public void Send(RequestMessage message)
+        {
+            connection.Send(message);
         }
     }
 }

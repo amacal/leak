@@ -6,11 +6,15 @@ namespace Leak.Core.Metadata
     {
         private readonly FileHash hash;
         private readonly MetainfoEntry[] entries;
+        private readonly MetainfoHash[] pieces;
+        private readonly MetainfoProperties properties;
 
-        public Metainfo(FileHash hash, MetainfoEntry[] entries)
+        public Metainfo(FileHash hash, MetainfoEntry[] entries, MetainfoHash[] pieces, MetainfoProperties properties)
         {
             this.hash = hash;
             this.entries = entries;
+            this.pieces = pieces;
+            this.properties = properties;
         }
 
         public FileHash Hash
@@ -25,7 +29,12 @@ namespace Leak.Core.Metadata
 
         public MetainfoHash[] Pieces
         {
-            get { return null; }
+            get { return pieces; }
+        }
+
+        public MetainfoProperties Properties
+        {
+            get { return properties; }
         }
     }
 }

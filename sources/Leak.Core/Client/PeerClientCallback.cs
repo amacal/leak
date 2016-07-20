@@ -13,5 +13,9 @@ namespace Leak.Core.Client
         void OnPeerConnected(Metainfo metainfo, PeerHash peer);
 
         void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield);
+
+        void OnPeerUnchoked(Metainfo metainfo, PeerHash peer);
+
+        void OnPieceReceived(Metainfo metainfo, PeerHash peer, Piece piece);
     }
 }

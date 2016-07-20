@@ -28,5 +28,10 @@ namespace Leak.Core.Loop
 
             connection.Receive(handler);
         }
+
+        public void Send(NetworkOutgoingMessage message)
+        {
+            connection.Send(message);
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace Leak.Core
 
         public static byte[] Hash(string text, params byte[][] parts)
         {
-            byte[] input = System.Text.Encoding.ASCII.GetBytes(text);
+            byte[] input = Encoding.ASCII.GetBytes(text);
 
             foreach (byte[] data in parts)
             {
@@ -148,6 +148,20 @@ namespace Leak.Core
             }
 
             return -1;
+        }
+
+        public static byte[] Copy(byte[] source, int offset)
+        {
+            byte[] result = new byte[source.Length - offset];
+            Array.Copy(source, offset, result, 0, result.Length);
+            return result;
+        }
+
+        public static byte[] Copy(byte[] source, int offset, int length)
+        {
+            byte[] result = new byte[length];
+            Array.Copy(source, offset, result, 0, result.Length);
+            return result;
         }
     }
 }

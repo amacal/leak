@@ -52,5 +52,10 @@ namespace Leak.Core.Collector
         public void Remove(NetworkConnection connection)
         {
         }
+
+        public ConnectionLoopChannel GetChannel(PeerHash peer)
+        {
+            return peers[peer].Channel;
+        }
     }
 }

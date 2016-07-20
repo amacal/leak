@@ -15,6 +15,11 @@ namespace Leak.Core.Repository
             this.location = location;
         }
 
+        public MetainfoProperties Properties
+        {
+            get { return metainfo.Properties; }
+        }
+
         public void Initialize()
         {
             foreach (MetainfoEntry entry in metainfo.Entries)
@@ -40,6 +45,20 @@ namespace Leak.Core.Repository
 
         public void SetPiece(int piece, int block, byte[] data)
         {
+            int pieceSize = metainfo.Properties.PieceSize;
+            int blockSize = metainfo.Properties.BlockSize;
+
+            using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
+            {
+                stream.Seek(piece * pieceSize + block * blockSize, SeekOrigin.Begin);
+                stream.Write(data);
+                stream.Flush();
+            }
+        }
+
+        public bool Verify(int piece)
+        {
+            return true;
         }
     }
 }

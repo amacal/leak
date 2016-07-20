@@ -24,12 +24,7 @@ namespace Leak.Core.Loop
 
         private void OnMessageHeader(NetworkIncomingMessage message)
         {
-            connection.Receive(OnMessageData, GetMessageSize(message) + 4);
-        }
-
-        private int GetMessageSize(NetworkIncomingMessage message)
-        {
-            return message[3] + message[2] * 256 + message[1] * 256 * 256;
+            connection.Receive(OnMessageData, ConnectionLoopMessage.GetMessageSize(message) + 4);
         }
 
         private void OnMessageData(NetworkIncomingMessage message)
@@ -59,7 +54,7 @@ namespace Leak.Core.Loop
                     break;
 
                 default:
-                    message.Acknowledge(GetMessageSize(message) + 4);
+                    message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
                     connection.Receive(OnMessageHeader, 4);
                     break;
             }
@@ -67,14 +62,14 @@ namespace Leak.Core.Loop
 
         private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel> callback)
         {
-            message.Acknowledge(GetMessageSize(message) + 4);
+            message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
             callback.Invoke(new ConnectionLoopChannel(connection, handshake));
             connection.Receive(OnMessageHeader, 4);
         }
 
         private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel, ConnectionLoopMessage> callback)
         {
-            message.Acknowledge(GetMessageSize(message) + 4);
+            message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
             callback.Invoke(new ConnectionLoopChannel(connection, handshake), new ConnectionLoopMessage(message));
             connection.Receive(OnMessageHeader, 4);
         }

@@ -21,5 +21,13 @@ namespace Leak.Core.Client
         public virtual void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
         {
         }
+
+        public virtual void OnPeerUnchoked(Metainfo metainfo, PeerHash peer)
+        {
+        }
+
+        public virtual void OnPieceReceived(Metainfo metainfo, PeerHash peer, Piece piece)
+        {
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
-using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
 using Leak.Core.Retriever;
@@ -13,10 +12,13 @@ namespace Leak.Core.Client
     {
         private readonly PeerClientConfiguration configuration;
         private readonly PeerClientStorageEntryCollection collection;
+        private readonly PeerClientCallback callback;
 
         public PeerClientStorage(PeerClientConfiguration configuration)
         {
             this.configuration = configuration;
+            this.callback = configuration.Callback;
+
             this.collection = new PeerClientStorageEntryCollection();
         }
 
@@ -45,14 +47,11 @@ namespace Leak.Core.Client
 
         public void AddPeer(FileHash hash, PeerHash peer)
         {
+            Metainfo metainfo = collection.ByHash(hash).Metainfo;
+
             collection.AddPeer(hash, peer);
             collection.ByHash(hash).Peers.Add(peer);
-            configuration.Callback.OnPeerConnected(collection.ByHash(hash).Metainfo, peer);
-        }
-
-        public void AddBitfield(PeerHash peer, Bitfield bitfield)
-        {
-            configuration.Callback.OnPeerBitfield(collection.ByPeer(peer).Metainfo, peer, bitfield);
+            callback.OnPeerConnected(metainfo, peer);
         }
 
         public ResourceRepository GetRepository(FileHash hash)
@@ -63,6 +62,16 @@ namespace Leak.Core.Client
         public ResourceRetriever GetRetriever(FileHash hash)
         {
             return collection.ByHash(hash).Retriever;
+        }
+
+        public ResourceRetriever GetRetriever(PeerHash peer)
+        {
+            return collection.ByPeer(peer).Retriever;
+        }
+
+        public Metainfo GetMetainfo(PeerHash peer)
+        {
+            return collection.ByPeer(peer).Metainfo;
         }
     }
 }
