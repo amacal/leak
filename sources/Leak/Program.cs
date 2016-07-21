@@ -33,24 +33,29 @@ namespace Leak
 
     public class Callback : PeerClientCallbackBase
     {
+        public override void OnInitialized(Metainfo metainfo, MetainfoSummary summary)
+        {
+            Console.WriteLine($"{metainfo.Hash}: initialized; completed={summary.Completed}; total={metainfo.Properties.Pieces}");
+        }
+
         public override void OnPeerConnected(Metainfo metainfo, PeerHash peer)
         {
-            Console.WriteLine($"Connected to {peer}");
+            Console.WriteLine($"{peer}: connected");
         }
 
         public override void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
         {
-            Console.WriteLine($"Bitfield received from {peer}; total={bitfield.Length}; completed={bitfield.Completed}");
+            Console.WriteLine($"{peer}: bitfield; total={bitfield.Length}; completed={bitfield.Completed}");
         }
 
         public override void OnPeerUnchoked(Metainfo metainfo, PeerHash peer)
         {
-            Console.WriteLine($"Unchoke received from {peer}");
+            Console.WriteLine($"{peer}: unchoke");
         }
 
         public override void OnPieceReceived(Metainfo metainfo, PeerHash peer, Piece piece)
         {
-            Console.WriteLine($"Piece received from {peer}; index={piece.Index}; offset={piece.Offset}; size={piece.Size}");
+            Console.WriteLine($"{peer}: piece; index={piece.Index}; offset={piece.Offset}; size={piece.Size}");
         }
     }
 }

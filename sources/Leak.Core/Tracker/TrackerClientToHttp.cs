@@ -39,7 +39,10 @@ namespace Leak.Core.Tracker
                 string host = GetHost(bytes, i);
                 int port = GetPort(bytes, i);
 
-                result.Add(new TrackerPeer(host, port));
+                if (port > 0)
+                {
+                    result.Add(new TrackerPeer(host, port));
+                }
             }
 
             return result.ToArray();

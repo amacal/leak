@@ -24,6 +24,11 @@
             return true;
         }
 
+        public ResourceBitfieldBlock Complete()
+        {
+            return this;
+        }
+
         public ResourceBitfieldBlock Complete(int block)
         {
             return this;

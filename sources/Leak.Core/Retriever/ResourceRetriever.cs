@@ -2,6 +2,8 @@
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Repository;
+using System;
+using System.Threading;
 
 namespace Leak.Core.Retriever
 {
@@ -10,6 +12,8 @@ namespace Leak.Core.Retriever
         private readonly ResourceRepository repository;
         private readonly PeerCollectorView collector;
         private readonly ResourceStorage storage;
+
+        private readonly Timer timer;
 
         public ResourceRetriever(ResourceRepository repository, PeerCollectorView collector)
         {
@@ -21,8 +25,31 @@ namespace Leak.Core.Retriever
                 Pieces = repository.Properties.Pieces,
                 Blocks = repository.Properties.Blocks,
                 BlocksInPiece = repository.Properties.PieceSize / repository.Properties.BlockSize,
-                BlockSize = repository.Properties.BlockSize
+                BlockSize = repository.Properties.BlockSize,
+                TotalSize = repository.Properties.TotalSize
             });
+
+            timer = new Timer(OnTick);
+            timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+        }
+
+        private void OnTick(object state)
+        {
+            lock (storage)
+            {
+                foreach (PeerHash peer in storage.GetPeers())
+                {
+                    SendPieceRequests(peer);
+                }
+            }
+        }
+
+        public void Initialize(Bitfield bitfield)
+        {
+            lock (storage)
+            {
+                storage.Complete(bitfield);
+            }
         }
 
         public void Start(PeerHash peer, Bitfield bitfield)
@@ -34,36 +61,47 @@ namespace Leak.Core.Retriever
             }
         }
 
-        public void Unchoke(PeerHash peer, ResourceDirection direction)
+        public void SetUnchoked(PeerHash peer, ResourceDirection direction)
         {
             lock (storage)
             {
-                ResourcePieceRequest[] requests = storage.Next(peer);
-
-                foreach (ResourcePieceRequest request in requests)
-                {
-                    collector.SendPieceRequest(peer, request.Index, request.Offset);
-                    storage.Freeze(peer, request);
-                }
+                storage.AddPeer(peer);
+                SendPieceRequests(peer);
             }
         }
 
-        public void Piece(PeerHash peer, Piece piece)
+        public void AddPiece(PeerHash peer, Piece piece)
         {
             lock (storage)
             {
                 if (storage.IsComplete(piece.Index) == false)
                 {
                     int block = piece.Offset / repository.Properties.BlockSize;
+                    ResourcePieceRequest request = new ResourcePieceRequest(piece.Index, piece.Offset, piece.Size);
 
                     repository.SetPiece(piece.Index, block, piece.Data);
-                    bool completed = storage.Complete(piece.Index, block);
+                    bool completed = storage.Complete(request);
 
-                    if (completed && repository.Verify(piece.Index) == false)
+                    if (completed)
                     {
-                        storage.Invalidate(piece.Index);
+                        if (repository.Verify(piece.Index) == false)
+                        {
+                            storage.Invalidate(piece.Index);
+                        }
                     }
                 }
+
+                SendPieceRequests(peer);
+            }
+        }
+
+        private void SendPieceRequests(PeerHash peer)
+        {
+            ResourcePieceRequest[] requests = storage.Next(peer);
+            foreach (ResourcePieceRequest request in requests)
+            {
+                collector.SendPieceRequest(peer, request.Index, request.Offset, request.Size);
+                storage.Book(peer, request);
             }
         }
     }

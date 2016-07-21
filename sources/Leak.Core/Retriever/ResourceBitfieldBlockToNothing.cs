@@ -24,6 +24,11 @@
             return false;
         }
 
+        public ResourceBitfieldBlock Complete()
+        {
+            return new ResourceBitfieldBlockToCompleted(size);
+        }
+
         public ResourceBitfieldBlock Complete(int block)
         {
             return new ResourceBitfieldBlockToPartial(size, block);

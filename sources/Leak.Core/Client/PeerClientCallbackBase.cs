@@ -6,6 +6,10 @@ namespace Leak.Core.Client
 {
     public abstract class PeerClientCallbackBase : PeerClientCallback
     {
+        public virtual void OnInitialized(Metainfo metainfo, MetainfoSummary summary)
+        {
+        }
+
         public virtual void OnStarted(Metainfo metainfo)
         {
         }

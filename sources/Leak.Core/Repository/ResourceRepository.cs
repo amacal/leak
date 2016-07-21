@@ -1,6 +1,8 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Messages;
+using Leak.Core.Metadata;
 using System;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace Leak.Core.Repository
 {
@@ -20,7 +22,7 @@ namespace Leak.Core.Repository
             get { return metainfo.Properties; }
         }
 
-        public void Initialize()
+        public Bitfield Initialize()
         {
             foreach (MetainfoEntry entry in metainfo.Entries)
             {
@@ -32,6 +34,39 @@ namespace Leak.Core.Repository
                     stream.SetLength(entry.Size);
                     stream.Flush();
                 }
+            }
+
+            return Verify();
+        }
+
+        private Bitfield Verify()
+        {
+            byte[] hash;
+            int piece = 0;
+
+            using (HashAlgorithm algorithm = SHA1.Create())
+            using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
+            {
+                int read = metainfo.Properties.PieceSize;
+                byte[] buffer = new byte[metainfo.Properties.PieceSize];
+
+                Bitfield bitfield = new Bitfield(metainfo.Properties.Pieces);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                while (piece < metainfo.Properties.Pieces)
+                {
+                    read = stream.Read(buffer, 0, read);
+                    hash = algorithm.ComputeHash(buffer, 0, read);
+
+                    if (Bytes.Equals(hash, metainfo.Pieces[piece].ToBytes()))
+                    {
+                        bitfield[piece] = true;
+                    }
+
+                    piece = piece + 1;
+                }
+
+                return bitfield;
             }
         }
 
@@ -58,7 +93,18 @@ namespace Leak.Core.Repository
 
         public bool Verify(int piece)
         {
-            return true;
+            byte[] buffer = new byte[metainfo.Properties.PieceSize];
+
+            using (HashAlgorithm algorithm = SHA1.Create())
+            using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
+            {
+                stream.Seek(piece * metainfo.Properties.PieceSize, SeekOrigin.Begin);
+
+                int read = stream.Read(buffer, 0, buffer.Length);
+                byte[] hash = algorithm.ComputeHash(buffer, 0, read);
+
+                return Bytes.Equals(hash, metainfo.Pieces[piece].ToBytes());
+            }
         }
     }
 }

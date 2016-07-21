@@ -4,11 +4,13 @@
     {
         private readonly int index;
         private readonly int offset;
+        private readonly int size;
 
-        public ResourcePieceRequest(int index, int offset)
+        public ResourcePieceRequest(int index, int offset, int size)
         {
             this.index = index;
             this.offset = offset;
+            this.size = size;
         }
 
         public int Index
@@ -19,6 +21,11 @@
         public int Offset
         {
             get { return offset; }
+        }
+
+        public int Size
+        {
+            get { return size; }
         }
 
         public override int GetHashCode()

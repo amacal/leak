@@ -2,6 +2,8 @@
 {
     public class ResourceConfiguration
     {
+        public long TotalSize { get; set; }
+
         public int Pieces { get; set; }
 
         public int Blocks { get; set; }

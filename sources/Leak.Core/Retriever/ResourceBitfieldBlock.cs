@@ -8,6 +8,8 @@
 
         bool IsComplete(int block);
 
+        ResourceBitfieldBlock Complete();
+
         ResourceBitfieldBlock Complete(int block);
 
         ResourceBitfieldBlock Invalidate();

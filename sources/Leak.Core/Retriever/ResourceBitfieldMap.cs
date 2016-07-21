@@ -22,6 +22,11 @@ namespace Leak.Core.Retriever
             }
         }
 
+        public void Complete(int piece)
+        {
+            items[piece] = items[piece].Complete();
+        }
+
         public bool Complete(int piece, int block)
         {
             items[piece] = items[piece].Complete(block);

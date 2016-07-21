@@ -11,11 +11,13 @@ namespace Leak.Core.Collector
     {
         private readonly PeerCollectorConfiguration configuration;
         private readonly Dictionary<PeerHash, PeerCollectorStorageEntry> peers;
+        private readonly Dictionary<string, PeerCollectorStorageEntry> byEndpoint;
 
         public PeerCollectorStorage(PeerCollectorConfiguration configuration)
         {
             this.configuration = configuration;
             this.peers = new Dictionary<PeerHash, PeerCollectorStorageEntry>();
+            this.byEndpoint = new Dictionary<string, PeerCollectorStorageEntry>();
         }
 
         public void Add(NetworkConnection connection, PeerListenerHandshake handshake)
@@ -26,6 +28,8 @@ namespace Leak.Core.Collector
                 Peer = handshake.Peer,
                 Connection = connection
             });
+
+            byEndpoint.Add(connection.Remote, peers[handshake.Peer]);
         }
 
         public void Add(NetworkConnection connection, PeerConnectorHandshake handshake)
@@ -36,6 +40,8 @@ namespace Leak.Core.Collector
                 Peer = handshake.Peer,
                 Connection = connection
             });
+
+            byEndpoint.Add(connection.Remote, peers[handshake.Peer]);
         }
 
         public void Add(ConnectionLoopChannel channel)
@@ -46,16 +52,32 @@ namespace Leak.Core.Collector
 
         public void Remove(PeerHash peer)
         {
+            string endpoint = peers[peer].Channel.Remote;
+
             peers.Remove(peer);
+            byEndpoint.Remove(endpoint);
+            configuration.Callback.OnDisconnected(peer);
         }
 
         public void Remove(NetworkConnection connection)
         {
+            string endpoint = connection.Remote;
+            PeerCollectorStorageEntry entry;
+
+            if (byEndpoint.TryGetValue(endpoint, out entry))
+            {
+                peers.Remove(entry.Peer);
+                byEndpoint.Remove(connection.Remote);
+                configuration.Callback.OnDisconnected(entry.Peer);
+            }
         }
 
         public ConnectionLoopChannel GetChannel(PeerHash peer)
         {
-            return peers[peer].Channel;
+            PeerCollectorStorageEntry entry;
+            peers.TryGetValue(peer, out entry);
+
+            return entry.Channel;
         }
     }
 }

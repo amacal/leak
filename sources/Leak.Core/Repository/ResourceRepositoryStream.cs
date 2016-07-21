@@ -64,7 +64,7 @@ namespace Leak.Core.Repository
 
                     current = entry;
                     left = index + entry.Size - offset;
-                    inner = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.Read);
+                    inner = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
                     inner.Seek(offset - index, SeekOrigin.Begin);
 
                     break;
@@ -82,7 +82,7 @@ namespace Leak.Core.Repository
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            throw new System.NotImplementedException();
+            return inner.Read(buffer, offset, count);
         }
 
         public override void Write(byte[] buffer, int offset, int count)

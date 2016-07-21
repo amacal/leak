@@ -1,7 +1,10 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Connector;
+using Leak.Core.Messages;
 using Leak.Core.Metadata;
+using Leak.Core.Repository;
+using Leak.Core.Retriever;
 using Leak.Core.Tracker;
 using System;
 
@@ -33,14 +36,22 @@ namespace Leak.Core.Client
 
         public void Start(MetainfoFile metainfo)
         {
-            Prepare(metainfo);
+            Initialize(metainfo);
             Connect(metainfo);
         }
 
-        private void Prepare(MetainfoFile metainfo)
+        private void Initialize(MetainfoFile metainfo)
         {
             storage.Register(metainfo, collector.CreateView());
-            storage.GetRepository(metainfo.Data.Hash).Initialize();
+
+            FileHash hash = metainfo.Data.Hash;
+            ResourceRepository repository = storage.GetRepository(hash);
+
+            Bitfield bitfield = repository.Initialize();
+            ResourceRetriever retriever = storage.GetRetriever(hash);
+
+            retriever.Initialize(bitfield);
+            configuration.Callback.OnInitialized(metainfo.Data, new MetainfoSummary(bitfield));
         }
 
         private void Connect(MetainfoFile metainfo)
@@ -63,7 +74,6 @@ namespace Leak.Core.Client
 
                 foreach (TrackerPeer peer in announce.Peers)
                 {
-                    //connector.ConnectTo("95.211.81.154", 58694);
                     connector.ConnectTo(peer.Host, peer.Port);
                 }
             }

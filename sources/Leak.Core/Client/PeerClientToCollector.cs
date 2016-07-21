@@ -42,7 +42,7 @@ namespace Leak.Core.Client
             ResourceDirection direction = ResourceDirection.Local;
 
             callback.OnPeerUnchoked(metainfo, peer);
-            storage.GetRetriever(peer).Unchoke(peer, direction);
+            storage.GetRetriever(peer).SetUnchoked(peer, direction);
         }
 
         public override void OnPiece(PeerHash peer, PieceMessage message)
@@ -51,7 +51,7 @@ namespace Leak.Core.Client
             Piece piece = new Piece(message.Piece, message.Offset, message.Size, message.Data);
 
             callback.OnPieceReceived(metainfo, peer, piece);
-            storage.GetRetriever(peer).Piece(peer, piece);
+            storage.GetRetriever(peer).AddPiece(peer, piece);
         }
     }
 }

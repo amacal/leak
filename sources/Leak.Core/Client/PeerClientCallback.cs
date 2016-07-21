@@ -6,6 +6,8 @@ namespace Leak.Core.Client
 {
     public interface PeerClientCallback
     {
+        void OnInitialized(Metainfo metainfo, MetainfoSummary summary);
+
         void OnStarted(Metainfo metainfo);
 
         void OnCompleted(Metainfo metainfo);

@@ -1,15 +1,18 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using System.Collections.Generic;
 
 namespace Leak.Core.Retriever
 {
     public class ResourceStorage
     {
         private readonly ResourceBitfield bitfields;
+        private readonly HashSet<PeerHash> peers;
 
         public ResourceStorage(ResourceConfiguration configuration)
         {
             this.bitfields = new ResourceBitfield(configuration);
+            this.peers = new HashSet<PeerHash>();
         }
 
         public void AddBitfield(PeerHash peer, Bitfield bitfield)
@@ -17,9 +20,24 @@ namespace Leak.Core.Retriever
             bitfields.Add(peer, bitfield);
         }
 
-        public bool Complete(int piece, int offset)
+        public void AddPeer(PeerHash peer)
         {
-            return bitfields.Complete(piece, offset / 32678);
+            peers.Add(peer);
+        }
+
+        public IEnumerable<PeerHash> GetPeers()
+        {
+            return peers;
+        }
+
+        public void Complete(Bitfield bitfield)
+        {
+            bitfields.Complete(bitfield);
+        }
+
+        public bool Complete(ResourcePieceRequest request)
+        {
+            return bitfields.Complete(request);
         }
 
         public void Invalidate(int piece)
@@ -37,9 +55,9 @@ namespace Leak.Core.Retriever
             return bitfields.Next(peer, 10);
         }
 
-        public void Freeze(PeerHash peer, ResourcePieceRequest request)
+        public void Book(PeerHash peer, ResourcePieceRequest request)
         {
-            bitfields.Freeze(peer, request);
+            bitfields.Book(peer, request);
         }
     }
 }

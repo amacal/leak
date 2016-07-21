@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
+    <Compile Include="Client\MetainfoSummary.cs" />
     <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Client\PeerClientCallback.cs" />
     <Compile Include="Client\PeerClientCallbackBase.cs" />
@@ -283,6 +284,8 @@
     <Compile Include="Retriever\ResourceBitfieldBlockToCompleted.cs" />
     <Compile Include="Retriever\ResourceBitfieldBlockToNothing.cs" />
     <Compile Include="Retriever\ResourceBitfieldBlockToPartial.cs" />
+    <Compile Include="Retriever\ResourceBitfieldBook.cs" />
+    <Compile Include="Retriever\ResourceBitfieldBookCollections.cs" />
     <Compile Include="Retriever\ResourceBitfieldMap.cs" />
     <Compile Include="Retriever\ResourceConfiguration.cs" />
     <Compile Include="Retriever\ResourceDirection.cs" />

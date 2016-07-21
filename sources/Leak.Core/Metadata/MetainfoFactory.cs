@@ -47,9 +47,9 @@ namespace Leak.Core.Metadata
             byte[] data = value.Find("pieces", x => x.Data.GetBytes());
             List<MetainfoHash> pieces = new List<MetainfoHash>();
 
-            for (int i = 0; i < data.Length / 20; i += 20)
+            for (int i = 0; i < data.Length; i += 20)
             {
-                pieces.Add(new MetainfoHash(Bytes.Copy(data, i * 20, 20)));
+                pieces.Add(new MetainfoHash(Bytes.Copy(data, i, 20)));
             }
 
             return pieces.ToArray();

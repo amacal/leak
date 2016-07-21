@@ -27,6 +27,11 @@
             return blocks[block];
         }
 
+        public ResourceBitfieldBlock Complete()
+        {
+            return new ResourceBitfieldBlockToCompleted(blocks.Length);
+        }
+
         public ResourceBitfieldBlock Complete(int block)
         {
             if (blocks[block] == false)
