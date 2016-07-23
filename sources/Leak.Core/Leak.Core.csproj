@@ -48,6 +48,7 @@
     <Compile Include="Client\PeerClientStorageEntryCollection.cs" />
     <Compile Include="Client\PeerClientToCollector.cs" />
     <Compile Include="Client\PeerClientToRetriever.cs" />
+    <Compile Include="Client\PeerClientToTelegraph.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
     <Compile Include="Collector\PeerCollectorCallbackToNothing.cs" />
@@ -293,6 +294,10 @@
     <Compile Include="Retriever\ResourceBitfieldBook.cs" />
     <Compile Include="Retriever\ResourceBitfieldBookCollections.cs" />
     <Compile Include="Retriever\ResourceBitfieldMap.cs" />
+    <Compile Include="Retriever\ResourcePeer.cs" />
+    <Compile Include="Retriever\ResourcePeerCollection.cs" />
+    <Compile Include="Retriever\ResourcePeerOperation.cs" />
+    <Compile Include="Retriever\ResourcePeerStatus.cs" />
     <Compile Include="Retriever\ResourcePiece.cs" />
     <Compile Include="Retriever\ResourceRetrieverCallbackBase.cs" />
     <Compile Include="Retriever\ResourceRetrieverConfiguration.cs" />
@@ -304,13 +309,18 @@
     <Compile Include="Retriever\ResourceRetrieverCallback.cs" />
     <Compile Include="Retriever\ResourceStorage.cs" />
     <Compile Include="StreamExtensions.cs" />
+    <Compile Include="Telegraph\TrackerTelegraphCallbackBase.cs" />
+    <Compile Include="Telegraph\TrackerTelegraphCallbackToNothing.cs" />
+    <Compile Include="Telegraph\TrackerTelegraphConfiguration.cs" />
     <Compile Include="Tracker\TrackerAnnounce.cs" />
+    <Compile Include="Telegraph\TrackerTelegraphCallback.cs" />
     <Compile Include="Tracker\TrackerAnnounceConfiguration.cs" />
     <Compile Include="Tracker\TrackerClient.cs" />
     <Compile Include="Tracker\TrackerClientFactory.cs" />
     <Compile Include="Tracker\TrackerClientToHttp.cs" />
     <Compile Include="Tracker\TrackerClientToUdp.cs" />
     <Compile Include="Tracker\TrackerPeer.cs" />
+    <Compile Include="Telegraph\TrackerTelegraph.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

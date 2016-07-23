@@ -27,8 +27,10 @@ namespace Leak.Core.Collector
 
         public void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
-            storage.Add(connection, handshake);
-            loop.Handle(connection, handshake);
+            if (storage.Add(connection, handshake))
+            {
+                loop.Handle(connection, handshake);
+            }
         }
 
         public void OnException(NetworkConnection connection, Exception ex)

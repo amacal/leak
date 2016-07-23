@@ -51,10 +51,14 @@ namespace Leak.Core.Client
             });
         }
 
-        public void AddPeer(FileHash hash, PeerHash peer)
+        public bool Contains(string remote)
         {
-            collection.AddPeer(hash, peer);
-            collection.ByHash(hash).Peers.Add(peer);
+            return collection.Contains(remote);
+        }
+
+        public bool AddEndpoint(PeerEndpoint endpoint)
+        {
+            return collection.AddEndpoint(endpoint);
         }
 
         public void RemovePeer(PeerHash peer)

@@ -1,18 +1,20 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Retriever
 {
     public class ResourceStorage
     {
         private readonly ResourceBitfield bitfields;
-        private readonly HashSet<PeerHash> peers;
+        private readonly ResourcePeerCollection peers;
 
         public ResourceStorage(ResourceStorageConfiguration configuration)
         {
             this.bitfields = new ResourceBitfield(configuration);
-            this.peers = new HashSet<PeerHash>();
+            this.peers = new ResourcePeerCollection();
         }
 
         public void AddBitfield(PeerHash peer, Bitfield bitfield)
@@ -22,12 +24,29 @@ namespace Leak.Core.Retriever
 
         public void AddPeer(PeerHash peer)
         {
-            peers.Add(peer);
+            peers.AddPeer(peer);
         }
 
-        public IEnumerable<PeerHash> GetPeers()
+        public void Choke(PeerHash peer)
         {
-            return peers;
+            peers.Choke(peer);
+        }
+
+        public void Unchoke(PeerHash peer)
+        {
+            peers.Unchoke(peer);
+        }
+
+        public IEnumerable<ResourcePeer> GetPeers(ResourcePeerOperation operation)
+        {
+            Func<ResourcePeer, bool> predicate = x => true;
+
+            if (operation == ResourcePeerOperation.Request)
+            {
+                predicate = x => x.IsUnchoke();
+            }
+
+            return peers.Where(predicate).OrderByDescending(x => x.Rank);
         }
 
         public void Complete(Bitfield bitfield)
@@ -35,8 +54,10 @@ namespace Leak.Core.Retriever
             bitfields.Complete(bitfield);
         }
 
-        public bool Complete(ResourceBlock block)
+        public bool Complete(PeerHash peer, ResourceBlock block)
         {
+            peers.Increase(peer);
+
             return bitfields.Complete(block);
         }
 
@@ -62,6 +83,7 @@ namespace Leak.Core.Retriever
 
         public void Book(PeerHash peer, ResourceBlock request)
         {
+            peers.Decrease(peer);
             bitfields.Book(peer, request);
         }
     }

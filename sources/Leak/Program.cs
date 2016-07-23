@@ -41,6 +41,7 @@ namespace Leak
         public override void OnCompleted(Metainfo metainfo)
         {
             Console.WriteLine($"{metainfo.Hash}: completed");
+            Environment.Exit(0);
         }
 
         public override void OnPeerConnecting(Metainfo metainfo, string endpoint)

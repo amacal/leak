@@ -82,10 +82,11 @@ namespace Leak.Core.Repository
         {
             int pieceSize = metainfo.Properties.PieceSize;
             int blockSize = metainfo.Properties.BlockSize;
+            long position = (long)piece * pieceSize + block * blockSize;
 
             using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
             {
-                stream.Seek(piece * pieceSize + block * blockSize, SeekOrigin.Begin);
+                stream.Seek(position, SeekOrigin.Begin);
                 stream.Write(data);
                 stream.Flush();
             }
@@ -94,11 +95,12 @@ namespace Leak.Core.Repository
         public bool Verify(int piece)
         {
             byte[] buffer = new byte[metainfo.Properties.PieceSize];
+            long position = (long)piece * metainfo.Properties.PieceSize;
 
             using (HashAlgorithm algorithm = SHA1.Create())
             using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
             {
-                stream.Seek(piece * metainfo.Properties.PieceSize, SeekOrigin.Begin);
+                stream.Seek(position, SeekOrigin.Begin);
 
                 int read = stream.Read(buffer, 0, buffer.Length);
                 byte[] hash = algorithm.ComputeHash(buffer, 0, read);

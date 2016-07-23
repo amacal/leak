@@ -50,15 +50,15 @@ namespace Leak.Core.Retriever
 
                 if (tick == 0)
                 {
-                    foreach (PeerHash peer in storage.GetPeers())
+                    foreach (ResourcePeer peer in storage.GetPeers(ResourcePeerOperation.KeepAlive))
                     {
-                        collector.SendKeepAlive(peer);
+                        collector.SendKeepAlive(peer.Hash);
                     }
                 }
 
-                foreach (PeerHash peer in storage.GetPeers())
+                foreach (ResourcePeer peer in storage.GetPeers(ResourcePeerOperation.Request))
                 {
-                    SendPieceRequests(peer);
+                    SendPieceRequests(peer.Hash);
                 }
             }
         }
@@ -75,6 +75,7 @@ namespace Leak.Core.Retriever
         {
             lock (storage)
             {
+                storage.AddPeer(peer);
                 storage.AddBitfield(peer, bitfield);
                 collector.SendInterested(peer);
             }
@@ -82,13 +83,17 @@ namespace Leak.Core.Retriever
 
         public void SetChoked(PeerHash peer, ResourceDirection direction)
         {
+            lock (storage)
+            {
+                storage.Choke(peer);
+            }
         }
 
         public void SetUnchoked(PeerHash peer, ResourceDirection direction)
         {
             lock (storage)
             {
-                storage.AddPeer(peer);
+                storage.Unchoke(peer);
             }
         }
 
@@ -102,7 +107,7 @@ namespace Leak.Core.Retriever
                     ResourceBlock block = new ResourceBlock(piece.Index, piece.Offset, piece.Size);
 
                     repository.SetPiece(piece.Index, blockIndex, piece.Data);
-                    bool completed = storage.Complete(block);
+                    bool completed = storage.Complete(peer, block);
 
                     if (completed)
                     {

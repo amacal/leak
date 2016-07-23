@@ -17,12 +17,12 @@ namespace Leak.Core.Loop
 
         public void OnException(Exception ex)
         {
-            configuration.Callback.OnException(new ConnectionLoopChannel(connection, handshake), ex);
+            configuration.Callback.OnException(new ConnectionLoopChannel(configuration, connection, handshake), ex);
         }
 
         public void OnDisconnected()
         {
-            configuration.Callback.OnDisconnected(new ConnectionLoopChannel(connection, handshake));
+            configuration.Callback.OnDisconnected(new ConnectionLoopChannel(configuration, connection, handshake));
         }
     }
 }

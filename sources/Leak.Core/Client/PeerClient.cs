@@ -5,9 +5,8 @@ using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
 using Leak.Core.Retriever;
-using Leak.Core.Tracker;
+using Leak.Core.Telegraph;
 using System;
-using System.Linq;
 
 namespace Leak.Core.Client
 {
@@ -22,7 +21,7 @@ namespace Leak.Core.Client
         {
             this.configuration = new PeerClientConfiguration
             {
-                Peer = PeerHash.Random("2d5554333437302d"),
+                Peer = PeerHash.Random(),
                 Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create),
                 Callback = new PeerClientCallbackToNothing()
             };
@@ -67,26 +66,18 @@ namespace Leak.Core.Client
                 with.Callback = collector.CreateConnectorCallback();
             });
 
-            connector.ConnectTo("127.0.0.1", 8080);
-
-            foreach (string tracker in metainfo.Trackers.Take(1))
+            TrackerTelegraph telegraph = new TrackerTelegraph(with =>
             {
-                try
-                {
-                    TrackerClient client = TrackerClientFactory.Create(tracker);
-                    TrackerAnnounce announce = client.Announce(with =>
-                    {
-                        with.Peer = configuration.Peer;
-                        with.Hash = metainfo.Data.Hash;
-                    });
+                with.Callback = new PeerClientToTelegraph(configuration, metainfo.Data, connector, storage);
+            });
 
-                    foreach (TrackerPeer peer in announce.Peers)
-                    {
-                        callback.OnPeerConnecting(metainfo.Data, $"{peer.Host}:{peer.Port}");
-                        connector.ConnectTo(peer.Host, peer.Port);
-                    }
-                }
-                catch { }
+            foreach (string tracker in metainfo.Trackers)
+            {
+                telegraph.Start(tracker, with =>
+                {
+                    with.Peer = configuration.Peer;
+                    with.Hash = metainfo.Data.Hash;
+                });
             }
         }
     }

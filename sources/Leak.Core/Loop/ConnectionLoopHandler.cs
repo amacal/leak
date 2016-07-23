@@ -18,7 +18,7 @@ namespace Leak.Core.Loop
 
         public void Execute()
         {
-            configuration.Callback.OnConnected(new ConnectionLoopChannel(connection, handshake));
+            configuration.Callback.OnConnected(new ConnectionLoopChannel(configuration, connection, handshake));
             connection.Receive(OnMessageHeader, 4);
         }
 
@@ -76,14 +76,14 @@ namespace Leak.Core.Loop
         private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel> callback)
         {
             message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
-            callback.Invoke(new ConnectionLoopChannel(connection, handshake));
+            callback.Invoke(new ConnectionLoopChannel(configuration, connection, handshake));
             connection.Receive(OnMessageHeader, 4);
         }
 
         private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel, ConnectionLoopMessage> callback)
         {
             message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
-            callback.Invoke(new ConnectionLoopChannel(connection, handshake), new ConnectionLoopMessage(message));
+            callback.Invoke(new ConnectionLoopChannel(configuration, connection, handshake), new ConnectionLoopMessage(message));
             connection.Receive(OnMessageHeader, 4);
         }
     }

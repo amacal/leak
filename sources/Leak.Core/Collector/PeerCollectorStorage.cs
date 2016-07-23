@@ -10,13 +10,17 @@ namespace Leak.Core.Collector
     public class PeerCollectorStorage
     {
         private readonly PeerCollectorConfiguration configuration;
-        private readonly Dictionary<PeerHash, PeerCollectorStorageEntry> peers;
+        private readonly object synchronized;
+
+        private readonly Dictionary<PeerHash, PeerCollectorStorageEntry> byHash;
         private readonly Dictionary<string, PeerCollectorStorageEntry> byEndpoint;
 
         public PeerCollectorStorage(PeerCollectorConfiguration configuration)
         {
             this.configuration = configuration;
-            this.peers = new Dictionary<PeerHash, PeerCollectorStorageEntry>();
+            this.synchronized = new object();
+
+            this.byHash = new Dictionary<PeerHash, PeerCollectorStorageEntry>();
             this.byEndpoint = new Dictionary<string, PeerCollectorStorageEntry>();
         }
 
@@ -24,42 +28,70 @@ namespace Leak.Core.Collector
         {
         }
 
-        public void Add(NetworkConnection connection, PeerListenerHandshake handshake)
+        public bool Add(NetworkConnection connection, PeerListenerHandshake handshake)
         {
-            peers.Add(handshake.Peer, new PeerCollectorStorageEntry
+            lock (synchronized)
             {
-                Hash = handshake.Hash,
-                Peer = handshake.Peer,
-                Connection = connection
-            });
+                if (byHash.ContainsKey(handshake.Peer))
+                    return false;
 
-            byEndpoint.Add(connection.Remote, peers[handshake.Peer]);
+                byHash.Add(handshake.Peer, new PeerCollectorStorageEntry
+                {
+                    Hash = handshake.Hash,
+                    Peer = handshake.Peer,
+                    Connection = connection
+                });
+
+                byEndpoint.Add(connection.Remote, byHash[handshake.Peer]);
+                return true;
+            }
         }
 
-        public void Add(NetworkConnection connection, PeerConnectorHandshake handshake)
+        public bool Add(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
-            peers.Add(handshake.Peer, new PeerCollectorStorageEntry
+            lock (synchronized)
             {
-                Hash = handshake.Hash,
-                Peer = handshake.Peer,
-                Connection = connection
-            });
+                if (byHash.ContainsKey(handshake.Peer))
+                    return false;
 
-            byEndpoint.Add(connection.Remote, peers[handshake.Peer]);
+                byHash.Add(handshake.Peer, new PeerCollectorStorageEntry
+                {
+                    Hash = handshake.Hash,
+                    Peer = handshake.Peer,
+                    Connection = connection
+                });
+
+                byEndpoint.Add(connection.Remote, byHash[handshake.Peer]);
+                return true;
+            }
         }
 
         public void Add(ConnectionLoopChannel channel)
         {
-            peers[channel.Endpoint.Peer].Channel = channel;
+            lock (synchronized)
+            {
+                byHash[channel.Endpoint.Peer].Channel = channel;
+            }
+
             configuration.Callback.OnConnected(channel.Endpoint);
         }
 
         public void Remove(PeerHash peer)
         {
-            PeerEndpoint endpoint = peers[peer].Channel.Endpoint;
+            lock (synchronized)
+            {
+                PeerCollectorStorageEntry entry;
+                byHash.TryGetValue(peer, out entry);
 
-            peers.Remove(peer);
-            byEndpoint.Remove(endpoint.Remote);
+                if (entry != null)
+                {
+                    PeerEndpoint endpoint = entry.Channel.Endpoint;
+
+                    byHash.Remove(peer);
+                    byEndpoint.Remove(endpoint.Remote);
+                }
+            }
+
             configuration.Callback.OnDisconnected(peer);
         }
 
@@ -68,10 +100,17 @@ namespace Leak.Core.Collector
             string endpoint = connection.Remote;
             PeerCollectorStorageEntry entry;
 
-            if (byEndpoint.TryGetValue(endpoint, out entry))
+            lock (synchronized)
             {
-                peers.Remove(entry.Peer);
-                byEndpoint.Remove(connection.Remote);
+                if (byEndpoint.TryGetValue(endpoint, out entry))
+                {
+                    byHash.Remove(entry.Peer);
+                    byEndpoint.Remove(connection.Remote);
+                }
+            }
+
+            if (entry != null)
+            {
                 configuration.Callback.OnDisconnected(entry.Peer);
             }
         }
@@ -79,7 +118,11 @@ namespace Leak.Core.Collector
         public ConnectionLoopChannel GetChannel(PeerHash peer)
         {
             PeerCollectorStorageEntry entry;
-            peers.TryGetValue(peer, out entry);
+
+            lock (synchronized)
+            {
+                byHash.TryGetValue(peer, out entry);
+            }
 
             return entry?.Channel;
         }

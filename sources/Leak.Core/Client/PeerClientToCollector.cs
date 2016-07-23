@@ -21,8 +21,10 @@ namespace Leak.Core.Client
         {
             Metainfo metainfo = storage.GetMetainfo(endpoint.Hash);
 
-            storage.AddPeer(endpoint.Hash, endpoint.Peer);
-            callback.OnPeerConnected(metainfo, endpoint);
+            if (storage.AddEndpoint(endpoint))
+            {
+                callback.OnPeerConnected(metainfo, endpoint);
+            }
         }
 
         public override void OnDisconnected(PeerHash peer)

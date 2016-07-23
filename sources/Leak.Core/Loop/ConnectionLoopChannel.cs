@@ -1,15 +1,19 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Loop
 {
     public class ConnectionLoopChannel
     {
+        private readonly ConnectionLoopConfiguration configuration;
         private readonly ConnectionLoopConnection connection;
         private readonly ConnectionLoopHandshake handshake;
 
-        public ConnectionLoopChannel(ConnectionLoopConnection connection, ConnectionLoopHandshake handshake)
+        public ConnectionLoopChannel(ConnectionLoopConfiguration configuration, ConnectionLoopConnection connection, ConnectionLoopHandshake handshake)
         {
+            this.configuration = configuration;
             this.connection = connection;
             this.handshake = handshake;
         }
@@ -21,22 +25,34 @@ namespace Leak.Core.Loop
 
         public void Send(KeepAliveMessage message)
         {
-            connection.Send(message);
+            Forward(message);
         }
 
         public void Send(InterestedMessage message)
         {
-            connection.Send(message);
+            Forward(message);
         }
 
         public void Send(BitfieldMessage message)
         {
-            connection.Send(message);
+            Forward(message);
         }
 
         public void Send(RequestMessage message)
         {
-            connection.Send(message);
+            Forward(message);
+        }
+
+        private void Forward(NetworkOutgoingMessage message)
+        {
+            try
+            {
+                connection.Send(message);
+            }
+            catch (Exception ex)
+            {
+                configuration.Callback.OnException(this, ex);
+            }
         }
     }
 }
