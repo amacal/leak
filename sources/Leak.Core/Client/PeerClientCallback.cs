@@ -6,18 +6,26 @@ namespace Leak.Core.Client
 {
     public interface PeerClientCallback
     {
-        void OnInitialized(Metainfo metainfo, MetainfoSummary summary);
+        void OnInitialized(Metainfo metainfo, PeerClientMetainfoSummary summary);
 
         void OnStarted(Metainfo metainfo);
 
         void OnCompleted(Metainfo metainfo);
 
-        void OnPeerConnected(Metainfo metainfo, PeerHash peer);
+        void OnPeerConnecting(Metainfo metainfo, string endpoint);
+
+        void OnPeerConnected(Metainfo metainfo, PeerEndpoint endpoint);
+
+        void OnPeerDisconnected(Metainfo metainfo, PeerHash peer);
 
         void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield);
 
+        void OnPeerChoked(Metainfo metainfo, PeerHash peer);
+
         void OnPeerUnchoked(Metainfo metainfo, PeerHash peer);
 
-        void OnPieceReceived(Metainfo metainfo, PeerHash peer, Piece piece);
+        void OnBlockReceived(Metainfo metainfo, PeerHash peer, Piece piece);
+
+        void OnPieceVerified(Metainfo metainfo, PeerClientPieceVerification verification);
     }
 }

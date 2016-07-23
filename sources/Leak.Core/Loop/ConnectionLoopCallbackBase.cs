@@ -12,11 +12,19 @@ namespace Leak.Core.Loop
         {
         }
 
+        public virtual void OnChoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
+        {
+        }
+
         public virtual void OnUnchoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
         }
 
         public virtual void OnInterested(ConnectionLoopChannel channel, ConnectionLoopMessage message)
+        {
+        }
+
+        public virtual void OnHave(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
         }
 

@@ -45,7 +45,7 @@ namespace Leak.Core.Tests.Loop
             callback.KeepAlive.Should().HaveCount(2);
         }
 
-        public class LoopCallback : ConnectionLoopCallback
+        public class LoopCallback : ConnectionLoopCallbackBase
         {
             private readonly List<ConnectionLoopChannel> keepAlive;
 
@@ -59,37 +59,9 @@ namespace Leak.Core.Tests.Loop
                 get { return keepAlive; }
             }
 
-            public void OnConnected(ConnectionLoopChannel channel)
-            {
-            }
-
-            public void OnKeepAlive(ConnectionLoopChannel channel)
+            public override void OnKeepAlive(ConnectionLoopChannel channel)
             {
                 keepAlive.Add(channel);
-            }
-
-            public void OnUnchoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
-            {
-            }
-
-            public void OnInterested(ConnectionLoopChannel channel, ConnectionLoopMessage message)
-            {
-            }
-
-            public void OnBitfield(ConnectionLoopChannel channel, ConnectionLoopMessage message)
-            {
-            }
-
-            public void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message)
-            {
-            }
-
-            public void OnException(ConnectionLoopChannel channel, Exception ex)
-            {
-            }
-
-            public void OnDisconnected(ConnectionLoopChannel channel)
-            {
             }
         }
 

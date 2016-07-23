@@ -10,9 +10,17 @@ namespace Leak.Core.Tracker
                 return new TrackerClientToHttp(uri);
 
             if (uri.StartsWith("udp://"))
-                return new TrackerClientToUdp();
+                return CreateUdpClient(uri);
 
             throw new NotSupportedException("The tracker type is not supported.");
+        }
+
+        private static TrackerClient CreateUdpClient(string uri)
+        {
+            Uri link = new Uri(uri, UriKind.Absolute);
+            TrackerClientToUdp client = new TrackerClientToUdp(link.Host, link.Port);
+
+            return client;
         }
     }
 }

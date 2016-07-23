@@ -36,16 +36,18 @@
   <ItemGroup>
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
-    <Compile Include="Client\MetainfoSummary.cs" />
+    <Compile Include="Client\PeerClientMetainfoSummary.cs" />
     <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Client\PeerClientCallback.cs" />
     <Compile Include="Client\PeerClientCallbackBase.cs" />
     <Compile Include="Client\PeerClientCallbackToNothing.cs" />
     <Compile Include="Client\PeerClientConfiguration.cs" />
+    <Compile Include="Client\PeerClientPieceVerification.cs" />
     <Compile Include="Client\PeerClientStorage.cs" />
     <Compile Include="Client\PeerClientStorageEntry.cs" />
     <Compile Include="Client\PeerClientStorageEntryCollection.cs" />
     <Compile Include="Client\PeerClientToCollector.cs" />
+    <Compile Include="Client\PeerClientToRetriever.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
     <Compile Include="Collector\PeerCollectorCallbackToNothing.cs" />
@@ -57,6 +59,8 @@
     <Compile Include="Collector\PeerCollector.cs" />
     <Compile Include="Collector\PeerCollectorToLoop.cs" />
     <Compile Include="Collector\PeerCollectorView.cs" />
+    <Compile Include="Common\PeerEndpoint.cs" />
+    <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorCallback.cs" />
     <Compile Include="Connector\PeerConnectorCallbackToNothing.cs" />
@@ -131,6 +135,8 @@
     <Compile Include="Loop\ConnectionLoopMessage.cs" />
     <Compile Include="Messages\Bitfield.cs" />
     <Compile Include="Messages\BitfieldMessage.cs" />
+    <Compile Include="Messages\ChokeMessage.cs" />
+    <Compile Include="Messages\HaveMessage.cs" />
     <Compile Include="Messages\InterestedMessage.cs" />
     <Compile Include="Messages\KeepAliveMessage.cs" />
     <Compile Include="Messages\Piece.cs" />
@@ -287,10 +293,15 @@
     <Compile Include="Retriever\ResourceBitfieldBook.cs" />
     <Compile Include="Retriever\ResourceBitfieldBookCollections.cs" />
     <Compile Include="Retriever\ResourceBitfieldMap.cs" />
-    <Compile Include="Retriever\ResourceConfiguration.cs" />
+    <Compile Include="Retriever\ResourcePiece.cs" />
+    <Compile Include="Retriever\ResourceRetrieverCallbackBase.cs" />
+    <Compile Include="Retriever\ResourceRetrieverConfiguration.cs" />
+    <Compile Include="Retriever\ResourceRetrieverToNothing.cs" />
+    <Compile Include="Retriever\ResourceStorageConfiguration.cs" />
     <Compile Include="Retriever\ResourceDirection.cs" />
-    <Compile Include="Retriever\ResourcePieceRequest.cs" />
+    <Compile Include="Retriever\ResourceBlock.cs" />
     <Compile Include="Retriever\ResourceRetriever.cs" />
+    <Compile Include="Retriever\ResourceRetrieverCallback.cs" />
     <Compile Include="Retriever\ResourceStorage.cs" />
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="Tracker\TrackerAnnounce.cs" />

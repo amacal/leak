@@ -7,12 +7,12 @@ namespace Leak.Core.Retriever
 {
     public class ResourceBitfield
     {
-        private readonly ResourceConfiguration configuration;
+        private readonly ResourceStorageConfiguration configuration;
         private readonly ResourceBitfieldMap completed;
         private readonly Dictionary<PeerHash, Bitfield> peers;
         private readonly ResourceBitfieldBookCollections books;
 
-        public ResourceBitfield(ResourceConfiguration configuration)
+        public ResourceBitfield(ResourceStorageConfiguration configuration)
         {
             this.configuration = configuration;
             this.completed = new ResourceBitfieldMap(configuration);
@@ -51,11 +51,11 @@ namespace Leak.Core.Retriever
             }
         }
 
-        public bool Complete(ResourcePieceRequest request)
+        public bool Complete(ResourceBlock block)
         {
-            books.Complete(request);
+            books.Complete(block);
 
-            return completed.Complete(request.Index, request.Offset / configuration.BlockSize);
+            return completed.Complete(block.Index, block.Offset / configuration.BlockSize);
         }
 
         public void Invalidate(int piece)
@@ -63,15 +63,20 @@ namespace Leak.Core.Retriever
             completed.Invalidate(piece);
         }
 
+        public bool IsComplete()
+        {
+            return completed.IsComplete();
+        }
+
         public bool IsComplete(int piece)
         {
             return completed.IsComplete(piece);
         }
 
-        public ResourcePieceRequest[] Next(PeerHash peer, int maximum)
+        public ResourceBlock[] Next(PeerHash peer, int maximum)
         {
             Bitfield bitfield = peers[peer];
-            List<ResourcePieceRequest> requests = new List<ResourcePieceRequest>();
+            List<ResourceBlock> requests = new List<ResourceBlock>();
 
             long size = configuration.TotalSize;
             int left = Math.Min(maximum, maximum - books.Count(peer));
@@ -92,11 +97,11 @@ namespace Leak.Core.Retriever
                                 blockSize = (int)size;
                             }
 
-                            ResourcePieceRequest request = new ResourcePieceRequest(i, offset, blockSize);
+                            ResourceBlock block = new ResourceBlock(i, offset, blockSize);
 
-                            if (books.Contains(request) == false)
+                            if (books.Contains(block) == false)
                             {
-                                requests.Add(request);
+                                requests.Add(block);
                                 left--;
                             }
                         }
@@ -113,7 +118,7 @@ namespace Leak.Core.Retriever
             return requests.ToArray();
         }
 
-        public void Book(PeerHash peer, ResourcePieceRequest request)
+        public void Book(PeerHash peer, ResourceBlock request)
         {
             books.Add(peer, request);
         }

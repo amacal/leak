@@ -37,12 +37,20 @@ namespace Leak.Core.Loop
 
             switch (message[4])
             {
+                case 0:
+                    Dispatch(message, configuration.Callback.OnChoke);
+                    break;
+
                 case 1:
                     Dispatch(message, configuration.Callback.OnUnchoke);
                     break;
 
                 case 2:
                     Dispatch(message, configuration.Callback.OnInterested);
+                    break;
+
+                case 4:
+                    Dispatch(message, configuration.Callback.OnHave);
                     break;
 
                 case 5:
@@ -54,10 +62,15 @@ namespace Leak.Core.Loop
                     break;
 
                 default:
-                    message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
-                    connection.Receive(OnMessageHeader, 4);
+                    Ignore(message);
                     break;
             }
+        }
+
+        private void Ignore(NetworkIncomingMessage message)
+        {
+            message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
+            connection.Receive(OnMessageHeader, 4);
         }
 
         private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel> callback)

@@ -5,9 +5,11 @@ namespace Leak.Core.Retriever
     public class ResourceBitfieldMap
     {
         private readonly ResourceBitfieldBlock[] items;
+        private int completed;
 
-        public ResourceBitfieldMap(ResourceConfiguration configuration)
+        public ResourceBitfieldMap(ResourceStorageConfiguration configuration)
         {
+            this.completed = 0;
             this.items = new ResourceBitfieldBlock[configuration.Pieces];
 
             int left = configuration.Blocks;
@@ -24,19 +26,48 @@ namespace Leak.Core.Retriever
 
         public void Complete(int piece)
         {
+            bool before = items[piece].IsComplete();
+
             items[piece] = items[piece].Complete();
+            bool after = items[piece].IsComplete();
+
+            if (before != after)
+            {
+                completed++;
+            }
         }
 
         public bool Complete(int piece, int block)
         {
-            items[piece] = items[piece].Complete(block);
+            bool before = items[piece].IsComplete();
 
-            return items[piece].IsComplete();
+            items[piece] = items[piece].Complete(block);
+            bool after = items[piece].IsComplete();
+
+            if (before != after)
+            {
+                completed++;
+            }
+
+            return after;
         }
 
         public void Invalidate(int piece)
         {
+            bool before = items[piece].IsComplete();
+
             items[piece] = items[piece].Invalidate();
+            bool after = items[piece].IsComplete();
+
+            if (before != after)
+            {
+                completed--;
+            }
+        }
+
+        public bool IsComplete()
+        {
+            return items.Length == completed;
         }
 
         public bool IsComplete(int piece)

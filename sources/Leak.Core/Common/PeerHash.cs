@@ -35,5 +35,14 @@
         {
             return new PeerHash(Bytes.Random(20));
         }
+
+        public static PeerHash Random(string prefix)
+        {
+            byte[] value = Bytes.Parse(prefix);
+            byte[] random = Bytes.Random(20 - value.Length);
+
+            Bytes.Append(ref value, random);
+            return new PeerHash(value);
+        }
     }
 }

@@ -36,10 +36,11 @@ namespace Leak.Core.Metadata
         private static MetainfoProperties FindProperties(BencodedValue value, MetainfoEntry[] entries, MetainfoHash[] pieces)
         {
             long totalSize = entries.Sum(x => x.Size);
+            int blockSize = 16384;
             int pieceSize = value.Find("piece length", x => (int)x.ToNumber());
-            int blocks = (int)(pieces.Length * (totalSize / pieceSize) - totalSize % pieceSize / 32 / 1024 + 1);
+            int blocks = (int)(pieces.Length * (totalSize / pieceSize) - totalSize % pieceSize / blockSize + 1);
 
-            return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blocks, 32 * 1024);
+            return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blocks, blockSize);
         }
 
         private static MetainfoHash[] FindPieces(BencodedValue value)

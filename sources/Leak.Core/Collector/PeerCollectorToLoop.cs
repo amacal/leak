@@ -22,37 +22,47 @@ namespace Leak.Core.Collector
 
         public override void OnKeepAlive(ConnectionLoopChannel channel)
         {
-            configuration.Callback.OnKeepAlive(channel.Peer, new KeepAliveMessage());
+            configuration.Callback.OnKeepAlive(channel.Endpoint.Peer, new KeepAliveMessage());
+        }
+
+        public override void OnChoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
+        {
+            configuration.Callback.OnChoke(channel.Endpoint.Peer, new ChokeMessage());
         }
 
         public override void OnUnchoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            configuration.Callback.OnUnchoke(channel.Peer, new UnchokeMessage());
+            configuration.Callback.OnUnchoke(channel.Endpoint.Peer, new UnchokeMessage());
         }
 
         public override void OnInterested(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            configuration.Callback.OnInterested(channel.Peer, new InterestedMessage());
+            configuration.Callback.OnInterested(channel.Endpoint.Peer, new InterestedMessage());
+        }
+
+        public override void OnHave(ConnectionLoopChannel channel, ConnectionLoopMessage message)
+        {
+            configuration.Callback.OnHave(channel.Endpoint.Peer, new HaveMessage());
         }
 
         public override void OnBitfield(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            configuration.Callback.OnBitfield(channel.Peer, new BitfieldMessage(message.ToBytes()));
+            configuration.Callback.OnBitfield(channel.Endpoint.Peer, new BitfieldMessage(message.ToBytes()));
         }
 
         public override void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            configuration.Callback.OnPiece(channel.Peer, new PieceMessage(message.ToBytes()));
+            configuration.Callback.OnPiece(channel.Endpoint.Peer, new PieceMessage(message.ToBytes()));
         }
 
         public override void OnException(ConnectionLoopChannel channel, Exception ex)
         {
-            storage.Remove(channel.Peer);
+            storage.Remove(channel.Endpoint.Peer);
         }
 
         public override void OnDisconnected(ConnectionLoopChannel channel)
         {
-            storage.Remove(channel.Peer);
+            storage.Remove(channel.Endpoint.Peer);
         }
     }
 }

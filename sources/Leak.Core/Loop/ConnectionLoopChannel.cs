@@ -14,22 +14,22 @@ namespace Leak.Core.Loop
             this.handshake = handshake;
         }
 
-        public string Remote
+        public PeerEndpoint Endpoint
         {
-            get { return connection.Remote; }
+            get { return new PeerEndpoint(handshake.Hash, handshake.Peer, connection.Remote); }
         }
 
-        public PeerHash Peer
+        public void Send(KeepAliveMessage message)
         {
-            get { return handshake.Peer; }
-        }
-
-        public FileHash Hash
-        {
-            get { return handshake.Hash; }
+            connection.Send(message);
         }
 
         public void Send(InterestedMessage message)
+        {
+            connection.Send(message);
+        }
+
+        public void Send(BitfieldMessage message)
         {
             connection.Send(message);
         }

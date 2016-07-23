@@ -8,9 +8,13 @@ namespace Leak.Core.Loop
 
         void OnKeepAlive(ConnectionLoopChannel channel);
 
+        void OnChoke(ConnectionLoopChannel channel, ConnectionLoopMessage message);
+
         void OnUnchoke(ConnectionLoopChannel channel, ConnectionLoopMessage message);
 
         void OnInterested(ConnectionLoopChannel channel, ConnectionLoopMessage message);
+
+        void OnHave(ConnectionLoopChannel channel, ConnectionLoopMessage message);
 
         void OnBitfield(ConnectionLoopChannel channel, ConnectionLoopMessage message);
 

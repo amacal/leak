@@ -34,7 +34,13 @@ namespace Leak.Core.Client
             }
 
             ResourceRepository repository = new ResourceRepository(metainfo.Data, path);
-            ResourceRetriever retriever = new ResourceRetriever(repository, collector);
+
+            ResourceRetriever retriever = new ResourceRetriever(with =>
+            {
+                with.Repository = repository;
+                with.Collector = collector;
+                with.Callback = new PeerClientToRetriever(metainfo.Data, configuration);
+            });
 
             collection.Add(metainfo.Data.Hash, new PeerClientStorageEntry
             {
@@ -47,11 +53,13 @@ namespace Leak.Core.Client
 
         public void AddPeer(FileHash hash, PeerHash peer)
         {
-            Metainfo metainfo = collection.ByHash(hash).Metainfo;
-
             collection.AddPeer(hash, peer);
             collection.ByHash(hash).Peers.Add(peer);
-            callback.OnPeerConnected(metainfo, peer);
+        }
+
+        public void RemovePeer(PeerHash peer)
+        {
+            collection.ByPeer(peer).Peers.Remove(peer);
         }
 
         public ResourceRepository GetRepository(FileHash hash)
@@ -72,6 +80,11 @@ namespace Leak.Core.Client
         public Metainfo GetMetainfo(PeerHash peer)
         {
             return collection.ByPeer(peer).Metainfo;
+        }
+
+        public Metainfo GetMetainfo(FileHash hash)
+        {
+            return collection.ByHash(hash).Metainfo;
         }
     }
 }

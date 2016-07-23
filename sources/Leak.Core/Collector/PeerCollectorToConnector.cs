@@ -18,6 +18,7 @@ namespace Leak.Core.Collector
 
         public void OnConnected(NetworkConnection connection)
         {
+            storage.Add(connection);
         }
 
         public void OnRejected(NetworkConnection connection)

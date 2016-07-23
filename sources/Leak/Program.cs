@@ -33,14 +33,29 @@ namespace Leak
 
     public class Callback : PeerClientCallbackBase
     {
-        public override void OnInitialized(Metainfo metainfo, MetainfoSummary summary)
+        public override void OnInitialized(Metainfo metainfo, PeerClientMetainfoSummary summary)
         {
             Console.WriteLine($"{metainfo.Hash}: initialized; completed={summary.Completed}; total={metainfo.Properties.Pieces}");
         }
 
-        public override void OnPeerConnected(Metainfo metainfo, PeerHash peer)
+        public override void OnCompleted(Metainfo metainfo)
         {
-            Console.WriteLine($"{peer}: connected");
+            Console.WriteLine($"{metainfo.Hash}: completed");
+        }
+
+        public override void OnPeerConnecting(Metainfo metainfo, string endpoint)
+        {
+            Console.WriteLine($"{metainfo.Hash}: connecting; endpoint={endpoint}");
+        }
+
+        public override void OnPeerConnected(Metainfo metainfo, PeerEndpoint endpoint)
+        {
+            Console.WriteLine($"{endpoint.Peer}: connected; remote={endpoint.Remote}");
+        }
+
+        public override void OnPeerDisconnected(Metainfo metainfo, PeerHash peer)
+        {
+            Console.WriteLine($"{peer}: disconnected");
         }
 
         public override void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
@@ -48,14 +63,24 @@ namespace Leak
             Console.WriteLine($"{peer}: bitfield; total={bitfield.Length}; completed={bitfield.Completed}");
         }
 
+        public override void OnPeerChoked(Metainfo metainfo, PeerHash peer)
+        {
+            Console.WriteLine($"{peer}: choke");
+        }
+
         public override void OnPeerUnchoked(Metainfo metainfo, PeerHash peer)
         {
             Console.WriteLine($"{peer}: unchoke");
         }
 
-        public override void OnPieceReceived(Metainfo metainfo, PeerHash peer, Piece piece)
+        public override void OnBlockReceived(Metainfo metainfo, PeerHash peer, Piece piece)
         {
-            Console.WriteLine($"{peer}: piece; index={piece.Index}; offset={piece.Offset}; size={piece.Size}");
+            Console.WriteLine($"{peer}: block; piece={piece.Index}; offset={piece.Offset}; size={piece.Size}");
+        }
+
+        public override void OnPieceVerified(Metainfo metainfo, PeerClientPieceVerification verification)
+        {
+            Console.WriteLine($"{metainfo.Hash}: verified; piece={verification.Piece}");
         }
     }
 }

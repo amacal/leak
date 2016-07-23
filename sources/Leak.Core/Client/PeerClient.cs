@@ -7,6 +7,7 @@ using Leak.Core.Repository;
 using Leak.Core.Retriever;
 using Leak.Core.Tracker;
 using System;
+using System.Linq;
 
 namespace Leak.Core.Client
 {
@@ -15,12 +16,13 @@ namespace Leak.Core.Client
         private readonly PeerCollector collector;
         private readonly PeerClientStorage storage;
         private readonly PeerClientConfiguration configuration;
+        private readonly PeerClientCallback callback;
 
         public PeerClient(Action<PeerClientConfiguration> configurer)
         {
             this.configuration = new PeerClientConfiguration
             {
-                Peer = PeerHash.Random(),
+                Peer = PeerHash.Random("2d5554333437302d"),
                 Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create),
                 Callback = new PeerClientCallbackToNothing()
             };
@@ -28,6 +30,8 @@ namespace Leak.Core.Client
             configurer.Invoke(configuration);
 
             this.storage = new PeerClientStorage(configuration);
+            this.callback = configuration.Callback;
+
             this.collector = new PeerCollector(with =>
             {
                 with.Callback = new PeerClientToCollector(configuration, storage);
@@ -51,7 +55,7 @@ namespace Leak.Core.Client
             ResourceRetriever retriever = storage.GetRetriever(hash);
 
             retriever.Initialize(bitfield);
-            configuration.Callback.OnInitialized(metainfo.Data, new MetainfoSummary(bitfield));
+            callback.OnInitialized(metainfo.Data, new PeerClientMetainfoSummary(bitfield));
         }
 
         private void Connect(MetainfoFile metainfo)
@@ -63,19 +67,26 @@ namespace Leak.Core.Client
                 with.Callback = collector.CreateConnectorCallback();
             });
 
-            foreach (string tracker in metainfo.Trackers)
-            {
-                TrackerClient client = TrackerClientFactory.Create(tracker);
-                TrackerAnnounce announce = client.Announce(with =>
-                {
-                    with.Peer = configuration.Peer;
-                    with.Hash = metainfo.Data.Hash;
-                });
+            connector.ConnectTo("127.0.0.1", 8080);
 
-                foreach (TrackerPeer peer in announce.Peers)
+            foreach (string tracker in metainfo.Trackers.Take(1))
+            {
+                try
                 {
-                    connector.ConnectTo(peer.Host, peer.Port);
+                    TrackerClient client = TrackerClientFactory.Create(tracker);
+                    TrackerAnnounce announce = client.Announce(with =>
+                    {
+                        with.Peer = configuration.Peer;
+                        with.Hash = metainfo.Data.Hash;
+                    });
+
+                    foreach (TrackerPeer peer in announce.Peers)
+                    {
+                        callback.OnPeerConnecting(metainfo.Data, $"{peer.Host}:{peer.Port}");
+                        connector.ConnectTo(peer.Host, peer.Port);
+                    }
                 }
+                catch { }
             }
         }
     }

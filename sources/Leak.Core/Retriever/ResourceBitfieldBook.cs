@@ -9,6 +9,6 @@ namespace Leak.Core.Retriever
 
         public DateTime Expires { get; set; }
 
-        public ResourcePieceRequest Request { get; set; }
+        public ResourceBlock Request { get; set; }
     }
 }

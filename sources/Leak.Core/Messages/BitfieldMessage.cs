@@ -11,6 +11,11 @@ namespace Leak.Core.Messages
             this.data = data;
         }
 
+        public BitfieldMessage(int size)
+        {
+            this.data = new byte[(size - 1) / 8 + 1];
+        }
+
         public bool this[int index]
         {
             get { return (data[index / 8] & (1 << (byte)(7 - index % 8))) > 0; }
@@ -18,12 +23,17 @@ namespace Leak.Core.Messages
 
         public int Length
         {
-            get { return data.Length; }
+            get { return data.Length + 5; }
         }
 
         public byte[] ToBytes()
         {
-            return data;
+            byte[] result = { 0x00, 0x00, 0x00, 0x00, 0x05 };
+
+            Bytes.Write(data.Length + 1, result, 0);
+            Bytes.Append(ref result, data);
+
+            return result;
         }
     }
 }

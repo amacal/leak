@@ -1,12 +1,12 @@
 ﻿namespace Leak.Core.Retriever
 {
-    public class ResourcePieceRequest
+    public class ResourceBlock
     {
         private readonly int index;
         private readonly int offset;
         private readonly int size;
 
-        public ResourcePieceRequest(int index, int offset, int size)
+        public ResourceBlock(int index, int offset, int size)
         {
             this.index = index;
             this.offset = offset;
@@ -35,7 +35,7 @@
 
         public override bool Equals(object obj)
         {
-            ResourcePieceRequest other = obj as ResourcePieceRequest;
+            ResourceBlock other = obj as ResourceBlock;
 
             return other.index == index && other.offset == offset;
         }

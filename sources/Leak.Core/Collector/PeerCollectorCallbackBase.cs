@@ -5,7 +5,7 @@ namespace Leak.Core.Collector
 {
     public abstract class PeerCollectorCallbackBase : PeerCollectorCallback
     {
-        public virtual void OnConnected(PeerHash peer, FileHash hash)
+        public virtual void OnConnected(PeerEndpoint endpoint)
         {
         }
 
@@ -17,11 +17,19 @@ namespace Leak.Core.Collector
         {
         }
 
+        public virtual void OnChoke(PeerHash peer, ChokeMessage message)
+        {
+        }
+
         public virtual void OnUnchoke(PeerHash peer, UnchokeMessage message)
         {
         }
 
         public virtual void OnInterested(PeerHash peer, InterestedMessage message)
+        {
+        }
+
+        public virtual void OnHave(PeerHash peer, HaveMessage message)
         {
         }
 

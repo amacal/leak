@@ -90,6 +90,14 @@ namespace Leak.Core
             Array.Copy(input, 0, data, data.Length - input.Length, input.Length);
         }
 
+        public static void Write(int value, byte[] data, int offset)
+        {
+            data[offset + 0] = (byte)((value >> 24) & 255);
+            data[offset + 1] = (byte)((value >> 16) & 255);
+            data[offset + 2] = (byte)((value >> 8) & 255);
+            data[offset + 3] = (byte)(value & 255);
+        }
+
         public static byte[] Xor(byte[] left, byte[] right)
         {
             byte[] data = new byte[left.Length];

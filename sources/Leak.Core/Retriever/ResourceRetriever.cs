@@ -9,18 +9,27 @@ namespace Leak.Core.Retriever
 {
     public class ResourceRetriever
     {
+        private readonly ResourceRetrieverConfiguration configuration;
+        private readonly ResourceRetrieverCallback callback;
         private readonly ResourceRepository repository;
         private readonly PeerCollectorView collector;
         private readonly ResourceStorage storage;
 
         private readonly Timer timer;
+        private int tick;
 
-        public ResourceRetriever(ResourceRepository repository, PeerCollectorView collector)
+        public ResourceRetriever(Action<ResourceRetrieverConfiguration> configurer)
         {
-            this.repository = repository;
-            this.collector = collector;
+            this.configuration = configurer.Configure(with =>
+            {
+                with.Callback = new ResourceRetrieverToNothing();
+            });
 
-            this.storage = new ResourceStorage(new ResourceConfiguration
+            this.repository = configuration.Repository;
+            this.collector = configuration.Collector;
+            this.callback = configuration.Callback;
+
+            this.storage = new ResourceStorage(new ResourceStorageConfiguration
             {
                 Pieces = repository.Properties.Pieces,
                 Blocks = repository.Properties.Blocks,
@@ -30,13 +39,23 @@ namespace Leak.Core.Retriever
             });
 
             timer = new Timer(OnTick);
-            timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+            timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
         }
 
         private void OnTick(object state)
         {
             lock (storage)
             {
+                tick = (tick + 1) % 20;
+
+                if (tick == 0)
+                {
+                    foreach (PeerHash peer in storage.GetPeers())
+                    {
+                        collector.SendKeepAlive(peer);
+                    }
+                }
+
                 foreach (PeerHash peer in storage.GetPeers())
                 {
                     SendPieceRequests(peer);
@@ -61,12 +80,15 @@ namespace Leak.Core.Retriever
             }
         }
 
+        public void SetChoked(PeerHash peer, ResourceDirection direction)
+        {
+        }
+
         public void SetUnchoked(PeerHash peer, ResourceDirection direction)
         {
             lock (storage)
             {
                 storage.AddPeer(peer);
-                SendPieceRequests(peer);
             }
         }
 
@@ -76,11 +98,11 @@ namespace Leak.Core.Retriever
             {
                 if (storage.IsComplete(piece.Index) == false)
                 {
-                    int block = piece.Offset / repository.Properties.BlockSize;
-                    ResourcePieceRequest request = new ResourcePieceRequest(piece.Index, piece.Offset, piece.Size);
+                    int blockIndex = piece.Offset / repository.Properties.BlockSize;
+                    ResourceBlock block = new ResourceBlock(piece.Index, piece.Offset, piece.Size);
 
-                    repository.SetPiece(piece.Index, block, piece.Data);
-                    bool completed = storage.Complete(request);
+                    repository.SetPiece(piece.Index, blockIndex, piece.Data);
+                    bool completed = storage.Complete(block);
 
                     if (completed)
                     {
@@ -88,6 +110,15 @@ namespace Leak.Core.Retriever
                         {
                             storage.Invalidate(piece.Index);
                         }
+                        else
+                        {
+                            callback.OnPieceVerified(new ResourcePiece(piece.Index));
+                        }
+                    }
+
+                    if (storage.IsComplete())
+                    {
+                        callback.OnCompleted();
                     }
                 }
 
@@ -97,11 +128,11 @@ namespace Leak.Core.Retriever
 
         private void SendPieceRequests(PeerHash peer)
         {
-            ResourcePieceRequest[] requests = storage.Next(peer);
-            foreach (ResourcePieceRequest request in requests)
+            ResourceBlock[] blocks = storage.Next(peer);
+            foreach (ResourceBlock block in blocks)
             {
-                collector.SendPieceRequest(peer, request.Index, request.Offset, request.Size);
-                storage.Book(peer, request);
+                collector.SendPieceRequest(peer, block.Index, block.Offset, block.Size);
+                storage.Book(peer, block);
             }
         }
     }

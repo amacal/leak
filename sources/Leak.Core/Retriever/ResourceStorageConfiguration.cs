@@ -1,6 +1,6 @@
 ﻿namespace Leak.Core.Retriever
 {
-    public class ResourceConfiguration
+    public class ResourceStorageConfiguration
     {
         public long TotalSize { get; set; }
 
