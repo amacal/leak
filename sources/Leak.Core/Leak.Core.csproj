@@ -309,9 +309,12 @@
     <Compile Include="Retriever\ResourceRetrieverCallback.cs" />
     <Compile Include="Retriever\ResourceStorage.cs" />
     <Compile Include="StreamExtensions.cs" />
+    <Compile Include="Telegraph\TrackerStorage.cs" />
+    <Compile Include="Telegraph\TrackerStorageEntry.cs" />
     <Compile Include="Telegraph\TrackerTelegraphCallbackBase.cs" />
     <Compile Include="Telegraph\TrackerTelegraphCallbackToNothing.cs" />
     <Compile Include="Telegraph\TrackerTelegraphConfiguration.cs" />
+    <Compile Include="Telegraph\TrackerTelegraphRequest.cs" />
     <Compile Include="Tracker\TrackerAnnounce.cs" />
     <Compile Include="Telegraph\TrackerTelegraphCallback.cs" />
     <Compile Include="Tracker\TrackerAnnounceConfiguration.cs" />

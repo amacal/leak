@@ -24,7 +24,7 @@ namespace Leak.Core.Tracker
             BencodedValue decoded = Bencoder.Decode(CallTracker(request));
             TrackerPeer[] peers = FindPeers(decoded);
 
-            return new TrackerAnnounce(peers);
+            return new TrackerAnnounce(peers, TimeSpan.FromMinutes(10));
         }
 
         private static TrackerPeer[] FindPeers(BencodedValue value)

@@ -68,14 +68,39 @@ namespace Leak.Core.Metadata
 
         private static void FindEntriesValue(BencodedValue value, List<MetainfoEntry> entries)
         {
-            string name = value.Find("name", x => x.ToText());
-            long size = value.Find("length", x => x.ToNumber());
+            string name = value.Find("name", x => x?.ToText());
+            long? size = value.Find("length", x => x?.ToNumber());
 
-            entries.Add(new MetainfoEntry(name, size));
+            if (name != null && size != null)
+            {
+                entries.Add(new MetainfoEntry(name, size.Value));
+            }
         }
 
         private static void FindEntriesList(BencodedValue value, List<MetainfoEntry> entries)
         {
+            BencodedValue files = value.Find("files", x => x);
+
+            if (files?.Array != null)
+            {
+                foreach (BencodedValue item in files.Array)
+                {
+                    long? size = item.Find("length", x => x?.ToNumber());
+                    BencodedValue path = item.Find("path", x => x);
+
+                    if (size != null && path?.Array != null)
+                    {
+                        List<string> names = new List<string>();
+
+                        foreach (BencodedValue name in path.Array)
+                        {
+                            names.Add(name.ToText());
+                        }
+
+                        entries.Add(new MetainfoEntry(names.ToArray(), size.Value));
+                    }
+                }
+            }
         }
 
         private static string[] FindTrackers(BencodedValue value)

@@ -55,7 +55,7 @@ namespace Leak.Core.Tracker
                 received = socket.Receive(response);
             }
 
-            return new TrackerAnnounce(FindPeers(response, received));
+            return new TrackerAnnounce(FindPeers(response, received), TimeSpan.FromMinutes(10));
         }
 
         private static TrackerPeer[] FindPeers(byte[] data, int count)

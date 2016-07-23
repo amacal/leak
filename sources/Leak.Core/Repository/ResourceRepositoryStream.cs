@@ -82,22 +82,63 @@ namespace Leak.Core.Repository
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return inner.Read(buffer, offset, count);
+            int read = 0;
+
+            if (inner != null)
+            {
+                read = inner.Read(buffer, offset, count);
+                position += read;
+
+                if (read < count)
+                {
+                    inner.Dispose();
+                    inner = null;
+
+                    Seek(position, SeekOrigin.Begin);
+                    read += Read(buffer, offset + read, count - read);
+                }
+            }
+
+            return read;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            inner.Write(buffer, offset, count);
+            int available = count;
+            int reduced = 0;
+
+            if (available > left)
+            {
+                available = (int)left;
+                reduced = count - available;
+            }
+
+            inner.Write(buffer, offset, available);
+            left -= available;
+            position += available;
+
             inner.Flush();
             inner.Close();
+            inner.Dispose();
+            inner = null;
+
+            if (reduced > 0)
+            {
+                Seek(position, SeekOrigin.Begin);
+                Write(buffer, offset + available, count - available);
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
 
-            inner.Close();
-            inner.Dispose();
+            if (inner != null)
+            {
+                inner.Close();
+                inner.Dispose();
+                inner = null;
+            }
         }
 
         private static string GetEntryPath(string location, MetainfoEntry entry)
