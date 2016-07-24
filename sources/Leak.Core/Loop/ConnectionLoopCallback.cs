@@ -20,6 +20,8 @@ namespace Leak.Core.Loop
 
         void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message);
 
+        void OnExtended(ConnectionLoopChannel channel, ConnectionLoopMessage message);
+
         void OnException(ConnectionLoopChannel channel, Exception ex);
 
         void OnDisconnected(ConnectionLoopChannel channel);

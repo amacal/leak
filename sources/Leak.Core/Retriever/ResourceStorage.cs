@@ -10,11 +10,20 @@ namespace Leak.Core.Retriever
     {
         private readonly ResourceBitfield bitfields;
         private readonly ResourcePeerCollection peers;
+        private readonly ResourceMetadataBookCollection metadata;
 
         public ResourceStorage(ResourceStorageConfiguration configuration)
         {
             this.bitfields = new ResourceBitfield(configuration);
             this.peers = new ResourcePeerCollection();
+            this.metadata = new ResourceMetadataBookCollection();
+        }
+
+        public ResourceStorage(ResourceStorage storage, ResourceStorageConfiguration configuration)
+        {
+            this.bitfields = new ResourceBitfield(configuration);
+            this.peers = storage.peers;
+            this.metadata = storage.metadata;
         }
 
         public void AddBitfield(PeerHash peer, Bitfield bitfield)
@@ -22,9 +31,9 @@ namespace Leak.Core.Retriever
             bitfields.Add(peer, bitfield);
         }
 
-        public void AddPeer(PeerHash peer)
+        public bool AddPeer(PeerHash peer)
         {
-            peers.AddPeer(peer);
+            return peers.AddPeer(peer);
         }
 
         public void Choke(PeerHash peer)
@@ -46,6 +55,10 @@ namespace Leak.Core.Retriever
                 predicate = x => x.IsUnchoke();
             }
 
+            if (operation == ResourcePeerOperation.Metadata)
+            {
+            }
+
             return peers.Where(predicate).OrderByDescending(x => x.Rank);
         }
 
@@ -59,6 +72,16 @@ namespace Leak.Core.Retriever
             peers.Increase(peer);
 
             return bitfields.Complete(block);
+        }
+
+        public void Complete(int size)
+        {
+            metadata.Complete(size);
+        }
+
+        public void Complete(PeerHash peer, ResourceMetadataBlock block, int size)
+        {
+            metadata.Complete(block, size);
         }
 
         public void Invalidate(int piece)
@@ -76,15 +99,30 @@ namespace Leak.Core.Retriever
             return bitfields.IsComplete(piece);
         }
 
+        public bool IsMetadataComplete()
+        {
+            return metadata.IsComplete();
+        }
+
         public ResourceBlock[] Next(PeerHash peer)
         {
             return bitfields.Next(peer, 16);
         }
 
-        public void Book(PeerHash peer, ResourceBlock request)
+        public ResourceMetadataBlock[] ScheduleMetadata(PeerHash peer)
+        {
+            return metadata.Next(peer, 1);
+        }
+
+        public void Reserve(PeerHash peer, ResourceBlock request)
         {
             peers.Decrease(peer);
-            bitfields.Book(peer, request);
+            bitfields.Reserve(peer, request);
+        }
+
+        public void Reserve(PeerHash peer, ResourceMetadataBlock request)
+        {
+            metadata.Add(peer, request);
         }
     }
 }

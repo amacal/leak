@@ -14,21 +14,29 @@ namespace Leak.Core.Metadata
         {
             byte[] bytes = File.ReadAllBytes(path);
             BencodedValue decoded = Bencoder.Decode(bytes);
+            BencodedValue info = decoded.Find("info", x => x);
 
-            Metainfo metainfo = DecodeMetainfo(decoded);
+            Metainfo metainfo = DecodeMetainfo(info);
             string[] trackers = FindTrackers(decoded);
 
             return new MetainfoFile(metainfo, trackers);
         }
 
+        public static Metainfo FromBytes(byte[] bytes)
+        {
+            BencodedValue decoded = Bencoder.Decode(bytes);
+            Metainfo metainfo = DecodeMetainfo(decoded);
+
+            return metainfo;
+        }
+
         private static Metainfo DecodeMetainfo(BencodedValue value)
         {
-            BencodedValue info = value.Find("info", x => x);
-            FileHash hash = ComputeHash(info.Data);
+            FileHash hash = ComputeHash(value.Data);
 
-            MetainfoEntry[] entries = FindEntries(info);
-            MetainfoHash[] pieces = FindPieces(info);
-            MetainfoProperties properties = FindProperties(info, entries, pieces);
+            MetainfoEntry[] entries = FindEntries(value);
+            MetainfoHash[] pieces = FindPieces(value);
+            MetainfoProperties properties = FindProperties(value, entries, pieces);
 
             return new Metainfo(hash, entries, pieces, properties);
         }
@@ -37,7 +45,7 @@ namespace Leak.Core.Metadata
         {
             long totalSize = entries.Sum(x => x.Size);
             int blockSize = 16384;
-            int pieceSize = value.Find("piece length", x => (int)x.ToNumber());
+            int pieceSize = value.Find("piece length", x => (int)x.ToInt64());
             int blocks = (int)(pieces.Length * (totalSize / pieceSize) - totalSize % pieceSize / blockSize + 1);
 
             return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blocks, blockSize);
@@ -69,7 +77,7 @@ namespace Leak.Core.Metadata
         private static void FindEntriesValue(BencodedValue value, List<MetainfoEntry> entries)
         {
             string name = value.Find("name", x => x?.ToText());
-            long? size = value.Find("length", x => x?.ToNumber());
+            long? size = value.Find("length", x => x?.ToInt64());
 
             if (name != null && size != null)
             {
@@ -85,7 +93,7 @@ namespace Leak.Core.Metadata
             {
                 foreach (BencodedValue item in files.Array)
                 {
-                    long? size = item.Find("length", x => x?.ToNumber());
+                    long? size = item.Find("length", x => x?.ToInt64());
                     BencodedValue path = item.Find("path", x => x);
 
                     if (size != null && path?.Array != null)

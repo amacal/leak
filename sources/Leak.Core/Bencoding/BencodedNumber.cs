@@ -11,6 +11,11 @@ namespace Leak.Core.Bencoding
             this.value = value;
         }
 
+        public byte ToByte()
+        {
+            return Convert.ToByte(value);
+        }
+
         public int ToInt32()
         {
             return Convert.ToInt32(value);

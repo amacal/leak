@@ -4,9 +4,9 @@ using Leak.Core.Connector;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
-using Leak.Core.Retriever;
 using Leak.Core.Telegraph;
 using System;
+using System.Collections.Generic;
 
 namespace Leak.Core.Client
 {
@@ -19,14 +19,13 @@ namespace Leak.Core.Client
 
         public PeerClient(Action<PeerClientConfiguration> configurer)
         {
-            this.configuration = new PeerClientConfiguration
+            this.configuration = configurer.Configure(with =>
             {
-                Peer = PeerHash.Random(),
-                Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create),
-                Callback = new PeerClientCallbackToNothing()
-            };
-
-            configurer.Invoke(configuration);
+                with.Peer = PeerHash.Random();
+                with.Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
+                with.Callback = new PeerClientCallbackToNothing();
+                with.Extensions = new PeerClientExtensionBuilder();
+            });
 
             this.storage = new PeerClientStorage(configuration);
             this.callback = configuration.Callback;
@@ -40,24 +39,41 @@ namespace Leak.Core.Client
         public void Start(MetainfoFile metainfo)
         {
             Initialize(metainfo);
-            Connect(metainfo);
+            Schedule(metainfo);
+        }
+
+        public void Start(Action<PeerClientStartConfiguration> configurer)
+        {
+            Start(configurer.Configure(with =>
+            {
+                with.Trackers = new List<string>();
+            }));
+        }
+
+        private void Start(PeerClientStartConfiguration start)
+        {
+            Register(start);
+            Schedule(start);
         }
 
         private void Initialize(MetainfoFile metainfo)
         {
-            storage.Register(metainfo, collector.CreateView());
+            storage.Register(metainfo.Data, collector.CreateView());
 
             FileHash hash = metainfo.Data.Hash;
             ResourceRepository repository = storage.GetRepository(hash);
-
             Bitfield bitfield = repository.Initialize();
-            ResourceRetriever retriever = storage.GetRetriever(hash);
 
-            retriever.Initialize(bitfield);
-            callback.OnInitialized(metainfo.Data, new PeerClientMetainfoSummary(bitfield));
+            storage.WithBitfield(hash, bitfield);
+            callback.OnInitialized(metainfo.Data.Hash, new PeerClientMetainfoSummary(bitfield));
         }
 
-        private void Connect(MetainfoFile metainfo)
+        private void Register(PeerClientStartConfiguration start)
+        {
+            storage.Register(start.Hash, collector.CreateView());
+        }
+
+        private void Schedule(MetainfoFile metainfo)
         {
             PeerConnector connector = new PeerConnector(with =>
             {
@@ -68,7 +84,7 @@ namespace Leak.Core.Client
 
             TrackerTelegraph telegraph = new TrackerTelegraph(with =>
             {
-                with.Callback = new PeerClientToTelegraph(configuration, metainfo.Data, connector, storage);
+                with.Callback = new PeerClientToTelegraph(configuration, metainfo.Data.Hash, connector, storage);
             });
 
             foreach (string tracker in metainfo.Trackers)
@@ -77,6 +93,31 @@ namespace Leak.Core.Client
                 {
                     with.Peer = configuration.Peer;
                     with.Hash = metainfo.Data.Hash;
+                });
+            }
+        }
+
+        private void Schedule(PeerClientStartConfiguration start)
+        {
+            PeerConnector connector = new PeerConnector(with =>
+            {
+                with.Hash = start.Hash;
+                with.Peer = configuration.Peer;
+                with.Callback = collector.CreateConnectorCallback();
+                with.Extensions = true;
+            });
+
+            TrackerTelegraph telegraph = new TrackerTelegraph(with =>
+            {
+                with.Callback = new PeerClientToTelegraph(configuration, start.Hash, connector, storage);
+            });
+
+            foreach (string tracker in start.Trackers)
+            {
+                telegraph.Start(tracker, with =>
+                {
+                    with.Peer = configuration.Peer;
+                    with.Hash = start.Hash;
                 });
             }
         }

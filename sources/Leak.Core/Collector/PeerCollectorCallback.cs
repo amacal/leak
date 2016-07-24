@@ -22,5 +22,7 @@ namespace Leak.Core.Collector
         void OnBitfield(PeerHash peer, BitfieldMessage message);
 
         void OnPiece(PeerHash peer, PieceMessage message);
+
+        void OnExtended(PeerHash peer, ExtendedIncomingMessage message);
     }
 }

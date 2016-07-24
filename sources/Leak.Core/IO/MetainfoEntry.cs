@@ -22,7 +22,7 @@ namespace Leak.Core.IO
         {
             get
             {
-                return data.Find("length", x => x.ToNumber());
+                return data.Find("length", x => x.ToInt64());
             }
         }
 

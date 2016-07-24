@@ -36,6 +36,10 @@ namespace Leak.Core.Loop
         {
         }
 
+        public virtual void OnExtended(ConnectionLoopChannel channel, ConnectionLoopMessage message)
+        {
+        }
+
         public virtual void OnException(ConnectionLoopChannel channel, Exception ex)
         {
         }

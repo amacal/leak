@@ -55,6 +55,11 @@ namespace Leak.Core.Collector
             configuration.Callback.OnPiece(channel.Endpoint.Peer, new PieceMessage(message.ToBytes()));
         }
 
+        public override void OnExtended(ConnectionLoopChannel channel, ConnectionLoopMessage message)
+        {
+            configuration.Callback.OnExtended(channel.Endpoint.Peer, new ExtendedIncomingMessage(message.ToBytes()));
+        }
+
         public override void OnException(ConnectionLoopChannel channel, Exception ex)
         {
             storage.Remove(channel.Endpoint.Peer);

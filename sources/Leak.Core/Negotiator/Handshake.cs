@@ -7,12 +7,14 @@ namespace Leak.Core.Negotiator
         private readonly PeerHash local;
         private readonly PeerHash remote;
         private readonly FileHash hash;
+        private readonly HandshakeOptions options;
 
-        public Handshake(PeerHash local, PeerHash remote, FileHash hash)
+        public Handshake(PeerHash local, PeerHash remote, FileHash hash, HandshakeOptions options)
         {
             this.local = local;
             this.remote = remote;
             this.hash = hash;
+            this.options = options;
         }
 
         public PeerHash Local
@@ -28,6 +30,11 @@ namespace Leak.Core.Negotiator
         public FileHash Hash
         {
             get { return hash; }
+        }
+
+        public HandshakeOptions Options
+        {
+            get { return options; }
         }
     }
 }

@@ -13,9 +13,17 @@ namespace Leak.Core.Retriever
             this.items = new Dictionary<PeerHash, ResourcePeer>();
         }
 
-        public void AddPeer(PeerHash peer)
+        public bool AddPeer(PeerHash peer)
         {
-            items.Add(peer, new ResourcePeer(peer));
+            ResourcePeer entry;
+            items.TryGetValue(peer, out entry);
+
+            if (entry == null)
+            {
+                items.Add(peer, new ResourcePeer(peer));
+            }
+
+            return entry == null;
         }
 
         public void Choke(PeerHash peer)

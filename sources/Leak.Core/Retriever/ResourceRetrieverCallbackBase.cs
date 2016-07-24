@@ -9,5 +9,9 @@
         public virtual void OnPieceVerified(ResourcePiece piece)
         {
         }
+
+        public virtual void OnMetadataCompleted()
+        {
+        }
     }
 }

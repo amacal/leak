@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Metadata;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -141,9 +142,33 @@ namespace Leak.Core.Repository
             }
         }
 
-        private static string GetEntryPath(string location, MetainfoEntry entry)
+        public static void EnsureDirectory(string path)
         {
-            string path = String.Join(Path.DirectorySeparatorChar.ToString(), entry.Name);
+            string directory = Path.GetDirectoryName(path);
+
+            if (Directory.Exists(directory) == false)
+            {
+                Directory.CreateDirectory(directory);
+            }
+        }
+
+        public static string GetEntryPath(string location, MetainfoEntry entry)
+        {
+            List<string> names = new List<string>();
+
+            foreach (string name in entry.Name)
+            {
+                string value = name;
+
+                foreach (char character in Path.GetInvalidFileNameChars())
+                {
+                    value = value.Replace(character, '-');
+                }
+
+                names.Add(value);
+            }
+
+            string path = String.Join(Path.DirectorySeparatorChar.ToString(), names);
             string result = Path.Combine(location, path);
 
             return result;

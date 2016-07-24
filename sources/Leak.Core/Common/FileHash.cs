@@ -30,5 +30,10 @@
         {
             return Bytes.ToString(value);
         }
+
+        public static FileHash Parse(string data)
+        {
+            return new FileHash(Bytes.Parse(data));
+        }
     }
 }

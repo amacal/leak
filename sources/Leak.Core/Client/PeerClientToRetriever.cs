@@ -1,29 +1,36 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Common;
 using Leak.Core.Retriever;
 
 namespace Leak.Core.Client
 {
     public class PeerClientToRetriever : ResourceRetrieverCallbackBase
     {
-        private readonly Metainfo metainfo;
+        private readonly FileHash hash;
         private readonly PeerClientConfiguration configuration;
+        private readonly PeerClientStorage storage;
         private readonly PeerClientCallback callback;
 
-        public PeerClientToRetriever(Metainfo metainfo, PeerClientConfiguration configuration)
+        public PeerClientToRetriever(FileHash hash, PeerClientConfiguration configuration, PeerClientStorage storage)
         {
-            this.metainfo = metainfo;
+            this.hash = hash;
             this.configuration = configuration;
+            this.storage = storage;
             this.callback = configuration.Callback;
         }
 
         public override void OnCompleted()
         {
-            callback.OnCompleted(metainfo);
+            callback.OnCompleted(hash);
         }
 
         public override void OnPieceVerified(ResourcePiece piece)
         {
-            callback.OnPieceVerified(metainfo, new PeerClientPieceVerification(piece));
+            callback.OnPieceVerified(hash, new PeerClientPieceVerification(piece));
+        }
+
+        public override void OnMetadataCompleted()
+        {
+            storage.WithMetainfo(hash);
         }
     }
 }

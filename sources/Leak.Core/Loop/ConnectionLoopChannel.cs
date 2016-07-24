@@ -43,6 +43,11 @@ namespace Leak.Core.Loop
             Forward(message);
         }
 
+        public void Send(ExtendedOutgoingMessage message)
+        {
+            Forward(message);
+        }
+
         private void Forward(NetworkOutgoingMessage message)
         {
             try

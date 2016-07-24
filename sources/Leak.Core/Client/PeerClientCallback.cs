@@ -1,31 +1,33 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
-using Leak.Core.Metadata;
 
 namespace Leak.Core.Client
 {
     public interface PeerClientCallback
     {
-        void OnInitialized(Metainfo metainfo, PeerClientMetainfoSummary summary);
+        void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary);
 
-        void OnStarted(Metainfo metainfo);
+        void OnStarted(FileHash hash);
 
-        void OnCompleted(Metainfo metainfo);
+        void OnCompleted(FileHash hash);
 
-        void OnPeerConnecting(Metainfo metainfo, string endpoint);
+        void OnPeerConnecting(FileHash hash, string endpoint);
 
-        void OnPeerConnected(Metainfo metainfo, PeerEndpoint endpoint);
+        void OnPeerConnected(FileHash hash, PeerEndpoint endpoint);
 
-        void OnPeerDisconnected(Metainfo metainfo, PeerHash peer);
+        void OnPeerDisconnected(FileHash hash, PeerHash peer);
 
-        void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield);
+        void OnPeerBitfield(FileHash hash, PeerHash peer, Bitfield bitfield);
 
-        void OnPeerChoked(Metainfo metainfo, PeerHash peer);
+        void OnPeerChoked(FileHash hash, PeerHash peer);
 
-        void OnPeerUnchoked(Metainfo metainfo, PeerHash peer);
+        void OnPeerUnchoked(FileHash hash, PeerHash peer);
 
-        void OnBlockReceived(Metainfo metainfo, PeerHash peer, Piece piece);
+        void OnBlockReceived(FileHash hash, PeerHash peer, Piece piece);
 
-        void OnPieceVerified(Metainfo metainfo, PeerClientPieceVerification verification);
+        void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification);
+
+        void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data);
     }
 }

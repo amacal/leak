@@ -27,7 +27,12 @@ namespace Leak.Core.Bencoding
             return AllTexts(value).FirstOrDefault();
         }
 
-        public static long ToNumber(this BencodedValue value)
+        public static int ToInt32(this BencodedValue value)
+        {
+            return value.Number.ToInt32();
+        }
+
+        public static long ToInt64(this BencodedValue value)
         {
             return value.Number.ToInt64();
         }

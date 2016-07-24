@@ -35,11 +35,15 @@ namespace Leak.Core.Collector
                 if (byHash.ContainsKey(handshake.Peer))
                     return false;
 
+                if (byEndpoint.ContainsKey(connection.Remote))
+                    return false;
+
                 byHash.Add(handshake.Peer, new PeerCollectorStorageEntry
                 {
                     Hash = handshake.Hash,
                     Peer = handshake.Peer,
-                    Connection = connection
+                    Connection = connection,
+                    HasExtensions = handshake.HasExtensions
                 });
 
                 byEndpoint.Add(connection.Remote, byHash[handshake.Peer]);
@@ -54,11 +58,15 @@ namespace Leak.Core.Collector
                 if (byHash.ContainsKey(handshake.Peer))
                     return false;
 
+                if (byEndpoint.ContainsKey(connection.Remote))
+                    return false;
+
                 byHash.Add(handshake.Peer, new PeerCollectorStorageEntry
                 {
                     Hash = handshake.Hash,
                     Peer = handshake.Peer,
-                    Connection = connection
+                    Connection = connection,
+                    HasExtensions = handshake.HasExtensions
                 });
 
                 byEndpoint.Add(connection.Remote, byHash[handshake.Peer]);

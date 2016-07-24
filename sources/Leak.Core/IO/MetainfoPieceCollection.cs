@@ -17,7 +17,7 @@ namespace Leak.Core.IO
         {
             get
             {
-                return (int)data.Find("piece length", x => x.ToNumber());
+                return (int)data.Find("piece length", x => x.ToInt64());
             }
         }
 

@@ -21,7 +21,7 @@ namespace Leak.Core.Telegraph
             this.storage = new TrackerStorage();
 
             timer = new Timer(OnTick);
-            timer.Change(TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(10));
+            timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(10));
         }
 
         private void OnTick(object state)

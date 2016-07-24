@@ -31,5 +31,10 @@ namespace Leak.Core.Collector
         {
             storage.GetChannel(peer)?.Send(new RequestMessage(piece, offset, size));
         }
+
+        public void SendExtended(PeerHash peer, Extended extended)
+        {
+            storage.GetChannel(peer)?.Send(new ExtendedOutgoingMessage(extended));
+        }
     }
 }

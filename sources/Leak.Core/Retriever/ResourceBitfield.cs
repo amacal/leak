@@ -75,50 +75,53 @@ namespace Leak.Core.Retriever
 
         public ResourceBlock[] Next(PeerHash peer, int maximum)
         {
-            Bitfield bitfield = peers[peer];
+            Bitfield bitfield;
             List<ResourceBlock> requests = new List<ResourceBlock>();
 
             long size = configuration.TotalSize;
             int left = Math.Min(maximum, maximum - books.Count(peer));
 
-            for (int i = 0; left > 0 && i < configuration.Pieces; i++)
+            if (peers.TryGetValue(peer, out bitfield))
             {
-                if (bitfield[i] && completed.IsComplete(i) == false)
+                for (int i = 0; left > 0 && i < configuration.Pieces; i++)
                 {
-                    for (int j = 0; left > 0 && size > 0 && j < configuration.BlocksInPiece; j++)
+                    if (bitfield[i] && completed.IsComplete(i) == false)
                     {
-                        if (completed.IsComplete(i, j) == false)
+                        for (int j = 0; left > 0 && size > 0 && j < configuration.BlocksInPiece; j++)
                         {
-                            int offset = j * configuration.BlockSize;
-                            int blockSize = configuration.BlockSize;
-
-                            if (size < blockSize)
+                            if (completed.IsComplete(i, j) == false)
                             {
-                                blockSize = (int)size;
+                                int offset = j * configuration.BlockSize;
+                                int blockSize = configuration.BlockSize;
+
+                                if (size < blockSize)
+                                {
+                                    blockSize = (int)size;
+                                }
+
+                                ResourceBlock block = new ResourceBlock(i, offset, blockSize);
+
+                                if (books.Contains(block) == false)
+                                {
+                                    requests.Add(block);
+                                    left--;
+                                }
                             }
 
-                            ResourceBlock block = new ResourceBlock(i, offset, blockSize);
-
-                            if (books.Contains(block) == false)
-                            {
-                                requests.Add(block);
-                                left--;
-                            }
+                            size = size - configuration.BlockSize;
                         }
-
-                        size = size - configuration.BlockSize;
                     }
-                }
-                else
-                {
-                    size = size - configuration.BlocksInPiece * configuration.BlockSize;
+                    else
+                    {
+                        size = size - configuration.BlocksInPiece * configuration.BlockSize;
+                    }
                 }
             }
 
             return requests.ToArray();
         }
 
-        public void Book(PeerHash peer, ResourceBlock request)
+        public void Reserve(PeerHash peer, ResourceBlock request)
         {
             books.Add(peer, request);
         }

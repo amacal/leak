@@ -90,6 +90,18 @@ namespace Leak.Core
             Array.Copy(input, 0, data, data.Length - input.Length, input.Length);
         }
 
+        public static uint ReadUInt32(byte[] data, int offset)
+        {
+            uint value = 0;
+
+            for (int i = 0; i < 4; i++)
+            {
+                value = (value << 8) + data[offset + i];
+            }
+
+            return value;
+        }
+
         public static void Write(int value, byte[] data, int offset)
         {
             data[offset + 0] = (byte)((value >> 24) & 255);

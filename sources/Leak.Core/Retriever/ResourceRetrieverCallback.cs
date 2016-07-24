@@ -5,5 +5,7 @@
         void OnCompleted();
 
         void OnPieceVerified(ResourcePiece piece);
+
+        void OnMetadataCompleted();
     }
 }

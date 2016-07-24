@@ -6,24 +6,24 @@ namespace Leak.Core.Retriever
 {
     public class ResourceBitfieldBookCollections
     {
-        private readonly Dictionary<ResourceBlock, ResourceBitfieldBook> items;
+        private readonly Dictionary<ResourceBlock, ResourceBitfieldBook> blocks;
         private readonly Dictionary<PeerHash, HashSet<ResourceBitfieldBook>> byPeer;
 
         public ResourceBitfieldBookCollections()
         {
-            this.items = new Dictionary<ResourceBlock, ResourceBitfieldBook>();
+            this.blocks = new Dictionary<ResourceBlock, ResourceBitfieldBook>();
             this.byPeer = new Dictionary<PeerHash, HashSet<ResourceBitfieldBook>>();
         }
 
         public bool Contains(ResourceBlock request)
         {
-            return items.ContainsKey(request) &&
-                   items[request].Expires > DateTime.Now;
+            return blocks.ContainsKey(request) &&
+                   blocks[request].Expires > DateTime.Now;
         }
 
         public void Add(PeerHash peer, ResourceBlock request)
         {
-            items[request] = new ResourceBitfieldBook
+            blocks[request] = new ResourceBitfieldBook
             {
                 Peer = peer,
                 Expires = DateTime.Now.AddMinutes(2),
@@ -35,18 +35,18 @@ namespace Leak.Core.Retriever
                 byPeer.Add(peer, new HashSet<ResourceBitfieldBook>());
             }
 
-            byPeer[peer].Add(items[request]);
+            byPeer[peer].Add(blocks[request]);
         }
 
         public void Complete(ResourceBlock request)
         {
             ResourceBitfieldBook block;
-            items.TryGetValue(request, out block);
+            blocks.TryGetValue(request, out block);
 
             if (block != null)
             {
                 byPeer[block.Peer].Remove(block);
-                items.Remove(request);
+                blocks.Remove(request);
             }
         }
 

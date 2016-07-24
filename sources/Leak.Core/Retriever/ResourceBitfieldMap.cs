@@ -31,7 +31,7 @@ namespace Leak.Core.Retriever
             items[piece] = items[piece].Complete();
             bool after = items[piece].IsComplete();
 
-            if (before != after)
+            if (before == false && after == true)
             {
                 completed++;
             }
@@ -44,7 +44,7 @@ namespace Leak.Core.Retriever
             items[piece] = items[piece].Complete(block);
             bool after = items[piece].IsComplete();
 
-            if (before != after)
+            if (before == false && after == true)
             {
                 completed++;
             }
@@ -59,7 +59,7 @@ namespace Leak.Core.Retriever
             items[piece] = items[piece].Invalidate();
             bool after = items[piece].IsComplete();
 
-            if (before != after)
+            if (before == true && after == false)
             {
                 completed--;
             }

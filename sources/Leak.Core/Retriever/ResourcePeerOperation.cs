@@ -3,6 +3,7 @@
     public enum ResourcePeerOperation
     {
         KeepAlive,
-        Request
+        Request,
+        Metadata
     }
 }

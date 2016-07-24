@@ -1,5 +1,5 @@
-﻿using Leak.Core.Connector;
-using Leak.Core.Metadata;
+﻿using Leak.Core.Common;
+using Leak.Core.Connector;
 using Leak.Core.Telegraph;
 using Leak.Core.Tracker;
 
@@ -9,16 +9,16 @@ namespace Leak.Core.Client
     {
         private readonly PeerClientConfiguration configuration;
         private readonly PeerClientCallback callback;
-        private readonly Metainfo metainfo;
+        private readonly FileHash hash;
         private readonly PeerConnector connector;
         private readonly PeerClientStorage storage;
 
-        public PeerClientToTelegraph(PeerClientConfiguration configuration, Metainfo metainfo, PeerConnector connector, PeerClientStorage storage)
+        public PeerClientToTelegraph(PeerClientConfiguration configuration, FileHash hash, PeerConnector connector, PeerClientStorage storage)
         {
             this.configuration = configuration;
             this.callback = configuration.Callback;
 
-            this.metainfo = metainfo;
+            this.hash = hash;
             this.connector = connector;
             this.storage = storage;
         }
@@ -29,7 +29,7 @@ namespace Leak.Core.Client
             {
                 if (storage.Contains(peer.Host) == false)
                 {
-                    callback.OnPeerConnecting(metainfo, $"{peer.Host}:{peer.Port}");
+                    callback.OnPeerConnecting(hash, $"{peer.Host}:{peer.Port}");
                     connector.ConnectTo(peer.Host, peer.Port);
                 }
             }

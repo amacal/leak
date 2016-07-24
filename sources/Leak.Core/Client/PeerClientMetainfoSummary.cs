@@ -15,5 +15,10 @@ namespace Leak.Core.Client
         {
             get { return bitfield.Completed; }
         }
+
+        public int Total
+        {
+            get { return bitfield.Length; }
+        }
     }
 }

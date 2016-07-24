@@ -40,5 +40,9 @@ namespace Leak.Core.Collector
         public virtual void OnPiece(PeerHash peer, PieceMessage message)
         {
         }
+
+        public virtual void OnExtended(PeerHash peer, ExtendedIncomingMessage message)
+        {
+        }
     }
 }

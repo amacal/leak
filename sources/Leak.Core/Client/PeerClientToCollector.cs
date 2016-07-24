@@ -1,7 +1,6 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Messages;
-using Leak.Core.Metadata;
 using Leak.Core.Retriever;
 
 namespace Leak.Core.Client
@@ -19,61 +18,74 @@ namespace Leak.Core.Client
 
         public override void OnConnected(PeerEndpoint endpoint)
         {
-            Metainfo metainfo = storage.GetMetainfo(endpoint.Hash);
-
             if (storage.AddEndpoint(endpoint))
             {
-                callback.OnPeerConnected(metainfo, endpoint);
+                callback.OnPeerConnected(endpoint.Hash, endpoint);
             }
         }
 
         public override void OnDisconnected(PeerHash peer)
         {
-            Metainfo metainfo = storage.GetMetainfo(peer);
+            FileHash hash = storage.GetHash(peer);
 
             storage.RemovePeer(peer);
-            callback.OnPeerDisconnected(metainfo, peer);
+            callback.OnPeerDisconnected(hash, peer);
         }
 
         public override void OnBitfield(PeerHash peer, BitfieldMessage message)
         {
-            Metainfo metainfo = storage.GetMetainfo(peer);
-            Bitfield bitfield = new Bitfield(metainfo.Pieces.Length);
+            int size = message.Length;
 
-            for (int i = 0; i < metainfo.Pieces.Length; i++)
+            if (storage.HasMetainfo(peer))
+            {
+                size = storage.GetMetainfo(peer).Pieces.Length;
+            }
+
+            FileHash hash = storage.GetHash(peer);
+            Bitfield bitfield = new Bitfield(size);
+
+            for (int i = 0; i < size; i++)
             {
                 bitfield[i] = message[i];
             }
 
-            callback.OnPeerBitfield(metainfo, peer, bitfield);
-            storage.GetRetriever(peer).Start(peer, bitfield);
+            callback.OnPeerBitfield(hash, peer, bitfield);
+            storage.GetRetriever(peer).SetBitfield(peer, bitfield);
         }
 
         public override void OnChoke(PeerHash peer, ChokeMessage message)
         {
-            Metainfo metainfo = storage.GetMetainfo(peer);
+            FileHash hash = storage.GetHash(peer);
             ResourceDirection direction = ResourceDirection.Local;
 
-            callback.OnPeerChoked(metainfo, peer);
+            callback.OnPeerChoked(hash, peer);
             storage.GetRetriever(peer).SetChoked(peer, direction);
         }
 
         public override void OnUnchoke(PeerHash peer, UnchokeMessage message)
         {
-            Metainfo metainfo = storage.GetMetainfo(peer);
+            FileHash hash = storage.GetHash(peer);
             ResourceDirection direction = ResourceDirection.Local;
 
-            callback.OnPeerUnchoked(metainfo, peer);
+            callback.OnPeerUnchoked(hash, peer);
             storage.GetRetriever(peer).SetUnchoked(peer, direction);
         }
 
         public override void OnPiece(PeerHash peer, PieceMessage message)
         {
-            Metainfo metainfo = storage.GetMetainfo(peer);
-            Piece piece = new Piece(message.Piece, message.Offset, message.Size, message.Data);
+            if (storage.HasMetainfo(peer))
+            {
+                FileHash hash = storage.GetHash(peer);
+                Piece piece = new Piece(message.Piece, message.Offset, message.Size, message.Data);
 
-            callback.OnBlockReceived(metainfo, peer, piece);
-            storage.GetRetriever(peer).AddPiece(peer, piece);
+                callback.OnBlockReceived(hash, peer, piece);
+                storage.GetRetriever(peer).AddPiece(peer, piece);
+            }
+        }
+
+        public override void OnExtended(PeerHash peer, ExtendedIncomingMessage message)
+        {
+            storage.GetExtender(peer).Handle(peer, message);
         }
     }
 }

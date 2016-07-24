@@ -28,7 +28,17 @@ namespace Leak.Core.Connector
 
         public HandshakeOptions Options
         {
-            get { return HandshakeOptions.None; }
+            get
+            {
+                HandshakeOptions options = HandshakeOptions.None;
+
+                if (configuration.Extensions)
+                {
+                    options = options | HandshakeOptions.Extended;
+                }
+
+                return options;
+            }
         }
 
         public void OnHandshake(NetworkConnection negotiated, Handshake handshake)

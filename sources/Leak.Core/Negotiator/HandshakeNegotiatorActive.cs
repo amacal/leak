@@ -104,7 +104,9 @@ namespace Leak.Core.Negotiator
 
             int size = HandshakeMessage.GetSize(decrypted);
             PeerHash peer = HandshakeMessage.GetPeer(decrypted);
-            Handshake handshake = new Handshake(context.Peer, peer, context.Hash);
+
+            HandshakeOptions options = HandshakeMessage.GetOptions(decrypted);
+            Handshake handshake = new Handshake(context.Peer, peer, context.Hash, options);
 
             message.Acknowledge(size);
             keys.Remote.Acknowledge(size);

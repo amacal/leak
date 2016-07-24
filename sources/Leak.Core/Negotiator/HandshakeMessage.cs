@@ -33,6 +33,14 @@ namespace Leak.Core.Negotiator
             return new PeerHash(data);
         }
 
+        public static HandshakeOptions GetOptions(NetworkIncomingMessage message)
+        {
+            int length = message[0];
+            uint value = Bytes.ReadUInt32(message.ToBytes(), 1 + length + 5);
+
+            return (HandshakeOptions)value;
+        }
+
         public int Length
         {
             get { return 49 + ProtocolName.Length; }

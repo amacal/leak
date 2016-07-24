@@ -13,5 +13,7 @@ namespace Leak.Core.Collector
         public NetworkConnection Connection { get; set; }
 
         public ConnectionLoopChannel Channel { get; set; }
+
+        public bool HasExtensions { get; set; }
     }
 }

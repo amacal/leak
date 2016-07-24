@@ -61,6 +61,10 @@ namespace Leak.Core.Loop
                     Dispatch(message, configuration.Callback.OnPiece);
                     break;
 
+                case 20:
+                    Dispatch(message, configuration.Callback.OnExtended);
+                    break;
+
                 default:
                     Ignore(message);
                     break;

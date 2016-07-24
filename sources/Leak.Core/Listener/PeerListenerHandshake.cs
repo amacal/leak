@@ -21,5 +21,10 @@ namespace Leak.Core.Listener
         {
             get { return handshake.Hash; }
         }
+
+        public bool HasExtensions
+        {
+            get { return handshake.Options.HasFlag(HandshakeOptions.Extended); }
+        }
     }
 }

@@ -1,52 +1,56 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
-using Leak.Core.Metadata;
 
 namespace Leak.Core.Client
 {
     public abstract class PeerClientCallbackBase : PeerClientCallback
     {
-        public virtual void OnInitialized(Metainfo metainfo, PeerClientMetainfoSummary summary)
+        public virtual void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary)
         {
         }
 
-        public virtual void OnStarted(Metainfo metainfo)
+        public virtual void OnStarted(FileHash hash)
         {
         }
 
-        public virtual void OnCompleted(Metainfo metainfo)
+        public virtual void OnCompleted(FileHash hash)
         {
         }
 
-        public virtual void OnPeerConnecting(Metainfo metainfo, string endpoint)
+        public virtual void OnPeerConnecting(FileHash hash, string endpoint)
         {
         }
 
-        public virtual void OnPeerConnected(Metainfo metainfo, PeerEndpoint endpoint)
+        public virtual void OnPeerConnected(FileHash hash, PeerEndpoint endpoint)
         {
         }
 
-        public virtual void OnPeerDisconnected(Metainfo metainfo, PeerHash peer)
+        public virtual void OnPeerDisconnected(FileHash hash, PeerHash peer)
         {
         }
 
-        public virtual void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
+        public virtual void OnPeerBitfield(FileHash hash, PeerHash peer, Bitfield bitfield)
         {
         }
 
-        public virtual void OnPeerChoked(Metainfo metainfo, PeerHash peer)
+        public virtual void OnPeerChoked(FileHash hash, PeerHash peer)
         {
         }
 
-        public virtual void OnPeerUnchoked(Metainfo metainfo, PeerHash peer)
+        public virtual void OnPeerUnchoked(FileHash hash, PeerHash peer)
         {
         }
 
-        public virtual void OnBlockReceived(Metainfo metainfo, PeerHash peer, Piece piece)
+        public virtual void OnBlockReceived(FileHash hash, PeerHash peer, Piece piece)
         {
         }
 
-        public virtual void OnPieceVerified(Metainfo metainfo, PeerClientPieceVerification verification)
+        public virtual void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification)
+        {
+        }
+
+        public virtual void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
         {
         }
     }

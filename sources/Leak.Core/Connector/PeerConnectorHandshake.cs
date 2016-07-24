@@ -21,5 +21,10 @@ namespace Leak.Core.Connector
         {
             get { return handshake.Hash; }
         }
+
+        public bool HasExtensions
+        {
+            get { return handshake.Options.HasFlag(HandshakeOptions.Extended); }
+        }
     }
 }

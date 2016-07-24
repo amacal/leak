@@ -16,7 +16,7 @@ namespace Leak.Core.Net
         {
             get
             {
-                return data.Find("interval", x => TimeSpan.FromSeconds(x.ToNumber()));
+                return data.Find("interval", x => TimeSpan.FromSeconds(x.ToInt64()));
             }
         }
 

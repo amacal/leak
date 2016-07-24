@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Client;
 using Leak.Core.Common;
+using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using System;
@@ -24,64 +25,71 @@ namespace Leak
             {
                 with.Destination = destination;
                 with.Callback = new Callback();
+                with.Extensions.Register("ut_metadata", 1);
             });
 
             client.Start(MetainfoFactory.FromFile(source));
+
             Thread.Sleep(TimeSpan.FromHours(1));
         }
     }
 
     public class Callback : PeerClientCallbackBase
     {
-        public override void OnInitialized(Metainfo metainfo, PeerClientMetainfoSummary summary)
+        public override void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary)
         {
-            Console.WriteLine($"{metainfo.Hash}: initialized; completed={summary.Completed}; total={metainfo.Properties.Pieces}");
+            Console.WriteLine($"{hash}: initialized; completed={summary.Completed}; total={summary.Total}");
         }
 
-        public override void OnCompleted(Metainfo metainfo)
+        public override void OnCompleted(FileHash hash)
         {
-            Console.WriteLine($"{metainfo.Hash}: completed");
+            Console.WriteLine($"{hash}: completed");
             Environment.Exit(0);
         }
 
-        public override void OnPeerConnecting(Metainfo metainfo, string endpoint)
+        public override void OnPeerConnecting(FileHash hash, string endpoint)
         {
-            Console.WriteLine($"{metainfo.Hash}: connecting; endpoint={endpoint}");
+            Console.WriteLine($"{hash}: connecting; endpoint={endpoint}");
         }
 
-        public override void OnPeerConnected(Metainfo metainfo, PeerEndpoint endpoint)
+        public override void OnPeerConnected(FileHash hash, PeerEndpoint endpoint)
         {
             Console.WriteLine($"{endpoint.Peer}: connected; remote={endpoint.Remote}");
         }
 
-        public override void OnPeerDisconnected(Metainfo metainfo, PeerHash peer)
+        public override void OnPeerDisconnected(FileHash hash, PeerHash peer)
         {
             Console.WriteLine($"{peer}: disconnected");
         }
 
-        public override void OnPeerBitfield(Metainfo metainfo, PeerHash peer, Bitfield bitfield)
+        public override void OnPeerBitfield(FileHash hash, PeerHash peer, Bitfield bitfield)
         {
             Console.WriteLine($"{peer}: bitfield; total={bitfield.Length}; completed={bitfield.Completed}");
         }
 
-        public override void OnPeerChoked(Metainfo metainfo, PeerHash peer)
+        public override void OnPeerChoked(FileHash hash, PeerHash peer)
         {
             Console.WriteLine($"{peer}: choke");
         }
 
-        public override void OnPeerUnchoked(Metainfo metainfo, PeerHash peer)
+        public override void OnPeerUnchoked(FileHash hash, PeerHash peer)
         {
             Console.WriteLine($"{peer}: unchoke");
         }
 
-        public override void OnBlockReceived(Metainfo metainfo, PeerHash peer, Piece piece)
+        public override void OnBlockReceived(FileHash hash, PeerHash peer, Piece piece)
         {
             Console.WriteLine($"{peer}: block; piece={piece.Index}; offset={piece.Offset}; size={piece.Size}");
         }
 
-        public override void OnPieceVerified(Metainfo metainfo, PeerClientPieceVerification verification)
+        public override void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification)
         {
-            Console.WriteLine($"{metainfo.Hash}: verified; piece={verification.Piece}");
+            Console.WriteLine($"{hash}: verified; piece={verification.Piece}");
+        }
+
+        public override void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
+        {
+            Console.WriteLine($"{hash}: metadata; piece={data.Piece}; total={data.Size}");
         }
     }
 }
