@@ -38,8 +38,8 @@ namespace Leak.Core.Client
 
         public void Start(MetainfoFile metainfo)
         {
-            Initialize(metainfo);
-            Schedule(metainfo);
+            Register(metainfo.Data);
+            Schedule(metainfo.Data, metainfo.Trackers);
         }
 
         public void Start(Action<PeerClientStartConfiguration> configurer)
@@ -52,20 +52,36 @@ namespace Leak.Core.Client
 
         private void Start(PeerClientStartConfiguration start)
         {
-            Register(start);
-            Schedule(start);
+            string location = configuration.Destination;
+            Metainfo metainfo = ResourceRepositoryToHash.Open(location, start.Hash);
+
+            if (metainfo == null)
+            {
+                Register(start);
+                Schedule(start);
+            }
+            else
+            {
+                Register(metainfo);
+                Schedule(metainfo, start.Trackers.ToArray());
+            }
         }
 
-        private void Initialize(MetainfoFile metainfo)
+        private void Register(Metainfo metainfo)
         {
-            storage.Register(metainfo.Data, collector.CreateView());
+            storage.Register(metainfo, collector.CreateView());
 
-            FileHash hash = metainfo.Data.Hash;
+            FileHash hash = metainfo.Hash;
             ResourceRepository repository = storage.GetRepository(hash);
             Bitfield bitfield = repository.Initialize();
 
             storage.WithBitfield(hash, bitfield);
-            callback.OnInitialized(metainfo.Data.Hash, new PeerClientMetainfoSummary(bitfield));
+            callback.OnInitialized(metainfo.Hash, new PeerClientMetainfoSummary(bitfield));
+
+            if (bitfield.Completed == bitfield.Length)
+            {
+                callback.OnCompleted(metainfo.Hash);
+            }
         }
 
         private void Register(PeerClientStartConfiguration start)
@@ -73,26 +89,26 @@ namespace Leak.Core.Client
             storage.Register(start.Hash, collector.CreateView());
         }
 
-        private void Schedule(MetainfoFile metainfo)
+        private void Schedule(Metainfo metainfo, string[] trackers)
         {
             PeerConnector connector = new PeerConnector(with =>
             {
                 with.Peer = configuration.Peer;
-                with.Hash = metainfo.Data.Hash;
+                with.Hash = metainfo.Hash;
                 with.Callback = collector.CreateConnectorCallback();
             });
 
             TrackerTelegraph telegraph = new TrackerTelegraph(with =>
             {
-                with.Callback = new PeerClientToTelegraph(configuration, metainfo.Data.Hash, connector, storage);
+                with.Callback = new PeerClientToTelegraph(configuration, metainfo.Hash, connector, storage);
             });
 
-            foreach (string tracker in metainfo.Trackers)
+            foreach (string tracker in trackers)
             {
                 telegraph.Start(tracker, with =>
                 {
                     with.Peer = configuration.Peer;
-                    with.Hash = metainfo.Data.Hash;
+                    with.Hash = metainfo.Hash;
                 });
             }
         }

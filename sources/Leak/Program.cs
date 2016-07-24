@@ -3,6 +3,7 @@ using Leak.Core.Common;
 using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
+using Pargos;
 using System;
 using System.Threading;
 
@@ -12,14 +13,14 @@ namespace Leak
     {
         public static void Main(string[] args)
         {
-            //CommandFactory factory = new CommandFactory();
-            //ArgumentCollection arguments = ArgumentFactory.Parse(args);
-            //Command command = factory.Create(arguments.GetString(0));
+            ArgumentCollection arguments = ArgumentFactory.Parse(args);
 
-            //command.Execute(arguments);
+            string command = arguments.GetString(0);
+            string destination = arguments.GetString("destination");
 
-            const string source = "d:\\debian-8.5.0-amd64-CD-1.iso.torrent";
-            const string destination = "d:\\leak";
+            string torrent = arguments.GetString("torrent");
+            string hash = arguments.GetString("hash");
+            int trackers = arguments.Count("tracker");
 
             PeerClient client = new PeerClient(with =>
             {
@@ -28,9 +29,27 @@ namespace Leak
                 with.Extensions.Register("ut_metadata", 1);
             });
 
-            client.Start(MetainfoFactory.FromFile(source));
+            if (command == "download")
+            {
+                if (torrent != null)
+                {
+                    client.Start(MetainfoFactory.FromFile(torrent));
+                }
+                else if (hash != null)
+                {
+                    client.Start(with =>
+                    {
+                        with.Hash = FileHash.Parse(hash);
 
-            Thread.Sleep(TimeSpan.FromHours(1));
+                        for (int i = 0; i < trackers; i++)
+                        {
+                            with.Trackers.Add(arguments.GetString("tracker", i));
+                        }
+                    });
+                }
+
+                Thread.Sleep(TimeSpan.FromHours(1));
+            }
         }
     }
 

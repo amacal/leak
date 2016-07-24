@@ -4,7 +4,7 @@ namespace Leak.Core.Retriever
 {
     public class ResourceBitfieldMap
     {
-        private readonly ResourceBitfieldBlock[] items;
+        private ResourceBitfieldBlock[] items;
         private int completed;
 
         public ResourceBitfieldMap(ResourceStorageConfiguration configuration)
@@ -22,6 +22,11 @@ namespace Leak.Core.Retriever
 
                 items[i] = new ResourceBitfieldBlockToNothing(blocks);
             }
+        }
+
+        public void Reduce(int size)
+        {
+            Array.Resize(ref items, size);
         }
 
         public void Complete(int piece)

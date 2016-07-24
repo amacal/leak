@@ -21,12 +21,18 @@ namespace Leak.Core.Retriever
                    blocks[request].Expires > DateTime.Now;
         }
 
+        public bool Contains(ResourceBlock request, PeerHash peer)
+        {
+            return blocks.ContainsKey(request) &&
+                   blocks[request].Peer.Equals(peer);
+        }
+
         public void Add(PeerHash peer, ResourceBlock request)
         {
             blocks[request] = new ResourceBitfieldBook
             {
                 Peer = peer,
-                Expires = DateTime.Now.AddMinutes(2),
+                Expires = DateTime.Now.AddSeconds(30),
                 Request = request
             };
 
@@ -61,10 +67,7 @@ namespace Leak.Core.Retriever
 
             foreach (ResourceBitfieldBook book in books)
             {
-                if (book.Expires > DateTime.Now)
-                {
-                    count++;
-                }
+                count++;
             }
 
             return count;

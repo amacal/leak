@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Bencoding
+﻿using System.Text;
+
+namespace Leak.Core.Bencoding
 {
     public class BencodedText
     {
@@ -21,7 +23,12 @@
 
         public string GetString()
         {
-            return System.Text.Encoding.ASCII.GetString(data.GetBytes()); ;
+            return GetString(Encoding.ASCII);
+        }
+
+        public string GetString(Encoding encoding)
+        {
+            return encoding.GetString(data.GetBytes()); ;
         }
 
         public byte[] GetBytes()

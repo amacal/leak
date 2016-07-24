@@ -21,6 +21,11 @@ namespace Leak.Core.Messages
             get { return (data[index / 8] & (1 << (byte)(7 - index % 8))) > 0; }
         }
 
+        public int Size
+        {
+            get { return data.Length * 8; }
+        }
+
         public int Length
         {
             get { return data.Length + 5; }

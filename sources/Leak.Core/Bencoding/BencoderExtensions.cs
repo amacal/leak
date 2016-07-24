@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Leak.Core.Bencoding
 {
@@ -24,7 +25,12 @@ namespace Leak.Core.Bencoding
 
         public static string ToText(this BencodedValue value)
         {
-            return AllTexts(value).FirstOrDefault();
+            return ToText(value, Encoding.ASCII);
+        }
+
+        public static string ToText(this BencodedValue value, Encoding encoding)
+        {
+            return AllTexts(value, encoding).FirstOrDefault();
         }
 
         public static int ToInt32(this BencodedValue value)
@@ -97,47 +103,52 @@ namespace Leak.Core.Bencoding
 
         public static string[] AllTexts(this BencodedValue value)
         {
-            return AllTexts(new List<string>(), value).ToArray();
+            return AllTexts(new List<string>(), value, Encoding.ASCII).ToArray();
         }
 
-        private static List<string> AllTexts(List<string> output, BencodedValue value)
+        public static string[] AllTexts(this BencodedValue value, Encoding encoding)
+        {
+            return AllTexts(new List<string>(), value, encoding).ToArray();
+        }
+
+        private static List<string> AllTexts(List<string> output, BencodedValue value, Encoding encoding)
         {
             if (value != null)
             {
-                AllTexts(output, value.Text);
-                AllTexts(output, value.Dictionary);
-                AllTexts(output, value.Array);
+                AllTexts(output, value.Text, encoding);
+                AllTexts(output, value.Dictionary, encoding);
+                AllTexts(output, value.Array, encoding);
             }
 
             return output;
         }
 
-        private static void AllTexts(List<string> output, BencodedText text)
+        private static void AllTexts(List<string> output, BencodedText text, Encoding encoding)
         {
             if (text != null)
             {
-                output.Add(text.GetString());
+                output.Add(text.GetString(encoding));
             }
         }
 
-        private static void AllTexts(List<string> output, BencodedValue[] array)
+        private static void AllTexts(List<string> output, BencodedValue[] array, Encoding encoding)
         {
             if (array != null)
             {
                 foreach (BencodedValue value in array)
                 {
-                    AllTexts(output, value);
+                    AllTexts(output, value, encoding);
                 }
             }
         }
 
-        private static void AllTexts(List<string> output, BencodedEntry[] dictionary)
+        private static void AllTexts(List<string> output, BencodedEntry[] dictionary, Encoding encoding)
         {
             if (dictionary != null)
             {
                 foreach (BencodedEntry entry in dictionary)
                 {
-                    AllTexts(output, entry.Value);
+                    AllTexts(output, entry.Value, encoding);
                 }
             }
         }

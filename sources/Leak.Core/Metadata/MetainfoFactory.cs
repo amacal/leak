@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Leak.Core.Metadata
 {
@@ -46,7 +47,7 @@ namespace Leak.Core.Metadata
             long totalSize = entries.Sum(x => x.Size);
             int blockSize = 16384;
             int pieceSize = value.Find("piece length", x => (int)x.ToInt64());
-            int blocks = (int)(pieces.Length * (totalSize / pieceSize) - totalSize % pieceSize / blockSize + 1);
+            int blocks = (int)((pieces.Length - 1) * (pieceSize / blockSize) + (totalSize % pieceSize / blockSize) + 1);
 
             return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blocks, blockSize);
         }
@@ -76,7 +77,7 @@ namespace Leak.Core.Metadata
 
         private static void FindEntriesValue(BencodedValue value, List<MetainfoEntry> entries)
         {
-            string name = value.Find("name", x => x?.ToText());
+            string name = value.Find("name", x => x?.ToText(Encoding.UTF8));
             long? size = value.Find("length", x => x?.ToInt64());
 
             if (name != null && size != null)
@@ -102,7 +103,7 @@ namespace Leak.Core.Metadata
 
                         foreach (BencodedValue name in path.Array)
                         {
-                            names.Add(name.ToText());
+                            names.Add(name.ToText(Encoding.UTF8));
                         }
 
                         entries.Add(new MetainfoEntry(names.ToArray(), size.Value));

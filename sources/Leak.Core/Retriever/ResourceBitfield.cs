@@ -42,6 +42,8 @@ namespace Leak.Core.Retriever
 
         public void Complete(Bitfield bitfield)
         {
+            completed.Reduce(bitfield.Length);
+
             for (int i = 0; i < bitfield.Length; i++)
             {
                 if (bitfield[i])
@@ -101,7 +103,7 @@ namespace Leak.Core.Retriever
 
                                 ResourceBlock block = new ResourceBlock(i, offset, blockSize);
 
-                                if (books.Contains(block) == false)
+                                if (books.Contains(block) == false && books.Contains(block, peer) == false)
                                 {
                                     requests.Add(block);
                                     left--;

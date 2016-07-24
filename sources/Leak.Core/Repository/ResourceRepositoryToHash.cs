@@ -66,5 +66,15 @@ namespace Leak.Core.Repository
         {
             throw new System.NotImplementedException();
         }
+
+        public static Metainfo Open(string location, FileHash hash)
+        {
+            string path = Path.Combine(location, $"{hash}.metainfo");
+
+            if (File.Exists(path) == false)
+                return null;
+
+            return MetainfoFactory.FromBytes(File.ReadAllBytes(path));
+        }
     }
 }

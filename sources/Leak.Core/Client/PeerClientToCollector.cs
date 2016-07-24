@@ -34,7 +34,7 @@ namespace Leak.Core.Client
 
         public override void OnBitfield(PeerHash peer, BitfieldMessage message)
         {
-            int size = message.Length;
+            int size = message.Size;
 
             if (storage.HasMetainfo(peer))
             {
