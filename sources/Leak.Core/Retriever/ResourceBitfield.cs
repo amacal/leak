@@ -20,6 +20,14 @@ namespace Leak.Core.Retriever
             this.books = new ResourceBitfieldBookCollections();
         }
 
+        public ResourceBitfield(ResourceBitfield bitfield, ResourceStorageConfiguration configuration)
+        {
+            this.configuration = configuration;
+            this.completed = new ResourceBitfieldMap(configuration);
+            this.peers = bitfield.peers;
+            this.books = bitfield.books;
+        }
+
         public void Add(PeerHash peer, Bitfield bitfield)
         {
             peers.Add(peer, bitfield);

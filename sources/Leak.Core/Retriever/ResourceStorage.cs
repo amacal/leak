@@ -21,7 +21,7 @@ namespace Leak.Core.Retriever
 
         public ResourceStorage(ResourceStorage storage, ResourceStorageConfiguration configuration)
         {
-            this.bitfields = new ResourceBitfield(configuration);
+            this.bitfields = new ResourceBitfield(storage.bitfields, configuration);
             this.peers = storage.peers;
             this.metadata = storage.metadata;
         }
