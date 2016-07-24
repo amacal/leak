@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Net;
 using Leak.Core.Network;
 
 namespace Leak.Core.Negotiator
@@ -8,7 +7,7 @@ namespace Leak.Core.Negotiator
     {
         private readonly HandshakeNegotiatorPassiveContext context;
         private readonly HandshakeConnection connection;
-        private readonly PeerCredentials credentials;
+        private readonly HandshakeCredentials credentials;
         private readonly HandshakeKeyContainer keys;
 
         private FileHash found;
@@ -18,7 +17,7 @@ namespace Leak.Core.Negotiator
             this.context = context;
             this.connection = new HandshakeConnection(connection, context);
 
-            this.credentials = PeerCryptography.Generate();
+            this.credentials = HandshakeCryptography.Generate();
             this.keys = new HandshakeKeyContainer();
         }
 
@@ -31,7 +30,7 @@ namespace Leak.Core.Negotiator
         {
             HandshakeKeyExchange exchange = new HandshakeKeyExchange(message);
 
-            keys.Secret = PeerCryptography.Secret(credentials, exchange.Key);
+            keys.Secret = HandshakeCryptography.Secret(credentials, exchange.Key);
             message.Acknowledge(96);
 
             connection.Send(new HandshakeKeyExchangeMessage(credentials));

@@ -38,10 +38,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\pargos.1.0\lib\net40\Pargos.dll</HintPath>
       <Private>True</Private>
@@ -49,25 +45,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AnalyzeCommand.cs" />
-    <Compile Include="Commands\AnnounceTask.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandFactory.cs" />
-    <Compile Include="Commands\AnnounceCommand.cs" />
-    <Compile Include="Commands\CheckExtensionsTask.cs" />
-    <Compile Include="Commands\CheckExtensionsTaskFactory.cs" />
-    <Compile Include="Commands\DownloadCommand.cs" />
-    <Compile Include="Commands\AnnounceTaskFactory.cs" />
-    <Compile Include="Commands\DownloadTask.cs" />
-    <Compile Include="Commands\DownloadTaskFactory.cs" />
-    <Compile Include="Commands\CheckExtensionsCommand.cs" />
-    <Compile Include="Commands\GetMetadataCommand.cs" />
-    <Compile Include="Commands\GetMetadataTask.cs" />
-    <Compile Include="Commands\GetMetadataTaskFactory.cs" />
-    <Compile Include="EventProcessorConfiguration.cs" />
-    <Compile Include="EventProcessorConfigurator.cs" />
-    <Compile Include="EventProcessor.cs" />
-    <Compile Include="EventStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

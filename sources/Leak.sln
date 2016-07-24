@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Core", "Leak.Core\Leak
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Core.Tests", "Leak.Core.Tests\Leak.Core.Tests.csproj", "{5748E985-E51A-4CD1-86DF-092FAA19E987}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Core.Tests.Resources", "Leak.Core.Tests.Resources\Leak.Core.Tests.Resources.csproj", "{E5245772-B33B-41E2-BA59-11E8269B2C2B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak", "Leak\Leak.csproj", "{CACD0BC5-0483-400D-8A0E-24648693C26F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Core.Tests.Integration", "Leak.Core.Tests.Integration\Leak.Core.Tests.Integration.csproj", "{7120B7B3-7FC0-4DF7-B201-E07C012A87F8}"
@@ -27,10 +25,6 @@ Global
 		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5245772-B33B-41E2-BA59-11E8269B2C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5245772-B33B-41E2-BA59-11E8269B2C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5245772-B33B-41E2-BA59-11E8269B2C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5245772-B33B-41E2-BA59-11E8269B2C2B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CACD0BC5-0483-400D-8A0E-24648693C26F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CACD0BC5-0483-400D-8A0E-24648693C26F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CACD0BC5-0483-400D-8A0E-24648693C26F}.Release|Any CPU.ActiveCfg = Release|Any CPU

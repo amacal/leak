@@ -1,13 +1,12 @@
-﻿using Leak.Core.Net;
-using Leak.Core.Network;
+﻿using Leak.Core.Network;
 
 namespace Leak.Core.Negotiator
 {
     public class HandshakeKeyExchangeMessage : NetworkOutgoingMessage
     {
-        private readonly PeerCredentials credentials;
+        private readonly HandshakeCredentials credentials;
 
-        public HandshakeKeyExchangeMessage(PeerCredentials credentials)
+        public HandshakeKeyExchangeMessage(HandshakeCredentials credentials)
         {
             this.credentials = credentials;
         }

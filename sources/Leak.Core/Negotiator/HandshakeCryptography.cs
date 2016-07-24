@@ -2,18 +2,18 @@
 using System.Linq;
 using System.Numerics;
 
-namespace Leak.Core.Net
+namespace Leak.Core.Negotiator
 {
-    public static class PeerCryptography
+    public static class HandshakeCryptography
     {
         private static readonly BigInteger Prime;
 
-        static PeerCryptography()
+        static HandshakeCryptography()
         {
             Prime = new BigInteger(Reverse(ToBytes("00ffffffffffffffffc90fdaa22168c234c4c6628b80dc1cd129024e088a67cc74020bbea63b139b22514a08798e3404ddef9519b3cd3a431b302b0a6df25f14374fe1356d6d51c245e485b576625e7ec6f44c42e9a63a36210000000000090563")));
         }
 
-        public static PeerCredentials Generate()
+        public static HandshakeCredentials Generate()
         {
             BigInteger generator = new BigInteger(2);
             BigInteger privateKey = new BigInteger(Randomize(20));
@@ -25,7 +25,7 @@ namespace Leak.Core.Net
 
             BigInteger publicKey = BigInteger.ModPow(generator, privateKey, Prime);
 
-            return new PeerCredentials
+            return new HandshakeCredentials
             {
                 PrivateKey = Padding(Reverse(privateKey.ToByteArray()), 20),
                 PublicKey = Padding(Reverse(publicKey.ToByteArray()), 96),
@@ -33,7 +33,7 @@ namespace Leak.Core.Net
             };
         }
 
-        public static byte[] Secret(PeerCredentials credentials, byte[] publicKey)
+        public static byte[] Secret(HandshakeCredentials credentials, byte[] publicKey)
         {
             BigInteger xa = new BigInteger(Reverse(Padding(credentials.PrivateKey, 21)));
             BigInteger yb = new BigInteger(Reverse(Padding(publicKey, 97)));

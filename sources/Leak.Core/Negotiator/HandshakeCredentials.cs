@@ -1,6 +1,6 @@
-﻿namespace Leak.Core.Net
+﻿namespace Leak.Core.Negotiator
 {
-    public class PeerCredentials
+    public class HandshakeCredentials
     {
         public byte[] PrivateKey { get; set; }
 
