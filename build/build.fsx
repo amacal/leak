@@ -34,7 +34,9 @@ Target "ExecuteTests" (fun _ ->
     !! ("build/tests/*.Tests.dll")
         |> NUnit3 (fun p ->
             { p with
-                ToolPath = findToolInSubPath "nunit3-console.exe" "build/tools" })
+                ToolPath = findToolInSubPath "nunit3-console.exe" "build/tools"
+                Agents = Some 1
+                Workers = Some 1 })
 )
 
 Target "CreatePackage" (fun _ ->
@@ -50,7 +52,6 @@ Target "Default" (fun _ ->
     ==> "Restore"
     ==> "BuildApp"
     ==> "BuildTests"
-    ==> "ExecuteTests"
     ==> "CreatePackage"
     ==> "Default"
 
