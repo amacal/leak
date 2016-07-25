@@ -36,7 +36,10 @@
   <ItemGroup>
     <Compile Include="Bytes.cs" />
     <Compile Include="BytesExtensions.cs" />
+    <Compile Include="Client\PeerClientConfigurationExtensions.cs" />
+    <Compile Include="Client\PeerClientExtension.cs" />
     <Compile Include="Client\PeerClientExtensionBuilder.cs" />
+    <Compile Include="Client\PeerClientExtensionMetadata.cs" />
     <Compile Include="Client\PeerClientMetainfoSummary.cs" />
     <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Client\PeerClientCallback.cs" />
@@ -46,6 +49,7 @@
     <Compile Include="Client\PeerClientPieceVerification.cs" />
     <Compile Include="Client\PeerClientStartConfiguration.cs" />
     <Compile Include="Client\PeerClientStorage.cs" />
+    <Compile Include="Client\PeerClientStorageContext.cs" />
     <Compile Include="Client\PeerClientStorageEntry.cs" />
     <Compile Include="Client\PeerClientStorageEntryCollection.cs" />
     <Compile Include="Client\PeerClientToCollector.cs" />
@@ -53,6 +57,7 @@
     <Compile Include="Client\PeerClientToMetadata.cs" />
     <Compile Include="Client\PeerClientToRetriever.cs" />
     <Compile Include="Client\PeerClientToTelegraph.cs" />
+    <Compile Include="Client\PeerClientExtensionContext.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
     <Compile Include="Collector\PeerCollectorCallbackToNothing.cs" />

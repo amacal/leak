@@ -26,7 +26,7 @@ namespace Leak
             {
                 with.Destination = destination;
                 with.Callback = new Callback();
-                with.Extensions.Register("ut_metadata", 1);
+                with.Extensions.Metadata();
             });
 
             if (command == "download")

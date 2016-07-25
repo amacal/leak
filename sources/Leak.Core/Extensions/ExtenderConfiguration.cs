@@ -1,5 +1,4 @@
-﻿using Leak.Core.Extensions.Metadata;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Leak.Core.Extensions
 {
@@ -9,6 +8,6 @@ namespace Leak.Core.Extensions
 
         public ExtenderExtensionCollection Extensions { get; set; }
 
-        public List<MetadataHandler> Handlers { get; set; }
+        public List<ExtenderHandler> Handlers { get; set; }
     }
 }

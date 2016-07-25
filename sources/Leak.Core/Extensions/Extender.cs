@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Bencoding;
 using Leak.Core.Common;
-using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
 using System;
 using System.Collections.Generic;
@@ -17,10 +16,9 @@ namespace Leak.Core.Extensions
         {
             this.configuration = configurer.Configure(with =>
             {
-                with.Handlers = new List<MetadataHandler>();
                 with.Callback = new ExtenderCallbackToNothing();
                 with.Extensions = new ExtenderExtensionCollection();
-                with.Handlers = new List<MetadataHandler>();
+                with.Handlers = new List<ExtenderHandler>();
             });
 
             this.synchronized = new object();

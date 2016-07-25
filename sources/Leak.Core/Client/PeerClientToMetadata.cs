@@ -5,21 +5,19 @@ namespace Leak.Core.Client
 {
     public class PeerClientToMetadata : MetadataCallbackBase
     {
-        private readonly PeerClientCallback callback;
-        private readonly PeerClientStorage storage;
+        private readonly PeerClientExtensionContext context;
 
-        public PeerClientToMetadata(PeerClientConfiguration configuration, PeerClientStorage storage)
+        public PeerClientToMetadata(PeerClientExtensionContext context)
         {
-            this.callback = configuration.Callback;
-            this.storage = storage;
+            this.context = context;
         }
 
         public override void OnData(PeerHash peer, MetadataData data)
         {
-            FileHash hash = storage.GetHash(peer);
+            FileHash hash = context.GetHash(peer);
 
-            storage.GetRetriever(peer).AddMetadata(peer, data);
-            callback.OnMetadataReceived(hash, peer, data);
+            context.GetRetriever(peer).AddMetadata(peer, data);
+            context.GetCallback(peer).OnMetadataReceived(hash, peer, data);
         }
     }
 }

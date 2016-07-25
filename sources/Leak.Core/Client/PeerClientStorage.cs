@@ -1,7 +1,6 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Extensions;
-using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
@@ -36,17 +35,13 @@ namespace Leak.Core.Client
             }
 
             ResourceRepository repository = new ResourceRepositoryToHash(hash, configuration.Destination);
-
-            MetadataHandler metadata = new MetadataHandler(with =>
-            {
-                with.Callback = new PeerClientToMetadata(configuration, this);
-            });
+            PeerClientExtensionContext context = new PeerClientStorageContext(this);
 
             Extender extender = new Extender(with =>
             {
                 with.Callback = new PeerClientToExtender(hash, this);
                 with.Extensions = configuration.Extensions.Build();
-                with.Handlers.Add(metadata);
+                with.Handlers.AddRange(configuration, context);
             });
 
             ResourceRetriever retriever = new ResourceRetrieverToQuery(with =>
@@ -79,17 +74,13 @@ namespace Leak.Core.Client
             }
 
             ResourceRepository repository = new ResourceRepositoryToMetainfo(metainfo, path);
-
-            MetadataHandler metadata = new MetadataHandler(with =>
-            {
-                with.Callback = new PeerClientToMetadata(configuration, this);
-            });
+            PeerClientExtensionContext context = new PeerClientStorageContext(this);
 
             Extender extender = new Extender(with =>
             {
                 with.Callback = new PeerClientToExtender(metainfo.Hash, this);
                 with.Extensions = configuration.Extensions.Build();
-                with.Handlers.Add(metadata);
+                with.Handlers.AddRange(configuration, context);
             });
 
             ResourceRetriever retriever = new ResourceRetrieverToGet(with =>
@@ -165,6 +156,11 @@ namespace Leak.Core.Client
         public ResourceRetriever GetRetriever(PeerHash peer)
         {
             return collection.ByPeer(peer).Retriever;
+        }
+
+        public PeerClientCallback GetCallback(PeerHash peer)
+        {
+            return configuration.Callback;
         }
 
         public Extender GetExtender(PeerHash peer)
