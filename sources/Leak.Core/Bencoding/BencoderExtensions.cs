@@ -43,29 +43,6 @@ namespace Leak.Core.Bencoding
             return value.Number.ToInt64();
         }
 
-        public static BencodedValue[] AllItems(this BencodedValue value)
-        {
-            return AllItems(new List<BencodedValue>(), value.Array).ToArray();
-        }
-
-        private static List<BencodedValue> AllItems(List<BencodedValue> result, BencodedValue[] array)
-        {
-            if (array != null)
-            {
-                foreach (BencodedValue value in array)
-                {
-                    result.Add(value);
-                }
-            }
-
-            return result;
-        }
-
-        public static string[] AllKeys(this BencodedValue value)
-        {
-            return AllKeys(new List<string>(), value).ToArray();
-        }
-
         private static List<string> AllKeys(List<string> output, BencodedValue value)
         {
             AllKeys(output, value.Dictionary);

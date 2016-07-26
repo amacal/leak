@@ -5,9 +5,9 @@ namespace Leak.Core.Negotiator
 {
     public class HandshakeKey
     {
-        private readonly RC4 inner;
+        private readonly HandshakeRivestCipher inner;
 
-        private HandshakeKey(RC4 key)
+        private HandshakeKey(HandshakeRivestCipher key)
         {
             inner = key;
         }
@@ -17,11 +17,11 @@ namespace Leak.Core.Negotiator
             switch (ownership)
             {
                 case HandshakeKeyOwnership.Initiator:
-                    inner = new RC4(Bytes.Hash("keyA", secret, hash.ToBytes()), 1024);
+                    inner = new HandshakeRivestCipher(Bytes.Hash("keyA", secret, hash.ToBytes()), 1024);
                     break;
 
                 case HandshakeKeyOwnership.Receiver:
-                    inner = new RC4(Bytes.Hash("keyB", secret, hash.ToBytes()), 1024);
+                    inner = new HandshakeRivestCipher(Bytes.Hash("keyB", secret, hash.ToBytes()), 1024);
                     break;
             }
         }

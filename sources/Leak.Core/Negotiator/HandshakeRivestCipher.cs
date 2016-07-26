@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Leak.Core
+namespace Leak.Core.Negotiator
 {
-    public class RC4
+    public class HandshakeRivestCipher
     {
         private readonly byte[] key;
         private readonly byte[] vector;
@@ -11,14 +11,14 @@ namespace Leak.Core
         private long position;
         private int i, j;
 
-        public RC4(byte[] key, int discard)
+        public HandshakeRivestCipher(byte[] key, int discard)
         {
             this.key = key;
             this.vector = Initialize(key);
             this.Skip(discard);
         }
 
-        private RC4(RC4 source)
+        private HandshakeRivestCipher(HandshakeRivestCipher source)
         {
             this.key = source.key.ToArray();
             this.vector = source.vector.ToArray();
@@ -42,9 +42,9 @@ namespace Leak.Core
             return EncryptOutput(data).ToArray();
         }
 
-        public RC4 Clone()
+        public HandshakeRivestCipher Clone()
         {
-            return new RC4(this);
+            return new HandshakeRivestCipher(this);
         }
 
         private static byte[] Initialize(byte[] key)

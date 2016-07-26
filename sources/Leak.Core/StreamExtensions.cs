@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace Leak.Core
 {
@@ -6,7 +7,7 @@ namespace Leak.Core
     {
         public static void Write(this Stream stream, string text)
         {
-            stream.Write(System.Text.Encoding.ASCII.GetBytes(text));
+            stream.Write(Encoding.ASCII.GetBytes(text));
         }
 
         public static void Write(this Stream stream, byte[] data)
