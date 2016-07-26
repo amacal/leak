@@ -45,6 +45,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DeamonCommand.cs" />
+    <Compile Include="Commands\DownloadCommand.cs" />
+    <Compile Include="Deamon\LeakCallback.cs" />
+    <Compile Include="Deamon\LeakDeamon.cs" />
+    <Compile Include="Deamon\LeakDeamonConfiguration.cs" />
+    <Compile Include="Deamon\LeakMonitor.cs" />
+    <Compile Include="Deamon\LeakMonitorCallback.cs" />
+    <Compile Include="Deamon\LeakMonitorConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
