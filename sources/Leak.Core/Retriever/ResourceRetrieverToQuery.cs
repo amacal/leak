@@ -1,5 +1,4 @@
-﻿using Leak.Core.Collector;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Extensions;
 using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
@@ -12,9 +11,8 @@ namespace Leak.Core.Retriever
     public class ResourceRetrieverToQuery : ResourceRetriever
     {
         private readonly ResourceRetrieverConfiguration configuration;
-        private readonly ResourceRetrieverCallback callback;
-        private readonly PeerCollectorView collector;
-        private readonly ResourceStorage storage;
+        private readonly ResourceQueueContext context;
+        private readonly ResourceQueue queue;
 
         private readonly Timer timer;
         private int tick;
@@ -26,40 +24,42 @@ namespace Leak.Core.Retriever
                 with.Callback = new ResourceRetrieverToNothing();
             });
 
-            this.collector = configuration.Collector;
-            this.callback = configuration.Callback;
-            this.storage = new ResourceStorage(new ResourceStorageConfiguration());
+            this.context = new ResourceQueueContext
+            {
+                Callback = configuration.Callback,
+                Collector = configuration.Collector,
+                Extender = configuration.Extender,
+                Repository = configuration.Repository,
+                Storage = new ResourceStorage(new ResourceStorageConfiguration())
+            };
 
-            timer = new Timer(OnTick);
-            timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+            this.timer = new Timer(OnTick);
+            this.timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+
+            this.queue = new ResourceQueue();
         }
 
         private void OnTick(object state)
         {
-            lock (storage)
+            lock (context.Storage)
             {
                 tick = (tick + 1) % 20;
 
                 if (tick == 0)
                 {
-                    foreach (ResourcePeer peer in storage.GetPeers(ResourcePeerOperation.KeepAlive))
-                    {
-                        collector.SendKeepAlive(peer.Hash);
-                    }
+                    queue.Enqueue(new ResourceQueueItemKeepAliveSend());
                 }
 
-                foreach (ResourcePeer peer in storage.GetPeers(ResourcePeerOperation.Metadata))
-                {
-                    SendMetadataRequest(peer.Hash);
-                }
+                queue.Enqueue(new ResourceQueueItemMetadataSend());
+                queue.Process(context);
             }
         }
 
         public ResourceRetriever WithBitfield(Bitfield bitfield)
         {
-            lock (storage)
+            lock (context.Storage)
             {
-                storage.Complete(bitfield);
+                context.Storage.Complete(bitfield);
             }
 
             return this;
@@ -67,11 +67,11 @@ namespace Leak.Core.Retriever
 
         public ResourceRetriever WithRepository(ResourceRepository repository)
         {
-            lock (storage)
+            lock (context.Storage)
             {
                 timer.Dispose();
 
-                return new ResourceRetrieverToGet(storage, with =>
+                return new ResourceRetrieverToGet(context, queue, with =>
                 {
                     with.Callback = configuration.Callback;
                     with.Extender = configuration.Extender;
@@ -83,37 +83,22 @@ namespace Leak.Core.Retriever
 
         public void SetExtensions(PeerHash peer, ExtenderHandshake handshake)
         {
-            lock (storage)
-            {
-                storage.AddPeer(peer);
-                collector.SendExtended(peer, configuration.Extender.GetHandshake());
-            }
+            queue.Enqueue(new ResourceQueueItemHandshakeHandle(peer));
         }
 
         public void SetBitfield(PeerHash peer, Bitfield bitfield)
         {
-            lock (storage)
-            {
-                storage.AddPeer(peer);
-                storage.AddBitfield(peer, bitfield);
-                collector.SendInterested(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemBitfieldHandle(peer, bitfield));
         }
 
         public void SetChoked(PeerHash peer, ResourceDirection direction)
         {
-            lock (storage)
-            {
-                storage.Choke(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemChokeHandle(peer));
         }
 
         public void SetUnchoked(PeerHash peer, ResourceDirection direction)
         {
-            lock (storage)
-            {
-                storage.Unchoke(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemUnchokeHandle(peer));
         }
 
         public void AddPiece(PeerHash peer, Piece piece)
@@ -122,32 +107,7 @@ namespace Leak.Core.Retriever
 
         public void AddMetadata(PeerHash peer, MetadataData data)
         {
-            ResourceMetadataBlock block = new ResourceMetadataBlock(data.Piece);
-
-            lock (storage)
-            {
-                if (storage.IsMetadataComplete() == false)
-                {
-                    storage.Complete(peer, block, data.Size);
-
-                    if (configuration.Repository.SetMetadata(data.Piece, data.Payload))
-                    {
-                        storage.Complete(data.Size);
-                        configuration.Callback.OnMetadataCompleted();
-                    }
-                }
-            }
-        }
-
-        private void SendMetadataRequest(PeerHash peer)
-        {
-            ResourceMetadataBlock[] requests = storage.ScheduleMetadata(peer);
-
-            foreach (ResourceMetadataBlock request in requests)
-            {
-                storage.Reserve(peer, request);
-                collector.SendExtended(peer, configuration.Extender.MetadataRequest(peer, request.Index));
-            }
+            queue.Enqueue(new ResourceQueueItemMetadataHandle(peer, data));
         }
     }
 }

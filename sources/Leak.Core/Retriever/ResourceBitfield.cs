@@ -90,6 +90,7 @@ namespace Leak.Core.Retriever
 
             long size = configuration.TotalSize;
             int left = Math.Min(maximum, maximum - books.Count(peer));
+            DateTime now = DateTime.Now;
 
             if (peers.TryGetValue(peer, out bitfield))
             {
@@ -111,7 +112,7 @@ namespace Leak.Core.Retriever
 
                                 ResourceBlock block = new ResourceBlock(i, offset, blockSize);
 
-                                if (books.Contains(block) == false && books.Contains(block, peer) == false)
+                                if (books.Contains(block, now) == false && books.Contains(block, peer) == false)
                                 {
                                     requests.Add(block);
                                     left--;

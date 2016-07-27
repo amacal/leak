@@ -15,16 +15,24 @@ namespace Leak.Core.Retriever
             this.byPeer = new Dictionary<PeerHash, HashSet<ResourceBitfieldBook>>();
         }
 
-        public bool Contains(ResourceBlock request)
+        public bool Contains(ResourceBlock request, DateTime now)
         {
-            return blocks.ContainsKey(request) &&
-                   blocks[request].Expires > DateTime.Now;
+            ResourceBitfieldBook book;
+
+            if (blocks.TryGetValue(request, out book) == false)
+                return false;
+
+            return book.Expires > now;
         }
 
         public bool Contains(ResourceBlock request, PeerHash peer)
         {
-            return blocks.ContainsKey(request) &&
-                   blocks[request].Peer.Equals(peer);
+            ResourceBitfieldBook book;
+
+            if (blocks.TryGetValue(request, out book) == false)
+                return false;
+
+            return book.Peer.Equals(peer);
         }
 
         public void Add(PeerHash peer, ResourceBlock request)

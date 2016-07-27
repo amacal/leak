@@ -1,5 +1,4 @@
-﻿using Leak.Core.Collector;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Extensions;
 using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
@@ -12,10 +11,8 @@ namespace Leak.Core.Retriever
     public class ResourceRetrieverToGet : ResourceRetriever
     {
         private readonly ResourceRetrieverConfiguration configuration;
-        private readonly ResourceRetrieverCallback callback;
-        private readonly ResourceRepository repository;
-        private readonly PeerCollectorView collector;
-        private readonly ResourceStorage storage;
+        private readonly ResourceQueueContext context;
+        private readonly ResourceQueue queue;
 
         private readonly Timer timer;
         private int tick;
@@ -27,73 +24,88 @@ namespace Leak.Core.Retriever
                 with.Callback = new ResourceRetrieverToNothing();
             });
 
-            this.repository = configuration.Repository;
-            this.collector = configuration.Collector;
-            this.callback = configuration.Callback;
-
-            this.storage = new ResourceStorage(new ResourceStorageConfiguration
+            this.context = new ResourceQueueContext
             {
-                Pieces = repository.Properties.Pieces,
-                Blocks = repository.Properties.Blocks,
-                BlocksInPiece = repository.Properties.PieceSize / repository.Properties.BlockSize,
-                BlockSize = repository.Properties.BlockSize,
-                TotalSize = repository.Properties.TotalSize
+                Callback = configuration.Callback,
+                Collector = configuration.Collector,
+                Extender = configuration.Extender,
+                Repository = configuration.Repository,
+                Storage = new ResourceStorage(new ResourceStorageConfiguration())
+            };
+
+            this.context.Storage = new ResourceStorage(new ResourceStorageConfiguration
+            {
+                Pieces = this.context.Repository.Properties.Pieces,
+                Blocks = this.context.Repository.Properties.Blocks,
+                BlocksInPiece = this.context.Repository.Properties.PieceSize / this.context.Repository.Properties.BlockSize,
+                BlockSize = this.context.Repository.Properties.BlockSize,
+                TotalSize = this.context.Repository.Properties.TotalSize
             });
 
-            timer = new Timer(OnTick);
-            timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+            this.timer = new Timer(OnTick);
+            this.timer.Change(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+
+            this.queue = new ResourceQueue();
         }
 
-        public ResourceRetrieverToGet(ResourceStorage storage, Action<ResourceRetrieverConfiguration> configurer)
+        public ResourceRetrieverToGet(ResourceQueueContext context, ResourceQueue queue, Action<ResourceRetrieverConfiguration> configurer)
         {
             this.configuration = configurer.Configure(with =>
             {
                 with.Callback = new ResourceRetrieverToNothing();
             });
 
-            this.repository = configuration.Repository;
-            this.collector = configuration.Collector;
-            this.callback = configuration.Callback;
+            this.queue = queue;
+            this.context = context;
 
-            this.storage = new ResourceStorage(storage, new ResourceStorageConfiguration
+            this.context.Callback = configuration.Callback;
+            this.context.Collector = configuration.Collector;
+            this.context.Extender = configuration.Extender;
+            this.context.Repository = configuration.Repository;
+
+            this.context.Storage = new ResourceStorage(this.context.Storage, new ResourceStorageConfiguration
             {
-                Pieces = repository.Properties.Pieces,
-                Blocks = repository.Properties.Blocks,
-                BlocksInPiece = repository.Properties.PieceSize / repository.Properties.BlockSize,
-                BlockSize = repository.Properties.BlockSize,
-                TotalSize = repository.Properties.TotalSize
+                Pieces = this.context.Repository.Properties.Pieces,
+                Blocks = this.context.Repository.Properties.Blocks,
+                BlocksInPiece = this.context.Repository.Properties.PieceSize / this.context.Repository.Properties.BlockSize,
+                BlockSize = this.context.Repository.Properties.BlockSize,
+                TotalSize = this.context.Repository.Properties.TotalSize
             });
 
-            timer = new Timer(OnTick);
-            timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+            this.timer = new Timer(OnTick);
+            this.timer.Change(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
         }
 
         private void OnTick(object state)
         {
-            lock (storage)
+            timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+
+            try
             {
-                tick = (tick + 1) % 20;
-
-                if (tick == 0)
+                lock (context.Storage)
                 {
-                    foreach (ResourcePeer peer in storage.GetPeers(ResourcePeerOperation.KeepAlive))
+                    tick = (tick + 1) % 600;
+
+                    if (tick == 0)
                     {
-                        collector.SendKeepAlive(peer.Hash);
+                        queue.Enqueue(new ResourceQueueItemKeepAliveSend());
                     }
-                }
 
-                foreach (ResourcePeer peer in storage.GetPeers(ResourcePeerOperation.Request))
-                {
-                    SendPieceRequests(peer.Hash);
+                    queue.Enqueue(new ResourceQueueItemRequestSendMultiple());
+                    queue.Process(context);
                 }
+            }
+            finally
+            {
+                this.timer.Change(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             }
         }
 
         public ResourceRetriever WithBitfield(Bitfield bitfield)
         {
-            lock (storage)
+            lock (context.Storage)
             {
-                storage.Complete(bitfield);
+                context.Storage.Complete(bitfield);
             }
 
             return this;
@@ -106,80 +118,32 @@ namespace Leak.Core.Retriever
 
         public void SetExtensions(PeerHash peer, ExtenderHandshake handshake)
         {
+            queue.Enqueue(new ResourceQueueItemHandshakeHandle(peer));
         }
 
         public void SetBitfield(PeerHash peer, Bitfield bitfield)
         {
-            lock (storage)
-            {
-                storage.AddPeer(peer);
-                storage.AddBitfield(peer, bitfield);
-                collector.SendInterested(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemBitfieldHandle(peer, bitfield));
         }
 
         public void SetChoked(PeerHash peer, ResourceDirection direction)
         {
-            lock (storage)
-            {
-                storage.Choke(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemChokeHandle(peer));
         }
 
         public void SetUnchoked(PeerHash peer, ResourceDirection direction)
         {
-            lock (storage)
-            {
-                storage.Unchoke(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemUnchokeHandle(peer));
         }
 
         public void AddPiece(PeerHash peer, Piece piece)
         {
-            lock (storage)
-            {
-                if (storage.IsComplete(piece.Index) == false)
-                {
-                    int blockIndex = piece.Offset / repository.Properties.BlockSize;
-                    ResourceBlock block = new ResourceBlock(piece.Index, piece.Offset, piece.Size);
-
-                    repository.SetPiece(piece.Index, blockIndex, piece.Data);
-                    bool completed = storage.Complete(peer, block);
-
-                    if (completed)
-                    {
-                        if (repository.Verify(piece.Index) == false)
-                        {
-                            storage.Invalidate(piece.Index);
-                        }
-                        else
-                        {
-                            callback.OnPieceVerified(new ResourcePiece(piece.Index));
-                        }
-                    }
-
-                    if (storage.IsComplete())
-                    {
-                        callback.OnCompleted();
-                    }
-                }
-
-                SendPieceRequests(peer);
-            }
+            queue.Enqueue(new ResourceQueueItemPieceHandle(peer, piece));
+            queue.Enqueue(new ResourceQueueItemRequestSend(peer));
         }
 
         public void AddMetadata(PeerHash peer, MetadataData data)
         {
-        }
-
-        private void SendPieceRequests(PeerHash peer)
-        {
-            ResourceBlock[] blocks = storage.Next(peer);
-            foreach (ResourceBlock block in blocks)
-            {
-                collector.SendPieceRequest(peer, block.Index, block.Offset, block.Size);
-                storage.Reserve(peer, block);
-            }
         }
     }
 }

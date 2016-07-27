@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Leak.Core.Negotiator
 {
@@ -29,17 +28,17 @@ namespace Leak.Core.Negotiator
 
         public void Skip(int count)
         {
-            EncryptOutput(Enumerable.Repeat<byte>(0, count)).ToArray();
+            Handle(new byte[count]);
         }
 
         public byte[] Encrypt(byte[] data)
         {
-            return EncryptOutput(data).ToArray();
+            return Handle(data);
         }
 
         public byte[] Decrypt(byte[] data)
         {
-            return EncryptOutput(data).ToArray();
+            return Handle(data);
         }
 
         public HandshakeRivestCipher Clone()
@@ -63,9 +62,12 @@ namespace Leak.Core.Negotiator
             return s;
         }
 
-        private IEnumerable<byte> EncryptOutput(IEnumerable<byte> data)
+        private byte[] Handle(byte[] data)
         {
-            return data.Select((b) =>
+            int length = data.Length;
+            byte[] result = new byte[length];
+
+            for (int x = 0; x < length; x++)
             {
                 i = (i + 1) & 255;
                 j = (j + vector[i]) & 255;
@@ -73,8 +75,10 @@ namespace Leak.Core.Negotiator
                 Swap(vector, i, j);
                 position++;
 
-                return (byte)(b ^ vector[(vector[i] + vector[j]) & 255]);
-            });
+                result[x] = (byte)(data[x] ^ vector[(vector[i] + vector[j]) & 255]);
+            }
+
+            return result;
         }
 
         private static void Swap(byte[] s, int i, int j)
