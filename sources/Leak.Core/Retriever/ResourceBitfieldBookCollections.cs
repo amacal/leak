@@ -35,8 +35,16 @@ namespace Leak.Core.Retriever
             return book.Peer.Equals(peer);
         }
 
-        public void Add(PeerHash peer, ResourceBlock request)
+        public PeerHash Add(PeerHash peer, ResourceBlock request)
         {
+            PeerHash previous = null;
+            ResourceBitfieldBook book;
+
+            if (blocks.TryGetValue(request, out book) == true)
+            {
+                previous = book.Peer;
+            }
+
             blocks[request] = new ResourceBitfieldBook
             {
                 Peer = peer,
@@ -50,6 +58,7 @@ namespace Leak.Core.Retriever
             }
 
             byPeer[peer].Add(blocks[request]);
+            return previous;
         }
 
         public void Complete(ResourceBlock request)

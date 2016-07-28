@@ -26,10 +26,11 @@ namespace Leak.Commands
             string hash = arguments.GetString("hash");
             int trackers = arguments.Count("tracker");
 
+            ManualResetEvent handle = new ManualResetEvent(false);
             PeerClient client = new PeerClient(with =>
             {
                 with.Destination = destination;
-                with.Callback = new Callback();
+                with.Callback = new Callback(handle);
                 with.Extensions.Metadata();
             });
 
@@ -50,11 +51,18 @@ namespace Leak.Commands
                 });
             }
 
-            Thread.Sleep(TimeSpan.FromHours(1));
+            handle.WaitOne();
         }
 
         public class Callback : PeerClientCallbackBase
         {
+            private readonly ManualResetEvent handle;
+
+            public Callback(ManualResetEvent handle)
+            {
+                this.handle = handle;
+            }
+
             public override void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary)
             {
                 Console.WriteLine($"{hash}: initialized; completed={summary.Completed}; total={summary.Total}");
@@ -63,7 +71,7 @@ namespace Leak.Commands
             public override void OnCompleted(FileHash hash)
             {
                 Console.WriteLine($"{hash}: completed");
-                Environment.Exit(0);
+                handle.Set();
             }
 
             public override void OnPeerConnecting(FileHash hash, string endpoint)

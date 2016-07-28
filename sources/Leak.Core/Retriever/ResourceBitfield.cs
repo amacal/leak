@@ -132,9 +132,9 @@ namespace Leak.Core.Retriever
             return requests.ToArray();
         }
 
-        public void Reserve(PeerHash peer, ResourceBlock request)
+        public PeerHash Reserve(PeerHash peer, ResourceBlock request)
         {
-            books.Add(peer, request);
+            return books.Add(peer, request);
         }
     }
 }

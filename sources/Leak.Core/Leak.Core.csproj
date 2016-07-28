@@ -114,6 +114,7 @@
     <Compile Include="Loop\ConnectionLoopCallbackBase.cs" />
     <Compile Include="Loop\ConnectionLoopCallbackToNothing.cs" />
     <Compile Include="Loop\ConnectionLoopChannel.cs" />
+    <Compile Include="Loop\ConnectionLoopCompositeMessage.cs" />
     <Compile Include="Loop\ConnectionLoopConfiguration.cs" />
     <Compile Include="Loop\ConnectionLoopConnection.cs" />
     <Compile Include="Loop\ConnectionLoopConnectionContext.cs" />
@@ -134,7 +135,8 @@
     <Compile Include="Messages\KeepAliveMessage.cs" />
     <Compile Include="Messages\Piece.cs" />
     <Compile Include="Messages\PieceMessage.cs" />
-    <Compile Include="Messages\RequestMessage.cs" />
+    <Compile Include="Messages\Request.cs" />
+    <Compile Include="Messages\RequestOutgoingMessage.cs" />
     <Compile Include="Messages\UnchokeMessage.cs" />
     <Compile Include="Metadata\Metainfo.cs" />
     <Compile Include="Metadata\MetainfoFactory.cs" />

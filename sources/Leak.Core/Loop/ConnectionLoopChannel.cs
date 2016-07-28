@@ -38,9 +38,9 @@ namespace Leak.Core.Loop
             Forward(message);
         }
 
-        public void Send(RequestMessage message)
+        public void Send(params RequestOutgoingMessage[] messages)
         {
-            Forward(message);
+            Forward(messages);
         }
 
         public void Send(ExtendedOutgoingMessage message)
@@ -53,6 +53,18 @@ namespace Leak.Core.Loop
             try
             {
                 connection.Send(message);
+            }
+            catch (Exception ex)
+            {
+                configuration.Callback.OnException(this, ex);
+            }
+        }
+
+        private void Forward(NetworkOutgoingMessage[] messages)
+        {
+            try
+            {
+                connection.Send(new ConnectionLoopCompositeMessage(messages));
             }
             catch (Exception ex)
             {

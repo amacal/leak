@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using System;
 
 namespace Leak.Core.Retriever
 {
@@ -24,14 +25,19 @@ namespace Leak.Core.Retriever
             get { return rank; }
         }
 
-        public void Increase()
+        public void Increase(int value)
         {
-            rank++;
+            rank = Math.Min(8192, rank + value);
         }
 
         public void Decrease()
         {
-            rank--;
+            rank = Math.Max(0, rank - 1);
+        }
+
+        public void Decrease(int value)
+        {
+            rank = Math.Max(0, rank - value);
         }
 
         public bool IsUnchoke()

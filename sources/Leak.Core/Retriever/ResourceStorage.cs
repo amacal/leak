@@ -104,9 +104,9 @@ namespace Leak.Core.Retriever
             return metadata.IsComplete();
         }
 
-        public ResourceBlock[] Next(PeerHash peer)
+        public ResourceBlock[] Next(PeerHash peer, int blocks)
         {
-            return bitfields.Next(peer, 16);
+            return bitfields.Next(peer, blocks);
         }
 
         public ResourceMetadataBlock[] ScheduleMetadata(PeerHash peer)
@@ -117,7 +117,7 @@ namespace Leak.Core.Retriever
         public void Reserve(PeerHash peer, ResourceBlock request)
         {
             peers.Decrease(peer);
-            bitfields.Reserve(peer, request);
+            peers.Decrease(bitfields.Reserve(peer, request), 10);
         }
 
         public void Reserve(PeerHash peer, ResourceMetadataBlock request)

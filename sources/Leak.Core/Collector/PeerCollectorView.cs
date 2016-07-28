@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using System.Collections.Generic;
 
 namespace Leak.Core.Collector
 {
@@ -27,9 +28,16 @@ namespace Leak.Core.Collector
             storage.GetChannel(peer)?.Send(new BitfieldMessage(bitfield.Length));
         }
 
-        public void SendPieceRequest(PeerHash peer, int piece, int offset, int size)
+        public void SendPieceRequest(PeerHash peer, Request[] requests)
         {
-            storage.GetChannel(peer)?.Send(new RequestMessage(piece, offset, size));
+            List<RequestOutgoingMessage> messages = new List<RequestOutgoingMessage>();
+
+            foreach (Request request in requests)
+            {
+                messages.Add(new RequestOutgoingMessage(request));
+            }
+
+            storage.GetChannel(peer)?.Send(messages.ToArray());
         }
 
         public void SendExtended(PeerHash peer, Extended extended)

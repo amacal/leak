@@ -38,12 +38,22 @@ namespace Leak.Core.Retriever
 
         public void Increase(PeerHash peer)
         {
-            items[peer].Increase();
+            items[peer].Increase(2);
         }
 
         public void Decrease(PeerHash peer)
         {
             items[peer].Decrease();
+        }
+
+        public void Decrease(PeerHash peer, int value)
+        {
+            ResourcePeer entry;
+
+            if (peer != null && items.TryGetValue(peer, out entry))
+            {
+                entry.Decrease(value);
+            }
         }
 
         public IEnumerator<ResourcePeer> GetEnumerator()
