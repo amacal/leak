@@ -19,6 +19,19 @@ namespace Leak.Core.Extensions
             this.items = items;
         }
 
+        public bool Supports(string name)
+        {
+            foreach (ExtenderExtension extension in items)
+            {
+                if (extension.Name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public byte Translate(string name)
         {
             foreach (ExtenderExtension extension in items)
@@ -29,7 +42,7 @@ namespace Leak.Core.Extensions
                 }
             }
 
-            throw new NotSupportedException();
+            throw new InvalidOperationException("The requested extension is not supported.");
         }
 
         public string Translate(byte id)

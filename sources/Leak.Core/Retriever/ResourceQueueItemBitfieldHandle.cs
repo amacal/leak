@@ -16,7 +16,6 @@ namespace Leak.Core.Retriever
 
         public void Handle(ResourceQueueContext context)
         {
-            context.Storage.AddPeer(peer);
             context.Storage.AddBitfield(peer, bitfield);
             context.Collector.SendInterested(peer);
         }

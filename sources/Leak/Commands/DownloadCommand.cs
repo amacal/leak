@@ -29,11 +29,15 @@ namespace Leak.Commands
             ManualResetEvent handle = new ManualResetEvent(false);
             Logging logging = GetLoggingValue(arguments.GetString("logging"));
 
+            string portText = arguments.GetString("port");
+            int? portValue = String.IsNullOrEmpty(portText) ? default(int?) : Int32.Parse(portText);
+
             PeerClient client = new PeerClient(with =>
             {
                 with.Destination = destination;
                 with.Callback = new Callback(handle, logging);
                 with.Extensions.Metadata();
+                with.Port = portValue;
             });
 
             if (torrent != null)
@@ -106,7 +110,10 @@ namespace Leak.Commands
 
             public override void OnPeerConnected(FileHash hash, PeerEndpoint endpoint)
             {
-                Console.WriteLine($"{endpoint.Peer}: connected; remote={endpoint.Remote}");
+                string remote = endpoint.Remote;
+                string direction = endpoint.Direction.ToString().ToLowerInvariant();
+
+                Console.WriteLine($"{endpoint.Peer}: connected; remote={remote}; direction={direction}");
             }
 
             public override void OnPeerDisconnected(FileHash hash, PeerHash peer)

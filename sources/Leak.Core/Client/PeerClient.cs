@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Connector;
+using Leak.Core.Listener;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
@@ -16,24 +17,40 @@ namespace Leak.Core.Client
         private readonly PeerClientStorage storage;
         private readonly PeerClientConfiguration configuration;
         private readonly PeerClientCallback callback;
+        private readonly PeerListener listener;
+        private readonly FileHashCollection hashes;
 
         public PeerClient(Action<PeerClientConfiguration> configurer)
         {
-            this.configuration = configurer.Configure(with =>
+            configuration = configurer.Configure(with =>
             {
                 with.Peer = PeerHash.Random();
                 with.Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
-                with.Callback = new PeerClientCallbackToNothing();
+                with.Callback = new PeerClientCallbackNothing();
                 with.Extensions = new PeerClientExtensionBuilder();
             });
 
-            this.storage = new PeerClientStorage(configuration);
-            this.callback = configuration.Callback;
+            storage = new PeerClientStorage(configuration);
+            hashes = new FileHashCollection();
+            callback = configuration.Callback;
 
-            this.collector = new PeerCollector(with =>
+            collector = new PeerCollector(with =>
             {
                 with.Callback = new PeerClientToCollector(configuration, storage);
             });
+
+            if (configuration.Port != null)
+            {
+                listener = new PeerListener(with =>
+                {
+                    with.Callback = collector.CreateListenerCallback();
+                    with.Port = configuration.Port.Value;
+                    with.Peer = configuration.Peer;
+                    with.Hashes = hashes;
+                });
+
+                listener.Start();
+            }
         }
 
         public void Start(MetainfoFile metainfo)
@@ -111,6 +128,8 @@ namespace Leak.Core.Client
                     with.Hash = metainfo.Hash;
                 });
             }
+
+            hashes.Add(metainfo.Hash);
         }
 
         private void Schedule(PeerClientStartConfiguration start)
@@ -136,6 +155,8 @@ namespace Leak.Core.Client
                     with.Hash = start.Hash;
                 });
             }
+
+            hashes.Add(start.Hash);
         }
     }
 }

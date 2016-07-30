@@ -6,6 +6,11 @@ namespace Leak.Core.Extensions.Metadata
 {
     public static class MetadataExtensions
     {
+        public static bool MetadataSupports(this ExtenderFormattable formattable, PeerHash peer)
+        {
+            return formattable.Supports(peer, "ut_metadata");
+        }
+
         public static Extended MetadataRequest(this ExtenderFormattable formattable, PeerHash peer, int piece)
         {
             BencodedValue payload = new BencodedValue

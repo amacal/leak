@@ -20,7 +20,18 @@ namespace Leak.Core.Loop
 
         public PeerEndpoint Endpoint
         {
-            get { return new PeerEndpoint(handshake.Hash, handshake.Peer, connection.Remote); }
+            get
+            {
+                PeerDirection direction = GetDirection(connection.Direction);
+                PeerEndpoint endpoint = new PeerEndpoint(handshake.Hash, handshake.Peer, connection.Remote, direction);
+
+                return endpoint;
+            }
+        }
+
+        private static PeerDirection GetDirection(NetworkConnectionDirection direction)
+        {
+            return direction == NetworkConnectionDirection.Incoming ? PeerDirection.Incoming : PeerDirection.Outgoing;
         }
 
         public void Send(KeepAliveMessage message)

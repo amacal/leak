@@ -8,6 +8,8 @@ namespace Leak.Core.Client
 
         public string Destination { get; set; }
 
+        public int? Port { get; set; }
+
         public PeerClientCallback Callback { get; set; }
 
         public PeerClientExtensionBuilder Extensions { get; set; }

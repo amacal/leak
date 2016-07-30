@@ -43,7 +43,7 @@
     <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Client\PeerClientCallback.cs" />
     <Compile Include="Client\PeerClientCallbackBase.cs" />
-    <Compile Include="Client\PeerClientCallbackToNothing.cs" />
+    <Compile Include="Client\PeerClientCallbackNothing.cs" />
     <Compile Include="Client\PeerClientConfiguration.cs" />
     <Compile Include="Client\PeerClientPieceVerification.cs" />
     <Compile Include="Client\PeerClientStartConfiguration.cs" />
@@ -68,6 +68,7 @@
     <Compile Include="Collector\PeerCollector.cs" />
     <Compile Include="Collector\PeerCollectorToLoop.cs" />
     <Compile Include="Collector\PeerCollectorView.cs" />
+    <Compile Include="Common\PeerDirection.cs" />
     <Compile Include="Common\PeerEndpoint.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Connector\PeerConnector.cs" />

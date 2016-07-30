@@ -40,12 +40,19 @@ namespace Leak.Core.Listener
 
         private void OnAccept(IAsyncResult result)
         {
-            Socket accepted = socket.EndAccept(result);
-            NetworkConnection connection = new NetworkConnection(accepted, NetworkConnectionDirection.Incoming);
-            PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
+            try
+            {
+                Socket accepted = socket.EndAccept(result);
+                NetworkConnection connection = new NetworkConnection(accepted, NetworkConnectionDirection.Incoming);
+                PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
 
-            OnConnected(connection);
-            Negotiate(context, connection);
+                OnConnected(connection);
+                Negotiate(context, connection);
+            }
+            finally
+            {
+                socket.BeginAccept(OnAccept, this);
+            }
         }
 
         private void OnConnected(NetworkConnection connection)

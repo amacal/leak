@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Common
 {
@@ -12,9 +13,20 @@ namespace Leak.Core.Common
             this.hashes = new List<FileHash>(items);
         }
 
+        public void Add(FileHash hash)
+        {
+            lock (hashes)
+            {
+                hashes.Add(hash);
+            }
+        }
+
         public IEnumerator<FileHash> GetEnumerator()
         {
-            return hashes.GetEnumerator();
+            lock (hashes)
+            {
+                return hashes.ToArray().OfType<FileHash>().GetEnumerator();
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -9,13 +9,16 @@ namespace Leak.Core.Retriever
         {
             foreach (ResourcePeer peer in context.Storage.GetPeers(ResourcePeerOperation.Metadata))
             {
-                PeerHash hash = peer.Hash;
-                ResourceMetadataBlock[] requests = context.Storage.ScheduleMetadata(hash);
-
-                foreach (ResourceMetadataBlock request in requests)
+                if (context.Extender.MetadataSupports(peer.Hash))
                 {
-                    context.Storage.Reserve(hash, request);
-                    context.Collector.SendExtended(hash, context.Extender.MetadataRequest(hash, request.Index));
+                    PeerHash hash = peer.Hash;
+                    ResourceMetadataBlock[] requests = context.Storage.ScheduleMetadata(hash);
+
+                    foreach (ResourceMetadataBlock request in requests)
+                    {
+                        context.Storage.Reserve(hash, request);
+                        context.Collector.SendExtended(hash, context.Extender.MetadataRequest(hash, request.Index));
+                    }
                 }
             }
         }

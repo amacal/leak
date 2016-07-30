@@ -101,6 +101,14 @@ namespace Leak.Core.Extensions
             return extensions.ToArray();
         }
 
+        public bool Supports(PeerHash peer, string name)
+        {
+            lock (synchronized)
+            {
+                return mapping[peer].Supports(name);
+            }
+        }
+
         public byte Translate(PeerHash peer, string name)
         {
             lock (synchronized)

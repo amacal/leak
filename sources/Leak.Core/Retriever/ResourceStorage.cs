@@ -28,21 +28,19 @@ namespace Leak.Core.Retriever
 
         public void AddBitfield(PeerHash peer, Bitfield bitfield)
         {
+            peers.AddPeer(peer);
             bitfields.Add(peer, bitfield);
-        }
-
-        public bool AddPeer(PeerHash peer)
-        {
-            return peers.AddPeer(peer);
         }
 
         public void Choke(PeerHash peer)
         {
+            peers.AddPeer(peer);
             peers.Choke(peer);
         }
 
         public void Unchoke(PeerHash peer)
         {
+            peers.AddPeer(peer);
             peers.Unchoke(peer);
         }
 

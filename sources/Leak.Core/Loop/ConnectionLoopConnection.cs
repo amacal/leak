@@ -21,6 +21,11 @@ namespace Leak.Core.Loop
             get { return connection.Remote; }
         }
 
+        public NetworkConnectionDirection Direction
+        {
+            get { return connection.Direction; }
+        }
+
         public void Receive(Action<NetworkIncomingMessage> callback, int bytes)
         {
             ConnectionLoopConnectionContext context = new ConnectionLoopConnectionContext(configuration, this, handshake);
