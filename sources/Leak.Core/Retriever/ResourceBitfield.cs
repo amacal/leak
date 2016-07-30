@@ -30,7 +30,7 @@ namespace Leak.Core.Retriever
 
         public void Add(PeerHash peer, Bitfield bitfield)
         {
-            peers.Add(peer, bitfield);
+            peers[peer] = bitfield;
         }
 
         public int Count(int piece)

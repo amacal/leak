@@ -27,10 +27,12 @@ namespace Leak.Commands
             int trackers = arguments.Count("tracker");
 
             ManualResetEvent handle = new ManualResetEvent(false);
+            Logging logging = GetLoggingValue(arguments.GetString("logging"));
+
             PeerClient client = new PeerClient(with =>
             {
                 with.Destination = destination;
-                with.Callback = new Callback(handle);
+                with.Callback = new Callback(handle, logging);
                 with.Extensions.Metadata();
             });
 
@@ -54,13 +56,36 @@ namespace Leak.Commands
             handle.WaitOne();
         }
 
+        private static Logging GetLoggingValue(string value)
+        {
+            Logging found;
+            Logging result = Logging.Default;
+
+            if (Enum.TryParse(value, true, out found))
+            {
+                result = found;
+            }
+
+            return result;
+        }
+
+        [Flags]
+        public enum Logging
+        {
+            None = 0,
+            Default = 1,
+            Blocks = 2
+        }
+
         public class Callback : PeerClientCallbackBase
         {
             private readonly ManualResetEvent handle;
+            private readonly Logging logging;
 
-            public Callback(ManualResetEvent handle)
+            public Callback(ManualResetEvent handle, Logging logging)
             {
                 this.handle = handle;
+                this.logging = logging;
             }
 
             public override void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary)
@@ -106,7 +131,10 @@ namespace Leak.Commands
 
             public override void OnBlockReceived(FileHash hash, PeerHash peer, Piece piece)
             {
-                Console.WriteLine($"{peer}: block; piece={piece.Index}; offset={piece.Offset}; size={piece.Size}");
+                if (logging.HasFlag(Logging.Blocks))
+                {
+                    Console.WriteLine($"{peer}: block; piece={piece.Index}; offset={piece.Offset}; size={piece.Size}");
+                }
             }
 
             public override void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification)

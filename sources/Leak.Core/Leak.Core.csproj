@@ -72,6 +72,7 @@
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorCallback.cs" />
+    <Compile Include="Connector\PeerConnectorCallbackBase.cs" />
     <Compile Include="Connector\PeerConnectorCallbackToNothing.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
     <Compile Include="Connector\PeerConnectorHandshake.cs" />
