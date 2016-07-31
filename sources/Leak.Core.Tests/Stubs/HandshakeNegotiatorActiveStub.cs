@@ -9,10 +9,10 @@ namespace Leak.Core.Tests.Stubs
         private readonly HandshakeNegotiatorActiveStubContext context;
         private readonly HandshakeNegotiatorActive negotiator;
 
-        public HandshakeNegotiatorActiveStub(NetworkConnection connection, Action<HandshakeNegotiatorActiveStubConfiguration> configurer)
+        public HandshakeNegotiatorActiveStub(NetworkPool pool, NetworkConnection connection, Action<HandshakeNegotiatorActiveStubConfiguration> configurer)
         {
             context = new HandshakeNegotiatorActiveStubContext(configurer);
-            negotiator = new HandshakeNegotiatorActive(connection, context);
+            negotiator = new HandshakeNegotiatorActive(pool, connection, context);
         }
 
         public HandshakeNegotiatorActiveStubContext Context

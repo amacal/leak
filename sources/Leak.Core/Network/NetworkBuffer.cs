@@ -50,13 +50,12 @@ namespace Leak.Core.Network
             length = buffer.length;
             offset = buffer.offset;
 
-            configuration = new NetworkBufferConfiguration
+            configuration = configurer.Configure(with =>
             {
-                Size = buffer.configuration.Size,
-                Decryptor = buffer.configuration.Decryptor
-            };
+                with.Size = buffer.configuration.Size;
+                with.Decryptor = buffer.configuration.Decryptor;
+            });
 
-            configurer.Invoke(configuration);
             Decrypt(offset, length);
         }
 

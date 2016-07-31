@@ -20,8 +20,8 @@ namespace Leak.Core.Tests.Negotiator
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container["active"], with => with.Hash = hash);
-                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container["passive"], with => with.Hashes.Add(hash));
+                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container.Pool, container["active"], with => with.Hash = hash);
+                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container.Pool, container["passive"], with => with.Hashes.Add(hash));
 
                 passive.Execute();
                 active.Execute();
@@ -45,8 +45,8 @@ namespace Leak.Core.Tests.Negotiator
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container["active"], with => with.Hash = hash);
-                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container["passive"], with => with.Hashes.Add(hash));
+                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container.Pool, container["active"], with => with.Hash = hash);
+                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container.Pool, container["passive"], with => with.Hashes.Add(hash));
 
                 passive.Execute();
                 active.Execute();
@@ -70,8 +70,8 @@ namespace Leak.Core.Tests.Negotiator
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container["active"], with => with.Hash = hash);
-                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container["passive"], with => { });
+                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container.Pool, container["active"], with => with.Hash = hash);
+                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container.Pool, container["passive"], with => { });
 
                 passive.Execute();
                 active.Execute();
@@ -96,8 +96,8 @@ namespace Leak.Core.Tests.Negotiator
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container["active"], with => with.Hash = hash2);
-                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container["passive"], with => with.Hashes.Add(hash1));
+                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container.Pool, container["active"], with => with.Hash = hash2);
+                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container.Pool, container["passive"], with => with.Hashes.Add(hash1));
 
                 passive.Execute();
                 active.Execute();

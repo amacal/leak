@@ -8,13 +8,20 @@ namespace Leak.Core.Tests
 {
     public class NetworkContainer : IDisposable
     {
+        private readonly NetworkPool pool;
         private readonly SocketContainer sockets;
         private readonly Dictionary<string, NetworkConnection> connections;
 
         public NetworkContainer()
         {
+            pool = new NetworkPool();
             sockets = new SocketContainer();
             connections = new Dictionary<string, NetworkConnection>();
+        }
+
+        public NetworkPool Pool
+        {
+            get { return pool; }
         }
 
         public NetworkConnection this[string name]
@@ -37,10 +44,10 @@ namespace Leak.Core.Tests
             sockets.Connect(active, passive);
 
             if (connections.ContainsKey(active) == false)
-                connections.Add(active, new NetworkConnection(sockets[active], NetworkConnectionDirection.Outgoing));
+                connections.Add(active, pool.Create(sockets[active], NetworkDirection.Outgoing));
 
             if (connections.ContainsKey(passive) == false)
-                connections.Add(passive, new NetworkConnection(sockets[passive], NetworkConnectionDirection.Incoming));
+                connections.Add(passive, pool.Create(sockets[passive], NetworkDirection.Incoming));
         }
 
         public void ConnectTo(string active, string host, int port)
@@ -48,7 +55,7 @@ namespace Leak.Core.Tests
             sockets.ConnectTo(active, host, port);
 
             if (connections.ContainsKey(active) == false)
-                connections.Add(active, new NetworkConnection(sockets[active], NetworkConnectionDirection.Outgoing));
+                connections.Add(active, pool.Create(sockets[active], NetworkDirection.Outgoing));
         }
 
         public async Task<NetworkConnection> Listen(string passive, int port)
@@ -56,7 +63,7 @@ namespace Leak.Core.Tests
             Socket socket = await sockets.Listen(passive, port);
 
             if (connections.ContainsKey(passive) == false)
-                connections.Add(passive, new NetworkConnection(socket, NetworkConnectionDirection.Incoming));
+                connections.Add(passive, pool.Create(socket, NetworkDirection.Incoming));
 
             return connections[passive];
         }

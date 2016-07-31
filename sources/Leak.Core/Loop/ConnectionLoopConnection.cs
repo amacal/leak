@@ -21,7 +21,7 @@ namespace Leak.Core.Loop
             get { return connection.Remote; }
         }
 
-        public NetworkConnectionDirection Direction
+        public NetworkDirection Direction
         {
             get { return connection.Direction; }
         }

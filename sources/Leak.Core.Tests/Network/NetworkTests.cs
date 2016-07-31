@@ -20,8 +20,9 @@ namespace Leak.Core.Tests.Network
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
-                NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
+                NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
                 byte[] payload = { 1, 2, 3 };
                 NetworkOutgoingMessageBytes outgoing = new NetworkOutgoingMessageBytes(payload);
@@ -46,8 +47,9 @@ namespace Leak.Core.Tests.Network
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
-                NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
+                NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
                 NetworkOutgoingMessageBytes part1 = new NetworkOutgoingMessageBytes(1, 2);
                 NetworkOutgoingMessageBytes part2 = new NetworkOutgoingMessageBytes(3);
@@ -75,8 +77,9 @@ namespace Leak.Core.Tests.Network
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
-                NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
+                NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
                 active.Send(new NetworkOutgoingMessageBytes(1, 2, 3, 4, 5, 6));
 
@@ -108,7 +111,8 @@ namespace Leak.Core.Tests.Network
                 container.Connect("active", "passive");
 
                 Socket passive = container["passive"];
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -132,7 +136,8 @@ namespace Leak.Core.Tests.Network
                 container.Connect("active", "passive");
 
                 Socket passive = container["passive"];
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {
@@ -154,10 +159,11 @@ namespace Leak.Core.Tests.Network
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
-                NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
+                NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
-                active = new NetworkConnection(active, with => with.Encryptor = new IncrementalEncryptor());
+                active = pool.Change(active, with => with.Encryptor = new IncrementalEncryptor());
                 NetworkOutgoingMessageBytes outgoing = new NetworkOutgoingMessageBytes(1, 2, 3);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
@@ -180,10 +186,11 @@ namespace Leak.Core.Tests.Network
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
-                NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
+                NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
-                passive = new NetworkConnection(passive, with => with.Decryptor = new DecrementalDecryptor());
+                passive = pool.Change(passive, with => with.Decryptor = new DecrementalDecryptor());
                 NetworkOutgoingMessageBytes outgoing = new NetworkOutgoingMessageBytes(2, 3, 4);
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
@@ -206,8 +213,9 @@ namespace Leak.Core.Tests.Network
                 container.Passive("passive");
                 container.Connect("active", "passive");
 
-                NetworkConnection active = new NetworkConnection(container["active"], NetworkConnectionDirection.Outgoing);
-                NetworkConnection passive = new NetworkConnection(container["passive"], NetworkConnectionDirection.Incoming);
+                NetworkPool pool = new NetworkPool();
+                NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
+                NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
                 active.Send(new NetworkOutgoingMessageBytes(1, 2, 3, 5, 6, 7));
 
@@ -219,7 +227,7 @@ namespace Leak.Core.Tests.Network
                     handler.ToBytes().Should().Equal(1, 2, 3);
                 }
 
-                passive = new NetworkConnection(passive, with => with.Decryptor = new DecrementalDecryptor());
+                passive = pool.Change(passive, with => with.Decryptor = new DecrementalDecryptor());
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))
                 {

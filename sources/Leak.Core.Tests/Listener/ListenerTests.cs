@@ -27,7 +27,7 @@ namespace Leak.Core.Tests.Listener
                 container.Active("active");
                 container.ConnectTo("active", "localhost", 8080);
 
-                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container["active"], with =>
+                HandshakeNegotiatorActiveStub active = new HandshakeNegotiatorActiveStub(container.Pool, container["active"], with =>
                 {
                     with.Hash = hash;
                 });

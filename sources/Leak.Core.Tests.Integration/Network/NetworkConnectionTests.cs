@@ -20,10 +20,11 @@ namespace Leak.Core.Tests.Integration.Network
             {
                 socket.Connect("www.example.com", 80);
 
+                NetworkPool pool = new NetworkPool();
                 IncomingMessageHandler handler = new IncomingMessageHandler();
-                NetworkConnection connection = new NetworkConnection(socket, NetworkConnectionDirection.Outgoing);
+                NetworkConnection connection = pool.Create(socket, NetworkDirection.Outgoing);
 
-                connection.Direction.Should().Be(NetworkConnectionDirection.Outgoing);
+                connection.Direction.Should().Be(NetworkDirection.Outgoing);
                 connection.Remote.Should().Be("93.184.216.34");
 
                 connection.Send(new NetworkOutgoingMessageBytes(System.Text.Encoding.ASCII.GetBytes(Request)));

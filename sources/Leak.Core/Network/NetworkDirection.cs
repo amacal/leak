@@ -3,7 +3,7 @@
     /// <summary>
     /// Indicates who is the initiator of the connection.
     /// </summary>
-    public enum NetworkConnectionDirection
+    public enum NetworkDirection
     {
         /// <summary>
         /// The connection was initiated by remote endpoint.

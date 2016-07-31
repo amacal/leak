@@ -29,7 +29,7 @@ namespace Leak.Core.Tests.Connector
 
                 connector.ConnectTo("localhost", 8080);
 
-                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(await connection, with =>
+                HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container.Pool, await connection, with =>
                 {
                     with.Hashes.Add(hash);
                 });

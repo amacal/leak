@@ -10,10 +10,10 @@ namespace Leak.Core.Negotiator
         private readonly HandshakeCredentials credentials;
         private readonly HandshakeKeyContainer keys;
 
-        public HandshakeNegotiatorActive(NetworkConnection connection, HandshakeNegotiatorActiveContext context)
+        public HandshakeNegotiatorActive(NetworkPool pool, NetworkConnection connection, HandshakeNegotiatorActiveContext context)
         {
             this.context = context;
-            this.connection = new HandshakeConnection(connection, context);
+            this.connection = new HandshakeConnection(pool, connection, context);
 
             this.credentials = HandshakeCryptography.Generate();
             this.keys = new HandshakeKeyContainer();

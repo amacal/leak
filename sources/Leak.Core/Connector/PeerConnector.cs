@@ -13,13 +13,12 @@ namespace Leak.Core.Connector
 
         public PeerConnector(Action<PeerConnectorConfiguration> configurer)
         {
-            this.configuration = new PeerConnectorConfiguration
+            configuration = configurer.Configure(with =>
             {
-                Callback = new PeerConnectorCallbackToNothing(),
-                Peer = new PeerHash(Bytes.Random(20))
-            };
-
-            configurer.Invoke(configuration);
+                with.Callback = new PeerConnectorCallbackToNothing();
+                with.Peer = new PeerHash(Bytes.Random(20));
+                with.Pool = new NetworkPool();
+            });
         }
 
         public void ConnectTo(string host, int port)
@@ -37,11 +36,11 @@ namespace Leak.Core.Connector
                 Socket socket = (Socket)result.AsyncState;
                 socket.EndConnect(result);
 
-                NetworkConnection connection = new NetworkConnection(socket, NetworkConnectionDirection.Outgoing);
+                NetworkConnection connection = configuration.Pool.Create(socket, NetworkDirection.Outgoing);
                 configuration.Callback.OnConnected(connection);
 
                 PeerConnectorNegotiatorContext context = new PeerConnectorNegotiatorContext(configuration, connection);
-                HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(connection, context);
+                HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(configuration.Pool, connection, context);
 
                 negotiator.Execute();
             }

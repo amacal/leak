@@ -12,10 +12,10 @@ namespace Leak.Core.Negotiator
 
         private FileHash found;
 
-        public HandshakeNegotiatorPassive(NetworkConnection connection, HandshakeNegotiatorPassiveContext context)
+        public HandshakeNegotiatorPassive(NetworkPool pool, NetworkConnection connection, HandshakeNegotiatorPassiveContext context)
         {
             this.context = context;
-            this.connection = new HandshakeConnection(connection, context);
+            this.connection = new HandshakeConnection(pool, connection, context);
 
             this.credentials = HandshakeCryptography.Generate();
             this.keys = new HandshakeKeyContainer();
@@ -58,7 +58,7 @@ namespace Leak.Core.Negotiator
             if (found == null)
             {
                 context.OnRejected(new HandshakeRejection(match));
-                connection.Close();
+                connection.Terminate();
 
                 return;
             }

@@ -5,11 +5,13 @@ namespace Leak.Core.Negotiator
 {
     public class HandshakeConnection
     {
+        private readonly NetworkPool pool;
         private readonly NetworkConnection connection;
         private readonly HandshakeNegotiatorContext context;
 
-        public HandshakeConnection(NetworkConnection connection, HandshakeNegotiatorContext context)
+        public HandshakeConnection(NetworkPool pool, NetworkConnection connection, HandshakeNegotiatorContext context)
         {
+            this.pool = pool;
             this.connection = connection;
             this.context = context;
         }
@@ -44,14 +46,14 @@ namespace Leak.Core.Negotiator
             connection.Send(new HandshakeConnectionEncryptedMessage(message, key));
         }
 
-        public void Close()
+        public void Terminate()
         {
             connection.Terminate();
         }
 
         public NetworkConnection StartEncryption(HandshakeKeyContainer pair)
         {
-            return new NetworkConnection(connection, with =>
+            return pool.Change(connection, with =>
             {
                 with.Encryptor = new HandshakeConnectionToEncryptor(pair.Local);
                 with.Decryptor = new HandshakeConnectionToDecryptor(pair.Remote);

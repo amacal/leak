@@ -200,6 +200,7 @@
     <Compile Include="Negotiator\HandshakeRivestCipher.cs" />
     <Compile Include="Network\NetworkBufferDecryptor.cs" />
     <Compile Include="Network\NetworkBufferDecryptorToNothing.cs" />
+    <Compile Include="Network\NetworkConnection.cs" />
     <Compile Include="Network\NetworkConnectionDecryptor.cs" />
     <Compile Include="Network\NetworkConnectionDecryptorToBuffer.cs" />
     <Compile Include="Network\NetworkConnectionDecryptorToNothing.cs" />
@@ -211,12 +212,13 @@
     <Compile Include="Negotiator\HandshakeConnection.cs" />
     <Compile Include="Negotiator\HandshakeConnectionToCall.cs" />
     <Compile Include="Network\NetworkOutgoingMessage.cs" />
-    <Compile Include="Network\NetworkConnectionDirection.cs" />
+    <Compile Include="Network\NetworkDirection.cs" />
     <Compile Include="Network\NetworkBuffer.cs" />
     <Compile Include="Network\NetworkBufferConfiguration.cs" />
-    <Compile Include="Network\NetworkConnection.cs" />
+    <Compile Include="Network\NetworkConnectionSocket.cs" />
     <Compile Include="Network\NetworkConnectionConfiguration.cs" />
     <Compile Include="Network\NetworkOutgoingMessageBytes.cs" />
+    <Compile Include="Network\NetworkPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ResourceRepository.cs" />
     <Compile Include="Repository\ResourceRepositoryToHash.cs" />

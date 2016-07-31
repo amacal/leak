@@ -29,9 +29,9 @@ namespace Leak.Core.Loop
             }
         }
 
-        private static PeerDirection GetDirection(NetworkConnectionDirection direction)
+        private static PeerDirection GetDirection(NetworkDirection direction)
         {
-            return direction == NetworkConnectionDirection.Incoming ? PeerDirection.Incoming : PeerDirection.Outgoing;
+            return direction == NetworkDirection.Incoming ? PeerDirection.Incoming : PeerDirection.Outgoing;
         }
 
         public bool SupportsExtensions()

@@ -14,15 +14,14 @@ namespace Leak.Core.Listener
 
         public PeerListener(Action<PeerListenerConfiguration> configurer)
         {
-            this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            this.configuration = new PeerListenerConfiguration
+            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            configuration = configurer.Configure(with =>
             {
-                Port = 8080,
-                Callback = new PeerListenerCallbackToNothing(),
-                Peer = new PeerHash(Bytes.Random(20))
-            };
-
-            configurer.Invoke(configuration);
+                with.Port = 8080;
+                with.Callback = new PeerListenerCallbackToNothing();
+                with.Peer = new PeerHash(Bytes.Random(20));
+                with.Pool = new NetworkPool();
+            });
         }
 
         public void Start()
@@ -43,7 +42,7 @@ namespace Leak.Core.Listener
             try
             {
                 Socket accepted = socket.EndAccept(result);
-                NetworkConnection connection = new NetworkConnection(accepted, NetworkConnectionDirection.Incoming);
+                NetworkConnection connection = configuration.Pool.Create(accepted, NetworkDirection.Incoming);
                 PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
 
                 OnConnected(connection);
@@ -63,9 +62,9 @@ namespace Leak.Core.Listener
             configuration.Callback.OnConnected(connection);
         }
 
-        private static void Negotiate(PeerListenerNegotiatorContext context, NetworkConnection connection)
+        private void Negotiate(PeerListenerNegotiatorContext context, NetworkConnection connection)
         {
-            new HandshakeNegotiatorPassive(connection, context).Execute();
+            new HandshakeNegotiatorPassive(configuration.Pool, connection, context).Execute();
         }
     }
 }
