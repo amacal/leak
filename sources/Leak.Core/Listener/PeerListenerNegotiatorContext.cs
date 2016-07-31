@@ -23,7 +23,17 @@ namespace Leak.Core.Listener
 
         public HandshakeOptions Options
         {
-            get { return HandshakeOptions.None; }
+            get
+            {
+                HandshakeOptions options = HandshakeOptions.None;
+
+                if (configuration.Extensions)
+                {
+                    options = options | HandshakeOptions.Extended;
+                }
+
+                return options;
+            }
         }
 
         public FileHashCollection Hashes

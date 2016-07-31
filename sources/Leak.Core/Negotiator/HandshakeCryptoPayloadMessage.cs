@@ -4,6 +4,13 @@ namespace Leak.Core.Negotiator
 {
     public class HandshakeCryptoPayloadMessage : NetworkOutgoingMessage
     {
+        private readonly int method;
+
+        public HandshakeCryptoPayloadMessage(int method)
+        {
+            this.method = method;
+        }
+
         public int Length
         {
             get { return 14; }
@@ -11,7 +18,7 @@ namespace Leak.Core.Negotiator
 
         public byte[] ToBytes()
         {
-            return Bytes.Concatenate(HandshakeCryptoPayload.GetVerification(), Bytes.Parse("00000002"), Bytes.Parse("0000"));
+            return Bytes.Concatenate(HandshakeCryptoPayload.GetVerification(), Bytes.ToInt32(method), Bytes.Parse("0000"));
         }
     }
 }

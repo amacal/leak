@@ -44,6 +44,18 @@ namespace Leak.Core.Retriever
             peers.Unchoke(peer);
         }
 
+        public bool IsExtended(PeerHash peer)
+        {
+            peers.AddPeer(peer);
+            return peers.IsExtended(peer);
+        }
+
+        public void Extend(PeerHash peer)
+        {
+            peers.AddPeer(peer);
+            peers.Extend(peer);
+        }
+
         public IEnumerable<ResourcePeer> GetPeers(ResourcePeerOperation operation)
         {
             Func<ResourcePeer, bool> predicate = x => true;

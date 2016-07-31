@@ -83,33 +83,31 @@ namespace Leak.Core.Negotiator
         {
             HandshakeKey decryptor = keys.Remote.Clone();
             NetworkIncomingMessage decrypted = decryptor.Decrypt(message);
+
             int size = HandshakeCryptoPayload.GetSize(decrypted);
+            int method = HandshakeCryptoPayload.GetMethod(decrypted);
 
             message.Acknowledge(size);
             keys.Remote.Acknowledge(size);
 
-            connection.Receive(MeasureCryptoMessage, HandshakeCryptoMessage.MinimumSize);
+            connection.Receive(MeasureCryptoMessage, HandshakeCryptoMessage.MinimumSize, method);
         }
 
-        private void MeasureCryptoMessage(NetworkIncomingMessage message)
+        private void MeasureCryptoMessage(NetworkIncomingMessage message, int method)
         {
             HandshakeKey decryptor = keys.Remote.Clone();
             NetworkIncomingMessage decrypted = decryptor.Decrypt(message);
 
             int size = HandshakeCryptoMessage.GetSize(decrypted);
-            connection.Receive(HandleCryptoMessage, size);
+            connection.Receive(HandleCryptoMessage, size, method);
         }
 
-        private void HandleCryptoMessage(NetworkIncomingMessage message)
+        private void HandleCryptoMessage(NetworkIncomingMessage message, int method)
         {
-            HandshakeKey decryptor = keys.Remote.Clone();
-            NetworkIncomingMessage decrypted = decryptor.Decrypt(message);
-            int size = HandshakeCryptoMessage.GetSize(decrypted);
+            message.Acknowledge(2);
+            keys.Remote.Acknowledge(2);
 
-            message.Acknowledge(size);
-            keys.Remote.Acknowledge(size);
-
-            connection.Send(new HandshakeCryptoPayloadMessage(), keys.Local);
+            connection.Send(new HandshakeCryptoPayloadMessage(2), keys.Local);
             connection.Receive(MeasureHandshakeMessage, HandshakeMessage.MinSize);
         }
 

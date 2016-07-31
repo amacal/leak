@@ -36,6 +36,16 @@ namespace Leak.Core.Retriever
             items[peer].Unchoke();
         }
 
+        public bool IsExtended(PeerHash peer)
+        {
+            return items[peer].IsExtended();
+        }
+
+        public void Extend(PeerHash peer)
+        {
+            items[peer].Extend();
+        }
+
         public void Increase(PeerHash peer)
         {
             items[peer].Increase(2);

@@ -13,6 +13,11 @@ namespace Leak.Core.Collector
             this.storage = storage;
         }
 
+        public bool SupportExtensions(PeerHash peer)
+        {
+            return storage.SupportsExtensions(peer);
+        }
+
         public void SendKeepAlive(PeerHash peer)
         {
             storage.GetChannel(peer)?.Send(new KeepAliveMessage());

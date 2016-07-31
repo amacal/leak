@@ -11,6 +11,11 @@ namespace Leak.Core.Negotiator
             return Bytes.Parse("0000000000000000");
         }
 
+        public static int GetMethod(NetworkIncomingMessage message)
+        {
+            return message[11];
+        }
+
         public static int GetSize(NetworkIncomingMessage message)
         {
             return 14 + GetPaddingSize(message);

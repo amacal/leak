@@ -21,5 +21,10 @@ namespace Leak.Core.Loop
         {
             get { return handshake.Hash; }
         }
+
+        public bool HasExtensions
+        {
+            get { return handshake.HasExtensions; }
+        }
     }
 }

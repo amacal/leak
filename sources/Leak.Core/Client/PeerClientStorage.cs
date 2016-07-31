@@ -116,7 +116,7 @@ namespace Leak.Core.Client
 
             entry.Repository = entry.Repository.WithMetainfo(out metainfo);
             Bitfield bitfield = entry.Repository.Initialize();
-            callback.OnInitialized(hash, new PeerClientMetainfoSummary(bitfield));
+            callback.OnInitialized(hash, new PeerClientMetainfo(bitfield));
 
             entry.Retriever = entry.Retriever.WithRepository(entry.Repository);
             entry.Retriever = entry.Retriever.WithBitfield(bitfield);
@@ -166,6 +166,11 @@ namespace Leak.Core.Client
         public Extender GetExtender(PeerHash peer)
         {
             return collection.ByPeer(peer).Extender;
+        }
+
+        public FileHash GetHash()
+        {
+            return collection.Hash();
         }
 
         public FileHash GetHash(PeerHash peer)

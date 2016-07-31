@@ -5,9 +5,17 @@ namespace Leak.Core.Collector
 {
     public interface PeerCollectorCallback
     {
-        void OnConnected(PeerEndpoint endpoint);
+        void OnConnected(string remote);
+
+        void OnRejected(string remote);
 
         void OnDisconnected(PeerHash peer);
+
+        void OnHandshake(PeerEndpoint endpoint);
+
+        void OnIncoming(PeerHash peer, PeerCollectorMessage message);
+
+        void OnOutgoing(PeerHash peer, PeerCollectorMessage message);
 
         void OnKeepAlive(PeerHash peer, KeepAliveMessage message);
 

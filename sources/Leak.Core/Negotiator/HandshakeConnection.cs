@@ -24,6 +24,11 @@ namespace Leak.Core.Negotiator
             connection.Receive(new HandshakeConnectionToBytes(context, callback, bytes));
         }
 
+        public void Receive<T>(Action<NetworkIncomingMessage, T> callback, int bytes, T parameter)
+        {
+            connection.Receive(new HandshakeConnectionToBytes(context, x => callback.Invoke(x, parameter), bytes));
+        }
+
         public void Receive(Action<NetworkIncomingMessage> callback, Func<NetworkIncomingMessage, bool> peek)
         {
             connection.Receive(new HandshakeConnectionToPeek(context, callback, peek));
@@ -41,7 +46,7 @@ namespace Leak.Core.Negotiator
 
         public void Close()
         {
-            connection.Close();
+            connection.Terminate();
         }
 
         public NetworkConnection StartEncryption(HandshakeKeyContainer pair)

@@ -105,7 +105,12 @@ namespace Leak.Core.Extensions
         {
             lock (synchronized)
             {
-                return mapping[peer].Supports(name);
+                ExtenderExtensionCollection extensions;
+
+                if (mapping.TryGetValue(peer, out extensions) == false)
+                    return false;
+
+                return extensions.Supports(name);
             }
         }
 

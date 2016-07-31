@@ -1,4 +1,5 @@
-﻿using Leak.Core.Connector;
+﻿using Leak.Core.Bouncer;
+using Leak.Core.Connector;
 using Leak.Core.Listener;
 using Leak.Core.Loop;
 using System;
@@ -8,22 +9,28 @@ namespace Leak.Core.Collector
     public class PeerCollector
     {
         private readonly ConnectionLoop loop;
+        private readonly PeerBouncer bouncer;
         private readonly PeerCollectorStorage storage;
         private readonly PeerCollectorConfiguration configuration;
 
         public PeerCollector(Action<PeerCollectorConfiguration> configurer)
         {
-            this.configuration = new PeerCollectorConfiguration
+            configuration = new PeerCollectorConfiguration
             {
-                Callback = new PeerCollectorCallbackToNothing()
+                Callback = new PeerCollectorCallbackNothing()
             };
 
             configurer.Invoke(configuration);
+            storage = new PeerCollectorStorage(configuration);
 
-            this.storage = new PeerCollectorStorage(configuration);
-            this.loop = new ConnectionLoop(with =>
+            loop = new ConnectionLoop(with =>
             {
-                with.Callback = new PeerCollectorToLoop(storage, configuration);
+                with.Callback = new PeerCollectorLoop(storage, configuration);
+            });
+
+            bouncer = new PeerBouncer(with =>
+            {
+                with.Callback = new PeerCollectorBouncer();
             });
         }
 
@@ -34,12 +41,12 @@ namespace Leak.Core.Collector
 
         public PeerListenerCallback CreateListenerCallback()
         {
-            return new PeerCollectorToListener(loop, storage);
+            return new PeerCollectorListener(configuration.Callback, bouncer, loop, storage);
         }
 
         public PeerConnectorCallback CreateConnectorCallback()
         {
-            return new PeerCollectorToConnector(loop, storage);
+            return new PeerCollectorConnector(configuration.Callback, loop, storage);
         }
     }
 }

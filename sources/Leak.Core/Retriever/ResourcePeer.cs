@@ -7,7 +7,9 @@ namespace Leak.Core.Retriever
     {
         private readonly PeerHash hash;
         private ResourcePeerStatus status;
+
         private int rank;
+        private bool? extended;
 
         public ResourcePeer(PeerHash hash)
         {
@@ -53,6 +55,16 @@ namespace Leak.Core.Retriever
         public void Choke()
         {
             status = status ^ ResourcePeerStatus.Unchoke;
+        }
+
+        public bool IsExtended()
+        {
+            return extended.HasValue;
+        }
+
+        public void Extend()
+        {
+            extended = true;
         }
     }
 }

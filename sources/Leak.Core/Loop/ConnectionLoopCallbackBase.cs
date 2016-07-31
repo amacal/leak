@@ -4,7 +4,7 @@ namespace Leak.Core.Loop
 {
     public abstract class ConnectionLoopCallbackBase : ConnectionLoopCallback
     {
-        public virtual void OnConnected(ConnectionLoopChannel channel)
+        public virtual void OnAttached(ConnectionLoopChannel channel)
         {
         }
 

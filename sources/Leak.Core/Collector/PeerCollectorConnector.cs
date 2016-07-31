@@ -5,20 +5,22 @@ using System;
 
 namespace Leak.Core.Collector
 {
-    public class PeerCollectorToConnector : PeerConnectorCallback
+    public class PeerCollectorConnector : PeerConnectorCallback
     {
+        private readonly PeerCollectorCallback callback;
         private readonly ConnectionLoop loop;
         private readonly PeerCollectorStorage storage;
 
-        public PeerCollectorToConnector(ConnectionLoop loop, PeerCollectorStorage storage)
+        public PeerCollectorConnector(PeerCollectorCallback callback, ConnectionLoop loop, PeerCollectorStorage storage)
         {
+            this.callback = callback;
             this.loop = loop;
             this.storage = storage;
         }
 
         public void OnConnected(NetworkConnection connection)
         {
-            storage.Add(connection);
+            callback.OnConnected(connection.Remote);
         }
 
         public void OnRejected(NetworkConnection connection)

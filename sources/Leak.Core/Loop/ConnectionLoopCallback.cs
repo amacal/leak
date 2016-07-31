@@ -4,7 +4,7 @@ namespace Leak.Core.Loop
 {
     public interface ConnectionLoopCallback
     {
-        void OnConnected(ConnectionLoopChannel channel);
+        void OnAttached(ConnectionLoopChannel channel);
 
         void OnKeepAlive(ConnectionLoopChannel channel);
 

@@ -2,11 +2,11 @@
 
 namespace Leak.Core.Client
 {
-    public class PeerClientMetainfoSummary
+    public class PeerClientMetainfo
     {
         private readonly Bitfield bitfield;
 
-        public PeerClientMetainfoSummary(Bitfield bitfield)
+        public PeerClientMetainfo(Bitfield bitfield)
         {
             this.bitfield = bitfield;
         }

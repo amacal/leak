@@ -24,10 +24,6 @@ namespace Leak.Core.Collector
             this.byEndpoint = new Dictionary<string, PeerCollectorStorageEntry>();
         }
 
-        public void Add(NetworkConnection connection)
-        {
-        }
-
         public bool Add(NetworkConnection connection, PeerListenerHandshake handshake)
         {
             lock (synchronized)
@@ -78,10 +74,10 @@ namespace Leak.Core.Collector
         {
             lock (synchronized)
             {
-                byHash[channel.Endpoint.Peer].Channel = channel;
+                byHash[channel.Endpoint.Peer].Channel = new PeerCollectorChannel(configuration.Callback, channel);
             }
 
-            configuration.Callback.OnConnected(channel.Endpoint);
+            configuration.Callback.OnHandshake(channel.Endpoint);
         }
 
         public void Remove(PeerHash peer)
@@ -123,7 +119,7 @@ namespace Leak.Core.Collector
             }
         }
 
-        public ConnectionLoopChannel GetChannel(PeerHash peer)
+        public PeerCollectorChannel GetChannel(PeerHash peer)
         {
             PeerCollectorStorageEntry entry;
 
@@ -133,6 +129,18 @@ namespace Leak.Core.Collector
             }
 
             return entry?.Channel;
+        }
+
+        public bool SupportsExtensions(PeerHash peer)
+        {
+            PeerCollectorStorageEntry entry;
+
+            lock (synchronized)
+            {
+                byHash.TryGetValue(peer, out entry);
+            }
+
+            return entry?.HasExtensions == true;
         }
     }
 }

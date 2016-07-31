@@ -17,6 +17,17 @@ namespace Leak.Core.Retriever
         public void Handle(ResourceQueueContext context)
         {
             context.Storage.AddBitfield(peer, bitfield);
+
+            if (context.Collector.SupportExtensions(peer))
+            {
+                if (context.Storage.IsExtended(peer) == false)
+                {
+                    context.Storage.Extend(peer);
+                    context.Collector.SendExtended(peer, context.Extender.GetHandshake());
+                }
+            }
+
+            context.Collector.SendBitfield(peer, new Bitfield(bitfield.Length));
             context.Collector.SendInterested(peer);
         }
     }

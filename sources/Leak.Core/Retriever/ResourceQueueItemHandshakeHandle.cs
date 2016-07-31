@@ -13,7 +13,14 @@ namespace Leak.Core.Retriever
 
         public void Handle(ResourceQueueContext context)
         {
-            context.Collector.SendExtended(peer, context.Extender.GetHandshake());
+            if (context.Collector.SupportExtensions(peer))
+            {
+                if (context.Storage.IsExtended(peer) == false)
+                {
+                    context.Storage.Extend(peer);
+                    context.Collector.SendExtended(peer, context.Extender.GetHandshake());
+                }
+            }
         }
     }
 }

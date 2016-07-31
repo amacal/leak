@@ -18,7 +18,7 @@ namespace Leak.Core.Loop
 
         public void Execute()
         {
-            configuration.Callback.OnConnected(new ConnectionLoopChannel(configuration, connection, handshake));
+            configuration.Callback.OnAttached(new ConnectionLoopChannel(configuration, connection, handshake));
             connection.Receive(OnMessageHeader, 4);
         }
 

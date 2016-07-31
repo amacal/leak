@@ -36,7 +36,7 @@ namespace Leak.Core.Negotiator
             message.Acknowledge(96);
 
             connection.Send(new HandshakeCryptoHashMessage(keys.Secret, context.Hash.ToBytes()));
-            connection.Send(new HandshakeCryptoPayloadMessage(), keys.Local);
+            connection.Send(new HandshakeCryptoPayloadMessage(2), keys.Local);
             connection.Send(new HandshakeCryptoMessage(), keys.Local);
 
             connection.Receive(SynchronizeCryptoMessage, VerifyCryptoMessage);

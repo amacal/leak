@@ -105,7 +105,10 @@ namespace Leak.Core.Network
             socket.Send(encrypted);
         }
 
-        public void Close()
+        /// <summary>
+        /// Terminates the connection with the remote endpoint.
+        /// </summary>
+        public void Terminate()
         {
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();

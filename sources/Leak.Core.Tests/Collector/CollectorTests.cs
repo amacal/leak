@@ -66,7 +66,7 @@ namespace Leak.Core.Tests.Collector
                 get { return connected; }
             }
 
-            public override void OnConnected(PeerEndpoint endpoint)
+            public override void OnHandshake(PeerEndpoint endpoint)
             {
                 connected.Add(endpoint.Peer);
                 onReady.Set();

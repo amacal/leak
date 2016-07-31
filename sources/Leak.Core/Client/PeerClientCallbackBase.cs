@@ -6,7 +6,7 @@ namespace Leak.Core.Client
 {
     public abstract class PeerClientCallbackBase : PeerClientCallback
     {
-        public virtual void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary)
+        public virtual void OnInitialized(FileHash hash, PeerClientMetainfo summary)
         {
         }
 
@@ -22,11 +22,27 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnPeerConnected(FileHash hash, PeerEndpoint endpoint)
+        public virtual void OnPeerConnected(FileHash hash, string endpoint)
+        {
+        }
+
+        public virtual void OnPeerRejected(FileHash hash, string endpoint)
         {
         }
 
         public virtual void OnPeerDisconnected(FileHash hash, PeerHash peer)
+        {
+        }
+
+        public virtual void OnPeerHandshake(FileHash hash, PeerEndpoint endpoint)
+        {
+        }
+
+        public virtual void OnPeerIncomingMessage(FileHash hash, PeerHash peer, PeerClientMessage message)
+        {
+        }
+
+        public virtual void OnPeerOutgoingMessage(FileHash hash, PeerHash peer, PeerClientMessage message)
         {
         }
 

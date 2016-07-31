@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Client
 {
@@ -67,6 +68,14 @@ namespace Leak.Core.Client
             lock (synchronized)
             {
                 return byPeer[peer];
+            }
+        }
+
+        public FileHash Hash()
+        {
+            lock (synchronized)
+            {
+                return byHash.Keys.Single();
             }
         }
     }

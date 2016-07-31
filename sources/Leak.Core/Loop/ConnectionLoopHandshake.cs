@@ -7,5 +7,7 @@ namespace Leak.Core.Loop
         PeerHash Peer { get; }
 
         FileHash Hash { get; }
+
+        bool HasExtensions { get; }
     }
 }

@@ -5,17 +5,15 @@ using Leak.Core.Tracker;
 
 namespace Leak.Core.Client
 {
-    public class PeerClientToTelegraph : TrackerTelegraphCallbackBase
+    public class PeerClientTelegraphConnect : TrackerTelegraphCallbackBase
     {
-        private readonly PeerClientConfiguration configuration;
         private readonly PeerClientCallback callback;
         private readonly FileHash hash;
         private readonly PeerConnector connector;
         private readonly PeerClientStorage storage;
 
-        public PeerClientToTelegraph(PeerClientConfiguration configuration, FileHash hash, PeerConnector connector, PeerClientStorage storage)
+        public PeerClientTelegraphConnect(PeerClientConfiguration configuration, FileHash hash, PeerConnector connector, PeerClientStorage storage)
         {
-            this.configuration = configuration;
             this.callback = configuration.Callback;
 
             this.hash = hash;

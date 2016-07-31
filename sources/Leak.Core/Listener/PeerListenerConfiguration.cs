@@ -11,5 +11,7 @@ namespace Leak.Core.Listener
         public FileHashCollection Hashes { get; set; }
 
         public PeerListenerCallback Callback { get; set; }
+
+        public bool Extensions { get; set; }
     }
 }

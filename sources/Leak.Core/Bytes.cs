@@ -86,6 +86,13 @@ namespace Leak.Core
             return value;
         }
 
+        public static byte[] ToInt32(int value)
+        {
+            byte[] data = new byte[4];
+            Write(value, data, 0);
+            return data;
+        }
+
         public static void Write(int value, byte[] data, int offset)
         {
             data[offset + 0] = (byte)((value >> 24) & 255);

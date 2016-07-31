@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Loop;
 using Leak.Core.Network;
 
 namespace Leak.Core.Collector
@@ -12,7 +11,7 @@ namespace Leak.Core.Collector
 
         public NetworkConnection Connection { get; set; }
 
-        public ConnectionLoopChannel Channel { get; set; }
+        public PeerCollectorChannel Channel { get; set; }
 
         public bool HasExtensions { get; set; }
     }

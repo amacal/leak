@@ -16,12 +16,14 @@ namespace Leak.Core.Client
             this.storage = storage;
         }
 
-        public override void OnConnected(PeerEndpoint endpoint)
+        public override void OnConnected(string remote)
         {
-            if (storage.AddEndpoint(endpoint))
-            {
-                callback.OnPeerConnected(endpoint.Hash, endpoint);
-            }
+            callback.OnPeerConnected(storage.GetHash(), remote);
+        }
+
+        public override void OnRejected(string remote)
+        {
+            callback.OnPeerRejected(storage.GetHash(), remote);
         }
 
         public override void OnDisconnected(PeerHash peer)
@@ -30,6 +32,30 @@ namespace Leak.Core.Client
 
             storage.RemovePeer(peer);
             callback.OnPeerDisconnected(hash, peer);
+        }
+
+        public override void OnHandshake(PeerEndpoint endpoint)
+        {
+            if (storage.AddEndpoint(endpoint))
+            {
+                callback.OnPeerHandshake(endpoint.Hash, endpoint);
+            }
+        }
+
+        public override void OnIncoming(PeerHash peer, PeerCollectorMessage message)
+        {
+            FileHash hash = storage.GetHash(peer);
+            PeerClientMessage payload = new PeerClientMessage(message);
+
+            callback.OnPeerIncomingMessage(hash, peer, payload);
+        }
+
+        public override void OnOutgoing(PeerHash peer, PeerCollectorMessage message)
+        {
+            FileHash hash = storage.GetHash(peer);
+            PeerClientMessage payload = new PeerClientMessage(message);
+
+            callback.OnPeerOutgoingMessage(hash, peer, payload);
         }
 
         public override void OnBitfield(PeerHash peer, BitfieldMessage message)

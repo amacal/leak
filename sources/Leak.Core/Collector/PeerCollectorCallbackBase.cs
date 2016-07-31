@@ -5,11 +5,27 @@ namespace Leak.Core.Collector
 {
     public abstract class PeerCollectorCallbackBase : PeerCollectorCallback
     {
-        public virtual void OnConnected(PeerEndpoint endpoint)
+        public virtual void OnConnected(string remote)
+        {
+        }
+
+        public virtual void OnRejected(string remote)
         {
         }
 
         public virtual void OnDisconnected(PeerHash peer)
+        {
+        }
+
+        public virtual void OnHandshake(PeerEndpoint endpoint)
+        {
+        }
+
+        public virtual void OnIncoming(PeerHash peer, PeerCollectorMessage message)
+        {
+        }
+
+        public virtual void OnOutgoing(PeerHash peer, PeerCollectorMessage message)
         {
         }
 

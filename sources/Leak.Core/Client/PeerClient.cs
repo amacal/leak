@@ -28,6 +28,8 @@ namespace Leak.Core.Client
                 with.Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
                 with.Callback = new PeerClientCallbackNothing();
                 with.Extensions = new PeerClientExtensionBuilder();
+                with.Connector = new PeerClientConnectorBuilder();
+                with.Listener = new PeerClientListenerBuilder();
             });
 
             storage = new PeerClientStorage(configuration);
@@ -39,12 +41,11 @@ namespace Leak.Core.Client
                 with.Callback = new PeerClientToCollector(configuration, storage);
             });
 
-            if (configuration.Port != null)
+            if (configuration.Listener.Status == PeerClientListenerStatus.On)
             {
-                listener = new PeerListener(with =>
+                listener = configuration.Listener.Build(with =>
                 {
                     with.Callback = collector.CreateListenerCallback();
-                    with.Port = configuration.Port.Value;
                     with.Peer = configuration.Peer;
                     with.Hashes = hashes;
                 });
@@ -93,7 +94,7 @@ namespace Leak.Core.Client
             Bitfield bitfield = repository.Initialize();
 
             storage.WithBitfield(hash, bitfield);
-            callback.OnInitialized(metainfo.Hash, new PeerClientMetainfoSummary(bitfield));
+            callback.OnInitialized(metainfo.Hash, new PeerClientMetainfo(bitfield));
 
             if (bitfield.Completed == bitfield.Length)
             {
@@ -108,16 +109,24 @@ namespace Leak.Core.Client
 
         private void Schedule(Metainfo metainfo, string[] trackers)
         {
-            PeerConnector connector = new PeerConnector(with =>
+            PeerConnector connector = null;
+
+            if (configuration.Connector.Status == PeerClientListenerStatus.On)
             {
-                with.Peer = configuration.Peer;
-                with.Hash = metainfo.Hash;
-                with.Callback = collector.CreateConnectorCallback();
-            });
+                connector = configuration.Connector.Build(with =>
+                {
+                    with.Peer = configuration.Peer;
+                    with.Hash = metainfo.Hash;
+                    with.Callback = collector.CreateConnectorCallback();
+                });
+            }
 
             TrackerTelegraph telegraph = new TrackerTelegraph(with =>
             {
-                with.Callback = new PeerClientToTelegraph(configuration, metainfo.Hash, connector, storage);
+                if (connector != null)
+                {
+                    with.Callback = new PeerClientTelegraphConnect(configuration, metainfo.Hash, connector, storage);
+                }
             });
 
             foreach (string tracker in trackers)
@@ -134,17 +143,25 @@ namespace Leak.Core.Client
 
         private void Schedule(PeerClientStartConfiguration start)
         {
-            PeerConnector connector = new PeerConnector(with =>
+            PeerConnector connector = null;
+
+            if (configuration.Connector.Status == PeerClientListenerStatus.On)
             {
-                with.Hash = start.Hash;
-                with.Peer = configuration.Peer;
-                with.Callback = collector.CreateConnectorCallback();
-                with.Extensions = true;
-            });
+                connector = configuration.Connector.Build(with =>
+                {
+                    with.Hash = start.Hash;
+                    with.Peer = configuration.Peer;
+                    with.Callback = collector.CreateConnectorCallback();
+                    with.Extensions = true;
+                });
+            }
 
             TrackerTelegraph telegraph = new TrackerTelegraph(with =>
             {
-                with.Callback = new PeerClientToTelegraph(configuration, start.Hash, connector, storage);
+                if (connector != null)
+                {
+                    with.Callback = new PeerClientTelegraphConnect(configuration, start.Hash, connector, storage);
+                }
             });
 
             foreach (string tracker in start.Trackers)

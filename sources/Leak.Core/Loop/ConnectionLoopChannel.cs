@@ -34,6 +34,11 @@ namespace Leak.Core.Loop
             return direction == NetworkConnectionDirection.Incoming ? PeerDirection.Incoming : PeerDirection.Outgoing;
         }
 
+        public bool SupportsExtensions()
+        {
+            return handshake.HasExtensions;
+        }
+
         public void Send(KeepAliveMessage message)
         {
             Forward(message);

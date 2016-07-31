@@ -29,6 +29,9 @@ namespace Leak.Commands
             ManualResetEvent handle = new ManualResetEvent(false);
             Logging logging = GetLoggingValue(arguments.GetString("logging"));
 
+            bool listen = arguments.GetString("listener") == "on";
+            bool connect = arguments.GetString("connector") != "off";
+
             string portText = arguments.GetString("port");
             int? portValue = String.IsNullOrEmpty(portText) ? default(int?) : Int32.Parse(portText);
 
@@ -37,7 +40,22 @@ namespace Leak.Commands
                 with.Destination = destination;
                 with.Callback = new Callback(handle, logging);
                 with.Extensions.Metadata();
-                with.Port = portValue;
+
+                if (listen)
+                {
+                    with.Listener.Enable(listener =>
+                    {
+                        if (portValue != null)
+                        {
+                            listener.Port = portValue.Value;
+                        }
+                    });
+                }
+
+                if (connect)
+                {
+                    with.Connector.Enable();
+                }
             });
 
             if (torrent != null)
@@ -92,7 +110,7 @@ namespace Leak.Commands
                 this.logging = logging;
             }
 
-            public override void OnInitialized(FileHash hash, PeerClientMetainfoSummary summary)
+            public override void OnInitialized(FileHash hash, PeerClientMetainfo summary)
             {
                 Console.WriteLine($"{hash}: initialized; completed={summary.Completed}; total={summary.Total}");
             }
@@ -108,17 +126,37 @@ namespace Leak.Commands
                 Console.WriteLine($"{hash}: connecting; endpoint={endpoint}");
             }
 
-            public override void OnPeerConnected(FileHash hash, PeerEndpoint endpoint)
+            public override void OnPeerConnected(FileHash hash, string endpoint)
             {
-                string remote = endpoint.Remote;
-                string direction = endpoint.Direction.ToString().ToLowerInvariant();
+                Console.WriteLine($"{hash}: connected; endpoint={endpoint}");
+            }
 
-                Console.WriteLine($"{endpoint.Peer}: connected; remote={remote}; direction={direction}");
+            public override void OnPeerRejected(FileHash hash, string endpoint)
+            {
+                Console.WriteLine($"{hash}: rejected; endpoint={endpoint}");
             }
 
             public override void OnPeerDisconnected(FileHash hash, PeerHash peer)
             {
                 Console.WriteLine($"{peer}: disconnected");
+            }
+
+            public override void OnPeerHandshake(FileHash hash, PeerEndpoint endpoint)
+            {
+                string remote = endpoint.Remote;
+                string direction = endpoint.Direction.ToString().ToLowerInvariant();
+
+                Console.WriteLine($"{endpoint.Peer}: handshake; remote={remote}; direction={direction}");
+            }
+
+            public override void OnPeerIncomingMessage(FileHash hash, PeerHash peer, PeerClientMessage message)
+            {
+                Console.WriteLine($"{peer}: incoming-message; type={message.Type}; size={message.Size}");
+            }
+
+            public override void OnPeerOutgoingMessage(FileHash hash, PeerHash peer, PeerClientMessage message)
+            {
+                Console.WriteLine($"{peer}: outgoing-message; type={message.Type}; size={message.Size}");
             }
 
             public override void OnPeerBitfield(FileHash hash, PeerHash peer, Bitfield bitfield)
