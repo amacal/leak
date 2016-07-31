@@ -32,7 +32,7 @@ namespace Leak.Core.Bouncer
 
         public bool AcceptPeer(NetworkConnection connection, PeerHash peer)
         {
-            if (storage.AddPeer(connection.Remote, peer))
+            if (storage.AddPeer(connection.Remote, peer) == false)
             {
                 connection.Terminate();
                 return false;

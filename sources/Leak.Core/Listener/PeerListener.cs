@@ -49,6 +49,9 @@ namespace Leak.Core.Listener
                 OnConnected(connection);
                 Negotiate(context, connection);
             }
+            catch (SocketException)
+            {
+            }
             finally
             {
                 socket.BeginAccept(OnAccept, this);

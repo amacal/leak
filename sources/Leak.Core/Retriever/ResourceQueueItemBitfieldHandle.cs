@@ -18,7 +18,7 @@ namespace Leak.Core.Retriever
         {
             context.Storage.AddBitfield(peer, bitfield);
 
-            if (context.Collector.SupportExtensions(peer))
+            if (context.Collector.IsExtendable(peer))
             {
                 if (context.Storage.IsExtended(peer) == false)
                 {

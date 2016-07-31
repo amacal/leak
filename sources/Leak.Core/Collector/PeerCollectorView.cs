@@ -13,9 +13,19 @@ namespace Leak.Core.Collector
             this.storage = storage;
         }
 
-        public bool SupportExtensions(PeerHash peer)
+        public bool IsExtendable(PeerHash peer)
         {
             return storage.SupportsExtensions(peer);
+        }
+
+        public bool IsInteresting(PeerHash peer)
+        {
+            return storage.IsInterested(peer);
+        }
+
+        public bool IsChoking(PeerHash peer)
+        {
+            return storage.IsChoked(peer);
         }
 
         public void SendKeepAlive(PeerHash peer)

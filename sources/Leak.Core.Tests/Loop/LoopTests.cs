@@ -92,7 +92,7 @@ namespace Leak.Core.Tests.Loop
 
             public void OnHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
             {
-                loop.Handle(connection, handshake);
+                loop.StartProcessing(connection, handshake);
                 connection.Send(new NetworkOutgoingMessageBytes(new byte[4]));
             }
 
@@ -124,7 +124,7 @@ namespace Leak.Core.Tests.Loop
 
             public void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
             {
-                loop.Handle(connection, handshake);
+                loop.StartProcessing(connection, handshake);
                 connection.Send(new NetworkOutgoingMessageBytes(new byte[4]));
             }
 

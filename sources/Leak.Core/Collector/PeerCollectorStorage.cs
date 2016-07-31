@@ -3,144 +3,95 @@ using Leak.Core.Connector;
 using Leak.Core.Listener;
 using Leak.Core.Loop;
 using Leak.Core.Network;
-using System.Collections.Generic;
 
 namespace Leak.Core.Collector
 {
     public class PeerCollectorStorage
     {
         private readonly PeerCollectorConfiguration configuration;
-        private readonly object synchronized;
-
-        private readonly Dictionary<PeerHash, PeerCollectorStorageEntry> byHash;
-        private readonly Dictionary<string, PeerCollectorStorageEntry> byEndpoint;
+        private readonly PeerCollectorStorageEntryCollection collection;
 
         public PeerCollectorStorage(PeerCollectorConfiguration configuration)
         {
             this.configuration = configuration;
-            this.synchronized = new object();
-
-            this.byHash = new Dictionary<PeerHash, PeerCollectorStorageEntry>();
-            this.byEndpoint = new Dictionary<string, PeerCollectorStorageEntry>();
+            this.collection = new PeerCollectorStorageEntryCollection();
         }
 
-        public bool Add(NetworkConnection connection, PeerListenerHandshake handshake)
+        public void AddHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
         {
-            lock (synchronized)
-            {
-                if (byHash.ContainsKey(handshake.Peer))
-                    return false;
+            PeerCollectorStorageEntry entry = collection.CreateByRemote(connection.Remote);
 
-                if (byEndpoint.ContainsKey(connection.Remote))
-                    return false;
+            entry.Remote = connection.Remote;
+            entry.Peer = handshake.Peer;
+            entry.Hash = handshake.Hash;
+            entry.HasExtensions = handshake.HasExtensions;
 
-                byHash.Add(handshake.Peer, new PeerCollectorStorageEntry
-                {
-                    Hash = handshake.Hash,
-                    Peer = handshake.Peer,
-                    Connection = connection,
-                    HasExtensions = handshake.HasExtensions
-                });
-
-                byEndpoint.Add(connection.Remote, byHash[handshake.Peer]);
-                return true;
-            }
+            collection.AddByPeer(handshake.Peer, entry);
+            collection.AddByHash(handshake.Hash, entry);
         }
 
-        public bool Add(NetworkConnection connection, PeerConnectorHandshake handshake)
+        public void AddHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
-            lock (synchronized)
-            {
-                if (byHash.ContainsKey(handshake.Peer))
-                    return false;
+            PeerCollectorStorageEntry entry = collection.CreateByRemote(connection.Remote);
 
-                if (byEndpoint.ContainsKey(connection.Remote))
-                    return false;
+            entry.Remote = connection.Remote;
+            entry.Peer = handshake.Peer;
+            entry.Hash = handshake.Hash;
+            entry.HasExtensions = handshake.HasExtensions;
 
-                byHash.Add(handshake.Peer, new PeerCollectorStorageEntry
-                {
-                    Hash = handshake.Hash,
-                    Peer = handshake.Peer,
-                    Connection = connection,
-                    HasExtensions = handshake.HasExtensions
-                });
-
-                byEndpoint.Add(connection.Remote, byHash[handshake.Peer]);
-                return true;
-            }
+            collection.AddByPeer(handshake.Peer, entry);
+            collection.AddByHash(handshake.Hash, entry);
         }
 
-        public void Add(ConnectionLoopChannel channel)
+        public void AttachChannel(ConnectionLoopChannel channel)
         {
-            lock (synchronized)
-            {
-                byHash[channel.Endpoint.Peer].Channel = new PeerCollectorChannel(configuration.Callback, channel);
-            }
-
-            configuration.Callback.OnHandshake(channel.Endpoint);
-        }
-
-        public void Remove(PeerHash peer)
-        {
-            lock (synchronized)
-            {
-                PeerCollectorStorageEntry entry;
-                byHash.TryGetValue(peer, out entry);
-
-                if (entry != null)
-                {
-                    PeerEndpoint endpoint = entry.Channel.Endpoint;
-
-                    byHash.Remove(peer);
-                    byEndpoint.Remove(endpoint.Remote);
-                }
-            }
-
-            configuration.Callback.OnDisconnected(peer);
-        }
-
-        public void Remove(NetworkConnection connection)
-        {
-            string endpoint = connection.Remote;
-            PeerCollectorStorageEntry entry;
-
-            lock (synchronized)
-            {
-                if (byEndpoint.TryGetValue(endpoint, out entry))
-                {
-                    byHash.Remove(entry.Peer);
-                    byEndpoint.Remove(connection.Remote);
-                }
-            }
+            PeerCollectorStorageEntry entry = collection.FindByRemote(channel.Endpoint.Remote);
 
             if (entry != null)
             {
-                configuration.Callback.OnDisconnected(entry.Peer);
+                entry.Loop = channel;
             }
+        }
+
+        public void RemoveRemote(string remote)
+        {
+            PeerCollectorStorageEntry entry = collection.FindByRemote(remote);
+
+            if (entry != null)
+            {
+                collection.RemoveByRemote(entry.Remote);
+                collection.RemoveByPeer(entry.Peer);
+            }
+        }
+
+        public bool IsInterested(PeerHash peer)
+        {
+            return collection.FindByPeer(peer)?.LocalState.IsInterested() == true;
+        }
+
+        public void SetInterested(PeerHash peer, bool value)
+        {
+            collection.FindByPeer(peer)?.LocalState.SetInterested(value);
+        }
+
+        public bool IsChoked(PeerHash peer)
+        {
+            return collection.FindByPeer(peer)?.RemoteState.IsChoked() == true;
+        }
+
+        public void SetChoked(PeerHash peer, bool value)
+        {
+            collection.FindByPeer(peer)?.RemoteState.SetChoked(value);
         }
 
         public PeerCollectorChannel GetChannel(PeerHash peer)
         {
-            PeerCollectorStorageEntry entry;
-
-            lock (synchronized)
-            {
-                byHash.TryGetValue(peer, out entry);
-            }
-
-            return entry?.Channel;
+            return new PeerCollectorChannel(configuration.Callback, collection.FindByPeer(peer)?.Loop);
         }
 
         public bool SupportsExtensions(PeerHash peer)
         {
-            PeerCollectorStorageEntry entry;
-
-            lock (synchronized)
-            {
-                byHash.TryGetValue(peer, out entry);
-            }
-
-            return entry?.HasExtensions == true;
+            return collection.FindByPeer(peer)?.HasExtensions == true;
         }
     }
 }

@@ -98,6 +98,7 @@ namespace Leak.Core.Retriever
 
         public void SetUnchoked(PeerHash peer, ResourceDirection direction)
         {
+            queue.Enqueue(new ResourceQueueItemHandshakeHandle(peer));
             queue.Enqueue(new ResourceQueueItemUnchokeHandle(peer));
         }
 

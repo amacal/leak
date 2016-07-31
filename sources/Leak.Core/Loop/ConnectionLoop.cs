@@ -19,17 +19,17 @@ namespace Leak.Core.Loop
             configurer.Invoke(configuration);
         }
 
-        public void Handle(NetworkConnection connection, PeerListenerHandshake handshake)
+        public void StartProcessing(NetworkConnection connection, PeerListenerHandshake handshake)
         {
-            Handle(connection, new ConnectionLoopHandshakeToListener(handshake));
+            StartProcessing(connection, new ConnectionLoopHandshakeToListener(handshake));
         }
 
-        public void Handle(NetworkConnection connection, PeerConnectorHandshake handshake)
+        public void StartProcessing(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
-            Handle(connection, new ConnectionLoopHandshakeToConnector(handshake));
+            StartProcessing(connection, new ConnectionLoopHandshakeToConnector(handshake));
         }
 
-        private void Handle(NetworkConnection network, ConnectionLoopHandshake handshake)
+        private void StartProcessing(NetworkConnection network, ConnectionLoopHandshake handshake)
         {
             ConnectionLoopConnection connection = new ConnectionLoopConnection(configuration, network, handshake);
             ConnectionLoopHandler handler = new ConnectionLoopHandler(configuration, connection, handshake);

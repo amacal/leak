@@ -24,35 +24,38 @@ namespace Leak.Core.Collector
         public void Send(KeepAliveMessage message)
         {
             OnOutgoing(message, "keep-alive");
-            inner.Send(message);
+            inner?.Send(message);
         }
 
         public void Send(InterestedMessage message)
         {
             OnOutgoing(message, "interested");
-            inner.Send(message);
+            inner?.Send(message);
         }
 
         public void Send(BitfieldMessage message)
         {
             OnOutgoing(message, "bitfield");
-            inner.Send(message);
+            inner?.Send(message);
         }
 
         public void Send(params RequestOutgoingMessage[] messages)
         {
-            inner.Send(messages);
+            inner?.Send(messages);
         }
 
         public void Send(ExtendedOutgoingMessage message)
         {
             OnOutgoing(message, "extended");
-            inner.Send(message);
+            inner?.Send(message);
         }
 
         private void OnOutgoing(NetworkOutgoingMessage message, string type)
         {
-            callback.OnOutgoing(inner.Endpoint.Peer, message.ToConnector(type));
+            if (inner != null)
+            {
+                callback.OnOutgoing(inner.Endpoint.Peer, message.ToConnector(type));
+            }
         }
     }
 }

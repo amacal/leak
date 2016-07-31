@@ -12,13 +12,15 @@ namespace Leak.Core.Collector
         private readonly PeerBouncer bouncer;
         private readonly ConnectionLoop loop;
         private readonly PeerCollectorStorage storage;
+        private readonly object synchronized;
 
-        public PeerCollectorListener(PeerCollectorCallback callback, PeerBouncer bouncer, ConnectionLoop loop, PeerCollectorStorage storage)
+        public PeerCollectorListener(PeerCollectorCallback callback, PeerBouncer bouncer, ConnectionLoop loop, PeerCollectorStorage storage, object synchronized)
         {
             this.callback = callback;
             this.bouncer = bouncer;
             this.loop = loop;
             this.storage = storage;
+            this.synchronized = synchronized;
         }
 
         public void OnStarted()
@@ -31,7 +33,17 @@ namespace Leak.Core.Collector
 
         public void OnConnected(NetworkConnection connection)
         {
-            if (bouncer.AcceptRemote(connection))
+            bool accepted = false;
+
+            lock (synchronized)
+            {
+                if (bouncer.AcceptRemote(connection))
+                {
+                    accepted = true;
+                }
+            }
+
+            if (accepted)
             {
                 callback.OnConnected(connection.Remote);
             }
@@ -39,29 +51,47 @@ namespace Leak.Core.Collector
 
         public void OnRejected(NetworkConnection connection)
         {
-            bouncer.ReleaseRemote(connection);
+            lock (synchronized)
+            {
+                bouncer.ReleaseRemote(connection);
+            }
+
             callback.OnRejected(connection.Remote);
         }
 
         public void OnHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
         {
-            if (bouncer.AcceptPeer(connection, handshake.Peer))
+            lock (synchronized)
             {
-                storage.Add(connection, handshake);
-                loop.Handle(connection, handshake);
+                if (bouncer.AcceptPeer(connection, handshake.Peer))
+                {
+                    storage.AddHandshake(connection, handshake);
+                }
             }
+
+            loop.StartProcessing(connection, handshake);
         }
 
         public void OnException(NetworkConnection connection, Exception ex)
         {
-            bouncer.ReleaseRemote(connection);
-            storage.Remove(connection);
+            lock (synchronized)
+            {
+                bouncer.ReleaseRemote(connection);
+                storage.RemoveRemote(connection.Remote);
+            }
+
+            connection.Terminate();
         }
 
         public void OnDisconnected(NetworkConnection connection)
         {
-            bouncer.ReleaseRemote(connection);
-            storage.Remove(connection);
+            lock (synchronized)
+            {
+                bouncer.ReleaseRemote(connection);
+                storage.RemoveRemote(connection.Remote);
+            }
+
+            connection.Terminate();
         }
     }
 }

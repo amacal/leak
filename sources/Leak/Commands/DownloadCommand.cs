@@ -151,12 +151,18 @@ namespace Leak.Commands
 
             public override void OnPeerIncomingMessage(FileHash hash, PeerHash peer, PeerClientMessage message)
             {
-                Console.WriteLine($"{peer}: incoming-message; type={message.Type}; size={message.Size}");
+                if (logging.HasFlag(Logging.Blocks) && message.Type == "piece")
+                {
+                    Console.WriteLine($"{peer}: incoming-message; type={message.Type}; size={message.Size}");
+                }
             }
 
             public override void OnPeerOutgoingMessage(FileHash hash, PeerHash peer, PeerClientMessage message)
             {
-                Console.WriteLine($"{peer}: outgoing-message; type={message.Type}; size={message.Size}");
+                if (logging.HasFlag(Logging.Blocks) && message.Type == "request")
+                {
+                    Console.WriteLine($"{peer}: outgoing-message; type={message.Type}; size={message.Size}");
+                }
             }
 
             public override void OnPeerBitfield(FileHash hash, PeerHash peer, Bitfield bitfield)

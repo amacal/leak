@@ -47,6 +47,7 @@ namespace Leak.Core.Client
                 {
                     with.Callback = collector.CreateListenerCallback();
                     with.Peer = configuration.Peer;
+                    with.Extensions = true;
                     with.Hashes = hashes;
                 });
 

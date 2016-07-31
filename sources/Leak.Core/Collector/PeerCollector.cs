@@ -8,6 +8,8 @@ namespace Leak.Core.Collector
 {
     public class PeerCollector
     {
+        private readonly object synchronized;
+
         private readonly ConnectionLoop loop;
         private readonly PeerBouncer bouncer;
         private readonly PeerCollectorStorage storage;
@@ -15,17 +17,17 @@ namespace Leak.Core.Collector
 
         public PeerCollector(Action<PeerCollectorConfiguration> configurer)
         {
-            configuration = new PeerCollectorConfiguration
+            configuration = configurer.Configure(with =>
             {
-                Callback = new PeerCollectorCallbackNothing()
-            };
+                with.Callback = new PeerCollectorCallbackNothing();
+            });
 
-            configurer.Invoke(configuration);
+            synchronized = new object();
             storage = new PeerCollectorStorage(configuration);
 
             loop = new ConnectionLoop(with =>
             {
-                with.Callback = new PeerCollectorLoop(storage, configuration);
+                with.Callback = new PeerCollectorLoop(storage, configuration, synchronized);
             });
 
             bouncer = new PeerBouncer(with =>
@@ -41,12 +43,12 @@ namespace Leak.Core.Collector
 
         public PeerListenerCallback CreateListenerCallback()
         {
-            return new PeerCollectorListener(configuration.Callback, bouncer, loop, storage);
+            return new PeerCollectorListener(configuration.Callback, bouncer, loop, storage, synchronized);
         }
 
         public PeerConnectorCallback CreateConnectorCallback()
         {
-            return new PeerCollectorConnector(configuration.Callback, loop, storage);
+            return new PeerCollectorConnector(configuration.Callback, bouncer, loop, storage, synchronized);
         }
     }
 }

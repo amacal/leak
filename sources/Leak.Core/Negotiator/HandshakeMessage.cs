@@ -37,7 +37,7 @@ namespace Leak.Core.Negotiator
         public static HandshakeOptions GetOptions(NetworkIncomingMessage message)
         {
             int length = message[0];
-            uint value = Bytes.ReadUInt32(message.ToBytes(), 1 + length + 4);
+            uint value = Bytes.ReadUInt32(message.ToBytes(), 5 + length);
 
             return (HandshakeOptions)value;
         }
@@ -53,7 +53,8 @@ namespace Leak.Core.Negotiator
             byte[] data = new byte[49 + length];
 
             data[0] = (byte)length;
-            data[1 + length + 5] = (byte)((uint)options / 256 / 256 % 256);
+
+            Bytes.Write((int)options, data, 5 + length);
 
             Array.Copy(Encoding.ASCII.GetBytes(ProtocolName), 0, data, 1, ProtocolName.Length);
             Array.Copy(hash.ToBytes(), 0, data, data.Length - 40, 20);

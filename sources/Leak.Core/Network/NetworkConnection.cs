@@ -11,6 +11,8 @@ namespace Leak.Core.Network
     public class NetworkConnection
     {
         private readonly Socket socket;
+        private readonly string remote;
+
         private readonly NetworkBuffer buffer;
         private readonly NetworkConnectionDirection direction;
         private readonly NetworkConnectionConfiguration configuration;
@@ -38,6 +40,8 @@ namespace Leak.Core.Network
                 with.Size = 40000;
                 with.Decryptor = NetworkBufferDecryptor.Nothing;
             });
+
+            this.remote = GetRemote(socket);
         }
 
         /// <summary>
@@ -50,6 +54,7 @@ namespace Leak.Core.Network
         public NetworkConnection(NetworkConnection connection, Action<NetworkConnectionConfiguration> configurer)
         {
             socket = connection.socket;
+            remote = connection.remote;
             direction = connection.direction;
 
             configuration = new NetworkConnectionConfiguration
@@ -66,12 +71,17 @@ namespace Leak.Core.Network
             });
         }
 
+        private static string GetRemote(Socket socket)
+        {
+            return ((IPEndPoint)socket.RemoteEndPoint).Address.MapToIPv4().ToString();
+        }
+
         /// <summary>
         /// Gets a text representation of the remote endpoint.
         /// </summary>
         public string Remote
         {
-            get { return ((IPEndPoint)socket.RemoteEndPoint).Address.MapToIPv4().ToString(); }
+            get { return remote; }
         }
 
         /// <summary>
@@ -102,7 +112,16 @@ namespace Leak.Core.Network
             byte[] decrypted = message.ToBytes();
             byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
 
-            socket.Send(encrypted);
+            try
+            {
+                socket.Send(encrypted);
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+            catch (SocketException)
+            {
+            }
         }
 
         /// <summary>

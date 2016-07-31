@@ -77,6 +77,8 @@
     <Compile Include="Collector\PeerCollectorCallbackNothing.cs" />
     <Compile Include="Collector\PeerCollectorChannel.cs" />
     <Compile Include="Collector\PeerCollectorConfiguration.cs" />
+    <Compile Include="Collector\PeerCollectorStatus.cs" />
+    <Compile Include="Collector\PeerCollectorStorageEntryCollection.cs" />
     <Compile Include="Collector\PeerCollectorMessage.cs" />
     <Compile Include="Collector\PeerCollectorMessageExtensions.cs" />
     <Compile Include="Collector\PeerCollectorStorage.cs" />

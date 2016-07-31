@@ -87,6 +87,9 @@ namespace Leak.Core.Network
                     socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
                 }
             }
+            catch (ObjectDisposedException)
+            {
+            }
             catch (SocketException ex)
             {
                 handler.OnException(ex);
