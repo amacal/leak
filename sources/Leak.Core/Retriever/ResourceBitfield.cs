@@ -85,7 +85,10 @@ namespace Leak.Core.Retriever
 
         public bool IsComplete(PeerHash peer)
         {
-            return peers[peer].IsCompleted();
+            Bitfield bitfield;
+            peers.TryGetValue(peer, out bitfield);
+
+            return bitfield?.IsCompleted() == true;
         }
 
         public ResourceBlock[] Next(PeerHash peer, int maximum)
