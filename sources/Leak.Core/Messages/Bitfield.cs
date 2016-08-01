@@ -21,6 +21,11 @@
             get { return completed; }
         }
 
+        public bool IsCompleted()
+        {
+            return items.Length - 8 < completed;
+        }
+
         public bool this[int index]
         {
             get { return items[index]; }

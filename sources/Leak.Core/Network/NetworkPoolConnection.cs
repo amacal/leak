@@ -8,7 +8,7 @@ namespace Leak.Core.Network
     /// Describes the network connection between local endpoint and
     /// remote endpoint initiated by one of the side.
     /// </summary>
-    public class NetworkConnectionSocket : NetworkConnection
+    public class NetworkPoolConnection : NetworkConnection
     {
         private readonly Socket socket;
         private readonly string remote;
@@ -16,6 +16,7 @@ namespace Leak.Core.Network
 
         private readonly NetworkBuffer buffer;
         private readonly NetworkDirection direction;
+        private readonly NetworkPoolListener listener;
         private readonly NetworkConnectionConfiguration configuration;
 
         /// <summary>
@@ -23,11 +24,13 @@ namespace Leak.Core.Network
         /// already connected socket instance and direction value indicating
         /// who is the initiator of the connection.
         /// </summary>
+        /// <param name="listener"></param>
         /// <param name="socket">The already connected socket.</param>
         /// <param name="direction">The direction indicating who initiated the connection.</param>
         /// <param name="identifier"></param>
-        public NetworkConnectionSocket(Socket socket, NetworkDirection direction, long identifier)
+        public NetworkPoolConnection(NetworkPoolListener listener, Socket socket, NetworkDirection direction, long identifier)
         {
+            this.listener = listener;
             this.socket = socket;
             this.direction = direction;
             this.identifier = identifier;
@@ -38,7 +41,7 @@ namespace Leak.Core.Network
                 Decryptor = NetworkConnectionDecryptor.Nothing,
             };
 
-            this.buffer = new NetworkBuffer(socket, with =>
+            this.buffer = new NetworkBuffer(listener, socket, identifier, with =>
             {
                 with.Size = 40000;
                 with.Decryptor = NetworkBufferDecryptor.Nothing;
@@ -54,11 +57,13 @@ namespace Leak.Core.Network
         /// </summary>
         /// <param name="connection">The existing instance of the connection.</param>
         /// <param name="configurer">The configurer to parametrize newly created instance.</param>
-        public NetworkConnectionSocket(NetworkConnectionSocket connection, Action<NetworkConnectionConfiguration> configurer)
+        public NetworkPoolConnection(NetworkPoolConnection connection, Action<NetworkConnectionConfiguration> configurer)
         {
+            listener = connection.listener;
             socket = connection.socket;
             remote = connection.remote;
             direction = connection.direction;
+            identifier = connection.identifier;
 
             configuration = configurer.Configure(with =>
             {
@@ -116,18 +121,19 @@ namespace Leak.Core.Network
         /// <param name="message">An instance of the outgoing message.</param>
         public void Send(NetworkOutgoingMessage message)
         {
-            byte[] decrypted = message.ToBytes();
-            byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
+            if (listener.IsAvailable(identifier))
+            {
+                byte[] decrypted = message.ToBytes();
+                byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
 
-            try
-            {
-                socket.Send(encrypted);
-            }
-            catch (ObjectDisposedException)
-            {
-            }
-            catch (SocketException)
-            {
+                try
+                {
+                    socket.Send(encrypted);
+                }
+                catch (SocketException ex)
+                {
+                    listener.OnException(identifier, ex);
+                }
             }
         }
 
@@ -136,8 +142,12 @@ namespace Leak.Core.Network
         /// </summary>
         public void Terminate()
         {
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            if (listener.IsAvailable(identifier))
+            {
+                listener.OnDisconnected(identifier);
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
         }
     }
 }

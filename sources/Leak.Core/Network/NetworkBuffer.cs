@@ -9,7 +9,9 @@ namespace Leak.Core.Network
     /// </summary>
     public class NetworkBuffer
     {
+        private readonly NetworkPoolListener listener;
         private readonly Socket socket;
+        private readonly long identifier;
         private readonly byte[] data;
         private readonly NetworkBufferConfiguration configuration;
 
@@ -21,18 +23,22 @@ namespace Leak.Core.Network
         /// connected socket instance and configuration defining the buffer size
         /// and how the incoming data should be decrypted.
         /// </summary>
+        /// <param name="listener"></param>
         /// <param name="socket">The already connected socket.</param>
+        /// <param name="identifier"></param>
         /// <param name="configurer">The configurer to parametrize newly created instance.</param>
-        public NetworkBuffer(Socket socket, Action<NetworkBufferConfiguration> configurer)
+        public NetworkBuffer(NetworkPoolListener listener, Socket socket, long identifier, Action<NetworkBufferConfiguration> configurer)
         {
-            this.socket = socket;
-            this.configuration = new NetworkBufferConfiguration
+            this.configuration = configurer.Configure(with =>
             {
-                Size = 40000,
-                Decryptor = NetworkBufferDecryptor.Nothing
-            };
+                with.Size = 40000;
+                with.Decryptor = NetworkBufferDecryptor.Nothing;
+            });
 
-            configurer.Invoke(configuration);
+            this.listener = listener;
+            this.socket = socket;
+            this.identifier = identifier;
+
             this.data = new byte[configuration.Size];
         }
 
@@ -45,7 +51,9 @@ namespace Leak.Core.Network
         /// <param name="configurer">The configurer to parametrize newly created instance.</param>
         public NetworkBuffer(NetworkBuffer buffer, Action<NetworkBufferConfiguration> configurer)
         {
+            listener = buffer.listener;
             socket = buffer.socket;
+            identifier = buffer.identifier;
             data = buffer.data;
             length = buffer.length;
             offset = buffer.offset;
@@ -75,23 +83,24 @@ namespace Leak.Core.Network
         /// <param name="handler">An instance of the incoming message handler.</param>
         public void Receive(NetworkIncomingMessageHandler handler)
         {
-            try
+            if (listener.IsAvailable(identifier))
             {
-                if (offset + length >= configuration.Size)
+                try
                 {
-                    socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
+                    if (offset + length >= configuration.Size)
+                    {
+                        socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
+                    }
+                    else
+                    {
+                        socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                    }
                 }
-                else
+                catch (SocketException ex)
                 {
-                    socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                    listener.OnException(identifier, ex);
+                    handler.OnException(ex);
                 }
-            }
-            catch (ObjectDisposedException)
-            {
-            }
-            catch (SocketException ex)
-            {
-                handler.OnException(ex);
             }
         }
 
@@ -103,13 +112,16 @@ namespace Leak.Core.Network
         /// <param name="handler">An instance of the incoming message handler.</param>
         public void ReceiveOrCallback(NetworkIncomingMessageHandler handler)
         {
-            if (length > 0)
+            if (listener.IsAvailable(identifier))
             {
-                handler.BeginOnMessage(new NetworkIncomingMessage(this));
-            }
-            else
-            {
-                Receive(handler);
+                if (length > 0)
+                {
+                    handler.BeginOnMessage(new NetworkIncomingMessage(this));
+                }
+                else
+                {
+                    Receive(handler);
+                }
             }
         }
 
@@ -117,32 +129,37 @@ namespace Leak.Core.Network
         {
             var handler = (NetworkIncomingMessageHandler)result.AsyncState;
 
-            try
+            if (listener.IsAvailable(identifier))
             {
-                int received = socket.EndReceive(result);
-
-                if (received > 0)
+                try
                 {
-                    if (offset + length >= configuration.Size)
+                    int received = socket.EndReceive(result);
+
+                    if (received > 0)
                     {
-                        Decrypt(offset + length - configuration.Size, received);
+                        if (offset + length >= configuration.Size)
+                        {
+                            Decrypt(offset + length - configuration.Size, received);
+                        }
+                        else
+                        {
+                            Decrypt(offset + length, received);
+                        }
+
+                        length += received;
+                        handler.OnMessage(new NetworkIncomingMessage(this));
                     }
                     else
                     {
-                        Decrypt(offset + length, received);
+                        listener.OnDisconnected(identifier);
+                        handler.OnDisconnected();
                     }
-
-                    length += received;
-                    handler.OnMessage(new NetworkIncomingMessage(this));
                 }
-                else
+                catch (SocketException ex)
                 {
-                    handler.OnDisconnected();
+                    listener.OnException(identifier, ex);
+                    handler.OnException(ex);
                 }
-            }
-            catch (SocketException ex)
-            {
-                handler.OnException(ex);
             }
         }
 

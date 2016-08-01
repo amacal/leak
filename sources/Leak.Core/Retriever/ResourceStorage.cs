@@ -28,8 +28,8 @@ namespace Leak.Core.Retriever
 
         public void AddBitfield(PeerHash peer, Bitfield bitfield)
         {
-            peers.AddPeer(peer);
             bitfields.Add(peer, bitfield);
+            peers.AddPeer(peer);
         }
 
         public void Choke(PeerHash peer)
@@ -67,6 +67,7 @@ namespace Leak.Core.Retriever
 
             if (operation == ResourcePeerOperation.Metadata)
             {
+                predicate = x => x.IsExtended() && bitfields.IsComplete(x.Hash);
             }
 
             return peers.Where(predicate).OrderByDescending(x => x.Rank);
