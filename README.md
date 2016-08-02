@@ -17,11 +17,15 @@ options:
 
     --listener (on|off) (default: off)
 
-        Listen to incomming connection and accept them.
+        Listen to incomming connections and accept them.
 
     --port #value (default: 8080)
 
         Listen on specified port.
+
+    --logging (off|normal|verbose) (default: normal)
+
+        Show only logs with requested severity.
 ````
 
 ## csharp code
