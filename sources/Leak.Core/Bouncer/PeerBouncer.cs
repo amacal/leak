@@ -21,7 +21,7 @@ namespace Leak.Core.Bouncer
 
         public bool AcceptRemote(NetworkConnection connection)
         {
-            if (storage.AddRemote(connection.Remote) == false)
+            if (storage.AddRemote(connection.Identifier, connection.Remote) == false)
             {
                 connection.Terminate();
                 return false;
@@ -32,7 +32,7 @@ namespace Leak.Core.Bouncer
 
         public bool AcceptPeer(NetworkConnection connection, PeerHash peer)
         {
-            if (storage.AddPeer(connection.Remote, peer) == false)
+            if (storage.AddPeer(connection.Identifier, peer) == false)
             {
                 connection.Terminate();
                 return false;
@@ -41,9 +41,14 @@ namespace Leak.Core.Bouncer
             return true;
         }
 
-        public void ReleaseRemote(NetworkConnection connection)
+        public void AttachConnection(NetworkConnection connection)
         {
-            storage.RemoveRemote(connection.Remote);
+            storage.AddIdentifier(connection.Identifier);
+        }
+
+        public void ReleaseConnection(NetworkConnection connection)
+        {
+            storage.RemoveIdentifier(connection.Identifier);
         }
     }
 }

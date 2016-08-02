@@ -2,11 +2,10 @@
 using Leak.Core.Connector;
 using Leak.Core.Loop;
 using Leak.Core.Network;
-using System;
 
 namespace Leak.Core.Collector
 {
-    public class PeerCollectorConnector : PeerConnectorCallback
+    public class PeerCollectorConnector : PeerConnectorCallbackBase
     {
         private readonly PeerCollectorCallback callback;
         private readonly PeerBouncer bouncer;
@@ -23,7 +22,7 @@ namespace Leak.Core.Collector
             this.synchronized = synchronized;
         }
 
-        public void OnConnected(NetworkConnection connection)
+        public override void OnConnected(NetworkConnection connection)
         {
             bool accepted = false;
 
@@ -41,17 +40,12 @@ namespace Leak.Core.Collector
             }
         }
 
-        public void OnRejected(NetworkConnection connection)
+        public override void OnRejected(NetworkConnection connection)
         {
-            lock (synchronized)
-            {
-                bouncer.ReleaseRemote(connection);
-            }
-
             callback.OnRejected(connection.Remote);
         }
 
-        public void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
+        public override void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
             lock (synchronized)
             {
@@ -62,28 +56,6 @@ namespace Leak.Core.Collector
             }
 
             loop.StartProcessing(connection, handshake);
-        }
-
-        public void OnException(NetworkConnection connection, Exception ex)
-        {
-            lock (synchronized)
-            {
-                bouncer.ReleaseRemote(connection);
-                storage.RemoveRemote(connection.Remote);
-            }
-
-            connection.Terminate();
-        }
-
-        public void OnDisconnected(NetworkConnection connection)
-        {
-            lock (synchronized)
-            {
-                bouncer.ReleaseRemote(connection);
-                storage.RemoveRemote(connection.Remote);
-            }
-
-            connection.Terminate();
         }
     }
 }

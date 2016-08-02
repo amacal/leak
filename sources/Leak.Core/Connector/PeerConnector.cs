@@ -15,7 +15,7 @@ namespace Leak.Core.Connector
         {
             configuration = configurer.Configure(with =>
             {
-                with.Callback = new PeerConnectorCallbackToNothing();
+                with.Callback = new PeerConnectorCallbackNothing();
                 with.Peer = new PeerHash(Bytes.Random(20));
                 with.Pool = new NetworkPool();
             });

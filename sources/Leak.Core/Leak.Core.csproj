@@ -77,6 +77,7 @@
     <Compile Include="Collector\PeerCollectorCallbackNothing.cs" />
     <Compile Include="Collector\PeerCollectorChannel.cs" />
     <Compile Include="Collector\PeerCollectorConfiguration.cs" />
+    <Compile Include="Collector\PeerCollectorPool.cs" />
     <Compile Include="Collector\PeerCollectorStatus.cs" />
     <Compile Include="Collector\PeerCollectorStorageEntryCollection.cs" />
     <Compile Include="Collector\PeerCollectorMessage.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorCallback.cs" />
     <Compile Include="Connector\PeerConnectorCallbackBase.cs" />
-    <Compile Include="Connector\PeerConnectorCallbackToNothing.cs" />
+    <Compile Include="Connector\PeerConnectorCallbackNothing.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
     <Compile Include="Connector\PeerConnectorHandshake.cs" />
     <Compile Include="Connector\PeerConnectorNegotiatorContext.cs" />
@@ -127,7 +128,8 @@
     <Compile Include="Extensions\Metadata\MetadataRequest.cs" />
     <Compile Include="Listener\PeerListener.cs" />
     <Compile Include="Listener\PeerListenerCallback.cs" />
-    <Compile Include="Listener\PeerListenerCallbackToNothing.cs" />
+    <Compile Include="Listener\PeerListenerCallbackBase.cs" />
+    <Compile Include="Listener\PeerListenerCallbackNothing.cs" />
     <Compile Include="Listener\PeerListenerConfiguration.cs" />
     <Compile Include="Listener\PeerListenerNegotiatorContext.cs" />
     <Compile Include="Listener\PeerListenerHandshake.cs" />
@@ -215,6 +217,10 @@
     <Compile Include="Network\NetworkDirection.cs" />
     <Compile Include="Network\NetworkBuffer.cs" />
     <Compile Include="Network\NetworkBufferConfiguration.cs" />
+    <Compile Include="Network\NetworkPoolCallback.cs" />
+    <Compile Include="Network\NetworkPoolCallbackBase.cs" />
+    <Compile Include="Network\NetworkPoolCallbackNothing.cs" />
+    <Compile Include="Network\NetworkPoolConfiguration.cs" />
     <Compile Include="Network\NetworkPoolConnection.cs" />
     <Compile Include="Network\NetworkConnectionConfiguration.cs" />
     <Compile Include="Network\NetworkOutgoingMessageBytes.cs" />

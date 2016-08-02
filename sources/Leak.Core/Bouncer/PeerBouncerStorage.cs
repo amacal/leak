@@ -13,40 +13,66 @@ namespace Leak.Core.Bouncer
             this.collection = new PeerBouncerStorageEntryCollection();
         }
 
-        public bool AddRemote(string remote)
+        public bool AddIdentifier(long identifier)
         {
-            PeerBouncerStorageEntry entry = collection.FindByRemote(remote);
+            PeerBouncerStorageEntry entry = collection.FindOrCreateByIdentifier(identifier);
 
-            if (entry.Remotes.Count > 0)
+            if (entry.Released)
                 return false;
 
-            entry.Remotes.Add(remote);
+            if (entry.Identifiers.Count > 0)
+                return false;
+
+            entry.Identifiers.Add(identifier);
             return true;
         }
 
-        public bool AddPeer(string remote, PeerHash peer)
+        public bool AddRemote(long identifier, string remote)
         {
-            PeerBouncerStorageEntry entry = collection.FindByRemote(remote);
+            PeerBouncerStorageEntry byIdentifier = collection.FindOrCreateByIdentifier(identifier);
+            PeerBouncerStorageEntry byRemote = collection.FindOrDefaultByRemote(remote);
 
-            if (entry.Remotes.Count == 0)
+            if (byIdentifier.Released)
                 return false;
 
-            if (entry.Peers.Count > 0)
+            if (byIdentifier.Identifiers.Count == 0)
                 return false;
 
-            entry.Peers.Add(peer);
+            if (byRemote != null)
+                return false;
+
+            byIdentifier.Remotes.Add(remote);
+            collection.AddByRemote(remote, byIdentifier);
+
             return true;
         }
 
-        public void RemoveRemote(string remote)
+        public bool AddPeer(long identifier, PeerHash peer)
         {
-            PeerBouncerStorageEntry entry = collection.FindByRemote(remote);
+            PeerBouncerStorageEntry byIdentifier = collection.FindOrCreateByIdentifier(identifier);
+            PeerBouncerStorageEntry byPeer = collection.FindOrDefaultByPeer(peer);
 
-            if (entry.Remotes.Count == 1)
-                collection.RemoveByRemote(remote);
+            if (byIdentifier.Released)
+                return false;
 
-            foreach (PeerHash peer in entry.Peers)
-                collection.RemoveByPeer(peer);
+            if (byIdentifier.Identifiers.Count == 0)
+                return false;
+
+            if (byIdentifier.Remotes.Count == 0)
+                return false;
+
+            if (byPeer != null)
+                return false;
+
+            byIdentifier.Peers.Add(peer);
+            collection.AddByPeer(peer, byIdentifier);
+
+            return true;
+        }
+
+        public void RemoveIdentifier(long identifier)
+        {
+            collection.FindOrCreateByIdentifier(identifier).Released = true;
         }
     }
 }

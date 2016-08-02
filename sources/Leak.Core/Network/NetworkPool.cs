@@ -7,12 +7,32 @@ namespace Leak.Core.Network
 {
     public class NetworkPool : NetworkPoolListener
     {
-        private long sequence;
         private readonly Dictionary<long, NetworkPoolEntry> items;
+        private readonly NetworkPoolConfiguration configuration;
+        private readonly NetworkPoolCallback callback;
+
+        private long sequence;
 
         public NetworkPool()
         {
+            configuration = new NetworkPoolConfiguration
+            {
+                Callback = new NetworkPoolCallbackNothing()
+            };
+
             items = new Dictionary<long, NetworkPoolEntry>();
+            callback = configuration.Callback;
+        }
+
+        public NetworkPool(Action<NetworkPoolConfiguration> configurer)
+        {
+            configuration = configurer.Configure(with =>
+            {
+                with.Callback = new NetworkPoolCallbackNothing();
+            });
+
+            items = new Dictionary<long, NetworkPoolEntry>();
+            callback = configuration.Callback;
         }
 
         public NetworkConnection Create(Socket socket, NetworkDirection direction)
@@ -29,6 +49,7 @@ namespace Leak.Core.Network
                 });
             }
 
+            callback.OnAttached(connection);
             return connection;
         }
 
@@ -74,6 +95,7 @@ namespace Leak.Core.Network
             if (entry != null)
             {
                 entry.IsAvailable = false;
+                callback.OnDisconnected(entry.Connection);
             }
         }
 
@@ -89,6 +111,7 @@ namespace Leak.Core.Network
             if (entry != null)
             {
                 entry.IsAvailable = false;
+                callback.OnException(entry.Connection, ex);
             }
         }
     }

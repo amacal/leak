@@ -2,6 +2,7 @@
 using Leak.Core.Connector;
 using Leak.Core.Listener;
 using Leak.Core.Loop;
+using Leak.Core.Network;
 using System;
 
 namespace Leak.Core.Collector
@@ -49,6 +50,11 @@ namespace Leak.Core.Collector
         public PeerConnectorCallback CreateConnectorCallback()
         {
             return new PeerCollectorConnector(configuration.Callback, bouncer, loop, storage, synchronized);
+        }
+
+        public NetworkPoolCallback CreatePoolCallback()
+        {
+            return new PeerCollectorPool(configuration.Callback, bouncer, storage, synchronized);
         }
     }
 }

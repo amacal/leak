@@ -4,6 +4,7 @@ using Leak.Core.Connector;
 using Leak.Core.Listener;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
+using Leak.Core.Network;
 using Leak.Core.Repository;
 using Leak.Core.Telegraph;
 using System;
@@ -19,6 +20,7 @@ namespace Leak.Core.Client
         private readonly PeerClientCallback callback;
         private readonly PeerListener listener;
         private readonly FileHashCollection hashes;
+        private readonly NetworkPool pool;
 
         public PeerClient(Action<PeerClientConfiguration> configurer)
         {
@@ -41,6 +43,11 @@ namespace Leak.Core.Client
                 with.Callback = new PeerClientToCollector(configuration, storage);
             });
 
+            pool = new NetworkPool(with =>
+            {
+                with.Callback = collector.CreatePoolCallback();
+            });
+
             if (configuration.Listener.Status == PeerClientListenerStatus.On)
             {
                 listener = configuration.Listener.Build(with =>
@@ -49,6 +56,7 @@ namespace Leak.Core.Client
                     with.Peer = configuration.Peer;
                     with.Extensions = true;
                     with.Hashes = hashes;
+                    with.Pool = pool;
                 });
 
                 listener.Start();
@@ -119,6 +127,7 @@ namespace Leak.Core.Client
                     with.Peer = configuration.Peer;
                     with.Hash = metainfo.Hash;
                     with.Callback = collector.CreateConnectorCallback();
+                    with.Pool = pool;
                 });
             }
 
@@ -154,6 +163,7 @@ namespace Leak.Core.Client
                     with.Peer = configuration.Peer;
                     with.Callback = collector.CreateConnectorCallback();
                     with.Extensions = true;
+                    with.Pool = pool;
                 });
             }
 

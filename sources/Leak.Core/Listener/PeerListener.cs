@@ -18,7 +18,7 @@ namespace Leak.Core.Listener
             configuration = configurer.Configure(with =>
             {
                 with.Port = 8080;
-                with.Callback = new PeerListenerCallbackToNothing();
+                with.Callback = new PeerListenerCallbackNothing();
                 with.Peer = new PeerHash(Bytes.Random(20));
                 with.Pool = new NetworkPool();
             });
