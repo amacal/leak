@@ -45,14 +45,28 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CompositeCallback.cs" />
     <Compile Include="Commands\DeamonCommand.cs" />
     <Compile Include="Commands\DownloadCommand.cs" />
+    <Compile Include="Commands\LoggerFactory.cs" />
+    <Compile Include="Commands\ReadyCallback.cs" />
     <Compile Include="Deamon\LeakCallback.cs" />
     <Compile Include="Deamon\LeakDeamon.cs" />
     <Compile Include="Deamon\LeakDeamonConfiguration.cs" />
     <Compile Include="Deamon\LeakMonitor.cs" />
     <Compile Include="Deamon\LeakMonitorCallback.cs" />
     <Compile Include="Deamon\LeakMonitorConfiguration.cs" />
+    <Compile Include="Loggers\BouncerLogger.cs" />
+    <Compile Include="Loggers\ConnectorLogger.cs" />
+    <Compile Include="Loggers\HashLogger.cs" />
+    <Compile Include="Loggers\HashLoggerNormal.cs" />
+    <Compile Include="Loggers\ListenerLogger.cs" />
+    <Compile Include="Loggers\NetworkLogger.cs" />
+    <Compile Include="Loggers\NetworkLoggerNormal.cs" />
+    <Compile Include="Loggers\NetworkLoggerVerbose.cs" />
+    <Compile Include="Loggers\PeerLogger.cs" />
+    <Compile Include="Loggers\PeerLoggerNormal.cs" />
+    <Compile Include="Loggers\PeerLoggerVerbose.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
