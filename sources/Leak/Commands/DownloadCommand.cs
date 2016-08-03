@@ -47,7 +47,9 @@ namespace Leak.Commands
             {
                 with.Destination = destination;
                 with.Callback = callback;
+
                 with.Extensions.Metadata();
+                with.Extensions.PeerExchange();
 
                 if (listen)
                 {

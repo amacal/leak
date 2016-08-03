@@ -13,7 +13,7 @@ namespace Leak.Core.Extensions.Metadata
         {
             this.configuration = configurer.Configure(with =>
             {
-                with.Callback = new MetadataCallbackToNothing();
+                with.Callback = new MetadataCallbackNothing();
             });
         }
 

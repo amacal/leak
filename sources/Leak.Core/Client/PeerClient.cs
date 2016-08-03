@@ -6,13 +6,14 @@ using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Network;
 using Leak.Core.Repository;
+using Leak.Core.Retriever;
 using Leak.Core.Telegraph;
 using System;
 using System.Collections.Generic;
 
 namespace Leak.Core.Client
 {
-    public class PeerClient
+    public class PeerClient : PeerClientExtensionContext
     {
         private readonly PeerCollector collector;
         private readonly PeerClientStorage storage;
@@ -34,7 +35,7 @@ namespace Leak.Core.Client
                 with.Listener = new PeerClientListenerBuilder();
             });
 
-            storage = new PeerClientStorage(configuration);
+            storage = new PeerClientStorage(configuration, this);
             hashes = new FileHashCollection();
             callback = configuration.Callback;
 
@@ -97,6 +98,7 @@ namespace Leak.Core.Client
         private void Register(Metainfo metainfo)
         {
             storage.Register(metainfo, collector.CreateView());
+            hashes.Add(metainfo.Hash);
 
             FileHash hash = metainfo.Hash;
             ResourceRepository repository = storage.GetRepository(hash);
@@ -114,6 +116,7 @@ namespace Leak.Core.Client
         private void Register(PeerClientStartConfiguration start)
         {
             storage.Register(start.Hash, collector.CreateView());
+            hashes.Add(start.Hash);
         }
 
         private void Schedule(Metainfo metainfo, string[] trackers)
@@ -147,8 +150,6 @@ namespace Leak.Core.Client
                     with.Hash = metainfo.Hash;
                 });
             }
-
-            hashes.Add(metainfo.Hash);
         }
 
         private void Schedule(PeerClientStartConfiguration start)
@@ -183,8 +184,37 @@ namespace Leak.Core.Client
                     with.Hash = start.Hash;
                 });
             }
+        }
 
-            hashes.Add(start.Hash);
+        FileHash PeerClientExtensionContext.GetHash(PeerHash peer)
+        {
+            return storage.GetHash(peer);
+        }
+
+        ResourceRetriever PeerClientExtensionContext.GetRetriever(PeerHash peer)
+        {
+            return storage.GetRetriever(peer);
+        }
+
+        PeerClientCallback PeerClientExtensionContext.GetCallback(PeerHash peer)
+        {
+            return storage.GetCallback(peer);
+        }
+
+        PeerConnector PeerClientExtensionContext.GetConnector(PeerHash peer)
+        {
+            return configuration.Connector.Build(with =>
+            {
+                with.Peer = configuration.Peer;
+                with.Hash = storage.GetHash(peer);
+                with.Callback = collector.CreateConnectorCallback();
+                with.Pool = pool;
+            });
+        }
+
+        bool PeerClientExtensionContext.IsConnected(string remote)
+        {
+            return storage.Contains(remote);
         }
     }
 }

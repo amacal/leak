@@ -13,12 +13,14 @@ namespace Leak.Core.Client
     public class PeerClientStorage
     {
         private readonly PeerClientConfiguration configuration;
+        private readonly PeerClientExtensionContext context;
         private readonly PeerClientStorageEntryCollection collection;
         private readonly PeerClientCallback callback;
 
-        public PeerClientStorage(PeerClientConfiguration configuration)
+        public PeerClientStorage(PeerClientConfiguration configuration, PeerClientExtensionContext context)
         {
             this.configuration = configuration;
+            this.context = context;
             this.callback = configuration.Callback;
 
             this.collection = new PeerClientStorageEntryCollection();
@@ -35,7 +37,6 @@ namespace Leak.Core.Client
             }
 
             ResourceRepository repository = new ResourceRepositoryToHash(hash, configuration.Destination);
-            PeerClientExtensionContext context = new PeerClientStorageContext(this);
 
             Extender extender = new Extender(with =>
             {
@@ -74,7 +75,6 @@ namespace Leak.Core.Client
             }
 
             ResourceRepository repository = new ResourceRepositoryToMetainfo(metainfo, path);
-            PeerClientExtensionContext context = new PeerClientStorageContext(this);
 
             Extender extender = new Extender(with =>
             {

@@ -17,6 +17,11 @@ namespace Leak.Core.Client
             extensions.Add(new PeerClientExtensionMetadata());
         }
 
+        public void PeerExchange()
+        {
+            extensions.Add(new PeerClientExtensionPeerExchange());
+        }
+
         public void Register(ICollection<ExtenderHandler> handlers, PeerClientExtensionContext context)
         {
             foreach (PeerClientExtension extension in extensions)

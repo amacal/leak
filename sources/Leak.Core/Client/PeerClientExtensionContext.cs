@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Connector;
 using Leak.Core.Retriever;
 
 namespace Leak.Core.Client
@@ -10,5 +11,9 @@ namespace Leak.Core.Client
         ResourceRetriever GetRetriever(PeerHash peer);
 
         PeerClientCallback GetCallback(PeerHash peer);
+
+        PeerConnector GetConnector(PeerHash peer);
+
+        bool IsConnected(string remote);
     }
 }
