@@ -90,6 +90,7 @@
     <Compile Include="Collector\PeerCollector.cs" />
     <Compile Include="Collector\PeerCollectorLoop.cs" />
     <Compile Include="Collector\PeerCollectorView.cs" />
+    <Compile Include="Common\PeerAddress.cs" />
     <Compile Include="Common\PeerDirection.cs" />
     <Compile Include="Common\PeerEndpoint.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
@@ -134,7 +135,6 @@
     <Compile Include="Extensions\PeerExchange\PeerExchangeExtensions.cs" />
     <Compile Include="Extensions\PeerExchange\PeerExchangeHandler.cs" />
     <Compile Include="Extensions\PeerExchange\PeerExchangeMessage.cs" />
-    <Compile Include="Extensions\PeerExchange\PeerExchangePeer.cs" />
     <Compile Include="Listener\PeerListener.cs" />
     <Compile Include="Listener\PeerListenerCallback.cs" />
     <Compile Include="Listener\PeerListenerCallbackBase.cs" />
@@ -296,7 +296,6 @@
     <Compile Include="Tracker\TrackerClientFactory.cs" />
     <Compile Include="Tracker\TrackerClientToHttp.cs" />
     <Compile Include="Tracker\TrackerClientToUdp.cs" />
-    <Compile Include="Tracker\TrackerPeer.cs" />
     <Compile Include="Telegraph\TrackerTelegraph.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -19,9 +19,10 @@ namespace Leak.Core.Collector
 
         public void AddHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
         {
-            PeerCollectorStorageEntry entry = collection.CreateByRemote(connection.Remote);
+            PeerAddress address = PeerAddress.Parse(connection.Remote);
+            PeerCollectorStorageEntry entry = collection.CreateByRemote(address);
 
-            entry.Remote = connection.Remote;
+            entry.Remote = address;
             entry.Peer = handshake.Peer;
             entry.Hash = handshake.Hash;
             entry.HasExtensions = handshake.HasExtensions;
@@ -32,9 +33,10 @@ namespace Leak.Core.Collector
 
         public void AddHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
-            PeerCollectorStorageEntry entry = collection.CreateByRemote(connection.Remote);
+            PeerAddress address = PeerAddress.Parse(connection.Remote);
+            PeerCollectorStorageEntry entry = collection.CreateByRemote(address);
 
-            entry.Remote = connection.Remote;
+            entry.Remote = address;
             entry.Peer = handshake.Peer;
             entry.Hash = handshake.Hash;
             entry.HasExtensions = handshake.HasExtensions;
@@ -53,7 +55,7 @@ namespace Leak.Core.Collector
             }
         }
 
-        public void RemoveRemote(string remote)
+        public void RemoveRemote(PeerAddress remote)
         {
             PeerCollectorStorageEntry entry = collection.FindByRemote(remote);
 

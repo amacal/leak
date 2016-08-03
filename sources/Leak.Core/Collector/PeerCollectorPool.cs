@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Bouncer;
+using Leak.Core.Common;
 using Leak.Core.Network;
 using System;
 
@@ -32,7 +33,7 @@ namespace Leak.Core.Collector
             lock (synchronized)
             {
                 bouncer.ReleaseConnection(connection);
-                storage.RemoveRemote(connection.Remote);
+                storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
             }
 
             connection.Terminate();
@@ -43,7 +44,7 @@ namespace Leak.Core.Collector
             lock (synchronized)
             {
                 bouncer.ReleaseConnection(connection);
-                storage.RemoveRemote(connection.Remote);
+                storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
             }
 
             connection.Terminate();

@@ -11,7 +11,7 @@ namespace Leak.Core.Collector
             RemoteState = new PeerCollectorStatus();
         }
 
-        public string Remote { get; set; }
+        public PeerAddress Remote { get; set; }
 
         public FileHash Hash { get; set; }
 

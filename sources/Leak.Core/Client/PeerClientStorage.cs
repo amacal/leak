@@ -123,7 +123,7 @@ namespace Leak.Core.Client
             entry.Metainfo = metainfo;
         }
 
-        public bool Contains(string remote)
+        public bool Contains(PeerAddress remote)
         {
             return collection.Contains(remote);
         }

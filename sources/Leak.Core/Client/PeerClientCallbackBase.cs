@@ -18,15 +18,15 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnPeerConnecting(FileHash hash, string endpoint)
+        public virtual void OnPeerConnecting(FileHash hash, PeerAddress peer)
         {
         }
 
-        public virtual void OnPeerConnected(FileHash hash, string endpoint)
+        public virtual void OnPeerConnected(FileHash hash, PeerAddress peer)
         {
         }
 
-        public virtual void OnPeerRejected(FileHash hash, string endpoint)
+        public virtual void OnPeerRejected(FileHash hash, PeerAddress peer)
         {
         }
 

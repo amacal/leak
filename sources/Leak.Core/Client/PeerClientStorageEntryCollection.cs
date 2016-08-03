@@ -10,7 +10,7 @@ namespace Leak.Core.Client
 
         private readonly Dictionary<FileHash, PeerClientStorageEntry> byHash;
         private readonly Dictionary<PeerHash, PeerClientStorageEntry> byPeer;
-        private readonly Dictionary<string, PeerClientStorageEntry> byRemote;
+        private readonly Dictionary<PeerAddress, PeerClientStorageEntry> byRemote;
 
         public PeerClientStorageEntryCollection()
         {
@@ -18,7 +18,7 @@ namespace Leak.Core.Client
 
             this.byHash = new Dictionary<FileHash, PeerClientStorageEntry>();
             this.byPeer = new Dictionary<PeerHash, PeerClientStorageEntry>();
-            this.byRemote = new Dictionary<string, PeerClientStorageEntry>();
+            this.byRemote = new Dictionary<PeerAddress, PeerClientStorageEntry>();
         }
 
         public void Add(FileHash hash, PeerClientStorageEntry entry)
@@ -47,7 +47,7 @@ namespace Leak.Core.Client
             }
         }
 
-        public bool Contains(string remote)
+        public bool Contains(PeerAddress remote)
         {
             lock (synchronized)
             {

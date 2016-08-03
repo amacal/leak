@@ -44,27 +44,27 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnPeerConnecting(FileHash hash, string endpoint)
+        public override void OnPeerConnecting(FileHash hash, PeerAddress peer)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPeerConnecting(hash, endpoint);
+                item.OnPeerConnecting(hash, peer);
             }
         }
 
-        public override void OnPeerConnected(FileHash hash, string endpoint)
+        public override void OnPeerConnected(FileHash hash, PeerAddress peer)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPeerConnected(hash, endpoint);
+                item.OnPeerConnected(hash, peer);
             }
         }
 
-        public override void OnPeerRejected(FileHash hash, string endpoint)
+        public override void OnPeerRejected(FileHash hash, PeerAddress peer)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPeerRejected(hash, endpoint);
+                item.OnPeerRejected(hash, peer);
             }
         }
 

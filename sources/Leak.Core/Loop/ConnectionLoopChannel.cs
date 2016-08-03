@@ -23,7 +23,8 @@ namespace Leak.Core.Loop
             get
             {
                 PeerDirection direction = GetDirection(connection.Direction);
-                PeerEndpoint endpoint = new PeerEndpoint(handshake.Hash, handshake.Peer, connection.Remote, direction);
+                PeerAddress address = PeerAddress.Parse(connection.Remote);
+                PeerEndpoint endpoint = new PeerEndpoint(handshake.Hash, handshake.Peer, address, direction);
 
                 return endpoint;
             }

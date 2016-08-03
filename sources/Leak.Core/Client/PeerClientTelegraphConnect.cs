@@ -23,12 +23,12 @@ namespace Leak.Core.Client
 
         public override void OnAnnounced(TrackerAnnounce announce)
         {
-            foreach (TrackerPeer peer in announce.Peers)
+            foreach (PeerAddress peer in announce.Peers)
             {
-                if (storage.Contains(peer.Host) == false)
+                if (storage.Contains(peer) == false)
                 {
-                    callback.OnPeerConnecting(hash, $"{peer.Host}:{peer.Port}");
-                    connector.ConnectTo(peer.Host, peer.Port);
+                    callback.OnPeerConnecting(hash, peer);
+                    connector.ConnectTo(peer);
                 }
             }
         }

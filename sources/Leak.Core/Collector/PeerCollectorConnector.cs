@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Bouncer;
+using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Loop;
 using Leak.Core.Network;
@@ -36,13 +37,13 @@ namespace Leak.Core.Collector
 
             if (accepted)
             {
-                callback.OnConnected(connection.Remote);
+                callback.OnConnected(PeerAddress.Parse(connection.Remote));
             }
         }
 
         public override void OnRejected(NetworkConnection connection)
         {
-            callback.OnRejected(connection.Remote);
+            callback.OnRejected(PeerAddress.Parse(connection.Remote));
         }
 
         public override void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)

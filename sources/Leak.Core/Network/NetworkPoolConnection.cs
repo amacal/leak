@@ -80,7 +80,10 @@ namespace Leak.Core.Network
 
         private static string GetRemote(Socket socket)
         {
-            return ((IPEndPoint)socket.RemoteEndPoint).Address.MapToIPv4().ToString();
+            string host = ((IPEndPoint)socket.RemoteEndPoint).Address.MapToIPv4().ToString();
+            int port = ((IPEndPoint)socket.RemoteEndPoint).Port;
+
+            return $"{host}:{port}";
         }
 
         public long Identifier

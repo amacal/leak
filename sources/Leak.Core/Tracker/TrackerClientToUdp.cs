@@ -58,16 +58,16 @@ namespace Leak.Core.Tracker
             return new TrackerAnnounce(FindPeers(response, received), TimeSpan.FromMinutes(10));
         }
 
-        private static TrackerPeer[] FindPeers(byte[] data, int count)
+        private static PeerAddress[] FindPeers(byte[] data, int count)
         {
-            List<TrackerPeer> peers = new List<TrackerPeer>();
+            List<PeerAddress> peers = new List<PeerAddress>();
 
             for (int i = 20; i < count; i += 6)
             {
                 string host = String.Join(".", data.Skip(i).Take(4));
                 int port = 256 * data[i + 4] + data[i + 5];
 
-                peers.Add(new TrackerPeer(host, port));
+                peers.Add(new PeerAddress(host, port));
             }
 
             return peers.ToArray();

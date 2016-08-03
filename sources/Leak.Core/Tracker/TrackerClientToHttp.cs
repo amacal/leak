@@ -22,14 +22,14 @@ namespace Leak.Core.Tracker
             string request = BuildAnnounceUri(uri, configuration);
 
             BencodedValue decoded = Bencoder.Decode(CallTracker(request));
-            TrackerPeer[] peers = FindPeers(decoded);
+            PeerAddress[] peers = FindPeers(decoded);
 
             return new TrackerAnnounce(peers, TimeSpan.FromMinutes(10));
         }
 
-        private static TrackerPeer[] FindPeers(BencodedValue value)
+        private static PeerAddress[] FindPeers(BencodedValue value)
         {
-            List<TrackerPeer> result = new List<TrackerPeer>();
+            List<PeerAddress> result = new List<PeerAddress>();
 
             BencodedValue peers = value.Find("peers", x => x);
             byte[] bytes = peers.Data.GetBytes();
@@ -41,7 +41,7 @@ namespace Leak.Core.Tracker
 
                 if (port > 0)
                 {
-                    result.Add(new TrackerPeer(host, port));
+                    result.Add(new PeerAddress(host, port));
                 }
             }
 

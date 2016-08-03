@@ -39,7 +39,7 @@ namespace Leak.Core.Tests.Collector
             });
 
             listener.Start();
-            connector.ConnectTo("localhost", 8080);
+            connector.ConnectTo(new PeerAddress("localhost", 8080));
 
             context.Ready.WaitOne(TimeSpan.FromSeconds(2));
             context.Connected.Should().Contain(peer);

@@ -8,14 +8,14 @@ namespace Leak.Loggers
 {
     public class PeerLoggerNormal : PeerLogger
     {
-        public override void OnPeerRejected(FileHash hash, string endpoint)
+        public override void OnPeerRejected(FileHash hash, PeerAddress peer)
         {
-            Console.WriteLine($"{hash}: rejected; endpoint={endpoint}");
+            Console.WriteLine($"{hash}: rejected; endpoint={peer}");
         }
 
         public override void OnPeerHandshake(FileHash hash, PeerEndpoint endpoint)
         {
-            string remote = endpoint.Remote;
+            string remote = endpoint.Remote.ToString();
             string direction = endpoint.Direction.ToString().ToLowerInvariant();
 
             Console.WriteLine($"{endpoint.Peer}: handshake; remote={remote}; direction={direction}");

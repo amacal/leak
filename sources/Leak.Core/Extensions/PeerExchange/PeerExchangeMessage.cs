@@ -1,15 +1,17 @@
-﻿namespace Leak.Core.Extensions.PeerExchange
+﻿using Leak.Core.Common;
+
+namespace Leak.Core.Extensions.PeerExchange
 {
     public class PeerExchangeMessage
     {
-        private readonly PeerExchangePeer[] added;
+        private readonly PeerAddress[] added;
 
-        public PeerExchangeMessage(PeerExchangePeer[] added)
+        public PeerExchangeMessage(PeerAddress[] added)
         {
             this.added = added;
         }
 
-        public PeerExchangePeer[] Added
+        public PeerAddress[] Added
         {
             get { return added; }
         }

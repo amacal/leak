@@ -4,10 +4,10 @@
     {
         private readonly FileHash hash;
         private readonly PeerHash peer;
-        private readonly string remote;
+        private readonly PeerAddress remote;
         private readonly PeerDirection direction;
 
-        public PeerEndpoint(FileHash hash, PeerHash peer, string remote, PeerDirection direction)
+        public PeerEndpoint(FileHash hash, PeerHash peer, PeerAddress remote, PeerDirection direction)
         {
             this.hash = hash;
             this.peer = peer;
@@ -25,7 +25,7 @@
             get { return peer; }
         }
 
-        public string Remote
+        public PeerAddress Remote
         {
             get { return remote; }
         }

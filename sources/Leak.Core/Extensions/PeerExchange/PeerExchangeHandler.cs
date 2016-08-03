@@ -28,7 +28,7 @@ namespace Leak.Core.Extensions.PeerExchange
         {
             BencodedValue value = Bencoder.Decode(message.ToBytes());
             byte[] added = value.Find("added", x => x.Data.GetBytes());
-            List<PeerExchangePeer> peers = new List<PeerExchangePeer>();
+            List<PeerAddress> peers = new List<PeerAddress>();
 
             if (added != null)
             {
@@ -37,7 +37,7 @@ namespace Leak.Core.Extensions.PeerExchange
                     string host = GetHost(added, i);
                     int port = GetPort(added, i);
 
-                    peers.Add(new PeerExchangePeer(host, port));
+                    peers.Add(new PeerAddress(host, port));
                 }
             }
 

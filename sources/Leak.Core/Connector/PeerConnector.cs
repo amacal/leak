@@ -21,10 +21,10 @@ namespace Leak.Core.Connector
             });
         }
 
-        public void ConnectTo(string host, int port)
+        public void ConnectTo(PeerAddress peer)
         {
             Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            EndPoint endpoint = new DnsEndPoint(host, port);
+            EndPoint endpoint = new DnsEndPoint(peer.Host, peer.Port);
 
             socket.BeginConnect(endpoint, OnConnected, socket);
         }

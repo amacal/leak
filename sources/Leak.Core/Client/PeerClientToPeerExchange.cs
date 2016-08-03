@@ -19,12 +19,12 @@ namespace Leak.Core.Client
             PeerClientCallback callback = context.GetCallback(peer);
             PeerConnector connector = context.GetConnector(peer);
 
-            foreach (PeerExchangePeer added in message.Added)
+            foreach (PeerAddress added in message.Added)
             {
-                if (context.IsConnected(added.Host) == false)
+                if (context.IsConnected(added) == false)
                 {
-                    callback.OnPeerConnecting(hash, added.Host);
-                    connector.ConnectTo(added.Host, added.Port);
+                    callback.OnPeerConnecting(hash, added);
+                    connector.ConnectTo(added);
                 }
             }
         }

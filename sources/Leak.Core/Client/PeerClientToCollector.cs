@@ -16,14 +16,14 @@ namespace Leak.Core.Client
             this.storage = storage;
         }
 
-        public override void OnConnected(string remote)
+        public override void OnConnected(PeerAddress peer)
         {
-            callback.OnPeerConnected(storage.GetHash(), remote);
+            callback.OnPeerConnected(storage.GetHash(), peer);
         }
 
-        public override void OnRejected(string remote)
+        public override void OnRejected(PeerAddress peer)
         {
-            callback.OnPeerRejected(storage.GetHash(), remote);
+            callback.OnPeerRejected(storage.GetHash(), peer);
         }
 
         public override void OnDisconnected(PeerHash peer)

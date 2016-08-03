@@ -67,7 +67,7 @@ namespace Leak.Core.Client
         public void Start(MetainfoFile metainfo)
         {
             Register(metainfo.Data);
-            Schedule(metainfo.Data, metainfo.Trackers);
+            Schedule(metainfo.Data, metainfo.Trackers, new PeerAddress[0]);
         }
 
         public void Start(Action<PeerClientStartConfiguration> configurer)
@@ -75,6 +75,7 @@ namespace Leak.Core.Client
             Start(configurer.Configure(with =>
             {
                 with.Trackers = new List<string>();
+                with.Peers = new List<PeerAddress>();
             }));
         }
 
@@ -91,14 +92,13 @@ namespace Leak.Core.Client
             else
             {
                 Register(metainfo);
-                Schedule(metainfo, start.Trackers.ToArray());
+                Schedule(metainfo, start.Trackers.ToArray(), start.Peers.ToArray());
             }
         }
 
         private void Register(Metainfo metainfo)
         {
             storage.Register(metainfo, collector.CreateView());
-            hashes.Add(metainfo.Hash);
 
             FileHash hash = metainfo.Hash;
             ResourceRepository repository = storage.GetRepository(hash);
@@ -106,6 +106,7 @@ namespace Leak.Core.Client
 
             storage.WithBitfield(hash, bitfield);
             callback.OnInitialized(metainfo.Hash, new PeerClientMetainfo(bitfield));
+            hashes.Add(metainfo.Hash);
 
             if (bitfield.Completed == bitfield.Length)
             {
@@ -119,7 +120,7 @@ namespace Leak.Core.Client
             hashes.Add(start.Hash);
         }
 
-        private void Schedule(Metainfo metainfo, string[] trackers)
+        private void Schedule(Metainfo metainfo, string[] trackers, PeerAddress[] peers)
         {
             PeerConnector connector = null;
 
@@ -132,6 +133,15 @@ namespace Leak.Core.Client
                     with.Callback = collector.CreateConnectorCallback();
                     with.Pool = pool;
                 });
+
+                foreach (PeerAddress peer in peers)
+                {
+                    if (storage.Contains(peer) == false)
+                    {
+                        callback.OnPeerConnecting(metainfo.Hash, peer);
+                        connector.ConnectTo(peer);
+                    }
+                }
             }
 
             TrackerTelegraph telegraph = new TrackerTelegraph(with =>
@@ -212,7 +222,7 @@ namespace Leak.Core.Client
             });
         }
 
-        bool PeerClientExtensionContext.IsConnected(string remote)
+        bool PeerClientExtensionContext.IsConnected(PeerAddress remote)
         {
             return storage.Contains(remote);
         }

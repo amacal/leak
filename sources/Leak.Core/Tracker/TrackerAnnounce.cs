@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Leak.Core.Common;
+using System;
 
 namespace Leak.Core.Tracker
 {
     public class TrackerAnnounce
     {
-        private readonly TrackerPeer[] peers;
+        private readonly PeerAddress[] peers;
         private readonly TimeSpan interval;
 
-        public TrackerAnnounce(TrackerPeer[] peers, TimeSpan interval)
+        public TrackerAnnounce(PeerAddress[] peers, TimeSpan interval)
         {
             this.peers = peers;
             this.interval = interval;
         }
 
-        public TrackerPeer[] Peers
+        public PeerAddress[] Peers
         {
             get { return peers; }
         }

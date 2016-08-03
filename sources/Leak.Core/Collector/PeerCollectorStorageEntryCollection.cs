@@ -5,16 +5,16 @@ namespace Leak.Core.Collector
 {
     public class PeerCollectorStorageEntryCollection
     {
-        private readonly Dictionary<string, PeerCollectorStorageEntry> byRemote;
+        private readonly Dictionary<PeerAddress, PeerCollectorStorageEntry> byRemote;
         private readonly Dictionary<PeerHash, PeerCollectorStorageEntry> byPeer;
 
         public PeerCollectorStorageEntryCollection()
         {
-            byRemote = new Dictionary<string, PeerCollectorStorageEntry>();
+            byRemote = new Dictionary<PeerAddress, PeerCollectorStorageEntry>();
             byPeer = new Dictionary<PeerHash, PeerCollectorStorageEntry>();
         }
 
-        public PeerCollectorStorageEntry CreateByRemote(string remote)
+        public PeerCollectorStorageEntry CreateByRemote(PeerAddress remote)
         {
             PeerCollectorStorageEntry entry;
 
@@ -27,7 +27,7 @@ namespace Leak.Core.Collector
             return entry;
         }
 
-        public PeerCollectorStorageEntry FindByRemote(string remote)
+        public PeerCollectorStorageEntry FindByRemote(PeerAddress remote)
         {
             PeerCollectorStorageEntry entry;
             byRemote.TryGetValue(remote, out entry);
@@ -50,7 +50,7 @@ namespace Leak.Core.Collector
         {
         }
 
-        public void RemoveByRemote(string remote)
+        public void RemoveByRemote(PeerAddress remote)
         {
             byRemote.Remove(remote);
         }

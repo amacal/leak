@@ -14,6 +14,6 @@ namespace Leak.Core.Client
 
         PeerConnector GetConnector(PeerHash peer);
 
-        bool IsConnected(string remote);
+        bool IsConnected(PeerAddress remote);
     }
 }

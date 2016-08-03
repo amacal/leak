@@ -5,9 +5,9 @@ namespace Leak.Core.Collector
 {
     public interface PeerCollectorCallback
     {
-        void OnConnected(string remote);
+        void OnConnected(PeerAddress peer);
 
-        void OnRejected(string remote);
+        void OnRejected(PeerAddress peer);
 
         void OnDisconnected(PeerHash peer);
 

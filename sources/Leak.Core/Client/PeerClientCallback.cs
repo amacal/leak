@@ -12,11 +12,11 @@ namespace Leak.Core.Client
 
         void OnCompleted(FileHash hash);
 
-        void OnPeerConnecting(FileHash hash, string endpoint);
+        void OnPeerConnecting(FileHash hash, PeerAddress peer);
 
-        void OnPeerConnected(FileHash hash, string endpoint);
+        void OnPeerConnected(FileHash hash, PeerAddress peer);
 
-        void OnPeerRejected(FileHash hash, string endpoint);
+        void OnPeerRejected(FileHash hash, PeerAddress peer);
 
         void OnPeerDisconnected(FileHash hash, PeerHash peer);
 
