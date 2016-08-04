@@ -21,9 +21,9 @@ namespace Leak.Core.Client
             callback.OnPeerConnecting(storage.GetHash(), peer);
         }
 
-        public override void OnConnected(PeerAddress peer)
+        public override void OnConnected(PeerCollectorConnected connected)
         {
-            callback.OnPeerConnected(storage.GetHash(), peer);
+            callback.OnPeerConnected(storage.GetHash(), new PeerClientConnected(connected));
         }
 
         public override void OnRejected(PeerAddress peer)

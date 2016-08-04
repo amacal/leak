@@ -22,7 +22,7 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnPeerConnected(FileHash hash, PeerAddress peer)
+        public virtual void OnPeerConnected(FileHash hash, PeerClientConnected connected)
         {
         }
 

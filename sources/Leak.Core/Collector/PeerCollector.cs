@@ -34,7 +34,7 @@ namespace Leak.Core.Collector
             bouncer = new PeerBouncer(with =>
             {
                 with.Callback = new PeerCollectorBouncer();
-                with.MaximumNumberOfConnections = 32;
+                with.Connections = 32;
             });
         }
 

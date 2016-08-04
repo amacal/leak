@@ -44,6 +44,7 @@
     <Compile Include="Bouncer\PeerBouncerStorageEntryCollection.cs" />
     <Compile Include="Bytes.cs" />
     <Compile Include="Client\PeerClientConfigurationExtensions.cs" />
+    <Compile Include="Client\PeerClientConnected.cs" />
     <Compile Include="Client\PeerClientConnectorBuilder.cs" />
     <Compile Include="Client\PeerClientConnectorStatus.cs" />
     <Compile Include="Client\PeerClientExtension.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Collector\PeerCollectorCallbackNothing.cs" />
     <Compile Include="Collector\PeerCollectorChannel.cs" />
     <Compile Include="Collector\PeerCollectorConfiguration.cs" />
+    <Compile Include="Collector\PeerCollectorConnected.cs" />
     <Compile Include="Collector\PeerCollectorPool.cs" />
     <Compile Include="Collector\PeerCollectorStatus.cs" />
     <Compile Include="Collector\PeerCollectorStorageEntryCollection.cs" />

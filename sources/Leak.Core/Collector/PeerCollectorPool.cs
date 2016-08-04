@@ -30,24 +30,38 @@ namespace Leak.Core.Collector
 
         public override void OnException(NetworkConnection connection, Exception ex)
         {
+            PeerHash peer;
+
             lock (synchronized)
             {
                 bouncer.ReleaseConnection(connection);
-                storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
+                peer = storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
             }
 
             connection.Terminate();
+
+            if (peer != null)
+            {
+                callback.OnDisconnected(peer);
+            }
         }
 
         public override void OnDisconnected(NetworkConnection connection)
         {
+            PeerHash peer;
+
             lock (synchronized)
             {
                 bouncer.ReleaseConnection(connection);
-                storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
+                peer = storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
             }
 
             connection.Terminate();
+
+            if (peer != null)
+            {
+                callback.OnDisconnected(peer);
+            }
         }
     }
 }

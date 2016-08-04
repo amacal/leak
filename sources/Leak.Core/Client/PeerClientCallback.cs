@@ -14,7 +14,7 @@ namespace Leak.Core.Client
 
         void OnPeerConnecting(FileHash hash, PeerAddress peer);
 
-        void OnPeerConnected(FileHash hash, PeerAddress peer);
+        void OnPeerConnected(FileHash hash, PeerClientConnected connected);
 
         void OnPeerRejected(FileHash hash, PeerAddress peer);
 

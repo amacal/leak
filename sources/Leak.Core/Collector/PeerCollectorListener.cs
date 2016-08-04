@@ -39,6 +39,7 @@ namespace Leak.Core.Collector
 
         public override void OnConnected(NetworkConnection connection)
         {
+            int total = 0;
             bool accepted = false;
 
             lock (synchronized)
@@ -46,12 +47,16 @@ namespace Leak.Core.Collector
                 if (bouncer.AcceptRemote(connection))
                 {
                     accepted = true;
+                    total = bouncer.Count();
                 }
             }
 
             if (accepted)
             {
-                callback.OnConnected(PeerAddress.Parse(connection.Remote));
+                PeerAddress peer = PeerAddress.Parse(connection.Remote);
+                PeerCollectorConnected connected = new PeerCollectorConnected(peer, total);
+
+                callback.OnConnected(connected);
             }
         }
 

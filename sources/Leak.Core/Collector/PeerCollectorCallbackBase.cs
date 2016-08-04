@@ -9,7 +9,7 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnConnected(PeerAddress peer)
+        public virtual void OnConnected(PeerCollectorConnected connected)
         {
         }
 

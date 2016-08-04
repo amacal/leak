@@ -14,15 +14,20 @@ namespace Leak.Core.Bouncer
             configuration = configurer.Configure(with =>
             {
                 with.Callback = new PeerBouncerCallbackNothing();
-                with.MaximumNumberOfConnections = 128;
+                with.Connections = 128;
             });
 
             storage = new PeerBouncerStorage(configuration);
         }
 
+        public int Count()
+        {
+            return storage.Count();
+        }
+
         public bool Accept(NetworkConnectionInfo connection)
         {
-            return storage.Count() < configuration.MaximumNumberOfConnections;
+            return storage.Count() < configuration.Connections;
         }
 
         public bool AcceptRemote(NetworkConnection connection)

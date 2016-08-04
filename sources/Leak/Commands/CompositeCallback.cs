@@ -52,11 +52,11 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnPeerConnected(FileHash hash, PeerAddress peer)
+        public override void OnPeerConnected(FileHash hash, PeerClientConnected connected)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPeerConnected(hash, peer);
+                item.OnPeerConnected(hash, connected);
             }
         }
 

@@ -55,7 +55,7 @@ namespace Leak.Core.Collector
             }
         }
 
-        public void RemoveRemote(PeerAddress remote)
+        public PeerHash RemoveRemote(PeerAddress remote)
         {
             PeerCollectorStorageEntry entry = collection.FindByRemote(remote);
 
@@ -64,6 +64,8 @@ namespace Leak.Core.Collector
                 collection.RemoveByRemote(entry.Remote);
                 collection.RemoveByPeer(entry.Peer);
             }
+
+            return entry?.Peer;
         }
 
         public bool IsInterested(PeerHash peer)

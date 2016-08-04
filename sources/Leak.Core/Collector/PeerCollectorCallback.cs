@@ -7,11 +7,11 @@ namespace Leak.Core.Collector
     {
         void OnConnecting(PeerAddress peer);
 
-        void OnConnected(PeerAddress peer);
-
-        void OnRejected(PeerAddress peer);
+        void OnConnected(PeerCollectorConnected connected);
 
         void OnDisconnected(PeerHash peer);
+
+        void OnRejected(PeerAddress peer);
 
         void OnHandshake(PeerEndpoint endpoint);
 

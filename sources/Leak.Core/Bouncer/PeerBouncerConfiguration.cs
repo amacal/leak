@@ -2,7 +2,7 @@
 {
     public class PeerBouncerConfiguration
     {
-        public int MaximumNumberOfConnections { get; set; }
+        public int Connections { get; set; }
 
         public PeerBouncerCallback Callback { get; set; }
     }

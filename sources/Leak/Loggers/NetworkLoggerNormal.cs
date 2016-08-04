@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Client;
+using Leak.Core.Common;
 using System;
 
 namespace Leak.Loggers
@@ -10,9 +11,9 @@ namespace Leak.Loggers
             Console.WriteLine($"{hash}: connecting; endpoint={peer}");
         }
 
-        public override void OnPeerConnected(FileHash hash, PeerAddress peer)
+        public override void OnPeerConnected(FileHash hash, PeerClientConnected connected)
         {
-            Console.WriteLine($"{hash}: connected; endpoint={peer}");
+            Console.WriteLine($"{hash}: connected; endpoint={connected.Peer}; total={connected.Total}");
         }
 
         public override void OnPeerDisconnected(FileHash hash, PeerHash peer)
