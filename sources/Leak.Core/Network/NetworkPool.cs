@@ -35,6 +35,19 @@ namespace Leak.Core.Network
             callback = configuration.Callback;
         }
 
+        public NetworkConnectionInfo Info(string remote, NetworkDirection direction)
+        {
+            return new NetworkConnectionInfo(remote, direction);
+        }
+
+        public NetworkConnectionInfo Info(Socket socket, NetworkDirection direction)
+        {
+            string remote = NetworkPoolConnection.GetRemote(socket);
+            NetworkConnectionInfo info = new NetworkConnectionInfo(remote, direction);
+
+            return info;
+        }
+
         public NetworkConnection Create(Socket socket, NetworkDirection direction)
         {
             long identifier = Interlocked.Increment(ref sequence);

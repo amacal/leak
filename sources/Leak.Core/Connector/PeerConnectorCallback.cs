@@ -5,6 +5,8 @@ namespace Leak.Core.Connector
 {
     public interface PeerConnectorCallback
     {
+        void OnConnecting(PeerConnectorConnecting connecting);
+
         void OnConnected(NetworkConnection connection);
 
         void OnRejected(NetworkConnection connection);

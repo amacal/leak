@@ -23,10 +23,24 @@ namespace Leak.Core.Connector
 
         public void ConnectTo(PeerAddress peer)
         {
-            Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            EndPoint endpoint = new DnsEndPoint(peer.Host, peer.Port);
+            if (OnConnecting(peer))
+            {
+                Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                EndPoint endpoint = new DnsEndPoint(peer.Host, peer.Port);
 
-            socket.BeginConnect(endpoint, OnConnected, socket);
+                socket.BeginConnect(endpoint, OnConnected, socket);
+            }
+        }
+
+        private bool OnConnecting(PeerAddress peer)
+        {
+            bool accepted = true;
+
+            NetworkConnectionInfo connection = configuration.Pool.Info(peer.ToString(), NetworkDirection.Incoming);
+            PeerConnectorConnecting connecting = new PeerConnectorConnecting(connection, () => accepted = false);
+
+            configuration.Callback.OnConnecting(connecting);
+            return accepted;
         }
 
         private void OnConnected(IAsyncResult result)

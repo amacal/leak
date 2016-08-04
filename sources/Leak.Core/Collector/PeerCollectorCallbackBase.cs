@@ -5,6 +5,10 @@ namespace Leak.Core.Collector
 {
     public abstract class PeerCollectorCallbackBase : PeerCollectorCallback
     {
+        public virtual void OnConnecting(PeerAddress peer)
+        {
+        }
+
         public virtual void OnConnected(PeerAddress peer)
         {
         }

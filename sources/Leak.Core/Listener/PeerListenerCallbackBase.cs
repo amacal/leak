@@ -13,6 +13,10 @@ namespace Leak.Core.Listener
         {
         }
 
+        public virtual void OnConnecting(PeerListenerConnecting connecting)
+        {
+        }
+
         public virtual void OnConnected(NetworkConnection connection)
         {
         }

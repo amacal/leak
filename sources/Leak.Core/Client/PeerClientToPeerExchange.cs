@@ -23,7 +23,6 @@ namespace Leak.Core.Client
             {
                 if (context.IsConnected(added) == false)
                 {
-                    callback.OnPeerConnecting(hash, added);
                     connector.ConnectTo(added);
                 }
             }

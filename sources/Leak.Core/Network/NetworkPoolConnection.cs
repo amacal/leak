@@ -78,7 +78,7 @@ namespace Leak.Core.Network
             });
         }
 
-        private static string GetRemote(Socket socket)
+        public static string GetRemote(Socket socket)
         {
             string host = ((IPEndPoint)socket.RemoteEndPoint).Address.MapToIPv4().ToString();
             int port = ((IPEndPoint)socket.RemoteEndPoint).Port;

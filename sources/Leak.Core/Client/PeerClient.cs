@@ -138,7 +138,6 @@ namespace Leak.Core.Client
                 {
                     if (storage.Contains(peer) == false)
                     {
-                        callback.OnPeerConnecting(metainfo.Hash, peer);
                         connector.ConnectTo(peer);
                     }
                 }

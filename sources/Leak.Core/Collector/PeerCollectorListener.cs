@@ -23,6 +23,20 @@ namespace Leak.Core.Collector
             this.synchronized = synchronized;
         }
 
+        public override void OnConnecting(PeerListenerConnecting connecting)
+        {
+            lock (synchronized)
+            {
+                if (bouncer.Accept(connecting.Connection) == false)
+                {
+                    connecting.Reject();
+                    return;
+                }
+            }
+
+            callback.OnConnecting(PeerAddress.Parse(connecting.Connection.Remote));
+        }
+
         public override void OnConnected(NetworkConnection connection)
         {
             bool accepted = false;

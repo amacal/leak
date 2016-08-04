@@ -13,7 +13,7 @@ namespace Leak.Core.Loop
         {
             this.configuration = new ConnectionLoopConfiguration
             {
-                Callback = new ConnectionLoopCallbackToNothing()
+                Callback = new ConnectionLoopCallbackNothing()
             };
 
             configurer.Invoke(configuration);

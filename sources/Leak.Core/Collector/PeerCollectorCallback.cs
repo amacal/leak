@@ -5,6 +5,8 @@ namespace Leak.Core.Collector
 {
     public interface PeerCollectorCallback
     {
+        void OnConnecting(PeerAddress peer);
+
         void OnConnected(PeerAddress peer);
 
         void OnRejected(PeerAddress peer);

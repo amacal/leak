@@ -9,6 +9,8 @@ namespace Leak.Core.Listener
 
         void OnStopped();
 
+        void OnConnecting(PeerListenerConnecting connecting);
+
         void OnConnected(NetworkConnection connection);
 
         void OnRejected(NetworkConnection connection);

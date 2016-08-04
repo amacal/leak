@@ -99,6 +99,7 @@
     <Compile Include="Connector\PeerConnectorCallbackBase.cs" />
     <Compile Include="Connector\PeerConnectorCallbackNothing.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
+    <Compile Include="Connector\PeerConnectorConnecting.cs" />
     <Compile Include="Connector\PeerConnectorHandshake.cs" />
     <Compile Include="Connector\PeerConnectorNegotiatorContext.cs" />
     <Compile Include="Bencoding\BencodedData.cs" />
@@ -140,12 +141,13 @@
     <Compile Include="Listener\PeerListenerCallbackBase.cs" />
     <Compile Include="Listener\PeerListenerCallbackNothing.cs" />
     <Compile Include="Listener\PeerListenerConfiguration.cs" />
+    <Compile Include="Listener\PeerListenerConnecting.cs" />
     <Compile Include="Listener\PeerListenerNegotiatorContext.cs" />
     <Compile Include="Listener\PeerListenerHandshake.cs" />
     <Compile Include="Loop\ConnectionLoop.cs" />
     <Compile Include="Loop\ConnectionLoopCallback.cs" />
     <Compile Include="Loop\ConnectionLoopCallbackBase.cs" />
-    <Compile Include="Loop\ConnectionLoopCallbackToNothing.cs" />
+    <Compile Include="Loop\ConnectionLoopCallbackNothing.cs" />
     <Compile Include="Loop\ConnectionLoopChannel.cs" />
     <Compile Include="Loop\ConnectionLoopCompositeMessage.cs" />
     <Compile Include="Loop\ConnectionLoopConfiguration.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Network\NetworkConnectionDecryptorToNothing.cs" />
     <Compile Include="Network\NetworkConnectionEncryptor.cs" />
     <Compile Include="Network\NetworkConnectionEncryptorToNothing.cs" />
+    <Compile Include="Network\NetworkConnectionInfo.cs" />
     <Compile Include="Network\NetworkIncomingMessage.cs" />
     <Compile Include="Network\NetworkIncomingMessageExtensions.cs" />
     <Compile Include="Network\NetworkIncomingMessageHandler.cs" />

@@ -65,7 +65,7 @@ namespace Leak.Core.Tests.Loop
             }
         }
 
-        public class ListenerCallback : PeerListenerCallback
+        public class ListenerCallback : PeerListenerCallbackBase
         {
             private readonly ConnectionLoop loop;
 
@@ -74,38 +74,14 @@ namespace Leak.Core.Tests.Loop
                 this.loop = loop;
             }
 
-            public void OnStarted()
-            {
-            }
-
-            public void OnStopped()
-            {
-            }
-
-            public void OnConnected(NetworkConnection connection)
-            {
-            }
-
-            public void OnRejected(NetworkConnection connection)
-            {
-            }
-
-            public void OnHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
+            public override void OnHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
             {
                 loop.StartProcessing(connection, handshake);
                 connection.Send(new NetworkOutgoingMessageBytes(new byte[4]));
             }
-
-            public void OnException(NetworkConnection connection, Exception ex)
-            {
-            }
-
-            public void OnDisconnected(NetworkConnection connection)
-            {
-            }
         }
 
-        public class ConnectorCallback : PeerConnectorCallback
+        public class ConnectorCallback : PeerConnectorCallbackBase
         {
             private readonly ConnectionLoop loop;
 
@@ -114,26 +90,10 @@ namespace Leak.Core.Tests.Loop
                 this.loop = loop;
             }
 
-            public void OnConnected(NetworkConnection connection)
-            {
-            }
-
-            public void OnRejected(NetworkConnection connection)
-            {
-            }
-
-            public void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
+            public override void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
             {
                 loop.StartProcessing(connection, handshake);
                 connection.Send(new NetworkOutgoingMessageBytes(new byte[4]));
-            }
-
-            public void OnException(NetworkConnection connection, Exception ex)
-            {
-            }
-
-            public void OnDisconnected(NetworkConnection connection)
-            {
             }
         }
     }

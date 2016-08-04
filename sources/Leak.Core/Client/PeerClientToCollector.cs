@@ -16,6 +16,11 @@ namespace Leak.Core.Client
             this.storage = storage;
         }
 
+        public override void OnConnecting(PeerAddress peer)
+        {
+            callback.OnPeerConnecting(storage.GetHash(), peer);
+        }
+
         public override void OnConnected(PeerAddress peer)
         {
             callback.OnPeerConnected(storage.GetHash(), peer);

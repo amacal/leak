@@ -42,6 +42,15 @@ namespace Leak.Core.Listener
             try
             {
                 Socket accepted = socket.EndAccept(result);
+
+                if (OnConnecting(accepted) == false)
+                {
+                    accepted.Close();
+                    accepted.Dispose();
+
+                    return;
+                }
+
                 NetworkConnection connection = configuration.Pool.Create(accepted, NetworkDirection.Incoming);
                 PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
 
@@ -55,6 +64,17 @@ namespace Leak.Core.Listener
             {
                 socket.BeginAccept(OnAccept, this);
             }
+        }
+
+        private bool OnConnecting(Socket incoming)
+        {
+            bool accepted = true;
+
+            NetworkConnectionInfo connection = configuration.Pool.Info(incoming, NetworkDirection.Incoming);
+            PeerListenerConnecting connecting = new PeerListenerConnecting(connection, () => accepted = false);
+
+            configuration.Callback.OnConnecting(connecting);
+            return accepted;
         }
 
         private void OnConnected(NetworkConnection connection)

@@ -13,6 +13,11 @@ namespace Leak.Core.Bouncer
             this.collection = new PeerBouncerStorageEntryCollection();
         }
 
+        public int Count()
+        {
+            return collection.Count(x => x.Released == false);
+        }
+
         public bool AddIdentifier(long identifier)
         {
             PeerBouncerStorageEntry entry = collection.FindOrCreateByIdentifier(identifier);

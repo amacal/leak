@@ -1,5 +1,7 @@
 ﻿using Leak.Core.Common;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Bouncer
 {
@@ -14,6 +16,11 @@ namespace Leak.Core.Bouncer
             byIdentifier = new Dictionary<long, PeerBouncerStorageEntry>();
             byRemote = new Dictionary<string, PeerBouncerStorageEntry>();
             byPeer = new Dictionary<PeerHash, PeerBouncerStorageEntry>();
+        }
+
+        public int Count(Func<PeerBouncerStorageEntry, bool> predicate)
+        {
+            return byIdentifier.Values.Count(predicate);
         }
 
         public PeerBouncerStorageEntry FindOrCreateByIdentifier(long identifier)
