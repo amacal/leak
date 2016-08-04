@@ -27,7 +27,7 @@ namespace Leak.Core.Extensions.PeerExchange
         public void Handle(PeerHash peer, ExtendedIncomingMessage message)
         {
             BencodedValue value = Bencoder.Decode(message.ToBytes());
-            byte[] added = value.Find("added", x => x.Data.GetBytes());
+            byte[] added = value.Find("added", x => x?.Data?.GetBytes());
             List<PeerAddress> peers = new List<PeerAddress>();
 
             if (added != null)
