@@ -9,11 +9,14 @@ namespace Leak.Core.Repository
     {
         private readonly Metainfo metainfo;
         private readonly string location;
+        private readonly byte[] buffer;
 
         public ResourceRepositoryToMetainfo(Metainfo metainfo, string location)
         {
             this.metainfo = metainfo;
             this.location = location;
+
+            this.buffer = new byte[metainfo.Properties.PieceSize];
         }
 
         public MetainfoProperties Properties
@@ -55,9 +58,8 @@ namespace Leak.Core.Repository
             using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
             {
                 int read = metainfo.Properties.PieceSize;
-                byte[] buffer = new byte[metainfo.Properties.PieceSize];
-
                 Bitfield bitfield = new Bitfield(metainfo.Properties.Pieces);
+
                 stream.Seek(0, SeekOrigin.Begin);
 
                 while (piece < metainfo.Properties.Pieces)
@@ -103,7 +105,6 @@ namespace Leak.Core.Repository
 
         public bool Verify(int piece)
         {
-            byte[] buffer = new byte[metainfo.Properties.PieceSize];
             long position = (long)piece * metainfo.Properties.PieceSize;
 
             using (HashAlgorithm algorithm = SHA1.Create())

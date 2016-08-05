@@ -36,6 +36,11 @@ namespace Leak.Core.Negotiator
             return inner.Decrypt(data);
         }
 
+        public void Decrypt(byte[] data, int index, int count)
+        {
+            inner.Decrypt(data, index, count);
+        }
+
         public NetworkIncomingMessage Decrypt(NetworkIncomingMessage message)
         {
             byte[] encrypted = message.ToBytes();

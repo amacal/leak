@@ -332,14 +332,10 @@ namespace Leak.Core.Tests.Network
 
         private class DecrementalDecryptor : NetworkConnectionDecryptor
         {
-            public override byte[] Decrypt(byte[] data)
+            public override void Decrypt(byte[] data, int offset, int count)
             {
-                byte[] result = new byte[data.Length];
-
-                for (int i = 0; i < result.Length; i++)
-                    result[i] = (byte)(data[i] - 1);
-
-                return result;
+                for (int i = 0; i < data.Length; i++)
+                    data[i] = (byte)(data[i] - 1);
             }
         }
     }

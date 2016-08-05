@@ -13,10 +13,12 @@
         public static readonly NetworkConnectionDecryptor Nothing = new NetworkConnectionDecryptorToNothing();
 
         /// <summary>
-        /// Decrypts the given bytes array.
+        /// Decrypts the given bytes array in place.
         /// </summary>
         /// <param name="data">The array with bytes to decrypt.</param>
+        /// <param name="index">The index to start from.</param>
+        /// <param name="count">The number of bytes to decrypt.</param>
         /// <returns>A decrypted array of bytes.</returns>
-        public abstract byte[] Decrypt(byte[] data);
+        public abstract void Decrypt(byte[] data, int index, int count);
     }
 }

@@ -21,6 +21,7 @@ namespace Leak.Core.Negotiator
         {
             this.key = source.key.ToArray();
             this.vector = source.vector.ToArray();
+
             this.position = source.position;
             this.i = source.i;
             this.j = source.j;
@@ -41,6 +42,11 @@ namespace Leak.Core.Negotiator
             return Handle(data);
         }
 
+        public void Decrypt(byte[] data, int index, int count)
+        {
+            Handle(data, true, index, count);
+        }
+
         public HandshakeRivestCipher Clone()
         {
             return new HandshakeRivestCipher(this);
@@ -48,15 +54,21 @@ namespace Leak.Core.Negotiator
 
         private static byte[] Initialize(byte[] key)
         {
-            byte[] s = Enumerable.Range(0, 256)
-              .Select(i => (byte)i)
-              .ToArray();
+            byte c;
+            byte[] s = new byte[256];
+
+            for (int i = 0; i < 256; i++)
+            {
+                s[i] = (byte)i;
+            }
 
             for (int i = 0, j = 0; i < 256; i++)
             {
                 j = (j + key[i % key.Length] + s[i]) & 255;
 
-                Swap(s, i, j);
+                c = s[i];
+                s[i] = s[j];
+                s[j] = c;
             }
 
             return s;
@@ -64,29 +76,29 @@ namespace Leak.Core.Negotiator
 
         private byte[] Handle(byte[] data)
         {
-            int length = data.Length;
-            byte[] result = new byte[length];
+            return Handle(data, false, 0, data.Length);
+        }
 
-            for (int x = 0; x < length; x++)
+        private byte[] Handle(byte[] data, bool inPlace, int index, int count)
+        {
+            byte c;
+            int length = index + count;
+            byte[] result = inPlace ? data : new byte[length];
+
+            for (int x = index; x < length; x++)
             {
                 i = (i + 1) & 255;
                 j = (j + vector[i]) & 255;
 
-                Swap(vector, i, j);
-                position++;
+                c = vector[i];
+                vector[i] = vector[j];
+                vector[j] = c;
 
+                position++;
                 result[x] = (byte)(data[x] ^ vector[(vector[i] + vector[j]) & 255]);
             }
 
             return result;
-        }
-
-        private static void Swap(byte[] s, int i, int j)
-        {
-            byte c = s[i];
-
-            s[i] = s[j];
-            s[j] = c;
         }
 
         public override string ToString()

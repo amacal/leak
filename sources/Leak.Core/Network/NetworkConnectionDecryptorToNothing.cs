@@ -2,9 +2,8 @@
 {
     public class NetworkConnectionDecryptorToNothing : NetworkConnectionDecryptor
     {
-        public override byte[] Decrypt(byte[] data)
+        public override void Decrypt(byte[] data, int index, int count)
         {
-            return data;
         }
     }
 }

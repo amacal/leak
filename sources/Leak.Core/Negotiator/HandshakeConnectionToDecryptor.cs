@@ -11,9 +11,9 @@ namespace Leak.Core.Negotiator
             this.key = key;
         }
 
-        public override byte[] Decrypt(byte[] data)
+        public override void Decrypt(byte[] data, int index, int count)
         {
-            return key.Decrypt(data);
+            key.Decrypt(data, index, count);
         }
     }
 }

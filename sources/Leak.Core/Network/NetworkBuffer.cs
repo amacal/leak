@@ -189,17 +189,8 @@ namespace Leak.Core.Network
         {
             int min = Math.Min(count, configuration.Size - offset);
 
-            byte[] first = new byte[min];
-            byte[] second = new byte[count - min];
-
-            Array.Copy(data, offset, first, 0, min);
-            Array.Copy(data, 0, second, 0, count - min);
-
-            first = configuration.Decryptor.Decrypt(first);
-            second = configuration.Decryptor.Decrypt(second);
-
-            Array.Copy(first, 0, data, offset, min);
-            Array.Copy(second, 0, data, 0, count - min);
+            configuration.Decryptor.Decrypt(data, offset, min);
+            configuration.Decryptor.Decrypt(data, 0, count - min);
         }
     }
 }
