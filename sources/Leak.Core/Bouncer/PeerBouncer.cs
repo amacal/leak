@@ -27,7 +27,8 @@ namespace Leak.Core.Bouncer
 
         public bool Accept(NetworkConnectionInfo connection)
         {
-            return storage.Count() < configuration.Connections;
+            return storage.Count() < configuration.Connections &&
+                   storage.FindRemote(connection.Remote) == false;
         }
 
         public bool AcceptRemote(NetworkConnection connection)

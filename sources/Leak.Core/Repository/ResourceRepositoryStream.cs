@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Leak.Core.Repository
 {
-    public class ResourceRepositoryStream : Stream
+    public class ResourceRepositoryStream : IDisposable
     {
         private readonly string location;
         private readonly Metainfo metainfo;
@@ -23,39 +22,16 @@ namespace Leak.Core.Repository
             this.position = 0;
         }
 
-        public override bool CanRead
-        {
-            get { return false; }
-        }
-
-        public override bool CanSeek
-        {
-            get { return true; }
-        }
-
-        public override bool CanWrite
-        {
-            get { return true; }
-        }
-
-        public override long Length
-        {
-            get { return metainfo.Entries.Sum(x => x.Size); }
-        }
-
-        public override long Position
+        public long Position
         {
             get { return position; }
             set { Seek(value, SeekOrigin.Begin); }
         }
 
-        public override void Flush()
-        {
-        }
-
-        public override long Seek(long offset, SeekOrigin origin)
+        public long Seek(long offset, SeekOrigin origin)
         {
             long index = 0;
+            bool found = false;
 
             foreach (MetainfoEntry entry in metainfo.Entries)
             {
@@ -63,25 +39,48 @@ namespace Leak.Core.Repository
                 {
                     string path = GetEntryPath(location, entry);
 
-                    current = entry;
-                    left = index + entry.Size - offset;
-                    inner = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
-                    inner.Seek(offset - index, SeekOrigin.Begin);
+                    if (current != entry && inner != null)
+                    {
+                        inner.Flush();
+                        inner.Close();
+                        inner.Dispose();
+                        inner = null;
+                    }
 
+                    if (current != entry)
+                    {
+                        current = entry;
+                        inner = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read, metainfo.Properties.BlockSize);
+                    }
+
+                    left = index + entry.Size - offset;
+
+                    if (inner.Position != offset - index)
+                    {
+                        inner.Seek(offset - index, SeekOrigin.Begin);
+                    }
+
+                    found = true;
                     break;
                 }
 
                 index = index + entry.Size;
             }
 
+            if (found == false && inner != null)
+            {
+                inner.Flush();
+                inner.Close();
+                inner.Dispose();
+
+                current = null;
+                inner = null;
+            }
+
             return this.position = offset;
         }
 
-        public override void SetLength(long value)
-        {
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
+        public int Read(byte[] buffer, int offset, int count)
         {
             int read = 0;
 
@@ -89,12 +88,10 @@ namespace Leak.Core.Repository
             {
                 read = inner.Read(buffer, offset, count);
                 position += read;
+                left -= read;
 
                 if (read < count)
                 {
-                    inner.Dispose();
-                    inner = null;
-
                     Seek(position, SeekOrigin.Begin);
                     read += Read(buffer, offset + read, count - read);
                 }
@@ -103,7 +100,7 @@ namespace Leak.Core.Repository
             return read;
         }
 
-        public override void Write(byte[] buffer, int offset, int count)
+        public void Write(byte[] buffer, int offset, int count)
         {
             int available = count;
             int reduced = 0;
@@ -118,11 +115,6 @@ namespace Leak.Core.Repository
             left -= available;
             position += available;
 
-            inner.Flush();
-            inner.Close();
-            inner.Dispose();
-            inner = null;
-
             if (reduced > 0)
             {
                 Seek(position, SeekOrigin.Begin);
@@ -130,12 +122,11 @@ namespace Leak.Core.Repository
             }
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
         {
-            base.Dispose(disposing);
-
             if (inner != null)
             {
+                inner.Flush();
                 inner.Close();
                 inner.Dispose();
                 inner = null;

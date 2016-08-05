@@ -18,7 +18,7 @@ namespace Leak.Core.Retriever
         {
             if (context.Storage.IsComplete(piece.Index) == false)
             {
-                int blockIndex = piece.Offset / context.Repository.Properties.BlockSize;
+                int blockIndex = piece.Offset / context.Properties.BlockSize;
                 ResourceBlock block = new ResourceBlock(piece.Index, piece.Offset, piece.Size);
 
                 context.Repository.SetPiece(piece.Index, blockIndex, piece.Data);

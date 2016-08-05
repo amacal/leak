@@ -49,6 +49,11 @@ namespace Leak.Core.Repository
             return this;
         }
 
+        public ResourceRepositorySession OpenSession()
+        {
+            return new ResourceRepositoryToMetainfoSession(new ResourceRepositoryStream(location, metainfo), metainfo, buffer);
+        }
+
         private Bitfield Verify()
         {
             byte[] hash;
@@ -82,41 +87,6 @@ namespace Leak.Core.Repository
         private static string GetEntryPath(string location, MetainfoEntry entry)
         {
             return ResourceRepositoryStream.GetEntryPath(location, entry);
-        }
-
-        public void SetPiece(int piece, int block, byte[] data)
-        {
-            int pieceSize = metainfo.Properties.PieceSize;
-            int blockSize = metainfo.Properties.BlockSize;
-            long position = (long)piece * pieceSize + block * blockSize;
-
-            using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
-            {
-                stream.Seek(position, SeekOrigin.Begin);
-                stream.Write(data);
-                stream.Flush();
-            }
-        }
-
-        public bool SetMetadata(int piece, byte[] data)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool Verify(int piece)
-        {
-            long position = (long)piece * metainfo.Properties.PieceSize;
-
-            using (HashAlgorithm algorithm = SHA1.Create())
-            using (ResourceRepositoryStream stream = new ResourceRepositoryStream(location, metainfo))
-            {
-                stream.Seek(position, SeekOrigin.Begin);
-
-                int read = stream.Read(buffer, 0, buffer.Length);
-                byte[] hash = algorithm.ComputeHash(buffer, 0, read);
-
-                return Bytes.Equals(hash, metainfo.Pieces[piece].ToBytes());
-            }
         }
     }
 }

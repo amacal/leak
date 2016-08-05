@@ -32,6 +32,11 @@ namespace Leak.Core.Bouncer
             return true;
         }
 
+        public bool FindRemote(string remote)
+        {
+            return collection.FindOrDefaultByRemote(remote) != null;
+        }
+
         public bool AddRemote(long identifier, string remote)
         {
             PeerBouncerStorageEntry byIdentifier = collection.FindOrCreateByIdentifier(identifier);

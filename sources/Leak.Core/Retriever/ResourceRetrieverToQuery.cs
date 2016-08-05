@@ -11,6 +11,7 @@ namespace Leak.Core.Retriever
     public class ResourceRetrieverToQuery : ResourceRetriever
     {
         private readonly ResourceRetrieverConfiguration configuration;
+        private readonly ResourceRepository repository;
         private readonly ResourceQueueContext context;
         private readonly ResourceQueue queue;
 
@@ -24,34 +25,40 @@ namespace Leak.Core.Retriever
                 with.Callback = new ResourceRetrieverToNothing();
             });
 
+            this.repository = configuration.Repository;
+            this.queue = new ResourceQueue();
+
             this.context = new ResourceQueueContext
             {
                 Callback = configuration.Callback,
                 Collector = configuration.Collector,
                 Extender = configuration.Extender,
-                Repository = configuration.Repository,
                 Storage = new ResourceStorage(new ResourceStorageConfiguration())
             };
 
             this.timer = new Timer(OnTick);
             this.timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
-
-            this.queue = new ResourceQueue();
         }
 
         private void OnTick(object state)
         {
             lock (context.Storage)
             {
-                tick = (tick + 1) % 20;
-
-                if (tick == 0)
+                using (ResourceRepositorySession session = repository.OpenSession())
                 {
-                    queue.Enqueue(new ResourceQueueItemKeepAliveSend());
-                }
+                    tick = (tick + 1) % 20;
 
-                queue.Enqueue(new ResourceQueueItemMetadataSend());
-                queue.Process(context);
+                    if (tick == 0)
+                    {
+                        queue.Enqueue(new ResourceQueueItemKeepAliveSend());
+                    }
+
+                    queue.Enqueue(new ResourceQueueItemMetadataSend());
+                    queue.Process(context.Configure(with =>
+                    {
+                        with.Repository = session;
+                    }));
+                }
             }
         }
 
@@ -71,7 +78,7 @@ namespace Leak.Core.Retriever
             {
                 timer.Dispose();
 
-                return new ResourceRetrieverToGet(context, queue, with =>
+                return new ResourceRetrieverToGet(context, queue, repository, with =>
                 {
                     with.Callback = configuration.Callback;
                     with.Extender = configuration.Extender;

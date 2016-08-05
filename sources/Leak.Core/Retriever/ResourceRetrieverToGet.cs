@@ -11,6 +11,7 @@ namespace Leak.Core.Retriever
     public class ResourceRetrieverToGet : ResourceRetriever
     {
         private readonly ResourceRetrieverConfiguration configuration;
+        private readonly ResourceRepository repository;
         private readonly ResourceQueueContext context;
         private readonly ResourceQueue queue;
 
@@ -24,31 +25,32 @@ namespace Leak.Core.Retriever
                 with.Callback = new ResourceRetrieverToNothing();
             });
 
+            this.repository = configuration.Repository;
+            this.queue = new ResourceQueue();
+
             this.context = new ResourceQueueContext
             {
                 Callback = configuration.Callback,
                 Collector = configuration.Collector,
                 Extender = configuration.Extender,
-                Repository = configuration.Repository,
+                Properties = repository.Properties,
                 Storage = new ResourceStorage(new ResourceStorageConfiguration())
             };
 
             this.context.Storage = new ResourceStorage(new ResourceStorageConfiguration
             {
-                Pieces = this.context.Repository.Properties.Pieces,
-                Blocks = this.context.Repository.Properties.Blocks,
-                BlocksInPiece = this.context.Repository.Properties.PieceSize / this.context.Repository.Properties.BlockSize,
-                BlockSize = this.context.Repository.Properties.BlockSize,
-                TotalSize = this.context.Repository.Properties.TotalSize
+                Pieces = this.context.Properties.Pieces,
+                Blocks = this.context.Properties.Blocks,
+                BlocksInPiece = this.context.Properties.PieceSize / this.context.Properties.BlockSize,
+                BlockSize = this.context.Properties.BlockSize,
+                TotalSize = this.context.Properties.TotalSize
             });
 
             this.timer = new Timer(OnTick);
             this.timer.Change(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
-
-            this.queue = new ResourceQueue();
         }
 
-        public ResourceRetrieverToGet(ResourceQueueContext context, ResourceQueue queue, Action<ResourceRetrieverConfiguration> configurer)
+        public ResourceRetrieverToGet(ResourceQueueContext context, ResourceQueue queue, ResourceRepository repository, Action<ResourceRetrieverConfiguration> configurer)
         {
             this.configuration = configurer.Configure(with =>
             {
@@ -57,19 +59,20 @@ namespace Leak.Core.Retriever
 
             this.queue = queue;
             this.context = context;
+            this.repository = repository;
 
             this.context.Callback = configuration.Callback;
             this.context.Collector = configuration.Collector;
             this.context.Extender = configuration.Extender;
-            this.context.Repository = configuration.Repository;
+            this.context.Properties = repository.Properties;
 
             this.context.Storage = new ResourceStorage(this.context.Storage, new ResourceStorageConfiguration
             {
-                Pieces = this.context.Repository.Properties.Pieces,
-                Blocks = this.context.Repository.Properties.Blocks,
-                BlocksInPiece = this.context.Repository.Properties.PieceSize / this.context.Repository.Properties.BlockSize,
-                BlockSize = this.context.Repository.Properties.BlockSize,
-                TotalSize = this.context.Repository.Properties.TotalSize
+                Pieces = this.context.Properties.Pieces,
+                Blocks = this.context.Properties.Blocks,
+                BlocksInPiece = this.context.Properties.PieceSize / this.context.Properties.BlockSize,
+                BlockSize = this.context.Properties.BlockSize,
+                TotalSize = this.context.Properties.TotalSize
             });
 
             this.timer = new Timer(OnTick);
@@ -84,15 +87,21 @@ namespace Leak.Core.Retriever
             {
                 lock (context.Storage)
                 {
-                    tick = (tick + 1) % 600;
-
-                    if (tick == 0)
+                    using (ResourceRepositorySession session = repository.OpenSession())
                     {
-                        queue.Enqueue(new ResourceQueueItemKeepAliveSend());
-                    }
+                        tick = (tick + 1) % 600;
 
-                    queue.Enqueue(new ResourceQueueItemRequestSendMultiple());
-                    queue.Process(context);
+                        if (tick == 0)
+                        {
+                            queue.Enqueue(new ResourceQueueItemKeepAliveSend());
+                        }
+
+                        queue.Enqueue(new ResourceQueueItemRequestSendMultiple());
+                        queue.Process(context.Configure(with =>
+                        {
+                            with.Repository = session;
+                        }));
+                    }
                 }
             }
             finally

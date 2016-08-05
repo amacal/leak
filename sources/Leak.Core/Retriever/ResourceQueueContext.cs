@@ -1,6 +1,8 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Extensions;
+using Leak.Core.Metadata;
 using Leak.Core.Repository;
+using System;
 
 namespace Leak.Core.Retriever
 {
@@ -14,6 +16,20 @@ namespace Leak.Core.Retriever
 
         public ResourceRetrieverCallback Callback { get; set; }
 
-        public ResourceRepository Repository { get; set; }
+        public ResourceRepositorySession Repository { get; set; }
+
+        public MetainfoProperties Properties { get; set; }
+
+        public ResourceQueueContext Configure(Action<ResourceQueueContext> configurer)
+        {
+            return configurer.Configure(with =>
+            {
+                with.Storage = Storage;
+                with.Collector = Collector;
+                with.Extender = Extender;
+                with.Callback = Callback;
+                with.Properties = Properties;
+            });
+        }
     }
 }

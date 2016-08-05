@@ -243,10 +243,13 @@
     <Compile Include="Network\NetworkPoolListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ResourceRepository.cs" />
+    <Compile Include="Repository\ResourceRepositorySession.cs" />
     <Compile Include="Repository\ResourceRepositoryToHash.cs" />
+    <Compile Include="Repository\ResourceRepositoryToHashSession.cs" />
     <Compile Include="Repository\ResourceRepositoryToMetainfo.cs" />
     <Compile Include="Repository\ResourceRepositoryBitfield.cs" />
     <Compile Include="Repository\ResourceRepositoryStream.cs" />
+    <Compile Include="Repository\ResourceRepositoryToMetainfoSession.cs" />
     <Compile Include="Retriever\ResourceBitfield.cs" />
     <Compile Include="Retriever\ResourceBitfieldBlock.cs" />
     <Compile Include="Retriever\ResourceBitfieldBlockToCompleted.cs" />
@@ -287,7 +290,6 @@
     <Compile Include="Retriever\ResourceRetrieverToGet.cs" />
     <Compile Include="Retriever\ResourceRetrieverCallback.cs" />
     <Compile Include="Retriever\ResourceStorage.cs" />
-    <Compile Include="StreamExtensions.cs" />
     <Compile Include="Telegraph\TrackerStorage.cs" />
     <Compile Include="Telegraph\TrackerStorageEntry.cs" />
     <Compile Include="Telegraph\TrackerTelegraphCallbackBase.cs" />

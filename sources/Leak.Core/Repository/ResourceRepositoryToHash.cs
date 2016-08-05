@@ -2,7 +2,6 @@
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using System.IO;
-using System.Security.Cryptography;
 
 namespace Leak.Core.Repository
 {
@@ -38,33 +37,9 @@ namespace Leak.Core.Repository
             return new ResourceRepositoryToMetainfo(metainfo, destination);
         }
 
-        public void SetPiece(int piece, int block, byte[] data)
+        public ResourceRepositorySession OpenSession()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public bool SetMetadata(int piece, byte[] data)
-        {
-            string path = Path.Combine(location, $"{hash}.metainfo");
-
-            using (FileStream file = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
-            {
-                file.Seek(piece * 16384, SeekOrigin.Begin);
-                file.Write(data, 0, data.Length);
-                file.Flush(true);
-
-                file.Seek(0, SeekOrigin.Begin);
-
-                using (HashAlgorithm algorithm = SHA1.Create())
-                {
-                    return Bytes.Equals(hash.ToBytes(), algorithm.ComputeHash(file));
-                }
-            }
-        }
-
-        public bool Verify(int piece)
-        {
-            throw new System.NotImplementedException();
+            return new ResourceRepositoryToHashSession(hash, location);
         }
 
         public static Metainfo Open(string location, FileHash hash)
