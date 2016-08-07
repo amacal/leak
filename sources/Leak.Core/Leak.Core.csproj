@@ -241,9 +241,13 @@
     <Compile Include="Network\NetworkPool.cs" />
     <Compile Include="Network\NetworkPoolEntry.cs" />
     <Compile Include="Network\NetworkPoolListener.cs" />
+    <Compile Include="Omnibus\OmnibusBitfieldCollection.cs" />
     <Compile Include="Omnibus\OmnibusBlock.cs" />
     <Compile Include="Omnibus\OmnibusConfiguration.cs" />
+    <Compile Include="Omnibus\OmnibusStrategyContext.cs" />
     <Compile Include="Omnibus\OmnibusExtensions.cs" />
+    <Compile Include="Omnibus\OmnibusStrategy.cs" />
+    <Compile Include="Omnibus\OmnibusStrategySequential.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ResourceRepository.cs" />
     <Compile Include="Repository\ResourceRepositorySession.cs" />
@@ -259,8 +263,8 @@
     <Compile Include="Omnibus\OmnibusPieceNothing.cs" />
     <Compile Include="Omnibus\OmnibusPiecePartial.cs" />
     <Compile Include="Omnibus\OmnibusReservation.cs" />
-    <Compile Include="Omnibus\OmnibusReservationCollections.cs" />
-    <Compile Include="Omnibus\OmnibusMap.cs" />
+    <Compile Include="Omnibus\OmnibusReservationCollection.cs" />
+    <Compile Include="Omnibus\OmnibusPieceCollection.cs" />
     <Compile Include="Retriever\ResourceExtensions.cs" />
     <Compile Include="Retriever\ResourceMetadataBlock.cs" />
     <Compile Include="Retriever\ResourceMetadataBook.cs" />

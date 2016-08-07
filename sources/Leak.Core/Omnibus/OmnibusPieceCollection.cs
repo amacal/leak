@@ -2,12 +2,12 @@
 
 namespace Leak.Core.Omnibus
 {
-    public class OmnibusMap
+    public class OmnibusPieceCollection
     {
         private OmnibusPiece[] items;
         private int completed;
 
-        public OmnibusMap(OmnibusConfiguration configuration)
+        public OmnibusPieceCollection(OmnibusConfiguration configuration)
         {
             this.completed = 0;
             this.items = new OmnibusPiece[configuration.Pieces];

@@ -12,7 +12,7 @@
             this.completed = 1;
         }
 
-        public int Size
+        public int Blocks
         {
             get { return blocks.Length; }
         }

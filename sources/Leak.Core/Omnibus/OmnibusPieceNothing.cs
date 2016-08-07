@@ -2,16 +2,16 @@
 {
     public class OmnibusPieceNothing : OmnibusPiece
     {
-        private readonly int size;
+        private readonly int blocks;
 
-        public OmnibusPieceNothing(int size)
+        public OmnibusPieceNothing(int blocks)
         {
-            this.size = size;
+            this.blocks = blocks;
         }
 
-        public int Size
+        public int Blocks
         {
-            get { return size; }
+            get { return blocks; }
         }
 
         public bool IsComplete()
@@ -26,12 +26,12 @@
 
         public OmnibusPiece Complete()
         {
-            return new OmnibusPieceCompleted(size);
+            return new OmnibusPieceCompleted(blocks);
         }
 
         public OmnibusPiece Complete(int block)
         {
-            return new OmnibusPiecePartial(size, block);
+            return new OmnibusPiecePartial(blocks, block);
         }
 
         public OmnibusPiece Invalidate()

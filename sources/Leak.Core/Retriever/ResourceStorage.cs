@@ -118,7 +118,7 @@ namespace Leak.Core.Retriever
 
         public ResourceBlock[] Next(PeerHash peer, int blocks)
         {
-            return bitfields.Next(peer, blocks).FromOmnibus();
+            return bitfields.Next(OmnibusStrategy.Sequential, peer, blocks).FromOmnibus();
         }
 
         public ResourceMetadataBlock[] ScheduleMetadata(PeerHash peer)

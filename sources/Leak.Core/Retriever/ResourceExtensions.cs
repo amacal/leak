@@ -21,9 +21,9 @@ namespace Leak.Core.Retriever
             return new OmnibusBlock(block.Index, block.Offset, block.Size);
         }
 
-        public static ResourceBlock[] FromOmnibus(this OmnibusBlock[] blocks)
+        public static ResourceBlock[] FromOmnibus(this IEnumerable<OmnibusBlock> blocks)
         {
-            List<ResourceBlock> result = new List<ResourceBlock>(blocks.Length);
+            List<ResourceBlock> result = new List<ResourceBlock>();
 
             foreach (OmnibusBlock block in blocks)
             {

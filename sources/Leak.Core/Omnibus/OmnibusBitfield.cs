@@ -1,51 +1,37 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Omnibus
 {
     public class OmnibusBitfield
     {
         private readonly OmnibusConfiguration configuration;
-        private readonly OmnibusMap completed;
-        private readonly Dictionary<PeerHash, Bitfield> peers;
-        private readonly OmnibusReservationCollections books;
+        private readonly OmnibusBitfieldCollection bitfields;
+        private readonly OmnibusPieceCollection completed;
+        private readonly OmnibusReservationCollection reservations;
 
         public OmnibusBitfield(OmnibusConfiguration configuration)
         {
             this.configuration = configuration;
-            this.completed = new OmnibusMap(configuration);
-            this.peers = new Dictionary<PeerHash, Bitfield>();
-            this.books = new OmnibusReservationCollections();
+            this.bitfields = new OmnibusBitfieldCollection();
+            this.completed = new OmnibusPieceCollection(configuration);
+            this.reservations = new OmnibusReservationCollection();
         }
 
         public OmnibusBitfield(OmnibusBitfield bitfield, OmnibusConfiguration configuration)
         {
             this.configuration = configuration;
-            this.completed = new OmnibusMap(configuration);
-            this.peers = bitfield.peers;
-            this.books = bitfield.books;
+            this.completed = new OmnibusPieceCollection(configuration);
+
+            this.bitfields = bitfield.bitfields;
+            this.reservations = bitfield.reservations;
         }
 
         public void Add(PeerHash peer, Bitfield bitfield)
         {
-            peers[peer] = bitfield;
-        }
-
-        public int Count(int piece)
-        {
-            int count = 0;
-
-            foreach (Bitfield bitfield in peers.Values)
-            {
-                if (bitfield[piece])
-                {
-                    count++;
-                }
-            }
-
-            return count;
+            bitfields.Add(peer, bitfield);
         }
 
         public void Complete(Bitfield bitfield)
@@ -63,7 +49,7 @@ namespace Leak.Core.Omnibus
 
         public bool Complete(OmnibusBlock block)
         {
-            books.Complete(block);
+            reservations.Complete(block);
 
             return completed.Complete(block.Piece, block.Offset / configuration.BlockSize);
         }
@@ -85,66 +71,31 @@ namespace Leak.Core.Omnibus
 
         public bool IsComplete(PeerHash peer)
         {
-            Bitfield bitfield;
-            peers.TryGetValue(peer, out bitfield);
-
-            return bitfield?.IsCompleted() == true;
+            return bitfields.IsComplete(peer);
         }
 
-        public OmnibusBlock[] Next(PeerHash peer, int maximum)
+        public IEnumerable<OmnibusBlock> Next(OmnibusStrategy strategy, PeerHash peer, int count)
         {
-            Bitfield bitfield;
-            List<OmnibusBlock> requests = new List<OmnibusBlock>();
-
-            long size = configuration.TotalSize;
-            int left = Math.Min(maximum, maximum - books.Count(peer));
-
-            int blocks = configuration.GetBlocksInPiece();
-            DateTime now = DateTime.Now;
-
-            if (peers.TryGetValue(peer, out bitfield))
+            if (bitfields.Contains(peer))
             {
-                for (int i = 0; left > 0 && i < configuration.Pieces; i++)
+                OmnibusStrategyContext context = new OmnibusStrategyContext
                 {
-                    if (bitfield[i] && completed.IsComplete(i) == false)
-                    {
-                        for (int j = 0; left > 0 && size > 0 && j < blocks; j++)
-                        {
-                            if (completed.IsComplete(i, j) == false)
-                            {
-                                int offset = j * configuration.BlockSize;
-                                int blockSize = configuration.BlockSize;
+                    Peer = peer,
+                    Bitfield = bitfields.ByPeer(peer),
+                    Completed = completed,
+                    Configuration = configuration,
+                    Reservations = reservations
+                };
 
-                                if (size < blockSize)
-                                {
-                                    blockSize = (int)size;
-                                }
-
-                                OmnibusBlock block = new OmnibusBlock(i, offset, blockSize);
-
-                                if (books.Contains(block, now) == false && books.Contains(block, peer) == false)
-                                {
-                                    requests.Add(block);
-                                    left--;
-                                }
-                            }
-
-                            size = size - configuration.BlockSize;
-                        }
-                    }
-                    else
-                    {
-                        size = size - blocks * configuration.BlockSize;
-                    }
-                }
+                return strategy.Next(context, count);
             }
 
-            return requests.ToArray();
+            return Enumerable.Empty<OmnibusBlock>();
         }
 
         public PeerHash Reserve(PeerHash peer, OmnibusBlock request)
         {
-            return books.Add(peer, request);
+            return reservations.Add(peer, request);
         }
     }
 }

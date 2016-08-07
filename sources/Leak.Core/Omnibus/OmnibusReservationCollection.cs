@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus
 {
-    public class OmnibusReservationCollections
+    public class OmnibusReservationCollection
     {
         private readonly Dictionary<OmnibusBlock, OmnibusReservation> blocks;
         private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
 
-        public OmnibusReservationCollections()
+        public OmnibusReservationCollection()
         {
             this.blocks = new Dictionary<OmnibusBlock, OmnibusReservation>();
             this.byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();

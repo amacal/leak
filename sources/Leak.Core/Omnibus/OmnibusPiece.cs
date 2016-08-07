@@ -2,7 +2,7 @@
 {
     public interface OmnibusPiece
     {
-        int Size { get; }
+        int Blocks { get; }
 
         bool IsComplete();
 
