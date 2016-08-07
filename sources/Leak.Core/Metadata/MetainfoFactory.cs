@@ -47,9 +47,8 @@ namespace Leak.Core.Metadata
             long totalSize = entries.Sum(x => x.Size);
             int blockSize = 16384;
             int pieceSize = value.Find("piece length", x => (int)x.ToInt64());
-            int blocks = (int)((pieces.Length - 1) * (pieceSize / blockSize) + (totalSize % pieceSize / blockSize) + 1);
 
-            return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blocks, blockSize);
+            return new MetainfoProperties(totalSize, pieces.Length, pieceSize, blockSize);
         }
 
         private static MetainfoHash[] FindPieces(BencodedValue value)

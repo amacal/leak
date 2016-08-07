@@ -5,15 +5,13 @@
         private readonly long totalSize;
         private readonly int pieces;
         private readonly int pieceSize;
-        private readonly int blocks;
         private readonly int blockSize;
 
-        public MetainfoProperties(long totalSize, int pieces, int pieceSize, int blocks, int blockSize)
+        public MetainfoProperties(long totalSize, int pieces, int pieceSize, int blockSize)
         {
             this.totalSize = totalSize;
             this.pieces = pieces;
             this.pieceSize = pieceSize;
-            this.blocks = blocks;
             this.blockSize = blockSize;
         }
 
@@ -30,11 +28,6 @@
         public int PieceSize
         {
             get { return pieceSize; }
-        }
-
-        public int Blocks
-        {
-            get { return blocks; }
         }
 
         public int BlockSize

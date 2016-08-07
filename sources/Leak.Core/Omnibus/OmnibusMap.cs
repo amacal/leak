@@ -1,26 +1,26 @@
 ﻿using System;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Omnibus
 {
-    public class ResourceBitfieldMap
+    public class OmnibusMap
     {
-        private ResourceBitfieldBlock[] items;
+        private OmnibusPiece[] items;
         private int completed;
 
-        public ResourceBitfieldMap(ResourceStorageConfiguration configuration)
+        public OmnibusMap(OmnibusConfiguration configuration)
         {
             this.completed = 0;
-            this.items = new ResourceBitfieldBlock[configuration.Pieces];
+            this.items = new OmnibusPiece[configuration.Pieces];
 
-            int left = configuration.Blocks;
-            int blocks = configuration.BlocksInPiece;
+            int left = configuration.GetBlocksInTotal();
+            int blocks = configuration.GetBlocksInPiece();
 
             for (int i = 0; i < configuration.Pieces; i++)
             {
                 blocks = Math.Min(blocks, left);
                 left = left - blocks;
 
-                items[i] = new ResourceBitfieldBlockToNothing(blocks);
+                items[i] = new OmnibusPieceNothing(blocks);
             }
         }
 

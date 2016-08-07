@@ -2,22 +2,22 @@
 using System;
 using System.Collections.Generic;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Omnibus
 {
-    public class ResourceBitfieldBookCollections
+    public class OmnibusReservationCollections
     {
-        private readonly Dictionary<ResourceBlock, ResourceBitfieldBook> blocks;
-        private readonly Dictionary<PeerHash, HashSet<ResourceBitfieldBook>> byPeer;
+        private readonly Dictionary<OmnibusBlock, OmnibusReservation> blocks;
+        private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
 
-        public ResourceBitfieldBookCollections()
+        public OmnibusReservationCollections()
         {
-            this.blocks = new Dictionary<ResourceBlock, ResourceBitfieldBook>();
-            this.byPeer = new Dictionary<PeerHash, HashSet<ResourceBitfieldBook>>();
+            this.blocks = new Dictionary<OmnibusBlock, OmnibusReservation>();
+            this.byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
         }
 
-        public bool Contains(ResourceBlock request, DateTime now)
+        public bool Contains(OmnibusBlock request, DateTime now)
         {
-            ResourceBitfieldBook book;
+            OmnibusReservation book;
 
             if (blocks.TryGetValue(request, out book) == false)
                 return false;
@@ -25,9 +25,9 @@ namespace Leak.Core.Retriever
             return book.Expires > now;
         }
 
-        public bool Contains(ResourceBlock request, PeerHash peer)
+        public bool Contains(OmnibusBlock request, PeerHash peer)
         {
-            ResourceBitfieldBook book;
+            OmnibusReservation book;
 
             if (blocks.TryGetValue(request, out book) == false)
                 return false;
@@ -35,17 +35,17 @@ namespace Leak.Core.Retriever
             return book.Peer.Equals(peer);
         }
 
-        public PeerHash Add(PeerHash peer, ResourceBlock request)
+        public PeerHash Add(PeerHash peer, OmnibusBlock request)
         {
             PeerHash previous = null;
-            ResourceBitfieldBook book;
+            OmnibusReservation book;
 
             if (blocks.TryGetValue(request, out book) == true)
             {
                 previous = book.Peer;
             }
 
-            blocks[request] = new ResourceBitfieldBook
+            blocks[request] = new OmnibusReservation
             {
                 Peer = peer,
                 Expires = DateTime.Now.AddSeconds(30),
@@ -54,16 +54,16 @@ namespace Leak.Core.Retriever
 
             if (byPeer.ContainsKey(peer) == false)
             {
-                byPeer.Add(peer, new HashSet<ResourceBitfieldBook>());
+                byPeer.Add(peer, new HashSet<OmnibusReservation>());
             }
 
             byPeer[peer].Add(blocks[request]);
             return previous;
         }
 
-        public void Complete(ResourceBlock request)
+        public void Complete(OmnibusBlock request)
         {
-            ResourceBitfieldBook block;
+            OmnibusReservation block;
             blocks.TryGetValue(request, out block);
 
             if (block != null)
@@ -76,13 +76,13 @@ namespace Leak.Core.Retriever
         public int Count(PeerHash peer)
         {
             int count = 0;
-            HashSet<ResourceBitfieldBook> books;
+            HashSet<OmnibusReservation> books;
             byPeer.TryGetValue(peer, out books);
 
             if (books == null)
                 return 0;
 
-            foreach (ResourceBitfieldBook book in books)
+            foreach (OmnibusReservation book in books)
             {
                 count++;
             }

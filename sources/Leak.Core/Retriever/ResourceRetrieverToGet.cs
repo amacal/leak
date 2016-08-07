@@ -40,8 +40,7 @@ namespace Leak.Core.Retriever
             this.context.Storage = new ResourceStorage(new ResourceStorageConfiguration
             {
                 Pieces = this.context.Properties.Pieces,
-                Blocks = this.context.Properties.Blocks,
-                BlocksInPiece = this.context.Properties.PieceSize / this.context.Properties.BlockSize,
+                PieceSize = this.context.Properties.PieceSize,
                 BlockSize = this.context.Properties.BlockSize,
                 TotalSize = this.context.Properties.TotalSize
             });
@@ -69,8 +68,7 @@ namespace Leak.Core.Retriever
             this.context.Storage = new ResourceStorage(this.context.Storage, new ResourceStorageConfiguration
             {
                 Pieces = this.context.Properties.Pieces,
-                Blocks = this.context.Properties.Blocks,
-                BlocksInPiece = this.context.Properties.PieceSize / this.context.Properties.BlockSize,
+                PieceSize = this.context.Properties.PieceSize,
                 BlockSize = this.context.Properties.BlockSize,
                 TotalSize = this.context.Properties.TotalSize
             });

@@ -1,6 +1,6 @@
-﻿namespace Leak.Core.Retriever
+﻿namespace Leak.Core.Omnibus
 {
-    public class ResourceStorageConfiguration
+    public class OmnibusConfiguration
     {
         public int Pieces { get; set; }
 

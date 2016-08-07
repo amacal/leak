@@ -3,27 +3,27 @@ using Leak.Core.Messages;
 using System;
 using System.Collections.Generic;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Omnibus
 {
-    public class ResourceBitfield
+    public class OmnibusBitfield
     {
-        private readonly ResourceStorageConfiguration configuration;
-        private readonly ResourceBitfieldMap completed;
+        private readonly OmnibusConfiguration configuration;
+        private readonly OmnibusMap completed;
         private readonly Dictionary<PeerHash, Bitfield> peers;
-        private readonly ResourceBitfieldBookCollections books;
+        private readonly OmnibusReservationCollections books;
 
-        public ResourceBitfield(ResourceStorageConfiguration configuration)
+        public OmnibusBitfield(OmnibusConfiguration configuration)
         {
             this.configuration = configuration;
-            this.completed = new ResourceBitfieldMap(configuration);
+            this.completed = new OmnibusMap(configuration);
             this.peers = new Dictionary<PeerHash, Bitfield>();
-            this.books = new ResourceBitfieldBookCollections();
+            this.books = new OmnibusReservationCollections();
         }
 
-        public ResourceBitfield(ResourceBitfield bitfield, ResourceStorageConfiguration configuration)
+        public OmnibusBitfield(OmnibusBitfield bitfield, OmnibusConfiguration configuration)
         {
             this.configuration = configuration;
-            this.completed = new ResourceBitfieldMap(configuration);
+            this.completed = new OmnibusMap(configuration);
             this.peers = bitfield.peers;
             this.books = bitfield.books;
         }
@@ -61,11 +61,11 @@ namespace Leak.Core.Retriever
             }
         }
 
-        public bool Complete(ResourceBlock block)
+        public bool Complete(OmnibusBlock block)
         {
             books.Complete(block);
 
-            return completed.Complete(block.Index, block.Offset / configuration.BlockSize);
+            return completed.Complete(block.Piece, block.Offset / configuration.BlockSize);
         }
 
         public void Invalidate(int piece)
@@ -91,13 +91,15 @@ namespace Leak.Core.Retriever
             return bitfield?.IsCompleted() == true;
         }
 
-        public ResourceBlock[] Next(PeerHash peer, int maximum)
+        public OmnibusBlock[] Next(PeerHash peer, int maximum)
         {
             Bitfield bitfield;
-            List<ResourceBlock> requests = new List<ResourceBlock>();
+            List<OmnibusBlock> requests = new List<OmnibusBlock>();
 
             long size = configuration.TotalSize;
             int left = Math.Min(maximum, maximum - books.Count(peer));
+
+            int blocks = configuration.GetBlocksInPiece();
             DateTime now = DateTime.Now;
 
             if (peers.TryGetValue(peer, out bitfield))
@@ -106,7 +108,7 @@ namespace Leak.Core.Retriever
                 {
                     if (bitfield[i] && completed.IsComplete(i) == false)
                     {
-                        for (int j = 0; left > 0 && size > 0 && j < configuration.BlocksInPiece; j++)
+                        for (int j = 0; left > 0 && size > 0 && j < blocks; j++)
                         {
                             if (completed.IsComplete(i, j) == false)
                             {
@@ -118,7 +120,7 @@ namespace Leak.Core.Retriever
                                     blockSize = (int)size;
                                 }
 
-                                ResourceBlock block = new ResourceBlock(i, offset, blockSize);
+                                OmnibusBlock block = new OmnibusBlock(i, offset, blockSize);
 
                                 if (books.Contains(block, now) == false && books.Contains(block, peer) == false)
                                 {
@@ -132,7 +134,7 @@ namespace Leak.Core.Retriever
                     }
                     else
                     {
-                        size = size - configuration.BlocksInPiece * configuration.BlockSize;
+                        size = size - blocks * configuration.BlockSize;
                     }
                 }
             }
@@ -140,7 +142,7 @@ namespace Leak.Core.Retriever
             return requests.ToArray();
         }
 
-        public PeerHash Reserve(PeerHash peer, ResourceBlock request)
+        public PeerHash Reserve(PeerHash peer, OmnibusBlock request)
         {
             return books.Add(peer, request);
         }

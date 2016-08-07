@@ -1,10 +1,10 @@
-﻿namespace Leak.Core.Retriever
+﻿namespace Leak.Core.Omnibus
 {
-    public class ResourceBitfieldBlockToCompleted : ResourceBitfieldBlock
+    public class OmnibusPieceCompleted : OmnibusPiece
     {
         private readonly int size;
 
-        public ResourceBitfieldBlockToCompleted(int size)
+        public OmnibusPieceCompleted(int size)
         {
             this.size = size;
         }
@@ -24,19 +24,19 @@
             return true;
         }
 
-        public ResourceBitfieldBlock Complete()
+        public OmnibusPiece Complete()
         {
             return this;
         }
 
-        public ResourceBitfieldBlock Complete(int block)
+        public OmnibusPiece Complete(int block)
         {
             return this;
         }
 
-        public ResourceBitfieldBlock Invalidate()
+        public OmnibusPiece Invalidate()
         {
-            return new ResourceBitfieldBlockToNothing(size);
+            return new OmnibusPieceNothing(size);
         }
     }
 }

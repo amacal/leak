@@ -1,11 +1,11 @@
-﻿namespace Leak.Core.Retriever
+﻿namespace Leak.Core.Omnibus
 {
-    public class ResourceBitfieldBlockToPartial : ResourceBitfieldBlock
+    public class OmnibusPiecePartial : OmnibusPiece
     {
         private readonly bool[] blocks;
         private int completed;
 
-        public ResourceBitfieldBlockToPartial(int size, int block)
+        public OmnibusPiecePartial(int size, int block)
         {
             this.blocks = new bool[size];
             this.blocks[block] = true;
@@ -27,12 +27,12 @@
             return blocks[block];
         }
 
-        public ResourceBitfieldBlock Complete()
+        public OmnibusPiece Complete()
         {
-            return new ResourceBitfieldBlockToCompleted(blocks.Length);
+            return new OmnibusPieceCompleted(blocks.Length);
         }
 
-        public ResourceBitfieldBlock Complete(int block)
+        public OmnibusPiece Complete(int block)
         {
             if (blocks[block] == false)
             {
@@ -42,15 +42,15 @@
 
             if (completed == blocks.Length)
             {
-                return new ResourceBitfieldBlockToCompleted(blocks.Length);
+                return new OmnibusPieceCompleted(blocks.Length);
             }
 
             return this;
         }
 
-        public ResourceBitfieldBlock Invalidate()
+        public OmnibusPiece Invalidate()
         {
-            return new ResourceBitfieldBlockToNothing(blocks.Length);
+            return new OmnibusPieceNothing(blocks.Length);
         }
     }
 }

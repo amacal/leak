@@ -1,14 +1,14 @@
 ﻿using Leak.Core.Common;
 using System;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Omnibus
 {
-    public class ResourceBitfieldBook
+    public class OmnibusReservation
     {
         public PeerHash Peer { get; set; }
 
         public DateTime Expires { get; set; }
 
-        public ResourceBlock Request { get; set; }
+        public OmnibusBlock Request { get; set; }
     }
 }

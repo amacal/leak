@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Omnibus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,20 +9,20 @@ namespace Leak.Core.Retriever
 {
     public class ResourceStorage
     {
-        private readonly ResourceBitfield bitfields;
+        private readonly OmnibusBitfield bitfields;
         private readonly ResourcePeerCollection peers;
         private readonly ResourceMetadataBookCollection metadata;
 
         public ResourceStorage(ResourceStorageConfiguration configuration)
         {
-            this.bitfields = new ResourceBitfield(configuration);
+            this.bitfields = new OmnibusBitfield(configuration.ToOmnibus());
             this.peers = new ResourcePeerCollection();
             this.metadata = new ResourceMetadataBookCollection();
         }
 
         public ResourceStorage(ResourceStorage storage, ResourceStorageConfiguration configuration)
         {
-            this.bitfields = new ResourceBitfield(storage.bitfields, configuration);
+            this.bitfields = new OmnibusBitfield(storage.bitfields, configuration.ToOmnibus());
             this.peers = storage.peers;
             this.metadata = storage.metadata;
         }
@@ -82,7 +83,7 @@ namespace Leak.Core.Retriever
         {
             peers.Increase(peer);
 
-            return bitfields.Complete(block);
+            return bitfields.Complete(block.ToOmnibus());
         }
 
         public void Complete(int size)
@@ -117,7 +118,7 @@ namespace Leak.Core.Retriever
 
         public ResourceBlock[] Next(PeerHash peer, int blocks)
         {
-            return bitfields.Next(peer, blocks);
+            return bitfields.Next(peer, blocks).FromOmnibus();
         }
 
         public ResourceMetadataBlock[] ScheduleMetadata(PeerHash peer)
@@ -128,7 +129,7 @@ namespace Leak.Core.Retriever
         public void Reserve(PeerHash peer, ResourceBlock request)
         {
             peers.Decrease(peer);
-            peers.Decrease(bitfields.Reserve(peer, request), 10);
+            peers.Decrease(bitfields.Reserve(peer, request.ToOmnibus()), 10);
         }
 
         public void Reserve(PeerHash peer, ResourceMetadataBlock request)
