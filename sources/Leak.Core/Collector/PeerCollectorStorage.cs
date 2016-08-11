@@ -1,7 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Listener;
-using Leak.Core.Loop;
 using Leak.Core.Network;
 
 namespace Leak.Core.Collector
@@ -22,9 +21,7 @@ namespace Leak.Core.Collector
             PeerAddress address = PeerAddress.Parse(connection.Remote);
             PeerCollectorStorageEntry entry = collection.CreateByRemote(address);
 
-            entry.Remote = address;
-            entry.Peer = handshake.Peer;
-            entry.Hash = handshake.Hash;
+            entry.Endpoint = handshake.ToEndpoint(address);
             entry.HasExtensions = handshake.HasExtensions;
 
             collection.AddByPeer(handshake.Peer, entry);
@@ -36,23 +33,11 @@ namespace Leak.Core.Collector
             PeerAddress address = PeerAddress.Parse(connection.Remote);
             PeerCollectorStorageEntry entry = collection.CreateByRemote(address);
 
-            entry.Remote = address;
-            entry.Peer = handshake.Peer;
-            entry.Hash = handshake.Hash;
+            entry.Endpoint = handshake.ToEndpoint(address);
             entry.HasExtensions = handshake.HasExtensions;
 
             collection.AddByPeer(handshake.Peer, entry);
             collection.AddByHash(handshake.Hash, entry);
-        }
-
-        public void AttachChannel(ConnectionLoopChannel channel)
-        {
-            PeerCollectorStorageEntry entry = collection.FindByRemote(channel.Endpoint.Remote);
-
-            if (entry != null)
-            {
-                entry.Loop = channel;
-            }
         }
 
         public PeerHash RemoveRemote(PeerAddress remote)
@@ -61,36 +46,11 @@ namespace Leak.Core.Collector
 
             if (entry != null)
             {
-                collection.RemoveByRemote(entry.Remote);
-                collection.RemoveByPeer(entry.Peer);
+                collection.RemoveByRemote(entry.Endpoint.Remote);
+                collection.RemoveByPeer(entry.Endpoint.Peer);
             }
 
-            return entry?.Peer;
-        }
-
-        public bool IsInterested(PeerHash peer)
-        {
-            return collection.FindByPeer(peer)?.LocalState.IsInterested() == true;
-        }
-
-        public void SetInterested(PeerHash peer, bool value)
-        {
-            collection.FindByPeer(peer)?.LocalState.SetInterested(value);
-        }
-
-        public bool IsChoked(PeerHash peer)
-        {
-            return collection.FindByPeer(peer)?.RemoteState.IsChoked() == true;
-        }
-
-        public void SetChoked(PeerHash peer, bool value)
-        {
-            collection.FindByPeer(peer)?.RemoteState.SetChoked(value);
-        }
-
-        public PeerCollectorChannel GetChannel(PeerHash peer)
-        {
-            return new PeerCollectorChannel(configuration.Callback, collection.FindByPeer(peer)?.Loop);
+            return entry?.Endpoint.Peer;
         }
 
         public bool SupportsExtensions(PeerHash peer)

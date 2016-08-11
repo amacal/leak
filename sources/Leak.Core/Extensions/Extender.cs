@@ -65,7 +65,7 @@ namespace Leak.Core.Extensions
 
                 lock (synchronized)
                 {
-                    mapping.Add(peer, collection);
+                    mapping[peer] = collection;
                 }
 
                 configuration.Callback.OnHandshake(peer, handshake);

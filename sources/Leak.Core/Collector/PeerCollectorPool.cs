@@ -1,5 +1,4 @@
-﻿using Leak.Core.Bouncer;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Network;
 using System;
 
@@ -7,24 +6,18 @@ namespace Leak.Core.Collector
 {
     public class PeerCollectorPool : NetworkPoolCallbackBase
     {
-        private readonly PeerCollectorCallback callback;
-        private readonly PeerBouncer bouncer;
-        private readonly PeerCollectorStorage storage;
-        private readonly object synchronized;
+        private readonly PeerCollectorContext context;
 
-        public PeerCollectorPool(PeerCollectorCallback callback, PeerBouncer bouncer, PeerCollectorStorage storage, object synchronized)
+        public PeerCollectorPool(PeerCollectorContext context)
         {
-            this.callback = callback;
-            this.bouncer = bouncer;
-            this.storage = storage;
-            this.synchronized = synchronized;
+            this.context = context;
         }
 
         public override void OnAttached(NetworkConnection connection)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                bouncer.AttachConnection(connection);
+                context.Bouncer.AttachConnection(connection);
             }
         }
 
@@ -32,17 +25,17 @@ namespace Leak.Core.Collector
         {
             PeerHash peer;
 
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                bouncer.ReleaseConnection(connection);
-                peer = storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
+                context.Bouncer.ReleaseConnection(connection);
+                peer = context.Storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
             }
 
             connection.Terminate();
 
             if (peer != null)
             {
-                callback.OnDisconnected(peer);
+                context.Callback.OnDisconnected(peer);
             }
         }
 
@@ -50,17 +43,17 @@ namespace Leak.Core.Collector
         {
             PeerHash peer;
 
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                bouncer.ReleaseConnection(connection);
-                peer = storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
+                context.Bouncer.ReleaseConnection(connection);
+                peer = context.Storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
             }
 
             connection.Terminate();
 
             if (peer != null)
             {
-                callback.OnDisconnected(peer);
+                context.Callback.OnDisconnected(peer);
             }
         }
     }

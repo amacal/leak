@@ -18,7 +18,7 @@ namespace Leak.Core.Retriever
         {
             context.Storage.AddBitfield(peer, bitfield);
 
-            if (context.Collector.IsExtendable(peer))
+            if (context.Collector.SupportExtensions(peer))
             {
                 if (context.Storage.IsExtended(peer) == false)
                 {
@@ -28,7 +28,7 @@ namespace Leak.Core.Retriever
             }
 
             context.Collector.SendBitfield(peer, new Bitfield(bitfield.Length));
-            context.Collector.SendInterested(peer);
+            context.Collector.SetLocalInterested(peer);
         }
     }
 }

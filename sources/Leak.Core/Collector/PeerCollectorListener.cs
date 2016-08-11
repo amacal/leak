@@ -1,40 +1,30 @@
-﻿using Leak.Core.Bouncer;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Listener;
-using Leak.Core.Loop;
 using Leak.Core.Network;
 
 namespace Leak.Core.Collector
 {
     public class PeerCollectorListener : PeerListenerCallbackBase
     {
-        private readonly PeerCollectorCallback callback;
-        private readonly PeerBouncer bouncer;
-        private readonly ConnectionLoop loop;
-        private readonly PeerCollectorStorage storage;
-        private readonly object synchronized;
+        private readonly PeerCollectorContext context;
 
-        public PeerCollectorListener(PeerCollectorCallback callback, PeerBouncer bouncer, ConnectionLoop loop, PeerCollectorStorage storage, object synchronized)
+        public PeerCollectorListener(PeerCollectorContext context)
         {
-            this.callback = callback;
-            this.bouncer = bouncer;
-            this.loop = loop;
-            this.storage = storage;
-            this.synchronized = synchronized;
+            this.context = context;
         }
 
         public override void OnConnecting(PeerListenerConnecting connecting)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                if (bouncer.Accept(connecting.Connection) == false)
+                if (context.Bouncer.Accept(connecting.Connection) == false)
                 {
                     connecting.Reject();
                     return;
                 }
             }
 
-            callback.OnConnecting(PeerAddress.Parse(connecting.Connection.Remote));
+            context.Callback.OnConnecting(PeerAddress.Parse(connecting.Connection.Remote));
         }
 
         public override void OnConnected(NetworkConnection connection)
@@ -42,12 +32,12 @@ namespace Leak.Core.Collector
             int total = 0;
             bool accepted = false;
 
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                if (bouncer.AcceptRemote(connection))
+                if (context.Bouncer.AcceptRemote(connection))
                 {
                     accepted = true;
-                    total = bouncer.Count();
+                    total = context.Bouncer.Count();
                 }
             }
 
@@ -56,26 +46,35 @@ namespace Leak.Core.Collector
                 PeerAddress peer = PeerAddress.Parse(connection.Remote);
                 PeerCollectorConnected connected = new PeerCollectorConnected(peer, total);
 
-                callback.OnConnected(connected);
+                context.Callback.OnConnected(connected);
+            }
+            else
+            {
+                connection.Terminate();
             }
         }
 
         public override void OnRejected(NetworkConnection connection)
         {
-            callback.OnRejected(PeerAddress.Parse(connection.Remote));
+            context.Callback.OnRejected(PeerAddress.Parse(connection.Remote));
         }
 
         public override void OnHandshake(NetworkConnection connection, PeerListenerHandshake handshake)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                if (bouncer.AcceptPeer(connection, handshake.Peer))
+                if (context.Bouncer.AcceptPeer(connection, handshake.Peer))
                 {
-                    storage.AddHandshake(connection, handshake);
+                    context.Peers.Enlist(handshake.Peer, handshake.Hash);
+                    context.Storage.AddHandshake(connection, handshake);
+                }
+                else
+                {
+                    connection.Terminate();
                 }
             }
 
-            loop.StartProcessing(connection, handshake);
+            context.Loop.StartProcessing(connection, handshake);
         }
     }
 }

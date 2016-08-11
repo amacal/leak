@@ -41,6 +41,17 @@ namespace Leak.Core.Collector
             return entry;
         }
 
+        public IEnumerable<PeerCollectorStorageEntry> FindByHash(FileHash hash)
+        {
+            foreach (PeerCollectorStorageEntry entry in byPeer.Values)
+            {
+                if (hash.Equals(entry.Endpoint?.Hash))
+                {
+                    yield return entry;
+                }
+            }
+        }
+
         public void AddByPeer(PeerHash peer, PeerCollectorStorageEntry entry)
         {
             byPeer.Add(peer, entry);

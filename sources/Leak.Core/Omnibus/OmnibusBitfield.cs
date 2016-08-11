@@ -5,6 +5,11 @@ using System.Linq;
 
 namespace Leak.Core.Omnibus
 {
+    /// <summary>
+    /// Manages the global bitfield for a given FileHash. It manages all peers
+    /// which announced their bitfield, tracks all requested pieces/blocks and
+    /// monitors completed pieces.
+    /// </summary>
     public class OmnibusBitfield
     {
         private readonly OmnibusConfiguration configuration;

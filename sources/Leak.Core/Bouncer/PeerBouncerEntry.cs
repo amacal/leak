@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Leak.Core.Bouncer
 {
-    public class PeerBouncerStorageEntry
+    public class PeerBouncerEntry
     {
-        public PeerBouncerStorageEntry()
+        public PeerBouncerEntry()
         {
             Identifiers = new HashSet<long>();
             Remotes = new HashSet<string>();

@@ -16,7 +16,7 @@
 
         public override int GetHashCode()
         {
-            return 0;
+            return value[19] * 256 + value[18];
         }
 
         public override bool Equals(object obj)

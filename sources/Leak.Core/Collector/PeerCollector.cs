@@ -1,61 +1,44 @@
-﻿using Leak.Core.Bouncer;
+﻿using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Listener;
-using Leak.Core.Loop;
 using Leak.Core.Network;
 using System;
 
 namespace Leak.Core.Collector
 {
+    /// <summary>
+    /// Represents a man-in-the-middle to mediate between low-level components
+    /// and upper components in the stack. It provides an extra abstraction for
+    /// looping each connection and offers additional benefits like connection
+    /// filtering, congestion and peers management.
+    /// </summary>
     public class PeerCollector
     {
-        private readonly object synchronized;
-
-        private readonly ConnectionLoop loop;
-        private readonly PeerBouncer bouncer;
-        private readonly PeerCollectorStorage storage;
-        private readonly PeerCollectorConfiguration configuration;
+        private readonly PeerCollectorContext context;
 
         public PeerCollector(Action<PeerCollectorConfiguration> configurer)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new PeerCollectorCallbackNothing();
-            });
-
-            synchronized = new object();
-            storage = new PeerCollectorStorage(configuration);
-
-            loop = new ConnectionLoop(with =>
-            {
-                with.Callback = new PeerCollectorLoop(storage, configuration, synchronized);
-            });
-
-            bouncer = new PeerBouncer(with =>
-            {
-                with.Callback = new PeerCollectorBouncer();
-                with.Connections = 32;
-            });
+            context = new PeerCollectorContext(configurer);
         }
 
-        public PeerCollectorView CreateView()
+        public PeerCollectorView CreateView(FileHash hash)
         {
-            return new PeerCollectorView(storage);
+            return new PeerCollectorView(hash, context);
         }
 
         public PeerListenerCallback CreateListenerCallback()
         {
-            return new PeerCollectorListener(configuration.Callback, bouncer, loop, storage, synchronized);
+            return new PeerCollectorListener(context);
         }
 
         public PeerConnectorCallback CreateConnectorCallback()
         {
-            return new PeerCollectorConnector(configuration.Callback, bouncer, loop, storage, synchronized);
+            return new PeerCollectorConnector(context);
         }
 
         public NetworkPoolCallback CreatePoolCallback()
         {
-            return new PeerCollectorPool(configuration.Callback, bouncer, storage, synchronized);
+            return new PeerCollectorPool(context);
         }
     }
 }

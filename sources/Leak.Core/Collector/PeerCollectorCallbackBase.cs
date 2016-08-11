@@ -33,10 +33,6 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnKeepAlive(PeerHash peer, KeepAliveMessage message)
-        {
-        }
-
         public virtual void OnChoke(PeerHash peer, ChokeMessage message)
         {
         }

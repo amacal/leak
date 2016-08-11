@@ -16,7 +16,6 @@ namespace Leak.Core.Retriever
         private readonly ResourceQueue queue;
 
         private readonly Timer timer;
-        private int tick;
 
         public ResourceRetrieverToGet(Action<ResourceRetrieverConfiguration> configurer)
         {
@@ -87,13 +86,6 @@ namespace Leak.Core.Retriever
                 {
                     using (ResourceRepositorySession session = repository.OpenSession())
                     {
-                        tick = (tick + 1) % 600;
-
-                        if (tick == 0)
-                        {
-                            queue.Enqueue(new ResourceQueueItemKeepAliveSend());
-                        }
-
                         queue.Enqueue(new ResourceQueueItemRequestSendMultiple());
                         queue.Process(context.Configure(with =>
                         {

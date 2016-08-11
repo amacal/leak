@@ -98,7 +98,7 @@ namespace Leak.Core.Client
 
         private void Register(Metainfo metainfo)
         {
-            storage.Register(metainfo, collector.CreateView());
+            storage.Register(metainfo, collector.CreateView(metainfo.Hash));
 
             FileHash hash = metainfo.Hash;
             ResourceRepository repository = storage.GetRepository(hash);
@@ -116,7 +116,7 @@ namespace Leak.Core.Client
 
         private void Register(PeerClientStartConfiguration start)
         {
-            storage.Register(start.Hash, collector.CreateView());
+            storage.Register(start.Hash, collector.CreateView(start.Hash));
             hashes.Add(start.Hash);
         }
 

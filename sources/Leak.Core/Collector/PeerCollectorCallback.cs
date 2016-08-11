@@ -19,8 +19,6 @@ namespace Leak.Core.Collector
 
         void OnOutgoing(PeerHash peer, PeerCollectorMessage message);
 
-        void OnKeepAlive(PeerHash peer, KeepAliveMessage message);
-
         void OnChoke(PeerHash peer, ChokeMessage message);
 
         void OnUnchoke(PeerHash peer, UnchokeMessage message);
