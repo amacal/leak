@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Extensions.Metadata;
 
 namespace Leak.Core.Retriever
 {
@@ -15,7 +14,7 @@ namespace Leak.Core.Retriever
                 foreach (ResourceMetadataBlock request in requests)
                 {
                     context.Storage.Reserve(hash, request);
-                    context.Collector.SendExtended(hash, context.Extender.MetadataRequest(hash, request.Index));
+                    context.Collector.SendMetadataRequest(hash, request.Index);
                 }
             }
         }

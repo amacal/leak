@@ -1,4 +1,5 @@
-﻿using Leak.Core.Collector;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Retriever;
@@ -114,9 +115,15 @@ namespace Leak.Core.Client
             }
         }
 
-        public override void OnExtended(PeerHash peer, ExtendedIncomingMessage message)
+        public override void OnMetadataReceived(PeerHash peer, MetadataData metadata)
         {
-            storage.GetExtender(peer).Handle(peer, message);
+            if (storage.HasMetainfo(peer) == false)
+            {
+                FileHash hash = storage.GetHash(peer);
+
+                callback.OnMetadataReceived(hash, peer, metadata);
+                storage.GetRetriever(peer).AddMetadata(peer, metadata);
+            }
         }
     }
 }

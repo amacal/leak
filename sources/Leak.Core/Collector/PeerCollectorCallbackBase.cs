@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Common;
 using Leak.Core.Messages;
 
 namespace Leak.Core.Collector
@@ -57,7 +58,7 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnExtended(PeerHash peer, ExtendedIncomingMessage message)
+        public virtual void OnMetadataReceived(PeerHash peer, MetadataData metadata)
         {
         }
     }

@@ -1,6 +1,5 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Extensions;
-using Leak.Core.Extensions.Metadata;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Repository;
 using System;
@@ -31,7 +30,6 @@ namespace Leak.Core.Retriever
             {
                 Callback = configuration.Callback,
                 Collector = configuration.Collector,
-                Extender = configuration.Extender,
                 Storage = new ResourceStorage(new ResourceStorageConfiguration())
             };
 
@@ -73,16 +71,10 @@ namespace Leak.Core.Retriever
                 return new ResourceRetrieverToGet(context, queue, repository, with =>
                 {
                     with.Callback = configuration.Callback;
-                    with.Extender = configuration.Extender;
                     with.Collector = configuration.Collector;
                     with.Repository = repository;
                 });
             }
-        }
-
-        public void SetExtensions(PeerHash peer, ExtenderHandshake handshake)
-        {
-            queue.Enqueue(new ResourceQueueItemHandshakeHandle(peer));
         }
 
         public void SetBitfield(PeerHash peer, Bitfield bitfield)

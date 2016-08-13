@@ -1,5 +1,5 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Extensions.Metadata;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Common;
 
 namespace Leak.Core.Retriever
 {

@@ -13,7 +13,5 @@ namespace Leak.Core.Client
         public PeerClientListenerBuilder Listener { get; set; }
 
         public PeerClientConnectorBuilder Connector { get; set; }
-
-        public PeerClientExtensionBuilder Extensions { get; set; }
     }
 }

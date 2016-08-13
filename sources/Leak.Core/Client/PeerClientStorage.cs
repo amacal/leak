@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
-using Leak.Core.Extensions;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
@@ -13,14 +12,12 @@ namespace Leak.Core.Client
     public class PeerClientStorage
     {
         private readonly PeerClientConfiguration configuration;
-        private readonly PeerClientExtensionContext context;
         private readonly PeerClientStorageEntryCollection collection;
         private readonly PeerClientCallback callback;
 
-        public PeerClientStorage(PeerClientConfiguration configuration, PeerClientExtensionContext context)
+        public PeerClientStorage(PeerClientConfiguration configuration)
         {
             this.configuration = configuration;
-            this.context = context;
             this.callback = configuration.Callback;
 
             this.collection = new PeerClientStorageEntryCollection();
@@ -38,17 +35,9 @@ namespace Leak.Core.Client
 
             ResourceRepository repository = new ResourceRepositoryToHash(hash, configuration.Destination);
 
-            Extender extender = new Extender(with =>
-            {
-                with.Callback = new PeerClientToExtender(hash, this);
-                with.Extensions = configuration.Extensions.Build();
-                with.Handlers.AddRange(configuration, context);
-            });
-
             ResourceRetriever retriever = new ResourceRetrieverToQuery(with =>
             {
                 with.Collector = collector;
-                with.Extender = extender;
                 with.Repository = repository;
                 with.Callback = new PeerClientToRetriever(hash, configuration, this);
             });
@@ -57,7 +46,6 @@ namespace Leak.Core.Client
             {
                 Hash = hash,
                 Retriever = retriever,
-                Extender = extender,
                 Repository = repository,
                 Peers = new HashSet<PeerHash>()
             });
@@ -76,18 +64,10 @@ namespace Leak.Core.Client
 
             ResourceRepository repository = new ResourceRepositoryToMetainfo(metainfo, path);
 
-            Extender extender = new Extender(with =>
-            {
-                with.Callback = new PeerClientToExtender(metainfo.Hash, this);
-                with.Extensions = configuration.Extensions.Build();
-                with.Handlers.AddRange(configuration, context);
-            });
-
             ResourceRetriever retriever = new ResourceRetrieverToGet(with =>
             {
                 with.Repository = repository;
                 with.Collector = collector;
-                with.Extender = extender;
                 with.Callback = new PeerClientToRetriever(metainfo.Hash, configuration, this);
             });
 
@@ -97,7 +77,6 @@ namespace Leak.Core.Client
                 Metainfo = metainfo,
                 Repository = repository,
                 Retriever = retriever,
-                Extender = extender,
                 Peers = new HashSet<PeerHash>()
             });
         }
@@ -161,11 +140,6 @@ namespace Leak.Core.Client
         public PeerClientCallback GetCallback(PeerHash peer)
         {
             return configuration.Callback;
-        }
-
-        public Extender GetExtender(PeerHash peer)
-        {
-            return collection.ByPeer(peer).Extender;
         }
 
         public FileHash GetHash()

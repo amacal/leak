@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Common;
 using Leak.Core.Communicator;
 using Leak.Core.Congestion;
 using Leak.Core.Messages;
@@ -85,14 +86,11 @@ namespace Leak.Core.Collector
             }
         }
 
-        public void SendExtended(PeerHash peer, Extended extended)
+        public void SendMetadataRequest(PeerHash peer, int piece)
         {
             lock (context.Synchronized)
             {
-                ExtendedOutgoingMessage message = new ExtendedOutgoingMessage(extended);
-                CommunicatorChannel channel = context.Communicator.Get(peer);
-
-                channel?.Send(message);
+                context.Cando.Send(peer, formatter => formatter.MetadataRequest(piece));
             }
         }
     }

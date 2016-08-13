@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Collector;
-using Leak.Core.Extensions;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
 using System;
@@ -11,8 +10,6 @@ namespace Leak.Core.Retriever
         public ResourceStorage Storage { get; set; }
 
         public PeerCollectorView Collector { get; set; }
-
-        public Extender Extender { get; set; }
 
         public ResourceRetrieverCallback Callback { get; set; }
 
@@ -26,7 +23,6 @@ namespace Leak.Core.Retriever
             {
                 with.Storage = Storage;
                 with.Collector = Collector;
-                with.Extender = Extender;
                 with.Callback = Callback;
                 with.Properties = Properties;
             });

@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Extensions;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
 using Leak.Core.Retriever;
@@ -16,8 +15,6 @@ namespace Leak.Core.Client
         public ResourceRepository Repository { get; set; }
 
         public ResourceRetriever Retriever { get; set; }
-
-        public Extender Extender { get; set; }
 
         public HashSet<PeerHash> Peers { get; set; }
     }

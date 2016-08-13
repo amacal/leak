@@ -23,7 +23,6 @@ namespace Leak.Core.Retriever
                 if (context.Storage.IsExtended(peer) == false)
                 {
                     context.Storage.Extend(peer);
-                    context.Collector.SendExtended(peer, context.Extender.GetHandshake());
                 }
             }
 

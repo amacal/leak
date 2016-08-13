@@ -1,8 +1,8 @@
 ﻿using Leak.Core.Client;
 using Leak.Core.Common;
-using Leak.Core.Extensions.Metadata;
 using Leak.Core.Messages;
 using System;
+using Leak.Core.Cando.Metadata;
 
 namespace Leak.Loggers
 {

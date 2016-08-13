@@ -1,6 +1,5 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Extensions;
-using Leak.Core.Extensions.Metadata;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Repository;
 
@@ -11,8 +10,6 @@ namespace Leak.Core.Retriever
         ResourceRetriever WithBitfield(Bitfield bitfield);
 
         ResourceRetriever WithRepository(ResourceRepository repository);
-
-        void SetExtensions(PeerHash peer, ExtenderHandshake handshake);
 
         void SetBitfield(PeerHash peer, Bitfield bitfield);
 

@@ -6,14 +6,13 @@ using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Network;
 using Leak.Core.Repository;
-using Leak.Core.Retriever;
 using Leak.Core.Telegraph;
 using System;
 using System.Collections.Generic;
 
 namespace Leak.Core.Client
 {
-    public class PeerClient : PeerClientExtensionContext
+    public class PeerClient
     {
         private readonly PeerCollector collector;
         private readonly PeerClientStorage storage;
@@ -30,12 +29,11 @@ namespace Leak.Core.Client
                 with.Peer = PeerHash.Random();
                 with.Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
                 with.Callback = new PeerClientCallbackNothing();
-                with.Extensions = new PeerClientExtensionBuilder();
                 with.Connector = new PeerClientConnectorBuilder();
                 with.Listener = new PeerClientListenerBuilder();
             });
 
-            storage = new PeerClientStorage(configuration, this);
+            storage = new PeerClientStorage(configuration);
             hashes = new FileHashCollection();
             callback = configuration.Callback;
 
@@ -193,37 +191,6 @@ namespace Leak.Core.Client
                     with.Hash = start.Hash;
                 });
             }
-        }
-
-        FileHash PeerClientExtensionContext.GetHash(PeerHash peer)
-        {
-            return storage.GetHash(peer);
-        }
-
-        ResourceRetriever PeerClientExtensionContext.GetRetriever(PeerHash peer)
-        {
-            return storage.GetRetriever(peer);
-        }
-
-        PeerClientCallback PeerClientExtensionContext.GetCallback(PeerHash peer)
-        {
-            return storage.GetCallback(peer);
-        }
-
-        PeerConnector PeerClientExtensionContext.GetConnector(PeerHash peer)
-        {
-            return configuration.Connector.Build(with =>
-            {
-                with.Peer = configuration.Peer;
-                with.Hash = storage.GetHash(peer);
-                with.Callback = collector.CreateConnectorCallback();
-                with.Pool = pool;
-            });
-        }
-
-        bool PeerClientExtensionContext.IsConnected(PeerAddress remote)
-        {
-            return storage.Contains(remote);
         }
     }
 }

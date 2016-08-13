@@ -1,4 +1,6 @@
 ﻿using Leak.Core.Bouncer;
+using Leak.Core.Cando;
+using Leak.Core.Collector.Callbacks;
 using Leak.Core.Communicator;
 using Leak.Core.Congestion;
 using Leak.Core.Infantry;
@@ -19,6 +21,7 @@ namespace Leak.Core.Collector
         private readonly PeerCollectorStorage storage;
         private readonly CommunicatorService communicator;
         private readonly ResponderService responder;
+        private readonly CandoService cando;
 
         public PeerCollectorContext(Action<PeerCollectorConfiguration> configurer)
         {
@@ -54,6 +57,21 @@ namespace Leak.Core.Collector
 
             responder = new ResponderService(with =>
             {
+            });
+
+            cando = new CandoService(with =>
+            {
+                with.Callback = new PeerCollectorCando(this);
+
+                with.Extensions.Metadata(metadata =>
+                {
+                    metadata.Callback = new PeerCollectorMetadata(this);
+                });
+
+                with.Extensions.PeerExchange(exchange =>
+                {
+                    exchange.Callback = new PeerCollectorExchange(this);
+                });
             });
 
             synchronized = new object();
@@ -108,6 +126,11 @@ namespace Leak.Core.Collector
         public ResponderService Responder
         {
             get { return responder; }
+        }
+
+        public CandoService Cando
+        {
+            get { return cando; }
         }
     }
 }
