@@ -5,6 +5,11 @@ namespace Leak.Core.Cando.Metadata
 {
     public static class MetadataExtensions
     {
+        public static bool DoesSupportMetadata(this CandoFormatter formattable)
+        {
+            return formattable.Translate("ut_metadata") > 0;
+        }
+
         public static Extended MetadataRequest(this CandoFormatter formattable, int piece)
         {
             BencodedValue payload = new BencodedValue

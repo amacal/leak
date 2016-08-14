@@ -82,17 +82,6 @@ namespace Leak.Core.Retriever
             queue.Enqueue(new ResourceQueueItemBitfieldHandle(peer, bitfield));
         }
 
-        public void SetChoked(PeerHash peer, ResourceDirection direction)
-        {
-            queue.Enqueue(new ResourceQueueItemChokeHandle(peer));
-        }
-
-        public void SetUnchoked(PeerHash peer, ResourceDirection direction)
-        {
-            queue.Enqueue(new ResourceQueueItemHandshakeHandle(peer));
-            queue.Enqueue(new ResourceQueueItemUnchokeHandle(peer));
-        }
-
         public void AddPiece(PeerHash peer, Piece piece)
         {
         }

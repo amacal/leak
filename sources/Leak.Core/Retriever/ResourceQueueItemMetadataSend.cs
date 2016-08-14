@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Collector;
+using Leak.Core.Common;
 
 namespace Leak.Core.Retriever
 {
@@ -6,15 +7,20 @@ namespace Leak.Core.Retriever
     {
         public void Handle(ResourceQueueContext context)
         {
-            foreach (ResourcePeer peer in context.Storage.GetPeers(ResourcePeerOperation.Metadata))
+            PeerCollectorCriterion[] criterion =
             {
-                PeerHash hash = peer.Hash;
-                ResourceMetadataBlock[] requests = context.Storage.ScheduleMetadata(hash);
+                PeerCollectorCriterion.IsLocalNotChockedByRemote,
+                PeerCollectorCriterion.DoesRemoteSupportMetadata
+            };
+
+            foreach (PeerHash peer in context.Collector.GetPeers(criterion))
+            {
+                ResourceMetadataBlock[] requests = context.Storage.ScheduleMetadata(peer);
 
                 foreach (ResourceMetadataBlock request in requests)
                 {
-                    context.Storage.Reserve(hash, request);
-                    context.Collector.SendMetadataRequest(hash, request.Index);
+                    context.Storage.Reserve(peer, request);
+                    context.Collector.SendMetadataRequest(peer, request.Index);
                 }
             }
         }

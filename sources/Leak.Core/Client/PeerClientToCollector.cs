@@ -2,7 +2,6 @@
 using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Messages;
-using Leak.Core.Retriever;
 
 namespace Leak.Core.Client
 {
@@ -88,19 +87,13 @@ namespace Leak.Core.Client
         public override void OnChoke(PeerHash peer, ChokeMessage message)
         {
             FileHash hash = storage.GetHash(peer);
-            ResourceDirection direction = ResourceDirection.Local;
-
             callback.OnPeerChoked(hash, peer);
-            storage.GetRetriever(peer).SetChoked(peer, direction);
         }
 
         public override void OnUnchoke(PeerHash peer, UnchokeMessage message)
         {
             FileHash hash = storage.GetHash(peer);
-            ResourceDirection direction = ResourceDirection.Local;
-
             callback.OnPeerUnchoked(hash, peer);
-            storage.GetRetriever(peer).SetUnchoked(peer, direction);
         }
 
         public override void OnPiece(PeerHash peer, PieceMessage message)

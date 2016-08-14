@@ -89,6 +89,17 @@ namespace Leak.Core.Cando
             }
         }
 
+        public bool Supports(PeerHash peer, Func<CandoFormatter, bool> callback)
+        {
+            lock (context.Synchronized)
+            {
+                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                CandoFormatter formatter = new CandoFormatter(entry.Remote);
+
+                return callback.Invoke(formatter);
+            }
+        }
+
         public void Remove(PeerHash peer)
         {
             lock (context.Synchronized)

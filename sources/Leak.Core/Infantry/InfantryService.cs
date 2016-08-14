@@ -6,50 +6,45 @@ namespace Leak.Core.Infantry
 {
     public class InfantryService
     {
-        private readonly object synchronized;
-        private readonly InfantryCollection collection;
-        private readonly InfantryConfiguration configuration;
+        private readonly InfantryContext context;
 
         public InfantryService(Action<InfantryConfiguration> configurer)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new InfantryCallbackNothing();
-            });
-
-            synchronized = new object();
-            collection = new InfantryCollection();
+            context = new InfantryContext(configurer);
         }
 
         public void Enlist(PeerHash peer, FileHash hash)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                collection.Register(hash, collection.GetOrCreate(peer));
+                InfantryEntry entry = context.Collection.GetOrCreate(peer);
+
+                context.Collection.Register(hash, entry);
+                entry.Hash = hash;
             }
         }
 
         public void Dismiss(PeerHash peer)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                collection.Remove(peer);
+                context.Collection.Remove(peer);
             }
         }
 
         public bool Contains(PeerHash peer)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                return collection.Get(peer) != null;
+                return context.Collection.Get(peer) != null;
             }
         }
 
         public bool Contains(PeerHash peer, FileHash hash)
         {
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                return hash.Equals(collection.Get(peer)?.Hash);
+                return hash.Equals(context.Collection.Get(peer)?.Hash);
             }
         }
 
@@ -57,9 +52,9 @@ namespace Leak.Core.Infantry
         {
             List<PeerHash> result = new List<PeerHash>();
 
-            lock (synchronized)
+            lock (context.Synchronized)
             {
-                foreach (InfantryEntry entry in collection.Get(hash))
+                foreach (InfantryEntry entry in context.Collection.Get(hash))
                 {
                     result.Add(entry.Peer);
                 }

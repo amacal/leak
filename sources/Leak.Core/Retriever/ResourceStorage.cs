@@ -1,9 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Omnibus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Leak.Core.Retriever
 {
@@ -31,47 +28,6 @@ namespace Leak.Core.Retriever
         {
             bitfields.Add(peer, bitfield);
             peers.AddPeer(peer);
-        }
-
-        public void Choke(PeerHash peer)
-        {
-            peers.AddPeer(peer);
-            peers.Choke(peer);
-        }
-
-        public void Unchoke(PeerHash peer)
-        {
-            peers.AddPeer(peer);
-            peers.Unchoke(peer);
-        }
-
-        public bool IsExtended(PeerHash peer)
-        {
-            peers.AddPeer(peer);
-            return peers.IsExtended(peer);
-        }
-
-        public void Extend(PeerHash peer)
-        {
-            peers.AddPeer(peer);
-            peers.Extend(peer);
-        }
-
-        public IEnumerable<ResourcePeer> GetPeers(ResourcePeerOperation operation)
-        {
-            Func<ResourcePeer, bool> predicate = x => true;
-
-            if (operation == ResourcePeerOperation.Request)
-            {
-                predicate = x => x.IsUnchoke();
-            }
-
-            if (operation == ResourcePeerOperation.Metadata)
-            {
-                predicate = x => x.IsExtended() && bitfields.IsComplete(x.Hash);
-            }
-
-            return peers.Where(predicate).OrderByDescending(x => x.Rank);
         }
 
         public void Complete(Bitfield bitfield)

@@ -6,15 +6,12 @@ namespace Leak.Core.Retriever
     public class ResourcePeer
     {
         private readonly PeerHash hash;
-        private ResourcePeerStatus status;
 
         private int rank;
-        private bool? extended;
 
         public ResourcePeer(PeerHash hash)
         {
             this.hash = hash;
-            this.status = ResourcePeerStatus.None;
         }
 
         public PeerHash Hash
@@ -40,31 +37,6 @@ namespace Leak.Core.Retriever
         public void Decrease(int value)
         {
             rank = Math.Max(0, rank - value);
-        }
-
-        public bool IsUnchoke()
-        {
-            return status.HasFlag(ResourcePeerStatus.Unchoke);
-        }
-
-        public void Unchoke()
-        {
-            status = status | ResourcePeerStatus.Unchoke;
-        }
-
-        public void Choke()
-        {
-            status = status ^ ResourcePeerStatus.Unchoke;
-        }
-
-        public bool IsExtended()
-        {
-            return extended.HasValue;
-        }
-
-        public void Extend()
-        {
-            extended = true;
         }
     }
 }

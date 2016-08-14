@@ -4,6 +4,7 @@ using Leak.Core.Communicator;
 using Leak.Core.Congestion;
 using Leak.Core.Messages;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Collector
 {
@@ -43,12 +44,28 @@ namespace Leak.Core.Collector
             }
         }
 
-        public PeerHash[] GetPeers()
+        public PeerHash[] GetPeers(params PeerCollectorCriterion[] criterions)
         {
+            HashSet<PeerHash> peers = new HashSet<PeerHash>();
+
             lock (context.Synchronized)
             {
-                return context.Peers.Find(hash);
+                foreach (PeerHash peer in context.Peers.Find(hash))
+                {
+                    peers.Add(peer);
+
+                    foreach (PeerCollectorCriterion criterion in criterions)
+                    {
+                        if (criterion.Accept(peer, context) == false)
+                        {
+                            peers.Remove(peer);
+                            break;
+                        }
+                    }
+                }
             }
+
+            return peers.ToArray();
         }
 
         public bool SupportExtensions(PeerHash peer)

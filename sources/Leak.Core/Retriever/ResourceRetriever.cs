@@ -13,10 +13,6 @@ namespace Leak.Core.Retriever
 
         void SetBitfield(PeerHash peer, Bitfield bitfield);
 
-        void SetChoked(PeerHash peer, ResourceDirection direction);
-
-        void SetUnchoked(PeerHash peer, ResourceDirection direction);
-
         void AddPiece(PeerHash peer, Piece piece);
 
         void AddMetadata(PeerHash peer, MetadataData data);

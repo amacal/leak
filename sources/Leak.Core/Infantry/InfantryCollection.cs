@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Leak.Core.Common;
+using System.Collections.Generic;
 using System.Linq;
-using Leak.Core.Common;
 
 namespace Leak.Core.Infantry
 {
@@ -50,7 +50,6 @@ namespace Leak.Core.Infantry
                 byHash.Add(hash, entries);
             }
 
-            entry.Hash = hash;
             entries.Add(entry);
         }
 
