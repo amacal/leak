@@ -58,6 +58,10 @@ namespace Leak.Core.Collector
         {
         }
 
+        public virtual void OnMetadataSize(PeerHash peer, MetadataSize size)
+        {
+        }
+
         public virtual void OnMetadataReceived(PeerHash peer, MetadataData metadata)
         {
         }

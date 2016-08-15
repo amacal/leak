@@ -103,11 +103,11 @@ namespace Leak.Core.Collector
             }
         }
 
-        public void SendMetadataRequest(PeerHash peer, int piece)
+        public void SendMetadataRequest(PeerHash peer, int block)
         {
             lock (context.Synchronized)
             {
-                context.Cando.Send(peer, formatter => formatter.MetadataRequest(piece));
+                context.Cando.Send(peer, formatter => formatter.MetadataRequest(block));
             }
         }
     }

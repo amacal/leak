@@ -6,13 +6,13 @@ namespace Leak.Core.Collector
 {
     public abstract class PeerCollectorCriterion
     {
-        public static readonly PeerCollectorCriterion IsLocalNotChockedByRemote = new IsLocalNotChockedByRemoteCriterion();
+        public static readonly PeerCollectorCriterion IsLocalNotChokedByRemote = new IsLocalNotChokedByRemoteCriterion();
 
-        public static readonly PeerCollectorCriterion DoesRemoteSupportMetadata = new IsLocalNotChockedByRemoteCriterion();
+        public static readonly PeerCollectorCriterion DoesRemoteSupportMetadata = new DoesRemoteSupportMetadataCriterion();
 
         public abstract bool Accept(PeerHash peer, PeerCollectorContext context);
 
-        private class IsLocalNotChockedByRemoteCriterion : PeerCollectorCriterion
+        private class IsLocalNotChokedByRemoteCriterion : PeerCollectorCriterion
         {
             public override bool Accept(PeerHash peer, PeerCollectorContext context)
             {

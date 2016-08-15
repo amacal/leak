@@ -10,7 +10,7 @@ namespace Leak.Core.Cando.Metadata
             return formattable.Translate("ut_metadata") > 0;
         }
 
-        public static Extended MetadataRequest(this CandoFormatter formattable, int piece)
+        public static Extended MetadataRequest(this CandoFormatter formattable, int block)
         {
             BencodedValue payload = new BencodedValue
             {
@@ -18,13 +18,13 @@ namespace Leak.Core.Cando.Metadata
                 {
                     new BencodedEntry
                     {
-                        Key = new BencodedValue {Text = new BencodedText("msg_type")},
-                        Value = new BencodedValue {Number = new BencodedNumber(0)}
+                        Key = new BencodedValue { Text = new BencodedText("msg_type") },
+                        Value = new BencodedValue { Number = new BencodedNumber(0) }
                     },
                     new BencodedEntry
                     {
-                        Key = new BencodedValue {Text = new BencodedText("piece")},
-                        Value = new BencodedValue {Number = new BencodedNumber(piece)}
+                        Key = new BencodedValue { Text = new BencodedText("piece") },
+                        Value = new BencodedValue { Number = new BencodedNumber(block) }
                     }
                 }
             };

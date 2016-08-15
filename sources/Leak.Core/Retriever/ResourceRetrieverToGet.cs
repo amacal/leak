@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using System;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace Leak.Core.Retriever
         private readonly ResourceQueueContext context;
         private readonly ResourceQueue queue;
 
-        private readonly Timer timer;
+        private Timer timer;
 
         public ResourceRetrieverToGet(Action<ResourceRetrieverConfiguration> configurer)
         {
@@ -30,11 +31,10 @@ namespace Leak.Core.Retriever
             {
                 Callback = configuration.Callback,
                 Collector = configuration.Collector,
-                Properties = repository.Properties,
-                Storage = new ResourceStorage(new ResourceStorageConfiguration())
+                Properties = repository.Properties
             };
 
-            this.context.Storage = new ResourceStorage(new ResourceStorageConfiguration
+            this.context.Omnibus = new OmnibusBitfield(new OmnibusConfiguration
             {
                 Pieces = this.context.Properties.Pieces,
                 PieceSize = this.context.Properties.PieceSize,
@@ -61,7 +61,7 @@ namespace Leak.Core.Retriever
             this.context.Collector = configuration.Collector;
             this.context.Properties = repository.Properties;
 
-            this.context.Storage = new ResourceStorage(this.context.Storage, new ResourceStorageConfiguration
+            this.context.Omnibus = new OmnibusBitfield(this.context.Omnibus, new OmnibusConfiguration
             {
                 Pieces = this.context.Properties.Pieces,
                 PieceSize = this.context.Properties.PieceSize,
@@ -75,41 +75,39 @@ namespace Leak.Core.Retriever
 
         private void OnTick(object state)
         {
-            timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            timer?.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
 
             try
             {
-                lock (context.Storage)
+                using (ResourceRepositorySession session = repository.OpenSession())
                 {
-                    using (ResourceRepositorySession session = repository.OpenSession())
+                    queue.Enqueue(new ResourceQueueItemRequestSendMultiple());
+                    queue.Process(context.Configure(with =>
                     {
-                        queue.Enqueue(new ResourceQueueItemRequestSendMultiple());
-                        queue.Process(context.Configure(with =>
-                        {
-                            with.Repository = session;
-                        }));
-                    }
+                        with.Repository = session;
+                    }));
                 }
             }
             finally
             {
-                this.timer.Change(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+                timer?.Change(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
             }
+        }
+
+        public ResourceRetriever WithMetadata(MetadataSize size)
+        {
+            return this;
         }
 
         public ResourceRetriever WithBitfield(Bitfield bitfield)
         {
-            lock (context.Storage)
-            {
-                context.Storage.Complete(bitfield);
-            }
-
+            context.Omnibus.Complete(bitfield);
             return this;
         }
 
         public ResourceRetriever WithRepository(ResourceRepository repository)
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         public void SetBitfield(PeerHash peer, Bitfield bitfield)

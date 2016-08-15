@@ -113,12 +113,21 @@ namespace Leak.Core.Cando
             if (payload.Id == 0)
             {
                 byte[] data = payload.Data;
-                BencodedValue bencoded = Bencoder.Decode(data);
+                BencodedValue handshake = Bencoder.Decode(data);
 
-                entry.Remote = CandoMap.Parse(bencoded);
+                entry.Remote = CandoMap.Parse(handshake);
                 entry.KnowsRemoteExtensions = true;
 
+                CallHandshakeOnEachHandler(entry, handshake);
                 CallHandshakeIfRequired(entry);
+            }
+        }
+
+        private void CallHandshakeOnEachHandler(CandoEntry entry, BencodedValue handshake)
+        {
+            foreach (CandoHandler handler in entry.Handlers)
+            {
+                handler.OnHandshake(entry.Peer, handshake);
             }
         }
 
@@ -129,7 +138,7 @@ namespace Leak.Core.Cando
                 string extension = entry.Local.Translate(payload.Id);
                 CandoHandler handler = entry.Handlers.Find(extension);
 
-                handler?.Handle(entry.Peer, payload);
+                handler?.OnMessage(entry.Peer, payload);
             }
         }
 

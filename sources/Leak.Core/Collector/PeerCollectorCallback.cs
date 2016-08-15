@@ -32,6 +32,8 @@ namespace Leak.Core.Collector
 
         void OnPiece(PeerHash peer, PieceMessage message);
 
+        void OnMetadataSize(PeerHash peer, MetadataSize size);
+
         void OnMetadataReceived(PeerHash peer, MetadataData metadata);
     }
 }

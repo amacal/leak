@@ -138,6 +138,13 @@ namespace Leak.Core.Bencoding
         {
             int offset = position;
             long number = 0L;
+            long multiply = 1L;
+
+            if (data[position] == 0x2d)
+            {
+                multiply = -1L;
+                position++;
+            }
 
             while (data[position] != 0x65)
             {
@@ -148,7 +155,7 @@ namespace Leak.Core.Bencoding
             return new BencodedValue
             {
                 Data = new BencodedData(data, offset, position - offset),
-                Number = new BencodedNumber(number)
+                Number = new BencodedNumber(number * multiply)
             };
         }
 

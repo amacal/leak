@@ -108,6 +108,14 @@ namespace Leak.Core.Client
             }
         }
 
+        public override void OnMetadataSize(PeerHash peer, MetadataSize size)
+        {
+            if (storage.HasMetainfo(peer) == false)
+            {
+                storage.GetRetriever(peer).WithMetadata(size);
+            }
+        }
+
         public override void OnMetadataReceived(PeerHash peer, MetadataData metadata)
         {
             if (storage.HasMetainfo(peer) == false)

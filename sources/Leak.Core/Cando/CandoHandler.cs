@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Bencoding;
+using Leak.Core.Common;
 using Leak.Core.Messages;
 
 namespace Leak.Core.Cando
@@ -7,6 +8,8 @@ namespace Leak.Core.Cando
     {
         bool CanHandle(string name);
 
-        void Handle(PeerHash peer, Extended payload);
+        void OnHandshake(PeerHash peer, BencodedValue handshake);
+
+        void OnMessage(PeerHash peer, Extended payload);
     }
 }

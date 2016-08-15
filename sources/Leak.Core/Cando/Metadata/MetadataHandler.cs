@@ -22,7 +22,18 @@ namespace Leak.Core.Cando.Metadata
             return name == "ut_metadata";
         }
 
-        public void Handle(PeerHash peer, Extended payload)
+        public void OnHandshake(PeerHash peer, BencodedValue handshake)
+        {
+            int? bytes = handshake.Find("metadata_size", x => x?.ToInt32());
+
+            if (bytes != null && bytes > 0)
+            {
+                MetadataSize size = new MetadataSize(bytes.Value);
+                configuration.Callback.OnSize(peer, size);
+            }
+        }
+
+        public void OnMessage(PeerHash peer, Extended payload)
         {
             BencodedValue value = Bencoder.Decode(payload.Data);
             int? type = value.Find("msg_type", x => x?.ToInt32());

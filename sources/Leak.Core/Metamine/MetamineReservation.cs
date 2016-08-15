@@ -1,14 +1,14 @@
 ﻿using Leak.Core.Common;
 using System;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Metamine
 {
-    public class ResourceMetadataBook
+    public class MetamineReservation
     {
         public PeerHash Peer { get; set; }
 
         public DateTime Expires { get; set; }
 
-        public ResourceMetadataBlock Request { get; set; }
+        public MetamineBlock Request { get; set; }
     }
 }

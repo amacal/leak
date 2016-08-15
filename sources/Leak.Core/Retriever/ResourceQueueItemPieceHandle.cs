@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Omnibus;
 
 namespace Leak.Core.Retriever
 {
@@ -16,19 +17,19 @@ namespace Leak.Core.Retriever
 
         public void Handle(ResourceQueueContext context)
         {
-            if (context.Storage.IsComplete(piece.Index) == false)
+            if (context.Omnibus.IsComplete(piece.Index) == false)
             {
                 int blockIndex = piece.Offset / context.Properties.BlockSize;
-                ResourceBlock block = new ResourceBlock(piece.Index, piece.Offset, piece.Size);
+                OmnibusBlock block = new OmnibusBlock(piece.Index, piece.Offset, piece.Size);
 
                 context.Repository.SetPiece(piece.Index, blockIndex, piece.Data);
-                bool completed = context.Storage.Complete(peer, block);
+                bool completed = context.Omnibus.Complete(block);
 
                 if (completed)
                 {
                     if (context.Repository.Verify(piece.Index) == false)
                     {
-                        context.Storage.Invalidate(piece.Index);
+                        context.Omnibus.Invalidate(piece.Index);
                     }
                     else
                     {
@@ -36,7 +37,7 @@ namespace Leak.Core.Retriever
                     }
                 }
 
-                if (context.Storage.IsComplete())
+                if (context.Omnibus.IsComplete())
                 {
                     context.Callback.OnCompleted();
                 }

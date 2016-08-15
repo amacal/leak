@@ -1,6 +1,8 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Metamine;
+using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using System;
 using System.Threading;
@@ -14,7 +16,7 @@ namespace Leak.Core.Retriever
         private readonly ResourceQueueContext context;
         private readonly ResourceQueue queue;
 
-        private readonly Timer timer;
+        private Timer timer;
 
         public ResourceRetrieverToQuery(Action<ResourceRetrieverConfiguration> configurer)
         {
@@ -30,8 +32,9 @@ namespace Leak.Core.Retriever
             {
                 Callback = configuration.Callback,
                 Collector = configuration.Collector,
-                Storage = new ResourceStorage(new ResourceStorageConfiguration())
             };
+
+            this.context.Omnibus = new OmnibusBitfield(new OmnibusConfiguration());
 
             this.timer = new Timer(OnTick);
             this.timer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
@@ -39,7 +42,9 @@ namespace Leak.Core.Retriever
 
         private void OnTick(object state)
         {
-            lock (context.Storage)
+            timer?.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+
+            try
             {
                 using (ResourceRepositorySession session = repository.OpenSession())
                 {
@@ -50,13 +55,29 @@ namespace Leak.Core.Retriever
                     }));
                 }
             }
+            finally
+            {
+                timer?.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+            }
         }
 
         public ResourceRetriever WithBitfield(Bitfield bitfield)
         {
-            lock (context.Storage)
+            context.Omnibus.Complete(bitfield);
+            return this;
+        }
+
+        public ResourceRetriever WithMetadata(MetadataSize size)
+        {
+            lock (context)
             {
-                context.Storage.Complete(bitfield);
+                if (context.Metamine == null)
+                {
+                    context.Metamine = new MetamineBitfield(with =>
+                    {
+                        with.Size = size.Bytes;
+                    });
+                }
             }
 
             return this;
@@ -64,9 +85,10 @@ namespace Leak.Core.Retriever
 
         public ResourceRetriever WithRepository(ResourceRepository repository)
         {
-            lock (context.Storage)
+            lock (context)
             {
-                timer.Dispose();
+                timer?.Dispose();
+                timer = null;
 
                 return new ResourceRetrieverToGet(context, queue, repository, with =>
                 {

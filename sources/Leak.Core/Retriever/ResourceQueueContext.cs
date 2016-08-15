@@ -1,5 +1,7 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Metadata;
+using Leak.Core.Metamine;
+using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using System;
 
@@ -7,7 +9,9 @@ namespace Leak.Core.Retriever
 {
     public class ResourceQueueContext
     {
-        public ResourceStorage Storage { get; set; }
+        public OmnibusBitfield Omnibus { get; set; }
+
+        public MetamineBitfield Metamine { get; set; }
 
         public PeerCollectorView Collector { get; set; }
 
@@ -21,7 +25,8 @@ namespace Leak.Core.Retriever
         {
             return configurer.Configure(with =>
             {
-                with.Storage = Storage;
+                with.Omnibus = Omnibus;
+                with.Metamine = Metamine;
                 with.Collector = Collector;
                 with.Callback = Callback;
                 with.Properties = Properties;

@@ -12,6 +12,11 @@ namespace Leak.Core.Collector.Callbacks
             this.context = context;
         }
 
+        public override void OnSize(PeerHash peer, MetadataSize size)
+        {
+            context.Callback.OnMetadataSize(peer, size);
+        }
+
         public override void OnData(PeerHash peer, MetadataData data)
         {
             context.Callback.OnMetadataReceived(peer, data);

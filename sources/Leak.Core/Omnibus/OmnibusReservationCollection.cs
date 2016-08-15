@@ -6,20 +6,20 @@ namespace Leak.Core.Omnibus
 {
     public class OmnibusReservationCollection
     {
-        private readonly Dictionary<OmnibusBlock, OmnibusReservation> blocks;
+        private readonly Dictionary<OmnibusBlock, OmnibusReservation> byBlock;
         private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
 
         public OmnibusReservationCollection()
         {
-            this.blocks = new Dictionary<OmnibusBlock, OmnibusReservation>();
-            this.byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
+            byBlock = new Dictionary<OmnibusBlock, OmnibusReservation>();
+            byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
         }
 
         public bool Contains(OmnibusBlock request, DateTime now)
         {
             OmnibusReservation book;
 
-            if (blocks.TryGetValue(request, out book) == false)
+            if (byBlock.TryGetValue(request, out book) == false)
                 return false;
 
             return book.Expires > now;
@@ -29,7 +29,7 @@ namespace Leak.Core.Omnibus
         {
             OmnibusReservation book;
 
-            if (blocks.TryGetValue(request, out book) == false)
+            if (byBlock.TryGetValue(request, out book) == false)
                 return false;
 
             return book.Peer.Equals(peer);
@@ -40,12 +40,12 @@ namespace Leak.Core.Omnibus
             PeerHash previous = null;
             OmnibusReservation book;
 
-            if (blocks.TryGetValue(request, out book) == true)
+            if (byBlock.TryGetValue(request, out book))
             {
                 previous = book.Peer;
             }
 
-            blocks[request] = new OmnibusReservation
+            byBlock[request] = new OmnibusReservation
             {
                 Peer = peer,
                 Expires = DateTime.Now.AddSeconds(30),
@@ -57,37 +57,31 @@ namespace Leak.Core.Omnibus
                 byPeer.Add(peer, new HashSet<OmnibusReservation>());
             }
 
-            byPeer[peer].Add(blocks[request]);
+            byPeer[peer].Add(byBlock[request]);
             return previous;
         }
 
         public void Complete(OmnibusBlock request)
         {
             OmnibusReservation block;
-            blocks.TryGetValue(request, out block);
+            byBlock.TryGetValue(request, out block);
 
             if (block != null)
             {
                 byPeer[block.Peer].Remove(block);
-                blocks.Remove(request);
+                byBlock.Remove(request);
             }
         }
 
         public int Count(PeerHash peer)
         {
-            int count = 0;
             HashSet<OmnibusReservation> books;
             byPeer.TryGetValue(peer, out books);
 
             if (books == null)
                 return 0;
 
-            foreach (OmnibusReservation book in books)
-            {
-                count++;
-            }
-
-            return count;
+            return books.Count;
         }
     }
 }

@@ -1,26 +1,19 @@
-﻿namespace Leak.Core.Retriever
+﻿namespace Leak.Core.Metamine
 {
-    public class ResourceBlock
+    public class MetamineBlock
     {
         private readonly int index;
-        private readonly int offset;
         private readonly int size;
 
-        public ResourceBlock(int index, int offset, int size)
+        public MetamineBlock(int index, int size)
         {
             this.index = index;
-            this.offset = offset;
             this.size = size;
         }
 
         public int Index
         {
             get { return index; }
-        }
-
-        public int Offset
-        {
-            get { return offset; }
         }
 
         public int Size
@@ -35,9 +28,9 @@
 
         public override bool Equals(object obj)
         {
-            ResourceBlock other = obj as ResourceBlock;
+            MetamineBlock other = obj as MetamineBlock;
 
-            return other.index == index && other.offset == offset;
+            return other != null && other.index == index;
         }
     }
 }

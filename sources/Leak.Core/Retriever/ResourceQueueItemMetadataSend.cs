@@ -1,5 +1,7 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
+using Leak.Core.Metamine;
+using System.Linq;
 
 namespace Leak.Core.Retriever
 {
@@ -9,18 +11,22 @@ namespace Leak.Core.Retriever
         {
             PeerCollectorCriterion[] criterion =
             {
-                PeerCollectorCriterion.IsLocalNotChockedByRemote,
+                PeerCollectorCriterion.IsLocalNotChokedByRemote,
                 PeerCollectorCriterion.DoesRemoteSupportMetadata
             };
 
-            foreach (PeerHash peer in context.Collector.GetPeers(criterion))
+            if (context.Metamine != null)
             {
-                ResourceMetadataBlock[] requests = context.Storage.ScheduleMetadata(peer);
-
-                foreach (ResourceMetadataBlock request in requests)
+                foreach (PeerHash peer in context.Collector.GetPeers(criterion))
                 {
-                    context.Storage.Reserve(peer, request);
-                    context.Collector.SendMetadataRequest(peer, request.Index);
+                    MetamineStrategy strategy = MetamineStrategy.Sequential;
+                    MetamineBlock[] blocks = context.Metamine.Next(strategy, peer).ToArray();
+
+                    foreach (MetamineBlock block in blocks)
+                    {
+                        context.Collector.SendMetadataRequest(peer, block.Index);
+                        context.Metamine.Reserve(peer, block);
+                    }
                 }
             }
         }

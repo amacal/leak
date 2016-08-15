@@ -24,7 +24,11 @@ namespace Leak.Core.Cando.PeerExchange
             return name == "ut_pex";
         }
 
-        public void Handle(PeerHash peer, Extended payload)
+        public void OnHandshake(PeerHash peer, BencodedValue handshake)
+        {
+        }
+
+        public void OnMessage(PeerHash peer, Extended payload)
         {
             BencodedValue value = Bencoder.Decode(payload.Data);
             byte[] added = value.Find("added", x => x?.Data?.GetBytes());

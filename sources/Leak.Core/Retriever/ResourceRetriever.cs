@@ -7,6 +7,8 @@ namespace Leak.Core.Retriever
 {
     public interface ResourceRetriever
     {
+        ResourceRetriever WithMetadata(MetadataSize size);
+
         ResourceRetriever WithBitfield(Bitfield bitfield);
 
         ResourceRetriever WithRepository(ResourceRepository repository);

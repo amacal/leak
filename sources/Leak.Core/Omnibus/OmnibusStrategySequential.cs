@@ -15,11 +15,11 @@ namespace Leak.Core.Omnibus
 
             for (int i = 0; left > 0 && i < context.Configuration.Pieces; i++)
             {
-                if (context.Bitfield[i] && context.Completed.IsComplete(i) == false)
+                if (context.Bitfield[i] && context.Pieces.IsComplete(i) == false)
                 {
                     for (int j = 0; left > 0 && size > 0 && j < blocks; j++)
                     {
-                        if (context.Completed.IsComplete(i, j) == false)
+                        if (context.Pieces.IsComplete(i, j) == false)
                         {
                             int offset = j * context.Configuration.BlockSize;
                             int blockSize = context.Configuration.BlockSize;
@@ -30,8 +30,10 @@ namespace Leak.Core.Omnibus
                             }
 
                             OmnibusBlock block = new OmnibusBlock(i, offset, blockSize);
+                            bool contains = context.Reservations.Contains(block, now) ||
+                                            context.Reservations.Contains(block, context.Peer);
 
-                            if (context.Reservations.Contains(block, now) == false && context.Reservations.Contains(block, context.Peer) == false)
+                            if (contains == false)
                             {
                                 left = left - 1;
                                 yield return block;

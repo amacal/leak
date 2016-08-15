@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
+using Leak.Core.Metamine;
 
 namespace Leak.Core.Retriever
 {
@@ -16,15 +17,14 @@ namespace Leak.Core.Retriever
 
         public void Handle(ResourceQueueContext context)
         {
-            ResourceMetadataBlock block = new ResourceMetadataBlock(data.Piece);
-
-            if (context.Storage.IsMetadataComplete() == false)
+            if (context.Metamine != null)
             {
-                context.Storage.Complete(peer, block, data.Size);
+                MetamineBlock block = new MetamineBlock(data.Piece, data.Size);
+
+                context.Metamine.Complete(block);
 
                 if (context.Repository.SetMetadata(data.Piece, data.Payload))
                 {
-                    context.Storage.Complete(data.Size);
                     context.Callback.OnMetadataCompleted();
                 }
             }
