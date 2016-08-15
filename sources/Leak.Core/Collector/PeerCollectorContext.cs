@@ -5,6 +5,7 @@ using Leak.Core.Communicator;
 using Leak.Core.Congestion;
 using Leak.Core.Infantry;
 using Leak.Core.Loop;
+using Leak.Core.Ranking;
 using Leak.Core.Responder;
 using System;
 
@@ -22,6 +23,7 @@ namespace Leak.Core.Collector
         private readonly CommunicatorService communicator;
         private readonly ResponderService responder;
         private readonly CandoService cando;
+        private readonly RankingService ranking;
 
         public PeerCollectorContext(Action<PeerCollectorConfiguration> configurer)
         {
@@ -72,6 +74,10 @@ namespace Leak.Core.Collector
                 {
                     exchange.Callback = new PeerCollectorExchange(this);
                 });
+            });
+
+            ranking = new RankingService(with =>
+            {
             });
 
             synchronized = new object();
@@ -131,6 +137,11 @@ namespace Leak.Core.Collector
         public CandoService Cando
         {
             get { return cando; }
+        }
+
+        public RankingService Ranking
+        {
+            get { return ranking; }
         }
     }
 }

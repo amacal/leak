@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Collector;
+using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Omnibus;
@@ -11,23 +12,21 @@ namespace Leak.Core.Retriever
     {
         public void Handle(ResourceQueueContext context)
         {
+            Schedule(context, 1024, 8, 64);
+            Schedule(context, 128, 8, 16);
+            Schedule(context, 0, 16, 4);
+        }
+
+        private void Schedule(ResourceQueueContext context, int ranking, int count, int pieces)
+        {
             PeerCollectorCriterion[] criterion =
             {
-                PeerCollectorCriterion.IsLocalNotChokedByRemote,
+                new IsLocalNotChokedByRemote(),
+                new IsRankingAboveThreshold(ranking),
             };
 
-            //int slots = 8;
-
-            foreach (PeerHash peer in context.Collector.GetPeers(criterion))
+            foreach (PeerHash peer in context.Collector.GetPeers(criterion).Take(count))
             {
-                int pieces = 4;
-
-                //if (slots > 0)// && peer.Rank > 128)
-                //{
-                //    slots--;
-                //    pieces = 64;
-                //}
-
                 List<Request> requests = new List<Request>();
                 OmnibusStrategy strategy = OmnibusStrategy.Sequential;
                 OmnibusBlock[] blocks = context.Omnibus.Next(strategy, peer, pieces).ToArray();
@@ -41,7 +40,14 @@ namespace Leak.Core.Retriever
 
                 foreach (OmnibusBlock block in blocks)
                 {
-                    context.Omnibus.Reserve(peer, block);
+                    PeerHash previous = context.Omnibus.Reserve(peer, block);
+
+                    context.Collector.Decrease(peer, 1);
+
+                    if (previous != null)
+                    {
+                        context.Collector.Decrease(previous, 20);
+                    }
                 }
             }
         }

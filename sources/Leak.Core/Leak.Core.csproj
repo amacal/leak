@@ -52,6 +52,9 @@
     <Compile Include="Collector\Callbacks\PeerCollectorCando.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorMetadata.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorExchange.cs" />
+    <Compile Include="Collector\Criterions\IsMetadataSupportedByRemote.cs" />
+    <Compile Include="Collector\Criterions\IsRankingAboveThreshold.cs" />
+    <Compile Include="Collector\Criterions\IsLocalNotChokedByRemote.cs" />
     <Compile Include="Collector\PeerCollectorCriterion.cs" />
     <Compile Include="Communicator\CommunicatorChannel.cs" />
     <Compile Include="Communicator\CommunicatorCollection.cs" />
@@ -281,6 +284,11 @@
     <Compile Include="Omnibus\OmnibusStrategy.cs" />
     <Compile Include="Omnibus\OmnibusStrategySequential.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ranking\RankingCollection.cs" />
+    <Compile Include="Ranking\RankingConfiguration.cs" />
+    <Compile Include="Ranking\RankingContext.cs" />
+    <Compile Include="Ranking\RankingEntry.cs" />
+    <Compile Include="Ranking\RankingService.cs" />
     <Compile Include="Repository\ResourceRepository.cs" />
     <Compile Include="Repository\ResourceRepositorySession.cs" />
     <Compile Include="Repository\ResourceRepositoryToHash.cs" />

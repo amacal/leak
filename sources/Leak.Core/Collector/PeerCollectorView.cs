@@ -24,15 +24,34 @@ namespace Leak.Core.Collector
             get { return hash; }
         }
 
-        public bool IsRemoteChoking(PeerHash peer)
+        public PeerHash[] GetPeers(params PeerCollectorCriterion[] criterions)
         {
+            IEnumerable<PeerHash> peers;
+
             lock (context.Synchronized)
             {
-                return context.Congestion.IsChoking(peer, PeerCongestionDirection.Remote);
+                peers = context.Peers.Find(hash);
+
+                foreach (PeerCollectorCriterion criterion in criterions)
+                {
+                    peers = criterion.Accept(peers, context);
+                }
             }
+
+            return peers.ToArray();
         }
 
-        public void SetLocalInterested(PeerHash peer)
+        public void Increase(PeerHash peer, int step)
+        {
+            context.Ranking.Increase(peer, step);
+        }
+
+        public void Decrease(PeerHash peer, int step)
+        {
+            context.Ranking.Decrease(peer, step);
+        }
+
+        public void SendLocalInterested(PeerHash peer)
         {
             lock (context.Synchronized)
             {
@@ -40,39 +59,7 @@ namespace Leak.Core.Collector
                 PeerCongestionDirection direction = PeerCongestionDirection.Local;
 
                 context.Communicator.Get(peer)?.Send(interested);
-                context.Congestion.IsInterested(peer, direction);
-            }
-        }
-
-        public PeerHash[] GetPeers(params PeerCollectorCriterion[] criterions)
-        {
-            HashSet<PeerHash> peers = new HashSet<PeerHash>();
-
-            lock (context.Synchronized)
-            {
-                foreach (PeerHash peer in context.Peers.Find(hash))
-                {
-                    peers.Add(peer);
-
-                    foreach (PeerCollectorCriterion criterion in criterions)
-                    {
-                        if (criterion.Accept(peer, context) == false)
-                        {
-                            peers.Remove(peer);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return peers.ToArray();
-        }
-
-        public bool SupportExtensions(PeerHash peer)
-        {
-            lock (context.Synchronized)
-            {
-                return context.Storage.SupportsExtensions(peer);
+                context.Congestion.SetInterested(peer, direction, true);
             }
         }
 

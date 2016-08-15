@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Collector;
+using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
 using Leak.Core.Metamine;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Leak.Core.Retriever
         {
             PeerCollectorCriterion[] criterion =
             {
-                PeerCollectorCriterion.IsLocalNotChokedByRemote,
-                PeerCollectorCriterion.DoesRemoteSupportMetadata
+                new IsLocalNotChokedByRemote(),
+                new IsMetadataSupportedByRemote(),
             };
 
             if (context.Metamine != null)

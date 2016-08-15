@@ -52,10 +52,5 @@ namespace Leak.Core.Collector
 
             return entry?.Endpoint.Peer;
         }
-
-        public bool SupportsExtensions(PeerHash peer)
-        {
-            return collection.FindByPeer(peer)?.HasExtensions == true;
-        }
     }
 }

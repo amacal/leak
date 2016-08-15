@@ -41,6 +41,8 @@ namespace Leak.Core.Retriever
                 {
                     context.Callback.OnCompleted();
                 }
+
+                context.Collector.Increase(peer, 2);
             }
         }
     }

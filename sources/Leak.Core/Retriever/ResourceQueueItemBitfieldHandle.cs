@@ -18,7 +18,7 @@ namespace Leak.Core.Retriever
         {
             context.Omnibus.Add(peer, bitfield);
             context.Collector.SendBitfield(peer, new Bitfield(bitfield.Length));
-            context.Collector.SetLocalInterested(peer);
+            context.Collector.SendLocalInterested(peer);
         }
     }
 }
