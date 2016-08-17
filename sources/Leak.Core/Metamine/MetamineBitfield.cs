@@ -1,13 +1,13 @@
 ﻿using Leak.Core.Common;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Metamine
 {
     /// <summary>
-    /// Manages the global bitfield for a metadata of a given FileHash. It
-    /// manages all peers which returned the metadata blocks, tracks all
-    /// requested blocks and monitors completeness.
+    /// Manages the bitfield for a metadata of a given FileHash. It manages
+    /// all peers which returned the metadata blocks, tracks all requested
+    /// blocks and monitors completeness.
     /// </summary>
     public class MetamineBitfield
     {
@@ -27,7 +27,7 @@ namespace Leak.Core.Metamine
             reservations = new MetamineReservationCollection();
         }
 
-        public IEnumerable<MetamineBlock> Next(MetamineStrategy strategy, PeerHash peer)
+        public MetamineBlock[] Next(MetamineStrategy strategy, PeerHash peer)
         {
             lock (synchronized)
             {
@@ -39,7 +39,7 @@ namespace Leak.Core.Metamine
                     Reservations = reservations
                 };
 
-                return strategy.Next(context);
+                return strategy.Next(context).ToArray();
             }
         }
 

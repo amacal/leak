@@ -19,11 +19,11 @@ namespace Leak.Core.Retriever
         {
             if (context.Metamine != null)
             {
-                MetamineBlock block = new MetamineBlock(data.Piece, data.Size);
+                MetamineBlock block = new MetamineBlock(data.Block, data.Size);
 
                 context.Metamine.Complete(block);
 
-                if (context.Repository.SetMetadata(data.Piece, data.Payload))
+                if (context.Repository.SetMetadata(data.Block, data.Payload))
                 {
                     context.Callback.OnMetadataCompleted();
                 }

@@ -43,7 +43,7 @@ namespace Leak.Loggers
 
         public override void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
         {
-            Console.WriteLine($"{hash}: metadata; piece={data.Piece}; total={data.Size}");
+            Console.WriteLine($"{hash}: metadata; piece={data.Block}; total={data.Size}");
         }
     }
 }

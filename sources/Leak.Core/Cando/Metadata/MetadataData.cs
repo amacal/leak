@@ -2,20 +2,20 @@
 {
     public class MetadataData
     {
-        private readonly int piece;
+        private readonly int block;
         private readonly int size;
         private readonly byte[] payload;
 
-        public MetadataData(int piece, int size, byte[] payload)
+        public MetadataData(int block, int size, byte[] payload)
         {
-            this.piece = piece;
+            this.block = block;
             this.size = size;
             this.payload = payload;
         }
 
-        public int Piece
+        public int Block
         {
-            get { return piece; }
+            get { return block; }
         }
 
         public int Size
