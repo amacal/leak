@@ -2,9 +2,9 @@
 using Leak.Core.Common;
 using Leak.Core.Messages;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public interface PeerClientTaskCallback
+    public interface SchedulerTaskCallback
     {
         void OnMetadataSize(PeerHash peer, MetadataSize size);
 

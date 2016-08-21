@@ -9,7 +9,7 @@ namespace Leak.Core.Connector
         {
         }
 
-        public virtual void OnConnected(NetworkConnection connection)
+        public virtual void OnConnected(PeerConnectorConnected connected)
         {
         }
 

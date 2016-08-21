@@ -2,20 +2,20 @@
 using Leak.Core.Metadata;
 using Leak.Core.Metaget;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskMetadataMetagetCallback : MetagetCallbackBase
+    public class SchedulerTaskMetadataMetagetCallback : MetagetCallbackBase
     {
-        private readonly PeerClientTaskMetadataContext context;
+        private readonly SchedulerTaskMetadataContext context;
 
-        public PeerClientTaskMetadataMetagetCallback(PeerClientTaskMetadataContext context)
+        public SchedulerTaskMetadataMetagetCallback(SchedulerTaskMetadataContext context)
         {
             this.context = context;
         }
 
         public override void OnMetadataCompleted(FileHash hash, Metainfo metainfo)
         {
-            PeerClientTaskInitialize initialize = new PeerClientTaskInitialize(with =>
+            SchedulerTaskInitialize initialize = new SchedulerTaskInitialize(with =>
             {
                 with.Metainfo = metainfo;
                 with.Destination = context.Destination;

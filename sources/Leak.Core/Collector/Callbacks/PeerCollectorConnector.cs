@@ -24,17 +24,17 @@ namespace Leak.Core.Collector.Callbacks
                 }
             }
 
-            context.Callback.OnConnecting(PeerAddress.Parse(connecting.Connection.Remote));
+            context.Callback.OnConnecting(connecting.Hash, PeerAddress.Parse(connecting.Connection.Remote));
         }
 
-        public override void OnConnected(NetworkConnection connection)
+        public override void OnConnected(PeerConnectorConnected connected)
         {
             int total = 0;
             bool accepted = false;
 
             lock (context.Synchronized)
             {
-                if (context.Bouncer.AcceptRemote(connection))
+                if (context.Bouncer.AcceptRemote(connected.Connection))
                 {
                     accepted = true;
                     total = context.Bouncer.Count();
@@ -43,14 +43,14 @@ namespace Leak.Core.Collector.Callbacks
 
             if (accepted)
             {
-                PeerAddress peer = PeerAddress.Parse(connection.Remote);
-                PeerCollectorConnected connected = new PeerCollectorConnected(peer, total);
+                PeerAddress peer = PeerAddress.Parse(connected.Connection.Remote);
+                PeerCollectorConnected payload = new PeerCollectorConnected(connected.Hash, peer, total);
 
-                context.Callback.OnConnected(connected);
+                context.Callback.OnConnected(payload);
             }
             else
             {
-                connection.Terminate();
+                connected.Connection.Terminate();
             }
         }
 

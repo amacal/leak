@@ -2,20 +2,20 @@
 using Leak.Core.Messages;
 using Leak.Core.Repository;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskInitializeRepositoryCallback : RepositoryCallbackBase
+    public class SchedulerTaskInitializeRepositoryCallback : RepositoryCallbackBase
     {
-        private readonly PeerClientTaskInitializeContext context;
+        private readonly SchedulerTaskInitializeContext context;
 
-        public PeerClientTaskInitializeRepositoryCallback(PeerClientTaskInitializeContext context)
+        public SchedulerTaskInitializeRepositoryCallback(SchedulerTaskInitializeContext context)
         {
             this.context = context;
         }
 
         public override void OnVerified(FileHash hash, Bitfield bitfield)
         {
-            PeerClientTaskDownload download = new PeerClientTaskDownload(with =>
+            SchedulerTaskDownload download = new SchedulerTaskDownload(with =>
             {
                 with.Bitfield = bitfield;
                 with.Metainfo = context.Metainfo;

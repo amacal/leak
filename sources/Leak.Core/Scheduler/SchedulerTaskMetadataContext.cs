@@ -1,9 +1,9 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Metaget;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskMetadataContext
+    public class SchedulerTaskMetadataContext
     {
         public FileHash Hash { get; set; }
 
@@ -11,8 +11,8 @@ namespace Leak.Core.Tasking
 
         public MetagetService Metaget { get; set; }
 
-        public PeerClientTaskQueue Queue { get; set; }
+        public SchedulerQueue Queue { get; set; }
 
-        public PeerClientTask Task { get; set; }
+        public SchedulerTask Task { get; set; }
     }
 }

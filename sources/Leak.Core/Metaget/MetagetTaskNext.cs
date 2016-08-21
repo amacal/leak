@@ -15,7 +15,7 @@ namespace Leak.Core.Metaget
 
         public void Execute(MetagetContext context)
         {
-            if (context.Metamine != null)
+            if (context.Metamine != null && context.Metafile.IsCompleted() == false)
             {
                 foreach (PeerHash peer in context.View.GetPeers(Criterions))
                 {

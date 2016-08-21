@@ -16,6 +16,7 @@ namespace Leak.Core.Metaget
         public void Start()
         {
             context.Timer.Start(OnTick);
+            context.Queue.Add(new MetagetTaskVerify());
         }
 
         public void Stop()
@@ -26,6 +27,7 @@ namespace Leak.Core.Metaget
         public void Dispose()
         {
             context.Timer.Dispose();
+            context.Queue.Clear();
         }
 
         public void OnSize(PeerHash peer, MetadataSize size)

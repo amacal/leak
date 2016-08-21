@@ -2,7 +2,7 @@
 using Leak.Core.Common;
 using Leak.Core.Listener;
 using Leak.Core.Network;
-using Leak.Core.Tasking;
+using Leak.Core.Scheduler;
 using Leak.Core.Telegraph;
 using System;
 
@@ -13,7 +13,7 @@ namespace Leak.Core.Client
         private readonly PeerClientConfiguration configuration;
         private readonly PeerClientCollection collection;
         private readonly FileHashCollection hashes;
-        private readonly PeerClientTaskService tasking;
+        private readonly SchedulerService scheduler;
         private readonly NetworkPool network;
         private readonly PeerCollector collector;
         private readonly PeerListener listener;
@@ -57,9 +57,10 @@ namespace Leak.Core.Client
                 with.Callback = new PeerClientToTelegraph(this);
             });
 
-            tasking = new PeerClientTaskService(with =>
+            scheduler = new SchedulerService(with =>
             {
                 with.Collector = collector;
+                with.Callback = new PeerClientToScheduler(this);
             });
         }
 
@@ -78,9 +79,9 @@ namespace Leak.Core.Client
             get { return configuration.Callback; }
         }
 
-        public PeerClientTaskService Tasking
+        public SchedulerService Scheduler
         {
-            get { return tasking; }
+            get { return scheduler; }
         }
 
         public TrackerTelegraph Telegraph

@@ -1,15 +1,15 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Metaget;
-using System;
+﻿using System;
 using System.IO;
+using Leak.Core.Common;
+using Leak.Core.Metaget;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskMetadata : PeerClientTask
+    public class SchedulerTaskMetadata : SchedulerTask
     {
-        private readonly PeerClientTaskMetadataContext inside;
+        private readonly SchedulerTaskMetadataContext inside;
 
-        public PeerClientTaskMetadata(Action<PeerClientTaskMetadataContext> configurer)
+        public SchedulerTaskMetadata(Action<SchedulerTaskMetadataContext> configurer)
         {
             inside = configurer.Configure(with =>
             {
@@ -22,7 +22,7 @@ namespace Leak.Core.Tasking
             get { return inside.Hash; }
         }
 
-        public PeerClientTaskCallback Start(PeerClientTaskContext context)
+        public SchedulerTaskCallback Start(SchedulerContext context)
         {
             inside.Queue = context.Queue;
             inside.Metaget = new MetagetService(with =>
@@ -30,12 +30,12 @@ namespace Leak.Core.Tasking
                 with.Hash = inside.Hash;
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Hash}.metainfo");
                 with.Collector = context.Collector.CreateView(inside.Hash);
-                with.Callback = new PeerClientTaskMetadataMetagetCallback(inside);
+                with.Callback = new SchedulerTaskMetadataMetagetCallback(inside);
             });
 
             inside.Metaget.Start();
 
-            return new PeerClientTaskMetadataTaskCallback(inside);
+            return new SchedulerTaskMetadataTaskCallback(inside);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Collector;
-using Leak.Core.Messages;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
@@ -34,6 +33,8 @@ namespace Leak.Core.Retriever
                 Metainfo = configuration.Metainfo
             });
 
+            omnibus.Complete(configuration.Bitfield);
+
             queue = new RetrieverQueue();
             timer = new RetrieverTimer(TimeSpan.FromSeconds(0.25));
         }
@@ -56,11 +57,6 @@ namespace Leak.Core.Retriever
         public Metainfo Metainfo
         {
             get { return configuration.Metainfo; }
-        }
-
-        public Bitfield Bitfield
-        {
-            get { return configuration.Bitfield; }
         }
 
         public RepositoryService Repository

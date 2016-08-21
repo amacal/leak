@@ -17,7 +17,7 @@ namespace Leak.Core.Metaget
 
         public void Execute(MetagetContext context)
         {
-            if (context.Metamine == null)
+            if (context.Metamine == null && context.Metafile.IsCompleted() == false)
             {
                 context.Metamine = new MetamineBitfield(with =>
                 {

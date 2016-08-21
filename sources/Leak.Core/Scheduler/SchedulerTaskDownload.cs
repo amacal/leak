@@ -3,13 +3,13 @@ using Leak.Core.Retriever;
 using System;
 using System.IO;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskDownload : PeerClientTask
+    public class SchedulerTaskDownload : SchedulerTask
     {
-        private readonly PeerClientTaskDownloadContext inside;
+        private readonly SchedulerTaskDownloadContext inside;
 
-        public PeerClientTaskDownload(Action<PeerClientTaskDownloadContext> configurer)
+        public SchedulerTaskDownload(Action<SchedulerTaskDownloadContext> configurer)
         {
             inside = configurer.Configure(with =>
             {
@@ -22,7 +22,7 @@ namespace Leak.Core.Tasking
             get { return inside.Metainfo.Hash; }
         }
 
-        public PeerClientTaskCallback Start(PeerClientTaskContext context)
+        public SchedulerTaskCallback Start(SchedulerContext context)
         {
             inside.Retriever = new RetrieverService(with =>
             {
@@ -30,12 +30,15 @@ namespace Leak.Core.Tasking
                 with.Bitfield = inside.Bitfield;
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Metainfo.Hash}");
                 with.Collector = context.Collector.CreateView(inside.Metainfo.Hash);
-                with.Callback = new PeerClientTaskDownloadRetrieverCallback(inside);
+                with.Callback = new SchedulerTaskDownloadRetrieverCallback(inside);
             });
+
+            inside.Queue = context.Queue;
+            inside.Callback = context.Callback;
 
             inside.Retriever.Start();
 
-            return new PeerClientTaskDownloadTaskCallback(inside);
+            return new SchedulerTaskDownloadTaskCallback(inside);
         }
     }
 }

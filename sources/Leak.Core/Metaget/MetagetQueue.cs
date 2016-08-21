@@ -16,6 +16,15 @@ namespace Leak.Core.Metaget
             items.Enqueue(task);
         }
 
+        public void Clear()
+        {
+            MetagetTask task;
+
+            while (items.TryDequeue(out task))
+            {
+            }
+        }
+
         public void Process(MetagetContext context)
         {
             MetagetTask task;

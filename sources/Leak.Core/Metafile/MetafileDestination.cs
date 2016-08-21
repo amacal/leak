@@ -13,14 +13,6 @@ namespace Leak.Core.Metafile
             this.context = context;
         }
 
-        public byte[] ToBytes()
-        {
-            string path = context.Configuration.Destination;
-            byte[] bytes = File.ReadAllBytes(path);
-
-            return bytes;
-        }
-
         public void Write(int block, byte[] data)
         {
             int offset = block * 16384;
@@ -36,7 +28,7 @@ namespace Leak.Core.Metafile
             }
         }
 
-        public void Validate()
+        public void Verify()
         {
             FileHash computed;
             string path = context.Configuration.Destination;
@@ -50,7 +42,7 @@ namespace Leak.Core.Metafile
             if (computed.Equals(context.Configuration.Hash))
             {
                 context.IsCompleted = true;
-                context.Callback.OnCompleted(computed);
+                context.Callback.OnCompleted(computed, File.ReadAllBytes(path));
             }
         }
     }

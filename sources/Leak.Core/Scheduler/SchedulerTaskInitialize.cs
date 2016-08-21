@@ -1,15 +1,15 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Repository;
-using System;
+﻿using System;
 using System.IO;
+using Leak.Core.Common;
+using Leak.Core.Repository;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskInitialize : PeerClientTask
+    public class SchedulerTaskInitialize : SchedulerTask
     {
-        private readonly PeerClientTaskInitializeContext inside;
+        private readonly SchedulerTaskInitializeContext inside;
 
-        public PeerClientTaskInitialize(Action<PeerClientTaskInitializeContext> configurer)
+        public SchedulerTaskInitialize(Action<SchedulerTaskInitializeContext> configurer)
         {
             inside = configurer.Configure(with =>
             {
@@ -22,20 +22,20 @@ namespace Leak.Core.Tasking
             get { return inside.Metainfo.Hash; }
         }
 
-        public PeerClientTaskCallback Start(PeerClientTaskContext context)
+        public SchedulerTaskCallback Start(SchedulerContext context)
         {
             inside.Queue = context.Queue;
             inside.Repository = new RepositoryService(with =>
             {
                 with.Metainfo = inside.Metainfo;
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Metainfo.Hash}");
-                with.Callback = new PeerClientTaskInitializeRepositoryCallback(inside);
+                with.Callback = new SchedulerTaskInitializeRepositoryCallback(inside);
             });
 
             inside.Repository.Allocate();
             inside.Repository.Verify();
 
-            return new PeerClientTaskCallbackNothing();
+            return new SchedulerTaskCallbackNothing();
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Leak.Core.Metafile
 {
     public interface MetafileCallback
     {
-        void OnCompleted(FileHash hash);
+        void OnCompleted(FileHash hash, byte[] data);
     }
 }

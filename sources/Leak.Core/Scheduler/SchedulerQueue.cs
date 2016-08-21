@@ -2,31 +2,31 @@
 using System;
 using System.Collections.Generic;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskQueue
+    public class SchedulerQueue
     {
-        private readonly PeerClientTaskContext context;
+        private readonly SchedulerContext context;
 
-        private readonly Dictionary<FileHash, List<PeerClientTask>> items;
-        private readonly Dictionary<PeerClientTask, PeerClientTaskCallback> running;
+        private readonly Dictionary<FileHash, List<SchedulerTask>> items;
+        private readonly Dictionary<SchedulerTask, SchedulerTaskCallback> running;
 
-        public PeerClientTaskQueue(PeerClientTaskContext context)
+        public SchedulerQueue(SchedulerContext context)
         {
             this.context = context;
 
-            items = new Dictionary<FileHash, List<PeerClientTask>>();
-            running = new Dictionary<PeerClientTask, PeerClientTaskCallback>();
+            items = new Dictionary<FileHash, List<SchedulerTask>>();
+            running = new Dictionary<SchedulerTask, SchedulerTaskCallback>();
         }
 
-        public void Register(PeerClientTask task)
+        public void Register(SchedulerTask task)
         {
             FileHash hash = task.Hash;
-            List<PeerClientTask> tasks;
+            List<SchedulerTask> tasks;
 
             if (items.TryGetValue(hash, out tasks) == false)
             {
-                tasks = new List<PeerClientTask>();
+                tasks = new List<SchedulerTask>();
                 items.Add(hash, tasks);
             }
 
@@ -39,10 +39,10 @@ namespace Leak.Core.Tasking
             }
         }
 
-        public void Complete(PeerClientTask task)
+        public void Complete(SchedulerTask task)
         {
             FileHash hash = task.Hash;
-            List<PeerClientTask> tasks;
+            List<SchedulerTask> tasks;
 
             if (running.Remove(task))
             {
@@ -60,9 +60,9 @@ namespace Leak.Core.Tasking
             }
         }
 
-        public void Notify(Action<PeerClientTaskCallback> callback)
+        public void Notify(Action<SchedulerTaskCallback> callback)
         {
-            foreach (PeerClientTaskCallback target in running.Values)
+            foreach (SchedulerTaskCallback target in running.Values)
             {
                 callback.Invoke(target);
             }

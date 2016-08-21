@@ -14,12 +14,20 @@ namespace Leak.Core.Client
             this.context = context;
         }
 
-        public override void OnConnecting(PeerAddress peer)
+        public override void OnConnecting(FileHash hash, PeerAddress peer)
         {
+            if (hash != null)
+            {
+                context.Callback.OnPeerConnecting(hash, peer);
+            }
         }
 
         public override void OnConnected(PeerCollectorConnected connected)
         {
+            if (connected.Hash != null)
+            {
+                context.Callback.OnPeerConnected(connected.Hash, new PeerClientConnected(connected));
+            }
         }
 
         public override void OnRejected(PeerAddress peer)
@@ -47,7 +55,7 @@ namespace Leak.Core.Client
         {
             context.Callback.OnPeerBitfield(endpoint.Hash, endpoint.Peer, message.ToBitfield());
 
-            context.Tasking.Handle(with =>
+            context.Scheduler.Handle(with =>
             {
                 with.OnPeerBitfield(endpoint.Peer, message.ToBitfield());
             });
@@ -65,7 +73,7 @@ namespace Leak.Core.Client
 
         public override void OnPiece(PeerEndpoint endpoint, PieceMessage message)
         {
-            context.Tasking.Handle(with =>
+            context.Scheduler.Handle(with =>
             {
                 with.OnPeerPiece(endpoint.Peer, message.ToPiece());
             });
@@ -73,7 +81,7 @@ namespace Leak.Core.Client
 
         public override void OnMetadataSize(PeerHash peer, MetadataSize size)
         {
-            context.Tasking.Handle(with =>
+            context.Scheduler.Handle(with =>
             {
                 with.OnMetadataSize(peer, size);
             });
@@ -81,7 +89,7 @@ namespace Leak.Core.Client
 
         public override void OnMetadataReceived(PeerHash peer, MetadataData metadata)
         {
-            context.Tasking.Handle(with =>
+            context.Scheduler.Handle(with =>
             {
                 with.OnMetadataData(peer, metadata);
             });

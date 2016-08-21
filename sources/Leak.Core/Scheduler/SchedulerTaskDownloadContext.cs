@@ -2,9 +2,9 @@
 using Leak.Core.Metadata;
 using Leak.Core.Retriever;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskDownloadContext
+    public class SchedulerTaskDownloadContext
     {
         public Metainfo Metainfo { get; set; }
 
@@ -14,8 +14,10 @@ namespace Leak.Core.Tasking
 
         public RetrieverService Retriever { get; set; }
 
-        public PeerClientTaskQueue Queue { get; set; }
+        public SchedulerQueue Queue { get; set; }
 
-        public PeerClientTask Task { get; set; }
+        public SchedulerTask Task { get; set; }
+
+        public SchedulerCallback Callback { get; set; }
     }
 }

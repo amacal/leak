@@ -13,11 +13,9 @@ namespace Leak.Core.Metaget
             this.context = context;
         }
 
-        public override void OnCompleted(FileHash hash)
+        public override void OnCompleted(FileHash hash, byte[] data)
         {
-            byte[] bytes = context.Metafile.ToBytes();
-            Metainfo metainfo = MetainfoFactory.FromBytes(bytes);
-
+            Metainfo metainfo = MetainfoFactory.FromBytes(data);
             context.Callback.OnMetadataCompleted(hash, metainfo);
         }
     }

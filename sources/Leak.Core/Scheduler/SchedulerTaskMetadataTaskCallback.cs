@@ -1,13 +1,13 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskMetadataTaskCallback : PeerClientTaskCallbackBase
+    public class SchedulerTaskMetadataTaskCallback : SchedulerTaskCallbackBase
     {
-        private readonly PeerClientTaskMetadataContext context;
+        private readonly SchedulerTaskMetadataContext context;
 
-        public PeerClientTaskMetadataTaskCallback(PeerClientTaskMetadataContext context)
+        public SchedulerTaskMetadataTaskCallback(SchedulerTaskMetadataContext context)
         {
             this.context = context;
         }

@@ -12,7 +12,7 @@ namespace Leak.Core.Ranking
         {
             configuration = configurer.Configure(with =>
             {
-                with.Minimum = 0;
+                with.Minimum = -128;
                 with.Maximum = 8192;
             });
 

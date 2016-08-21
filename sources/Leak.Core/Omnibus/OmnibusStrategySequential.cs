@@ -32,7 +32,7 @@ namespace Leak.Core.Omnibus
                                 nextSize = (int)totalSize;
                             }
 
-                            OmnibusBlock block = new OmnibusBlock(i, offset, blockSize);
+                            OmnibusBlock block = new OmnibusBlock(i, offset, nextSize);
                             bool contains = context.Reservations.Contains(block, now) ||
                                             context.Reservations.Contains(block, context.Peer);
 

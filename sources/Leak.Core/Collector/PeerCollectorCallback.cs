@@ -6,7 +6,7 @@ namespace Leak.Core.Collector
 {
     public interface PeerCollectorCallback
     {
-        void OnConnecting(PeerAddress peer);
+        void OnConnecting(FileHash hash, PeerAddress peer);
 
         void OnConnected(PeerCollectorConnected connected);
 

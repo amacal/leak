@@ -7,7 +7,7 @@ namespace Leak.Core.Connector
     {
         void OnConnecting(PeerConnectorConnecting connecting);
 
-        void OnConnected(NetworkConnection connection);
+        void OnConnected(PeerConnectorConnected connected);
 
         void OnRejected(NetworkConnection connection);
 

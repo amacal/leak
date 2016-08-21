@@ -1,13 +1,13 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
 
-namespace Leak.Core.Tasking
+namespace Leak.Core.Scheduler
 {
-    public class PeerClientTaskDownloadTaskCallback : PeerClientTaskCallbackBase
+    public class SchedulerTaskDownloadTaskCallback : SchedulerTaskCallbackBase
     {
-        private readonly PeerClientTaskDownloadContext context;
+        private readonly SchedulerTaskDownloadContext context;
 
-        public PeerClientTaskDownloadTaskCallback(PeerClientTaskDownloadContext context)
+        public SchedulerTaskDownloadTaskCallback(SchedulerTaskDownloadContext context)
         {
             this.context = context;
         }

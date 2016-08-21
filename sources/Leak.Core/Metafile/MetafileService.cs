@@ -18,16 +18,27 @@ namespace Leak.Core.Metafile
                 if (context.IsCompleted == false)
                 {
                     context.Destination.Write(block, data);
-                    context.Destination.Validate();
+                    context.Destination.Verify();
                 }
             }
         }
 
-        public byte[] ToBytes()
+        public void Verify()
         {
             lock (context.Synchronized)
             {
-                return context.Destination.ToBytes();
+                if (context.IsCompleted == false)
+                {
+                    context.Destination.Verify();
+                }
+            }
+        }
+
+        public bool IsCompleted()
+        {
+            lock (context.Synchronized)
+            {
+                return context.IsCompleted;
             }
         }
     }

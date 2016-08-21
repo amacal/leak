@@ -26,7 +26,7 @@ namespace Leak.Core.Client
                 });
             }
 
-            context.Tasking.Initialize(with =>
+            context.Scheduler.Initialize(with =>
             {
                 with.Metainfo = metainfo.Data;
                 with.Destination = context.Destination;
@@ -51,7 +51,7 @@ namespace Leak.Core.Client
                 });
             }
 
-            context.Tasking.Metadata(with =>
+            context.Scheduler.Metadata(with =>
             {
                 with.Hash = configuration.Hash;
                 with.Destination = context.Destination;

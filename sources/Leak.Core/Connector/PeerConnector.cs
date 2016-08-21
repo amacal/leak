@@ -37,7 +37,7 @@ namespace Leak.Core.Connector
             bool accepted = true;
 
             NetworkConnectionInfo connection = configuration.Pool.Info(peer.ToString(), NetworkDirection.Incoming);
-            PeerConnectorConnecting connecting = new PeerConnectorConnecting(connection, () => accepted = false);
+            PeerConnectorConnecting connecting = new PeerConnectorConnecting(configuration.Hash, connection, () => accepted = false);
 
             configuration.Callback.OnConnecting(connecting);
             return accepted;
@@ -51,7 +51,9 @@ namespace Leak.Core.Connector
                 socket.EndConnect(result);
 
                 NetworkConnection connection = configuration.Pool.Create(socket, NetworkDirection.Outgoing);
-                configuration.Callback.OnConnected(connection);
+                PeerConnectorConnected connected = new PeerConnectorConnected(configuration.Hash, connection);
+
+                configuration.Callback.OnConnected(connected);
 
                 PeerConnectorNegotiatorContext context = new PeerConnectorNegotiatorContext(configuration, connection);
                 HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(configuration.Pool, connection, context);
