@@ -41,6 +41,11 @@ namespace Leak.Core.Collector
             return peers.ToArray();
         }
 
+        public Bitfield GetBitfield(PeerHash peer)
+        {
+            return context.Battlefield.Get(peer);
+        }
+
         public void Increase(PeerHash peer, int step)
         {
             context.Ranking.Increase(peer, step);

@@ -26,35 +26,35 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnIncoming(PeerHash peer, PeerCollectorMessage message)
+        public virtual void OnIncoming(PeerEndpoint endpoint, PeerCollectorMessage message)
         {
         }
 
-        public virtual void OnOutgoing(PeerHash peer, PeerCollectorMessage message)
+        public virtual void OnOutgoing(PeerEndpoint endpoint, PeerCollectorMessage message)
         {
         }
 
-        public virtual void OnChoke(PeerHash peer, ChokeMessage message)
+        public virtual void OnChoke(PeerEndpoint endpoint, ChokeMessage message)
         {
         }
 
-        public virtual void OnUnchoke(PeerHash peer, UnchokeMessage message)
+        public virtual void OnUnchoke(PeerEndpoint endpoint, UnchokeMessage message)
         {
         }
 
-        public virtual void OnInterested(PeerHash peer, InterestedMessage message)
+        public virtual void OnInterested(PeerEndpoint endpoint, InterestedMessage message)
         {
         }
 
-        public virtual void OnHave(PeerHash peer, HaveMessage message)
+        public virtual void OnHave(PeerEndpoint endpoint, HaveMessage message)
         {
         }
 
-        public virtual void OnBitfield(PeerHash peer, BitfieldMessage message)
+        public virtual void OnBitfield(PeerEndpoint endpoint, BitfieldMessage message)
         {
         }
 
-        public virtual void OnPiece(PeerHash peer, PieceMessage message)
+        public virtual void OnPiece(PeerEndpoint endpoint, PieceMessage message)
         {
         }
 

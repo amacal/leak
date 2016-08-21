@@ -40,5 +40,17 @@ namespace Leak.Core.Messages
 
             return result;
         }
+
+        public Bitfield ToBitfield()
+        {
+            Bitfield bitfield = new Bitfield(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                bitfield[i] = this[i];
+            }
+
+            return bitfield;
+        }
     }
 }

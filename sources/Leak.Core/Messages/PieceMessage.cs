@@ -32,5 +32,10 @@
         {
             get { return data; }
         }
+
+        public Piece ToPiece()
+        {
+            return new Piece(piece, offset, data.Length, data);
+        }
     }
 }

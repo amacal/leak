@@ -45,7 +45,7 @@ namespace Leak.Core.Metaget
 
         public PeerCollectorView View
         {
-            get { return configuration.View; }
+            get { return configuration.Collector; }
         }
 
         public MetagetCallback Callback

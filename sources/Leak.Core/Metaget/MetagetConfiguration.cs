@@ -9,7 +9,7 @@ namespace Leak.Core.Metaget
 
         public string Destination { get; set; }
 
-        public PeerCollectorView View { get; set; }
+        public PeerCollectorView Collector { get; set; }
 
         public MetagetCallback Callback { get; set; }
     }

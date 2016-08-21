@@ -1,4 +1,5 @@
-﻿using Leak.Core.Bouncer;
+﻿using Leak.Core.Battlefield;
+using Leak.Core.Bouncer;
 using Leak.Core.Cando;
 using Leak.Core.Collector.Callbacks;
 using Leak.Core.Communicator;
@@ -24,6 +25,7 @@ namespace Leak.Core.Collector
         private readonly ResponderService responder;
         private readonly CandoService cando;
         private readonly RankingService ranking;
+        private readonly BattlefieldService battlefield;
 
         public PeerCollectorContext(Action<PeerCollectorConfiguration> configurer)
         {
@@ -77,6 +79,10 @@ namespace Leak.Core.Collector
             });
 
             ranking = new RankingService(with =>
+            {
+            });
+
+            battlefield = new BattlefieldService(with =>
             {
             });
 
@@ -142,6 +148,11 @@ namespace Leak.Core.Collector
         public RankingService Ranking
         {
             get { return ranking; }
+        }
+
+        public BattlefieldService Battlefield
+        {
+            get { return battlefield; }
         }
     }
 }

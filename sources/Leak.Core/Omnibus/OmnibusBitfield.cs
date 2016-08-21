@@ -77,7 +77,7 @@ namespace Leak.Core.Omnibus
             {
                 reservations.Complete(block);
 
-                return pieces.Complete(block.Piece, block.Offset / configuration.BlockSize);
+                return pieces.Complete(block.Piece, block.Offset / configuration.Metainfo.Properties.BlockSize);
             }
         }
 

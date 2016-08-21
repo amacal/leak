@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Metadata;
 using Leak.Core.Metafile;
 
 namespace Leak.Core.Metaget
@@ -14,7 +15,10 @@ namespace Leak.Core.Metaget
 
         public override void OnCompleted(FileHash hash)
         {
-            context.Callback.OnMetadataCompleted(hash);
+            byte[] bytes = context.Metafile.ToBytes();
+            Metainfo metainfo = MetainfoFactory.FromBytes(bytes);
+
+            context.Callback.OnMetadataCompleted(hash, metainfo);
         }
     }
 }

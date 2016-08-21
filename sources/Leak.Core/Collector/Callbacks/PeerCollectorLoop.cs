@@ -29,52 +29,56 @@ namespace Leak.Core.Collector.Callbacks
         public override void OnKeepAlive(ConnectionLoopChannel channel)
         {
             context.Responder.Handle(channel.Endpoint.Peer, new KeepAliveMessage());
-            context.Callback.OnIncoming(channel.Endpoint.Peer, new PeerCollectorMessage("keep-alive", 0));
+            context.Callback.OnIncoming(channel.Endpoint, new PeerCollectorMessage("keep-alive", 0));
         }
 
         public override void OnChoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
             context.Congestion.SetChoking(channel.Endpoint.Peer, PeerCongestionDirection.Remote, true);
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("choke"));
-            context.Callback.OnChoke(channel.Endpoint.Peer, new ChokeMessage());
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("choke"));
+            context.Callback.OnChoke(channel.Endpoint, new ChokeMessage());
         }
 
         public override void OnUnchoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
             context.Congestion.SetChoking(channel.Endpoint.Peer, PeerCongestionDirection.Remote, false);
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("unchoke"));
-            context.Callback.OnUnchoke(channel.Endpoint.Peer, new UnchokeMessage());
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("unchoke"));
+            context.Callback.OnUnchoke(channel.Endpoint, new UnchokeMessage());
         }
 
         public override void OnInterested(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
             context.Congestion.SetInterested(channel.Endpoint.Peer, PeerCongestionDirection.Remote, true);
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("interested"));
-            context.Callback.OnInterested(channel.Endpoint.Peer, new InterestedMessage());
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("interested"));
+            context.Callback.OnInterested(channel.Endpoint, new InterestedMessage());
         }
 
         public override void OnHave(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("have"));
-            context.Callback.OnHave(channel.Endpoint.Peer, new HaveMessage());
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("have"));
+            context.Callback.OnHave(channel.Endpoint, new HaveMessage());
         }
 
         public override void OnBitfield(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("bitfield"));
-            context.Callback.OnBitfield(channel.Endpoint.Peer, new BitfieldMessage(message.ToBytes()));
+            BitfieldMessage payload = new BitfieldMessage(message.ToBytes());
+            Bitfield bitfield = payload.ToBitfield();
+
+            context.Battlefield.Handle(channel.Endpoint.Peer, bitfield);
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("bitfield"));
+            context.Callback.OnBitfield(channel.Endpoint, payload);
         }
 
         public override void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("piece"));
-            context.Callback.OnPiece(channel.Endpoint.Peer, new PieceMessage(message.ToBytes()));
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("piece"));
+            context.Callback.OnPiece(channel.Endpoint, new PieceMessage(message.ToBytes()));
         }
 
         public override void OnExtended(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
             context.Cando.Handle(channel.Endpoint.Peer, new ExtendedIncomingMessage(message.ToBytes()));
-            context.Callback.OnIncoming(channel.Endpoint.Peer, message.ToConnector("extended"));
+            context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("extended"));
         }
 
         public override void OnException(ConnectionLoopChannel channel, Exception ex)
@@ -82,6 +86,8 @@ namespace Leak.Core.Collector.Callbacks
             lock (context.Synchronized)
             {
                 context.Peers.Dismiss(channel.Endpoint.Peer);
+                context.Battlefield.Remove(channel.Endpoint.Peer);
+
                 context.Responder.Remove(channel.Endpoint.Peer);
                 context.Storage.RemoveRemote(channel.Endpoint.Remote);
                 context.Cando.Remove(channel.Endpoint.Peer);
@@ -93,6 +99,8 @@ namespace Leak.Core.Collector.Callbacks
             lock (context.Synchronized)
             {
                 context.Peers.Dismiss(channel.Endpoint.Peer);
+                context.Battlefield.Remove(channel.Endpoint.Peer);
+
                 context.Responder.Remove(channel.Endpoint.Peer);
                 context.Storage.RemoveRemote(channel.Endpoint.Remote);
                 context.Cando.Remove(channel.Endpoint.Peer);

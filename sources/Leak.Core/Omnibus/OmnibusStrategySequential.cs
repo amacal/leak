@@ -10,23 +10,26 @@ namespace Leak.Core.Omnibus
             DateTime now = DateTime.Now;
             int left = Math.Min(count, count - context.Reservations.Count(context.Peer));
 
-            long size = context.Configuration.TotalSize;
-            int blocks = context.Configuration.GetBlocksInPiece();
+            long totalSize = context.Configuration.Metainfo.Properties.TotalSize;
+            int blockSize = context.Configuration.Metainfo.Properties.BlockSize;
 
-            for (int i = 0; left > 0 && i < context.Configuration.Pieces; i++)
+            int blocks = context.Configuration.GetBlocksInPiece();
+            int pieces = context.Configuration.Metainfo.Properties.Pieces;
+
+            for (int i = 0; left > 0 && i < pieces; i++)
             {
                 if (context.Bitfield[i] && context.Pieces.IsComplete(i) == false)
                 {
-                    for (int j = 0; left > 0 && size > 0 && j < blocks; j++)
+                    for (int j = 0; left > 0 && totalSize > 0 && j < blocks; j++)
                     {
                         if (context.Pieces.IsComplete(i, j) == false)
                         {
-                            int offset = j * context.Configuration.BlockSize;
-                            int blockSize = context.Configuration.BlockSize;
+                            int offset = j * blockSize;
+                            int nextSize = blockSize;
 
-                            if (size < blockSize)
+                            if (totalSize < nextSize)
                             {
-                                blockSize = (int)size;
+                                nextSize = (int)totalSize;
                             }
 
                             OmnibusBlock block = new OmnibusBlock(i, offset, blockSize);
@@ -40,12 +43,12 @@ namespace Leak.Core.Omnibus
                             }
                         }
 
-                        size = size - context.Configuration.BlockSize;
+                        totalSize = totalSize - blockSize;
                     }
                 }
                 else
                 {
-                    size = size - blocks * context.Configuration.BlockSize;
+                    totalSize = totalSize - blocks * blockSize;
                 }
             }
         }

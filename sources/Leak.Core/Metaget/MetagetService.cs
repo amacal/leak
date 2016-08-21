@@ -11,7 +11,21 @@ namespace Leak.Core.Metaget
         public MetagetService(Action<MetagetConfiguration> configurer)
         {
             context = new MetagetContext(configurer);
+        }
+
+        public void Start()
+        {
             context.Timer.Start(OnTick);
+        }
+
+        public void Stop()
+        {
+            context.Timer.Stop();
+        }
+
+        public void Dispose()
+        {
+            context.Timer.Dispose();
         }
 
         public void OnSize(PeerHash peer, MetadataSize size)

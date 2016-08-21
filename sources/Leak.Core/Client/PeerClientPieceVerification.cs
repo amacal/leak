@@ -4,9 +4,9 @@ namespace Leak.Core.Client
 {
     public class PeerClientPieceVerification
     {
-        private readonly ResourcePiece piece;
+        private readonly RetrieverPiece piece;
 
-        public PeerClientPieceVerification(ResourcePiece piece)
+        public PeerClientPieceVerification(RetrieverPiece piece)
         {
             this.piece = piece;
         }

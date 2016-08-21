@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Metadata;
 
 namespace Leak.Core.Metaget
 {
@@ -16,7 +17,7 @@ namespace Leak.Core.Metaget
         {
         }
 
-        public virtual void OnMetadataCompleted(FileHash hash)
+        public virtual void OnMetadataCompleted(FileHash hash, Metainfo metainfo)
         {
         }
     }

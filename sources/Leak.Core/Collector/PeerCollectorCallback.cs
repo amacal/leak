@@ -16,21 +16,21 @@ namespace Leak.Core.Collector
 
         void OnHandshake(PeerEndpoint endpoint);
 
-        void OnIncoming(PeerHash peer, PeerCollectorMessage message);
+        void OnIncoming(PeerEndpoint endpoint, PeerCollectorMessage message);
 
-        void OnOutgoing(PeerHash peer, PeerCollectorMessage message);
+        void OnOutgoing(PeerEndpoint endpoint, PeerCollectorMessage message);
 
-        void OnChoke(PeerHash peer, ChokeMessage message);
+        void OnChoke(PeerEndpoint endpoint, ChokeMessage message);
 
-        void OnUnchoke(PeerHash peer, UnchokeMessage message);
+        void OnUnchoke(PeerEndpoint endpoint, UnchokeMessage message);
 
-        void OnInterested(PeerHash peer, InterestedMessage message);
+        void OnInterested(PeerEndpoint endpoint, InterestedMessage message);
 
-        void OnHave(PeerHash peer, HaveMessage message);
+        void OnHave(PeerEndpoint endpoint, HaveMessage message);
 
-        void OnBitfield(PeerHash peer, BitfieldMessage message);
+        void OnBitfield(PeerEndpoint endpoint, BitfieldMessage message);
 
-        void OnPiece(PeerHash peer, PieceMessage message);
+        void OnPiece(PeerEndpoint endpoint, PieceMessage message);
 
         void OnMetadataSize(PeerHash peer, MetadataSize size);
 

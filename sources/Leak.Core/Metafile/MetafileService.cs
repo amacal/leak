@@ -22,5 +22,13 @@ namespace Leak.Core.Metafile
                 }
             }
         }
+
+        public byte[] ToBytes()
+        {
+            lock (context.Synchronized)
+            {
+                return context.Destination.ToBytes();
+            }
+        }
     }
 }

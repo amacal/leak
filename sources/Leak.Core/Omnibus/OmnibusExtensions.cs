@@ -4,18 +4,12 @@
     {
         public static int GetBlocksInPiece(this OmnibusConfiguration configuration)
         {
-            if (configuration.Pieces == 0)
-                return 0;
-
-            return configuration.PieceSize / configuration.BlockSize;
+            return configuration.Metainfo.Properties.PieceSize / configuration.Metainfo.Properties.BlockSize;
         }
 
         public static int GetBlocksInTotal(this OmnibusConfiguration configuration)
         {
-            if (configuration.Pieces == 0)
-                return 0;
-
-            return (int)((configuration.TotalSize - 1) / configuration.BlockSize + 1);
+            return (int)((configuration.Metainfo.Properties.TotalSize - 1) / configuration.Metainfo.Properties.BlockSize + 1);
         }
     }
 }

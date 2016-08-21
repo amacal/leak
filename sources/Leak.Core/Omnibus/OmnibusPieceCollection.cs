@@ -10,12 +10,12 @@ namespace Leak.Core.Omnibus
         public OmnibusPieceCollection(OmnibusConfiguration configuration)
         {
             this.completed = 0;
-            this.items = new OmnibusPiece[configuration.Pieces];
+            this.items = new OmnibusPiece[configuration.Metainfo.Pieces.Length];
 
             int left = configuration.GetBlocksInTotal();
             int blocks = configuration.GetBlocksInPiece();
 
-            for (int i = 0; i < configuration.Pieces; i++)
+            for (int i = 0; i < items.Length; i++)
             {
                 blocks = Math.Min(blocks, left);
                 left = left - blocks;

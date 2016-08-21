@@ -6,6 +6,7 @@ namespace Leak.Core.Metaget
     public class MetagetTimer
     {
         private readonly TimeSpan period;
+        private Timer timer;
 
         public MetagetTimer(TimeSpan period)
         {
@@ -14,32 +15,46 @@ namespace Leak.Core.Metaget
 
         public void Start(Action callback)
         {
-            Timer timer = null;
             TimerCallback onTick = state =>
             {
-                Disable(timer);
+                Disable();
 
                 try
                 {
-                    callback.Invoke();
+                    if (timer != null)
+                    {
+                        callback.Invoke();
+                    }
                 }
                 finally
                 {
-                    Enable(timer);
+                    Enable();
                 }
             };
 
-            Enable(timer = new Timer(onTick));
+            timer = new Timer(onTick);
+            Enable();
         }
 
-        private void Enable(Timer timer)
+        public void Stop()
         {
-            timer.Change(period, period);
+            Disable();
         }
 
-        private void Disable(Timer timer)
+        public void Dispose()
         {
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            timer?.Dispose();
+            timer = null;
+        }
+
+        private void Enable()
+        {
+            timer?.Change(period, period);
+        }
+
+        private void Disable()
+        {
+            timer?.Change(Timeout.Infinite, Timeout.Infinite);
         }
     }
 }
