@@ -8,12 +8,12 @@ namespace Leak.Core.Collector
     {
         public static PeerEndpoint ToEndpoint(this PeerListenerHandshake handshake, PeerAddress address)
         {
-            return new PeerEndpoint(handshake.Hash, handshake.Peer, address, PeerDirection.Incoming);
+            return new PeerEndpoint(handshake.Session, address, PeerDirection.Incoming);
         }
 
         public static PeerEndpoint ToEndpoint(this PeerConnectorHandshake handshake, PeerAddress address)
         {
-            return new PeerEndpoint(handshake.Hash, handshake.Peer, address, PeerDirection.Outgoing);
+            return new PeerEndpoint(handshake.Session, address, PeerDirection.Outgoing);
         }
     }
 }

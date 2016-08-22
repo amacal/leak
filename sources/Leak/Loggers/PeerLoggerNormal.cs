@@ -1,8 +1,8 @@
-﻿using Leak.Core.Client;
+﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Client;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using System;
-using Leak.Core.Cando.Metadata;
 
 namespace Leak.Loggers
 {
@@ -18,7 +18,7 @@ namespace Leak.Loggers
             string remote = endpoint.Remote.ToString();
             string direction = endpoint.Direction.ToString().ToLowerInvariant();
 
-            Console.WriteLine($"{endpoint.Peer}: handshake; remote={remote}; direction={direction}");
+            Console.WriteLine($"{endpoint.Session.Peer}: handshake; remote={remote}; direction={direction}");
         }
 
         public override void OnPeerBitfield(FileHash hash, PeerHash peer, Bitfield bitfield)

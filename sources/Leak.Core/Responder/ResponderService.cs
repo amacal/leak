@@ -19,7 +19,7 @@ namespace Leak.Core.Responder
         {
             lock (context.Synchronized)
             {
-                PeerHash peer = channel.Endpoint.Peer;
+                PeerHash peer = channel.Endpoint.Session.Peer;
                 ResponderEntry entry = context.Collection.GetOrCreate(peer);
 
                 entry.Channel = new ResponderChannel(channel);

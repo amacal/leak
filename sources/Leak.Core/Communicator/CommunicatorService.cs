@@ -17,7 +17,7 @@ namespace Leak.Core.Communicator
         {
             lock (context.Synchronized)
             {
-                PeerHash peer = channel.Endpoint.Peer;
+                PeerHash peer = channel.Endpoint.Session.Peer;
                 CommunicatorEntry entry = context.Collection.GetOrCreate(peer);
 
                 entry.Internal = channel;

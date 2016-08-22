@@ -6,9 +6,9 @@ namespace Leak.Core.Collector.Criterions
 {
     public class IsBitfieldKnown : PeerCollectorCriterion
     {
-        public IEnumerable<PeerHash> Accept(IEnumerable<PeerHash> peers, PeerCollectorContext context)
+        public IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context)
         {
-            return peers.Where(context.Battlefield.Contains);
+            return sessions.Where(session => context.Battlefield.Contains(session.Peer));
         }
     }
 }

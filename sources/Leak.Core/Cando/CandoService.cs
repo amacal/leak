@@ -20,8 +20,8 @@ namespace Leak.Core.Cando
         {
             lock (context.Synchronized)
             {
-                PeerHash peer = handshake.Peer;
-                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                PeerSession session = handshake.Session;
+                CandoEntry entry = context.Collection.GetOrCreate(session);
 
                 entry.HasExtensions = handshake.HasExtensions;
                 entry.Direction = PeerDirection.Outgoing;
@@ -35,8 +35,8 @@ namespace Leak.Core.Cando
         {
             lock (context.Synchronized)
             {
-                PeerHash peer = handshake.Peer;
-                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                PeerSession session = handshake.Session;
+                CandoEntry entry = context.Collection.GetOrCreate(session);
 
                 entry.HasExtensions = handshake.HasExtensions;
                 entry.Direction = PeerDirection.Incoming;
@@ -46,11 +46,11 @@ namespace Leak.Core.Cando
             }
         }
 
-        public void Start(PeerHash peer)
+        public void Start(PeerSession session)
         {
             lock (context.Synchronized)
             {
-                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                CandoEntry entry = context.Collection.GetOrCreate(session);
                 PeerDirection direction = entry.Direction;
 
                 if (direction == PeerDirection.Outgoing)
@@ -60,11 +60,11 @@ namespace Leak.Core.Cando
             }
         }
 
-        public void Handle(PeerHash peer, ExtendedIncomingMessage message)
+        public void Handle(PeerSession session, ExtendedIncomingMessage message)
         {
             lock (context.Synchronized)
             {
-                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                CandoEntry entry = context.Collection.GetOrCreate(session);
                 Extended payload = new Extended(message.Id, message.ToBytes());
 
                 if (entry.HasExtensions)
@@ -75,36 +75,36 @@ namespace Leak.Core.Cando
             }
         }
 
-        public void Send(PeerHash peer, Func<CandoFormatter, Extended> callback)
+        public void Send(PeerSession session, Func<CandoFormatter, Extended> callback)
         {
             lock (context.Synchronized)
             {
-                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                CandoEntry entry = context.Collection.GetOrCreate(session);
                 CandoFormatter formatter = new CandoFormatter(entry.Remote);
 
                 Extended payload = callback.Invoke(formatter);
                 ExtendedOutgoingMessage message = new ExtendedOutgoingMessage(payload);
 
-                context.Callback.OnOutgoingMessage(peer, message);
+                context.Callback.OnOutgoingMessage(session.Peer, message);
             }
         }
 
-        public bool Supports(PeerHash peer, Func<CandoFormatter, bool> callback)
+        public bool Supports(PeerSession session, Func<CandoFormatter, bool> callback)
         {
             lock (context.Synchronized)
             {
-                CandoEntry entry = context.Collection.GetOrCreate(peer);
+                CandoEntry entry = context.Collection.GetOrCreate(session);
                 CandoFormatter formatter = new CandoFormatter(entry.Remote);
 
                 return callback.Invoke(formatter);
             }
         }
 
-        public void Remove(PeerHash peer)
+        public void Remove(PeerSession session)
         {
             lock (context.Synchronized)
             {
-                context.Collection.Remove(peer);
+                context.Collection.Remove(session);
             }
         }
 
@@ -127,7 +127,7 @@ namespace Leak.Core.Cando
         {
             foreach (CandoHandler handler in entry.Handlers)
             {
-                handler.OnHandshake(entry.Peer, handshake);
+                handler.OnHandshake(entry.Session, handshake);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Leak.Core.Cando
                 string extension = entry.Local.Translate(payload.Id);
                 CandoHandler handler = entry.Handlers.Find(extension);
 
-                handler?.OnMessage(entry.Peer, payload);
+                handler?.OnMessage(entry.Session, payload);
             }
         }
 
@@ -152,7 +152,7 @@ namespace Leak.Core.Cando
                 Extended extended = new Extended(0, data);
                 ExtendedOutgoingMessage message = new ExtendedOutgoingMessage(extended);
 
-                context.Callback.OnOutgoingMessage(entry.Peer, message);
+                context.Callback.OnOutgoingMessage(entry.Session.Peer, message);
                 entry.KnowsLocalExtensions = true;
             }
         }

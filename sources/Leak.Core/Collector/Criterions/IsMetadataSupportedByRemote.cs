@@ -7,9 +7,9 @@ namespace Leak.Core.Collector.Criterions
 {
     public class IsMetadataSupportedByRemote : PeerCollectorCriterion
     {
-        public IEnumerable<PeerHash> Accept(IEnumerable<PeerHash> peers, PeerCollectorContext context)
+        public IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context)
         {
-            return peers.Where(peer => context.Cando.Supports(peer, formatter => formatter.DoesSupportMetadata()));
+            return sessions.Where(session => context.Cando.Supports(session, formatter => formatter.DoesSupportMetadata()));
         }
     }
 }

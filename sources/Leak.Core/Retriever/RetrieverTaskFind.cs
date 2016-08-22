@@ -14,14 +14,14 @@ namespace Leak.Core.Retriever
 
         public void Execute(RetrieverContext context)
         {
-            foreach (PeerHash peer in context.Collector.GetPeers(Criterion))
+            foreach (PeerSession session in context.Collector.GetPeers(Criterion))
             {
-                Bitfield bitfield = context.Collector.GetBitfield(peer);
+                Bitfield bitfield = context.Collector.GetBitfield(session.Peer);
 
                 if (bitfield != null)
                 {
-                    context.Omnibus.Add(peer, bitfield);
-                    context.Collector.SendLocalInterested(peer);
+                    context.Omnibus.Add(session.Peer, bitfield);
+                    context.Collector.SendLocalInterested(session.Peer);
                 }
             }
         }

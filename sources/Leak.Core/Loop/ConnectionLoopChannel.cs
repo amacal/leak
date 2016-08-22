@@ -24,7 +24,7 @@ namespace Leak.Core.Loop
             {
                 PeerDirection direction = GetDirection(connection.Direction);
                 PeerAddress address = PeerAddress.Parse(connection.Remote);
-                PeerEndpoint endpoint = new PeerEndpoint(handshake.Hash, handshake.Peer, address, direction);
+                PeerEndpoint endpoint = new PeerEndpoint(handshake.Session, address, direction);
 
                 return endpoint;
             }

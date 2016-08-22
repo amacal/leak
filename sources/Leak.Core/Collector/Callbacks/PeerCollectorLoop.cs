@@ -20,7 +20,7 @@ namespace Leak.Core.Collector.Callbacks
             {
                 context.Communicator.Add(channel);
                 context.Responder.Register(channel);
-                context.Cando.Start(channel.Endpoint.Peer);
+                context.Cando.Start(channel.Endpoint.Session);
             }
 
             context.Callback.OnHandshake(channel.Endpoint);
@@ -28,27 +28,27 @@ namespace Leak.Core.Collector.Callbacks
 
         public override void OnKeepAlive(ConnectionLoopChannel channel)
         {
-            context.Responder.Handle(channel.Endpoint.Peer, new KeepAliveMessage());
+            context.Responder.Handle(channel.Endpoint.Session.Peer, new KeepAliveMessage());
             context.Callback.OnIncoming(channel.Endpoint, new PeerCollectorMessage("keep-alive", 0));
         }
 
         public override void OnChoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Congestion.SetChoking(channel.Endpoint.Peer, PeerCongestionDirection.Remote, true);
+            context.Congestion.SetChoking(channel.Endpoint.Session.Peer, PeerCongestionDirection.Remote, true);
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("choke"));
             context.Callback.OnChoke(channel.Endpoint, new ChokeMessage());
         }
 
         public override void OnUnchoke(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Congestion.SetChoking(channel.Endpoint.Peer, PeerCongestionDirection.Remote, false);
+            context.Congestion.SetChoking(channel.Endpoint.Session.Peer, PeerCongestionDirection.Remote, false);
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("unchoke"));
             context.Callback.OnUnchoke(channel.Endpoint, new UnchokeMessage());
         }
 
         public override void OnInterested(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Congestion.SetInterested(channel.Endpoint.Peer, PeerCongestionDirection.Remote, true);
+            context.Congestion.SetInterested(channel.Endpoint.Session.Peer, PeerCongestionDirection.Remote, true);
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("interested"));
             context.Callback.OnInterested(channel.Endpoint, new InterestedMessage());
         }
@@ -64,7 +64,7 @@ namespace Leak.Core.Collector.Callbacks
             BitfieldMessage payload = new BitfieldMessage(message.ToBytes());
             Bitfield bitfield = payload.ToBitfield();
 
-            context.Battlefield.Handle(channel.Endpoint.Peer, bitfield);
+            context.Battlefield.Handle(channel.Endpoint.Session.Peer, bitfield);
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("bitfield"));
             context.Callback.OnBitfield(channel.Endpoint, payload);
         }
@@ -77,7 +77,7 @@ namespace Leak.Core.Collector.Callbacks
 
         public override void OnExtended(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
-            context.Cando.Handle(channel.Endpoint.Peer, new ExtendedIncomingMessage(message.ToBytes()));
+            context.Cando.Handle(channel.Endpoint.Session, new ExtendedIncomingMessage(message.ToBytes()));
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("extended"));
         }
 
@@ -85,12 +85,11 @@ namespace Leak.Core.Collector.Callbacks
         {
             lock (context.Synchronized)
             {
-                context.Peers.Dismiss(channel.Endpoint.Peer);
-                context.Battlefield.Remove(channel.Endpoint.Peer);
+                context.Peers.Dismiss(channel.Endpoint.Session.Peer);
+                context.Battlefield.Remove(channel.Endpoint.Session.Peer);
 
-                context.Responder.Remove(channel.Endpoint.Peer);
-                context.Storage.RemoveRemote(channel.Endpoint.Remote);
-                context.Cando.Remove(channel.Endpoint.Peer);
+                context.Responder.Remove(channel.Endpoint.Session.Peer);
+                context.Cando.Remove(channel.Endpoint.Session);
             }
         }
 
@@ -98,12 +97,11 @@ namespace Leak.Core.Collector.Callbacks
         {
             lock (context.Synchronized)
             {
-                context.Peers.Dismiss(channel.Endpoint.Peer);
-                context.Battlefield.Remove(channel.Endpoint.Peer);
+                context.Peers.Dismiss(channel.Endpoint.Session.Peer);
+                context.Battlefield.Remove(channel.Endpoint.Session.Peer);
 
-                context.Responder.Remove(channel.Endpoint.Peer);
-                context.Storage.RemoveRemote(channel.Endpoint.Remote);
-                context.Cando.Remove(channel.Endpoint.Peer);
+                context.Responder.Remove(channel.Endpoint.Session.Peer);
+                context.Cando.Remove(channel.Endpoint.Session);
             }
         }
     }

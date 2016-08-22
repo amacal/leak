@@ -12,14 +12,14 @@ namespace Leak.Core.Collector.Callbacks
             this.context = context;
         }
 
-        public override void OnSize(PeerHash peer, MetadataSize size)
+        public override void OnSize(PeerSession session, MetadataSize size)
         {
-            context.Callback.OnMetadataSize(peer, size);
+            context.Callback.OnMetadataSize(session, size);
         }
 
-        public override void OnData(PeerHash peer, MetadataData data)
+        public override void OnData(PeerSession session, MetadataData data)
         {
-            context.Callback.OnMetadataReceived(peer, data);
+            context.Callback.OnMetadataReceived(session, data);
         }
     }
 }

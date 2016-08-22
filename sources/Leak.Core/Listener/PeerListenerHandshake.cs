@@ -12,14 +12,9 @@ namespace Leak.Core.Listener
             this.handshake = handshake;
         }
 
-        public PeerHash Peer
+        public PeerSession Session
         {
-            get { return handshake.Remote; }
-        }
-
-        public FileHash Hash
-        {
-            get { return handshake.Hash; }
+            get { return new PeerSession(handshake.Hash, handshake.Remote); }
         }
 
         public bool HasExtensions

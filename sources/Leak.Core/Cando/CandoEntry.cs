@@ -4,20 +4,15 @@ namespace Leak.Core.Cando
 {
     public class CandoEntry
     {
-        private readonly PeerHash peer;
+        private readonly PeerSession session;
 
-        public CandoEntry(PeerHash peer)
+        public CandoEntry(PeerSession session)
         {
-            this.peer = peer;
+            this.session = session;
 
             Local = new CandoMap();
             Remote = new CandoMap();
             Handlers = new CandoHandler[0];
-        }
-
-        public PeerHash Peer
-        {
-            get { return peer; }
         }
 
         public bool HasExtensions { get; set; }
@@ -33,5 +28,10 @@ namespace Leak.Core.Cando
         public CandoMap Remote { get; set; }
 
         public CandoHandler[] Handlers { get; set; }
+
+        public PeerSession Session
+        {
+            get { return session; }
+        }
     }
 }

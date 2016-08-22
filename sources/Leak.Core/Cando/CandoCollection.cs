@@ -5,29 +5,29 @@ namespace Leak.Core.Cando
 {
     public class CandoCollection
     {
-        private readonly Dictionary<PeerHash, CandoEntry> byPeer;
+        private readonly Dictionary<PeerSession, CandoEntry> byPeer;
 
         public CandoCollection()
         {
-            byPeer = new Dictionary<PeerHash, CandoEntry>();
+            byPeer = new Dictionary<PeerSession, CandoEntry>();
         }
 
-        public CandoEntry GetOrCreate(PeerHash peer)
+        public CandoEntry GetOrCreate(PeerSession session)
         {
             CandoEntry entry;
 
-            if (byPeer.TryGetValue(peer, out entry) == false)
+            if (byPeer.TryGetValue(session, out entry) == false)
             {
-                entry = new CandoEntry(peer);
-                byPeer.Add(peer, entry);
+                entry = new CandoEntry(session);
+                byPeer.Add(session, entry);
             }
 
             return entry;
         }
 
-        public void Remove(PeerHash peer)
+        public void Remove(PeerSession session)
         {
-            byPeer.Remove(peer);
+            byPeer.Remove(session);
         }
     }
 }

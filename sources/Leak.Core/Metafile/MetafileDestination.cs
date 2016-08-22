@@ -33,16 +33,19 @@ namespace Leak.Core.Metafile
             FileHash computed;
             string path = context.Configuration.Destination;
 
-            using (HashAlgorithm algorithm = SHA1.Create())
-            using (FileStream stream = File.OpenRead(path))
+            if (File.Exists(path))
             {
-                computed = new FileHash(algorithm.ComputeHash(stream));
-            }
+                using (HashAlgorithm algorithm = SHA1.Create())
+                using (FileStream stream = File.OpenRead(path))
+                {
+                    computed = new FileHash(algorithm.ComputeHash(stream));
+                }
 
-            if (computed.Equals(context.Configuration.Hash))
-            {
-                context.IsCompleted = true;
-                context.Callback.OnCompleted(computed, File.ReadAllBytes(path));
+                if (computed.Equals(context.Configuration.Hash))
+                {
+                    context.IsCompleted = true;
+                    context.Callback.OnCompleted(computed, File.ReadAllBytes(path));
+                }
             }
         }
     }

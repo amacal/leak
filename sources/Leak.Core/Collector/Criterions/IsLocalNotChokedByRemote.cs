@@ -7,9 +7,9 @@ namespace Leak.Core.Collector.Criterions
 {
     public class IsLocalNotChokedByRemote : PeerCollectorCriterion
     {
-        public IEnumerable<PeerHash> Accept(IEnumerable<PeerHash> peers, PeerCollectorContext context)
+        public IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context)
         {
-            return peers.Where(peer => context.Congestion.IsChoking(peer, PeerCongestionDirection.Remote) == false);
+            return sessions.Where(session => context.Congestion.IsChoking(session.Peer, PeerCongestionDirection.Remote) == false);
         }
     }
 }

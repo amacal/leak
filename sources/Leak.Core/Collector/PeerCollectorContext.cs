@@ -20,7 +20,6 @@ namespace Leak.Core.Collector
         private readonly InfantryService peers;
         private readonly ConnectionLoop loop;
         private readonly PeerCollectorConfiguration configuration;
-        private readonly PeerCollectorStorage storage;
         private readonly CommunicatorService communicator;
         private readonly ResponderService responder;
         private readonly CandoService cando;
@@ -87,7 +86,6 @@ namespace Leak.Core.Collector
             });
 
             synchronized = new object();
-            storage = new PeerCollectorStorage(configuration);
         }
 
         public object Synchronized
@@ -123,11 +121,6 @@ namespace Leak.Core.Collector
         public PeerCollectorCallback Callback
         {
             get { return configuration.Callback; }
-        }
-
-        public PeerCollectorStorage Storage
-        {
-            get { return storage; }
         }
 
         public CommunicatorService Communicator

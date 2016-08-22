@@ -17,16 +17,16 @@ namespace Leak.Core.Metaget
         {
             if (context.Metamine != null && context.Metafile.IsCompleted() == false)
             {
-                foreach (PeerHash peer in context.View.GetPeers(Criterions))
+                foreach (PeerSession session in context.View.GetPeers(Criterions))
                 {
                     MetamineStrategy strategy = MetamineStrategy.Sequential;
-                    MetamineBlock[] blocks = context.Metamine.Next(strategy, peer);
+                    MetamineBlock[] blocks = context.Metamine.Next(strategy, session.Peer);
 
                     foreach (MetamineBlock block in blocks)
                     {
-                        context.Metamine.Reserve(peer, block);
-                        context.View.SendMetadataRequest(peer, block.Index);
-                        context.Callback.OnMetadataRequested(peer, block.Index);
+                        context.Metamine.Reserve(session.Peer, block);
+                        context.View.SendMetadataRequest(session, block.Index);
+                        context.Callback.OnMetadataRequested(session.Peer, block.Index);
                     }
                 }
             }

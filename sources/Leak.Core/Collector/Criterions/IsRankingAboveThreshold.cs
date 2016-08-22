@@ -13,16 +13,16 @@ namespace Leak.Core.Collector.Criterions
             this.threshold = threshold;
         }
 
-        public IEnumerable<PeerHash> Accept(IEnumerable<PeerHash> peers, PeerCollectorContext context)
+        public IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context)
         {
             List<Peer> result = new List<Peer>();
 
-            foreach (PeerHash hash in peers)
+            foreach (PeerSession session in sessions)
             {
                 Peer peer = new Peer
                 {
-                    Hash = hash,
-                    Ranking = context.Ranking.Get(hash)
+                    Session = session,
+                    Ranking = context.Ranking.Get(session.Peer)
                 };
 
                 if (peer.Ranking >= threshold)
@@ -31,12 +31,12 @@ namespace Leak.Core.Collector.Criterions
                 }
             }
 
-            return result.OrderByDescending(x => x.Ranking).Select(x => x.Hash);
+            return result.OrderByDescending(x => x.Ranking).Select(x => x.Session);
         }
 
         private struct Peer
         {
-            public PeerHash Hash;
+            public PeerSession Session;
 
             public int Ranking;
         }

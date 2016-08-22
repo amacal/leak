@@ -12,14 +12,9 @@ namespace Leak.Core.Loop
             this.handshake = handshake;
         }
 
-        public PeerHash Peer
+        public PeerSession Session
         {
-            get { return handshake.Peer; }
-        }
-
-        public FileHash Hash
-        {
-            get { return handshake.Hash; }
+            get { return handshake.Session; }
         }
 
         public bool HasExtensions

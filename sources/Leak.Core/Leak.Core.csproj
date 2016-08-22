@@ -62,6 +62,7 @@
     <Compile Include="Client\PeerClientEntry.cs" />
     <Compile Include="Client\PeerClientToScheduler.cs" />
     <Compile Include="Collector\Criterions\IsBitfieldKnown.cs" />
+    <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Connector\PeerConnectorConnected.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Repository\RepositoryBlock.cs" />
@@ -173,11 +174,8 @@
     <Compile Include="Collector\PeerCollectorContext.cs" />
     <Compile Include="Collector\PeerCollectorExtensions.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorPool.cs" />
-    <Compile Include="Collector\PeerCollectorStorageEntryCollection.cs" />
     <Compile Include="Collector\PeerCollectorMessage.cs" />
     <Compile Include="Collector\PeerCollectorMessageExtensions.cs" />
-    <Compile Include="Collector\PeerCollectorStorage.cs" />
-    <Compile Include="Collector\PeerCollectorStorageEntry.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorConnector.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorListener.cs" />
     <Compile Include="Collector\PeerCollector.cs" />

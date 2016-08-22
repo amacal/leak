@@ -5,6 +5,6 @@ namespace Leak.Core.Collector
 {
     public interface PeerCollectorCriterion
     {
-        IEnumerable<PeerHash> Accept(IEnumerable<PeerHash> peers, PeerCollectorContext context);
+        IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context);
     }
 }

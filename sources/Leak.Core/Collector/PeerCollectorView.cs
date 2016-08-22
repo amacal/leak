@@ -24,21 +24,21 @@ namespace Leak.Core.Collector
             get { return hash; }
         }
 
-        public PeerHash[] GetPeers(params PeerCollectorCriterion[] criterions)
+        public PeerSession[] GetPeers(params PeerCollectorCriterion[] criterions)
         {
-            IEnumerable<PeerHash> peers;
+            IEnumerable<PeerSession> sessions;
 
             lock (context.Synchronized)
             {
-                peers = context.Peers.Find(hash);
+                sessions = context.Peers.Find(hash).Select(peer => new PeerSession(hash, peer));
 
                 foreach (PeerCollectorCriterion criterion in criterions)
                 {
-                    peers = criterion.Accept(peers, context);
+                    sessions = criterion.Accept(sessions, context);
                 }
             }
 
-            return peers.ToArray();
+            return sessions.ToArray();
         }
 
         public Bitfield GetBitfield(PeerHash peer)
@@ -95,11 +95,11 @@ namespace Leak.Core.Collector
             }
         }
 
-        public void SendMetadataRequest(PeerHash peer, int block)
+        public void SendMetadataRequest(PeerSession session, int block)
         {
             lock (context.Synchronized)
             {
-                context.Cando.Send(peer, formatter => formatter.MetadataRequest(block));
+                context.Cando.Send(session, formatter => formatter.MetadataRequest(block));
             }
         }
     }

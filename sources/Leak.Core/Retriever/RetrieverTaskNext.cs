@@ -25,11 +25,11 @@ namespace Leak.Core.Retriever
                 new IsRankingAboveThreshold(ranking),
             };
 
-            foreach (PeerHash peer in context.Collector.GetPeers(criterion).Take(count))
+            foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))
             {
                 List<Request> requests = new List<Request>();
                 OmnibusStrategy strategy = OmnibusStrategy.Sequential;
-                OmnibusBlock[] blocks = context.Omnibus.Next(strategy, peer, pieces).ToArray();
+                OmnibusBlock[] blocks = context.Omnibus.Next(strategy, session.Peer, pieces).ToArray();
 
                 foreach (OmnibusBlock block in blocks)
                 {
@@ -38,14 +38,14 @@ namespace Leak.Core.Retriever
 
                 if (requests.Count > 0)
                 {
-                    context.Collector.SendPieceRequest(peer, requests.ToArray());
+                    context.Collector.SendPieceRequest(session.Peer, requests.ToArray());
                 }
 
                 foreach (OmnibusBlock block in blocks)
                 {
-                    PeerHash previous = context.Omnibus.Reserve(peer, block);
+                    PeerHash previous = context.Omnibus.Reserve(session.Peer, block);
 
-                    context.Collector.Decrease(peer, 1);
+                    context.Collector.Decrease(session.Peer, 1);
 
                     if (previous != null)
                     {

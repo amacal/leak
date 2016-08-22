@@ -18,7 +18,7 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnDisconnected(PeerHash peer)
+        public virtual void OnDisconnected(PeerSession session)
         {
         }
 
@@ -58,11 +58,11 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnMetadataSize(PeerHash peer, MetadataSize size)
+        public virtual void OnMetadataSize(PeerSession session, MetadataSize size)
         {
         }
 
-        public virtual void OnMetadataReceived(PeerHash peer, MetadataData metadata)
+        public virtual void OnMetadataReceived(PeerSession session, MetadataData metadata)
         {
         }
     }

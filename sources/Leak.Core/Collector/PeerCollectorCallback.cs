@@ -10,7 +10,7 @@ namespace Leak.Core.Collector
 
         void OnConnected(PeerCollectorConnected connected);
 
-        void OnDisconnected(PeerHash peer);
+        void OnDisconnected(PeerSession session);
 
         void OnRejected(PeerAddress peer);
 
@@ -32,8 +32,8 @@ namespace Leak.Core.Collector
 
         void OnPiece(PeerEndpoint endpoint, PieceMessage message);
 
-        void OnMetadataSize(PeerHash peer, MetadataSize size);
+        void OnMetadataSize(PeerSession session, MetadataSize size);
 
-        void OnMetadataReceived(PeerHash peer, MetadataData metadata);
+        void OnMetadataReceived(PeerSession session, MetadataData metadata);
     }
 }

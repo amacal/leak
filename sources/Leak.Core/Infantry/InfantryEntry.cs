@@ -11,6 +11,8 @@ namespace Leak.Core.Infantry
 
         public PeerHash Peer { get; set; }
 
-        public FileHash Hash { get; set; }
+        public PeerAddress Address { get; set; }
+
+        public PeerSession Session { get; set; }
     }
 }

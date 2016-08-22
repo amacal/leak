@@ -2,27 +2,15 @@
 {
     public class PeerEndpoint
     {
-        private readonly FileHash hash;
-        private readonly PeerHash peer;
+        private readonly PeerSession session;
         private readonly PeerAddress remote;
         private readonly PeerDirection direction;
 
-        public PeerEndpoint(FileHash hash, PeerHash peer, PeerAddress remote, PeerDirection direction)
+        public PeerEndpoint(PeerSession session, PeerAddress remote, PeerDirection direction)
         {
-            this.hash = hash;
-            this.peer = peer;
+            this.session = session;
             this.remote = remote;
             this.direction = direction;
-        }
-
-        public FileHash Hash
-        {
-            get { return hash; }
-        }
-
-        public PeerHash Peer
-        {
-            get { return peer; }
         }
 
         public PeerAddress Remote
@@ -33,6 +21,11 @@
         public PeerDirection Direction
         {
             get { return direction; }
+        }
+
+        public PeerSession Session
+        {
+            get { return session; }
         }
     }
 }

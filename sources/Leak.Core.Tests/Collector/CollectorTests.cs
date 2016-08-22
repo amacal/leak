@@ -68,7 +68,7 @@ namespace Leak.Core.Tests.Collector
 
             public override void OnHandshake(PeerEndpoint endpoint)
             {
-                connected.Add(endpoint.Peer);
+                connected.Add(endpoint.Session.Peer);
                 onReady.Set();
             }
 

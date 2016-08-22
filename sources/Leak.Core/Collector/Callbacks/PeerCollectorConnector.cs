@@ -61,12 +61,13 @@ namespace Leak.Core.Collector.Callbacks
 
         public override void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
+            PeerAddress address = PeerAddress.Parse(connection.Remote);
+
             lock (context.Synchronized)
             {
-                if (context.Bouncer.AcceptPeer(connection, handshake.Peer))
+                if (context.Bouncer.AcceptPeer(connection, handshake.Session.Peer))
                 {
-                    context.Peers.Enlist(handshake.Peer, handshake.Hash);
-                    context.Storage.AddHandshake(connection, handshake);
+                    context.Peers.Enlist(handshake.Session, address);
                     context.Cando.Register(handshake);
                 }
                 else

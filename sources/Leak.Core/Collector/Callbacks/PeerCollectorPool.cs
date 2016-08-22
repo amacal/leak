@@ -1,6 +1,6 @@
-﻿using System;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Collector.Callbacks
 {
@@ -23,37 +23,39 @@ namespace Leak.Core.Collector.Callbacks
 
         public override void OnException(NetworkConnection connection, Exception ex)
         {
-            PeerHash peer;
+            PeerSession session;
+            PeerAddress address = PeerAddress.Parse(connection.Remote);
 
             lock (context.Synchronized)
             {
                 context.Bouncer.ReleaseConnection(connection);
-                peer = context.Storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
+                session = context.Peers.Dismiss(address);
             }
 
             connection.Terminate();
 
-            if (peer != null)
+            if (session != null)
             {
-                context.Callback.OnDisconnected(peer);
+                context.Callback.OnDisconnected(session);
             }
         }
 
         public override void OnDisconnected(NetworkConnection connection)
         {
-            PeerHash peer;
+            PeerSession session;
+            PeerAddress address = PeerAddress.Parse(connection.Remote);
 
             lock (context.Synchronized)
             {
                 context.Bouncer.ReleaseConnection(connection);
-                peer = context.Storage.RemoveRemote(PeerAddress.Parse(connection.Remote));
+                session = context.Peers.Dismiss(address);
             }
 
             connection.Terminate();
 
-            if (peer != null)
+            if (session != null)
             {
-                context.Callback.OnDisconnected(peer);
+                context.Callback.OnDisconnected(session);
             }
         }
     }

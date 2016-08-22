@@ -8,8 +8,8 @@ namespace Leak.Core.Cando
     {
         bool CanHandle(string name);
 
-        void OnHandshake(PeerHash peer, BencodedValue handshake);
+        void OnHandshake(PeerSession session, BencodedValue handshake);
 
-        void OnMessage(PeerHash peer, Extended payload);
+        void OnMessage(PeerSession session, Extended payload);
     }
 }

@@ -4,12 +4,12 @@ namespace Leak.Core.Cando.Metadata
 {
     public interface MetadataCallback
     {
-        void OnSize(PeerHash peer, MetadataSize size);
+        void OnSize(PeerSession session, MetadataSize size);
 
-        void OnRequest(PeerHash peer, MetadataRequest request);
+        void OnRequest(PeerSession session, MetadataRequest request);
 
-        void OnData(PeerHash peer, MetadataData data);
+        void OnData(PeerSession session, MetadataData data);
 
-        void OnReject(PeerHash peer, MetadataReject reject);
+        void OnReject(PeerSession session, MetadataReject reject);
     }
 }

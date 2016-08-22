@@ -13,14 +13,16 @@ namespace Leak.Core.Infantry
             context = new InfantryContext(configurer);
         }
 
-        public void Enlist(PeerHash peer, FileHash hash)
+        public void Enlist(PeerSession session, PeerAddress address)
         {
             lock (context.Synchronized)
             {
-                InfantryEntry entry = context.Collection.GetOrCreate(peer);
+                InfantryEntry entry = context.Collection.GetOrCreate(session.Peer);
 
-                context.Collection.Register(hash, entry);
-                entry.Hash = hash;
+                entry.Session = session;
+                entry.Address = address;
+
+                context.Collection.Register(entry);
             }
         }
 
@@ -29,6 +31,21 @@ namespace Leak.Core.Infantry
             lock (context.Synchronized)
             {
                 context.Collection.Remove(peer);
+            }
+        }
+
+        public PeerSession Dismiss(PeerAddress address)
+        {
+            lock (context.Synchronized)
+            {
+                InfantryEntry entry = context.Collection.Get(address);
+
+                if (entry != null)
+                {
+                    context.Collection.Remove(entry.Peer);
+                }
+
+                return entry?.Session;
             }
         }
 
@@ -44,7 +61,7 @@ namespace Leak.Core.Infantry
         {
             lock (context.Synchronized)
             {
-                return hash.Equals(context.Collection.Get(peer)?.Hash);
+                return hash.Equals(context.Collection.Get(peer)?.Session.Hash);
             }
         }
 
