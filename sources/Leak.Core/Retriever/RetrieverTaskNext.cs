@@ -22,7 +22,7 @@ namespace Leak.Core.Retriever
             PeerCollectorCriterion[] criterion =
             {
                 new IsLocalNotChokedByRemote(),
-                new IsRankingAboveThreshold(ranking),
+                new OrderByRanking(ranking),
             };
 
             foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))

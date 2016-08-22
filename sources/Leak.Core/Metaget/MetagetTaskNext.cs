@@ -9,8 +9,8 @@ namespace Leak.Core.Metaget
     {
         private static readonly PeerCollectorCriterion[] Criterions =
         {
-            new IsLocalNotChokedByRemote(),
-            new IsMetadataSupportedByRemote()
+            new IsMetadataSupportedByRemote(),
+            new OrderByBitfield()
         };
 
         public void Execute(MetagetContext context)

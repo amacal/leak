@@ -4,15 +4,8 @@ using System.Linq;
 
 namespace Leak.Core.Collector.Criterions
 {
-    public class IsRankingAboveThreshold : PeerCollectorCriterion
+    public class OrderByBitfield : PeerCollectorCriterion
     {
-        private readonly int threshold;
-
-        public IsRankingAboveThreshold(int threshold)
-        {
-            this.threshold = threshold;
-        }
-
         public IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context)
         {
             List<Peer> result = new List<Peer>();
@@ -22,23 +15,23 @@ namespace Leak.Core.Collector.Criterions
                 Peer peer = new Peer
                 {
                     Session = session,
-                    Ranking = context.Ranking.Get(session.Peer)
+                    Completed = context.Battlefield.Get(session.Peer)?.Completed
                 };
 
-                if (peer.Ranking >= threshold)
+                if (peer.Completed != null)
                 {
                     result.Add(peer);
                 }
             }
 
-            return result.OrderByDescending(x => x.Ranking).Select(x => x.Session);
+            return result.OrderByDescending(x => x.Completed.Value).Select(x => x.Session);
         }
 
         private struct Peer
         {
             public PeerSession Session;
 
-            public int Ranking;
+            public int? Completed;
         }
     }
 }

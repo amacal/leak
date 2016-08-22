@@ -62,6 +62,7 @@
     <Compile Include="Client\PeerClientEntry.cs" />
     <Compile Include="Client\PeerClientToScheduler.cs" />
     <Compile Include="Collector\Criterions\IsBitfieldKnown.cs" />
+    <Compile Include="Collector\Criterions\OrderByBitfield.cs" />
     <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Connector\PeerConnectorConnected.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
@@ -123,7 +124,7 @@
     <Compile Include="Collector\Callbacks\PeerCollectorMetadata.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorExchange.cs" />
     <Compile Include="Collector\Criterions\IsMetadataSupportedByRemote.cs" />
-    <Compile Include="Collector\Criterions\IsRankingAboveThreshold.cs" />
+    <Compile Include="Collector\Criterions\OrderByRanking.cs" />
     <Compile Include="Collector\Criterions\IsLocalNotChokedByRemote.cs" />
     <Compile Include="Collector\PeerCollectorCriterion.cs" />
     <Compile Include="Communicator\CommunicatorChannel.cs" />

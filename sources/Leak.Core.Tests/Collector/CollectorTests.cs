@@ -72,9 +72,9 @@ namespace Leak.Core.Tests.Collector
                 onReady.Set();
             }
 
-            public override void OnDisconnected(PeerHash peer)
+            public override void OnDisconnected(PeerSession session)
             {
-                connected.Remove(peer);
+                connected.Remove(session.Peer);
             }
         }
     }
