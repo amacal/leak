@@ -7,6 +7,18 @@ namespace Leak.Core.Client
     {
         private PeerClientListenerConfiguration configuration;
 
+        public void Disable()
+        {
+        }
+
+        public void Enable(Action<PeerClientListenerConfiguration> configurer)
+        {
+            configuration = configurer.Configure(with =>
+            {
+                with.Port = 8080;
+            });
+        }
+
         public PeerClientListenerStatus Status
         {
             get
@@ -18,16 +30,9 @@ namespace Leak.Core.Client
             }
         }
 
-        public void Disable()
+        public int Port
         {
-        }
-
-        public void Enable(Action<PeerClientListenerConfiguration> configurer)
-        {
-            configuration = configurer.Configure(with =>
-            {
-                with.Port = 8080;
-            });
+            get { return configuration?.Port ?? 0; }
         }
 
         public PeerListener Build(Action<PeerListenerConfiguration> configurer)

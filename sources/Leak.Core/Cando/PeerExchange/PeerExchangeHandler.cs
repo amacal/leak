@@ -45,7 +45,10 @@ namespace Leak.Core.Cando.PeerExchange
                 }
             }
 
-            configuration.Callback.OnMessage(session.Peer, new PeerExchangeMessage(peers.ToArray()));
+            if (added.Length > 0)
+            {
+                configuration.Callback.OnMessage(session, new PeerExchangeData(peers.ToArray()));
+            }
         }
 
         private static string GetHost(byte[] data, int offset)

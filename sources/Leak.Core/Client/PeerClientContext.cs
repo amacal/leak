@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
+using Leak.Core.Connector;
 using Leak.Core.Listener;
 using Leak.Core.Network;
 using Leak.Core.Scheduler;
@@ -18,6 +19,7 @@ namespace Leak.Core.Client
         private readonly PeerCollector collector;
         private readonly PeerListener listener;
         private readonly TrackerTelegraph telegraph;
+        private readonly PeerConnector connector;
 
         public PeerClientContext(Action<PeerClientConfiguration> configurer)
         {
@@ -43,17 +45,22 @@ namespace Leak.Core.Client
                 with.Callback = collector.CreatePoolCallback();
             });
 
-            listener = configuration.Listener.Build(with =>
+            if (configuration.Listener.Status == PeerClientListenerStatus.On)
             {
-                with.Callback = collector.CreateListenerCallback();
-                with.Peer = configuration.Peer;
-                with.Extensions = true;
-                with.Hashes = hashes;
-                with.Pool = network;
-            });
+                listener = configuration.Listener.Build(with =>
+                {
+                    with.Callback = collector.CreateListenerCallback();
+                    with.Peer = configuration.Peer;
+                    with.Extensions = true;
+                    with.Hashes = hashes;
+                    with.Pool = network;
+                });
+            }
 
             telegraph = new TrackerTelegraph(with =>
             {
+                with.Peer = configuration.Peer;
+                with.Port = configuration.Listener.Port;
                 with.Callback = new PeerClientToTelegraph(this);
             });
 
@@ -62,6 +69,16 @@ namespace Leak.Core.Client
                 with.Collector = collector;
                 with.Callback = new PeerClientToScheduler(this);
             });
+
+            connector = new PeerConnector(with =>
+            {
+                with.Peer = configuration.Peer;
+                with.Extensions = true;
+                with.Pool = network;
+                with.Callback = collector.CreateConnectorCallback();
+            });
+
+            connector.Start();
         }
 
         public PeerHash Peer
@@ -97,6 +114,16 @@ namespace Leak.Core.Client
         public PeerCollector Collector
         {
             get { return collector; }
+        }
+
+        public PeerListener Listener
+        {
+            get { return listener; }
+        }
+
+        public PeerConnector Connector
+        {
+            get { return connector; }
         }
     }
 }

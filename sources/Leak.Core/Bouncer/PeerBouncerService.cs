@@ -49,6 +49,7 @@ namespace Leak.Core.Bouncer
 
                 PeerBouncerEntry byIdentifier = context.Collection.FindOrCreateByIdentifier(identifier);
                 PeerBouncerEntry byRemote = context.Collection.FindOrDefaultByRemote(remote);
+                int count = context.Collection.Count(x => x.Released == false);
 
                 if (byIdentifier.Released)
                     return false;
@@ -57,6 +58,9 @@ namespace Leak.Core.Bouncer
                     return false;
 
                 if (byRemote != null)
+                    return false;
+
+                if (count > context.Configuration.Connections)
                     return false;
 
                 byIdentifier.Remotes.Add(remote);
@@ -74,6 +78,7 @@ namespace Leak.Core.Bouncer
 
                 PeerBouncerEntry byIdentifier = context.Collection.FindOrCreateByIdentifier(identifier);
                 PeerBouncerEntry byPeer = context.Collection.FindOrDefaultByPeer(peer);
+                int count = context.Collection.Count(x => x.Released == false);
 
                 if (byIdentifier.Released)
                     return false;
@@ -85,6 +90,9 @@ namespace Leak.Core.Bouncer
                     return false;
 
                 if (byPeer != null)
+                    return false;
+
+                if (count > context.Configuration.Connections)
                     return false;
 
                 byIdentifier.Peers.Add(peer);

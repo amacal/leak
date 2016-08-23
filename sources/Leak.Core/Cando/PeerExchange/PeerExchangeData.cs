@@ -2,11 +2,11 @@
 
 namespace Leak.Core.Cando.PeerExchange
 {
-    public class PeerExchangeMessage
+    public class PeerExchangeData
     {
         private readonly PeerAddress[] added;
 
-        public PeerExchangeMessage(PeerAddress[] added)
+        public PeerExchangeData(PeerAddress[] added)
         {
             this.added = added;
         }

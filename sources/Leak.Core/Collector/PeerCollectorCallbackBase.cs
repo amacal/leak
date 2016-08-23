@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Cando.PeerExchange;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 
@@ -62,7 +63,11 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnMetadataReceived(PeerSession session, MetadataData metadata)
+        public virtual void OnMetadataReceived(PeerSession session, MetadataData data)
+        {
+        }
+
+        public virtual void OnPeerExchanged(PeerSession session, PeerExchangeData data)
         {
         }
     }

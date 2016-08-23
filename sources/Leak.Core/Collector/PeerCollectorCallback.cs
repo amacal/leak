@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Cando.PeerExchange;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 
@@ -34,6 +35,8 @@ namespace Leak.Core.Collector
 
         void OnMetadataSize(PeerSession session, MetadataSize size);
 
-        void OnMetadataReceived(PeerSession session, MetadataData metadata);
+        void OnMetadataReceived(PeerSession session, MetadataData data);
+
+        void OnPeerExchanged(PeerSession session, PeerExchangeData data);
     }
 }

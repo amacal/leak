@@ -7,8 +7,6 @@ namespace Leak.Core.Connector
     {
         public PeerHash Peer { get; set; }
 
-        public FileHash Hash { get; set; }
-
         public PeerConnectorCallback Callback { get; set; }
 
         public NetworkPool Pool { get; set; }

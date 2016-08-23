@@ -20,9 +20,7 @@ namespace Leak.Core.Client
             {
                 context.Telegraph.Start(tracker, with =>
                 {
-                    with.Peer = context.Peer;
                     with.Hash = metainfo.Data.Hash;
-                    with.Port = 8080;
                 });
             }
 
@@ -45,9 +43,7 @@ namespace Leak.Core.Client
             {
                 context.Telegraph.Start(tracker, with =>
                 {
-                    with.Peer = context.Peer;
                     with.Hash = configuration.Hash;
-                    with.Port = 8080;
                 });
             }
 

@@ -34,7 +34,13 @@ namespace Leak.Core.Telegraph
 
         public void Start(string tracker, Action<TrackerAnnounceConfiguration> configurer)
         {
-            storage.Register(tracker, configurer);
+            storage.Register(tracker, with =>
+            {
+                with.Port = configuration.Port;
+                with.Peer = configuration.Peer;
+
+                configurer.Invoke(with);
+            });
         }
     }
 }

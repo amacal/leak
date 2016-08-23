@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Cando.PeerExchange;
 using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Messages;
@@ -88,14 +89,22 @@ namespace Leak.Core.Client
             });
         }
 
-        public override void OnMetadataReceived(PeerSession session, MetadataData metadata)
+        public override void OnMetadataReceived(PeerSession session, MetadataData data)
         {
-            context.Callback.OnMetadataReceived(session.Hash, session.Peer, metadata);
+            context.Callback.OnMetadataReceived(session.Hash, session.Peer, data);
 
             context.Scheduler.Handle(with =>
             {
-                with.OnMetadataData(session.Peer, metadata);
+                with.OnMetadataData(session.Peer, data);
             });
+        }
+
+        public override void OnPeerExchanged(PeerSession session, PeerExchangeData data)
+        {
+            foreach (PeerAddress peer in data.Added)
+            {
+                context.Connector.ConnectTo(session.Hash, peer);
+            }
         }
     }
 }

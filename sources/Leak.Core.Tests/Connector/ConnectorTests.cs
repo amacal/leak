@@ -24,10 +24,9 @@ namespace Leak.Core.Tests.Connector
 
                 PeerConnector connector = new PeerConnector(with =>
                 {
-                    with.Hash = hash;
                 });
 
-                connector.ConnectTo(new PeerAddress("localhost", 8080));
+                connector.ConnectTo(hash, new PeerAddress("localhost", 8080));
 
                 HandshakeNegotiatorPassiveStub passive = new HandshakeNegotiatorPassiveStub(container.Pool, await connection, with =>
                 {

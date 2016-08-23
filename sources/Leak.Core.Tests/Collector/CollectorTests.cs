@@ -34,12 +34,11 @@ namespace Leak.Core.Tests.Collector
 
             PeerConnector connector = new PeerConnector(with =>
             {
-                with.Hash = hash;
                 with.Peer = peer;
             });
 
             listener.Start();
-            connector.ConnectTo(new PeerAddress("localhost", 8080));
+            connector.ConnectTo(hash, new PeerAddress("localhost", 8080));
 
             context.Ready.WaitOne(TimeSpan.FromSeconds(2));
             context.Connected.Should().Contain(peer);

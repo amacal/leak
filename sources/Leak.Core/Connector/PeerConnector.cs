@@ -1,68 +1,30 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Negotiator;
-using Leak.Core.Network;
 using System;
-using System.Net;
-using System.Net.Sockets;
 
 namespace Leak.Core.Connector
 {
     public class PeerConnector
     {
-        private readonly PeerConnectorConfiguration configuration;
+        private readonly PeerConnectorContext context;
 
         public PeerConnector(Action<PeerConnectorConfiguration> configurer)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new PeerConnectorCallbackNothing();
-                with.Peer = new PeerHash(Bytes.Random(20));
-                with.Pool = new NetworkPool();
-            });
+            context = new PeerConnectorContext(configurer);
         }
 
-        public void ConnectTo(PeerAddress peer)
+        public void Start()
         {
-            if (OnConnecting(peer))
-            {
-                Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                EndPoint endpoint = new DnsEndPoint(peer.Host, peer.Port);
-
-                socket.BeginConnect(endpoint, OnConnected, socket);
-            }
+            context.Timer.Start(OnTick);
         }
 
-        private bool OnConnecting(PeerAddress peer)
+        public void ConnectTo(FileHash hash, PeerAddress peer)
         {
-            bool accepted = true;
-
-            NetworkConnectionInfo connection = configuration.Pool.Info(peer.ToString(), NetworkDirection.Incoming);
-            PeerConnectorConnecting connecting = new PeerConnectorConnecting(configuration.Hash, connection, () => accepted = false);
-
-            configuration.Callback.OnConnecting(connecting);
-            return accepted;
+            context.Queue.Add(new PeerConnectorTaskConnect(context, hash, peer));
         }
 
-        private void OnConnected(IAsyncResult result)
+        private void OnTick()
         {
-            try
-            {
-                Socket socket = (Socket)result.AsyncState;
-                socket.EndConnect(result);
-
-                NetworkConnection connection = configuration.Pool.Create(socket, NetworkDirection.Outgoing);
-                PeerConnectorConnected connected = new PeerConnectorConnected(configuration.Hash, connection);
-
-                configuration.Callback.OnConnected(connected);
-
-                PeerConnectorNegotiatorContext context = new PeerConnectorNegotiatorContext(configuration, connection);
-                HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(configuration.Pool, connection, context);
-
-                negotiator.Execute();
-            }
-            catch (SocketException)
-            {
-            }
+            context.Queue.Process();
         }
     }
 }

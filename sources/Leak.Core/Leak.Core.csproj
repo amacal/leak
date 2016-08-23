@@ -65,6 +65,11 @@
     <Compile Include="Collector\Criterions\OrderByBitfield.cs" />
     <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Connector\PeerConnectorConnected.cs" />
+    <Compile Include="Connector\PeerConnectorContext.cs" />
+    <Compile Include="Connector\PeerConnectorQueue.cs" />
+    <Compile Include="Connector\PeerConnectorTask.cs" />
+    <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
+    <Compile Include="Connector\PeerConnectorTimer.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Repository\RepositoryBlock.cs" />
     <Compile Include="Repository\RepositoryBlockData.cs" />
@@ -227,7 +232,7 @@
     <Compile Include="Cando\PeerExchange\PeerExchangeConfiguration.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeExtensions.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeMessage.cs" />
+    <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
     <Compile Include="Listener\PeerListener.cs" />
     <Compile Include="Listener\PeerListenerCallback.cs" />
     <Compile Include="Listener\PeerListenerCallbackBase.cs" />

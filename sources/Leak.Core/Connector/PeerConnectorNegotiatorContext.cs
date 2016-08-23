@@ -7,11 +7,13 @@ namespace Leak.Core.Connector
 {
     public class PeerConnectorNegotiatorContext : HandshakeNegotiatorActiveContext
     {
+        private readonly FileHash hash;
         private readonly PeerConnectorConfiguration configuration;
         private readonly NetworkConnection connection;
 
-        public PeerConnectorNegotiatorContext(PeerConnectorConfiguration configuration, NetworkConnection connection)
+        public PeerConnectorNegotiatorContext(FileHash hash, PeerConnectorConfiguration configuration, NetworkConnection connection)
         {
+            this.hash = hash;
             this.configuration = configuration;
             this.connection = connection;
         }
@@ -23,7 +25,7 @@ namespace Leak.Core.Connector
 
         public FileHash Hash
         {
-            get { return configuration.Hash; }
+            get { return hash; }
         }
 
         public HandshakeOptions Options
