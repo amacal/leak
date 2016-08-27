@@ -6,12 +6,27 @@ namespace Leak.Loggers
 {
     public class HashLoggerNormal : HashLogger
     {
-        public override void OnInitialized(FileHash hash, PeerClientMetainfo summary)
+        public override void OnFileScheduled(FileHash hash)
+        {
+            Console.WriteLine($"{hash}: scheduled");
+        }
+
+        public override void OnFileDiscovered(FileHash hash)
+        {
+            Console.WriteLine($"{hash}: discovered");
+        }
+
+        public override void OnFileInitialized(FileHash hash, PeerClientMetainfo summary)
         {
             Console.WriteLine($"{hash}: initialized; completed={summary.Completed}; total={summary.Total}");
         }
 
-        public override void OnCompleted(FileHash hash)
+        public override void OnFileStarted(FileHash hash)
+        {
+            Console.WriteLine($"{hash}: started");
+        }
+
+        public override void OnFileCompleted(FileHash hash)
         {
             Console.WriteLine($"{hash}: completed");
         }

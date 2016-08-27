@@ -14,5 +14,7 @@ namespace Leak.Core.Scheduler
         public SchedulerQueue Queue { get; set; }
 
         public SchedulerTask Task { get; set; }
+
+        public SchedulerCallback Callback { get; set; }
     }
 }

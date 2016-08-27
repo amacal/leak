@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Metaget;
+using System;
+using System.IO;
 
 namespace Leak.Core.Scheduler
 {
@@ -24,7 +24,6 @@ namespace Leak.Core.Scheduler
 
         public SchedulerTaskCallback Start(SchedulerContext context)
         {
-            inside.Queue = context.Queue;
             inside.Metaget = new MetagetService(with =>
             {
                 with.Hash = inside.Hash;
@@ -32,6 +31,9 @@ namespace Leak.Core.Scheduler
                 with.Collector = context.Collector.CreateView(inside.Hash);
                 with.Callback = new SchedulerTaskMetadataMetagetCallback(inside);
             });
+
+            inside.Queue = context.Queue;
+            inside.Callback = context.Callback;
 
             inside.Metaget.Start();
 

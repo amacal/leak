@@ -5,7 +5,7 @@ namespace Leak.Core.Listener
 {
     public abstract class PeerListenerCallbackBase : PeerListenerCallback
     {
-        public virtual void OnStarted()
+        public virtual void OnStarted(PeerListenerStarted started)
         {
         }
 

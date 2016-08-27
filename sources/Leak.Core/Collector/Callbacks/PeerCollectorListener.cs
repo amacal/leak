@@ -13,6 +13,11 @@ namespace Leak.Core.Collector.Callbacks
             this.context = context;
         }
 
+        public override void OnStarted(PeerListenerStarted started)
+        {
+            context.Callback.OnListenerStarted(new PeerCollectorListenerStarted(started));
+        }
+
         public override void OnConnecting(PeerListenerConnecting connecting)
         {
             lock (context.Synchronized)

@@ -29,6 +29,8 @@ namespace Leak.Core.Client
                 with.Metainfo = metainfo.Data;
                 with.Destination = context.Destination;
             });
+
+            context.Callback.OnFileScheduled(metainfo.Data.Hash);
         }
 
         public void Start(Action<PeerClientStartConfiguration> configurer)
@@ -52,6 +54,8 @@ namespace Leak.Core.Client
                 with.Hash = configuration.Hash;
                 with.Destination = context.Destination;
             });
+
+            context.Callback.OnFileScheduled(configuration.Hash);
         }
     }
 }

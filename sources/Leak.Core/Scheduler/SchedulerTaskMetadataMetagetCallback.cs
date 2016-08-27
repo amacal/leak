@@ -24,6 +24,8 @@ namespace Leak.Core.Scheduler
             context.Metaget.Stop();
             context.Metaget.Dispose();
 
+            context.Callback.OnMetadataCompleted(hash);
+
             context.Queue.Complete(context.Task);
             context.Queue.Register(initialize);
         }

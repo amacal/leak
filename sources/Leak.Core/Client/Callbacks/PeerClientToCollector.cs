@@ -4,7 +4,7 @@ using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Callbacks
 {
     public class PeerClientToCollector : PeerCollectorCallbackBase
     {
@@ -13,6 +13,10 @@ namespace Leak.Core.Client
         public PeerClientToCollector(PeerClientContext context)
         {
             this.context = context;
+        }
+
+        public override void OnListenerStarted(PeerCollectorListenerStarted started)
+        {
         }
 
         public override void OnConnecting(FileHash hash, PeerAddress peer)

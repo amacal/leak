@@ -22,6 +22,8 @@ namespace Leak.Core.Scheduler
                 with.Destination = context.Destination;
             });
 
+            context.Callback.OnResourceInitialized(hash, bitfield);
+
             context.Queue.Complete(context.Task);
             context.Queue.Register(download);
         }

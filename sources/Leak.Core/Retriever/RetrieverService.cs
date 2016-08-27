@@ -16,6 +16,8 @@ namespace Leak.Core.Retriever
         public void Start()
         {
             context.Timer.Start(OnTick);
+            context.Callback.OnStarted(context.Metainfo.Hash);
+
             context.Queue.Add(new RetrieverTaskVerify());
             context.Queue.Add(new RetrieverTaskFind());
         }

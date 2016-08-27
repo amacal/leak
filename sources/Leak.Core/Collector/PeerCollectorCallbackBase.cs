@@ -7,6 +7,10 @@ namespace Leak.Core.Collector
 {
     public abstract class PeerCollectorCallbackBase : PeerCollectorCallback
     {
+        public virtual void OnListenerStarted(PeerCollectorListenerStarted started)
+        {
+        }
+
         public virtual void OnConnecting(FileHash hash, PeerAddress peer)
         {
         }

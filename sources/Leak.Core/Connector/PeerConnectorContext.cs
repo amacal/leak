@@ -28,6 +28,11 @@ namespace Leak.Core.Connector
             get { return configuration; }
         }
 
+        public NetworkPool Pool
+        {
+            get { return configuration.Pool; }
+        }
+
         public PeerConnectorQueue Queue
         {
             get { return queue; }

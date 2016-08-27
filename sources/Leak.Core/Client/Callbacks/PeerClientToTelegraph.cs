@@ -2,7 +2,7 @@
 using Leak.Core.Telegraph;
 using Leak.Core.Tracker;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Callbacks
 {
     public class PeerClientToTelegraph : TrackerTelegraphCallbackBase
     {

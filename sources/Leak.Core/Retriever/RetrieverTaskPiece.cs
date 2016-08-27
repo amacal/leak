@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
-using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 
 namespace Leak.Core.Retriever
@@ -23,18 +22,6 @@ namespace Leak.Core.Retriever
                 RepositoryBlockData block = new RepositoryBlockData(piece.Index, piece.Offset, piece.Data);
 
                 context.Repository.Write(block);
-                bool completed = context.Omnibus.Complete(new OmnibusBlock(piece.Index, piece.Offset, piece.Size));
-
-                if (completed)
-                {
-                    context.Repository.Verify(new RepositoryPiece(piece.Index));
-                }
-
-                if (context.Omnibus.IsComplete())
-                {
-                    context.Callback.OnCompleted(context.Metainfo.Hash);
-                }
-
                 context.Collector.Increase(peer, 2);
             }
         }

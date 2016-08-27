@@ -41,7 +41,10 @@ namespace Leak.Core.Cando.PeerExchange
                     string host = GetHost(added, i);
                     int port = GetPort(added, i);
 
-                    peers.Add(new PeerAddress(host, port));
+                    if (port > 0)
+                    {
+                        peers.Add(new PeerAddress(host, port));
+                    }
                 }
             }
 

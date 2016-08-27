@@ -6,15 +6,23 @@ namespace Leak.Core.Client
 {
     public abstract class PeerClientCallbackBase : PeerClientCallback
     {
-        public virtual void OnInitialized(FileHash hash, PeerClientMetainfo summary)
+        public virtual void OnFileScheduled(FileHash hash)
         {
         }
 
-        public virtual void OnStarted(FileHash hash)
+        public virtual void OnFileDiscovered(FileHash hash)
         {
         }
 
-        public virtual void OnCompleted(FileHash hash)
+        public virtual void OnFileInitialized(FileHash hash, PeerClientMetainfo summary)
+        {
+        }
+
+        public virtual void OnFileStarted(FileHash hash)
+        {
+        }
+
+        public virtual void OnFileCompleted(FileHash hash)
         {
         }
 

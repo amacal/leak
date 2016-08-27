@@ -5,7 +5,11 @@ namespace Leak.Core.Listener
 {
     public interface PeerListenerCallback
     {
-        void OnStarted();
+        /// <summary>
+        /// Called when the listener entered the listening mode.
+        /// </summary>
+        /// <param name="started">Describes the listening details.</param>
+        void OnStarted(PeerListenerStarted started);
 
         void OnStopped();
 

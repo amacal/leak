@@ -67,7 +67,10 @@ namespace Leak.Core.Tracker
                 string host = String.Join(".", data.Skip(i).Take(4));
                 int port = 256 * data[i + 4] + data[i + 5];
 
-                peers.Add(new PeerAddress(host, port));
+                if (port > 0)
+                {
+                    peers.Add(new PeerAddress(host, port));
+                }
             }
 
             return peers.ToArray();

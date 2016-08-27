@@ -13,7 +13,7 @@ namespace Leak.Commands
             this.handle = handle;
         }
 
-        public override void OnCompleted(FileHash hash)
+        public override void OnFileCompleted(FileHash hash)
         {
             handle.Set();
         }

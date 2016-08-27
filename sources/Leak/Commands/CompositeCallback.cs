@@ -1,8 +1,8 @@
+using Leak.Core.Cando.Metadata;
 using Leak.Core.Client;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using System.Collections.Generic;
-using Leak.Core.Cando.Metadata;
 
 namespace Leak.Commands
 {
@@ -20,27 +20,43 @@ namespace Leak.Commands
             items.Add(item);
         }
 
-        public override void OnInitialized(FileHash hash, PeerClientMetainfo summary)
+        public override void OnFileScheduled(FileHash hash)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnInitialized(hash, summary);
+                item.OnFileScheduled(hash);
             }
         }
 
-        public override void OnStarted(FileHash hash)
+        public override void OnFileDiscovered(FileHash hash)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnStarted(hash);
+                item.OnFileDiscovered(hash);
             }
         }
 
-        public override void OnCompleted(FileHash hash)
+        public override void OnFileInitialized(FileHash hash, PeerClientMetainfo summary)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnCompleted(hash);
+                item.OnFileInitialized(hash, summary);
+            }
+        }
+
+        public override void OnFileStarted(FileHash hash)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnFileStarted(hash);
+            }
+        }
+
+        public override void OnFileCompleted(FileHash hash)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnFileCompleted(hash);
             }
         }
 

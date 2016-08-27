@@ -14,7 +14,6 @@ namespace Leak.Core.Listener
 
         public PeerListener(Action<PeerListenerConfiguration> configurer)
         {
-            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             configuration = configurer.Configure(with =>
             {
                 with.Port = 8080;
@@ -22,19 +21,20 @@ namespace Leak.Core.Listener
                 with.Peer = new PeerHash(Bytes.Random(20));
                 with.Pool = new NetworkPool();
             });
+
+            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         }
 
         public void Start()
         {
-            socket.Bind(new IPEndPoint(IPAddress.Any, configuration.Port));
+            int port = configuration.Port;
+            PeerHash peer = configuration.Peer;
+
+            socket.Bind(new IPEndPoint(IPAddress.Any, port));
             socket.Listen(8);
 
             socket.BeginAccept(OnAccept, this);
-            configuration.Callback.OnStarted();
-        }
-
-        public void Stop()
-        {
+            configuration.Callback.OnStarted(new PeerListenerStarted(peer, port));
         }
 
         private void OnAccept(IAsyncResult result)

@@ -12,14 +12,19 @@ namespace Leak.Core.Scheduler
             this.context = context;
         }
 
+        public override void OnStarted(FileHash hash)
+        {
+            context.Callback.OnDownloadStarted(hash);
+        }
+
         public override void OnCompleted(FileHash hash)
         {
-            context.Callback.OnCompleted(hash);
+            context.Callback.OnDownloadCompleted(hash);
         }
 
         public override void OnPieceVerified(FileHash hash, RetrieverPiece piece)
         {
-            context.Callback.OnVerified(hash, piece);
+            context.Callback.OnPieceVerified(hash, piece);
         }
     }
 }
