@@ -5,7 +5,11 @@ namespace Leak.Core.Telegraph
 {
     public abstract class TrackerTelegraphCallbackBase : TrackerTelegraphCallback
     {
-        public virtual void OnAnnounced(TrackerAnnounce announce)
+        public virtual void OnAnnouncingStarted(TrackerAnnounceConfiguration configuration)
+        {
+        }
+
+        public virtual void OnAnnouncingCompleted(TrackerAnnounce announce)
         {
         }
 

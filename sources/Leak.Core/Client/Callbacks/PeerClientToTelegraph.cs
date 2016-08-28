@@ -13,8 +13,10 @@ namespace Leak.Core.Client.Callbacks
             this.context = context;
         }
 
-        public override void OnAnnounced(TrackerAnnounce announce)
+        public override void OnAnnouncingCompleted(TrackerAnnounce announce)
         {
+            context.Callback.OnAnnounceCompleted(announce.Hash, new PeerClientAnnounced(announce));
+
             foreach (PeerAddress peer in announce.Peers)
             {
                 context.Connector.ConnectTo(announce.Hash, peer);

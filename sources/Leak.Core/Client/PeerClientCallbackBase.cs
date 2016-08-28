@@ -26,11 +26,23 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnPeerConnecting(FileHash hash, PeerAddress peer)
+        public virtual void OnListenerStarted(PeerHash local)
         {
         }
 
-        public virtual void OnPeerConnected(FileHash hash, PeerClientConnected connected)
+        public virtual void OnPeerConnectingTo(FileHash hash, PeerAddress peer)
+        {
+        }
+
+        public virtual void OnPeerConnectingFrom(PeerHash local, PeerAddress peer)
+        {
+        }
+
+        public virtual void OnPeerConnectedTo(FileHash hash, PeerClientConnected connected)
+        {
+        }
+
+        public virtual void OnPeerConnectedFrom(PeerHash local, PeerClientConnected connected)
         {
         }
 
@@ -75,6 +87,18 @@ namespace Leak.Core.Client
         }
 
         public virtual void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
+        {
+        }
+
+        public virtual void OnAnnounceStarted(FileHash hash)
+        {
+        }
+
+        public virtual void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced)
+        {
+        }
+
+        public virtual void OnAnnounceFailed(FileHash hash)
         {
         }
     }

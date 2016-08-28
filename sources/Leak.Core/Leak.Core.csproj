@@ -57,6 +57,10 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Metadata\MetadataSize.cs" />
+    <Compile Include="Client\PeerClientAnnounced.cs" />
+    <Compile Include="Client\PeerClientCallbackFile.cs" />
+    <Compile Include="Client\PeerClientCallbackNetwork.cs" />
+    <Compile Include="Client\PeerClientCallbackTracker.cs" />
     <Compile Include="Client\PeerClientCollection.cs" />
     <Compile Include="Client\PeerClientContext.cs" />
     <Compile Include="Client\PeerClientEntry.cs" />

@@ -91,6 +91,8 @@ namespace Leak.Core.Collector.Callbacks
                 context.Responder.Remove(channel.Endpoint.Session.Peer);
                 context.Cando.Remove(channel.Endpoint.Session);
             }
+
+            context.Callback.OnDisconnected(channel.Endpoint.Session);
         }
 
         public override void OnDisconnected(ConnectionLoopChannel channel)
@@ -103,6 +105,8 @@ namespace Leak.Core.Collector.Callbacks
                 context.Responder.Remove(channel.Endpoint.Session.Peer);
                 context.Cando.Remove(channel.Endpoint.Session);
             }
+
+            context.Callback.OnDisconnected(channel.Endpoint.Session);
         }
     }
 }

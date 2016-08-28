@@ -8,7 +8,7 @@ namespace Leak.Commands
 {
     public class CompositeCallback : PeerClientCallbackBase
     {
-        private List<PeerClientCallback> items;
+        private readonly List<PeerClientCallback> items;
 
         public CompositeCallback()
         {
@@ -60,19 +60,43 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnPeerConnecting(FileHash hash, PeerAddress peer)
+        public override void OnListenerStarted(PeerHash local)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPeerConnecting(hash, peer);
+                item.OnListenerStarted(local);
             }
         }
 
-        public override void OnPeerConnected(FileHash hash, PeerClientConnected connected)
+        public override void OnPeerConnectingTo(FileHash hash, PeerAddress peer)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPeerConnected(hash, connected);
+                item.OnPeerConnectingTo(hash, peer);
+            }
+        }
+
+        public override void OnPeerConnectingFrom(PeerHash local, PeerAddress peer)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnPeerConnectingFrom(local, peer);
+            }
+        }
+
+        public override void OnPeerConnectedTo(FileHash hash, PeerClientConnected connected)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnPeerConnectedTo(hash, connected);
+            }
+        }
+
+        public override void OnPeerConnectedFrom(PeerHash local, PeerClientConnected connected)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnPeerConnectedFrom(local, connected);
             }
         }
 
@@ -161,6 +185,30 @@ namespace Leak.Commands
             foreach (PeerClientCallback item in items)
             {
                 item.OnMetadataReceived(hash, peer, data);
+            }
+        }
+
+        public override void OnAnnounceStarted(FileHash hash)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnAnnounceStarted(hash);
+            }
+        }
+
+        public override void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnAnnounceCompleted(hash, announced);
+            }
+        }
+
+        public override void OnAnnounceFailed(FileHash hash)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnAnnounceFailed(hash);
             }
         }
     }

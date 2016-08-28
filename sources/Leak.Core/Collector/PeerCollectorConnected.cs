@@ -4,13 +4,11 @@ namespace Leak.Core.Collector
 {
     public class PeerCollectorConnected
     {
-        private readonly FileHash hash;
         private readonly PeerAddress peer;
         private readonly int total;
 
-        public PeerCollectorConnected(FileHash hash, PeerAddress peer, int total)
+        public PeerCollectorConnected(PeerAddress peer, int total)
         {
-            this.hash = hash;
             this.peer = peer;
             this.total = total;
         }
@@ -23,11 +21,6 @@ namespace Leak.Core.Collector
         public int Total
         {
             get { return total; }
-        }
-
-        public FileHash Hash
-        {
-            get { return hash; }
         }
     }
 }

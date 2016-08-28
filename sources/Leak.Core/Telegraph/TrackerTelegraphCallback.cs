@@ -5,7 +5,9 @@ namespace Leak.Core.Telegraph
 {
     public interface TrackerTelegraphCallback
     {
-        void OnAnnounced(TrackerAnnounce announce);
+        void OnAnnouncingStarted(TrackerAnnounceConfiguration configuration);
+
+        void OnAnnouncingCompleted(TrackerAnnounce announce);
 
         void OnException(Exception ex);
     }

@@ -8,5 +8,10 @@ namespace Leak.Loggers
         {
             return new ListenerLogger();
         }
+
+        public static ListenerLogger Normal()
+        {
+            return new ListenerLoggerNormal();
+        }
     }
 }

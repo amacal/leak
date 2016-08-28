@@ -30,5 +30,10 @@ namespace Leak.Loggers
         {
             Console.WriteLine($"{hash}: completed");
         }
+
+        public override void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced)
+        {
+            Console.WriteLine($"{hash}: announced; peers={announced.Peers}");
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace Leak.Core.Telegraph
             {
                 TrackerAnnounce response = client.Announce(request);
 
-                callback.OnAnnounced(response);
+                callback.OnAnnouncingCompleted(response);
                 entry.Trigger = DateTime.Now.AddMinutes(30);
             }
             catch (Exception ex)

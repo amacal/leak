@@ -80,8 +80,12 @@ namespace Leak.Core.Client
             });
 
             connector.Start();
+            listener.Start();
         }
 
+        /// <summary>
+        /// The local peer hash.
+        /// </summary>
         public PeerHash Peer
         {
             get { return configuration.Peer; }

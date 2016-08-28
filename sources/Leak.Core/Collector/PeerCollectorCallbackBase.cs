@@ -11,11 +11,19 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnConnecting(FileHash hash, PeerAddress peer)
+        public virtual void OnConnectingTo(FileHash hash, PeerAddress peer)
         {
         }
 
-        public virtual void OnConnected(PeerCollectorConnected connected)
+        public virtual void OnConnectingFrom(PeerAddress peer)
+        {
+        }
+
+        public virtual void OnConnectedTo(FileHash hash, PeerCollectorConnected connected)
+        {
+        }
+
+        public virtual void OnConnectedFrom(PeerCollectorConnected connected)
         {
         }
 

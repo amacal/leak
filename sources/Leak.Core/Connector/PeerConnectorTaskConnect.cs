@@ -44,13 +44,16 @@ namespace Leak.Core.Connector
 
         private void OnConnected(IAsyncResult result)
         {
+            PeerConnectorConnected connected;
+            NetworkConnection connection = null;
+
             try
             {
                 Socket socket = (Socket)result.AsyncState;
                 socket.EndConnect(result);
 
-                NetworkConnection connection = context.Pool.Create(socket, NetworkDirection.Outgoing);
-                PeerConnectorConnected connected = new PeerConnectorConnected(hash, connection);
+                connection = context.Pool.Create(socket, NetworkDirection.Outgoing);
+                connected = new PeerConnectorConnected(hash, connection);
 
                 context.Configuration.Callback.OnConnected(connected);
 
@@ -59,8 +62,12 @@ namespace Leak.Core.Connector
 
                 negotiator.Execute();
             }
-            catch (SocketException)
+            catch (SocketException ex)
             {
+                if (connection != null)
+                {
+                    context.Configuration.Callback.OnException(connection, ex);
+                }
             }
         }
     }

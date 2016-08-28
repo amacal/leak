@@ -37,7 +37,14 @@ namespace Leak.Commands
 
         public PeerClientCallback Listener()
         {
-            return ListenerLogger.Off();
+            switch (Severity("network"))
+            {
+                case "off":
+                    return ListenerLogger.Off();
+
+                default:
+                    return ListenerLogger.Normal();
+            }
         }
 
         public PeerClientCallback Network()

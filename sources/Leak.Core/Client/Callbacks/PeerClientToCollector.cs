@@ -17,22 +17,27 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnListenerStarted(PeerCollectorListenerStarted started)
         {
+            context.Callback.OnListenerStarted(context.Peer);
         }
 
-        public override void OnConnecting(FileHash hash, PeerAddress peer)
+        public override void OnConnectingTo(FileHash hash, PeerAddress peer)
         {
-            if (hash != null)
-            {
-                context.Callback.OnPeerConnecting(hash, peer);
-            }
+            context.Callback.OnPeerConnectingTo(hash, peer);
         }
 
-        public override void OnConnected(PeerCollectorConnected connected)
+        public override void OnConnectingFrom(PeerAddress peer)
         {
-            if (connected.Hash != null)
-            {
-                context.Callback.OnPeerConnected(connected.Hash, new PeerClientConnected(connected));
-            }
+            context.Callback.OnPeerConnectingFrom(context.Peer, peer);
+        }
+
+        public override void OnConnectedTo(FileHash hash, PeerCollectorConnected connected)
+        {
+            context.Callback.OnPeerConnectedTo(hash, new PeerClientConnected(connected));
+        }
+
+        public override void OnConnectedFrom(PeerCollectorConnected connected)
+        {
+            context.Callback.OnPeerConnectedFrom(context.Peer, new PeerClientConnected(connected));
         }
 
         public override void OnRejected(PeerAddress peer)
