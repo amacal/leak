@@ -1,7 +1,11 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Client.Events;
+using Leak.Core.Common;
 
 namespace Leak.Core.Client
 {
+    /// <summary>
+    /// Defines handlers related to the FileHash.
+    /// </summary>
     public interface PeerClientCallbackFile
     {
         /// <summary>

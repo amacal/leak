@@ -1,7 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Tracker;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Events
 {
     public class PeerClientAnnounced
     {

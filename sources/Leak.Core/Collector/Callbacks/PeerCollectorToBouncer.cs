@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Collector.Callbacks
 {
-    public class PeerCollectorBouncer : PeerBouncerCallbackBase
+    public class PeerCollectorToBouncer : PeerBouncerCallbackBase
     {
     }
 }

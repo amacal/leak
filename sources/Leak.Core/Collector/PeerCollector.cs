@@ -29,17 +29,17 @@ namespace Leak.Core.Collector
 
         public PeerListenerCallback CreateListenerCallback()
         {
-            return new PeerCollectorListener(context);
+            return new PeerCollectorToListener(context);
         }
 
         public PeerConnectorCallback CreateConnectorCallback()
         {
-            return new PeerCollectorConnector(context);
+            return new PeerCollectorToConnector(context);
         }
 
         public NetworkPoolCallback CreatePoolCallback()
         {
-            return new PeerCollectorPool(context);
+            return new PeerCollectorToPool(context);
         }
     }
 }

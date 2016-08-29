@@ -5,11 +5,11 @@ using System;
 
 namespace Leak.Core.Collector.Callbacks
 {
-    public class PeerCollectorLoop : ConnectionLoopCallbackBase
+    public class PeerCollectorToLoop : ConnectionLoopCallbackBase
     {
         private readonly PeerCollectorContext context;
 
-        public PeerCollectorLoop(PeerCollectorContext context)
+        public PeerCollectorToLoop(PeerCollectorContext context)
         {
             this.context = context;
         }

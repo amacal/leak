@@ -31,6 +31,8 @@ namespace Leak.Core.Collector
             configuration = configurer.Configure(with =>
             {
                 with.Callback = new PeerCollectorCallbackNothing();
+                with.Metadata = PeerCollectorMetadata.Yes;
+                with.PeerExchange = PeerCollectorPeerExchange.Yes;
             });
 
             peers = new InfantryService(with =>
@@ -45,12 +47,12 @@ namespace Leak.Core.Collector
 
             loop = new ConnectionLoop(with =>
             {
-                with.Callback = new PeerCollectorLoop(this);
+                with.Callback = new PeerCollectorToLoop(this);
             });
 
             bouncer = new PeerBouncerService(with =>
             {
-                with.Callback = new PeerCollectorBouncer();
+                with.Callback = new PeerCollectorToBouncer();
                 with.Connections = 32;
             });
 
@@ -64,17 +66,23 @@ namespace Leak.Core.Collector
 
             cando = new CandoService(with =>
             {
-                with.Callback = new PeerCollectorCando(this);
+                with.Callback = new PeerCollectorToCando(this);
 
-                with.Extensions.Metadata(metadata =>
+                if (configuration.Metadata == PeerCollectorMetadata.Yes)
                 {
-                    metadata.Callback = new PeerCollectorMetadata(this);
-                });
+                    with.Extensions.Metadata(metadata =>
+                    {
+                        metadata.Callback = new PeerCollectorToMetadata(this);
+                    });
+                }
 
-                with.Extensions.PeerExchange(exchange =>
+                if (configuration.PeerExchange == PeerCollectorPeerExchange.Yes)
                 {
-                    exchange.Callback = new PeerCollectorExchange(this);
-                });
+                    with.Extensions.PeerExchange(exchange =>
+                    {
+                        exchange.Callback = new PeerCollectorToExchange(this);
+                    });
+                }
             });
 
             ranking = new RankingService(with =>

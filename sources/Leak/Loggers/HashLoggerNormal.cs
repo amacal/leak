@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Client;
 using Leak.Core.Common;
 using System;
+using Leak.Core.Client.Events;
 
 namespace Leak.Loggers
 {

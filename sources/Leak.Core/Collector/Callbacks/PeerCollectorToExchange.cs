@@ -3,11 +3,11 @@ using Leak.Core.Common;
 
 namespace Leak.Core.Collector.Callbacks
 {
-    public class PeerCollectorExchange : PeerExchangeCallbackBase
+    public class PeerCollectorToExchange : PeerExchangeCallbackBase
     {
         private readonly PeerCollectorContext context;
 
-        public PeerCollectorExchange(PeerCollectorContext context)
+        public PeerCollectorToExchange(PeerCollectorContext context)
         {
             this.context = context;
         }

@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Client.Events;
+using Leak.Core.Common;
 using Leak.Core.Messages;
 using Leak.Core.Retriever;
 using Leak.Core.Scheduler;

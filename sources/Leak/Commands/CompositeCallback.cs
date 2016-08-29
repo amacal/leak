@@ -3,6 +3,7 @@ using Leak.Core.Client;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using System.Collections.Generic;
+using Leak.Core.Client.Events;
 
 namespace Leak.Commands
 {

@@ -4,11 +4,11 @@ using System;
 
 namespace Leak.Core.Collector.Callbacks
 {
-    public class PeerCollectorPool : NetworkPoolCallbackBase
+    public class PeerCollectorToPool : NetworkPoolCallbackBase
     {
         private readonly PeerCollectorContext context;
 
-        public PeerCollectorPool(PeerCollectorContext context)
+        public PeerCollectorToPool(PeerCollectorContext context)
         {
             this.context = context;
         }

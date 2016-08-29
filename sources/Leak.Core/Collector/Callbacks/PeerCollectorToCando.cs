@@ -4,11 +4,11 @@ using Leak.Core.Messages;
 
 namespace Leak.Core.Collector.Callbacks
 {
-    public class PeerCollectorCando : CandoCallbackBase
+    public class PeerCollectorToCando : CandoCallbackBase
     {
         private readonly PeerCollectorContext context;
 
-        public PeerCollectorCando(PeerCollectorContext context)
+        public PeerCollectorToCando(PeerCollectorContext context)
         {
             this.context = context;
         }

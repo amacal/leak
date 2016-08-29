@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Messages;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Events
 {
     public class PeerClientMetainfo
     {

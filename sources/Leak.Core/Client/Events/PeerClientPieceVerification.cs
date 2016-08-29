@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Retriever;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Events
 {
     public class PeerClientPieceVerification
     {

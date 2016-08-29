@@ -4,11 +4,11 @@ using Leak.Core.Network;
 
 namespace Leak.Core.Collector.Callbacks
 {
-    public class PeerCollectorListener : PeerListenerCallbackBase
+    public class PeerCollectorToListener : PeerListenerCallbackBase
     {
         private readonly PeerCollectorContext context;
 
-        public PeerCollectorListener(PeerCollectorContext context)
+        public PeerCollectorToListener(PeerCollectorContext context)
         {
             this.context = context;
         }

@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Cando.Metadata;
+using Leak.Core.Client.Events;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 
