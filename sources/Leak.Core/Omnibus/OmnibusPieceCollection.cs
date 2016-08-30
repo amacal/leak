@@ -7,38 +7,30 @@ namespace Leak.Core.Omnibus
         private OmnibusPiece[] items;
         private int completed;
 
-        public OmnibusPieceCollection(OmnibusConfiguration configuration)
+        public OmnibusPieceCollection(OmnibusContext context)
         {
+            int size = context.Metainfo.Pieces.Length;
+
             this.completed = 0;
-            this.items = new OmnibusPiece[configuration.Metainfo.Pieces.Length];
+            this.items = new OmnibusPiece[size];
 
-            int left = configuration.GetBlocksInTotal();
-            int blocks = configuration.GetBlocksInPiece();
+            int left = context.Metainfo.GetBlocksInTotal();
+            int blocks = context.Metainfo.GetBlocksInPiece();
 
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < size; i++)
             {
                 blocks = Math.Min(blocks, left);
                 left = left - blocks;
 
-                items[i] = new OmnibusPieceNothing(blocks);
-            }
-        }
-
-        public void Reduce(int size)
-        {
-            Array.Resize(ref items, size);
-        }
-
-        public void Complete(int piece)
-        {
-            bool before = items[piece].IsComplete();
-
-            items[piece] = items[piece].Complete();
-            bool after = items[piece].IsComplete();
-
-            if (before == false && after == true)
-            {
-                completed++;
+                if (context.Bitfield[i])
+                {
+                    items[i] = new OmnibusPieceCompleted(blocks);
+                    completed++;
+                }
+                else
+                {
+                    items[i] = new OmnibusPieceNothing(blocks);
+                }
             }
         }
 

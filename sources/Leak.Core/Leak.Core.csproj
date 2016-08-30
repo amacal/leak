@@ -57,7 +57,7 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Metadata\MetadataSize.cs" />
-    <Compile Include="Client\Events\PeerClientAnnounced.cs" />
+    <Compile Include="Client\Events\FileAnnouncedEvent.cs" />
     <Compile Include="Client\PeerClientCallbackFile.cs" />
     <Compile Include="Client\PeerClientCallbackNetwork.cs" />
     <Compile Include="Client\PeerClientCallbackTracker.cs" />
@@ -79,6 +79,7 @@
     <Compile Include="Connector\PeerConnectorTimer.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
+    <Compile Include="Omnibus\OmnibusContext.cs" />
     <Compile Include="Repository\RepositoryBlock.cs" />
     <Compile Include="Repository\RepositoryBlockData.cs" />
     <Compile Include="Repository\RepositoryCallback.cs" />
@@ -169,13 +170,13 @@
     <Compile Include="Client\PeerClientListenerConfiguration.cs" />
     <Compile Include="Client\PeerClientListenerStatus.cs" />
     <Compile Include="Client\PeerClientMessage.cs" />
-    <Compile Include="Client\Events\PeerClientMetainfo.cs" />
+    <Compile Include="Client\Events\FileInitializedEvent.cs" />
     <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Client\PeerClientCallback.cs" />
     <Compile Include="Client\PeerClientCallbackBase.cs" />
     <Compile Include="Client\PeerClientCallbackNothing.cs" />
     <Compile Include="Client\PeerClientConfiguration.cs" />
-    <Compile Include="Client\Events\PeerClientPieceVerification.cs" />
+    <Compile Include="Client\Events\PieceVerifiedEvent.cs" />
     <Compile Include="Client\PeerClientStartConfiguration.cs" />
     <Compile Include="Client\Callbacks\PeerClientToCollector.cs" />
     <Compile Include="Client\Callbacks\PeerClientToTelegraph.cs" />
@@ -388,7 +389,7 @@
     <Compile Include="Ranking\RankingEntry.cs" />
     <Compile Include="Ranking\RankingService.cs" />
     <Compile Include="Repository\RepositoryStream.cs" />
-    <Compile Include="Omnibus\OmnibusBitfield.cs" />
+    <Compile Include="Omnibus\OmnibusService.cs" />
     <Compile Include="Omnibus\OmnibusPiece.cs" />
     <Compile Include="Omnibus\OmnibusPieceCompleted.cs" />
     <Compile Include="Omnibus\OmnibusPieceNothing.cs" />

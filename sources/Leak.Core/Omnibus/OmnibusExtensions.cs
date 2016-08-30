@@ -1,15 +1,17 @@
-﻿namespace Leak.Core.Omnibus
+﻿using Leak.Core.Metadata;
+
+namespace Leak.Core.Omnibus
 {
     public static class OmnibusExtensions
     {
-        public static int GetBlocksInPiece(this OmnibusConfiguration configuration)
+        public static int GetBlocksInPiece(this Metainfo metainfo)
         {
-            return configuration.Metainfo.Properties.PieceSize / configuration.Metainfo.Properties.BlockSize;
+            return metainfo.Properties.PieceSize / metainfo.Properties.BlockSize;
         }
 
-        public static int GetBlocksInTotal(this OmnibusConfiguration configuration)
+        public static int GetBlocksInTotal(this Metainfo metainfo)
         {
-            return (int)((configuration.Metainfo.Properties.TotalSize - 1) / configuration.Metainfo.Properties.BlockSize + 1);
+            return (int)((metainfo.Properties.TotalSize - 1) / metainfo.Properties.BlockSize + 1);
         }
     }
 }

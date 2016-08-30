@@ -3,11 +3,11 @@ using Leak.Core.Tracker;
 
 namespace Leak.Core.Client.Events
 {
-    public class PeerClientAnnounced
+    public class FileAnnouncedEvent
     {
         private readonly TrackerAnnounce announce;
 
-        public PeerClientAnnounced(TrackerAnnounce announce)
+        public FileAnnouncedEvent(TrackerAnnounce announce)
         {
             this.announce = announce;
         }

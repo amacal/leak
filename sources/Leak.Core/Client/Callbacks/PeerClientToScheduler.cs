@@ -22,12 +22,12 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnResourceInitialized(FileHash hash, Bitfield bitfield)
         {
-            context.Callback.OnFileInitialized(hash, new PeerClientMetainfo(bitfield));
+            context.Callback.OnFileInitialized(hash, new FileInitializedEvent(bitfield));
         }
 
         public override void OnPieceVerified(FileHash hash, RetrieverPiece piece)
         {
-            context.Callback.OnPieceVerified(hash, new PeerClientPieceVerification(piece));
+            context.Callback.OnPieceVerified(hash, new PieceVerifiedEvent(hash, piece));
         }
 
         public override void OnDownloadStarted(FileHash hash)

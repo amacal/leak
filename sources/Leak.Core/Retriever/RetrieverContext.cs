@@ -10,7 +10,7 @@ namespace Leak.Core.Retriever
     {
         private readonly RetrieverConfiguration configuration;
         private readonly RepositoryService repository;
-        private readonly OmnibusBitfield omnibus;
+        private readonly OmnibusService omnibus;
         private readonly RetrieverQueue queue;
         private readonly RetrieverTimer timer;
 
@@ -28,12 +28,11 @@ namespace Leak.Core.Retriever
                 with.Callback = new RetrieverToRepository(this);
             });
 
-            omnibus = new OmnibusBitfield(new OmnibusConfiguration
+            omnibus = new OmnibusService(with =>
             {
-                Metainfo = configuration.Metainfo
+                with.Metainfo = configuration.Metainfo;
+                with.Bitfield = configuration.Bitfield;
             });
-
-            omnibus.Complete(configuration.Bitfield);
 
             queue = new RetrieverQueue();
             timer = new RetrieverTimer(TimeSpan.FromSeconds(0.25));
@@ -74,7 +73,7 @@ namespace Leak.Core.Retriever
             get { return timer; }
         }
 
-        public OmnibusBitfield Omnibus
+        public OmnibusService Omnibus
         {
             get { return omnibus; }
         }

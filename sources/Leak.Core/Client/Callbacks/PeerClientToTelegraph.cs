@@ -16,7 +16,7 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnAnnouncingCompleted(TrackerAnnounce announce)
         {
-            context.Callback.OnAnnounceCompleted(announce.Hash, new PeerClientAnnounced(announce));
+            context.Callback.OnAnnounceCompleted(announce.Hash, new FileAnnouncedEvent(announce));
 
             foreach (PeerAddress peer in announce.Peers)
             {

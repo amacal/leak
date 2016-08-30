@@ -37,11 +37,11 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnFileInitialized(FileHash hash, PeerClientMetainfo summary)
+        public override void OnFileInitialized(FileHash hash, FileInitializedEvent @event)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnFileInitialized(hash, summary);
+                item.OnFileInitialized(hash, @event);
             }
         }
 
@@ -173,11 +173,11 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification)
+        public override void OnPieceVerified(FileHash hash, PieceVerifiedEvent @event)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnPieceVerified(hash, verification);
+                item.OnPieceVerified(hash, @event);
             }
         }
 
@@ -197,11 +197,11 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced)
+        public override void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event)
         {
             foreach (PeerClientCallback item in items)
             {
-                item.OnAnnounceCompleted(hash, announced);
+                item.OnAnnounceCompleted(hash, @event);
             }
         }
 

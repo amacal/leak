@@ -24,8 +24,8 @@ namespace Leak.Core.Client
         /// Called when the resource is initialized.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
-        /// <param name="summary">Describes the affected resource.</param>
-        void OnFileInitialized(FileHash hash, PeerClientMetainfo summary);
+        /// <param name="event">Describes the affected resource.</param>
+        void OnFileInitialized(FileHash hash, FileInitializedEvent @event);
 
         /// <summary>
         /// Called when the downloading started.

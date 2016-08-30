@@ -2,11 +2,11 @@
 
 namespace Leak.Core.Client.Events
 {
-    public class PeerClientMetainfo
+    public class FileInitializedEvent
     {
         private readonly Bitfield bitfield;
 
-        public PeerClientMetainfo(Bitfield bitfield)
+        public FileInitializedEvent(Bitfield bitfield)
         {
             this.bitfield = bitfield;
         }

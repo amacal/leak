@@ -10,11 +10,11 @@ namespace Leak.Core.Omnibus
             DateTime now = DateTime.Now;
             int left = Math.Min(count, count - context.Reservations.Count(context.Peer));
 
-            long totalSize = context.Configuration.Metainfo.Properties.TotalSize;
-            int blockSize = context.Configuration.Metainfo.Properties.BlockSize;
+            long totalSize = context.Metainfo.Properties.TotalSize;
+            int blockSize = context.Metainfo.Properties.BlockSize;
 
-            int blocks = context.Configuration.GetBlocksInPiece();
-            int pieces = context.Configuration.Metainfo.Properties.Pieces;
+            int blocks = context.Metainfo.GetBlocksInPiece();
+            int pieces = context.Metainfo.Properties.Pieces;
 
             for (int i = 0; left > 0 && i < pieces; i++)
             {

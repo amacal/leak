@@ -7,7 +7,7 @@ namespace Leak.Core.Client
     {
         void OnAnnounceStarted(FileHash hash);
 
-        void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced);
+        void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event);
 
         void OnAnnounceFailed(FileHash hash);
     }

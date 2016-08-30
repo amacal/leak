@@ -17,9 +17,9 @@ namespace Leak.Loggers
             Console.WriteLine($"{hash}: discovered");
         }
 
-        public override void OnFileInitialized(FileHash hash, PeerClientMetainfo summary)
+        public override void OnFileInitialized(FileHash hash, FileInitializedEvent @event)
         {
-            Console.WriteLine($"{hash}: initialized; completed={summary.Completed}; total={summary.Total}");
+            Console.WriteLine($"{hash}: initialized; completed={@event.Completed}; total={@event.Total}");
         }
 
         public override void OnFileStarted(FileHash hash)
@@ -32,9 +32,9 @@ namespace Leak.Loggers
             Console.WriteLine($"{hash}: completed");
         }
 
-        public override void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced)
+        public override void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event)
         {
-            Console.WriteLine($"{hash}: announced; peers={announced.Peers}");
+            Console.WriteLine($"{hash}: announced; peers={@event.Peers}");
         }
     }
 }

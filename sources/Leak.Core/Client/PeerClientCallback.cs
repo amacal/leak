@@ -23,7 +23,7 @@ namespace Leak.Core.Client
 
         void OnBlockReceived(FileHash hash, PeerHash peer, Piece piece);
 
-        void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification);
+        void OnPieceVerified(FileHash hash, PieceVerifiedEvent @event);
 
         void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data);
     }

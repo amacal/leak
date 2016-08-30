@@ -15,7 +15,7 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnFileInitialized(FileHash hash, PeerClientMetainfo summary)
+        public virtual void OnFileInitialized(FileHash hash, FileInitializedEvent @event)
         {
         }
 
@@ -83,7 +83,7 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification)
+        public virtual void OnPieceVerified(FileHash hash, PieceVerifiedEvent @event)
         {
         }
 
@@ -95,7 +95,7 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnAnnounceCompleted(FileHash hash, PeerClientAnnounced announced)
+        public virtual void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event)
         {
         }
 

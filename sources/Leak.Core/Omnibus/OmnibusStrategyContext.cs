@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Metadata;
 
 namespace Leak.Core.Omnibus
 {
@@ -15,10 +16,10 @@ namespace Leak.Core.Omnibus
         /// </summary>
         public Bitfield Bitfield { get; set; }
 
+        public Metainfo Metainfo { get; set; }
+
         public OmnibusPieceCollection Pieces { get; set; }
 
         public OmnibusReservationCollection Reservations { get; set; }
-
-        public OmnibusConfiguration Configuration { get; set; }
     }
 }

@@ -37,9 +37,9 @@ namespace Leak.Loggers
             Console.WriteLine($"{peer}: unchoke");
         }
 
-        public override void OnPieceVerified(FileHash hash, PeerClientPieceVerification verification)
+        public override void OnPieceVerified(FileHash hash, PieceVerifiedEvent @event)
         {
-            Console.WriteLine($"{hash}: verified; piece={verification.Piece}");
+            Console.WriteLine($"{hash}: verified; piece={@event.Piece}");
         }
 
         public override void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
