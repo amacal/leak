@@ -22,9 +22,14 @@ namespace Leak.Core.Scheduler
             context.Callback.OnDownloadCompleted(hash);
         }
 
-        public override void OnPieceVerified(FileHash hash, RetrieverPiece piece)
+        public override void OnVerified(FileHash hash, RetrieverPiece piece)
         {
             context.Callback.OnPieceVerified(hash, piece);
+        }
+
+        public override void OnProgress(FileHash hash, BitfieldInfo bitfield)
+        {
+            context.Callback.OnDownloadChanged(hash, bitfield);
         }
     }
 }

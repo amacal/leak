@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Messages
+﻿namespace Leak.Core.Common
 {
     public class Bitfield
     {
@@ -19,11 +19,6 @@
         public int Completed
         {
             get { return completed; }
-        }
-
-        public bool IsCompleted()
-        {
-            return items.Length - 8 < completed;
         }
 
         public bool this[int index]

@@ -23,6 +23,10 @@ namespace Leak.Core.Client
         {
         }
 
+        public virtual void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
+        {
+        }
+
         public virtual void OnFileCompleted(FileHash hash)
         {
         }

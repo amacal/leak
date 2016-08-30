@@ -1,4 +1,4 @@
-﻿using Leak.Core.Messages;
+﻿using Leak.Core.Common;
 
 namespace Leak.Core.Client.Events
 {

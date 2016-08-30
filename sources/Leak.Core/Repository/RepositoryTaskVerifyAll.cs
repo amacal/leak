@@ -2,6 +2,7 @@
 using Leak.Core.Metadata;
 using System.IO;
 using System.Security.Cryptography;
+using Leak.Core.Common;
 
 namespace Leak.Core.Repository
 {

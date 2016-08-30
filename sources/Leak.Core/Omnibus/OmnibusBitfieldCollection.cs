@@ -10,7 +10,7 @@ namespace Leak.Core.Omnibus
 
         public OmnibusBitfieldCollection()
         {
-            this.byPeer = new Dictionary<PeerHash, Bitfield>();
+            byPeer = new Dictionary<PeerHash, Bitfield>();
         }
 
         public void Add(PeerHash peer, Bitfield bitfield)
@@ -21,14 +21,6 @@ namespace Leak.Core.Omnibus
         public bool Contains(PeerHash peer)
         {
             return byPeer.ContainsKey(peer);
-        }
-
-        public bool IsComplete(PeerHash peer)
-        {
-            Bitfield bitfield;
-            byPeer.TryGetValue(peer, out bitfield);
-
-            return bitfield?.IsCompleted() == true;
         }
 
         public Bitfield ByPeer(PeerHash peer)

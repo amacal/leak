@@ -20,6 +20,11 @@ namespace Leak.Core.Omnibus
             context = new OmnibusContext(configurer);
         }
 
+        /// <summary>
+        /// Registers a bitfield belonging to the peer.
+        /// </summary>
+        /// <param name="peer">The peer affected by a bitfield.</param>
+        /// <param name="bitfield">The bitfield of requested hash.</param>
         public void Add(PeerHash peer, Bitfield bitfield)
         {
             lock (context.Synchronized)
@@ -68,14 +73,6 @@ namespace Leak.Core.Omnibus
             lock (context.Synchronized)
             {
                 return context.Pieces.IsComplete(piece);
-            }
-        }
-
-        public bool IsComplete(PeerHash peer)
-        {
-            lock (context.Synchronized)
-            {
-                return context.Bitfields.IsComplete(peer);
             }
         }
 

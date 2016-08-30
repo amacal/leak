@@ -12,7 +12,11 @@ namespace Leak.Core.Retriever
         {
         }
 
-        public virtual void OnPieceVerified(FileHash hash, RetrieverPiece piece)
+        public virtual void OnVerified(FileHash hash, RetrieverPiece piece)
+        {
+        }
+
+        public virtual void OnProgress(FileHash hash, BitfieldInfo bitfield)
         {
         }
     }

@@ -70,6 +70,7 @@
     <Compile Include="Collector\PeerCollectorListenerStarted.cs" />
     <Compile Include="Collector\PeerCollectorMetadata.cs" />
     <Compile Include="Collector\PeerCollectorPeerExchange.cs" />
+    <Compile Include="Common\BitfieldInfo.cs" />
     <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Connector\PeerConnectorConnected.cs" />
     <Compile Include="Connector\PeerConnectorContext.cs" />
@@ -79,6 +80,9 @@
     <Compile Include="Connector\PeerConnectorTimer.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
+    <Compile Include="Omnibus\OmnibusCallback.cs" />
+    <Compile Include="Omnibus\OmnibusCallbackBase.cs" />
+    <Compile Include="Omnibus\OmnibusCallbackNothing.cs" />
     <Compile Include="Omnibus\OmnibusContext.cs" />
     <Compile Include="Repository\RepositoryBlock.cs" />
     <Compile Include="Repository\RepositoryBlockData.cs" />
@@ -97,11 +101,13 @@
     <Compile Include="Repository\RepositoryTaskVerifyPiece.cs" />
     <Compile Include="Repository\RepositoryTaskWriteBlock.cs" />
     <Compile Include="Repository\RepositoryTimer.cs" />
+    <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
     <Compile Include="Retriever\RetrieverCallback.cs" />
     <Compile Include="Retriever\RetrieverCallbackBase.cs" />
     <Compile Include="Retriever\RetrieverCallbackNothing.cs" />
     <Compile Include="Retriever\RetrieverConfiguration.cs" />
     <Compile Include="Retriever\RetrieverContext.cs" />
+    <Compile Include="Retriever\RetrieverExtensions.cs" />
     <Compile Include="Retriever\RetrieverPiece.cs" />
     <Compile Include="Retriever\RetrieverQueue.cs" />
     <Compile Include="Retriever\RetrieverService.cs" />
@@ -112,7 +118,7 @@
     <Compile Include="Retriever\RetrieverTaskPiece.cs" />
     <Compile Include="Retriever\RetrieverTaskVerify.cs" />
     <Compile Include="Retriever\RetrieverTimer.cs" />
-    <Compile Include="Retriever\RetrieverToRepository.cs" />
+    <Compile Include="Retriever\Callbacks\RetrieverToRepository.cs" />
     <Compile Include="Scheduler\SchedulerCallback.cs" />
     <Compile Include="Scheduler\SchedulerCallbackBase.cs" />
     <Compile Include="Scheduler\SchedulerCallbackNothing.cs" />
@@ -265,7 +271,7 @@
     <Compile Include="Loop\ConnectionLoopHandshakeToConnector.cs" />
     <Compile Include="Loop\ConnectionLoopHandshakeToListener.cs" />
     <Compile Include="Loop\ConnectionLoopMessage.cs" />
-    <Compile Include="Messages\Bitfield.cs" />
+    <Compile Include="Common\Bitfield.cs" />
     <Compile Include="Messages\BitfieldMessage.cs" />
     <Compile Include="Messages\ChokeMessage.cs" />
     <Compile Include="Messages\Extended.cs" />

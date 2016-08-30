@@ -2,7 +2,7 @@
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Retriever.Callbacks
 {
     public class RetrieverToRepository : RepositoryCallbackBase
     {
@@ -26,7 +26,7 @@ namespace Leak.Core.Retriever
 
         public override void OnAccepted(FileHash hash, RepositoryPiece piece)
         {
-            context.Callback.OnPieceVerified(hash, new RetrieverPiece(piece.Index));
+            context.Callback.OnVerified(hash, new RetrieverPiece(piece.Index));
 
             if (context.Omnibus.IsComplete())
             {

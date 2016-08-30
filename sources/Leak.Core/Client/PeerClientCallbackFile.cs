@@ -34,6 +34,13 @@ namespace Leak.Core.Client
         void OnFileStarted(FileHash hash);
 
         /// <summary>
+        /// Called when the downloading progress changed.
+        /// </summary>
+        /// <param name="hash">The hash of the affected resource.</param>
+        /// <param name="bitfield">The current bitfield describing the progress.</param>
+        void OnFileChanged(FileHash hash, BitfieldInfo bitfield);
+
+        /// <summary>
         /// Called when the downloading completed.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>

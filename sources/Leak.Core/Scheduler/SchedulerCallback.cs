@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 using Leak.Core.Retriever;
 
 namespace Leak.Core.Scheduler
@@ -31,6 +30,13 @@ namespace Leak.Core.Scheduler
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
         void OnDownloadStarted(FileHash hash);
+
+        /// <summary>
+        /// Called when the download progress changed.
+        /// </summary>
+        /// <param name="hash">The hash of the affected resource.</param>
+        /// <param name="bitfield">The current bitfield describing the progress.</param>
+        void OnDownloadChanged(FileHash hash, BitfieldInfo bitfield);
 
         /// <summary>
         /// Called when the downloading task completed and

@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Leak.Core.Common;
+using System;
 
 namespace Leak.Core.Omnibus
 {
     public class OmnibusPieceCollection
     {
-        private OmnibusPiece[] items;
+        private readonly OmnibusContext context;
+        private readonly OmnibusPiece[] items;
+
         private int completed;
 
         public OmnibusPieceCollection(OmnibusContext context)
         {
+            this.context = context;
             int size = context.Metainfo.Pieces.Length;
 
             this.completed = 0;
@@ -44,6 +48,7 @@ namespace Leak.Core.Omnibus
             if (before == false && after == true)
             {
                 completed++;
+                CallOnChanged();
             }
 
             return after;
@@ -59,6 +64,7 @@ namespace Leak.Core.Omnibus
             if (before == true && after == false)
             {
                 completed--;
+                CallOnChanged();
             }
         }
 
@@ -75,6 +81,14 @@ namespace Leak.Core.Omnibus
         public bool IsComplete(int piece, int block)
         {
             return items[piece].IsComplete(block);
+        }
+
+        private void CallOnChanged()
+        {
+            FileHash hash = context.Metainfo.Hash;
+            BitfieldInfo bitfield = new BitfieldInfo(items.Length, completed);
+
+            context.Callback.OnChanged(hash, bitfield);
         }
     }
 }

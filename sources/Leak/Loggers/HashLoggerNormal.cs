@@ -1,7 +1,6 @@
-﻿using Leak.Core.Client;
+﻿using Leak.Core.Client.Events;
 using Leak.Core.Common;
 using System;
-using Leak.Core.Client.Events;
 
 namespace Leak.Loggers
 {
@@ -25,6 +24,11 @@ namespace Leak.Loggers
         public override void OnFileStarted(FileHash hash)
         {
             Console.WriteLine($"{hash}: started");
+        }
+
+        public override void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
+        {
+            Console.WriteLine($"{hash}: changed; completed={bitfield.Completed}; total={bitfield.Total}");
         }
 
         public override void OnFileCompleted(FileHash hash)

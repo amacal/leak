@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 using Leak.Core.Retriever;
 
 namespace Leak.Core.Scheduler
@@ -19,6 +18,10 @@ namespace Leak.Core.Scheduler
         }
 
         public virtual void OnDownloadStarted(FileHash hash)
+        {
+        }
+
+        public virtual void OnDownloadChanged(FileHash hash, BitfieldInfo bitfield)
         {
         }
 

@@ -1,4 +1,4 @@
-﻿using Leak.Core.Messages;
+﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
 using System;
 
@@ -16,12 +16,13 @@ namespace Leak.Core.Omnibus
         {
             configuration = configurer.Configure(with =>
             {
+                with.Callback = new OmnibusCallbackNothing();
             });
 
-            synchronized = new object();
             bitfields = new OmnibusBitfieldCollection();
             reservations = new OmnibusReservationCollection();
 
+            synchronized = new object();
             pieces = new OmnibusPieceCollection(this);
         }
 
@@ -33,6 +34,11 @@ namespace Leak.Core.Omnibus
         public Bitfield Bitfield
         {
             get { return configuration.Bitfield; }
+        }
+
+        public OmnibusCallback Callback
+        {
+            get { return configuration.Callback; }
         }
 
         public object Synchronized

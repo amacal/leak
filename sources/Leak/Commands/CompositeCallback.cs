@@ -1,9 +1,9 @@
 using Leak.Core.Cando.Metadata;
 using Leak.Core.Client;
+using Leak.Core.Client.Events;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using System.Collections.Generic;
-using Leak.Core.Client.Events;
 
 namespace Leak.Commands
 {
@@ -50,6 +50,14 @@ namespace Leak.Commands
             foreach (PeerClientCallback item in items)
             {
                 item.OnFileStarted(hash);
+            }
+        }
+
+        public override void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnFileChanged(hash, bitfield);
             }
         }
 

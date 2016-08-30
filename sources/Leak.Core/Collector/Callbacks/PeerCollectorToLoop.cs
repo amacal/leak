@@ -2,6 +2,7 @@
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using System;
+using Leak.Core.Common;
 
 namespace Leak.Core.Collector.Callbacks
 {

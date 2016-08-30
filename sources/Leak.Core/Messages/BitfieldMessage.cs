@@ -1,4 +1,5 @@
-﻿using Leak.Core.Network;
+﻿using Leak.Core.Common;
+using Leak.Core.Network;
 
 namespace Leak.Core.Messages
 {

@@ -21,6 +21,13 @@ namespace Leak.Core.Retriever
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
         /// <param name="piece">The successfully verified piece.</param>
-        void OnPieceVerified(FileHash hash, RetrieverPiece piece);
+        void OnVerified(FileHash hash, RetrieverPiece piece);
+
+        /// <summary>
+        /// Called when the progress changed.
+        /// </summary>
+        /// <param name="hash">The hash of the affected resource.</param>
+        /// <param name="bitfield">The current bitfield describing the progress.</param>
+        void OnProgress(FileHash hash, BitfieldInfo bitfield);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Leak.Core.Messages;
+﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
 
 namespace Leak.Core.Omnibus
@@ -8,5 +8,7 @@ namespace Leak.Core.Omnibus
         public Metainfo Metainfo { get; set; }
 
         public Bitfield Bitfield { get; set; }
+
+        public OmnibusCallback Callback { get; set; }
     }
 }

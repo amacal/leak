@@ -2,6 +2,7 @@
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
+using Leak.Core.Retriever.Callbacks;
 using System;
 
 namespace Leak.Core.Retriever
@@ -32,6 +33,7 @@ namespace Leak.Core.Retriever
             {
                 with.Metainfo = configuration.Metainfo;
                 with.Bitfield = configuration.Bitfield;
+                with.Callback = new RetrieverToOmnibus(this);
             });
 
             queue = new RetrieverQueue();
