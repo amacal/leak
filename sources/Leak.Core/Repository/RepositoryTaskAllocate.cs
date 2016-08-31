@@ -1,9 +1,10 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Core;
+using Leak.Core.Metadata;
 using System.IO;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskAllocate : RepositoryTask
+    public class RepositoryTaskAllocate : LeakTask<RepositoryContext>
     {
         public void Execute(RepositoryContext context)
         {

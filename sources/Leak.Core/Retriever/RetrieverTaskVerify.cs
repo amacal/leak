@@ -1,6 +1,8 @@
-﻿namespace Leak.Core.Retriever
+﻿using Leak.Core.Core;
+
+namespace Leak.Core.Retriever
 {
-    public class RetrieverTaskVerify : RetrieverTask
+    public class RetrieverTaskVerify : LeakTask<RetrieverContext>
     {
         public void Execute(RetrieverContext context)
         {

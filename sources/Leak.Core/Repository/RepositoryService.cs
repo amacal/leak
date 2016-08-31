@@ -9,6 +9,10 @@ namespace Leak.Core.Repository
         public RepositoryService(Action<RepositoryConfiguration> configurer)
         {
             context = new RepositoryContext(configurer);
+        }
+
+        public void Start()
+        {
             context.Timer.Start(OnTick);
         }
 

@@ -36,6 +36,7 @@ namespace Leak.Core.Scheduler
 
             inside.Repository.Allocate();
             inside.Repository.Verify();
+            inside.Repository.Start();
 
             return new SchedulerTaskCallbackNothing();
         }

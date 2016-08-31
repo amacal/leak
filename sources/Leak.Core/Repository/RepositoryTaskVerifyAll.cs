@@ -1,12 +1,12 @@
-﻿using Leak.Core.Messages;
+﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Metadata;
 using System.IO;
 using System.Security.Cryptography;
-using Leak.Core.Common;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskVerifyAll : RepositoryTask
+    public class RepositoryTaskVerifyAll : LeakTask<RepositoryContext>
     {
         public void Execute(RepositoryContext context)
         {

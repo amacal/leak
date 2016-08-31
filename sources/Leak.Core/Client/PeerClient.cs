@@ -18,7 +18,7 @@ namespace Leak.Core.Client
         {
             foreach (string tracker in metainfo.Trackers)
             {
-                context.Telegraph.Start(tracker, with =>
+                context.Telegraph.Register(tracker, with =>
                 {
                     with.Hash = metainfo.Data.Hash;
                 });
@@ -43,7 +43,7 @@ namespace Leak.Core.Client
 
             foreach (string tracker in configuration.Trackers)
             {
-                context.Telegraph.Start(tracker, with =>
+                context.Telegraph.Register(tracker, with =>
                 {
                     with.Hash = configuration.Hash;
                 });

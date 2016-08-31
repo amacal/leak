@@ -17,10 +17,8 @@ namespace Leak.Core.Tracker
             this.port = port;
         }
 
-        public TrackerAnnounce Announce(Action<TrackerAnnounceConfiguration> configurer)
+        public TrackerAnnounce Announce(TrackerRequest configuration)
         {
-            TrackerAnnounceConfiguration configuration = Configure(configurer);
-
             int received;
 
             byte[] connect = new byte[16];
@@ -76,9 +74,9 @@ namespace Leak.Core.Tracker
             return peers.ToArray();
         }
 
-        private static TrackerAnnounceConfiguration Configure(Action<TrackerAnnounceConfiguration> configurer)
+        private static TrackerRequest Configure(Action<TrackerRequest> configurer)
         {
-            TrackerAnnounceConfiguration configuration = new TrackerAnnounceConfiguration
+            TrackerRequest configuration = new TrackerRequest
             {
                 Peer = PeerHash.Random()
             };

@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Collector;
+using Leak.Core.Core;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
@@ -12,8 +13,8 @@ namespace Leak.Core.Retriever
         private readonly RetrieverConfiguration configuration;
         private readonly RepositoryService repository;
         private readonly OmnibusService omnibus;
-        private readonly RetrieverQueue queue;
-        private readonly RetrieverTimer timer;
+        private readonly LeakQueue<RetrieverContext> queue;
+        private readonly LeakTimer timer;
 
         public RetrieverContext(Action<RetrieverConfiguration> configurer)
         {
@@ -36,8 +37,8 @@ namespace Leak.Core.Retriever
                 with.Callback = new RetrieverToOmnibus(this);
             });
 
-            queue = new RetrieverQueue();
-            timer = new RetrieverTimer(TimeSpan.FromSeconds(0.25));
+            queue = new LeakQueue<RetrieverContext>();
+            timer = new LeakTimer(TimeSpan.FromSeconds(0.25));
         }
 
         public RetrieverConfiguration Configuration
@@ -65,12 +66,12 @@ namespace Leak.Core.Retriever
             get { return repository; }
         }
 
-        public RetrieverQueue Queue
+        public LeakQueue<RetrieverContext> Queue
         {
             get { return queue; }
         }
 
-        public RetrieverTimer Timer
+        public LeakTimer Timer
         {
             get { return timer; }
         }

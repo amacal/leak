@@ -1,9 +1,9 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
+using Leak.Core.Core;
 
 namespace Leak.Core.Retriever
 {
-    public class RetrieverTaskBitfield : RetrieverTask
+    public class RetrieverTaskBitfield : LeakTask<RetrieverContext>
     {
         private readonly PeerHash peer;
         private readonly Bitfield bitfield;

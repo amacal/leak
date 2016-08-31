@@ -1,10 +1,11 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Core;
+using Leak.Core.Metadata;
 using System.IO;
 using System.Security.Cryptography;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskVerifyPiece : RepositoryTask
+    public class RepositoryTaskVerifyPiece : LeakTask<RepositoryContext>
     {
         private readonly RepositoryPiece piece;
 

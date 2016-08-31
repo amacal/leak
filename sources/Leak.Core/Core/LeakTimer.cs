@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 
-namespace Leak.Core.Connector
+namespace Leak.Core.Core
 {
-    public class PeerConnectorTimer
+    public class LeakTimer
     {
         private readonly TimeSpan period;
         private Timer timer;
 
-        public PeerConnectorTimer(TimeSpan period)
+        public LeakTimer(TimeSpan period)
         {
             this.period = period;
         }

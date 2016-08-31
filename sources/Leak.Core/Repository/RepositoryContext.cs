@@ -1,4 +1,5 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Core;
+using Leak.Core.Metadata;
 using System;
 
 namespace Leak.Core.Repository
@@ -6,8 +7,8 @@ namespace Leak.Core.Repository
     public class RepositoryContext
     {
         private readonly RepositoryConfiguration configuration;
-        private readonly RepositoryQueue queue;
-        private readonly RepositoryTimer timer;
+        private readonly LeakQueue<RepositoryContext> queue;
+        private readonly LeakTimer timer;
 
         private readonly byte[] buffer;
 
@@ -18,8 +19,8 @@ namespace Leak.Core.Repository
                 with.Callback = new RepositoryCallbackNothing();
             });
 
-            queue = new RepositoryQueue();
-            timer = new RepositoryTimer(TimeSpan.FromSeconds(0.25));
+            queue = new LeakQueue<RepositoryContext>();
+            timer = new LeakTimer(TimeSpan.FromSeconds(0.25));
             buffer = new byte[configuration.Metainfo.Properties.PieceSize];
         }
 
@@ -43,12 +44,12 @@ namespace Leak.Core.Repository
             get { return configuration.Destination; }
         }
 
-        public RepositoryQueue Queue
+        public LeakQueue<RepositoryContext> Queue
         {
             get { return queue; }
         }
 
-        public RepositoryTimer Timer
+        public LeakTimer Timer
         {
             get { return timer; }
         }

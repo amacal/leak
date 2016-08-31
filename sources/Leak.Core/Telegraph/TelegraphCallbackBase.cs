@@ -3,9 +3,9 @@ using System;
 
 namespace Leak.Core.Telegraph
 {
-    public abstract class TrackerTelegraphCallbackBase : TrackerTelegraphCallback
+    public abstract class TelegraphCallbackBase : TelegraphCallback
     {
-        public virtual void OnAnnouncingStarted(TrackerAnnounceConfiguration configuration)
+        public virtual void OnAnnouncingStarted(TrackerRequest configuration)
         {
         }
 

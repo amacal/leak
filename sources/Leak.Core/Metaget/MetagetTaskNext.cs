@@ -1,11 +1,12 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Metamine;
 
 namespace Leak.Core.Metaget
 {
-    public class MetagetTaskNext : MetagetTask
+    public class MetagetTaskNext : LeakTask<MetagetContext>
     {
         private static readonly PeerCollectorCriterion[] Criterions =
         {

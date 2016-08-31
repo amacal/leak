@@ -1,33 +1,33 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Leak.Core.Metaget
+namespace Leak.Core.Core
 {
-    public class MetagetQueue
+    public class LeakQueue<TContext>
     {
-        private readonly ConcurrentQueue<MetagetTask> items;
+        private readonly ConcurrentQueue<LeakTask<TContext>> items;
 
-        public MetagetQueue()
+        public LeakQueue()
         {
-            items = new ConcurrentQueue<MetagetTask>();
+            items = new ConcurrentQueue<LeakTask<TContext>>();
         }
 
-        public void Add(MetagetTask task)
+        public void Add(LeakTask<TContext> task)
         {
             items.Enqueue(task);
         }
 
         public void Clear()
         {
-            MetagetTask task;
+            LeakTask<TContext> task;
 
             while (items.TryDequeue(out task))
             {
             }
         }
 
-        public void Process(MetagetContext context)
+        public void Process(TContext context)
         {
-            MetagetTask task;
+            LeakTask<TContext> task;
 
             while (items.TryDequeue(out task))
             {

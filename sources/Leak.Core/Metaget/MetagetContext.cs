@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Collector;
+using Leak.Core.Core;
 using Leak.Core.Metafile;
 using Leak.Core.Metamine;
 using System;
@@ -8,8 +9,8 @@ namespace Leak.Core.Metaget
     public class MetagetContext
     {
         private readonly MetagetConfiguration configuration;
-        private readonly MetagetQueue queue;
-        private readonly MetagetTimer timer;
+        private readonly LeakQueue<MetagetContext> queue;
+        private readonly LeakTimer timer;
         private readonly MetafileService metafile;
 
         private MetamineBitfield metamine;
@@ -28,8 +29,8 @@ namespace Leak.Core.Metaget
                 with.Callback = new MetagetMetafile(this);
             });
 
-            queue = new MetagetQueue();
-            timer = new MetagetTimer(TimeSpan.FromSeconds(1));
+            queue = new LeakQueue<MetagetContext>();
+            timer = new LeakTimer(TimeSpan.FromSeconds(1));
         }
 
         public MetamineBitfield Metamine
@@ -53,12 +54,12 @@ namespace Leak.Core.Metaget
             get { return configuration.Callback; }
         }
 
-        public MetagetQueue Queue
+        public LeakQueue<MetagetContext> Queue
         {
             get { return queue; }
         }
 
-        public MetagetTimer Timer
+        public LeakTimer Timer
         {
             get { return timer; }
         }

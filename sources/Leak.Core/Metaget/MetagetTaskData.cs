@@ -1,9 +1,10 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
+using Leak.Core.Core;
 
 namespace Leak.Core.Metaget
 {
-    public class MetagetTaskData : MetagetTask
+    public class MetagetTaskData : LeakTask<MetagetContext>
     {
         private readonly PeerHash peer;
         private readonly MetadataData data;

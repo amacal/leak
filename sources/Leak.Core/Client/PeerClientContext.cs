@@ -19,7 +19,7 @@ namespace Leak.Core.Client
         private readonly NetworkPool network;
         private readonly PeerCollector collector;
         private readonly PeerListener listener;
-        private readonly TrackerTelegraph telegraph;
+        private readonly TelegraphService telegraph;
         private readonly PeerConnector connector;
 
         public PeerClientContext(Action<PeerClientConfiguration> configurer)
@@ -58,7 +58,7 @@ namespace Leak.Core.Client
                 });
             }
 
-            telegraph = new TrackerTelegraph(with =>
+            telegraph = new TelegraphService(with =>
             {
                 with.Peer = configuration.Peer;
                 with.Port = configuration.Listener.Port;
@@ -81,6 +81,7 @@ namespace Leak.Core.Client
 
             connector.Start();
             listener.Start();
+            telegraph.Start();
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace Leak.Core.Client
             get { return scheduler; }
         }
 
-        public TrackerTelegraph Telegraph
+        public TelegraphService Telegraph
         {
             get { return telegraph; }
         }

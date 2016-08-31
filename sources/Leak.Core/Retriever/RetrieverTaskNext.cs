@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Messages;
 using Leak.Core.Omnibus;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace Leak.Core.Retriever
 {
-    public class RetrieverTaskNext : RetrieverTask
+    public class RetrieverTaskNext : LeakTask<RetrieverContext>
     {
         public void Execute(RetrieverContext context)
         {

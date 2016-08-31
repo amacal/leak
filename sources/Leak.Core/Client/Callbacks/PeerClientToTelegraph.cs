@@ -5,7 +5,7 @@ using Leak.Core.Tracker;
 
 namespace Leak.Core.Client.Callbacks
 {
-    public class PeerClientToTelegraph : TrackerTelegraphCallbackBase
+    public class PeerClientToTelegraph : TelegraphCallbackBase
     {
         private readonly PeerClientContext context;
 

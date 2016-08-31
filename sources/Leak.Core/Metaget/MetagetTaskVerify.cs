@@ -1,6 +1,8 @@
-﻿namespace Leak.Core.Metaget
+﻿using Leak.Core.Core;
+
+namespace Leak.Core.Metaget
 {
-    public class MetagetTaskVerify : MetagetTask
+    public class MetagetTaskVerify : LeakTask<MetagetContext>
     {
         public void Execute(MetagetContext context)
         {

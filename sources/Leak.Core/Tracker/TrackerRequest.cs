@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Tracker
 {
-    public class TrackerAnnounceConfiguration
+    public class TrackerRequest
     {
         public FileHash Hash { get; set; }
 

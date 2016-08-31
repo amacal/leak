@@ -16,9 +16,8 @@ namespace Leak.Core.Tracker
             this.uri = uri;
         }
 
-        public TrackerAnnounce Announce(Action<TrackerAnnounceConfiguration> configurer)
+        public TrackerAnnounce Announce(TrackerRequest configuration)
         {
-            TrackerAnnounceConfiguration configuration = Configure(configurer);
             string request = BuildAnnounceUri(uri, configuration);
 
             BencodedValue decoded = Bencoder.Decode(CallTracker(request));
@@ -68,9 +67,9 @@ namespace Leak.Core.Tracker
             return data[4 + offset] * 256 + data[5 + offset];
         }
 
-        private static TrackerAnnounceConfiguration Configure(Action<TrackerAnnounceConfiguration> configurer)
+        private static TrackerRequest Configure(Action<TrackerRequest> configurer)
         {
-            TrackerAnnounceConfiguration configuration = new TrackerAnnounceConfiguration
+            TrackerRequest configuration = new TrackerRequest
             {
                 Peer = PeerHash.Random()
             };
@@ -79,7 +78,7 @@ namespace Leak.Core.Tracker
             return configuration;
         }
 
-        private static string BuildAnnounceUri(string tracker, TrackerAnnounceConfiguration configuration)
+        private static string BuildAnnounceUri(string tracker, TrackerRequest configuration)
         {
             StringBuilder request = new StringBuilder();
 

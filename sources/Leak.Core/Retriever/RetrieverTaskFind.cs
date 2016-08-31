@@ -1,11 +1,11 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
-using Leak.Core.Messages;
+using Leak.Core.Core;
 
 namespace Leak.Core.Retriever
 {
-    public class RetrieverTaskFind : RetrieverTask
+    public class RetrieverTaskFind : LeakTask<RetrieverContext>
     {
         private static readonly PeerCollectorCriterion[] Criterion =
         {
