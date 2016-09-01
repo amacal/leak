@@ -30,7 +30,7 @@ namespace Leak.Core.Retriever
             {
                 List<Request> requests = new List<Request>();
                 OmnibusStrategy strategy = OmnibusStrategy.RarestFirst;
-                OmnibusBlock[] blocks = context.Omnibus.Next(strategy, session.Peer, pieces).ToArray();
+                OmnibusBlock[] blocks = context.Omnibus.Next(strategy, session.Peer, pieces);
 
                 foreach (OmnibusBlock block in blocks)
                 {

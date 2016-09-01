@@ -48,7 +48,7 @@ namespace Leak.Core.Cando.PeerExchange
                 }
             }
 
-            if (added.Length > 0)
+            if (added?.Length > 0)
             {
                 configuration.Callback.OnMessage(session, new PeerExchangeData(peers.ToArray()));
             }

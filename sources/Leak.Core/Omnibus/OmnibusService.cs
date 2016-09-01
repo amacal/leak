@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Leak.Core.Omnibus
@@ -75,17 +74,17 @@ namespace Leak.Core.Omnibus
             }
         }
 
-        public IEnumerable<OmnibusBlock> Next(OmnibusStrategy strategy, PeerHash peer, int count)
+        public OmnibusBlock[] Next(OmnibusStrategy strategy, PeerHash peer, int count)
         {
             lock (context.Synchronized)
             {
                 if (context.Bitfields.Contains(peer))
                 {
-                    return strategy.Next(context, peer, count);
+                    return strategy.Next(context, peer, count).ToArray();
                 }
             }
 
-            return Enumerable.Empty<OmnibusBlock>();
+            return new OmnibusBlock[0];
         }
 
         /// <summary>
