@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Leak.Core.Common;
+using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus
 {
@@ -6,6 +7,8 @@ namespace Leak.Core.Omnibus
     {
         public static OmnibusStrategy Sequential = new OmnibusStrategySequential();
 
-        public abstract IEnumerable<OmnibusBlock> Next(OmnibusStrategyContext context, int count);
+        public static OmnibusStrategy RarestFirst = new OmnibusStrategyRarestFirst();
+
+        public abstract IEnumerable<OmnibusBlock> Next(OmnibusContext context, PeerHash peer, int count);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Omnibus
 {
@@ -28,6 +28,11 @@ namespace Leak.Core.Omnibus
             Bitfield bitfield;
             byPeer.TryGetValue(peer, out bitfield);
             return bitfield;
+        }
+
+        public Bitfield[] All()
+        {
+            return byPeer.Values.ToArray();
         }
     }
 }

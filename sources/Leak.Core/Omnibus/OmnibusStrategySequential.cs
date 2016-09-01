@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Leak.Core.Common;
+using System;
 using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus
 {
     public class OmnibusStrategySequential : OmnibusStrategy
     {
-        public override IEnumerable<OmnibusBlock> Next(OmnibusStrategyContext context, int count)
+        public override IEnumerable<OmnibusBlock> Next(OmnibusContext context, PeerHash peer, int count)
         {
             DateTime now = DateTime.Now;
-            int left = Math.Min(count, count - context.Reservations.Count(context.Peer));
+
+            int left = Math.Min(count, count - context.Reservations.Count(peer));
+            Bitfield bitfield = context.Bitfields.ByPeer(peer);
 
             long totalSize = context.Metainfo.Properties.TotalSize;
             int blockSize = context.Metainfo.Properties.BlockSize;
@@ -18,7 +21,7 @@ namespace Leak.Core.Omnibus
 
             for (int i = 0; left > 0 && i < pieces; i++)
             {
-                if (context.Bitfield[i] && context.Pieces.IsComplete(i) == false)
+                if (bitfield[i] && context.Pieces.IsComplete(i) == false)
                 {
                     for (int j = 0; left > 0 && totalSize > 0 && j < blocks; j++)
                     {
@@ -34,7 +37,7 @@ namespace Leak.Core.Omnibus
 
                             OmnibusBlock block = new OmnibusBlock(i, offset, nextSize);
                             bool contains = context.Reservations.Contains(block, now) ||
-                                            context.Reservations.Contains(block, context.Peer);
+                                            context.Reservations.Contains(block, peer);
 
                             if (contains == false)
                             {

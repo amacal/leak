@@ -29,7 +29,7 @@ namespace Leak.Core.Retriever
             foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))
             {
                 List<Request> requests = new List<Request>();
-                OmnibusStrategy strategy = OmnibusStrategy.Sequential;
+                OmnibusStrategy strategy = OmnibusStrategy.RarestFirst;
                 OmnibusBlock[] blocks = context.Omnibus.Next(strategy, session.Peer, pieces).ToArray();
 
                 foreach (OmnibusBlock block in blocks)

@@ -80,10 +80,12 @@
     <Compile Include="Core\LeakTimer.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
+    <Compile Include="Omnibus\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\OmnibusCallback.cs" />
     <Compile Include="Omnibus\OmnibusCallbackBase.cs" />
     <Compile Include="Omnibus\OmnibusCallbackNothing.cs" />
     <Compile Include="Omnibus\OmnibusContext.cs" />
+    <Compile Include="Omnibus\OmnibusStrategyRarestFirst.cs" />
     <Compile Include="Repository\RepositoryBlock.cs" />
     <Compile Include="Repository\RepositoryBlockData.cs" />
     <Compile Include="Repository\RepositoryCallback.cs" />
@@ -377,7 +379,6 @@
     <Compile Include="Omnibus\OmnibusBitfieldCollection.cs" />
     <Compile Include="Omnibus\OmnibusBlock.cs" />
     <Compile Include="Omnibus\OmnibusConfiguration.cs" />
-    <Compile Include="Omnibus\OmnibusStrategyContext.cs" />
     <Compile Include="Omnibus\OmnibusExtensions.cs" />
     <Compile Include="Omnibus\OmnibusStrategy.cs" />
     <Compile Include="Omnibus\OmnibusStrategySequential.cs" />

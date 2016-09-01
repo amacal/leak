@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,16 +81,7 @@ namespace Leak.Core.Omnibus
             {
                 if (context.Bitfields.Contains(peer))
                 {
-                    OmnibusStrategyContext inner = new OmnibusStrategyContext
-                    {
-                        Peer = peer,
-                        Pieces = context.Pieces,
-                        Metainfo = context.Metainfo,
-                        Reservations = context.Reservations,
-                        Bitfield = context.Bitfields.ByPeer(peer)
-                    };
-
-                    return strategy.Next(inner, count);
+                    return strategy.Next(context, peer, count);
                 }
             }
 
