@@ -33,6 +33,7 @@ namespace Leak.Core.Network
             {
                 with.Size = 40000;
                 with.Decryptor = NetworkBufferDecryptor.Nothing;
+                with.Synchronized = new object();
             });
 
             this.listener = listener;
@@ -62,6 +63,7 @@ namespace Leak.Core.Network
             {
                 with.Size = buffer.configuration.Size;
                 with.Decryptor = buffer.configuration.Decryptor;
+                with.Synchronized = buffer.configuration.Synchronized;
             });
 
             Decrypt(offset, length);
@@ -133,7 +135,12 @@ namespace Leak.Core.Network
             {
                 try
                 {
-                    int received = socket.EndReceive(result);
+                    int received = 0;
+
+                    lock (configuration.Synchronized)
+                    {
+                        received = socket.EndReceive(result);
+                    }
 
                     if (received > 0)
                     {

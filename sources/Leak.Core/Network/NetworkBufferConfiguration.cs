@@ -14,5 +14,10 @@
         /// The way how the incoming messages should be decrypted.
         /// </summary>
         public NetworkBufferDecryptor Decryptor { get; set; }
+
+        /// <summary>
+        /// The object to used for multi-thread synchronization.
+        /// </summary>
+        public object Synchronized { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace Leak.Core.Network
         private readonly Socket socket;
         private readonly string remote;
         private readonly long identifier;
+        private readonly object synchronized;
 
         private readonly NetworkBuffer buffer;
         private readonly NetworkDirection direction;
@@ -41,13 +42,15 @@ namespace Leak.Core.Network
                 Decryptor = NetworkConnectionDecryptor.Nothing,
             };
 
+            this.synchronized = new object();
+            this.remote = GetRemote(socket);
+
             this.buffer = new NetworkBuffer(listener, socket, identifier, with =>
             {
                 with.Size = 40000;
                 with.Decryptor = NetworkBufferDecryptor.Nothing;
+                with.Synchronized = synchronized;
             });
-
-            this.remote = GetRemote(socket);
         }
 
         /// <summary>
@@ -64,6 +67,7 @@ namespace Leak.Core.Network
             remote = connection.remote;
             direction = connection.direction;
             identifier = connection.identifier;
+            synchronized = connection.synchronized;
 
             configuration = configurer.Configure(with =>
             {
@@ -75,6 +79,7 @@ namespace Leak.Core.Network
             {
                 with.Size = 40000;
                 with.Decryptor = new NetworkConnectionDecryptorToBuffer(configuration.Decryptor);
+                with.Synchronized = synchronized;
             });
         }
 
@@ -131,7 +136,10 @@ namespace Leak.Core.Network
 
                 try
                 {
-                    socket.Send(encrypted);
+                    lock (synchronized)
+                    {
+                        socket.Send(encrypted);
+                    }
                 }
                 catch (SocketException ex)
                 {
@@ -148,8 +156,12 @@ namespace Leak.Core.Network
             if (listener.IsAvailable(identifier))
             {
                 listener.OnDisconnected(identifier);
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+
+                lock (synchronized)
+                {
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                }
             }
         }
     }
