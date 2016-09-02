@@ -131,19 +131,30 @@ namespace Leak.Core.Network
         {
             if (listener.IsAvailable(identifier))
             {
-                byte[] decrypted = message.ToBytes();
-                byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
-
-                try
+                lock (synchronized)
                 {
-                    lock (synchronized)
+                    byte[] decrypted = message.ToBytes();
+                    byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
+
+                    try
                     {
-                        socket.Send(encrypted);
+                        listener.OnSend(identifier, encrypted);
+                    }
+                    catch (SocketException ex)
+                    {
+                        listener.OnException(identifier, ex);
                     }
                 }
-                catch (SocketException ex)
+            }
+        }
+
+        public void Send(byte[] data)
+        {
+            if (listener.IsAvailable(identifier))
+            {
+                lock (synchronized)
                 {
-                    listener.OnException(identifier, ex);
+                    socket.Send(data);
                 }
             }
         }

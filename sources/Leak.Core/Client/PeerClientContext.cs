@@ -82,6 +82,7 @@ namespace Leak.Core.Client
             connector.Start();
             listener.Start();
             telegraph.Start();
+            network.Start();
         }
 
         /// <summary>

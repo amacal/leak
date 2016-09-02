@@ -9,5 +9,7 @@ namespace Leak.Core.Network
         void OnDisconnected(long id);
 
         void OnException(long id, Exception ex);
+
+        void OnSend(long id, byte[] data);
     }
 }

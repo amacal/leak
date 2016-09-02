@@ -80,6 +80,7 @@
     <Compile Include="Core\LeakTimer.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
+    <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\OmnibusCallback.cs" />
     <Compile Include="Omnibus\OmnibusCallbackBase.cs" />

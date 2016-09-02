@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Core;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
@@ -11,6 +12,9 @@ namespace Leak.Core.Network
         private readonly NetworkPoolConfiguration configuration;
         private readonly NetworkPoolCallback callback;
 
+        private readonly LeakTimer timer;
+        private readonly LeakQueue<NetworkPool> queue;
+
         private long sequence;
 
         public NetworkPool()
@@ -22,6 +26,9 @@ namespace Leak.Core.Network
 
             items = new Dictionary<long, NetworkPoolEntry>();
             callback = configuration.Callback;
+
+            queue = new LeakQueue<NetworkPool>();
+            timer = new LeakTimer(TimeSpan.FromMilliseconds(50));
         }
 
         public NetworkPool(Action<NetworkPoolConfiguration> configurer)
@@ -33,6 +40,19 @@ namespace Leak.Core.Network
 
             items = new Dictionary<long, NetworkPoolEntry>();
             callback = configuration.Callback;
+
+            queue = new LeakQueue<NetworkPool>();
+            timer = new LeakTimer(TimeSpan.FromMilliseconds(50));
+        }
+
+        public void Start()
+        {
+            timer.Start(OnTick);
+        }
+
+        private void OnTick()
+        {
+            queue.Process(this);
         }
 
         public NetworkConnectionInfo Info(string remote, NetworkDirection direction)
@@ -125,6 +145,21 @@ namespace Leak.Core.Network
             {
                 entry.IsAvailable = false;
                 callback.OnException(entry.Connection, ex);
+            }
+        }
+
+        void NetworkPoolListener.OnSend(long id, byte[] data)
+        {
+            NetworkPoolEntry entry;
+
+            lock (items)
+            {
+                items.TryGetValue(id, out entry);
+            }
+
+            if (entry?.Connection != null)
+            {
+                queue.Add(new NetworkPoolSend(entry.Connection, data));
             }
         }
     }
