@@ -14,8 +14,11 @@ namespace Leak.Core.Repository
     {
         public void Execute(RepositoryContext context)
         {
+            int length = context.Metainfo.Pieces.Length;
+            int size = context.Metainfo.Properties.PieceSize;
+
             FileHash hash = context.Metainfo.Hash;
-            Bitfield bitfield = new Bitfield(context.Metainfo.Pieces.Length);
+            Bitfield bitfield = new Bitfield(length);
 
             int count = Environment.ProcessorCount;
             TaskData data = new TaskData
@@ -25,6 +28,7 @@ namespace Leak.Core.Repository
                 Reading = new SemaphoreSlim(0, count),
                 Writing = new SemaphoreSlim(count, count),
                 Pieces = new Queue<PieceData>(),
+                Buffer = new RotatingBuffer(count, size),
                 Left = context.Metainfo.Pieces.Length
             };
 
@@ -56,7 +60,7 @@ namespace Leak.Core.Repository
 
                 using (RepositoryStream stream = new RepositoryStream(destination, metainfo))
                 {
-                    byte[] buffer;
+                    RotatingEntry buffer;
                     int read = metainfo.Properties.PieceSize;
 
                     stream.Seek(0, SeekOrigin.Begin);
@@ -64,9 +68,9 @@ namespace Leak.Core.Repository
                     while (piece < metainfo.Properties.Pieces)
                     {
                         data.Writing.Wait();
-                        buffer = new byte[metainfo.Properties.PieceSize];
+                        buffer = data.Buffer.Next();
 
-                        read = stream.Read(buffer, 0, read);
+                        read = stream.Read(buffer.Bytes, 0, read);
                         piece = piece + 1;
 
                         lock (data.Pieces)
@@ -105,7 +109,7 @@ namespace Leak.Core.Repository
                                 piece = data.Pieces.Dequeue();
                             }
 
-                            hash = algorithm.ComputeHash(piece.Data, 0, piece.Size);
+                            hash = algorithm.ComputeHash(piece.Data.Bytes, 0, piece.Size);
 
                             if (Bytes.Equals(hash, piece.Hash.ToBytes()))
                             {
@@ -115,6 +119,7 @@ namespace Leak.Core.Repository
                                 }
                             }
 
+                            data.Buffer.Release(piece.Data);
                             data.Writing.Release(1);
 
                             lock (data)
@@ -137,6 +142,8 @@ namespace Leak.Core.Repository
 
             public Queue<PieceData> Pieces { get; set; }
 
+            public RotatingBuffer Buffer { get; set; }
+
             public Bitfield Bitfield { get; set; }
 
             public int Left { get; set; }
@@ -148,9 +155,54 @@ namespace Leak.Core.Repository
 
             public MetainfoHash Hash { get; set; }
 
-            public byte[] Data { get; set; }
+            public RotatingEntry Data { get; set; }
 
             public int Size { get; set; }
+        }
+
+        private class RotatingBuffer
+        {
+            public readonly RotatingEntry[] entries;
+
+            public RotatingBuffer(int count, int size)
+            {
+                entries = new RotatingEntry[count];
+
+                for (int i = 0; i < count; i++)
+                {
+                    entries[i] = new RotatingEntry
+                    {
+                        Available = true,
+                        Bytes = new byte[size]
+                    };
+                }
+            }
+
+            public RotatingEntry Next()
+            {
+                for (int i = 0; i < entries.Length; i++)
+                {
+                    if (entries[i].Available)
+                    {
+                        entries[i].Available = false;
+                        return entries[i];
+                    }
+                }
+
+                return null;
+            }
+
+            public void Release(RotatingEntry entry)
+            {
+                entry.Available = true;
+            }
+        }
+
+        private class RotatingEntry
+        {
+            public bool Available { get; set; }
+
+            public byte[] Bytes { get; set; }
         }
     }
 }
