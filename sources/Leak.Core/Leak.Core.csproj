@@ -67,6 +67,7 @@
     <Compile Include="Client\Callbacks\PeerClientToScheduler.cs" />
     <Compile Include="Collector\Criterions\IsBitfieldKnown.cs" />
     <Compile Include="Collector\Criterions\OrderByBitfield.cs" />
+    <Compile Include="Collector\PeerCollectorBlockFactory.cs" />
     <Compile Include="Collector\PeerCollectorListenerStarted.cs" />
     <Compile Include="Collector\PeerCollectorMetadata.cs" />
     <Compile Include="Collector\PeerCollectorPeerExchange.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
     <Compile Include="Core\LeakTimer.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
+    <Compile Include="Messages\DataBlock.cs" />
+    <Compile Include="Messages\DataBlockFactory.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\OmnibusBitfieldRanking.cs" />

@@ -4,14 +4,12 @@
     {
         private readonly int index;
         private readonly int offset;
-        private readonly int size;
-        private readonly byte[] data;
+        private readonly DataBlock data;
 
-        public Piece(int index, int offset, int size, byte[] data)
+        public Piece(int index, int offset, DataBlock data)
         {
             this.index = index;
             this.offset = offset;
-            this.size = size;
             this.data = data;
         }
 
@@ -27,10 +25,10 @@
 
         public int Size
         {
-            get { return size; }
+            get { return data.Size; }
         }
 
-        public byte[] Data
+        public DataBlock Data
         {
             get { return data; }
         }

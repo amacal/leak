@@ -1,8 +1,8 @@
-﻿using Leak.Core.Congestion;
+﻿using Leak.Core.Common;
+using Leak.Core.Congestion;
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using System;
-using Leak.Core.Common;
 
 namespace Leak.Core.Collector.Callbacks
 {
@@ -73,7 +73,7 @@ namespace Leak.Core.Collector.Callbacks
         public override void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("piece"));
-            context.Callback.OnPiece(channel.Endpoint, new PieceMessage(message.ToBytes()));
+            context.Callback.OnPiece(channel.Endpoint, new PieceMessage(message.ToBlock(context.BlockFactory)));
         }
 
         public override void OnExtended(ConnectionLoopChannel channel, ConnectionLoopMessage message)

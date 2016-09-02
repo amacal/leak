@@ -1,16 +1,19 @@
-﻿namespace Leak.Core.Repository
+﻿using Leak.Core.Messages;
+using System;
+
+namespace Leak.Core.Repository
 {
     public class RepositoryBlockData
     {
         private readonly int piece;
         private readonly int offset;
-        private readonly byte[] bytes;
+        private readonly DataBlock data;
 
-        public RepositoryBlockData(int piece, int offset, byte[] bytes)
+        public RepositoryBlockData(int piece, int offset, DataBlock data)
         {
             this.piece = piece;
             this.offset = offset;
-            this.bytes = bytes;
+            this.data = data;
         }
 
         public int Piece
@@ -23,9 +26,14 @@
             get { return offset; }
         }
 
-        public byte[] Bytes
+        public int Length
         {
-            get { return bytes; }
+            get { return data.Size; }
+        }
+
+        public void Write(Action<byte[], int, int> stream)
+        {
+            data.Write(stream);
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Leak.Core.Collector
         private readonly CandoService cando;
         private readonly RankingService ranking;
         private readonly BattlefieldService battlefield;
+        private readonly PeerCollectorBlockFactory blockFactory;
 
         public PeerCollectorContext(Action<PeerCollectorConfiguration> configurer)
         {
@@ -94,6 +95,7 @@ namespace Leak.Core.Collector
             });
 
             synchronized = new object();
+            blockFactory = new PeerCollectorBlockFactory();
         }
 
         public object Synchronized
@@ -154,6 +156,11 @@ namespace Leak.Core.Collector
         public BattlefieldService Battlefield
         {
             get { return battlefield; }
+        }
+
+        public PeerCollectorBlockFactory BlockFactory
+        {
+            get { return blockFactory; }
         }
     }
 }

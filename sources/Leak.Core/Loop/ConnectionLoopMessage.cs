@@ -1,4 +1,5 @@
-﻿using Leak.Core.Network;
+﻿using Leak.Core.Messages;
+using Leak.Core.Network;
 
 namespace Leak.Core.Loop
 {
@@ -29,6 +30,11 @@ namespace Leak.Core.Loop
         public byte[] ToBytes()
         {
             return incoming.ToBytes(5, Size - 1);
+        }
+
+        public DataBlock ToBlock(DataBlockFactory factory)
+        {
+            return incoming.ToBlock(factory, 5, Size - 1);
         }
     }
 }

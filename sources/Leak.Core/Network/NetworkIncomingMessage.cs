@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Network
+﻿using Leak.Core.Messages;
+
+namespace Leak.Core.Network
 {
     /// <summary>
     /// Describes the incoming message requested be the caller.
@@ -69,6 +71,11 @@
         public byte[] ToBytes(int offset, int count)
         {
             return Bytes.Copy(data, offset, count);
+        }
+
+        public DataBlock ToBlock(DataBlockFactory factory, int offset, int count)
+        {
+            return factory.Create(data, offset, count);
         }
 
         /// <summary>

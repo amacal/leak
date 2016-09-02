@@ -2,15 +2,19 @@
 {
     public class PieceMessage
     {
+        private readonly DataBlock block;
+        private readonly DataBlock data;
+
         private readonly int piece;
         private readonly int offset;
-        private readonly byte[] data;
 
-        public PieceMessage(byte[] data)
+        public PieceMessage(DataBlock block)
         {
-            this.piece = data[3] + data[2] * 256 + data[1] * 256 * 256;
-            this.offset = data[7] + data[6] * 256 + data[5] * 256 * 256;
-            this.data = Bytes.Copy(data, 8);
+            this.block = block;
+            this.data = block.Scope(8);
+
+            this.piece = block[3] + block[2] * 256 + block[1] * 256 * 256;
+            this.offset = block[7] + block[6] * 256 + block[5] * 256 * 256;
         }
 
         public int Piece
@@ -25,17 +29,12 @@
 
         public int Size
         {
-            get { return data.Length; }
-        }
-
-        public byte[] Data
-        {
-            get { return data; }
+            get { return data.Size; }
         }
 
         public Piece ToPiece()
         {
-            return new Piece(piece, offset, data.Length, data);
+            return new Piece(piece, offset, data);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Leak.Core.Repository
     {
         public static RepositoryBlock ToBlock(this RepositoryBlockData data)
         {
-            return new RepositoryBlock(data.Piece, data.Offset, data.Bytes.Length);
+            return new RepositoryBlock(data.Piece, data.Offset, data.Length);
         }
 
         public static string GetPath(this MetainfoEntry entry, string destination)
