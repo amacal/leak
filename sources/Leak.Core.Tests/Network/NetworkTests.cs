@@ -81,6 +81,7 @@ namespace Leak.Core.Tests.Network
                 NetworkConnection active = pool.Create(container["active"], NetworkDirection.Outgoing);
                 NetworkConnection passive = pool.Create(container["passive"], NetworkDirection.Incoming);
 
+                pool.Start();
                 active.Send(new NetworkOutgoingMessageBytes(1, 2, 3, 4, 5, 6));
 
                 using (IncomingMessageHandler handler = new IncomingMessageHandler(3))

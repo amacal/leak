@@ -30,7 +30,7 @@
 
         public override int GetHashCode()
         {
-            return piece;
+            return piece + offset;
         }
 
         public override bool Equals(object obj)

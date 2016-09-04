@@ -83,6 +83,9 @@
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
+    <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
+    <Compile Include="Network\NetworkBufferView.cs" />
+    <Compile Include="Network\NetworkIncomingMessage.cs" />
     <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\OmnibusCallback.cs" />
@@ -361,7 +364,7 @@
     <Compile Include="Network\NetworkConnectionEncryptor.cs" />
     <Compile Include="Network\NetworkConnectionEncryptorToNothing.cs" />
     <Compile Include="Network\NetworkConnectionInfo.cs" />
-    <Compile Include="Network\NetworkIncomingMessage.cs" />
+    <Compile Include="Network\NetworkBufferMessage.cs" />
     <Compile Include="Network\NetworkIncomingMessageExtensions.cs" />
     <Compile Include="Network\NetworkIncomingMessageHandler.cs" />
     <Compile Include="Negotiator\HandshakeConnection.cs" />

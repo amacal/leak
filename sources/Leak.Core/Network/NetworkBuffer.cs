@@ -70,14 +70,6 @@ namespace Leak.Core.Network
         }
 
         /// <summary>
-        /// The current number of bytes waiting in the buffer.
-        /// </summary>
-        public int Length
-        {
-            get { return length; }
-        }
-
-        /// <summary>
         /// Begins receiving data from the remote endpoint. If the buffer already
         /// contains data it will wait anyway for additional remote data. The handler
         /// will be notified in asynchronous way.
@@ -118,7 +110,7 @@ namespace Leak.Core.Network
             {
                 if (length > 0)
                 {
-                    handler.BeginOnMessage(new NetworkIncomingMessage(this));
+                    handler.BeginOnMessage(new NetworkBufferMessage(this));
                 }
                 else
                 {
@@ -154,7 +146,7 @@ namespace Leak.Core.Network
                         }
 
                         length += received;
-                        handler.OnMessage(new NetworkIncomingMessage(this));
+                        handler.OnMessage(new NetworkBufferMessage(this));
                     }
                     else
                     {
@@ -181,23 +173,17 @@ namespace Leak.Core.Network
             length = length - bytes;
         }
 
-        public byte[] ToBytes()
-        {
-            byte[] result = new byte[length];
-            int min = Math.Min(length, configuration.Size - offset);
-
-            Array.Copy(data, offset, result, 0, min);
-            Array.Copy(data, 0, result, min, length - min);
-
-            return result;
-        }
-
         private void Decrypt(int offset, int count)
         {
             int min = Math.Min(count, configuration.Size - offset);
 
             configuration.Decryptor.Decrypt(data, offset, min);
             configuration.Decryptor.Decrypt(data, 0, count - min);
+        }
+
+        public NetworkBufferView View()
+        {
+            return new NetworkBufferView(data, length, offset);
         }
     }
 }

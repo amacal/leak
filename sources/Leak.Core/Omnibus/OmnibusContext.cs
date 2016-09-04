@@ -19,7 +19,7 @@ namespace Leak.Core.Omnibus
                 with.Callback = new OmnibusCallbackNothing();
             });
 
-            bitfields = new OmnibusBitfieldCollection();
+            bitfields = new OmnibusBitfieldCollection(configuration.Metainfo.Properties.Pieces);
             reservations = new OmnibusReservationCollection();
 
             synchronized = new object();

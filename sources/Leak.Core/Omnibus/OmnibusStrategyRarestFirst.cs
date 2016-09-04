@@ -16,7 +16,7 @@ namespace Leak.Core.Omnibus
             int blocks = context.Metainfo.GetBlocksInPiece();
             int pieces = context.Metainfo.Properties.Pieces;
 
-            OmnibusBitfieldRanking ranking = new OmnibusBitfieldRanking(context.Bitfields.All(), context.Bitfield.Length);
+            OmnibusBitfieldRanking ranking = context.Bitfields.Ranking;
             OmnibusBitfieldRanking adjusted = ranking.Exclude(context.Pieces).Include(bitfield);
 
             foreach (Bitfield best in adjusted.Order())

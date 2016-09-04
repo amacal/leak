@@ -46,7 +46,7 @@ namespace Leak.Core.Negotiator
             byte[] encrypted = message.ToBytes();
             byte[] decrypted = inner.Decrypt(encrypted);
 
-            return new NetworkIncomingMessage(message, decrypted);
+            return new HandshakeKeyMessage(message, decrypted);
         }
 
         public HandshakeKey Clone()

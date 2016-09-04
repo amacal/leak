@@ -152,9 +152,16 @@ namespace Leak.Core.Network
         {
             if (listener.IsAvailable(identifier))
             {
-                lock (synchronized)
+                try
                 {
-                    socket.Send(data);
+                    lock (synchronized)
+                    {
+                        socket.Send(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    listener.OnException(identifier, ex);
                 }
             }
         }
