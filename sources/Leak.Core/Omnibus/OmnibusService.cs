@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Omnibus.Tasks;
 using System;
-using System.Linq;
 
 namespace Leak.Core.Omnibus
 {
@@ -18,6 +18,26 @@ namespace Leak.Core.Omnibus
             context = new OmnibusContext(configurer);
         }
 
+        public void Start()
+        {
+            context.Timer.Start(OnTick);
+        }
+
+        private void OnTick()
+        {
+            context.Queue.Process(context);
+        }
+
+        public bool IsComplete()
+        {
+            return context.Pieces.IsComplete();
+        }
+
+        public bool IsComplete(int piece)
+        {
+            return context.Pieces.IsComplete(piece);
+        }
+
         /// <summary>
         /// Registers a bitfield belonging to the peer.
         /// </summary>
@@ -25,80 +45,31 @@ namespace Leak.Core.Omnibus
         /// <param name="bitfield">The bitfield of requested hash.</param>
         public void Add(PeerHash peer, Bitfield bitfield)
         {
-            lock (context.Synchronized)
-            {
-                context.Bitfields.Add(peer, bitfield);
-            }
+            context.Queue.Add(new AddBitfieldTask(peer, bitfield));
         }
 
         /// <summary>
         /// Reports completeness of the received block.
         /// </summary>
         /// <param name="block">The received block structure.</param>
-        /// <returns>The value indicated whether the block completed also the piece.</returns>
-        public bool Complete(OmnibusBlock block)
+        public void Complete(OmnibusBlock block)
         {
-            lock (context.Synchronized)
-            {
-                context.Reservations.Complete(block);
-
-                return context.Pieces.Complete(block.Piece, block.Offset / context.Metainfo.Properties.BlockSize);
-            }
+            context.Queue.Add(new CompleteBlockTask(block));
         }
 
-        /// <summary>
-        /// Invalidates the entire piece.
-        /// </summary>
-        /// <param name="piece">The piece index to invalidate.</param>
+        public void Complete(int piece)
+        {
+            context.Queue.Add(new CompletePieceTask(piece));
+        }
+
         public void Invalidate(int piece)
         {
-            lock (context.Synchronized)
-            {
-                context.Pieces.Invalidate(piece);
-            }
+            context.Queue.Add(new InvalidatePieceTask(piece));
         }
 
-        public bool IsComplete()
+        public void Schedule(OmnibusStrategy strategy, PeerHash peer, int count)
         {
-            lock (context.Synchronized)
-            {
-                return context.Pieces.IsComplete();
-            }
-        }
-
-        public bool IsComplete(int piece)
-        {
-            lock (context.Synchronized)
-            {
-                return context.Pieces.IsComplete(piece);
-            }
-        }
-
-        public OmnibusBlock[] Next(OmnibusStrategy strategy, PeerHash peer, int count)
-        {
-            lock (context.Synchronized)
-            {
-                if (context.Bitfields.Contains(peer))
-                {
-                    return strategy.Next(context, peer, count).ToArray();
-                }
-            }
-
-            return new OmnibusBlock[0];
-        }
-
-        /// <summary>
-        /// Reserves the block to be downloaded by the given peer.
-        /// </summary>
-        /// <param name="peer">The peer which reserves the block.</param>
-        /// <param name="request">The block structure describing the reservation.</param>
-        /// <returns>The optional peer which had assigned reservation.</returns>
-        public PeerHash Reserve(PeerHash peer, OmnibusBlock request)
-        {
-            lock (context.Synchronized)
-            {
-                return context.Reservations.Add(peer, request);
-            }
+            context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
         }
     }
 }

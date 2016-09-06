@@ -16,6 +16,8 @@ namespace Leak.Core.Retriever
         private readonly LeakQueue<RetrieverContext> queue;
         private readonly LeakTimer timer;
 
+        private DateTime nextSchedule;
+
         public RetrieverContext(Action<RetrieverConfiguration> configurer)
         {
             configuration = configurer.Configure(with =>
@@ -38,7 +40,7 @@ namespace Leak.Core.Retriever
             });
 
             queue = new LeakQueue<RetrieverContext>();
-            timer = new LeakTimer(TimeSpan.FromSeconds(0.25));
+            timer = new LeakTimer(TimeSpan.FromMilliseconds(25));
         }
 
         public RetrieverConfiguration Configuration
@@ -79,6 +81,12 @@ namespace Leak.Core.Retriever
         public OmnibusService Omnibus
         {
             get { return omnibus; }
+        }
+
+        public DateTime NextSchedule
+        {
+            get { return nextSchedule; }
+            set { nextSchedule = value; }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Omnibus
+﻿namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusCallbackNothing : OmnibusCallbackBase
     {

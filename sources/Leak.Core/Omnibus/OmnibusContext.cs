@@ -1,5 +1,7 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Metadata;
+using Leak.Core.Omnibus.Components;
 using System;
 
 namespace Leak.Core.Omnibus
@@ -11,6 +13,8 @@ namespace Leak.Core.Omnibus
         private readonly OmnibusBitfieldCollection bitfields;
         private readonly OmnibusPieceCollection pieces;
         private readonly OmnibusReservationCollection reservations;
+        private readonly LeakQueue<OmnibusContext> queue;
+        private readonly LeakTimer timer;
 
         public OmnibusContext(Action<OmnibusConfiguration> configurer)
         {
@@ -21,6 +25,9 @@ namespace Leak.Core.Omnibus
 
             bitfields = new OmnibusBitfieldCollection(configuration.Metainfo.Properties.Pieces);
             reservations = new OmnibusReservationCollection();
+
+            queue = new LeakQueue<OmnibusContext>();
+            timer = new LeakTimer(TimeSpan.FromMilliseconds(25));
 
             synchronized = new object();
             pieces = new OmnibusPieceCollection(this);
@@ -59,6 +66,16 @@ namespace Leak.Core.Omnibus
         public OmnibusReservationCollection Reservations
         {
             get { return reservations; }
+        }
+
+        public LeakQueue<OmnibusContext> Queue
+        {
+            get { return queue; }
+        }
+
+        public LeakTimer Timer
+        {
+            get { return timer; }
         }
     }
 }

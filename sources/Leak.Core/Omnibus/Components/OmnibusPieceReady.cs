@@ -1,10 +1,10 @@
-﻿namespace Leak.Core.Omnibus
+﻿namespace Leak.Core.Omnibus.Components
 {
-    public class OmnibusPieceNothing : OmnibusPiece
+    public class OmnibusPieceReady : OmnibusPiece
     {
         private readonly int blocks;
 
-        public OmnibusPieceNothing(int blocks)
+        public OmnibusPieceReady(int blocks)
         {
             this.blocks = blocks;
         }
@@ -14,6 +14,11 @@
             get { return blocks; }
         }
 
+        public bool IsReady()
+        {
+            return true;
+        }
+
         public bool IsComplete()
         {
             return false;
@@ -21,7 +26,7 @@
 
         public bool IsComplete(int block)
         {
-            return false;
+            return true;
         }
 
         public OmnibusPiece Complete()
@@ -31,12 +36,12 @@
 
         public OmnibusPiece Complete(int block)
         {
-            return new OmnibusPiecePartial(blocks, block);
+            return this;
         }
 
         public OmnibusPiece Invalidate()
         {
-            return this;
+            return new OmnibusPieceNothing(blocks);
         }
     }
 }

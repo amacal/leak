@@ -2,7 +2,7 @@
 using Leak.Core.Core;
 using Leak.Core.Messages;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Retriever.Tasks
 {
     public class RetrieverTaskPiece : LeakTask<RetrieverContext>
     {

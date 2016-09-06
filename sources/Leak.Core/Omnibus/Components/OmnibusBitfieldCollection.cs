@@ -1,8 +1,8 @@
-﻿using Leak.Core.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Leak.Core.Common;
 
-namespace Leak.Core.Omnibus
+namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusBitfieldCollection
     {

@@ -1,8 +1,9 @@
-﻿using Leak.Core.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Leak.Core.Common;
+using Leak.Core.Omnibus.Components;
 
-namespace Leak.Core.Omnibus
+namespace Leak.Core.Omnibus.Strategies
 {
     public class OmnibusStrategySequential : OmnibusStrategy
     {

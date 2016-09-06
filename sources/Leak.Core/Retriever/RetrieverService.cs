@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Retriever.Tasks;
 using System;
 
 namespace Leak.Core.Retriever
@@ -17,6 +18,7 @@ namespace Leak.Core.Retriever
         {
             context.Timer.Start(OnTick);
             context.Repository.Start();
+            context.Omnibus.Start();
 
             context.Callback.OnStarted(context.Metainfo.Hash);
 
@@ -36,7 +38,11 @@ namespace Leak.Core.Retriever
 
         private void OnTick()
         {
-            context.Queue.Add(new RetrieverTaskNext());
+            if (context.NextSchedule < DateTime.Now)
+            {
+                context.Queue.Add(new RetrieverTaskNext());
+            }
+
             context.Queue.Process(context);
         }
     }

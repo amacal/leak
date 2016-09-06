@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Omnibus
+﻿namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusPiecePartial : OmnibusPiece
     {
@@ -17,9 +17,14 @@
             get { return blocks.Length; }
         }
 
-        public bool IsComplete()
+        public bool IsReady()
         {
             return completed == blocks.Length;
+        }
+
+        public bool IsComplete()
+        {
+            return false;
         }
 
         public bool IsComplete(int block)
@@ -29,7 +34,7 @@
 
         public OmnibusPiece Complete()
         {
-            return new OmnibusPieceCompleted(blocks.Length);
+            return new OmnibusPieceReady(blocks.Length);
         }
 
         public OmnibusPiece Complete(int block)
@@ -42,7 +47,7 @@
 
             if (completed == blocks.Length)
             {
-                return new OmnibusPieceCompleted(blocks.Length);
+                return new OmnibusPieceReady(blocks.Length);
             }
 
             return this;

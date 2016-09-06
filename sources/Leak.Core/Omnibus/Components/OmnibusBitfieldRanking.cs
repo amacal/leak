@@ -1,8 +1,8 @@
-﻿using Leak.Core.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Leak.Core.Common;
 
-namespace Leak.Core.Omnibus
+namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusBitfieldRanking
     {

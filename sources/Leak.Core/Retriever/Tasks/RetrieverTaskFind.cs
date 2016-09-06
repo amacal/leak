@@ -3,7 +3,7 @@ using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
 using Leak.Core.Core;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Retriever.Tasks
 {
     public class RetrieverTaskFind : LeakTask<RetrieverContext>
     {

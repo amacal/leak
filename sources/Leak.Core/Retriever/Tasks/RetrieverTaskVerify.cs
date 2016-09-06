@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Core;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Retriever.Tasks
 {
     public class RetrieverTaskVerify : LeakTask<RetrieverContext>
     {

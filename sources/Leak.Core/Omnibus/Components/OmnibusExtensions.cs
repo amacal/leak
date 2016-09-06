@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Metadata;
 
-namespace Leak.Core.Omnibus
+namespace Leak.Core.Omnibus.Components
 {
     public static class OmnibusExtensions
     {

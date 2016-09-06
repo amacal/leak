@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Omnibus
+﻿namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusPieceCompleted : OmnibusPiece
     {
@@ -12,6 +12,11 @@
         public int Blocks
         {
             get { return blocks; }
+        }
+
+        public bool IsReady()
+        {
+            return true;
         }
 
         public bool IsComplete()
