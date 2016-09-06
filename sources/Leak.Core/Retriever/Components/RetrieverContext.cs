@@ -1,12 +1,12 @@
-﻿using Leak.Core.Collector;
+﻿using System;
+using Leak.Core.Collector;
 using Leak.Core.Core;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using Leak.Core.Retriever.Callbacks;
-using System;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Retriever.Components
 {
     public class RetrieverContext
     {

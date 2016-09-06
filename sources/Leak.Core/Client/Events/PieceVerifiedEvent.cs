@@ -1,14 +1,13 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Retriever;
 
 namespace Leak.Core.Client.Events
 {
     public class PieceVerifiedEvent
     {
         private readonly FileHash hash;
-        private readonly RetrieverPiece piece;
+        private readonly PieceInfo piece;
 
-        public PieceVerifiedEvent(FileHash hash, RetrieverPiece piece)
+        public PieceVerifiedEvent(FileHash hash, PieceInfo piece)
         {
             this.hash = hash;
             this.piece = piece;
@@ -19,9 +18,9 @@ namespace Leak.Core.Client.Events
             get { return hash; }
         }
 
-        public int Piece
+        public PieceInfo Piece
         {
-            get { return piece.Index; }
+            get { return piece; }
         }
     }
 }

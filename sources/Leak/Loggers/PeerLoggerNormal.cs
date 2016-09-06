@@ -1,9 +1,7 @@
 ﻿using Leak.Core.Cando.Metadata;
-using Leak.Core.Client;
-using Leak.Core.Common;
-using Leak.Core.Messages;
-using System;
 using Leak.Core.Client.Events;
+using Leak.Core.Common;
+using System;
 
 namespace Leak.Loggers
 {
@@ -39,7 +37,7 @@ namespace Leak.Loggers
 
         public override void OnPieceVerified(FileHash hash, PieceVerifiedEvent @event)
         {
-            Console.WriteLine($"{hash}: verified; piece={@event.Piece}");
+            Console.WriteLine($"{hash}: verified; piece={@event.Piece.Index}");
         }
 
         public override void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)

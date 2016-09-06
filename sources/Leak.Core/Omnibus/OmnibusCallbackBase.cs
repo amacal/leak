@@ -13,11 +13,11 @@ namespace Leak.Core.Omnibus
         {
         }
 
-        public virtual void OnPieceReady(FileHash hash, int piece)
+        public virtual void OnPieceReady(FileHash hash, PieceInfo piece)
         {
         }
 
-        public virtual void OnPieceCompleted(FileHash hash, int piece)
+        public virtual void OnPieceCompleted(FileHash hash, PieceInfo piece)
         {
         }
 

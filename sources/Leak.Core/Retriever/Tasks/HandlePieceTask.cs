@@ -1,15 +1,16 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Messages;
+using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class RetrieverTaskPiece : LeakTask<RetrieverContext>
+    public class HandlePieceTask : LeakTask<RetrieverContext>
     {
         private readonly PeerHash peer;
         private readonly Piece piece;
 
-        public RetrieverTaskPiece(PeerHash peer, Piece piece)
+        public HandlePieceTask(PeerHash peer, Piece piece)
         {
             this.peer = peer;
             this.piece = piece;

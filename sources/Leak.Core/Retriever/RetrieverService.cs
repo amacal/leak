@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Messages;
+using Leak.Core.Retriever.Components;
 using Leak.Core.Retriever.Tasks;
 using System;
 
@@ -20,27 +21,27 @@ namespace Leak.Core.Retriever
             context.Repository.Start();
             context.Omnibus.Start();
 
-            context.Callback.OnStarted(context.Metainfo.Hash);
+            context.Callback.OnFileStarted(context.Metainfo.Hash);
 
-            context.Queue.Add(new RetrieverTaskVerify());
-            context.Queue.Add(new RetrieverTaskFind());
+            context.Queue.Add(new VerifyPieceTask());
+            context.Queue.Add(new FindBitfieldsTask());
         }
 
         public void OnBitfield(PeerHash peer, Bitfield bitfield)
         {
-            context.Queue.Add(new RetrieverTaskBitfield(peer, bitfield));
+            context.Queue.Add(new HandleBitfieldTask(peer, bitfield));
         }
 
         public void OnPiece(PeerHash peer, Piece piece)
         {
-            context.Queue.Add(new RetrieverTaskPiece(peer, piece));
+            context.Queue.Add(new HandlePieceTask(peer, piece));
         }
 
         private void OnTick()
         {
             if (context.NextSchedule < DateTime.Now)
             {
-                context.Queue.Add(new RetrieverTaskNext());
+                context.Queue.Add(new SchedulePeersTask());
             }
 
             context.Queue.Process(context);

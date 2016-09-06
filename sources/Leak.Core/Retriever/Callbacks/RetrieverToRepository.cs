@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
+using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Callbacks
 {
@@ -18,13 +19,13 @@ namespace Leak.Core.Retriever.Callbacks
             context.Omnibus.Complete(new OmnibusBlock(block.Piece, block.Offset, block.Size));
         }
 
-        public override void OnAccepted(FileHash hash, RepositoryPiece piece)
+        public override void OnAccepted(FileHash hash, PieceInfo piece)
         {
             context.Omnibus.Complete(piece.Index);
-            context.Callback.OnVerified(hash, new RetrieverPiece(piece.Index));
+            context.Callback.OnPieceVerified(hash, piece);
         }
 
-        public override void OnRejected(FileHash hash, RepositoryPiece piece)
+        public override void OnRejected(FileHash hash, PieceInfo piece)
         {
             context.Omnibus.Invalidate(piece.Index);
         }

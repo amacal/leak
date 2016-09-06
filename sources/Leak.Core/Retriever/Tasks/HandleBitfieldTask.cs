@@ -1,14 +1,15 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class RetrieverTaskBitfield : LeakTask<RetrieverContext>
+    public class HandleBitfieldTask : LeakTask<RetrieverContext>
     {
         private readonly PeerHash peer;
         private readonly Bitfield bitfield;
 
-        public RetrieverTaskBitfield(PeerHash peer, Bitfield bitfield)
+        public HandleBitfieldTask(PeerHash peer, Bitfield bitfield)
         {
             this.peer = peer;
             this.bitfield = bitfield;

@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Client.Events;
 using Leak.Core.Common;
-using Leak.Core.Retriever;
 using Leak.Core.Scheduler;
 
 namespace Leak.Core.Client.Callbacks
@@ -24,7 +23,7 @@ namespace Leak.Core.Client.Callbacks
             context.Callback.OnFileInitialized(hash, new FileInitializedEvent(bitfield));
         }
 
-        public override void OnPieceVerified(FileHash hash, RetrieverPiece piece)
+        public override void OnPieceVerified(FileHash hash, PieceInfo piece)
         {
             context.Callback.OnPieceVerified(hash, new PieceVerifiedEvent(hash, piece));
         }

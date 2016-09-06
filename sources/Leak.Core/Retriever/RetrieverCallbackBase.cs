@@ -4,19 +4,19 @@ namespace Leak.Core.Retriever
 {
     public abstract class RetrieverCallbackBase : RetrieverCallback
     {
-        public virtual void OnStarted(FileHash hash)
+        public virtual void OnFileStarted(FileHash hash)
         {
         }
 
-        public virtual void OnCompleted(FileHash hash)
+        public virtual void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
         {
         }
 
-        public virtual void OnVerified(FileHash hash, RetrieverPiece piece)
+        public virtual void OnFileCompleted(FileHash hash)
         {
         }
 
-        public virtual void OnProgress(FileHash hash, BitfieldInfo bitfield)
+        public virtual void OnPieceVerified(FileHash hash, PieceInfo piece)
         {
         }
     }

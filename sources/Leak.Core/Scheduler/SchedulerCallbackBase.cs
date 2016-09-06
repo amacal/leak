@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Retriever;
 
 namespace Leak.Core.Scheduler
 {
@@ -13,7 +12,7 @@ namespace Leak.Core.Scheduler
         {
         }
 
-        public virtual void OnPieceVerified(FileHash hash, RetrieverPiece piece)
+        public virtual void OnPieceVerified(FileHash hash, PieceInfo piece)
         {
         }
 

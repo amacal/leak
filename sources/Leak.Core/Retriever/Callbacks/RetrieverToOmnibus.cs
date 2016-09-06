@@ -2,7 +2,7 @@
 using Leak.Core.Messages;
 using Leak.Core.Omnibus;
 using Leak.Core.Omnibus.Events;
-using Leak.Core.Repository;
+using Leak.Core.Retriever.Components;
 using System.Collections.Generic;
 
 namespace Leak.Core.Retriever.Callbacks
@@ -18,12 +18,12 @@ namespace Leak.Core.Retriever.Callbacks
 
         public override void OnProgressChanged(FileHash hash, BitfieldInfo bitfield)
         {
-            context.Callback.OnProgress(hash, bitfield);
+            context.Callback.OnFileChanged(hash, bitfield);
         }
 
-        public override void OnPieceReady(FileHash hash, int piece)
+        public override void OnPieceReady(FileHash hash, PieceInfo piece)
         {
-            context.Repository.Verify(new RepositoryPiece(piece));
+            context.Repository.Verify(piece);
         }
 
         public override void OnBlockReserved(FileHash hash, OmnibusReservationEvent @event)
@@ -46,7 +46,7 @@ namespace Leak.Core.Retriever.Callbacks
 
         public override void OnFileCompleted(FileHash hash)
         {
-            context.Callback.OnCompleted(hash);
+            context.Callback.OnFileCompleted(hash);
         }
     }
 }

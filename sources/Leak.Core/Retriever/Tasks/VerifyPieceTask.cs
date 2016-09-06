@@ -1,14 +1,15 @@
 ﻿using Leak.Core.Core;
+using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class RetrieverTaskVerify : LeakTask<RetrieverContext>
+    public class VerifyPieceTask : LeakTask<RetrieverContext>
     {
         public void Execute(RetrieverContext context)
         {
             if (context.Omnibus.IsComplete())
             {
-                context.Callback.OnCompleted(context.Metainfo.Hash);
+                context.Callback.OnFileCompleted(context.Metainfo.Hash);
             }
         }
     }

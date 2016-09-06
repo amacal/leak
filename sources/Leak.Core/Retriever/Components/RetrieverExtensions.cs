@@ -1,7 +1,7 @@
 ﻿using Leak.Core.Messages;
 using Leak.Core.Repository;
 
-namespace Leak.Core.Retriever
+namespace Leak.Core.Retriever.Components
 {
     public static class RetrieverExtensions
     {

@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 
 namespace Leak.Core.Repository
 {
@@ -23,14 +22,14 @@ namespace Leak.Core.Repository
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
         /// <param name="piece">The accepted piece.</param>
-        void OnAccepted(FileHash hash, RepositoryPiece piece);
+        void OnAccepted(FileHash hash, PieceInfo piece);
 
         /// <summary>
         /// Called when the piece was verified against metadata and rejected.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
         /// <param name="piece">The accepted piece.</param>
-        void OnRejected(FileHash hash, RepositoryPiece piece);
+        void OnRejected(FileHash hash, PieceInfo piece);
 
         /// <summary>
         /// Called when the block was written onto the file system.

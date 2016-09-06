@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Retriever;
 
 namespace Leak.Core.Scheduler
 {
@@ -23,7 +22,7 @@ namespace Leak.Core.Scheduler
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
         /// <param name="piece">Describes the verified piece.</param>
-        void OnPieceVerified(FileHash hash, RetrieverPiece piece);
+        void OnPieceVerified(FileHash hash, PieceInfo piece);
 
         /// <summary>
         /// Called when the downloading task started.

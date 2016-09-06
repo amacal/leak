@@ -2,10 +2,11 @@
 using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class RetrieverTaskFind : LeakTask<RetrieverContext>
+    public class FindBitfieldsTask : LeakTask<RetrieverContext>
     {
         private static readonly PeerCollectorCriterion[] Criterion =
         {

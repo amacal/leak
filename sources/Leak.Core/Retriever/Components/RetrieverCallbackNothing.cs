@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Retriever
+﻿namespace Leak.Core.Retriever.Components
 {
     public class RetrieverCallbackNothing : RetrieverCallbackBase
     {

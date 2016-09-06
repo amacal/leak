@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 
 namespace Leak.Core.Repository
 {
@@ -13,11 +12,11 @@ namespace Leak.Core.Repository
         {
         }
 
-        public virtual void OnAccepted(FileHash hash, RepositoryPiece piece)
+        public virtual void OnAccepted(FileHash hash, PieceInfo piece)
         {
         }
 
-        public virtual void OnRejected(FileHash hash, RepositoryPiece piece)
+        public virtual void OnRejected(FileHash hash, PieceInfo piece)
         {
         }
 

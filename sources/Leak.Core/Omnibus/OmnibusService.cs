@@ -30,11 +30,13 @@ namespace Leak.Core.Omnibus
 
         public bool IsComplete()
         {
+            // ignore synchronization, there is no side effect
             return context.Pieces.IsComplete();
         }
 
         public bool IsComplete(int piece)
         {
+            // ignore synchronization, there is no side effect
             return context.Pieces.IsComplete(piece);
         }
 

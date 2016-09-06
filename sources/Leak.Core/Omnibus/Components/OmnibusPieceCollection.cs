@@ -106,12 +106,12 @@ namespace Leak.Core.Omnibus.Components
 
         private void CallPieceReady(int piece)
         {
-            context.Callback.OnPieceReady(context.Metainfo.Hash, piece);
+            context.Callback.OnPieceReady(context.Metainfo.Hash, new PieceInfo(piece));
         }
 
         private void CallPieceCompleted(int piece)
         {
-            context.Callback.OnPieceCompleted(context.Metainfo.Hash, piece);
+            context.Callback.OnPieceCompleted(context.Metainfo.Hash, new PieceInfo(piece));
         }
 
         private void CallFileCompleted()

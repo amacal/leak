@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Common;
+using System;
 
 namespace Leak.Core.Repository
 {
@@ -26,7 +27,7 @@ namespace Leak.Core.Repository
             context.Queue.Add(new RepositoryTaskVerifyAll());
         }
 
-        public void Verify(RepositoryPiece piece)
+        public void Verify(PieceInfo piece)
         {
             context.Queue.Add(new RepositoryTaskVerifyPiece(piece));
         }

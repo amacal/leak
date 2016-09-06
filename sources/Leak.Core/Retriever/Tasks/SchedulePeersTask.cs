@@ -3,12 +3,13 @@ using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Omnibus;
+using Leak.Core.Retriever.Components;
 using System;
 using System.Linq;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class RetrieverTaskNext : LeakTask<RetrieverContext>
+    public class SchedulePeersTask : LeakTask<RetrieverContext>
     {
         public void Execute(RetrieverContext context)
         {
