@@ -57,6 +57,7 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Metadata\MetadataSize.cs" />
+    <Compile Include="Client\Configuration\PeerClientDownloadBuilder.cs" />
     <Compile Include="Client\Configuration\PeerClientMetadataBuilder.cs" />
     <Compile Include="Client\Configuration\PeerClientMetadataStatus.cs" />
     <Compile Include="Client\Configuration\PeerClientPeerExchangeBuilder.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Retriever\Components\RetrieverContext.cs" />
     <Compile Include="Retriever\Components\RetrieverExtensions.cs" />
     <Compile Include="Retriever\RetrieverService.cs" />
+    <Compile Include="Retriever\RetrieverStrategy.cs" />
     <Compile Include="Retriever\Tasks\HandleBitfieldTask.cs" />
     <Compile Include="Retriever\Tasks\FindBitfieldsTask.cs" />
     <Compile Include="Retriever\Tasks\SchedulePeersTask.cs" />

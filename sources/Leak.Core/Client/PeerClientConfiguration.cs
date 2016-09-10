@@ -18,5 +18,7 @@ namespace Leak.Core.Client
         public PeerClientMetadataBuilder Metadata { get; set; }
 
         public PeerClientPeerExchangeBuilder PeerExchange { get; set; }
+
+        public PeerClientDownloadBuilder Download { get; set; }
     }
 }

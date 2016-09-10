@@ -59,6 +59,17 @@ namespace Leak.Commands
                 {
                     with.Connector.Enable();
                 }
+
+                switch (options.Download)
+                {
+                    case "rarest-first":
+                        with.Download.RarestFirst();
+                        break;
+
+                    case "sequential":
+                        with.Download.Sequential();
+                        break;
+                }
             });
 
             if (options.Torrent != null)

@@ -1,10 +1,10 @@
-﻿using System;
-using Leak.Core.Collector;
+﻿using Leak.Core.Collector;
 using Leak.Core.Core;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using Leak.Core.Retriever.Callbacks;
+using System;
 
 namespace Leak.Core.Retriever.Components
 {
@@ -23,6 +23,7 @@ namespace Leak.Core.Retriever.Components
             configuration = configurer.Configure(with =>
             {
                 with.Callback = new RetrieverCallbackNothing();
+                with.Strategy = RetrieverStrategy.RarestFirst;
             });
 
             repository = new RepositoryService(with =>

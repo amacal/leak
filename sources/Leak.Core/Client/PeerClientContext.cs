@@ -34,6 +34,7 @@ namespace Leak.Core.Client
                 with.Listener = new PeerClientListenerBuilder();
                 with.Metadata = new PeerClientMetadataBuilder();
                 with.PeerExchange = new PeerClientPeerExchangeBuilder();
+                with.Download = new PeerClientDownloadBuilder();
             });
 
             collection = new PeerClientCollection();
@@ -75,6 +76,8 @@ namespace Leak.Core.Client
             {
                 with.Collector = collector;
                 with.Callback = new PeerClientToScheduler(this);
+
+                configuration.Download.Apply(with);
             });
 
             connector = new PeerConnector(with =>

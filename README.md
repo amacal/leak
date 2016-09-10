@@ -31,6 +31,10 @@ options:
 
         Use ut_pex extension.
 
+    --download (sequential|rarest-first) (default: rarest-first)
+
+        Schedule pieces using algorithm.
+
     --logging (off|normal|verbose) (default: normal)
 
         Show only logs with requested severity.

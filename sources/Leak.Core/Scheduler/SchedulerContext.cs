@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Collector;
+using Leak.Core.Retriever;
 using System;
 
 namespace Leak.Core.Scheduler
@@ -13,6 +14,7 @@ namespace Leak.Core.Scheduler
             configuration = configurer.Configure(with =>
             {
                 with.Callback = new SchedulerCallbackNothing();
+                with.Strategy = RetrieverStrategy.RarestFirst;
             });
 
             queue = new SchedulerQueue(this);
@@ -26,6 +28,11 @@ namespace Leak.Core.Scheduler
         public PeerCollector Collector
         {
             get { return configuration.Collector; }
+        }
+
+        public RetrieverStrategy Strategy
+        {
+            get { return configuration.Strategy; }
         }
 
         public SchedulerQueue Queue

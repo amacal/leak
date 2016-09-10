@@ -28,6 +28,7 @@ namespace Leak.Core.Scheduler
             {
                 with.Metainfo = inside.Metainfo;
                 with.Bitfield = inside.Bitfield;
+                with.Strategy = context.Strategy;
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Metainfo.Hash}");
                 with.Collector = context.Collector.CreateView(inside.Metainfo.Hash);
                 with.Callback = new SchedulerTaskDownloadRetrieverCallback(inside);

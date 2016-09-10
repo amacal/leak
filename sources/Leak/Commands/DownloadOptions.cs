@@ -28,6 +28,9 @@ namespace Leak.Commands
         [NamedOption("peer-exchange")]
         public string PeerExchange { get; set; }
 
+        [NamedOption("download")]
+        public string Download { get; set; }
+
         [NamedOption("port")]
         public int Port { get; set; }
 

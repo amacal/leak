@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Common;
-using Leak.Core.Messages;
 using Leak.Core.Metadata;
 
 namespace Leak.Core.Retriever
@@ -16,5 +15,7 @@ namespace Leak.Core.Retriever
         public PeerCollectorView Collector { get; set; }
 
         public RetrieverCallback Callback { get; set; }
+
+        public RetrieverStrategy Strategy { get; set; }
     }
 }

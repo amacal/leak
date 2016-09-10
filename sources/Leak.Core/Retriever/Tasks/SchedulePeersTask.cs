@@ -2,7 +2,6 @@
 using Leak.Core.Collector.Criterions;
 using Leak.Core.Common;
 using Leak.Core.Core;
-using Leak.Core.Omnibus;
 using Leak.Core.Retriever.Components;
 using System;
 using System.Linq;
@@ -28,7 +27,7 @@ namespace Leak.Core.Retriever.Tasks
 
             foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))
             {
-                context.Omnibus.Schedule(OmnibusStrategy.RarestFirst, session.Peer, pieces);
+                context.Omnibus.Schedule(context.Configuration.Strategy.ToOmnibus(), session.Peer, pieces);
             }
 
             context.NextSchedule = DateTime.Now.AddSeconds(0.25);
