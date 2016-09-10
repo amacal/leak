@@ -1,4 +1,4 @@
-﻿using Leak.Core.Collector;
+﻿using Leak.Core.Collector.Events;
 using Leak.Core.Common;
 
 namespace Leak.Core.Client

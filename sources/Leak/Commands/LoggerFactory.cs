@@ -1,16 +1,15 @@
 ﻿using Leak.Core.Client;
 using Leak.Loggers;
-using Pargos;
 
 namespace Leak.Commands
 {
     public class LoggerFactory
     {
-        private readonly ArgumentCollection arguments;
+        private readonly DownloadOptions options;
 
-        public LoggerFactory(ArgumentCollection arguments)
+        public LoggerFactory(DownloadOptions options)
         {
-            this.arguments = arguments;
+            this.options = options;
         }
 
         public PeerClientCallback Bouncer()
@@ -25,7 +24,7 @@ namespace Leak.Commands
 
         public PeerClientCallback Hash()
         {
-            switch (Severity("hash"))
+            switch (Severity(options.LoggingHash))
             {
                 case "off":
                     return HashLogger.Off();
@@ -37,7 +36,7 @@ namespace Leak.Commands
 
         public PeerClientCallback Listener()
         {
-            switch (Severity("network"))
+            switch (Severity(options.LoggingListener))
             {
                 case "off":
                     return ListenerLogger.Off();
@@ -49,7 +48,7 @@ namespace Leak.Commands
 
         public PeerClientCallback Network()
         {
-            switch (Severity("network"))
+            switch (Severity(options.LoggingNetwork))
             {
                 case "off":
                     return NetworkLogger.Off();
@@ -64,7 +63,7 @@ namespace Leak.Commands
 
         public PeerClientCallback Peer()
         {
-            switch (Severity("peer"))
+            switch (Severity(options.LoggingPeer))
             {
                 case "off":
                     return PeerLogger.Off();
@@ -77,9 +76,9 @@ namespace Leak.Commands
             }
         }
 
-        private string Severity(string component)
+        private string Severity(string value)
         {
-            return arguments.GetString($"logging-{component}") ?? arguments.GetString("logging");
+            return value ?? options.Logging;
         }
     }
 }

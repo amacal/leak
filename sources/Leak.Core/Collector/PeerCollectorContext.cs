@@ -32,8 +32,7 @@ namespace Leak.Core.Collector
             configuration = configurer.Configure(with =>
             {
                 with.Callback = new PeerCollectorCallbackNothing();
-                with.Metadata = PeerCollectorMetadata.Yes;
-                with.PeerExchange = PeerCollectorPeerExchange.Yes;
+                with.Extensions = new PeerCollectorExtensionBuilder(this);
             });
 
             peers = new InfantryService(with =>
@@ -68,22 +67,7 @@ namespace Leak.Core.Collector
             cando = new CandoService(with =>
             {
                 with.Callback = new PeerCollectorToCando(this);
-
-                if (configuration.Metadata == PeerCollectorMetadata.Yes)
-                {
-                    with.Extensions.Metadata(metadata =>
-                    {
-                        metadata.Callback = new PeerCollectorToMetadata(this);
-                    });
-                }
-
-                if (configuration.PeerExchange == PeerCollectorPeerExchange.Yes)
-                {
-                    with.Extensions.PeerExchange(exchange =>
-                    {
-                        exchange.Callback = new PeerCollectorToExchange(this);
-                    });
-                }
+                configuration.Extensions.Apply(with);
             });
 
             ranking = new RankingService(with =>

@@ -1,38 +1,24 @@
 ﻿using Leak.Core.Client;
 using Leak.Core.Common;
 using Leak.Core.Metadata;
-using Pargos;
-using System;
 using System.Threading;
 
 namespace Leak.Commands
 {
     public class DownloadCommand
     {
-        private readonly ArgumentCollection arguments;
+        private readonly DownloadOptions options;
 
-        public DownloadCommand(ArgumentCollection arguments)
+        public DownloadCommand(DownloadOptions options)
         {
-            this.arguments = arguments;
+            this.options = options;
         }
 
         public void Execute()
         {
-            string destination = arguments.GetString("destination");
-            string torrent = arguments.GetString("torrent");
-
-            string hash = arguments.GetString("hash");
-            int trackers = arguments.Count("tracker");
-
-            bool listen = arguments.GetString("listener") == "on";
-            bool connect = arguments.GetString("connector") != "off";
-
-            string portText = arguments.GetString("port");
-            int? portValue = String.IsNullOrEmpty(portText) ? default(int?) : Int32.Parse(portText);
-
             ManualResetEvent handle = new ManualResetEvent(false);
             CompositeCallback callback = new CompositeCallback();
-            LoggerFactory factory = new LoggerFactory(arguments);
+            LoggerFactory factory = new LoggerFactory(options);
 
             callback.Add(factory.Bouncer());
             callback.Add(factory.Connector());
@@ -45,39 +31,53 @@ namespace Leak.Commands
 
             PeerClient client = new PeerClient(with =>
             {
-                with.Destination = destination;
+                with.Destination = options.Destination;
                 with.Callback = callback;
 
-                if (listen)
+                if (options.Metadata != "off")
+                {
+                    with.Metadata.Enable();
+                }
+
+                if (options.PeerExchange != "off")
+                {
+                    with.PeerExchange.Enable();
+                }
+
+                if (options.Listener == "on")
                 {
                     with.Listener.Enable(listener =>
                     {
-                        if (portValue != null)
+                        if (options.Port > 0 && options.Port < 65536)
                         {
-                            listener.Port = portValue.Value;
+                            listener.Port = options.Port;
                         }
                     });
                 }
 
-                if (connect)
+                if (options.Connector != "off")
                 {
                     with.Connector.Enable();
                 }
             });
 
-            if (torrent != null)
+            if (options.Torrent != null)
             {
-                client.Start(MetainfoFactory.FromFile(torrent));
+                client.Start(MetainfoFactory.FromFile(options.Torrent));
             }
-            else if (hash != null)
+
+            if (options.Hash != null)
             {
                 client.Start(with =>
                 {
-                    with.Hash = FileHash.Parse(hash);
+                    with.Hash = FileHash.Parse(options.Hash);
 
-                    for (int i = 0; i < trackers; i++)
+                    if (options.Tracker != null)
                     {
-                        with.Trackers.Add(arguments.GetString("tracker", i));
+                        foreach (string tracker in options.Tracker)
+                        {
+                            with.Trackers.Add(tracker);
+                        }
                     }
                 });
             }

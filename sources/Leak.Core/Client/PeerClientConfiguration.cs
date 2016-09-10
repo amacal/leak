@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Client.Configuration;
+using Leak.Core.Common;
 
 namespace Leak.Core.Client
 {
@@ -13,5 +14,9 @@ namespace Leak.Core.Client
         public PeerClientListenerBuilder Listener { get; set; }
 
         public PeerClientConnectorBuilder Connector { get; set; }
+
+        public PeerClientMetadataBuilder Metadata { get; set; }
+
+        public PeerClientPeerExchangeBuilder PeerExchange { get; set; }
     }
 }

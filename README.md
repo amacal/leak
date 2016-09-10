@@ -23,6 +23,14 @@ options:
 
         Listen on specified port.
 
+    --metadata (on|off) (default: on)
+
+        Use ut_metadata extension.
+
+    --peer-exchange (on|off) (default: on)
+
+        Use ut_pex extension.
+
     --logging (off|normal|verbose) (default: normal)
 
         Show only logs with requested severity.

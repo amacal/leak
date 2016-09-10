@@ -38,8 +38,16 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\pargos.1.0\lib\net40\Pargos.dll</HintPath>
+    <Reference Include="Pargos.Attributes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\pargos.1.1.0\lib\net45\Pargos.Attributes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Pargos.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\pargos.1.1.0\lib\net45\Pargos.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Pargos.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\pargos.1.1.0\lib\net45\Pargos.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -47,7 +55,9 @@
   <ItemGroup>
     <Compile Include="Commands\CompositeCallback.cs" />
     <Compile Include="Commands\DeamonCommand.cs" />
+    <Compile Include="Commands\DeamonOptions.cs" />
     <Compile Include="Commands\DownloadCommand.cs" />
+    <Compile Include="Commands\DownloadOptions.cs" />
     <Compile Include="Commands\LoggerFactory.cs" />
     <Compile Include="Commands\ReadyCallback.cs" />
     <Compile Include="Deamon\LeakCallback.cs" />
@@ -68,6 +78,7 @@
     <Compile Include="Loggers\PeerLogger.cs" />
     <Compile Include="Loggers\PeerLoggerNormal.cs" />
     <Compile Include="Loggers\PeerLoggerVerbose.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

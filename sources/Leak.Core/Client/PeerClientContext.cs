@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Client.Callbacks;
+using Leak.Core.Client.Configuration;
 using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Connector;
@@ -31,6 +32,8 @@ namespace Leak.Core.Client
                 with.Callback = new PeerClientCallbackNothing();
                 with.Connector = new PeerClientConnectorBuilder();
                 with.Listener = new PeerClientListenerBuilder();
+                with.Metadata = new PeerClientMetadataBuilder();
+                with.PeerExchange = new PeerClientPeerExchangeBuilder();
             });
 
             collection = new PeerClientCollection();
@@ -39,6 +42,9 @@ namespace Leak.Core.Client
             collector = new PeerCollector(with =>
             {
                 with.Callback = new PeerClientToCollector(this);
+
+                configuration.Metadata.Apply(with);
+                configuration.PeerExchange.Apply(with);
             });
 
             network = new NetworkPool(with =>

@@ -4,8 +4,6 @@
     {
         public PeerCollectorCallback Callback { get; set; }
 
-        public PeerCollectorMetadata Metadata { get; set; }
-
-        public PeerCollectorPeerExchange PeerExchange { get; set; }
+        public PeerCollectorExtensionBuilder Extensions { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Leak.Core.Connector;
 using System;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Configuration
 {
     public class PeerClientConnectorBuilder
     {
@@ -10,11 +10,6 @@ namespace Leak.Core.Client
         public PeerClientConnectorBuilder()
         {
             status = PeerClientListenerStatus.Off;
-        }
-
-        public PeerClientListenerStatus Status
-        {
-            get { return status; }
         }
 
         public void Disable()

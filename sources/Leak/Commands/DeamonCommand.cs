@@ -1,6 +1,6 @@
 ﻿using Leak.Core;
 using Leak.Deamon;
-using Pargos;
+using Pargos.Core;
 
 namespace Leak.Commands
 {

@@ -1,7 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Listener;
 
-namespace Leak.Core.Collector
+namespace Leak.Core.Collector.Events
 {
     public class PeerCollectorListenerStarted
     {

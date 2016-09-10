@@ -1,7 +1,7 @@
 ﻿using Leak.Core.Listener;
 using System;
 
-namespace Leak.Core.Client
+namespace Leak.Core.Client.Configuration
 {
     public class PeerClientListenerBuilder
     {

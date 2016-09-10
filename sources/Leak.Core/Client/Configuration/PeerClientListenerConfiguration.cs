@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Client
+﻿namespace Leak.Core.Client.Configuration
 {
     public class PeerClientListenerConfiguration
     {

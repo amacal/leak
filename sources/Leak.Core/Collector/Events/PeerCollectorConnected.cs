@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Common;
 
-namespace Leak.Core.Collector
+namespace Leak.Core.Collector.Events
 {
     public class PeerCollectorConnected
     {
