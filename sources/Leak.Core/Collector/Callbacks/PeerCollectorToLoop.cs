@@ -1,5 +1,4 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Congestion;
+﻿using Leak.Core.Congestion;
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using System;
@@ -56,18 +55,18 @@ namespace Leak.Core.Collector.Callbacks
 
         public override void OnHave(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
+            HaveMessage payload = new HaveMessage(message.ToBytes());
+
+            context.Battlefield.Handle(channel.Endpoint.Session, payload);
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("have"));
-            context.Callback.OnHave(channel.Endpoint, new HaveMessage());
         }
 
         public override void OnBitfield(ConnectionLoopChannel channel, ConnectionLoopMessage message)
         {
             BitfieldMessage payload = new BitfieldMessage(message.ToBytes());
-            Bitfield bitfield = payload.ToBitfield();
 
-            context.Battlefield.Handle(channel.Endpoint.Session.Peer, bitfield);
+            context.Battlefield.Handle(channel.Endpoint.Session, payload);
             context.Callback.OnIncoming(channel.Endpoint, message.ToConnector("bitfield"));
-            context.Callback.OnBitfield(channel.Endpoint, payload);
         }
 
         public override void OnPiece(ConnectionLoopChannel channel, ConnectionLoopMessage message)
@@ -87,7 +86,7 @@ namespace Leak.Core.Collector.Callbacks
             lock (context.Synchronized)
             {
                 context.Peers.Dismiss(channel.Endpoint.Session.Peer);
-                context.Battlefield.Remove(channel.Endpoint.Session.Peer);
+                context.Battlefield.Remove(channel.Endpoint.Session);
 
                 context.Responder.Remove(channel.Endpoint.Session.Peer);
                 context.Cando.Remove(channel.Endpoint.Session);
@@ -101,7 +100,7 @@ namespace Leak.Core.Collector.Callbacks
             lock (context.Synchronized)
             {
                 context.Peers.Dismiss(channel.Endpoint.Session.Peer);
-                context.Battlefield.Remove(channel.Endpoint.Session.Peer);
+                context.Battlefield.Remove(channel.Endpoint.Session);
 
                 context.Responder.Remove(channel.Endpoint.Session.Peer);
                 context.Cando.Remove(channel.Endpoint.Session);

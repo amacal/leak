@@ -1,15 +1,19 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 
 namespace Leak.Core.Battlefield
 {
     public class BattlefieldEntry
     {
-        private readonly PeerHash peer;
+        private readonly PeerSession session;
 
-        public BattlefieldEntry(PeerHash peer)
+        public BattlefieldEntry(PeerSession session)
         {
-            this.peer = peer;
+            this.session = session;
+        }
+
+        public PeerSession Session
+        {
+            get { return session; }
         }
 
         public Bitfield Bitfield { get; set; }

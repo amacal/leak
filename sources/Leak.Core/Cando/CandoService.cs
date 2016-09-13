@@ -85,7 +85,7 @@ namespace Leak.Core.Cando
                 Extended payload = callback.Invoke(formatter);
                 ExtendedOutgoingMessage message = new ExtendedOutgoingMessage(payload);
 
-                context.Callback.OnOutgoingMessage(session.Peer, message);
+                context.Callback.OnOutgoingMessage(session, message);
             }
         }
 
@@ -152,7 +152,7 @@ namespace Leak.Core.Cando
                 Extended extended = new Extended(0, data);
                 ExtendedOutgoingMessage message = new ExtendedOutgoingMessage(extended);
 
-                context.Callback.OnOutgoingMessage(entry.Session.Peer, message);
+                context.Callback.OnOutgoingMessage(entry.Session, message);
                 entry.KnowsLocalExtensions = true;
             }
         }

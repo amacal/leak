@@ -13,35 +13,65 @@ namespace Leak.Core.Battlefield
             context = new BattlefieldContext(configurer);
         }
 
-        public void Handle(PeerHash peer, Bitfield bitfield)
+        public void Handle(PeerSession session, BitfieldMessage message)
         {
+            Bitfield bitfield = null;
+            BattlefieldEntry entry = null;
+
             lock (context.Synchronized)
             {
-                context.Collection.GetOrCreate(peer).Bitfield = bitfield;
+                bitfield = message.ToBitfield();
+                entry = context.Collection.GetOrCreate(session);
+
+                entry.Bitfield = bitfield;
+            }
+
+            context.Callback.OnBitfieldChanged(session, bitfield);
+        }
+
+        public void Handle(PeerSession session, HaveMessage message)
+        {
+            Bitfield bitfield = null;
+            BattlefieldEntry entry = null;
+
+            lock (context.Synchronized)
+            {
+                entry = context.Collection.GetOrCreate(session);
+                bitfield = entry.Bitfield;
+
+                if (bitfield != null)
+                {
+                    bitfield[message.Piece] = true;
+                }
+            }
+
+            if (bitfield != null)
+            {
+                context.Callback.OnBitfieldChanged(session, bitfield);
             }
         }
 
-        public bool Contains(PeerHash peer)
+        public bool Contains(PeerSession session)
         {
             lock (context.Synchronized)
             {
-                return context.Collection.GetOrCreate(peer).Bitfield != null;
+                return context.Collection.GetOrCreate(session).Bitfield != null;
             }
         }
 
-        public Bitfield Get(PeerHash peer)
+        public Bitfield Get(PeerSession session)
         {
             lock (context.Synchronized)
             {
-                return context.Collection.GetOrCreate(peer).Bitfield;
+                return context.Collection.GetOrCreate(session).Bitfield;
             }
         }
 
-        public void Remove(PeerHash peer)
+        public void Remove(PeerSession session)
         {
             lock (context.Synchronized)
             {
-                context.Collection.Remove(peer);
+                context.Collection.Remove(session);
             }
         }
     }

@@ -5,29 +5,29 @@ namespace Leak.Core.Battlefield
 {
     public class BattlefieldCollection
     {
-        private readonly Dictionary<PeerHash, BattlefieldEntry> byPeer;
+        private readonly Dictionary<PeerSession, BattlefieldEntry> byPeer;
 
         public BattlefieldCollection()
         {
-            byPeer = new Dictionary<PeerHash, BattlefieldEntry>();
+            byPeer = new Dictionary<PeerSession, BattlefieldEntry>();
         }
 
-        public BattlefieldEntry GetOrCreate(PeerHash peer)
+        public BattlefieldEntry GetOrCreate(PeerSession session)
         {
             BattlefieldEntry entry;
 
-            if (byPeer.TryGetValue(peer, out entry) == false)
+            if (byPeer.TryGetValue(session, out entry) == false)
             {
-                entry = new BattlefieldEntry(peer);
-                byPeer.Add(peer, entry);
+                entry = new BattlefieldEntry(session);
+                byPeer.Add(session, entry);
             }
 
             return entry;
         }
 
-        public void Remove(PeerHash peer)
+        public void Remove(PeerSession session)
         {
-            byPeer.Remove(peer);
+            byPeer.Remove(session);
         }
     }
 }

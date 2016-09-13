@@ -59,9 +59,7 @@ namespace Leak.Core.Collector
 
         void OnInterested(PeerEndpoint endpoint, InterestedMessage message);
 
-        void OnHave(PeerEndpoint endpoint, HaveMessage message);
-
-        void OnBitfield(PeerEndpoint endpoint, BitfieldMessage message);
+        void OnBitfield(PeerSession session, Bitfield bitfield);
 
         void OnPiece(PeerEndpoint endpoint, PieceMessage message);
 

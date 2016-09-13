@@ -5,21 +5,21 @@ namespace Leak.Core.Client.Configuration
 {
     public class PeerClientConnectorBuilder
     {
-        private PeerClientListenerStatus status;
+        private PeerClientConnectorStatus status;
 
         public PeerClientConnectorBuilder()
         {
-            status = PeerClientListenerStatus.Off;
+            status = PeerClientConnectorStatus.Off;
         }
 
         public void Disable()
         {
-            status = PeerClientListenerStatus.Off;
+            status = PeerClientConnectorStatus.Off;
         }
 
         public void Enable()
         {
-            status = PeerClientListenerStatus.On;
+            status = PeerClientConnectorStatus.On;
         }
 
         public PeerConnector Build(Action<PeerConnectorConfiguration> configurer)

@@ -70,6 +70,7 @@
     <Compile Include="Client\PeerClientContext.cs" />
     <Compile Include="Client\PeerClientEntry.cs" />
     <Compile Include="Client\Callbacks\PeerClientToScheduler.cs" />
+    <Compile Include="Collector\Callbacks\PeerCollectorToBattlefield.cs" />
     <Compile Include="Collector\Criterions\IsBitfieldKnown.cs" />
     <Compile Include="Collector\Criterions\OrderByBitfield.cs" />
     <Compile Include="Collector\Extensions\MetadataInstaller.cs" />

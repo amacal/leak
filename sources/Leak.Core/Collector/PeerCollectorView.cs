@@ -41,9 +41,9 @@ namespace Leak.Core.Collector
             return sessions.ToArray();
         }
 
-        public Bitfield GetBitfield(PeerHash peer)
+        public Bitfield GetBitfield(PeerSession session)
         {
-            return context.Battlefield.Get(peer);
+            return context.Battlefield.Get(session);
         }
 
         public void Increase(PeerHash peer, int step)

@@ -76,6 +76,7 @@ namespace Leak.Core.Collector
 
             battlefield = new BattlefieldService(with =>
             {
+                with.Callback = new PeerCollectorToBattlefield(this);
             });
 
             synchronized = new object();

@@ -13,9 +13,9 @@ namespace Leak.Core.Collector.Callbacks
             this.context = context;
         }
 
-        public override void OnOutgoingMessage(PeerHash peer, ExtendedOutgoingMessage message)
+        public override void OnOutgoingMessage(PeerSession session, ExtendedOutgoingMessage message)
         {
-            context.Communicator.Get(peer).Send(message);
+            context.Communicator.Get(session.Peer).Send(message);
         }
     }
 }

@@ -60,11 +60,7 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnHave(PeerEndpoint endpoint, HaveMessage message)
-        {
-        }
-
-        public virtual void OnBitfield(PeerEndpoint endpoint, BitfieldMessage message)
+        public virtual void OnBitfield(PeerSession session, Bitfield bitfield)
         {
         }
 

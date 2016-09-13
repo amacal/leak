@@ -86,6 +86,18 @@ namespace Leak.Core
             return value;
         }
 
+        public static int ReadInt32(byte[] data, int offset)
+        {
+            int value = 0;
+
+            for (int i = 0; i < 4; i++)
+            {
+                value = (value << 8) + data[offset + i];
+            }
+
+            return value;
+        }
+
         public static byte[] ToInt32(int value)
         {
             byte[] data = new byte[4];

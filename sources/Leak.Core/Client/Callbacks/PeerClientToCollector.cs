@@ -63,13 +63,13 @@ namespace Leak.Core.Client.Callbacks
         {
         }
 
-        public override void OnBitfield(PeerEndpoint endpoint, BitfieldMessage message)
+        public override void OnBitfield(PeerSession session, Bitfield bitfield)
         {
-            context.Callback.OnPeerBitfield(endpoint.Session.Hash, endpoint.Session.Peer, message.ToBitfield());
+            context.Callback.OnPeerBitfield(session.Hash, session.Peer, bitfield);
 
             context.Scheduler.Handle(with =>
             {
-                with.OnPeerBitfield(endpoint.Session.Peer, message.ToBitfield());
+                with.OnPeerBitfield(session.Peer, bitfield);
             });
         }
 

@@ -15,7 +15,7 @@ namespace Leak.Core.Collector.Criterions
                 Peer peer = new Peer
                 {
                     Session = session,
-                    Completed = context.Battlefield.Get(session.Peer)?.Completed
+                    Completed = context.Battlefield.Get(session)?.Completed
                 };
 
                 if (peer.Completed != null)

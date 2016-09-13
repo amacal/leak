@@ -17,7 +17,7 @@ namespace Leak.Core.Retriever.Tasks
         {
             foreach (PeerSession session in context.Collector.GetPeers(Criterion))
             {
-                Bitfield bitfield = context.Collector.GetBitfield(session.Peer);
+                Bitfield bitfield = context.Collector.GetBitfield(session);
 
                 if (bitfield != null)
                 {

@@ -8,7 +8,7 @@ namespace Leak.Core.Collector.Criterions
     {
         public IEnumerable<PeerSession> Accept(IEnumerable<PeerSession> sessions, PeerCollectorContext context)
         {
-            return sessions.Where(session => context.Battlefield.Contains(session.Peer));
+            return sessions.Where(context.Battlefield.Contains);
         }
     }
 }

@@ -5,6 +5,6 @@ namespace Leak.Core.Cando
 {
     public interface CandoCallback
     {
-        void OnOutgoingMessage(PeerHash peer, ExtendedOutgoingMessage message);
+        void OnOutgoingMessage(PeerSession session, ExtendedOutgoingMessage message);
     }
 }

@@ -23,9 +23,9 @@ namespace Leak.Core.Battlefield
             get { return synchronized; }
         }
 
-        public BattlefieldConfiguration Configuration
+        public BattlefieldCallback Callback
         {
-            get { return configuration; }
+            get { return configuration.Callback; }
         }
 
         public BattlefieldCollection Collection
