@@ -45,7 +45,8 @@ options:
 PeerClient client = new PeerClient(with =>
 {
     with.Destination = "d:\\leak";
-    with.Extensions.Metadata();
+    with.Metadata.Enable();
+    with.PeerExchange.Enable();
 });
 
 client.Start(with =>
