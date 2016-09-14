@@ -8,7 +8,8 @@ namespace Leak.Core.Repository
         /// Called when the resource was allocated in the file system.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
-        void OnAllocated(FileHash hash);
+        /// <param name="allocation">The description of the allocation.</param>
+        void OnAllocated(FileHash hash, RepositoryAllocation allocation);
 
         /// <summary>
         /// Called when the resource was verified against metadata.

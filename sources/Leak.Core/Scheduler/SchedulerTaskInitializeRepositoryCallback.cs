@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Messages;
 using Leak.Core.Repository;
 
 namespace Leak.Core.Scheduler
@@ -11,6 +10,11 @@ namespace Leak.Core.Scheduler
         public SchedulerTaskInitializeRepositoryCallback(SchedulerTaskInitializeContext context)
         {
             this.context = context;
+        }
+
+        public override void OnAllocated(FileHash hash, RepositoryAllocation allocation)
+        {
+            context.Repository.Verify(allocation.ToBitfield());
         }
 
         public override void OnVerified(FileHash hash, Bitfield bitfield)

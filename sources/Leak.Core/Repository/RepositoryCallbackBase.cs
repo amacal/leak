@@ -4,7 +4,7 @@ namespace Leak.Core.Repository
 {
     public abstract class RepositoryCallbackBase : RepositoryCallback
     {
-        public virtual void OnAllocated(FileHash hash)
+        public virtual void OnAllocated(FileHash hash, RepositoryAllocation allocation)
         {
         }
 

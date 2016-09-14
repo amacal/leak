@@ -22,9 +22,9 @@ namespace Leak.Core.Repository
             context.Queue.Add(new RepositoryTaskAllocate());
         }
 
-        public void Verify()
+        public void Verify(Bitfield scope)
         {
-            context.Queue.Add(new RepositoryTaskVerifyAll());
+            context.Queue.Add(new RepositoryTaskVerifyRange(scope));
         }
 
         public void Verify(PieceInfo piece)

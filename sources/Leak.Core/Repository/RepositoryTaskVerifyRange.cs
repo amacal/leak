@@ -10,8 +10,15 @@ using System.Threading.Tasks;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskVerifyAll : LeakTask<RepositoryContext>
+    public class RepositoryTaskVerifyRange : LeakTask<RepositoryContext>
     {
+        private readonly Bitfield scope;
+
+        public RepositoryTaskVerifyRange(Bitfield scope)
+        {
+            this.scope = scope;
+        }
+
         public void Execute(RepositoryContext context)
         {
             int length = context.Metainfo.Pieces.Length;
@@ -29,7 +36,7 @@ namespace Leak.Core.Repository
                 Writing = new SemaphoreSlim(count, count),
                 Pieces = new Queue<PieceData>(),
                 Buffer = new RotatingBuffer(count, size),
-                Left = context.Metainfo.Pieces.Length
+                Left = scope.Completed
             };
 
             List<Task> tasks = new List<Task>
@@ -54,6 +61,7 @@ namespace Leak.Core.Repository
             return Task.Run(() =>
             {
                 int piece = 0;
+                bool seek = false;
 
                 Metainfo metainfo = data.Context.Metainfo;
                 string destination = data.Context.Destination;
@@ -67,24 +75,37 @@ namespace Leak.Core.Repository
 
                     while (piece < metainfo.Properties.Pieces)
                     {
-                        data.Writing.Wait();
-                        buffer = data.Buffer.Next();
-
-                        read = stream.Read(buffer.Bytes, 0, read);
-                        piece = piece + 1;
-
-                        lock (data.Pieces)
+                        if (scope[piece] == false)
                         {
-                            data.Pieces.Enqueue(new PieceData
-                            {
-                                Index = piece - 1,
-                                Hash = metainfo.Pieces[piece - 1],
-                                Data = buffer,
-                                Size = read
-                            });
+                            seek = true;
+                            piece++;
                         }
+                        else
+                        {
+                            if (seek)
+                            {
+                                stream.Seek(piece * metainfo.Properties.PieceSize, SeekOrigin.Begin);
+                            }
 
-                        data.Reading.Release(1);
+                            data.Writing.Wait();
+                            buffer = data.Buffer.Next();
+
+                            read = stream.Read(buffer.Bytes, 0, read);
+                            piece = piece + 1;
+
+                            lock (data.Pieces)
+                            {
+                                data.Pieces.Enqueue(new PieceData
+                                {
+                                    Index = piece - 1,
+                                    Hash = metainfo.Pieces[piece - 1],
+                                    Data = buffer,
+                                    Size = read
+                                });
+                            }
+
+                            data.Reading.Release(1);
+                        }
                     }
                 }
             });

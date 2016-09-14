@@ -34,9 +34,8 @@ namespace Leak.Core.Scheduler
             inside.Queue = context.Queue;
             inside.Callback = context.Callback;
 
-            inside.Repository.Allocate();
-            inside.Repository.Verify();
             inside.Repository.Start();
+            inside.Repository.Allocate();
 
             return new SchedulerTaskCallbackNothing();
         }

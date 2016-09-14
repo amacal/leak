@@ -109,6 +109,8 @@
     <Compile Include="Omnibus\Tasks\InvalidatePieceTask.cs" />
     <Compile Include="Omnibus\Tasks\SchedulePeerTask.cs" />
     <Compile Include="Omnibus\Tasks\CompletePieceTask.cs" />
+    <Compile Include="Repository\RepositoryAllocation.cs" />
+    <Compile Include="Repository\RepositoryAllocationRange.cs" />
     <Compile Include="Repository\RepositoryBlock.cs" />
     <Compile Include="Repository\RepositoryBlockData.cs" />
     <Compile Include="Repository\RepositoryCallback.cs" />
@@ -119,7 +121,7 @@
     <Compile Include="Repository\RepositoryExtensions.cs" />
     <Compile Include="Repository\RepositoryService.cs" />
     <Compile Include="Repository\RepositoryTaskAllocate.cs" />
-    <Compile Include="Repository\RepositoryTaskVerifyAll.cs" />
+    <Compile Include="Repository\RepositoryTaskVerifyRange.cs" />
     <Compile Include="Repository\RepositoryTaskVerifyPiece.cs" />
     <Compile Include="Repository\RepositoryTaskWriteBlock.cs" />
     <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
