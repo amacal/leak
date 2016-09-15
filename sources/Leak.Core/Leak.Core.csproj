@@ -119,11 +119,16 @@
     <Compile Include="Repository\RepositoryConfiguration.cs" />
     <Compile Include="Repository\RepositoryContext.cs" />
     <Compile Include="Repository\RepositoryExtensions.cs" />
+    <Compile Include="Repository\RepositoryTaskMergeable.cs" />
+    <Compile Include="Repository\RepositoryTaskQueue.cs" />
     <Compile Include="Repository\RepositoryService.cs" />
+    <Compile Include="Repository\RepositoryTask.cs" />
     <Compile Include="Repository\RepositoryTaskAllocate.cs" />
     <Compile Include="Repository\RepositoryTaskVerifyRange.cs" />
     <Compile Include="Repository\RepositoryTaskVerifyPiece.cs" />
+    <Compile Include="Repository\RepositoryTaskVisitor.cs" />
     <Compile Include="Repository\RepositoryTaskWriteBlock.cs" />
+    <Compile Include="Repository\RepositoryTaskWriteData.cs" />
     <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
     <Compile Include="Retriever\RetrieverCallback.cs" />
     <Compile Include="Retriever\RetrieverCallbackBase.cs" />

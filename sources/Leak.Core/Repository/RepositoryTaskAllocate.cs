@@ -1,11 +1,15 @@
-﻿using Leak.Core.Core;
-using Leak.Core.Metadata;
+﻿using Leak.Core.Metadata;
 using System.IO;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskAllocate : LeakTask<RepositoryContext>
+    public class RepositoryTaskAllocate : RepositoryTask
     {
+        public void Accept(RepositoryTaskVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
         public void Execute(RepositoryContext context)
         {
             long position = 0;

@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Core;
 using Leak.Core.Metadata;
 using System;
 using System.Collections.Generic;
@@ -10,13 +9,18 @@ using System.Threading.Tasks;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskVerifyRange : LeakTask<RepositoryContext>
+    public class RepositoryTaskVerifyRange : RepositoryTask
     {
         private readonly Bitfield scope;
 
         public RepositoryTaskVerifyRange(Bitfield scope)
         {
             this.scope = scope;
+        }
+
+        public void Accept(RepositoryTaskVisitor visitor)
+        {
+            visitor.Visit(this);
         }
 
         public void Execute(RepositoryContext context)
