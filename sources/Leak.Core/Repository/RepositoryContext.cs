@@ -20,7 +20,7 @@ namespace Leak.Core.Repository
             });
 
             queue = new RepositoryTaskQueue();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(25));
+            timer = new LeakTimer(TimeSpan.FromMilliseconds(50));
             buffer = new byte[configuration.Metainfo.Properties.PieceSize];
         }
 

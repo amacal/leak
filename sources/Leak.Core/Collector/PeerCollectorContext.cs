@@ -72,6 +72,8 @@ namespace Leak.Core.Collector
 
             ranking = new RankingService(with =>
             {
+                with.Minimum = -1024;
+                with.Maximum = +4096;
             });
 
             battlefield = new BattlefieldService(with =>

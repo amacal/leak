@@ -12,6 +12,7 @@ namespace Leak.Core.Retriever.Tasks
     {
         public void Execute(RetrieverContext context)
         {
+            Schedule(context, 2048, 8, 256);
             Schedule(context, 1024, 8, 64);
             Schedule(context, 128, 8, 16);
             Schedule(context, 0, 16, 4);
