@@ -42,6 +42,13 @@
     <Compile Include="Battlefield\BattlefieldContext.cs" />
     <Compile Include="Battlefield\BattlefieldEntry.cs" />
     <Compile Include="Battlefield\BattlefieldService.cs" />
+    <Compile Include="Bitfile\BitfileCallback.cs" />
+    <Compile Include="Bitfile\BitfileCallbackBase.cs" />
+    <Compile Include="Bitfile\BitfileCallbackNothing.cs" />
+    <Compile Include="Bitfile\BitfileConfiguration.cs" />
+    <Compile Include="Bitfile\BitfileContext.cs" />
+    <Compile Include="Bitfile\BitfileDestination.cs" />
+    <Compile Include="Bitfile\BitfileService.cs" />
     <Compile Include="Bouncer\PeerBouncerContext.cs" />
     <Compile Include="Cando\CandoBuilder.cs" />
     <Compile Include="Cando\CandoCallback.cs" />

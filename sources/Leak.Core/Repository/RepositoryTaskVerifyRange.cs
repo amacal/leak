@@ -25,13 +25,17 @@ namespace Leak.Core.Repository
 
         public void Execute(RepositoryContext context)
         {
+            FileHash hash = context.Metainfo.Hash;
+            Bitfield bitfield = context.Bitfile.Read();
+
             int length = context.Metainfo.Pieces.Length;
             int size = context.Metainfo.Properties.PieceSize;
 
-            FileHash hash = context.Metainfo.Hash;
-            Bitfield bitfield = new Bitfield(length);
+            bitfield = bitfield ?? new Bitfield(length);
 
             int count = Environment.ProcessorCount;
+            Bitfield reduced = ReduceScope(bitfield);
+
             TaskData data = new TaskData
             {
                 Context = context,
@@ -40,7 +44,8 @@ namespace Leak.Core.Repository
                 Writing = new SemaphoreSlim(count, count),
                 Pieces = new Queue<PieceData>(),
                 Buffer = new RotatingBuffer(count, size),
-                Left = scope.Completed
+                Left = reduced.Completed,
+                Scope = reduced,
             };
 
             List<Task> tasks = new List<Task>
@@ -54,10 +59,25 @@ namespace Leak.Core.Repository
             }
 
             Task.WaitAll(tasks.ToArray());
-            data.Context.Callback.OnVerified(hash, bitfield);
+            data.Context.Bitfile.Write(bitfield);
 
             data.Reading.Dispose();
             data.Writing.Dispose();
+
+            context.Callback.OnVerified(hash, bitfield);
+        }
+
+        private Bitfield ReduceScope(Bitfield bitfield)
+        {
+            int size = bitfield.Length;
+            Bitfield reduced = new Bitfield(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                reduced[i] = scope[i] && bitfield[i] == false;
+            }
+
+            return reduced;
         }
 
         private Task BufferPieces(TaskData data)
@@ -79,7 +99,7 @@ namespace Leak.Core.Repository
 
                     while (piece < metainfo.Properties.Pieces)
                     {
-                        if (scope[piece] == false)
+                        if (data.Scope[piece] == false)
                         {
                             seek = true;
                             piece++;
@@ -171,6 +191,7 @@ namespace Leak.Core.Repository
 
             public Bitfield Bitfield { get; set; }
 
+            public Bitfield Scope { get; set; }
             public int Left { get; set; }
         }
 

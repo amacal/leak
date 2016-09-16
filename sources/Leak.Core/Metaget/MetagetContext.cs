@@ -25,7 +25,7 @@ namespace Leak.Core.Metaget
             metafile = new MetafileService(with =>
             {
                 with.Hash = configuration.Hash;
-                with.Destination = configuration.Destination;
+                with.Destination = configuration.Destination + ".metainfo";
                 with.Callback = new MetagetMetafile(this);
             });
 
