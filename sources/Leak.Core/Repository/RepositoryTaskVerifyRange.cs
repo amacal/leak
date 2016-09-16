@@ -108,7 +108,7 @@ namespace Leak.Core.Repository
                         {
                             if (seek)
                             {
-                                stream.Seek(piece * metainfo.Properties.PieceSize, SeekOrigin.Begin);
+                                stream.Seek((long)piece * metainfo.Properties.PieceSize, SeekOrigin.Begin);
                             }
 
                             data.Writing.Wait();
