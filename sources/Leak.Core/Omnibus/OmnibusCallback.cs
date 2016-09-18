@@ -47,5 +47,7 @@ namespace Leak.Core.Omnibus
         /// <param name="peer">The hash of the affected peer.</param>
         /// <param name="block">The affected block.</param>
         void OnBlockExpired(FileHash hash, PeerHash peer, OmnibusBlock block);
+
+        void OnScheduleRequested(FileHash hash, PeerHash peer);
     }
 }

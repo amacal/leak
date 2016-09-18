@@ -12,7 +12,7 @@ namespace Leak.Core.Omnibus.Strategies
             int current = context.Reservations.Count(peer);
             int left = Math.Min(count, count - current);
 
-            if (current < 16 && left > 0)
+            if (left > 0 && current <= context.SchedulerThreshold)
             {
                 DateTime now = DateTime.Now;
                 Bitfield bitfield = context.Bitfields.ByPeer(peer);

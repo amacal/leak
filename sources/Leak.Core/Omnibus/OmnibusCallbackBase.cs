@@ -28,5 +28,9 @@ namespace Leak.Core.Omnibus
         public virtual void OnBlockExpired(FileHash hash, PeerHash peer, OmnibusBlock block)
         {
         }
+
+        public virtual void OnScheduleRequested(FileHash hash, PeerHash peer)
+        {
+        }
     }
 }

@@ -147,8 +147,9 @@
     <Compile Include="Retriever\RetrieverStrategy.cs" />
     <Compile Include="Retriever\Tasks\HandleBitfieldTask.cs" />
     <Compile Include="Retriever\Tasks\FindBitfieldsTask.cs" />
-    <Compile Include="Retriever\Tasks\SchedulePeersTask.cs" />
+    <Compile Include="Retriever\Tasks\ScheduleAllTask.cs" />
     <Compile Include="Retriever\Tasks\HandlePieceTask.cs" />
+    <Compile Include="Retriever\Tasks\ScheduleItTask.cs" />
     <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
     <Compile Include="Retriever\Callbacks\RetrieverToRepository.cs" />
     <Compile Include="Scheduler\SchedulerCallback.cs" />

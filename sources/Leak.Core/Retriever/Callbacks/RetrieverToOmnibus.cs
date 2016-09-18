@@ -3,6 +3,7 @@ using Leak.Core.Messages;
 using Leak.Core.Omnibus;
 using Leak.Core.Omnibus.Events;
 using Leak.Core.Retriever.Components;
+using Leak.Core.Retriever.Tasks;
 using System.Collections.Generic;
 
 namespace Leak.Core.Retriever.Callbacks
@@ -47,6 +48,11 @@ namespace Leak.Core.Retriever.Callbacks
         public override void OnFileCompleted(FileHash hash)
         {
             context.Callback.OnFileCompleted(hash);
+        }
+
+        public override void OnScheduleRequested(FileHash hash, PeerHash peer)
+        {
+            context.Queue.Add(new ScheduleItTask(peer));
         }
     }
 }

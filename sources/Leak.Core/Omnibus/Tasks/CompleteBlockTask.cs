@@ -1,4 +1,5 @@
-﻿using Leak.Core.Core;
+﻿using Leak.Core.Common;
+using Leak.Core.Core;
 
 namespace Leak.Core.Omnibus.Tasks
 {
@@ -16,10 +17,18 @@ namespace Leak.Core.Omnibus.Tasks
             int blockSize = context.Metainfo.Properties.BlockSize;
             int blockIndex = block.Offset / blockSize;
 
+            int left;
+            PeerHash peer;
+
             lock (context.Synchronized)
             {
-                context.Reservations.Complete(block);
+                left = context.Reservations.Complete(block, out peer);
                 context.Pieces.Complete(block.Piece, blockIndex);
+            }
+
+            if (peer != null && left == context.SchedulerThreshold)
+            {
+                context.Callback.OnScheduleRequested(context.Metainfo.Hash, peer);
             }
         }
     }

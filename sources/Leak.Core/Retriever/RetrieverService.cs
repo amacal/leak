@@ -41,7 +41,7 @@ namespace Leak.Core.Retriever
         {
             if (context.NextSchedule < DateTime.Now)
             {
-                context.Queue.Add(new SchedulePeersTask());
+                context.Queue.Add(new ScheduleAllTask());
             }
 
             context.Queue.Process(context);

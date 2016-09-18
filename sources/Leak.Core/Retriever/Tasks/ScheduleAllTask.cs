@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class SchedulePeersTask : LeakTask<RetrieverContext>
+    public class ScheduleAllTask : LeakTask<RetrieverContext>
     {
         public void Execute(RetrieverContext context)
         {

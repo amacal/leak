@@ -24,6 +24,24 @@ namespace Leak.Core.Collector
             get { return hash; }
         }
 
+        public bool Is(PeerHash peer, params PeerCollectorCriterion[] criterions)
+        {
+            IEnumerable<PeerSession> sessions = new[]
+            {
+                new PeerSession(hash, peer)
+            };
+
+            lock (context.Synchronized)
+            {
+                foreach (PeerCollectorCriterion criterion in criterions)
+                {
+                    sessions = criterion.Accept(sessions, context);
+                }
+            }
+
+            return sessions.Any();
+        }
+
         public PeerSession[] GetPeers(params PeerCollectorCriterion[] criterions)
         {
             IEnumerable<PeerSession> sessions;

@@ -69,16 +69,25 @@ namespace Leak.Core.Omnibus.Components
             return previous;
         }
 
-        public void Complete(OmnibusBlock request)
+        public int Complete(OmnibusBlock request, out PeerHash peer)
         {
             OmnibusReservation block;
             byBlock.TryGetValue(request, out block);
 
             if (block != null)
             {
-                byPeer[block.Peer].Remove(block);
+                HashSet<OmnibusReservation> blocks;
+                byPeer.TryGetValue(block.Peer, out blocks);
+
+                blocks.Remove(block);
                 byBlock.Remove(request);
+
+                peer = block.Peer;
+                return blocks.Count;
             }
+
+            peer = null;
+            return 0;
         }
 
         public int Count(PeerHash peer)

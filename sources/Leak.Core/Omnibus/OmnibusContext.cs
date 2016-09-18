@@ -22,6 +22,7 @@ namespace Leak.Core.Omnibus
             {
                 with.Callback = new OmnibusCallbackNothing();
                 with.LeaseDuration = TimeSpan.FromSeconds(30);
+                with.SchedulerThreshold = 16;
             });
 
             bitfields = new OmnibusBitfieldCollection(configuration.Metainfo.Properties.Pieces);
@@ -32,6 +33,11 @@ namespace Leak.Core.Omnibus
 
             synchronized = new object();
             pieces = new OmnibusPieceCollection(this);
+        }
+
+        public int SchedulerThreshold
+        {
+            get { return configuration.SchedulerThreshold; }
         }
 
         public Metainfo Metainfo

@@ -1,7 +1,6 @@
 ﻿using Leak.Core.Common;
-using System.Collections.Generic;
-using Leak.Core.Omnibus.Components;
 using Leak.Core.Omnibus.Strategies;
+using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus
 {

@@ -13,5 +13,7 @@ namespace Leak.Core.Omnibus
         public OmnibusCallback Callback { get; set; }
 
         public TimeSpan LeaseDuration { get; set; }
+
+        public int SchedulerThreshold { get; set; }
     }
 }
