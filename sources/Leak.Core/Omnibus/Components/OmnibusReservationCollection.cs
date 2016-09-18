@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Leak.Core.Common;
+using System;
 using System.Collections.Generic;
-using Leak.Core.Common;
 
 namespace Leak.Core.Omnibus.Components
 {
@@ -39,25 +39,29 @@ namespace Leak.Core.Omnibus.Components
         {
             PeerHash previous = null;
             OmnibusReservation book;
+            HashSet<OmnibusReservation> books;
 
             if (byBlock.TryGetValue(request, out book))
             {
                 previous = book.Peer;
             }
 
-            byBlock[request] = new OmnibusReservation
+            book = new OmnibusReservation
             {
                 Peer = peer,
                 Expires = DateTime.Now.AddSeconds(30),
                 Request = request
             };
 
-            if (byPeer.ContainsKey(peer) == false)
+            if (byPeer.TryGetValue(peer, out books) == false)
             {
-                byPeer.Add(peer, new HashSet<OmnibusReservation>());
+                books = new HashSet<OmnibusReservation>();
+                byPeer.Add(peer, books);
             }
 
-            byPeer[peer].Add(byBlock[request]);
+            byBlock[request] = book;
+            books.Add(book);
+
             return previous;
         }
 

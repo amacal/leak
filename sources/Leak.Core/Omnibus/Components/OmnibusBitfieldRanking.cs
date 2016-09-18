@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Leak.Core.Common;
+using System;
 using System.Collections.Generic;
-using Leak.Core.Common;
 
 namespace Leak.Core.Omnibus.Components
 {
@@ -56,7 +56,7 @@ namespace Leak.Core.Omnibus.Components
 
             for (int i = 0; i < size; i++)
             {
-                if (completed.IsComplete(i))
+                if (result.availabilities[i] >= 0 && completed.IsComplete(i))
                 {
                     result.availabilities[i] = -1;
                 }

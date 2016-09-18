@@ -130,7 +130,7 @@ namespace Leak.Core
             if (left.Length != right.Length)
                 return false;
 
-            for (int i = 0; i < left.Length; i++)
+            for (int i = left.Length - 1; i >= 0; i--)
                 if (left[i] != right[i])
                     return false;
 
