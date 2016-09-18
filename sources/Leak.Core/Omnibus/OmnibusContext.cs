@@ -21,10 +21,11 @@ namespace Leak.Core.Omnibus
             configuration = configurer.Configure(with =>
             {
                 with.Callback = new OmnibusCallbackNothing();
+                with.LeaseDuration = TimeSpan.FromSeconds(30);
             });
 
             bitfields = new OmnibusBitfieldCollection(configuration.Metainfo.Properties.Pieces);
-            reservations = new OmnibusReservationCollection();
+            reservations = new OmnibusReservationCollection(configuration.LeaseDuration);
 
             queue = new LeakQueue<OmnibusContext>();
             timer = new LeakTimer(TimeSpan.FromMilliseconds(25));

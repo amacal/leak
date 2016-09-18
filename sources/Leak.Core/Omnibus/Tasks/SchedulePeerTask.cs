@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Omnibus.Events;
+using System;
 using System.Linq;
 
 namespace Leak.Core.Omnibus.Tasks
@@ -21,6 +22,7 @@ namespace Leak.Core.Omnibus.Tasks
         public void Execute(OmnibusContext context)
         {
             OmnibusBlock[] blocks = null;
+            DateTime now = default(DateTime);
             FileHash hash = context.Metainfo.Hash;
 
             lock (context.Synchronized)
@@ -29,9 +31,14 @@ namespace Leak.Core.Omnibus.Tasks
                 {
                     blocks = strategy.Next(context, peer, count).ToArray();
 
+                    if (blocks.Length > 0)
+                    {
+                        now = DateTime.Now;
+                    }
+
                     foreach (OmnibusBlock block in blocks)
                     {
-                        PeerHash previous = context.Reservations.Add(peer, block);
+                        PeerHash previous = context.Reservations.Add(peer, block, now);
 
                         if (previous != null)
                         {

@@ -6,11 +6,15 @@ namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusReservationCollection
     {
+        private readonly TimeSpan lease;
+
         private readonly Dictionary<OmnibusBlock, OmnibusReservation> byBlock;
         private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
 
-        public OmnibusReservationCollection()
+        public OmnibusReservationCollection(TimeSpan lease)
         {
+            this.lease = lease;
+
             byBlock = new Dictionary<OmnibusBlock, OmnibusReservation>();
             byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
         }
@@ -35,7 +39,7 @@ namespace Leak.Core.Omnibus.Components
             return book.Peer.Equals(peer);
         }
 
-        public PeerHash Add(PeerHash peer, OmnibusBlock request)
+        public PeerHash Add(PeerHash peer, OmnibusBlock request, DateTime now)
         {
             PeerHash previous = null;
             OmnibusReservation book;
@@ -49,7 +53,7 @@ namespace Leak.Core.Omnibus.Components
             book = new OmnibusReservation
             {
                 Peer = peer,
-                Expires = DateTime.Now.AddSeconds(30),
+                Expires = now + lease,
                 Request = request
             };
 

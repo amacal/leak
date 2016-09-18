@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
+using System;
 
 namespace Leak.Core.Omnibus
 {
@@ -10,5 +11,7 @@ namespace Leak.Core.Omnibus
         public Bitfield Bitfield { get; set; }
 
         public OmnibusCallback Callback { get; set; }
+
+        public TimeSpan LeaseDuration { get; set; }
     }
 }
