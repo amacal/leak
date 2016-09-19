@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Messages
 {
-    public interface DataBlock
+    public interface DataBlock : IDisposable
     {
         int Size { get; }
 

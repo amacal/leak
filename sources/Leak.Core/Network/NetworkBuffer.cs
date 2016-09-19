@@ -173,11 +173,11 @@ namespace Leak.Core.Network
             length = length - bytes;
         }
 
-        private void Decrypt(int offset, int count)
+        private void Decrypt(int start, int count)
         {
-            int min = Math.Min(count, configuration.Size - offset);
+            int min = Math.Min(count, configuration.Size - start);
 
-            configuration.Decryptor.Decrypt(data, offset, min);
+            configuration.Decryptor.Decrypt(data, start, min);
             configuration.Decryptor.Decrypt(data, 0, count - min);
         }
 

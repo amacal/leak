@@ -3,7 +3,7 @@ using System;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryBlockData
+    public class RepositoryBlockData : IDisposable
     {
         private readonly int piece;
         private readonly int offset;
@@ -34,6 +34,11 @@ namespace Leak.Core.Repository
         public void Write(Action<byte[], int, int> stream)
         {
             data.Write(stream);
+        }
+
+        public void Dispose()
+        {
+            data.Dispose();
         }
     }
 }

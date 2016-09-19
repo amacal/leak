@@ -31,6 +31,8 @@ namespace Leak.Core.Repository
                 foreach (RepositoryBlockData block in data)
                 {
                     block.Write(stream.Write);
+                    block.Dispose();
+
                     context.Callback.OnWritten(metainfo.Hash, block.ToBlock());
                 }
             }

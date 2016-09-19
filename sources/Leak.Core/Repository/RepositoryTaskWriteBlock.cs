@@ -34,7 +34,9 @@ namespace Leak.Core.Repository
             using (RepositoryStream stream = new RepositoryStream(destination, metainfo))
             {
                 stream.Seek(position, SeekOrigin.Begin);
+
                 data.Write(stream.Write);
+                data.Dispose();
             }
 
             context.Callback.OnWritten(metainfo.Hash, data.ToBlock());

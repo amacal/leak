@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Messages;
+using System;
 
 namespace Leak.Core.Network
 {
@@ -57,22 +58,31 @@ namespace Leak.Core.Network
             return result;
         }
 
-        public byte[] ToBytes(int start, int count)
+        public byte[] ToBytes(byte[] result, int position, int start, int count)
         {
-            byte[] result = new byte[count];
             int min = Math.Min(length - start, data.Length - offset - start);
 
             if (min > 0)
             {
-                Array.Copy(data, offset + start, result, 0, Math.Min(min, count));
-                Array.Copy(data, 0, result, Math.Min(min, count), count - Math.Min(min, count));
+                Array.Copy(data, offset + start, result, position, Math.Min(min, count));
+                Array.Copy(data, 0, result, Math.Min(min, count) + position, count - Math.Min(min, count));
             }
             else
             {
-                Array.Copy(data, -min, result, 0, count);
+                Array.Copy(data, -min, result, position, count);
             }
 
             return result;
+        }
+
+        public byte[] ToBytes(int start, int count)
+        {
+            return ToBytes(new byte[count], 0, start, count);
+        }
+
+        public DataBlock ToBlock(DataBlockFactory factory, int start, int count)
+        {
+            return factory.New(count, (x, y, z) => ToBytes(x, y, start, count));
         }
     }
 }

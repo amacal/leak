@@ -66,8 +66,7 @@ namespace Leak.Core.Network
 
         public DataBlock ToBlock(DataBlockFactory factory, int offset, int count)
         {
-            byte[] data = view.ToBytes(offset, count);
-            return factory.Create(data, 0, data.Length);
+            return view.ToBlock(factory, offset, count);
         }
 
         /// <summary>
