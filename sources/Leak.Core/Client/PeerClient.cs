@@ -16,6 +16,15 @@ namespace Leak.Core.Client
 
         public void Start(MetainfoFile metainfo)
         {
+            context.Scheduler.Initialize(with =>
+            {
+                with.Metainfo = metainfo.Data;
+                with.Destination = context.Destination;
+            });
+
+            context.Hashes.Add(metainfo.Data.Hash);
+            context.Callback.OnFileScheduled(metainfo.Data.Hash);
+
             foreach (string tracker in metainfo.Trackers)
             {
                 context.Telegraph.Register(tracker, with =>
@@ -23,14 +32,6 @@ namespace Leak.Core.Client
                     with.Hash = metainfo.Data.Hash;
                 });
             }
-
-            context.Scheduler.Initialize(with =>
-            {
-                with.Metainfo = metainfo.Data;
-                with.Destination = context.Destination;
-            });
-
-            context.Callback.OnFileScheduled(metainfo.Data.Hash);
         }
 
         public void Start(Action<PeerClientStartConfiguration> configurer)
@@ -41,6 +42,15 @@ namespace Leak.Core.Client
                 with.Peers = new List<PeerAddress>();
             });
 
+            context.Scheduler.Metadata(with =>
+            {
+                with.Hash = configuration.Hash;
+                with.Destination = context.Destination;
+            });
+
+            context.Hashes.Add(configuration.Hash);
+            context.Callback.OnFileScheduled(configuration.Hash);
+
             foreach (string tracker in configuration.Trackers)
             {
                 context.Telegraph.Register(tracker, with =>
@@ -48,14 +58,6 @@ namespace Leak.Core.Client
                     with.Hash = configuration.Hash;
                 });
             }
-
-            context.Scheduler.Metadata(with =>
-            {
-                with.Hash = configuration.Hash;
-                with.Destination = context.Destination;
-            });
-
-            context.Callback.OnFileScheduled(configuration.Hash);
         }
     }
 }

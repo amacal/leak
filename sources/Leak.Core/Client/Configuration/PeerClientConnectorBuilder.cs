@@ -12,6 +12,11 @@ namespace Leak.Core.Client.Configuration
             status = PeerClientConnectorStatus.Off;
         }
 
+        public PeerClientConnectorStatus Status
+        {
+            get { return status; }
+        }
+
         public void Disable()
         {
             status = PeerClientConnectorStatus.Off;

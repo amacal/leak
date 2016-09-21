@@ -18,9 +18,12 @@ namespace Leak.Core.Client.Callbacks
         {
             context.Callback.OnAnnounceCompleted(announce.Hash, new FileAnnouncedEvent(announce));
 
-            foreach (PeerAddress peer in announce.Peers)
+            if (context.Connector != null)
             {
-                context.Connector.ConnectTo(announce.Hash, peer);
+                foreach (PeerAddress peer in announce.Peers)
+                {
+                    context.Connector.ConnectTo(announce.Hash, peer);
+                }
             }
         }
     }

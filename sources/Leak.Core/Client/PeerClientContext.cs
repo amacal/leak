@@ -80,18 +80,21 @@ namespace Leak.Core.Client
                 configuration.Download.Apply(with);
             });
 
-            connector = new PeerConnector(with =>
+            if (configuration.Connector.Status == PeerClientConnectorStatus.On)
             {
-                with.Peer = configuration.Peer;
-                with.Extensions = true;
-                with.Pool = network;
-                with.Callback = collector.CreateConnectorCallback();
-            });
+                connector = configuration.Connector.Build(with =>
+                {
+                    with.Peer = configuration.Peer;
+                    with.Extensions = true;
+                    with.Pool = network;
+                    with.Callback = collector.CreateConnectorCallback();
+                });
+            }
 
-            connector.Start();
-            listener.Start();
-            telegraph.Start();
-            network.Start();
+            connector?.Start();
+            listener?.Start();
+            telegraph?.Start();
+            network?.Start();
         }
 
         /// <summary>
@@ -140,6 +143,11 @@ namespace Leak.Core.Client
         public PeerConnector Connector
         {
             get { return connector; }
+        }
+
+        public FileHashCollection Hashes
+        {
+            get { return hashes; }
         }
     }
 }

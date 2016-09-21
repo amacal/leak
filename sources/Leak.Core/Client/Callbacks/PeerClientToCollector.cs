@@ -111,9 +111,12 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnPeerExchanged(PeerSession session, PeerExchangeData data)
         {
-            foreach (PeerAddress peer in data.Added)
+            if (context.Connector != null)
             {
-                context.Connector.ConnectTo(session.Hash, peer);
+                foreach (PeerAddress peer in data.Added)
+                {
+                    context.Connector.ConnectTo(session.Hash, peer);
+                }
             }
         }
     }
