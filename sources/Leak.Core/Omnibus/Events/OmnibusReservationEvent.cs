@@ -1,13 +1,14 @@
 ﻿using Leak.Core.Common;
+using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus.Events
 {
     public class OmnibusReservationEvent
     {
         private readonly PeerHash peer;
-        private readonly OmnibusBlock[] blocks;
+        private readonly IReadOnlyCollection<OmnibusBlock> blocks;
 
-        public OmnibusReservationEvent(PeerHash peer, OmnibusBlock[] blocks)
+        public OmnibusReservationEvent(PeerHash peer, IReadOnlyCollection<OmnibusBlock> blocks)
         {
             this.peer = peer;
             this.blocks = blocks;
@@ -20,10 +21,10 @@ namespace Leak.Core.Omnibus.Events
 
         public int Count
         {
-            get { return blocks.Length; }
+            get { return blocks.Count; }
         }
 
-        public OmnibusBlock[] Blocks
+        public IEnumerable<OmnibusBlock> Blocks
         {
             get { return blocks; }
         }

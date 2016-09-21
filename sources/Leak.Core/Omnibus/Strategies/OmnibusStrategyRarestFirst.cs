@@ -7,7 +7,7 @@ namespace Leak.Core.Omnibus.Strategies
 {
     public class OmnibusStrategyRarestFirst : OmnibusStrategy
     {
-        public override IEnumerable<OmnibusBlock> Next(OmnibusContext context, PeerHash peer, int count)
+        public override void Next(List<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count)
         {
             int current = context.Reservations.Count(peer);
             int left = Math.Min(count, count - current);
@@ -17,7 +17,7 @@ namespace Leak.Core.Omnibus.Strategies
                 DateTime now = DateTime.Now;
                 Bitfield bitfield = context.Bitfields.ByPeer(peer);
 
-                int blocks = context.Metainfo.GetBlocksInPiece();
+                int inPiece = context.Metainfo.GetBlocksInPiece();
                 int total = context.Metainfo.Properties.Pieces;
 
                 OmnibusBitfieldRanking ranking = context.Bitfields.Ranking;
@@ -36,7 +36,7 @@ namespace Leak.Core.Omnibus.Strategies
                     {
                         if (positive > 0 && best[i])
                         {
-                            for (int j = 0; left > 0 && totalSize > 0 && j < blocks; j++)
+                            for (int j = 0; left > 0 && totalSize > 0 && j < inPiece; j++)
                             {
                                 if (pieces.IsComplete(i, j) == false)
                                 {
@@ -55,7 +55,7 @@ namespace Leak.Core.Omnibus.Strategies
                                     if (contains == false)
                                     {
                                         left = left - 1;
-                                        yield return block;
+                                        blocks.Add(block);
                                     }
                                 }
 
@@ -66,7 +66,7 @@ namespace Leak.Core.Omnibus.Strategies
                         }
                         else
                         {
-                            totalSize = totalSize - blocks * blockSize;
+                            totalSize = totalSize - inPiece * blockSize;
                         }
                     }
                 }

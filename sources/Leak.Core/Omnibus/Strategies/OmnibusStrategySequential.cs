@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Omnibus.Components;
+using System;
+using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus.Strategies
 {
     public class OmnibusStrategySequential : OmnibusStrategy
     {
-        public override IEnumerable<OmnibusBlock> Next(OmnibusContext context, PeerHash peer, int count)
+        public override void Next(List<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count)
         {
             DateTime now = DateTime.Now;
 
@@ -17,14 +17,14 @@ namespace Leak.Core.Omnibus.Strategies
             long totalSize = context.Metainfo.Properties.TotalSize;
             int blockSize = context.Metainfo.Properties.BlockSize;
 
-            int blocks = context.Metainfo.GetBlocksInPiece();
+            int inPiece = context.Metainfo.GetBlocksInPiece();
             int pieces = context.Metainfo.Properties.Pieces;
 
             for (int i = 0; left > 0 && i < pieces; i++)
             {
                 if (bitfield[i] && context.Pieces.IsComplete(i) == false)
                 {
-                    for (int j = 0; left > 0 && totalSize > 0 && j < blocks; j++)
+                    for (int j = 0; left > 0 && totalSize > 0 && j < inPiece; j++)
                     {
                         if (context.Pieces.IsComplete(i, j) == false)
                         {
@@ -43,7 +43,7 @@ namespace Leak.Core.Omnibus.Strategies
                             if (contains == false)
                             {
                                 left = left - 1;
-                                yield return block;
+                                blocks.Add(block);
                             }
                         }
 
@@ -52,7 +52,7 @@ namespace Leak.Core.Omnibus.Strategies
                 }
                 else
                 {
-                    totalSize = totalSize - blocks * blockSize;
+                    totalSize = totalSize - inPiece * blockSize;
                 }
             }
         }
