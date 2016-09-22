@@ -30,14 +30,23 @@
 
         public override int GetHashCode()
         {
-            return piece + offset;
+            return GetHashCode(this);
         }
 
         public override bool Equals(object obj)
         {
-            OmnibusBlock other = obj as OmnibusBlock;
+            return Equals(this, obj as OmnibusBlock);
+        }
 
-            return other.piece == piece && other.offset == offset;
+        public static int GetHashCode(OmnibusBlock block)
+        {
+            return block.piece + block.offset;
+        }
+
+        public static bool Equals(OmnibusBlock left, OmnibusBlock right)
+        {
+            return left.piece == right.piece &&
+                   left.offset == right.offset;
         }
     }
 }

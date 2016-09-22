@@ -105,6 +105,7 @@
     <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCompleted.cs" />
+    <Compile Include="Omnibus\Components\OmnibusReservationComparer.cs" />
     <Compile Include="Omnibus\Events\OmnibusReservationEvent.cs" />
     <Compile Include="Omnibus\OmnibusCallback.cs" />
     <Compile Include="Omnibus\OmnibusCallbackBase.cs" />

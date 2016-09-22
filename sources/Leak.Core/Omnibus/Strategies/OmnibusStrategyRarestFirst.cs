@@ -32,9 +32,9 @@ namespace Leak.Core.Omnibus.Strategies
                     long totalSize = context.Metainfo.Properties.TotalSize;
                     int blockSize = context.Metainfo.Properties.BlockSize;
 
-                    for (int i = 0; left > 0 && i < total; i++)
+                    for (int i = 0; left > 0 && i < total && positive > 0; i++)
                     {
-                        if (positive > 0 && best[i])
+                        if (best[i])
                         {
                             for (int j = 0; left > 0 && totalSize > 0 && j < inPiece; j++)
                             {

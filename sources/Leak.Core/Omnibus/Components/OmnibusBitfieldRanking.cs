@@ -94,7 +94,10 @@ namespace Leak.Core.Omnibus.Components
                     }
                 }
 
-                yield return bitfield;
+                if (bitfield.Completed > 0)
+                {
+                    yield return bitfield;
+                }
             }
         }
     }

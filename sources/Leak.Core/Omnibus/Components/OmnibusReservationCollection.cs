@@ -7,6 +7,7 @@ namespace Leak.Core.Omnibus.Components
     public class OmnibusReservationCollection
     {
         private readonly TimeSpan lease;
+        private readonly OmnibusReservationComparer comparer;
 
         private readonly Dictionary<OmnibusBlock, OmnibusReservation> byBlock;
         private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
@@ -15,7 +16,8 @@ namespace Leak.Core.Omnibus.Components
         {
             this.lease = lease;
 
-            byBlock = new Dictionary<OmnibusBlock, OmnibusReservation>();
+            comparer = new OmnibusReservationComparer();
+            byBlock = new Dictionary<OmnibusBlock, OmnibusReservation>(comparer);
             byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
         }
 
