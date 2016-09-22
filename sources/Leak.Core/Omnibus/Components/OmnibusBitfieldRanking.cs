@@ -73,7 +73,7 @@ namespace Leak.Core.Omnibus.Components
             {
                 if (other[i] == false)
                 {
-                    availabilities[i] = -1;
+                    result.availabilities[i] = -1;
                 }
             }
 
@@ -96,11 +96,6 @@ namespace Leak.Core.Omnibus.Components
 
                 yield return bitfield;
             }
-        }
-
-        public int this[int index]
-        {
-            get { return availabilities[index]; }
         }
     }
 }
