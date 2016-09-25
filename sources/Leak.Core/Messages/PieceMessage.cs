@@ -2,7 +2,6 @@
 {
     public class PieceMessage
     {
-        private readonly DataBlock block;
         private readonly DataBlock data;
 
         private readonly int piece;
@@ -10,11 +9,9 @@
 
         public PieceMessage(DataBlock block)
         {
-            this.block = block;
-            this.data = block.Scope(8);
-
-            this.piece = block[3] + block[2] * 256 + block[1] * 256 * 256;
-            this.offset = block[7] + block[6] * 256 + block[5] * 256 * 256;
+            data = block.Scope(8);
+            piece = block[3] + block[2] * 256 + block[1] * 256 * 256;
+            offset = block[7] + block[6] * 256 + block[5] * 256 * 256;
         }
 
         public int Piece

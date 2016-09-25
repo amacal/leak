@@ -1,20 +1,18 @@
 ﻿using Leak.Core.Messages;
 using System;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading;
 
 namespace Leak.Core.Collector
 {
     public class PeerCollectorBlockFactory : DataBlockFactory
     {
-        private readonly byte[] buffer;
-        private readonly ConcurrentQueue<int> map;
+        private readonly int size;
+        private readonly ConcurrentQueue<byte[]> buffer;
 
         public PeerCollectorBlockFactory()
         {
-            buffer = new byte[40000 * 128];
-            map = new ConcurrentQueue<int>(Enumerable.Range(0, 128));
+            size = 40000;
+            buffer = new ConcurrentQueue<byte[]>();
         }
 
         public DataBlock Create(byte[] data, int offset, int count)
@@ -24,15 +22,15 @@ namespace Leak.Core.Collector
 
         public DataBlock New(int count, Action<byte[], int, int> callback)
         {
-            int index = 0;
+            byte[] data;
 
-            while (map.TryDequeue(out index) == false)
+            if (buffer.TryDequeue(out data) == false)
             {
-                Thread.Sleep(100);
+                data = new byte[size];
             }
 
-            callback.Invoke(buffer, index * 40000, count);
-            return new DataBlockInstance(buffer, index * 40000, count, () => map.Enqueue(index));
+            callback.Invoke(data, 0, count);
+            return new DataBlockInstance(data, 0, count, buffer);
         }
 
         private class DataBlockInstance : DataBlock
@@ -40,14 +38,14 @@ namespace Leak.Core.Collector
             private readonly byte[] data;
             private readonly int start;
             private readonly int count;
-            private readonly Action onCompleted;
+            private readonly ConcurrentQueue<byte[]> buffer;
 
-            public DataBlockInstance(byte[] data, int start, int count, Action onCompleted)
+            public DataBlockInstance(byte[] data, int start, int count, ConcurrentQueue<byte[]> buffer)
             {
                 this.data = data;
                 this.start = start;
                 this.count = count;
-                this.onCompleted = onCompleted;
+                this.buffer = buffer;
             }
 
             public int Size
@@ -67,12 +65,12 @@ namespace Leak.Core.Collector
 
             public DataBlock Scope(int offset)
             {
-                return new DataBlockInstance(data, start + offset, count - offset, onCompleted);
+                return new DataBlockInstance(data, start + offset, count - offset, buffer);
             }
 
             public void Dispose()
             {
-                onCompleted?.Invoke();
+                buffer.Enqueue(data);
             }
         }
     }
