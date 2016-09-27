@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Core;
+using System;
 
 namespace Leak.Core.Network
 {
@@ -11,5 +12,7 @@ namespace Leak.Core.Network
         void OnException(long id, Exception ex);
 
         void OnSend(long id, byte[] data);
+
+        void Schedule(LeakTask<NetworkPool> task);
     }
 }

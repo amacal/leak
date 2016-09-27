@@ -162,5 +162,10 @@ namespace Leak.Core.Network
                 queue.Add(new NetworkPoolSend(entry.Connection, data));
             }
         }
+
+        void NetworkPoolListener.Schedule(LeakTask<NetworkPool> task)
+        {
+            queue.Add(task);
+        }
     }
 }

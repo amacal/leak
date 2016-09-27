@@ -81,13 +81,16 @@ namespace Leak.Core.Network
             {
                 try
                 {
-                    if (offset + length >= configuration.Size)
+                    lock (configuration.Synchronized)
                     {
-                        socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
-                    }
-                    else
-                    {
-                        socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                        if (offset + length >= configuration.Size)
+                        {
+                            socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
+                        }
+                        else
+                        {
+                            socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                        }
                     }
                 }
                 catch (SocketException ex)
@@ -110,7 +113,7 @@ namespace Leak.Core.Network
             {
                 if (length > 0)
                 {
-                    handler.BeginOnMessage(new NetworkBufferMessage(this));
+                    listener.Schedule(new NetworkPoolReceive(handler, new NetworkBufferMessage(this)));
                 }
                 else
                 {
@@ -146,7 +149,7 @@ namespace Leak.Core.Network
                         }
 
                         length += received;
-                        handler.OnMessage(new NetworkBufferMessage(this));
+                        listener.Schedule(new NetworkPoolReceive(handler, new NetworkBufferMessage(this)));
                     }
                     else
                     {

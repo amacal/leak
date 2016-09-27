@@ -102,6 +102,7 @@
     <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
     <Compile Include="Network\NetworkBufferView.cs" />
     <Compile Include="Network\NetworkIncomingMessage.cs" />
+    <Compile Include="Network\NetworkPoolReceive.cs" />
     <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCompleted.cs" />
