@@ -94,6 +94,7 @@
     <Compile Include="Connector\PeerConnectorQueue.cs" />
     <Compile Include="Connector\PeerConnectorTask.cs" />
     <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
+    <Compile Include="Core\LeakQueueBase.cs" />
     <Compile Include="Core\LeakTimer.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
     <Compile Include="Messages\DataBlock.cs" />

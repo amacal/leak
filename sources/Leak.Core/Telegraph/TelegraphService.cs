@@ -14,13 +14,13 @@ namespace Leak.Core.Telegraph
 
         public void Start()
         {
+            context.Queue.Start(context);
             context.Timer.Start(OnTick);
         }
 
         private void OnTick()
         {
             context.Queue.Add(new TelegraphTaskSchedule());
-            context.Queue.Process(context);
         }
 
         public void Register(string tracker, Action<TrackerRequest> configurer)

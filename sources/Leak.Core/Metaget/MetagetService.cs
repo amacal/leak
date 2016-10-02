@@ -15,8 +15,9 @@ namespace Leak.Core.Metaget
 
         public void Start()
         {
-            context.Timer.Start(OnTick);
+            context.Queue.Start(context);
             context.Queue.Add(new MetagetTaskVerify());
+            context.Timer.Start(OnTick);
         }
 
         public void Stop()
@@ -43,7 +44,6 @@ namespace Leak.Core.Metaget
         private void OnTick()
         {
             context.Queue.Add(new MetagetTaskNext());
-            context.Queue.Process(context);
         }
     }
 }

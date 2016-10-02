@@ -17,9 +17,11 @@ namespace Leak.Core.Retriever
 
         public void Start()
         {
-            context.Timer.Start(OnTick);
             context.Repository.Start();
             context.Omnibus.Start();
+
+            context.Queue.Start(context);
+            context.Timer.Start(OnTick);
 
             context.Callback.OnFileStarted(context.Metainfo.Hash);
 
@@ -43,8 +45,6 @@ namespace Leak.Core.Retriever
             {
                 context.Queue.Add(new ScheduleAllTask());
             }
-
-            context.Queue.Process(context);
         }
     }
 }

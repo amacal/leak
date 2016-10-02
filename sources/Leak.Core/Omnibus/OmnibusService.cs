@@ -20,12 +20,7 @@ namespace Leak.Core.Omnibus
 
         public void Start()
         {
-            context.Timer.Start(OnTick);
-        }
-
-        private void OnTick()
-        {
-            context.Queue.Process(context);
+            context.Queue.Start(context);
         }
 
         public bool IsComplete()

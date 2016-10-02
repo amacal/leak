@@ -14,7 +14,7 @@ namespace Leak.Core.Repository
 
         public void Start()
         {
-            context.Timer.Start(OnTick);
+            context.Queue.Start(context);
         }
 
         public void Allocate()
@@ -35,11 +35,6 @@ namespace Leak.Core.Repository
         public void Write(RepositoryBlockData block)
         {
             context.Queue.Add(new RepositoryTaskWriteBlock(block));
-        }
-
-        private void OnTick()
-        {
-            context.Queue.Process(context);
         }
     }
 }

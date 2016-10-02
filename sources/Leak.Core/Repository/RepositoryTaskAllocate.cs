@@ -26,9 +26,6 @@ namespace Leak.Core.Repository
                 if (file.Exists == false)
                 {
                     EnsureDirectoryExists(path);
-                }
-                else
-                {
                     allocation.Add(entry, new RepositoryAllocationRange((int)(position / pieceSize), (int)((position + entry.Size) / pieceSize)));
                 }
 

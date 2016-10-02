@@ -1,10 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using Leak.Core.Core;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskQueue
+    public class RepositoryTaskQueue : LeakQueueBase<RepositoryContext>
     {
         private readonly ConcurrentQueue<RepositoryTask> ready;
         private readonly ConcurrentQueue<RepositoryTask> items;
@@ -18,6 +19,7 @@ namespace Leak.Core.Repository
         public void Add(RepositoryTask task)
         {
             items.Enqueue(task);
+            onReady.Set();
         }
 
         public void Clear()
@@ -29,7 +31,7 @@ namespace Leak.Core.Repository
             }
         }
 
-        public void Process(RepositoryContext context)
+        protected override void OnProcess(RepositoryContext context)
         {
             RepositoryTask task;
             Merge merge = new Merge(context);

@@ -47,12 +47,7 @@ namespace Leak.Core.Network
 
         public void Start()
         {
-            timer.Start(OnTick);
-        }
-
-        private void OnTick()
-        {
-            queue.Process(this);
+            queue.Start(this);
         }
 
         public NetworkConnectionInfo Info(string remote, NetworkDirection direction)

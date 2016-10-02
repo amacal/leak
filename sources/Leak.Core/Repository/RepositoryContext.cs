@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Bitfile;
-using Leak.Core.Core;
 using Leak.Core.Metadata;
 using System;
 
@@ -10,7 +9,6 @@ namespace Leak.Core.Repository
         private readonly RepositoryConfiguration configuration;
         private readonly BitfileService bitfile;
         private readonly RepositoryTaskQueue queue;
-        private readonly LeakTimer timer;
 
         private readonly byte[] buffer;
 
@@ -28,7 +26,6 @@ namespace Leak.Core.Repository
             });
 
             queue = new RepositoryTaskQueue();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(50));
             buffer = new byte[configuration.Metainfo.Properties.PieceSize];
         }
 
@@ -55,11 +52,6 @@ namespace Leak.Core.Repository
         public RepositoryTaskQueue Queue
         {
             get { return queue; }
-        }
-
-        public LeakTimer Timer
-        {
-            get { return timer; }
         }
 
         public byte[] Buffer

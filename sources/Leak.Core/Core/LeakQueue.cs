@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Core
 {
-    public class LeakQueue<TContext>
+    public class LeakQueue<TContext> : LeakQueueBase<TContext>
     {
         private readonly ConcurrentQueue<LeakTask<TContext>> items;
 
@@ -14,6 +14,7 @@ namespace Leak.Core.Core
         public void Add(LeakTask<TContext> task)
         {
             items.Enqueue(task);
+            onReady.Set();
         }
 
         public void Clear()
@@ -25,7 +26,7 @@ namespace Leak.Core.Core
             }
         }
 
-        public void Process(TContext context)
+        protected override void OnProcess(TContext context)
         {
             LeakTask<TContext> task;
 

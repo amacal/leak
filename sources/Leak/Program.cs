@@ -1,6 +1,7 @@
 ﻿using Leak.Commands;
 using Pargos.Core;
 using Pargos.Serialization;
+using System;
 
 namespace Leak
 {
@@ -15,6 +16,8 @@ namespace Leak
             {
                 new DownloadCommand(options.Download).Execute();
             }
+
+            Environment.Exit(0);
         }
     }
 }

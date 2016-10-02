@@ -44,7 +44,7 @@ namespace Leak.Core.Repository
                 Writing = new SemaphoreSlim(count, count),
                 Pieces = new Queue<PieceData>(),
                 Buffer = new RotatingBuffer(count, size),
-                Left = reduced.Completed,
+                Left = reduced.Length - reduced.Completed,
                 Scope = reduced,
             };
 
@@ -74,7 +74,8 @@ namespace Leak.Core.Repository
 
             for (int i = 0; i < size; i++)
             {
-                reduced[i] = scope[i] && bitfield[i] == false;
+                bitfield[i] = bitfield[i] && scope[i] == false;
+                reduced[i] = scope[i] || bitfield[i];
             }
 
             return reduced;
@@ -99,7 +100,7 @@ namespace Leak.Core.Repository
 
                     while (piece < metainfo.Properties.Pieces)
                     {
-                        if (data.Scope[piece] == false)
+                        if (data.Scope[piece])
                         {
                             seek = true;
                             piece++;
