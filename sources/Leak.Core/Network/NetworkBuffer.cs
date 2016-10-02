@@ -83,13 +83,31 @@ namespace Leak.Core.Network
                 {
                     lock (configuration.Synchronized)
                     {
+                        int receiveOffset;
+                        int receiveSize;
+
                         if (offset + length >= configuration.Size)
                         {
-                            socket.BeginReceive(data, offset + length - configuration.Size, offset - (offset + length) % configuration.Size, SocketFlags.None, OnReceived, handler);
+                            receiveOffset = offset + length - configuration.Size;
+                            receiveSize = offset - (offset + length) % configuration.Size;
                         }
                         else
                         {
-                            socket.BeginReceive(data, offset + length, configuration.Size - offset - length, SocketFlags.None, OnReceived, handler);
+                            receiveOffset = offset + length;
+                            receiveSize = configuration.Size - offset - length;
+                        }
+
+                        SocketAsyncEventArgs args = new SocketAsyncEventArgs
+                        {
+                            UserToken = handler
+                        };
+
+                        args.SetBuffer(data, receiveOffset, receiveSize);
+                        args.Completed += OnReceived;
+
+                        if (socket.ReceiveAsync(args) == false)
+                        {
+                            OnReceived(null, args);
                         }
                     }
                 }
@@ -122,46 +140,49 @@ namespace Leak.Core.Network
             }
         }
 
-        private void OnReceived(IAsyncResult result)
+        private void OnReceived(object target, SocketAsyncEventArgs args)
         {
-            var handler = (NetworkIncomingMessageHandler)result.AsyncState;
-
-            if (listener.IsAvailable(identifier))
+            try
             {
-                try
+                if (listener.IsAvailable(identifier))
                 {
-                    int received = 0;
+                    var handler = (NetworkIncomingMessageHandler)args.UserToken;
 
-                    lock (configuration.Synchronized)
+                    try
                     {
-                        received = socket.EndReceive(result);
-                    }
+                        bool successful = args.SocketError == SocketError.Success &&
+                                          args.BytesTransferred > 0;
 
-                    if (received > 0)
-                    {
-                        if (offset + length >= configuration.Size)
+                        if (successful)
                         {
-                            Decrypt(offset + length - configuration.Size, received);
+                            if (offset + length >= configuration.Size)
+                            {
+                                Decrypt(offset + length - configuration.Size, args.BytesTransferred);
+                            }
+                            else
+                            {
+                                Decrypt(offset + length, args.BytesTransferred);
+                            }
+
+                            length += args.BytesTransferred;
+                            listener.Schedule(new NetworkPoolReceive(handler, new NetworkBufferMessage(this)));
                         }
                         else
                         {
-                            Decrypt(offset + length, received);
+                            listener.OnDisconnected(identifier);
+                            handler.OnDisconnected();
                         }
-
-                        length += received;
-                        listener.Schedule(new NetworkPoolReceive(handler, new NetworkBufferMessage(this)));
                     }
-                    else
+                    catch (SocketException ex)
                     {
-                        listener.OnDisconnected(identifier);
-                        handler.OnDisconnected();
+                        listener.OnException(identifier, ex);
+                        handler.OnException(ex);
                     }
                 }
-                catch (SocketException ex)
-                {
-                    listener.OnException(identifier, ex);
-                    handler.OnException(ex);
-                }
+            }
+            finally
+            {
+                args.Dispose();
             }
         }
 

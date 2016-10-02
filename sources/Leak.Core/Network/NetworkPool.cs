@@ -28,7 +28,7 @@ namespace Leak.Core.Network
             callback = configuration.Callback;
 
             queue = new LeakQueue<NetworkPool>();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(50));
+            timer = new LeakTimer(TimeSpan.FromMilliseconds(10));
         }
 
         public NetworkPool(Action<NetworkPoolConfiguration> configurer)
@@ -116,7 +116,7 @@ namespace Leak.Core.Network
             return entry?.IsAvailable == true;
         }
 
-        void NetworkPoolListener.OnDisconnected(long id)
+        public void OnDisconnected(long id)
         {
             NetworkPoolEntry entry;
 
@@ -132,7 +132,7 @@ namespace Leak.Core.Network
             }
         }
 
-        void NetworkPoolListener.OnException(long id, Exception ex)
+        public void OnException(long id, Exception ex)
         {
             NetworkPoolEntry entry;
 
@@ -145,21 +145,6 @@ namespace Leak.Core.Network
             {
                 entry.IsAvailable = false;
                 callback.OnException(entry.Connection, ex);
-            }
-        }
-
-        void NetworkPoolListener.OnSend(long id, byte[] data)
-        {
-            NetworkPoolEntry entry;
-
-            lock (items)
-            {
-                items.TryGetValue(id, out entry);
-            }
-
-            if (entry?.Connection != null)
-            {
-                queue.Add(new NetworkPoolSend(entry.Connection, data));
             }
         }
 

@@ -25,11 +25,12 @@ namespace Leak.Core.Tests.Integration.Network
                 NetworkConnection connection = pool.Create(socket, NetworkDirection.Outgoing);
 
                 connection.Direction.Should().Be(NetworkDirection.Outgoing);
-                connection.Remote.Should().Be("93.184.216.34");
+                connection.Remote.Should().Be("93.184.216.34:80");
 
                 connection.Send(new NetworkOutgoingMessageBytes(System.Text.Encoding.ASCII.GetBytes(Request)));
                 connection.Receive(handler);
 
+                pool.Start();
                 handler.Ready.WaitOne(TimeSpan.FromMinutes(1));
 
                 handler.Messages.Should().HaveCount(1);

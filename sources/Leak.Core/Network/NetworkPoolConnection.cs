@@ -136,32 +136,7 @@ namespace Leak.Core.Network
                     byte[] decrypted = message.ToBytes();
                     byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
 
-                    try
-                    {
-                        listener.OnSend(identifier, encrypted);
-                    }
-                    catch (SocketException ex)
-                    {
-                        listener.OnException(identifier, ex);
-                    }
-                }
-            }
-        }
-
-        public void Send(byte[] data)
-        {
-            if (listener.IsAvailable(identifier))
-            {
-                try
-                {
-                    lock (synchronized)
-                    {
-                        socket.Send(data);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    listener.OnException(identifier, ex);
+                    listener.Schedule(new NetworkPoolSend(identifier, socket, encrypted));
                 }
             }
         }
