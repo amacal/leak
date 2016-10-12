@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -103,6 +105,7 @@
     <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
     <Compile Include="Network\NetworkBufferView.cs" />
     <Compile Include="Network\NetworkIncomingMessage.cs" />
+    <Compile Include="Network\NetworkPoolDecrypt.cs" />
     <Compile Include="Network\NetworkPoolReceive.cs" />
     <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
@@ -461,7 +464,12 @@
     <Compile Include="Tracker\TrackerClientToUdp.cs" />
     <Compile Include="Telegraph\TelegraphService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Suckets\Leak.Suckets.csproj">
+      <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
+      <Name>Leak.Suckets</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

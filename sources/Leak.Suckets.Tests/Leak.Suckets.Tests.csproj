@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5748E985-E51A-4CD1-86DF-092FAA19E987}</ProjectGuid>
+    <ProjectGuid>{742850E6-BFF3-4D98-B892-53C023DD4087}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Core.Tests</RootNamespace>
-    <AssemblyName>Leak.Core.Tests</AssemblyName>
+    <RootNamespace>Leak.Suckets.Tests</RootNamespace>
+    <AssemblyName>Leak.Suckets.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,39 +30,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="F2F.Sandbox, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=4.14.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.14.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.14.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.14.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptTests.cs" />
+    <Compile Include="BindTests.cs" />
+    <Compile Include="ConnectTests.cs" />
+    <Compile Include="CreateTests.cs" />
+    <Compile Include="EchoClient.cs" />
+    <Compile Include="EchoServer.cs" />
+    <Compile Include="EchoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceiveTests.cs" />
+    <Compile Include="SendTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Core\Leak.Core.csproj">
-      <Project>{c5760143-0cfc-4638-af74-069d1a8985d6}</Project>
-      <Name>Leak.Core</Name>
+    <ProjectReference Include="..\Leak.Suckets\Leak.Suckets.csproj">
+      <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
+      <Name>Leak.Suckets</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

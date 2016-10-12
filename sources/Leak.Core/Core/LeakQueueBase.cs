@@ -5,12 +5,12 @@ namespace Leak.Core.Core
     public abstract class LeakQueueBase<TContext>
     {
         private readonly Thread worker;
-        protected readonly ManualResetEvent onReady;
+        protected readonly ManualResetEventSlim onReady;
 
         protected LeakQueueBase()
         {
             worker = new Thread(Process);
-            onReady = new ManualResetEvent(false);
+            onReady = new ManualResetEventSlim(false);
         }
 
         public void Start(TContext context)
@@ -25,7 +25,7 @@ namespace Leak.Core.Core
 
             while (true)
             {
-                if (onReady.WaitOne(1000))
+                if (onReady.Wait(1000))
                 {
                     onReady.Reset();
                     OnProcess(context);

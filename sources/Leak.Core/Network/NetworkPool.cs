@@ -1,7 +1,8 @@
 ﻿using Leak.Core.Core;
+using Leak.Suckets;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
+using System.Net;
 using System.Threading;
 
 namespace Leak.Core.Network
@@ -12,8 +13,9 @@ namespace Leak.Core.Network
         private readonly NetworkPoolConfiguration configuration;
         private readonly NetworkPoolCallback callback;
 
-        private readonly LeakTimer timer;
         private readonly LeakQueue<NetworkPool> queue;
+        private readonly TcpSocketFactory factory;
+        private readonly CompletionImpl worker;
 
         private long sequence;
 
@@ -28,7 +30,8 @@ namespace Leak.Core.Network
             callback = configuration.Callback;
 
             queue = new LeakQueue<NetworkPool>();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(10));
+            worker = new CompletionImpl();
+            factory = new TcpSocketFactory(worker);
         }
 
         public NetworkPool(Action<NetworkPoolConfiguration> configurer)
@@ -42,12 +45,14 @@ namespace Leak.Core.Network
             callback = configuration.Callback;
 
             queue = new LeakQueue<NetworkPool>();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(50));
+            worker = new CompletionImpl();
+            factory = new TcpSocketFactory(worker);
         }
 
         public void Start()
         {
             queue.Start(this);
+            worker.Start();
         }
 
         public NetworkConnectionInfo Info(string remote, NetworkDirection direction)
@@ -55,18 +60,26 @@ namespace Leak.Core.Network
             return new NetworkConnectionInfo(remote, direction);
         }
 
-        public NetworkConnectionInfo Info(Socket socket, NetworkDirection direction)
+        public NetworkConnectionInfo Info(TcpSocket socket, NetworkDirection direction)
         {
-            string remote = NetworkPoolConnection.GetRemote(socket);
+            TcpSocketInfo data = socket.Info();
+            IPEndPoint endpoint = data.Endpoint;
+
+            string remote = endpoint.ToString();
             NetworkConnectionInfo info = new NetworkConnectionInfo(remote, direction);
 
             return info;
         }
 
-        public NetworkConnection Create(Socket socket, NetworkDirection direction)
+        public TcpSocket New()
+        {
+            return factory.Create();
+        }
+
+        public NetworkConnection Create(TcpSocket socket, NetworkDirection direction, IPEndPoint remote)
         {
             long identifier = Interlocked.Increment(ref sequence);
-            NetworkPoolConnection connection = new NetworkPoolConnection(this, socket, direction, identifier);
+            NetworkPoolConnection connection = new NetworkPoolConnection(this, socket, direction, identifier, remote);
 
             lock (items)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Suckets;
+using System;
 using System.Net.Sockets;
 
 namespace Leak.Core.Network
@@ -10,7 +11,7 @@ namespace Leak.Core.Network
     public class NetworkBuffer
     {
         private readonly NetworkPoolListener listener;
-        private readonly Socket socket;
+        private readonly TcpSocket socket;
         private readonly long identifier;
         private readonly byte[] data;
         private readonly NetworkBufferConfiguration configuration;
@@ -27,7 +28,7 @@ namespace Leak.Core.Network
         /// <param name="socket">The already connected socket.</param>
         /// <param name="identifier"></param>
         /// <param name="configurer">The configurer to parametrize newly created instance.</param>
-        public NetworkBuffer(NetworkPoolListener listener, Socket socket, long identifier, Action<NetworkBufferConfiguration> configurer)
+        public NetworkBuffer(NetworkPoolListener listener, TcpSocket socket, long identifier, Action<NetworkBufferConfiguration> configurer)
         {
             this.configuration = configurer.Configure(with =>
             {
@@ -97,18 +98,7 @@ namespace Leak.Core.Network
                             receiveSize = configuration.Size - offset - length;
                         }
 
-                        SocketAsyncEventArgs args = new SocketAsyncEventArgs
-                        {
-                            UserToken = handler
-                        };
-
-                        args.SetBuffer(data, receiveOffset, receiveSize);
-                        args.Completed += OnReceived;
-
-                        if (socket.ReceiveAsync(args) == false)
-                        {
-                            OnReceived(null, args);
-                        }
+                        socket.Receive(new TcpSocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
                     }
                 }
                 catch (SocketException ex)
@@ -140,50 +130,37 @@ namespace Leak.Core.Network
             }
         }
 
-        private void OnReceived(object target, SocketAsyncEventArgs args)
+        private void OnReceived(TcpSocketReceive context, NetworkIncomingMessageHandler handler)
         {
-            try
+            if (listener.IsAvailable(identifier))
             {
-                if (listener.IsAvailable(identifier))
+                bool successful = context.Count > 0;
+
+                if (successful)
                 {
-                    var handler = (NetworkIncomingMessageHandler)args.UserToken;
-
-                    try
-                    {
-                        bool successful = args.SocketError == SocketError.Success &&
-                                          args.BytesTransferred > 0;
-
-                        if (successful)
-                        {
-                            if (offset + length >= configuration.Size)
-                            {
-                                Decrypt(offset + length - configuration.Size, args.BytesTransferred);
-                            }
-                            else
-                            {
-                                Decrypt(offset + length, args.BytesTransferred);
-                            }
-
-                            length += args.BytesTransferred;
-                            listener.Schedule(new NetworkPoolReceive(handler, new NetworkBufferMessage(this)));
-                        }
-                        else
-                        {
-                            listener.OnDisconnected(identifier);
-                            handler.OnDisconnected();
-                        }
-                    }
-                    catch (SocketException ex)
-                    {
-                        listener.OnException(identifier, ex);
-                        handler.OnException(ex);
-                    }
+                    listener.Schedule(new NetworkPoolDecrypt(this, handler, context.Count));
+                }
+                else
+                {
+                    listener.OnDisconnected(identifier);
+                    handler.OnDisconnected();
                 }
             }
-            finally
+        }
+
+        public void Process(NetworkIncomingMessageHandler handler, int count)
+        {
+            if (offset + length >= configuration.Size)
             {
-                args.Dispose();
+                Decrypt(offset + length - configuration.Size, count);
             }
+            else
+            {
+                Decrypt(offset + length, count);
+            }
+
+            length += count;
+            handler.OnMessage(new NetworkBufferMessage(this));
         }
 
         public void Remove(int bytes)

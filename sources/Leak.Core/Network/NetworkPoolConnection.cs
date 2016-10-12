@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Leak.Suckets;
+using System;
 using System.Net;
-using System.Net.Sockets;
 
 namespace Leak.Core.Network
 {
@@ -10,7 +10,7 @@ namespace Leak.Core.Network
     /// </summary>
     public class NetworkPoolConnection : NetworkConnection
     {
-        private readonly Socket socket;
+        private readonly TcpSocket socket;
         private readonly string remote;
         private readonly long identifier;
         private readonly object synchronized;
@@ -29,7 +29,7 @@ namespace Leak.Core.Network
         /// <param name="socket">The already connected socket.</param>
         /// <param name="direction">The direction indicating who initiated the connection.</param>
         /// <param name="identifier"></param>
-        public NetworkPoolConnection(NetworkPoolListener listener, Socket socket, NetworkDirection direction, long identifier)
+        public NetworkPoolConnection(NetworkPoolListener listener, TcpSocket socket, NetworkDirection direction, long identifier, IPEndPoint remote)
         {
             this.listener = listener;
             this.socket = socket;
@@ -42,8 +42,8 @@ namespace Leak.Core.Network
                 Decryptor = NetworkConnectionDecryptor.Nothing,
             };
 
+            this.remote = remote.ToString();
             this.synchronized = new object();
-            this.remote = GetRemote(socket);
 
             this.buffer = new NetworkBuffer(listener, socket, identifier, with =>
             {
@@ -77,18 +77,8 @@ namespace Leak.Core.Network
 
             buffer = new NetworkBuffer(connection.buffer, with =>
             {
-                with.Size = 40000;
                 with.Decryptor = new NetworkConnectionDecryptorToBuffer(configuration.Decryptor);
-                with.Synchronized = synchronized;
             });
-        }
-
-        public static string GetRemote(Socket socket)
-        {
-            string host = ((IPEndPoint)socket.RemoteEndPoint).Address.MapToIPv4().ToString();
-            int port = ((IPEndPoint)socket.RemoteEndPoint).Port;
-
-            return $"{host}:{port}";
         }
 
         public long Identifier
@@ -152,8 +142,10 @@ namespace Leak.Core.Network
 
                 lock (synchronized)
                 {
-                    socket.Shutdown(SocketShutdown.Both);
-                    socket.Close();
+                    // TODO: fix
+                    //socket.Shutdown(SocketShutdown.Both);
+                    //socket.Close();
+                    socket.Dispose();
                 }
             }
         }

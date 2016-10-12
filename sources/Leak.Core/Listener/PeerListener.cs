@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
+using Leak.Suckets;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -9,7 +10,7 @@ namespace Leak.Core.Listener
 {
     public class PeerListener
     {
-        private readonly Socket socket;
+        private readonly TcpSocket socket;
         private readonly PeerListenerConfiguration configuration;
 
         public PeerListener(Action<PeerListenerConfiguration> configurer)
@@ -22,7 +23,7 @@ namespace Leak.Core.Listener
                 with.Pool = new NetworkPool();
             });
 
-            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            socket = configuration.Pool.New();
         }
 
         public void Start()
@@ -30,28 +31,29 @@ namespace Leak.Core.Listener
             int port = configuration.Port;
             PeerHash peer = configuration.Peer;
 
-            socket.Bind(new IPEndPoint(IPAddress.Any, port));
+            socket.Bind(port);
             socket.Listen(8);
 
-            socket.BeginAccept(OnAccept, this);
+            socket.Accept(OnAccept);
             configuration.Callback.OnStarted(new PeerListenerStarted(peer, port));
         }
 
-        private void OnAccept(IAsyncResult result)
+        private void OnAccept(TcpSocketAccept data)
         {
             try
             {
-                Socket accepted = socket.EndAccept(result);
-
-                if (OnConnecting(accepted) == false)
+                if (OnConnecting(data.Connection) == false)
                 {
-                    accepted.Close();
-                    accepted.Dispose();
+                    // TODO: close
+                    data.Connection.Dispose();
 
                     return;
                 }
 
-                NetworkConnection connection = configuration.Pool.Create(accepted, NetworkDirection.Incoming);
+                TcpSocket accepted = data.Connection;
+                IPEndPoint remote = data.GetRemote();
+
+                NetworkConnection connection = configuration.Pool.Create(accepted, NetworkDirection.Incoming, remote);
                 PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
 
                 OnConnected(connection);
@@ -62,11 +64,11 @@ namespace Leak.Core.Listener
             }
             finally
             {
-                socket.BeginAccept(OnAccept, this);
+                data.Socket.Accept(OnAccept);
             }
         }
 
-        private bool OnConnecting(Socket incoming)
+        private bool OnConnecting(TcpSocket incoming)
         {
             bool accepted = true;
 

@@ -1,7 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
-using System;
+using Leak.Suckets;
 using System.Net;
 using System.Net.Sockets;
 
@@ -24,10 +24,14 @@ namespace Leak.Core.Connector
         {
             if (OnConnecting())
             {
-                Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                EndPoint endpoint = new DnsEndPoint(peer.Host, peer.Port);
+                TcpSocket socket = context.Configuration.Pool.New();
+                IPAddress[] addresses = Dns.GetHostAddresses(peer.Host);
 
-                socket.BeginConnect(endpoint, OnConnected, socket);
+                IPAddress address = addresses[0].MapToIPv4();
+                IPEndPoint endpoint = new IPEndPoint(address, peer.Port);
+
+                socket.Bind();
+                socket.Connect(endpoint, OnConnected);
             }
         }
 
@@ -42,31 +46,29 @@ namespace Leak.Core.Connector
             return accepted;
         }
 
-        private void OnConnected(IAsyncResult result)
+        private void OnConnected(TcpSocketConnect data)
         {
-            PeerConnectorConnected connected;
-            NetworkConnection connection = null;
-
-            try
+            if (data.Status == TcpSocketStatus.OK)
             {
-                Socket socket = (Socket)result.AsyncState;
-                socket.EndConnect(result);
+                PeerConnectorConnected connected;
+                NetworkConnection connection = context.Pool.Create(data.Socket, NetworkDirection.Outgoing, data.Endpoint);
 
-                connection = context.Pool.Create(socket, NetworkDirection.Outgoing);
-                connected = new PeerConnectorConnected(hash, connection);
-
-                context.Configuration.Callback.OnConnected(connected);
-
-                PeerConnectorNegotiatorContext forNegotiator = new PeerConnectorNegotiatorContext(hash, context.Configuration, connection);
-                HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(context.Pool, connection, forNegotiator);
-
-                negotiator.Execute();
-            }
-            catch (SocketException ex)
-            {
-                if (connection != null)
+                try
                 {
-                    context.Configuration.Callback.OnException(connection, ex);
+                    connected = new PeerConnectorConnected(hash, connection);
+                    context.Configuration.Callback.OnConnected(connected);
+
+                    PeerConnectorNegotiatorContext forNegotiator = new PeerConnectorNegotiatorContext(hash, context.Configuration, connection);
+                    HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(context.Pool, connection, forNegotiator);
+
+                    negotiator.Execute();
+                }
+                catch (SocketException ex)
+                {
+                    if (connection != null)
+                    {
+                        context.Configuration.Callback.OnException(connection, ex);
+                    }
                 }
             }
         }

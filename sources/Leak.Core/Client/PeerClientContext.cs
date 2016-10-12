@@ -91,10 +91,10 @@ namespace Leak.Core.Client
                 });
             }
 
+            network?.Start();
             connector?.Start();
             listener?.Start();
             telegraph?.Start();
-            network?.Start();
         }
 
         /// <summary>
