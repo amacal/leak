@@ -48,7 +48,7 @@ namespace Leak.Suckets.Tests
                 using (TcpSocket client = factory.Create())
                 {
                     worker.Start();
-                    client.Bind(IPAddress.Loopback);
+                    client.Bind();
 
                     server.Bind(IPAddress.Loopback);
                     server.Listen(1);
@@ -64,6 +64,22 @@ namespace Leak.Suckets.Tests
                     Assert.That(remote.Address, Is.EqualTo(endpoint.Address));
                     Assert.That(remote.Port, Is.Not.EqualTo(endpoint.Port));
                     Assert.That(remote.Port, Is.Not.Zero);
+                }
+            }
+        }
+
+        [Test]
+        public async Task CanHandleNotBoundSocket()
+        {
+            using (CompletionImpl worker = new CompletionImpl())
+            {
+                TcpSocketFactory factory = new TcpSocketFactory(worker);
+
+                using (TcpSocket socket = factory.Create())
+                {
+                    TcpSocketAccept accepted = await socket.Accept();
+
+                    Assert.That(accepted.Status, Is.Not.EqualTo(TcpSocketStatus.OK));
                 }
             }
         }

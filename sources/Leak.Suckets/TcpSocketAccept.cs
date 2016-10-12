@@ -43,10 +43,10 @@ namespace Leak.Suckets
 
         public IPEndPoint GetRemote()
         {
-            IPEndPoint local;
-            IPEndPoint remote;
+            IPEndPoint local = null;
+            IPEndPoint remote = null;
 
-            parse.Invoke(out local, out remote);
+            parse?.Invoke(out local, out remote);
             return remote;
         }
     }

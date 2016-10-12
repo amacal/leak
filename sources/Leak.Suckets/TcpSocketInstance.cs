@@ -212,10 +212,7 @@ namespace Leak.Suckets
 
         public void Dispose()
         {
-            int value = TcpSocketInterop.closesocket(handle);
-
-            if (value != 0)
-                throw new Exception();
+            TcpSocketInterop.closesocket(handle);
         }
     }
 }

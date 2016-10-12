@@ -38,7 +38,7 @@ namespace Leak.Suckets
             Pinned = GCHandle.Alloc(instance, GCHandleType.Pinned);
         }
 
-        void CompletionCallback.Complete(int affected)
+        public void Complete(int affected)
         {
             Affected = affected;
             IsCompleted = true;

@@ -4,7 +4,6 @@ using Leak.Core.Network;
 using Leak.Suckets;
 using System;
 using System.Net;
-using System.Net.Sockets;
 
 namespace Leak.Core.Listener
 {
@@ -40,11 +39,12 @@ namespace Leak.Core.Listener
 
         private void OnAccept(TcpSocketAccept data)
         {
-            try
+            if (data.Status == TcpSocketStatus.OK)
             {
+                data.Socket.Accept(OnAccept);
+
                 if (OnConnecting(data.Connection) == false)
                 {
-                    // TODO: close
                     data.Connection.Dispose();
 
                     return;
@@ -59,12 +59,9 @@ namespace Leak.Core.Listener
                 OnConnected(connection);
                 Negotiate(context, connection);
             }
-            catch (SocketException)
+            else
             {
-            }
-            finally
-            {
-                data.Socket.Accept(OnAccept);
+                Console.WriteLine(data.Status);
             }
         }
 

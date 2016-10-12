@@ -1,9 +1,7 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Suckets;
 using System.Net;
-using System.Net.Sockets;
 
 namespace Leak.Core.Connector
 {
@@ -50,26 +48,7 @@ namespace Leak.Core.Connector
         {
             if (data.Status == TcpSocketStatus.OK)
             {
-                PeerConnectorConnected connected;
-                NetworkConnection connection = context.Pool.Create(data.Socket, NetworkDirection.Outgoing, data.Endpoint);
-
-                try
-                {
-                    connected = new PeerConnectorConnected(hash, connection);
-                    context.Configuration.Callback.OnConnected(connected);
-
-                    PeerConnectorNegotiatorContext forNegotiator = new PeerConnectorNegotiatorContext(hash, context.Configuration, connection);
-                    HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(context.Pool, connection, forNegotiator);
-
-                    negotiator.Execute();
-                }
-                catch (SocketException ex)
-                {
-                    if (connection != null)
-                    {
-                        context.Configuration.Callback.OnException(connection, ex);
-                    }
-                }
+                context.Queue.Add(new PeerConnectorTaskHandle(context, hash, data.Socket, data.Endpoint));
             }
         }
     }

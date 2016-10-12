@@ -37,11 +37,22 @@ namespace Leak.Suckets
             target.Buffer = buffer;
             target.Sockaddrs = sockaddr;
 
-            uint received;
+            int received;
             int result = accept(handle, connection, buffer, 0, 32, 32, out received, native);
             uint error = TcpSocketInterop.GetLastError();
 
-            if (result == 0 && error != 997)
+            if (result == 0 && error == 0)
+            {
+                if (received > 0)
+                {
+                    target.Complete(received);
+                }
+                else
+                {
+                    Console.WriteLine(error);
+                }
+            }
+            else if (result == 0 && error != 997)
             {
                 target.Fail(error);
             }

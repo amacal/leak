@@ -132,13 +132,26 @@ namespace Leak.Core.Network
 
         private void OnReceived(TcpSocketReceive context, NetworkIncomingMessageHandler handler)
         {
+            listener.Schedule(new NetworkPoolDecrypt(this, handler, context.Count));
+        }
+
+        public void Process(NetworkIncomingMessageHandler handler, int count)
+        {
             if (listener.IsAvailable(identifier))
             {
-                bool successful = context.Count > 0;
-
-                if (successful)
+                if (count > 0)
                 {
-                    listener.Schedule(new NetworkPoolDecrypt(this, handler, context.Count));
+                    if (offset + length >= configuration.Size)
+                    {
+                        Decrypt(offset + length - configuration.Size, count);
+                    }
+                    else
+                    {
+                        Decrypt(offset + length, count);
+                    }
+
+                    length += count;
+                    handler.OnMessage(new NetworkBufferMessage(this));
                 }
                 else
                 {
@@ -146,21 +159,6 @@ namespace Leak.Core.Network
                     handler.OnDisconnected();
                 }
             }
-        }
-
-        public void Process(NetworkIncomingMessageHandler handler, int count)
-        {
-            if (offset + length >= configuration.Size)
-            {
-                Decrypt(offset + length - configuration.Size, count);
-            }
-            else
-            {
-                Decrypt(offset + length, count);
-            }
-
-            length += count;
-            handler.OnMessage(new NetworkBufferMessage(this));
         }
 
         public void Remove(int bytes)

@@ -22,7 +22,7 @@ namespace Leak.Suckets
             uint dwReceiveDataLength,
             uint dwLocalAddressLength,
             uint dwRemoteAddressLength,
-            out uint lpdwBytesReceived,
+            out int lpdwBytesReceived,
             NativeOverlapped* lpOverlapped);
 
         internal delegate void GetAcceptExSockaddrsDelegate(
@@ -101,7 +101,9 @@ namespace Leak.Suckets
             [In] bool wait,
             [Out] out uint flags);
 
-        [DllImport("kernel32.dll")]
-        public static extern uint GetLastError();
+        public static uint GetLastError()
+        {
+            return (uint)Marshal.GetLastWin32Error();
+        }
     }
 }
