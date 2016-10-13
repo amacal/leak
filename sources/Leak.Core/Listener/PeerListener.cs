@@ -43,7 +43,7 @@ namespace Leak.Core.Listener
             {
                 data.Socket.Accept(OnAccept);
 
-                if (OnConnecting(data.Connection) == false)
+                if (OnConnecting(data.GetRemote()) == false)
                 {
                     data.Connection.Dispose();
 
@@ -59,17 +59,13 @@ namespace Leak.Core.Listener
                 OnConnected(connection);
                 Negotiate(context, connection);
             }
-            else
-            {
-                Console.WriteLine(data.Status);
-            }
         }
 
-        private bool OnConnecting(TcpSocket incoming)
+        private bool OnConnecting(IPEndPoint endpoint)
         {
             bool accepted = true;
 
-            NetworkConnectionInfo connection = configuration.Pool.Info(incoming, NetworkDirection.Incoming);
+            NetworkConnectionInfo connection = new NetworkConnectionInfo(endpoint.ToString(), NetworkDirection.Incoming);
             PeerListenerConnecting connecting = new PeerListenerConnecting(connection, () => accepted = false);
 
             configuration.Callback.OnConnecting(connecting);

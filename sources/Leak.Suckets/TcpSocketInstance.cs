@@ -19,47 +19,26 @@ namespace Leak.Suckets
 
         public void Bind()
         {
-            byte[] data = { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            GCHandle pinned = GCHandle.Alloc(data, GCHandleType.Pinned);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
+            TcpSocketBindRoutine routine = new TcpSocketBindRoutine(endpoint);
 
-            IntPtr address = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-            int value = TcpSocketInterop.bind(handle, address, data.Length);
-
-            pinned.Free();
-
-            if (value != 0)
-                throw new Exception();
+            routine.Execute(handle);
         }
 
         public void Bind(int port)
         {
-            byte[] data = { 0x02, 0x00, (byte)(port / 256), (byte)(port % 256), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            GCHandle pinned = GCHandle.Alloc(data, GCHandleType.Pinned);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
+            TcpSocketBindRoutine routine = new TcpSocketBindRoutine(endpoint);
 
-            IntPtr address = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-            int value = TcpSocketInterop.bind(handle, address, data.Length);
-
-            pinned.Free();
-
-            if (value != 0)
-                throw new Exception();
+            routine.Execute(handle);
         }
 
         public void Bind(IPAddress address)
         {
-            byte[] data = { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            GCHandle pinned = GCHandle.Alloc(data, GCHandleType.Pinned);
+            IPEndPoint endpoint = new IPEndPoint(address, 0);
+            TcpSocketBindRoutine routine = new TcpSocketBindRoutine(endpoint);
 
-            byte[] bytes = address.GetAddressBytes();
-            Array.Copy(bytes, 0, data, 4, 4);
-
-            IntPtr pointer = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-            int value = TcpSocketInterop.bind(handle, pointer, data.Length);
-
-            pinned.Free();
-
-            if (value != 0)
-                throw new Exception();
+            routine.Execute(handle);
         }
 
         public TcpSocketInfo Info()
@@ -69,9 +48,11 @@ namespace Leak.Suckets
 
             int length = data.Length;
             IntPtr pointer = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-            int value = TcpSocketInterop.getsockname(handle, pointer, ref length);
 
-            uint ee = TcpSocketInterop.GetLastError();
+            int result = TcpSocketInterop.getsockname(handle, pointer, ref length);
+            uint error = TcpSocketInterop.GetLastError();
+
+            pinned.Free();
 
             byte[] address = new byte[4];
             Array.Copy(data, 4, address, 0, 4);

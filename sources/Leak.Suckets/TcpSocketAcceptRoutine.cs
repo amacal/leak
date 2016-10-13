@@ -47,10 +47,6 @@ namespace Leak.Suckets
                 {
                     target.Complete(received);
                 }
-                else
-                {
-                    Console.WriteLine(error);
-                }
             }
             else if (result == 0 && error != 997)
             {

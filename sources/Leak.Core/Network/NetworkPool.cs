@@ -55,22 +55,6 @@ namespace Leak.Core.Network
             worker.Start();
         }
 
-        public NetworkConnectionInfo Info(string remote, NetworkDirection direction)
-        {
-            return new NetworkConnectionInfo(remote, direction);
-        }
-
-        public NetworkConnectionInfo Info(TcpSocket socket, NetworkDirection direction)
-        {
-            TcpSocketInfo data = socket.Info();
-            IPEndPoint endpoint = data.Endpoint;
-
-            string remote = endpoint.ToString();
-            NetworkConnectionInfo info = new NetworkConnectionInfo(remote, direction);
-
-            return info;
-        }
-
         public TcpSocket New()
         {
             return factory.Create();

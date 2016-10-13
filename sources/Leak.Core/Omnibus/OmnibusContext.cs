@@ -14,7 +14,6 @@ namespace Leak.Core.Omnibus
         private readonly OmnibusPieceCollection pieces;
         private readonly OmnibusReservationCollection reservations;
         private readonly LeakQueue<OmnibusContext> queue;
-        private readonly LeakTimer timer;
 
         public OmnibusContext(Action<OmnibusConfiguration> configurer)
         {
@@ -29,7 +28,6 @@ namespace Leak.Core.Omnibus
             reservations = new OmnibusReservationCollection(configuration.LeaseDuration);
 
             queue = new LeakQueue<OmnibusContext>();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(25));
 
             synchronized = new object();
             pieces = new OmnibusPieceCollection(this);
@@ -78,11 +76,6 @@ namespace Leak.Core.Omnibus
         public LeakQueue<OmnibusContext> Queue
         {
             get { return queue; }
-        }
-
-        public LeakTimer Timer
-        {
-            get { return timer; }
         }
     }
 }

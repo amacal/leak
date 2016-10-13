@@ -42,11 +42,14 @@
     <Compile Include="TcpSocketAcceptParse.cs" />
     <Compile Include="TcpSocketAcceptResult.cs" />
     <Compile Include="TcpSocketAcceptRoutine.cs" />
+    <Compile Include="TcpSocketBind.cs" />
+    <Compile Include="TcpSocketBindRoutine.cs" />
     <Compile Include="TcpSocketBuffer.cs" />
     <Compile Include="TcpSocketConnect.cs" />
     <Compile Include="TcpSocketConnectResult.cs" />
     <Compile Include="TcpSocketConnectRoutine.cs" />
     <Compile Include="TcpSocketInfo.cs" />
+    <Compile Include="TcpSocketInfoRoutine.cs" />
     <Compile Include="TcpSocketInstance.cs" />
     <Compile Include="TcpSocketInterop.cs" />
     <Compile Include="CompletionWorker.cs" />

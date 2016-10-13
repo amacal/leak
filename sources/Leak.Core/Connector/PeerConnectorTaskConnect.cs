@@ -37,7 +37,7 @@ namespace Leak.Core.Connector
         {
             bool accepted = true;
 
-            NetworkConnectionInfo connection = context.Pool.Info(peer.ToString(), NetworkDirection.Incoming);
+            NetworkConnectionInfo connection = new NetworkConnectionInfo(peer.ToString(), NetworkDirection.Incoming);
             PeerConnectorConnecting connecting = new PeerConnectorConnecting(hash, connection, () => accepted = false);
 
             context.Configuration.Callback.OnConnecting(connecting);
