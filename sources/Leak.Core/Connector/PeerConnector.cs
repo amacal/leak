@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using System;
 
 namespace Leak.Core.Connector
@@ -12,19 +13,14 @@ namespace Leak.Core.Connector
             context = new PeerConnectorContext(configurer);
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
-            context.Timer.Start(OnTick);
+            pipeline.Register(context.Queue);
         }
 
         public void ConnectTo(FileHash hash, PeerAddress peer)
         {
-            context.Queue.Add(new PeerConnectorTaskConnect(context, hash, peer));
-        }
-
-        private void OnTick()
-        {
-            context.Queue.Process();
+            context.Queue.Add(new PeerConnectorTaskConnect(hash, peer));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Messages;
 using Leak.Core.Retriever.Components;
 using Leak.Core.Retriever.Tasks;
@@ -15,13 +16,13 @@ namespace Leak.Core.Retriever
             context = new RetrieverContext(configurer);
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
             context.Repository.Start();
-            context.Omnibus.Start();
+            context.Omnibus.Start(pipeline);
 
-            context.Queue.Start(context);
-            context.Timer.Start(OnTick);
+            pipeline.Register(context.Queue);
+            pipeline.Register(TimeSpan.FromMilliseconds(250), OnTick);
 
             context.Callback.OnFileStarted(context.Metainfo.Hash);
 
@@ -41,10 +42,7 @@ namespace Leak.Core.Retriever
 
         private void OnTick()
         {
-            if (context.NextSchedule < DateTime.Now)
-            {
-                context.Queue.Add(new ScheduleAllTask());
-            }
+            context.Queue.Add(new ScheduleAllTask());
         }
     }
 }

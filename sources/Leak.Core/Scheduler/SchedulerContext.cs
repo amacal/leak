@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Collector;
+using Leak.Core.Core;
 using Leak.Core.Retriever;
 using System;
 
@@ -33,6 +34,11 @@ namespace Leak.Core.Scheduler
         public RetrieverStrategy Strategy
         {
             get { return configuration.Strategy; }
+        }
+
+        public LeakPipeline Pipeline
+        {
+            get { return configuration.Pipeline; }
         }
 
         public SchedulerQueue Queue

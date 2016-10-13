@@ -9,7 +9,6 @@ namespace Leak.Core.Telegraph
         private readonly TelegraphConfiguration configuration;
 
         private readonly TelegraphCollection collection;
-        private readonly LeakTimer timer;
         private readonly LeakQueue<TelegraphContext> queue;
 
         public TelegraphContext(Action<TelegraphConfiguration> configurer)
@@ -22,8 +21,7 @@ namespace Leak.Core.Telegraph
             synchronized = new object();
             collection = new TelegraphCollection();
 
-            timer = new LeakTimer(TimeSpan.FromSeconds(5));
-            queue = new LeakQueue<TelegraphContext>();
+            queue = new LeakQueue<TelegraphContext>(this);
         }
 
         public object Synchronized
@@ -34,11 +32,6 @@ namespace Leak.Core.Telegraph
         public TelegraphCollection Collection
         {
             get { return collection; }
-        }
-
-        public LeakTimer Timer
-        {
-            get { return timer; }
         }
 
         public LeakQueue<TelegraphContext> Queue

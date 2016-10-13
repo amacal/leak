@@ -27,7 +27,7 @@ namespace Leak.Core.Omnibus
             bitfields = new OmnibusBitfieldCollection(configuration.Metainfo.Properties.Pieces);
             reservations = new OmnibusReservationCollection(configuration.LeaseDuration);
 
-            queue = new LeakQueue<OmnibusContext>();
+            queue = new LeakQueue<OmnibusContext>(this);
 
             synchronized = new object();
             pieces = new OmnibusPieceCollection(this);

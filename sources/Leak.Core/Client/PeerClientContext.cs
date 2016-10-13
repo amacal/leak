@@ -3,6 +3,7 @@ using Leak.Core.Client.Configuration;
 using Leak.Core.Collector;
 using Leak.Core.Common;
 using Leak.Core.Connector;
+using Leak.Core.Core;
 using Leak.Core.Listener;
 using Leak.Core.Network;
 using Leak.Core.Scheduler;
@@ -22,6 +23,7 @@ namespace Leak.Core.Client
         private readonly PeerListener listener;
         private readonly TelegraphService telegraph;
         private readonly PeerConnector connector;
+        private readonly LeakPipeline pipeline;
 
         public PeerClientContext(Action<PeerClientConfiguration> configurer)
         {
@@ -39,6 +41,7 @@ namespace Leak.Core.Client
 
             collection = new PeerClientCollection();
             hashes = new FileHashCollection();
+            pipeline = new LeakPipeline();
 
             collector = new PeerCollector(with =>
             {
@@ -75,6 +78,7 @@ namespace Leak.Core.Client
             scheduler = new SchedulerService(with =>
             {
                 with.Collector = collector;
+                with.Pipeline = pipeline;
                 with.Callback = new PeerClientToScheduler(this);
 
                 configuration.Download.Apply(with);
@@ -91,10 +95,12 @@ namespace Leak.Core.Client
                 });
             }
 
-            network?.Start();
-            connector?.Start();
-            listener?.Start();
-            telegraph?.Start();
+            network?.Start(pipeline);
+            connector?.Start(pipeline);
+            listener?.Start(pipeline);
+            telegraph?.Start(pipeline);
+
+            pipeline.Start();
         }
 
         /// <summary>

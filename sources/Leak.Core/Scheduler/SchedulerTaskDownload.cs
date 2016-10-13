@@ -37,7 +37,7 @@ namespace Leak.Core.Scheduler
             inside.Queue = context.Queue;
             inside.Callback = context.Callback;
 
-            inside.Retriever.Start();
+            inside.Retriever.Start(context.Pipeline);
 
             return new SchedulerTaskDownloadTaskCallback(inside);
         }

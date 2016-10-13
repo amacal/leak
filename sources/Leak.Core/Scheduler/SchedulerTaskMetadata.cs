@@ -35,7 +35,8 @@ namespace Leak.Core.Scheduler
             inside.Queue = context.Queue;
             inside.Callback = context.Callback;
 
-            inside.Metaget.Start();
+            inside.Pipeline = context.Pipeline;
+            inside.Metaget.Start(context.Pipeline);
 
             return new SchedulerTaskMetadataTaskCallback(inside);
         }

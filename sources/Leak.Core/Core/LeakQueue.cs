@@ -1,13 +1,18 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
 
 namespace Leak.Core.Core
 {
-    public class LeakQueue<TContext> : LeakQueueBase<TContext>
+    public class LeakQueue<TContext> : LeakPipelineTrigger
     {
+        private readonly TContext context;
         private readonly ConcurrentQueue<LeakTask<TContext>> items;
 
-        public LeakQueue()
+        private ManualResetEvent onReady;
+
+        public LeakQueue(TContext context)
         {
+            this.context = context;
             items = new ConcurrentQueue<LeakTask<TContext>>();
         }
 
@@ -26,12 +31,18 @@ namespace Leak.Core.Core
             }
         }
 
-        protected override void OnProcess(TContext context)
+        void LeakPipelineTrigger.Register(ManualResetEvent watch)
+        {
+            onReady = watch;
+        }
+
+        void LeakPipelineTrigger.Execute()
         {
             LeakTask<TContext> task;
 
             while (items.TryDequeue(out task))
             {
+                onReady.Reset();
                 task.Execute(context);
             }
         }

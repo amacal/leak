@@ -1,26 +1,25 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Network;
 using Leak.Suckets;
 using System.Net;
 
 namespace Leak.Core.Connector
 {
-    public class PeerConnectorTaskConnect : PeerConnectorTask
+    public class PeerConnectorTaskConnect : LeakTask<PeerConnectorContext>
     {
-        private readonly PeerConnectorContext context;
         private readonly FileHash hash;
         private readonly PeerAddress peer;
 
-        public PeerConnectorTaskConnect(PeerConnectorContext context, FileHash hash, PeerAddress peer)
+        public PeerConnectorTaskConnect(FileHash hash, PeerAddress peer)
         {
-            this.context = context;
             this.hash = hash;
             this.peer = peer;
         }
 
-        public void Execute()
+        public void Execute(PeerConnectorContext context)
         {
-            if (OnConnecting())
+            if (OnConnecting(context))
             {
                 TcpSocket socket = context.Configuration.Pool.New();
                 IPAddress[] addresses = Dns.GetHostAddresses(peer.Host);
@@ -29,11 +28,11 @@ namespace Leak.Core.Connector
                 IPEndPoint endpoint = new IPEndPoint(address, peer.Port);
 
                 socket.Bind();
-                socket.Connect(endpoint, OnConnected);
+                socket.Connect(endpoint, data => OnConnected(context, data));
             }
         }
 
-        private bool OnConnecting()
+        private bool OnConnecting(PeerConnectorContext context)
         {
             bool accepted = true;
 
@@ -44,11 +43,11 @@ namespace Leak.Core.Connector
             return accepted;
         }
 
-        private void OnConnected(TcpSocketConnect data)
+        private void OnConnected(PeerConnectorContext context, TcpSocketConnect data)
         {
             if (data.Status == TcpSocketStatus.OK)
             {
-                context.Queue.Add(new PeerConnectorTaskHandle(context, hash, data.Socket, data.Endpoint));
+                context.Queue.Add(new PeerConnectorTaskHandle(hash, data.Socket, data.Endpoint));
             }
         }
     }

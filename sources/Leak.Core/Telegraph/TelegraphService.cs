@@ -1,4 +1,5 @@
-﻿using Leak.Core.Tracker;
+﻿using Leak.Core.Core;
+using Leak.Core.Tracker;
 using System;
 
 namespace Leak.Core.Telegraph
@@ -12,10 +13,10 @@ namespace Leak.Core.Telegraph
             context = new TelegraphContext(configurer);
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
-            context.Queue.Start(context);
-            context.Timer.Start(OnTick);
+            pipeline.Register(context.Queue);
+            pipeline.Register(TimeSpan.FromSeconds(5), OnTick);
         }
 
         private void OnTick()

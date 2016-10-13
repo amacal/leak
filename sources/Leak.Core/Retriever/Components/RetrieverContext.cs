@@ -14,7 +14,6 @@ namespace Leak.Core.Retriever.Components
         private readonly RepositoryService repository;
         private readonly OmnibusService omnibus;
         private readonly LeakQueue<RetrieverContext> queue;
-        private readonly LeakTimer timer;
 
         private DateTime nextSchedule;
 
@@ -40,8 +39,7 @@ namespace Leak.Core.Retriever.Components
                 with.Callback = new RetrieverToOmnibus(this);
             });
 
-            queue = new LeakQueue<RetrieverContext>();
-            timer = new LeakTimer(TimeSpan.FromMilliseconds(25));
+            queue = new LeakQueue<RetrieverContext>(this);
         }
 
         public RetrieverConfiguration Configuration
@@ -74,20 +72,9 @@ namespace Leak.Core.Retriever.Components
             get { return queue; }
         }
 
-        public LeakTimer Timer
-        {
-            get { return timer; }
-        }
-
         public OmnibusService Omnibus
         {
             get { return omnibus; }
-        }
-
-        public DateTime NextSchedule
-        {
-            get { return nextSchedule; }
-            set { nextSchedule = value; }
         }
     }
 }

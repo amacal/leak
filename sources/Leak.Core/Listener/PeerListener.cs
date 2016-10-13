@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Suckets;
@@ -25,7 +26,7 @@ namespace Leak.Core.Listener
             socket = configuration.Pool.New();
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
             int port = configuration.Port;
             PeerHash peer = configuration.Peer;

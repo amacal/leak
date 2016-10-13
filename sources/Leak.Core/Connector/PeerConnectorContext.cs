@@ -1,15 +1,14 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Network;
 using System;
-using Leak.Core.Core;
 
 namespace Leak.Core.Connector
 {
     public class PeerConnectorContext
     {
         private readonly PeerConnectorConfiguration configuration;
-        private readonly PeerConnectorQueue queue;
-        private readonly LeakTimer timer;
+        private readonly LeakQueue<PeerConnectorContext> queue;
 
         public PeerConnectorContext(Action<PeerConnectorConfiguration> configurer)
         {
@@ -20,8 +19,7 @@ namespace Leak.Core.Connector
                 with.Pool = new NetworkPool();
             });
 
-            queue = new PeerConnectorQueue();
-            timer = new LeakTimer(TimeSpan.FromSeconds(1));
+            queue = new LeakQueue<PeerConnectorContext>(this);
         }
 
         public PeerConnectorConfiguration Configuration
@@ -34,14 +32,9 @@ namespace Leak.Core.Connector
             get { return configuration.Pool; }
         }
 
-        public PeerConnectorQueue Queue
+        public LeakQueue<PeerConnectorContext> Queue
         {
             get { return queue; }
-        }
-
-        public LeakTimer Timer
-        {
-            get { return timer; }
         }
     }
 }

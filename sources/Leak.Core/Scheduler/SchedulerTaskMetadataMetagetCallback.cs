@@ -21,7 +21,7 @@ namespace Leak.Core.Scheduler
                 with.Destination = context.Destination;
             });
 
-            context.Metaget.Stop();
+            context.Metaget.Stop(context.Pipeline);
             context.Metaget.Dispose();
 
             context.Callback.OnMetadataCompleted(hash);

@@ -29,7 +29,7 @@ namespace Leak.Core.Network
             items = new Dictionary<long, NetworkPoolEntry>();
             callback = configuration.Callback;
 
-            queue = new LeakQueue<NetworkPool>();
+            queue = new LeakQueue<NetworkPool>(this);
             worker = new CompletionImpl();
             factory = new TcpSocketFactory(worker);
         }
@@ -44,14 +44,14 @@ namespace Leak.Core.Network
             items = new Dictionary<long, NetworkPoolEntry>();
             callback = configuration.Callback;
 
-            queue = new LeakQueue<NetworkPool>();
+            queue = new LeakQueue<NetworkPool>(this);
             worker = new CompletionImpl();
             factory = new TcpSocketFactory(worker);
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
-            queue.Start(this);
+            pipeline.Register(queue);
             worker.Start();
         }
 

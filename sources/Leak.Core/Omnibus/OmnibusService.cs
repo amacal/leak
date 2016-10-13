@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Omnibus.Tasks;
 using System;
 
@@ -18,9 +19,9 @@ namespace Leak.Core.Omnibus
             context = new OmnibusContext(configurer);
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
-            context.Queue.Start(context);
+            pipeline.Register(context.Queue);
         }
 
         public bool IsComplete()

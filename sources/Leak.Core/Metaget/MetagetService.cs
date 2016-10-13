@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
+using Leak.Core.Core;
 using System;
 
 namespace Leak.Core.Metaget
@@ -13,21 +14,21 @@ namespace Leak.Core.Metaget
             context = new MetagetContext(configurer);
         }
 
-        public void Start()
+        public void Start(LeakPipeline pipeline)
         {
-            context.Queue.Start(context);
+            pipeline.Register(context.Queue);
+            pipeline.Register(TimeSpan.FromSeconds(1), OnTick);
+
             context.Queue.Add(new MetagetTaskVerify());
-            context.Timer.Start(OnTick);
         }
 
-        public void Stop()
+        public void Stop(LeakPipeline pipeline)
         {
-            context.Timer.Stop();
+            pipeline.Remove(OnTick);
         }
 
         public void Dispose()
         {
-            context.Timer.Dispose();
             context.Queue.Clear();
         }
 
