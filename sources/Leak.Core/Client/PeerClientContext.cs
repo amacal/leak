@@ -99,6 +99,7 @@ namespace Leak.Core.Client
             connector?.Start(pipeline);
             listener?.Start(pipeline);
             telegraph?.Start(pipeline);
+            collector?.Start(pipeline);
 
             pipeline.Start();
         }

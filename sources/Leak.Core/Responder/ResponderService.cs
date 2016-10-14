@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using System;
@@ -12,7 +13,11 @@ namespace Leak.Core.Responder
         public ResponderService(Action<ResponderConfiguration> configurer)
         {
             context = new ResponderContext(configurer);
-            context.Timer.Start();
+        }
+
+        public void Start(LeakPipeline pipeline)
+        {
+            pipeline.Register(TimeSpan.FromMinutes(1), OnTick);
         }
 
         public void Register(ConnectionLoopChannel channel)
@@ -40,6 +45,26 @@ namespace Leak.Core.Responder
             lock (context.Synchronized)
             {
                 context.Collection.Remove(peer);
+            }
+        }
+
+        private void OnTick()
+        {
+            lock (context.Synchronized)
+            {
+                ResponderEntry[] entries;
+                DateTime now = DateTime.Now;
+
+                lock (context.Synchronized)
+                {
+                    entries = context.Collection.Find(now);
+                }
+
+                foreach (ResponderEntry entry in entries)
+                {
+                    entry.NextKeepAlive = DateTime.Now.AddMinutes(1);
+                    entry.Channel.SendKeepAlive();
+                }
             }
         }
     }

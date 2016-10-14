@@ -54,14 +54,22 @@ namespace Leak.Core.Core
 
         private void Execute()
         {
+            TimeSpan period = TimeSpan.FromMilliseconds(50);
+            DateTime next = DateTime.Now.Add(period);
+
             while (true)
             {
-                int found = WaitHandle.WaitAny(handles, 50);
+                int found = WaitHandle.WaitAny(handles, period);
                 DateTime now = DateTime.Now;
 
-                foreach (LeakPipelineTimer tick in ticks)
+                if (next < now)
                 {
-                    tick.Execute(now);
+                    next = now;
+
+                    foreach (LeakPipelineTimer tick in ticks)
+                    {
+                        tick.Execute(now);
+                    }
                 }
 
                 if (WaitHandle.WaitTimeout != found)

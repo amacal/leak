@@ -7,7 +7,6 @@ namespace Leak.Core.Responder
         private readonly object synchronized;
         private readonly ResponderConfiguration configuration;
         private readonly ResponderCollection collection;
-        private readonly ResponderTimer timer;
 
         public ResponderContext(Action<ResponderConfiguration> configurer)
         {
@@ -17,7 +16,6 @@ namespace Leak.Core.Responder
 
             synchronized = new object();
             collection = new ResponderCollection();
-            timer = new ResponderTimer(this);
         }
 
         public object Synchronized
@@ -33,11 +31,6 @@ namespace Leak.Core.Responder
         public ResponderCollection Collection
         {
             get { return collection; }
-        }
-
-        public ResponderTimer Timer
-        {
-            get { return timer; }
         }
     }
 }

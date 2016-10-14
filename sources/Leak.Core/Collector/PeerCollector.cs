@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Collector.Callbacks;
 using Leak.Core.Common;
 using Leak.Core.Connector;
+using Leak.Core.Core;
 using Leak.Core.Listener;
 using Leak.Core.Network;
 using System;
@@ -20,6 +21,11 @@ namespace Leak.Core.Collector
         public PeerCollector(Action<PeerCollectorConfiguration> configurer)
         {
             context = new PeerCollectorContext(configurer);
+        }
+
+        public void Start(LeakPipeline pipeline)
+        {
+            context.Responder.Start(pipeline);
         }
 
         public PeerCollectorView CreateView(FileHash hash)

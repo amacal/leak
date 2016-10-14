@@ -446,7 +446,6 @@
     <Compile Include="Responder\ResponderContext.cs" />
     <Compile Include="Responder\ResponderEntry.cs" />
     <Compile Include="Responder\ResponderService.cs" />
-    <Compile Include="Responder\ResponderTimer.cs" />
     <Compile Include="Scheduler\SchedulerService.cs" />
     <Compile Include="Telegraph\TelegraphCollection.cs" />
     <Compile Include="Telegraph\TelegraphEntry.cs" />
