@@ -49,6 +49,10 @@ namespace Leak.Core.Connector
             {
                 context.Queue.Add(new PeerConnectorTaskHandle(hash, data.Socket, data.Endpoint));
             }
+            else
+            {
+                data.Socket.Dispose();
+            }
         }
     }
 }

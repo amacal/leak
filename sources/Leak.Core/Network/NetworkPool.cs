@@ -120,6 +120,8 @@ namespace Leak.Core.Network
             if (entry != null)
             {
                 entry.IsAvailable = false;
+                entry.Connection.Dispose();
+
                 callback.OnDisconnected(entry.Connection);
             }
         }
@@ -136,6 +138,8 @@ namespace Leak.Core.Network
             if (entry != null)
             {
                 entry.IsAvailable = false;
+                entry.Connection.Dispose();
+
                 callback.OnException(entry.Connection, ex);
             }
         }

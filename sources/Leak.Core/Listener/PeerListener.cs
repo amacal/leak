@@ -47,7 +47,6 @@ namespace Leak.Core.Listener
                 if (OnConnecting(data.GetRemote()) == false)
                 {
                     data.Connection.Dispose();
-
                     return;
                 }
 
@@ -59,6 +58,10 @@ namespace Leak.Core.Listener
 
                 OnConnected(connection);
                 Negotiate(context, connection);
+            }
+            else
+            {
+                data.Connection.Dispose();
             }
         }
 

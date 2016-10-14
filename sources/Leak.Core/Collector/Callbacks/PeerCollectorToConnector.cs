@@ -74,6 +74,7 @@ namespace Leak.Core.Collector.Callbacks
                 else
                 {
                     connection.Terminate();
+                    return;
                 }
             }
 

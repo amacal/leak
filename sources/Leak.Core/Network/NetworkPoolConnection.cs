@@ -8,7 +8,7 @@ namespace Leak.Core.Network
     /// Describes the network connection between local endpoint and
     /// remote endpoint initiated by one of the side.
     /// </summary>
-    public class NetworkPoolConnection : NetworkConnection
+    public class NetworkPoolConnection : NetworkConnection, IDisposable
     {
         private readonly TcpSocket socket;
         private readonly string remote;
@@ -139,15 +139,12 @@ namespace Leak.Core.Network
             if (listener.IsAvailable(identifier))
             {
                 listener.OnDisconnected(identifier);
-
-                lock (synchronized)
-                {
-                    // TODO: fix
-                    //socket.Shutdown(SocketShutdown.Both);
-                    //socket.Close();
-                    socket.Dispose();
-                }
             }
+        }
+
+        public void Dispose()
+        {
+            socket.Dispose();
         }
     }
 }

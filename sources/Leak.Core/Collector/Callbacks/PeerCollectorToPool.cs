@@ -32,8 +32,6 @@ namespace Leak.Core.Collector.Callbacks
                 session = context.Peers.Dismiss(address);
             }
 
-            connection.Terminate();
-
             if (session != null)
             {
                 context.Callback.OnDisconnected(session);
@@ -50,8 +48,6 @@ namespace Leak.Core.Collector.Callbacks
                 context.Bouncer.ReleaseConnection(connection);
                 session = context.Peers.Dismiss(address);
             }
-
-            connection.Terminate();
 
             if (session != null)
             {
