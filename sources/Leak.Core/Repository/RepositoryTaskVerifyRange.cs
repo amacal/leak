@@ -45,20 +45,19 @@ namespace Leak.Core.Repository
                 Pieces = new Queue<PieceData>(),
                 Buffer = new RotatingBuffer(count, size),
                 Left = reduced.Length - reduced.Completed,
+                Tasks = new List<Task>(),
                 Scope = reduced,
             };
 
-            List<Task> tasks = new List<Task>
+            if (data.Left > 0)
             {
-                BufferPieces(data)
-            };
+                AddWorker(data);
+                data.Tasks.Add(BufferPieces(data));
 
-            for (int i = 0; i < count; i++)
-            {
-                tasks.Add(VerifyPieces(data));
+                Task.WaitAll(data.Tasks.ToArray());
+                Task.WaitAll(data.Tasks.ToArray());
             }
 
-            Task.WaitAll(tasks.ToArray());
             data.Context.Bitfile.Write(bitfield);
 
             data.Reading.Dispose();
@@ -79,6 +78,11 @@ namespace Leak.Core.Repository
             }
 
             return reduced;
+        }
+
+        private void AddWorker(TaskData data)
+        {
+            data.Tasks.Add(VerifyPieces(data));
         }
 
         private Task BufferPieces(TaskData data)
@@ -127,6 +131,11 @@ namespace Leak.Core.Repository
                                     Data = buffer,
                                     Size = read
                                 });
+
+                                if (data.Tasks.Count <= data.Pieces.Count)
+                                {
+                                    AddWorker(data);
+                                }
                             }
 
                             data.Reading.Release(1);
@@ -193,7 +202,10 @@ namespace Leak.Core.Repository
             public Bitfield Bitfield { get; set; }
 
             public Bitfield Scope { get; set; }
+
             public int Left { get; set; }
+
+            public List<Task> Tasks { get; set; }
         }
 
         private class PieceData
