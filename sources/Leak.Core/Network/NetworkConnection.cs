@@ -1,10 +1,12 @@
-﻿namespace Leak.Core.Network
+﻿using Leak.Core.Common;
+
+namespace Leak.Core.Network
 {
     public interface NetworkConnection
     {
         long Identifier { get; }
 
-        string Remote { get; }
+        PeerAddress Remote { get; }
 
         NetworkDirection Direction { get; }
 

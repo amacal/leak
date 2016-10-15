@@ -1,4 +1,5 @@
-﻿using Leak.Core.Network;
+﻿using Leak.Core.Common;
+using Leak.Core.Network;
 using System;
 
 namespace Leak.Core.Loop
@@ -16,7 +17,7 @@ namespace Leak.Core.Loop
             this.handshake = handshake;
         }
 
-        public string Remote
+        public PeerAddress Remote
         {
             get { return connection.Remote; }
         }

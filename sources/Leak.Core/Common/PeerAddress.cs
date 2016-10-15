@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Net;
 
 namespace Leak.Core.Common
 {
@@ -13,12 +13,9 @@ namespace Leak.Core.Common
             this.port = port;
         }
 
-        public static PeerAddress Parse(string remote)
+        public static PeerAddress Parse(IPEndPoint remote)
         {
-            string[] parts = remote.Split(':');
-            int port = Int32.Parse(parts[1]);
-
-            return new PeerAddress(parts[0], port);
+            return new PeerAddress(remote.Address.ToString(), remote.Port);
         }
 
         public string Host

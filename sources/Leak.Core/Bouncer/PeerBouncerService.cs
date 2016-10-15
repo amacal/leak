@@ -30,11 +30,11 @@ namespace Leak.Core.Bouncer
         {
             lock (context.Synchronized)
             {
-                string remote = connection.Remote;
+                PeerAddress remote = connection.Remote;
                 int count = context.Collection.Count(x => x.Released == false);
 
                 bool canAcceptMoreConnections = count < context.Configuration.Connections;
-                bool canAcceptRemote = context.Collection.FindOrDefaultByRemote(remote) == null;
+                bool canAcceptRemote = context.Collection.FindOrDefaultByRemote(remote.ToString()) == null;
 
                 return canAcceptMoreConnections && canAcceptRemote;
             }
@@ -45,7 +45,7 @@ namespace Leak.Core.Bouncer
             lock (context.Synchronized)
             {
                 long identifier = connection.Identifier;
-                string remote = connection.Remote;
+                string remote = connection.Remote.ToString();
 
                 PeerBouncerEntry byIdentifier = context.Collection.FindOrCreateByIdentifier(identifier);
                 PeerBouncerEntry byRemote = context.Collection.FindOrDefaultByRemote(remote);

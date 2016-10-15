@@ -1,4 +1,5 @@
-﻿using Leak.Suckets;
+﻿using Leak.Core.Common;
+using Leak.Suckets;
 using System;
 using System.Net;
 
@@ -11,7 +12,7 @@ namespace Leak.Core.Network
     public class NetworkPoolConnection : NetworkConnection, IDisposable
     {
         private readonly TcpSocket socket;
-        private readonly string remote;
+        private readonly PeerAddress remote;
         private readonly long identifier;
         private readonly object synchronized;
 
@@ -42,7 +43,7 @@ namespace Leak.Core.Network
                 Decryptor = NetworkConnectionDecryptor.Nothing,
             };
 
-            this.remote = remote.ToString();
+            this.remote = PeerAddress.Parse(remote);
             this.synchronized = new object();
 
             this.buffer = new NetworkBuffer(listener, socket, identifier, with =>
@@ -89,7 +90,7 @@ namespace Leak.Core.Network
         /// <summary>
         /// Gets a text representation of the remote endpoint.
         /// </summary>
-        public string Remote
+        public PeerAddress Remote
         {
             get { return remote; }
         }

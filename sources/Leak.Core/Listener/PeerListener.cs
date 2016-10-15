@@ -69,7 +69,7 @@ namespace Leak.Core.Listener
         {
             bool accepted = true;
 
-            NetworkConnectionInfo connection = new NetworkConnectionInfo(endpoint.ToString(), NetworkDirection.Incoming);
+            NetworkConnectionInfo connection = new NetworkConnectionInfo(PeerAddress.Parse(endpoint), NetworkDirection.Incoming);
             PeerListenerConnecting connecting = new PeerListenerConnecting(connection, () => accepted = false);
 
             configuration.Callback.OnConnecting(connecting);

@@ -24,7 +24,7 @@ namespace Leak.Core.Collector.Callbacks
         public override void OnException(NetworkConnection connection, Exception ex)
         {
             PeerSession session;
-            PeerAddress address = PeerAddress.Parse(connection.Remote);
+            PeerAddress address = connection.Remote;
 
             lock (context.Synchronized)
             {
@@ -41,7 +41,7 @@ namespace Leak.Core.Collector.Callbacks
         public override void OnDisconnected(NetworkConnection connection)
         {
             PeerSession session;
-            PeerAddress address = PeerAddress.Parse(connection.Remote);
+            PeerAddress address = connection.Remote;
 
             lock (context.Synchronized)
             {

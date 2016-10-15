@@ -15,8 +15,6 @@ namespace Leak.Core.Retriever.Components
         private readonly OmnibusService omnibus;
         private readonly LeakQueue<RetrieverContext> queue;
 
-        private DateTime nextSchedule;
-
         public RetrieverContext(Action<RetrieverConfiguration> configurer)
         {
             configuration = configurer.Configure(with =>

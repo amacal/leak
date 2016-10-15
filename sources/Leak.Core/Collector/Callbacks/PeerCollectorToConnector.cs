@@ -25,7 +25,7 @@ namespace Leak.Core.Collector.Callbacks
                 }
             }
 
-            context.Callback.OnConnectingTo(connecting.Hash, PeerAddress.Parse(connecting.Connection.Remote));
+            context.Callback.OnConnectingTo(connecting.Hash, connecting.Connection.Remote);
         }
 
         public override void OnConnected(PeerConnectorConnected connected)
@@ -44,7 +44,7 @@ namespace Leak.Core.Collector.Callbacks
 
             if (accepted)
             {
-                PeerAddress peer = PeerAddress.Parse(connected.Connection.Remote);
+                PeerAddress peer = connected.Connection.Remote;
                 PeerCollectorConnected payload = new PeerCollectorConnected(peer, total);
 
                 context.Callback.OnConnectedTo(connected.Hash, payload);
@@ -57,12 +57,12 @@ namespace Leak.Core.Collector.Callbacks
 
         public override void OnRejected(NetworkConnection connection)
         {
-            context.Callback.OnRejected(PeerAddress.Parse(connection.Remote));
+            context.Callback.OnRejected(connection.Remote);
         }
 
         public override void OnHandshake(NetworkConnection connection, PeerConnectorHandshake handshake)
         {
-            PeerAddress address = PeerAddress.Parse(connection.Remote);
+            PeerAddress address = connection.Remote;
 
             lock (context.Synchronized)
             {
