@@ -1,6 +1,6 @@
 ﻿namespace Leak.Core.Omnibus
 {
-    public class OmnibusBlock
+    public struct OmnibusBlock
     {
         private readonly int piece;
         private readonly int offset;
@@ -35,7 +35,7 @@
 
         public override bool Equals(object obj)
         {
-            return Equals(this, obj as OmnibusBlock);
+            return Equals(this, (OmnibusBlock)obj);
         }
 
         public static int GetHashCode(OmnibusBlock block)
