@@ -8,8 +8,8 @@ namespace Leak.Core.Omnibus
 {
     public class OmnibusContext
     {
-        private readonly object synchronized;
         private readonly OmnibusConfiguration configuration;
+        private readonly OmnibusCache cache;
         private readonly OmnibusBitfieldCollection bitfields;
         private readonly OmnibusPieceCollection pieces;
         private readonly OmnibusReservationCollection reservations;
@@ -24,12 +24,11 @@ namespace Leak.Core.Omnibus
                 with.SchedulerThreshold = 16;
             });
 
-            bitfields = new OmnibusBitfieldCollection(configuration.Metainfo.Properties.Pieces);
+            cache = new OmnibusCache(configuration.Metainfo.Properties.Pieces);
+            bitfields = new OmnibusBitfieldCollection(cache);
             reservations = new OmnibusReservationCollection(configuration.LeaseDuration);
 
             queue = new LeakQueue<OmnibusContext>(this);
-
-            synchronized = new object();
             pieces = new OmnibusPieceCollection(this);
         }
 
@@ -53,11 +52,6 @@ namespace Leak.Core.Omnibus
             get { return configuration.Callback; }
         }
 
-        public object Synchronized
-        {
-            get { return synchronized; }
-        }
-
         public OmnibusBitfieldCollection Bitfields
         {
             get { return bitfields; }
@@ -76,6 +70,11 @@ namespace Leak.Core.Omnibus
         public LeakQueue<OmnibusContext> Queue
         {
             get { return queue; }
+        }
+
+        public OmnibusCache Cache
+        {
+            get { return cache; }
         }
     }
 }

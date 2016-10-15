@@ -16,10 +16,7 @@ namespace Leak.Core.Omnibus.Tasks
 
         public void Execute(OmnibusContext context)
         {
-            lock (context.Synchronized)
-            {
-                context.Bitfields.Add(peer, bitfield);
-            }
+            context.Bitfields.Add(peer, bitfield);
         }
     }
 }

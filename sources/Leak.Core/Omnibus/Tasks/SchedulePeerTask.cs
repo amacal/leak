@@ -2,7 +2,6 @@
 using Leak.Core.Core;
 using Leak.Core.Omnibus.Events;
 using System;
-using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus.Tasks
 {
@@ -21,37 +20,34 @@ namespace Leak.Core.Omnibus.Tasks
 
         public void Execute(OmnibusContext context)
         {
-            List<OmnibusBlock> blocks = null;
             DateTime now = default(DateTime);
             FileHash hash = context.Metainfo.Hash;
 
-            lock (context.Synchronized)
+            context.Cache.Blocks.Clear();
+
+            if (context.Bitfields.Contains(peer))
             {
-                if (context.Bitfields.Contains(peer))
+                strategy.Next(context.Cache.Blocks, context, peer, count);
+
+                if (context.Cache.Blocks.Count > 0)
                 {
-                    blocks = new List<OmnibusBlock>(count);
-                    strategy.Next(blocks, context, peer, count);
+                    now = DateTime.Now;
 
-                    if (blocks.Count > 0)
+                    foreach (OmnibusBlock block in context.Cache.Blocks)
                     {
-                        now = DateTime.Now;
+                        PeerHash previous = context.Reservations.Add(peer, block, now);
 
-                        foreach (OmnibusBlock block in blocks)
+                        if (previous != null)
                         {
-                            PeerHash previous = context.Reservations.Add(peer, block, now);
-
-                            if (previous != null)
-                            {
-                                context.Callback.OnBlockExpired(hash, previous, block);
-                            }
+                            context.Callback.OnBlockExpired(hash, previous, block);
                         }
                     }
                 }
             }
 
-            if (blocks != null)
+            if (context.Cache.Blocks != null)
             {
-                context.Callback.OnBlockReserved(hash, new OmnibusReservationEvent(peer, blocks));
+                context.Callback.OnBlockReserved(hash, new OmnibusReservationEvent(peer, context.Cache.Blocks));
             }
         }
     }

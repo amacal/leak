@@ -13,10 +13,7 @@ namespace Leak.Core.Omnibus.Tasks
 
         public void Execute(OmnibusContext context)
         {
-            lock (context.Synchronized)
-            {
-                context.Pieces.Invalidate(piece);
-            }
+            context.Pieces.Invalidate(piece);
         }
     }
 }

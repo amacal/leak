@@ -1,20 +1,23 @@
 ﻿using Leak.Core.Common;
+using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus.Components
 {
-    public class OmnibusBitfieldCache
+    public class OmnibusCache
     {
         private readonly int size;
         private readonly Bitfield bitfield;
+        private readonly List<OmnibusBlock> blocks;
 
         private readonly int[] ranking;
         private readonly int[] included;
         private readonly int[] excluded;
 
-        public OmnibusBitfieldCache(int size)
+        public OmnibusCache(int size)
         {
             this.size = size;
             this.bitfield = new Bitfield(size);
+            this.blocks = new List<OmnibusBlock>(size);
 
             this.ranking = new int[size];
             this.included = new int[size];
@@ -44,6 +47,11 @@ namespace Leak.Core.Omnibus.Components
         public int[] Excluded
         {
             get { return excluded; }
+        }
+
+        public List<OmnibusBlock> Blocks
+        {
+            get { return blocks; }
         }
     }
 }

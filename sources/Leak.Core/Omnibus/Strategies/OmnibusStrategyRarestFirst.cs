@@ -7,7 +7,7 @@ namespace Leak.Core.Omnibus.Strategies
 {
     public class OmnibusStrategyRarestFirst : OmnibusStrategy
     {
-        public override void Next(List<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count)
+        public override void Next(ICollection<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count)
         {
             int current = context.Reservations.Count(peer);
             int left = Math.Min(count, count - current);

@@ -6,22 +6,15 @@ namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusBitfieldCollection
     {
-        private readonly int size;
         private readonly Dictionary<PeerHash, Bitfield> byPeer;
-        private readonly OmnibusBitfieldCache cache;
+        private readonly OmnibusCache cache;
 
         private OmnibusBitfieldRanking ranking;
 
-        public OmnibusBitfieldCollection(int size)
+        public OmnibusBitfieldCollection(OmnibusCache cache)
         {
-            this.size = size;
+            this.cache = cache;
             this.byPeer = new Dictionary<PeerHash, Bitfield>();
-            this.cache = new OmnibusBitfieldCache(size);
-        }
-
-        public int Size
-        {
-            get { return size; }
         }
 
         public OmnibusBitfieldRanking Ranking

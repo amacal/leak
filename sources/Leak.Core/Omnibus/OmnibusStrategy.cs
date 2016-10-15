@@ -10,6 +10,6 @@ namespace Leak.Core.Omnibus
 
         public static OmnibusStrategy RarestFirst = new OmnibusStrategyRarestFirst();
 
-        public abstract void Next(List<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count);
+        public abstract void Next(ICollection<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count);
     }
 }

@@ -6,7 +6,7 @@ namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusBitfieldRanking
     {
-        private readonly OmnibusBitfieldCache cache;
+        private readonly OmnibusCache cache;
         private readonly int size;
         private readonly int lowest;
         private readonly int highest;
@@ -24,7 +24,7 @@ namespace Leak.Core.Omnibus.Components
             Array.Copy(source.availabilities, availabilities, size);
         }
 
-        public OmnibusBitfieldRanking(OmnibusBitfieldCache cache, Bitfield[] bitfields)
+        public OmnibusBitfieldRanking(OmnibusCache cache, Bitfield[] bitfields)
         {
             this.cache = cache;
             this.size = cache.Size;
