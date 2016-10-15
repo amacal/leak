@@ -6,27 +6,33 @@ namespace Leak.Core.Omnibus.Components
 {
     public class OmnibusBitfieldRanking
     {
+        private readonly OmnibusBitfieldCache cache;
         private readonly int size;
         private readonly int lowest;
         private readonly int highest;
         private readonly int[] availabilities;
 
-        public OmnibusBitfieldRanking(OmnibusBitfieldRanking source)
+        public OmnibusBitfieldRanking(OmnibusBitfieldRanking source, int[] location)
         {
+            cache = source.cache;
             size = source.size;
+
             lowest = source.lowest;
             highest = source.highest;
-            availabilities = new int[size];
+            availabilities = location;
 
             Array.Copy(source.availabilities, availabilities, size);
         }
 
-        public OmnibusBitfieldRanking(Bitfield[] bitfields, int size)
+        public OmnibusBitfieldRanking(OmnibusBitfieldCache cache, Bitfield[] bitfields)
         {
-            this.size = size;
+            this.cache = cache;
+            this.size = cache.Size;
 
-            availabilities = new int[size];
+            availabilities = cache.Ranking;
             lowest = bitfields.Length + 1;
+
+            Array.Clear(availabilities, 0, size);
 
             for (int i = 0; i < size; i++)
             {
@@ -52,7 +58,7 @@ namespace Leak.Core.Omnibus.Components
 
         public OmnibusBitfieldRanking Exclude(OmnibusPieceCollection completed)
         {
-            OmnibusBitfieldRanking result = new OmnibusBitfieldRanking(this);
+            OmnibusBitfieldRanking result = new OmnibusBitfieldRanking(this, cache.Excluded);
 
             for (int i = 0; i < size; i++)
             {
@@ -67,7 +73,7 @@ namespace Leak.Core.Omnibus.Components
 
         public OmnibusBitfieldRanking Include(Bitfield other)
         {
-            OmnibusBitfieldRanking result = new OmnibusBitfieldRanking(this);
+            OmnibusBitfieldRanking result = new OmnibusBitfieldRanking(this, cache.Included);
 
             for (int i = 0; i < size; i++)
             {
@@ -82,16 +88,13 @@ namespace Leak.Core.Omnibus.Components
 
         public IEnumerable<Bitfield> Order()
         {
+            Bitfield bitfield = cache.Bitfield;
+
             for (int i = lowest; i <= highest; i++)
             {
-                Bitfield bitfield = new Bitfield(size);
-
                 for (int j = 0; j < size; j++)
                 {
-                    if (availabilities[j] == i)
-                    {
-                        bitfield[j] = true;
-                    }
+                    bitfield[j] = availabilities[j] == i;
                 }
 
                 if (bitfield.Completed > 0)

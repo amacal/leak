@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Leak.Core.Common;
+using System.Collections.Generic;
 using System.Linq;
-using Leak.Core.Common;
 
 namespace Leak.Core.Omnibus.Components
 {
@@ -8,6 +8,7 @@ namespace Leak.Core.Omnibus.Components
     {
         private readonly int size;
         private readonly Dictionary<PeerHash, Bitfield> byPeer;
+        private readonly OmnibusBitfieldCache cache;
 
         private OmnibusBitfieldRanking ranking;
 
@@ -15,6 +16,7 @@ namespace Leak.Core.Omnibus.Components
         {
             this.size = size;
             this.byPeer = new Dictionary<PeerHash, Bitfield>();
+            this.cache = new OmnibusBitfieldCache(size);
         }
 
         public int Size
@@ -24,7 +26,7 @@ namespace Leak.Core.Omnibus.Components
 
         public OmnibusBitfieldRanking Ranking
         {
-            get { return ranking ?? (ranking = new OmnibusBitfieldRanking(byPeer.Values.ToArray(), size)); }
+            get { return ranking ?? (ranking = new OmnibusBitfieldRanking(cache, byPeer.Values.ToArray())); }
         }
 
         public void Add(PeerHash peer, Bitfield bitfield)

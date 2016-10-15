@@ -109,6 +109,7 @@
     <Compile Include="Network\NetworkPoolDecrypt.cs" />
     <Compile Include="Network\NetworkPoolReceive.cs" />
     <Compile Include="Network\NetworkPoolSend.cs" />
+    <Compile Include="Omnibus\Components\OmnibusBitfieldCache.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCompleted.cs" />
     <Compile Include="Omnibus\Components\OmnibusReservationComparer.cs" />
