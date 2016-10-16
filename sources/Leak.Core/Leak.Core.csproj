@@ -466,9 +466,13 @@
     <Compile Include="Telegraph\TelegraphService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Suckets\Leak.Suckets.csproj">
+    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
+      <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
+      <Name>Leak.Completion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
-      <Name>Leak.Suckets</Name>
+      <Name>Leak.Sockets</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
