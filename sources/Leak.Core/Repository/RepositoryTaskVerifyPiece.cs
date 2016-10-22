@@ -53,8 +53,6 @@ namespace Leak.Core.Repository
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
-                onCompleted.Invoke(this);
-
                 Metainfo metainfo = context.Metainfo;
 
                 using (HashAlgorithm algorithm = SHA1.Create())

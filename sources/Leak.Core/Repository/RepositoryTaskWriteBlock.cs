@@ -25,7 +25,6 @@ namespace Leak.Core.Repository
 
                 context.View.Write(file, data.Piece, data.Offset / blockSize, args =>
                 {
-                    onCompleted.Invoke(this);
                     context.Queue.Add(new Complete(data));
                 });
             });
@@ -33,12 +32,12 @@ namespace Leak.Core.Repository
 
         public bool CanExecute(RepositoryTaskQueue queue)
         {
-            return queue.IsBlocked("all") == false;
+            return queue.IsBlocked(data.Piece) == false;
         }
 
         public void Block(RepositoryTaskQueue queue)
         {
-            queue.Block("all");
+            queue.Block(data.Piece);
         }
 
         public void Release(RepositoryTaskQueue queue)
@@ -72,7 +71,7 @@ namespace Leak.Core.Repository
 
             public void Release(RepositoryTaskQueue queue)
             {
-                queue.Release("all");
+                queue.Release(data.Piece);
             }
         }
     }

@@ -19,5 +19,9 @@ namespace Leak.Core.Retriever
         public virtual void OnPieceVerified(FileHash hash, PieceInfo piece)
         {
         }
+
+        public virtual void OnPieceRejected(FileHash hash, PieceInfo piece)
+        {
+        }
     }
 }

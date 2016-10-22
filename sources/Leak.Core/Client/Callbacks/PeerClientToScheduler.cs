@@ -28,6 +28,11 @@ namespace Leak.Core.Client.Callbacks
             context.Callback.OnPieceVerified(hash, new PieceVerifiedEvent(hash, piece));
         }
 
+        public override void OnPieceRejected(FileHash hash, PieceInfo piece)
+        {
+            context.Callback.OnPieceRejected(hash, new PieceRejectedEvent(hash, piece));
+        }
+
         public override void OnDownloadStarted(FileHash hash)
         {
             context.Callback.OnFileStarted(hash);

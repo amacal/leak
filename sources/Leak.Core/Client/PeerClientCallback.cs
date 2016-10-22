@@ -25,6 +25,8 @@ namespace Leak.Core.Client
 
         void OnPieceVerified(FileHash hash, PieceVerifiedEvent @event);
 
+        void OnPieceRejected(FileHash hash, PieceRejectedEvent @event);
+
         void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data);
     }
 }

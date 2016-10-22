@@ -27,6 +27,11 @@ namespace Leak.Core.Scheduler
             context.Callback.OnPieceVerified(hash, piece);
         }
 
+        public override void OnPieceRejected(FileHash hash, PieceInfo piece)
+        {
+            context.Callback.OnPieceRejected(hash, piece);
+        }
+
         public override void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
         {
             context.Callback.OnDownloadChanged(hash, bitfield);

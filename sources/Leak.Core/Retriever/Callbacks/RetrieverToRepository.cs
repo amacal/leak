@@ -28,6 +28,7 @@ namespace Leak.Core.Retriever.Callbacks
         public override void OnRejected(FileHash hash, PieceInfo piece)
         {
             context.Omnibus.Invalidate(piece.Index);
+            context.Callback.OnPieceRejected(hash, piece);
         }
     }
 }

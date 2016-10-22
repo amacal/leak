@@ -29,5 +29,12 @@ namespace Leak.Core.Retriever
         /// <param name="hash">The hash of the affected resource.</param>
         /// <param name="piece">The successfully verified piece.</param>
         void OnPieceVerified(FileHash hash, PieceInfo piece);
+
+        /// <summary>
+        /// Called when the piece was not successfully verified.
+        /// </summary>
+        /// <param name="hash">The hash of the affected resource.</param>
+        /// <param name="piece">The unsuccessfully verified piece.</param>
+        void OnPieceRejected(FileHash hash, PieceInfo piece);
     }
 }

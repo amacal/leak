@@ -46,9 +46,13 @@ namespace Leak.Core.Omnibus.Components
             items[piece] = items[piece].Complete(block);
             bool isReady = items[piece].IsReady();
 
-            if (wasReady == false && isReady == true)
+            if (wasReady == false && isReady)
             {
                 ready++;
+            }
+
+            if (isReady)
+            {
                 CallPieceReady(piece);
             }
         }

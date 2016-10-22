@@ -40,6 +40,13 @@ namespace Leak.Loggers
             Console.WriteLine($"{hash}: verified; piece={@event.Piece.Index}");
         }
 
+        public override void OnPieceRejected(FileHash hash, PieceRejectedEvent @event)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{hash}: rejected; piece={@event.Piece.Index}");
+            Console.ResetColor();
+        }
+
         public override void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
         {
             Console.WriteLine($"{hash}: metadata; piece={data.Block}; total={data.Size}");

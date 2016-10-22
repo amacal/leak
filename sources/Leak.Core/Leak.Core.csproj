@@ -72,6 +72,7 @@
     <Compile Include="Client\Configuration\PeerClientPeerExchangeBuilder.cs" />
     <Compile Include="Client\Configuration\PeerClientPeerExchangeStatus.cs" />
     <Compile Include="Client\Events\FileAnnouncedEvent.cs" />
+    <Compile Include="Client\Events\PieceRejectedEvent.cs" />
     <Compile Include="Client\PeerClientCallbackFile.cs" />
     <Compile Include="Client\PeerClientCallbackNetwork.cs" />
     <Compile Include="Client\PeerClientCallbackTracker.cs" />
@@ -134,7 +135,6 @@
     <Compile Include="Repository\RepositoryConfiguration.cs" />
     <Compile Include="Repository\RepositoryContext.cs" />
     <Compile Include="Repository\RepositoryExtensions.cs" />
-    <Compile Include="Repository\RepositoryTaskBuffer.cs" />
     <Compile Include="Repository\RepositoryTaskCallback.cs" />
     <Compile Include="Repository\RepositoryTaskQueue.cs" />
     <Compile Include="Repository\RepositoryService.cs" />

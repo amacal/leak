@@ -16,6 +16,10 @@ namespace Leak.Core.Scheduler
         {
         }
 
+        public virtual void OnPieceRejected(FileHash hash, PieceInfo piece)
+        {
+        }
+
         public virtual void OnDownloadStarted(FileHash hash)
         {
         }

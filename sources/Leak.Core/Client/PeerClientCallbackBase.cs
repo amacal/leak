@@ -91,6 +91,10 @@ namespace Leak.Core.Client
         {
         }
 
+        public virtual void OnPieceRejected(FileHash hash, PieceRejectedEvent @event)
+        {
+        }
+
         public virtual void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
         {
         }

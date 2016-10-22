@@ -189,6 +189,14 @@ namespace Leak.Commands
             }
         }
 
+        public override void OnPieceRejected(FileHash hash, PieceRejectedEvent @event)
+        {
+            foreach (PeerClientCallback item in items)
+            {
+                item.OnPieceRejected(hash, @event);
+            }
+        }
+
         public override void OnMetadataReceived(FileHash hash, PeerHash peer, MetadataData data)
         {
             foreach (PeerClientCallback item in items)

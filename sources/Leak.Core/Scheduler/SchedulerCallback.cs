@@ -25,6 +25,13 @@ namespace Leak.Core.Scheduler
         void OnPieceVerified(FileHash hash, PieceInfo piece);
 
         /// <summary>
+        /// Called when a single piece was unsuccessfully verified.
+        /// </summary>
+        /// <param name="hash">The hash of the affected resource.</param>
+        /// <param name="piece">Describes the verified piece.</param>
+        void OnPieceRejected(FileHash hash, PieceInfo piece);
+
+        /// <summary>
         /// Called when the downloading task started.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
