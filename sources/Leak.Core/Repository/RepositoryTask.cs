@@ -2,8 +2,12 @@
 {
     public interface RepositoryTask
     {
-        void Accept(RepositoryTaskVisitor visitor);
+        bool CanExecute(RepositoryTaskQueue queue);
 
-        void Execute(RepositoryContext context);
+        void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted);
+
+        void Block(RepositoryTaskQueue queue);
+
+        void Release(RepositoryTaskQueue queue);
     }
 }

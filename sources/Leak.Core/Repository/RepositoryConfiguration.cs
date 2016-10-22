@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Metadata;
+using Leak.Files;
 
 namespace Leak.Core.Repository
 {
@@ -7,6 +8,8 @@ namespace Leak.Core.Repository
         public Metainfo Metainfo { get; set; }
 
         public string Destination { get; set; }
+
+        public FileFactory Files { get; set; }
 
         public RepositoryCallback Callback { get; set; }
     }

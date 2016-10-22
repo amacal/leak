@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Core;
 using Leak.Core.Retriever;
+using Leak.Files;
 
 namespace Leak.Core.Scheduler
 {
@@ -13,5 +14,7 @@ namespace Leak.Core.Scheduler
         public RetrieverStrategy Strategy { get; set; }
 
         public LeakPipeline Pipeline { get; set; }
+
+        public FileFactory Files { get; set; }
     }
 }

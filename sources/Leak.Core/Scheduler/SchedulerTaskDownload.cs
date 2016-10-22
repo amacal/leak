@@ -26,9 +26,11 @@ namespace Leak.Core.Scheduler
         {
             inside.Retriever = new RetrieverService(with =>
             {
+                with.Files = context.Files;
                 with.Metainfo = inside.Metainfo;
                 with.Bitfield = inside.Bitfield;
                 with.Strategy = context.Strategy;
+                with.Repository = inside.Repository;
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Metainfo.Hash}");
                 with.Collector = context.Collector.CreateView(inside.Metainfo.Hash);
                 with.Callback = new SchedulerTaskDownloadRetrieverCallback(inside);

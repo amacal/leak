@@ -2,10 +2,9 @@
 using Leak.Core.Core;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
-using Leak.Suckets;
+using Leak.Sockets;
 using System;
 using System.Net;
-using Leak.Sockets;
 
 namespace Leak.Core.Listener
 {
@@ -21,7 +20,6 @@ namespace Leak.Core.Listener
                 with.Port = 8080;
                 with.Callback = new PeerListenerCallbackNothing();
                 with.Peer = new PeerHash(Bytes.Random(20));
-                with.Pool = new NetworkPool();
             });
 
             socket = configuration.Pool.New();

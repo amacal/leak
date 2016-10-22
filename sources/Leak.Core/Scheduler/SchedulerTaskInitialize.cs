@@ -26,6 +26,7 @@ namespace Leak.Core.Scheduler
         {
             inside.Repository = new RepositoryService(with =>
             {
+                with.Files = context.Files;
                 with.Metainfo = inside.Metainfo;
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Metainfo.Hash}");
                 with.Callback = new SchedulerTaskInitializeRepositoryCallback(inside);

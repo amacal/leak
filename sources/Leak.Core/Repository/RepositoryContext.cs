@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Bitfile;
 using Leak.Core.Metadata;
+using Leak.Files;
 using System;
 
 namespace Leak.Core.Repository
@@ -11,22 +12,27 @@ namespace Leak.Core.Repository
         private readonly RepositoryTaskQueue queue;
 
         private readonly byte[] buffer;
+        private RepositoryView view;
 
-        public RepositoryContext(Action<RepositoryConfiguration> configurer)
+        public RepositoryContext(RepositoryContext context, Action<RepositoryConfiguration> configurer)
         {
             configuration = configurer.Configure(with =>
             {
+                with.Metainfo = context?.configuration.Metainfo;
+                with.Destination = context?.configuration.Destination;
+                with.Files = context?.configuration.Files;
                 with.Callback = new RepositoryCallbackNothing();
             });
 
-            bitfile = new BitfileService(with =>
+            bitfile = context?.bitfile ?? new BitfileService(with =>
             {
                 with.Hash = configuration.Metainfo.Hash;
                 with.Destination = configuration.Destination + ".bitfield";
             });
 
-            queue = new RepositoryTaskQueue();
-            buffer = new byte[configuration.Metainfo.Properties.PieceSize];
+            view = context?.view;
+            queue = context?.queue ?? new RepositoryTaskQueue();
+            buffer = context?.buffer ?? new byte[configuration.Metainfo.Properties.PieceSize];
         }
 
         public RepositoryConfiguration Configuration
@@ -37,6 +43,11 @@ namespace Leak.Core.Repository
         public RepositoryCallback Callback
         {
             get { return configuration.Callback; }
+        }
+
+        public FileFactory Files
+        {
+            get { return configuration.Files; }
         }
 
         public Metainfo Metainfo
@@ -54,14 +65,20 @@ namespace Leak.Core.Repository
             get { return queue; }
         }
 
+        public BitfileService Bitfile
+        {
+            get { return bitfile; }
+        }
+
         public byte[] Buffer
         {
             get { return buffer; }
         }
 
-        public BitfileService Bitfile
+        public RepositoryView View
         {
-            get { return bitfile; }
+            get { return view; }
+            set { view = value; }
         }
     }
 }

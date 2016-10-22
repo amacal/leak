@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Collector;
 using Leak.Core.Core;
 using Leak.Core.Retriever;
+using Leak.Files;
 using System;
 
 namespace Leak.Core.Scheduler
@@ -39,6 +40,11 @@ namespace Leak.Core.Scheduler
         public LeakPipeline Pipeline
         {
             get { return configuration.Pipeline; }
+        }
+
+        public FileFactory Files
+        {
+            get { return configuration.Files; }
         }
 
         public SchedulerQueue Queue

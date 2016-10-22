@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Core;
 using Leak.Sockets;
-using Leak.Suckets;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -16,24 +15,8 @@ namespace Leak.Core.Network
 
         private readonly LeakQueue<NetworkPool> queue;
         private readonly TcpSocketFactory factory;
-        private readonly CompletionThread worker;
 
         private long sequence;
-
-        public NetworkPool()
-        {
-            configuration = new NetworkPoolConfiguration
-            {
-                Callback = new NetworkPoolCallbackNothing()
-            };
-
-            items = new Dictionary<long, NetworkPoolEntry>();
-            callback = configuration.Callback;
-
-            queue = new LeakQueue<NetworkPool>(this);
-            worker = new CompletionThread();
-            factory = new TcpSocketFactory(worker);
-        }
 
         public NetworkPool(Action<NetworkPoolConfiguration> configurer)
         {
@@ -46,14 +29,12 @@ namespace Leak.Core.Network
             callback = configuration.Callback;
 
             queue = new LeakQueue<NetworkPool>(this);
-            worker = new CompletionThread();
-            factory = new TcpSocketFactory(worker);
+            factory = new TcpSocketFactory(configuration.Worker);
         }
 
         public void Start(LeakPipeline pipeline)
         {
             pipeline.Register(queue);
-            worker.Start();
         }
 
         public TcpSocket New()

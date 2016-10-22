@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Metaget;
+using Leak.Files;
 
 namespace Leak.Core.Scheduler
 {
@@ -19,5 +20,7 @@ namespace Leak.Core.Scheduler
         public SchedulerCallback Callback { get; set; }
 
         public LeakPipeline Pipeline { get; set; }
+
+        public FileFactory Files { get; set; }
     }
 }

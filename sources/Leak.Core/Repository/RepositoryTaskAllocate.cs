@@ -5,43 +5,49 @@ namespace Leak.Core.Repository
 {
     public class RepositoryTaskAllocate : RepositoryTask
     {
-        public void Accept(RepositoryTaskVisitor visitor)
+        public bool CanExecute(RepositoryTaskQueue queue)
         {
-            visitor.Visit(this);
+            return true;
         }
 
-        public void Execute(RepositoryContext context)
+        public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
             long position = 0;
-            int pieceSize = context.Metainfo.Properties.PieceSize;
             int pieces = context.Metainfo.Properties.Pieces;
 
+            int pieceSize = context.Metainfo.Properties.PieceSize;
+            int blockSize = context.Metainfo.Properties.BlockSize;
+
             RepositoryAllocation allocation = new RepositoryAllocation(pieces);
+            RepositoryViewAllocator allocator = new RepositoryViewAllocator(context.Files);
 
             foreach (MetainfoEntry entry in context.Metainfo.Entries)
             {
                 string path = entry.GetPath(context.Destination);
-                FileInfo file = new FileInfo(path);
+                FileInfo info = new FileInfo(path);
 
-                if (file.Exists == false)
+                if (info.Exists == false)
                 {
                     EnsureDirectoryExists(path);
                     allocation.Add(entry, new RepositoryAllocationRange((int)(position / pieceSize), (int)((position + entry.Size) / pieceSize)));
                 }
 
-                using (FileStream stream = file.Open(FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
-                {
-                    if (stream.Length != entry.Size)
-                    {
-                        stream.SetLength(entry.Size);
-                        stream.Flush();
-                    }
-                }
-
                 position += entry.Size;
             }
 
+            MetainfoEntry[] entries = context.Metainfo.Entries;
+            RepositoryViewCache cache = allocator.Allocate(context.Destination, entries, pieceSize, blockSize);
+
+            context.View = new RepositoryView(cache);
             context.Callback.OnAllocated(context.Metainfo.Hash, allocation);
+        }
+
+        public void Block(RepositoryTaskQueue queue)
+        {
+        }
+
+        public void Release(RepositoryTaskQueue queue)
+        {
         }
 
         private static void EnsureDirectoryExists(string path)

@@ -1,10 +1,8 @@
-﻿using Leak.Core.Metadata;
-using System.Collections.Generic;
-using System.IO;
+﻿using Leak.Files;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryTaskWriteBlock : RepositoryTask, RepositoryTaskMergeable
+    public class RepositoryTaskWriteBlock : RepositoryTask
     {
         private readonly RepositoryBlockData data;
 
@@ -13,38 +11,69 @@ namespace Leak.Core.Repository
             this.data = data;
         }
 
-        public void Accept(RepositoryTaskVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
         public int Piece
         {
             get { return data.Piece; }
         }
 
-        public void Execute(RepositoryContext context)
+        public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
-            Metainfo metainfo = context.Metainfo;
-            string destination = context.Destination;
-
-            int size = metainfo.Properties.PieceSize;
-            long position = (long)data.Piece * size + data.Offset;
-
-            using (RepositoryStream stream = new RepositoryStream(destination, metainfo))
+            data.Write((buffer, offset, count) =>
             {
-                stream.Seek(position, SeekOrigin.Begin);
+                int blockSize = context.Metainfo.Properties.BlockSize;
+                FileBuffer file = new FileBuffer(buffer, offset, count);
 
-                data.Write(stream.Write);
+                context.View.Write(file, data.Piece, data.Offset / blockSize, args =>
+                {
+                    onCompleted.Invoke(this);
+                    context.Queue.Add(new Complete(data));
+                });
+            });
+        }
+
+        public bool CanExecute(RepositoryTaskQueue queue)
+        {
+            return queue.IsBlocked("all") == false;
+        }
+
+        public void Block(RepositoryTaskQueue queue)
+        {
+            queue.Block("all");
+        }
+
+        public void Release(RepositoryTaskQueue queue)
+        {
+        }
+
+        private class Complete : RepositoryTask
+        {
+            private readonly RepositoryBlockData data;
+
+            public Complete(RepositoryBlockData data)
+            {
+                this.data = data;
+            }
+
+            public bool CanExecute(RepositoryTaskQueue queue)
+            {
+                return true;
+            }
+
+            public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
+            {
+                onCompleted.Invoke(this);
+                context.Callback.OnWritten(context.Metainfo.Hash, data.ToBlock());
                 data.Dispose();
             }
 
-            context.Callback.OnWritten(metainfo.Hash, data.ToBlock());
-        }
+            public void Block(RepositoryTaskQueue queue)
+            {
+            }
 
-        public void MergeInto(ICollection<RepositoryBlockData> blocks)
-        {
-            blocks.Add(data);
+            public void Release(RepositoryTaskQueue queue)
+            {
+                queue.Release("all");
+            }
         }
     }
 }

@@ -134,16 +134,25 @@
     <Compile Include="Repository\RepositoryConfiguration.cs" />
     <Compile Include="Repository\RepositoryContext.cs" />
     <Compile Include="Repository\RepositoryExtensions.cs" />
-    <Compile Include="Repository\RepositoryTaskMergeable.cs" />
+    <Compile Include="Repository\RepositoryTaskBuffer.cs" />
+    <Compile Include="Repository\RepositoryTaskCallback.cs" />
     <Compile Include="Repository\RepositoryTaskQueue.cs" />
     <Compile Include="Repository\RepositoryService.cs" />
     <Compile Include="Repository\RepositoryTask.cs" />
     <Compile Include="Repository\RepositoryTaskAllocate.cs" />
     <Compile Include="Repository\RepositoryTaskVerifyRange.cs" />
     <Compile Include="Repository\RepositoryTaskVerifyPiece.cs" />
-    <Compile Include="Repository\RepositoryTaskVisitor.cs" />
     <Compile Include="Repository\RepositoryTaskWriteBlock.cs" />
-    <Compile Include="Repository\RepositoryTaskWriteData.cs" />
+    <Compile Include="Repository\RepositoryView.cs" />
+    <Compile Include="Repository\RepositoryViewAllocator.cs" />
+    <Compile Include="Repository\RepositoryViewCache.cs" />
+    <Compile Include="Repository\RepositoryViewEntry.cs" />
+    <Compile Include="Repository\RepositoryViewRead.cs" />
+    <Compile Include="Repository\RepositoryViewReadCallback.cs" />
+    <Compile Include="Repository\RepositoryViewReadRoutine.cs" />
+    <Compile Include="Repository\RepositoryViewWrite.cs" />
+    <Compile Include="Repository\RepositoryViewWriteCallback.cs" />
+    <Compile Include="Repository\RepositoryViewWriteRoutine.cs" />
     <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
     <Compile Include="Retriever\RetrieverCallback.cs" />
     <Compile Include="Retriever\RetrieverCallbackBase.cs" />
@@ -432,7 +441,6 @@
     <Compile Include="Ranking\RankingContext.cs" />
     <Compile Include="Ranking\RankingEntry.cs" />
     <Compile Include="Ranking\RankingService.cs" />
-    <Compile Include="Repository\RepositoryStream.cs" />
     <Compile Include="Omnibus\OmnibusService.cs" />
     <Compile Include="Omnibus\Components\OmnibusPiece.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceReady.cs" />
@@ -469,6 +477,10 @@
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
       <Name>Leak.Completion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
+      <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
+      <Name>Leak.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>

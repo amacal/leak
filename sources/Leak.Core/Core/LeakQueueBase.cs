@@ -7,28 +7,29 @@ namespace Leak.Core.Core
         private readonly Thread worker;
         protected readonly ManualResetEventSlim onReady;
 
+        private TContext data;
+
         protected LeakQueueBase()
         {
-            worker = new Thread(Process);
             onReady = new ManualResetEventSlim(false);
+            worker = new Thread(Process);
+            worker.Start();
         }
 
         public void Start(TContext context)
         {
-            worker.Start(context);
+            data = context;
             onReady.Set();
         }
 
-        private void Process(object state)
+        private void Process()
         {
-            TContext context = (TContext)state;
-
             while (true)
             {
                 if (onReady.Wait(1000))
                 {
                     onReady.Reset();
-                    OnProcess(context);
+                    OnProcess(data);
                 }
             }
         }

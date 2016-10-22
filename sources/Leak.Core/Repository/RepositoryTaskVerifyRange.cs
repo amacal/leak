@@ -2,7 +2,6 @@
 using Leak.Core.Metadata;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,12 +17,7 @@ namespace Leak.Core.Repository
             this.scope = scope;
         }
 
-        public void Accept(RepositoryTaskVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
-        public void Execute(RepositoryContext context)
+        public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
             FileHash hash = context.Metainfo.Hash;
             Bitfield bitfield = context.Bitfile.Read();
@@ -44,7 +38,8 @@ namespace Leak.Core.Repository
                 Writing = new SemaphoreSlim(count, count),
                 Pieces = new Queue<PieceData>(),
                 Buffer = new RotatingBuffer(count, size),
-                Left = reduced.Length - reduced.Completed,
+                //Left = reduced.Length - reduced.Completed,
+                Left = bitfield.Length,
                 Tasks = new List<Task>(),
                 Scope = reduced,
             };
@@ -64,6 +59,19 @@ namespace Leak.Core.Repository
             data.Writing.Dispose();
 
             context.Callback.OnVerified(hash, bitfield);
+        }
+
+        public bool CanExecute(RepositoryTaskQueue queue)
+        {
+            return true;
+        }
+
+        public void Block(RepositoryTaskQueue queue)
+        {
+        }
+
+        public void Release(RepositoryTaskQueue queue)
+        {
         }
 
         private Bitfield ReduceScope(Bitfield bitfield)
@@ -90,58 +98,48 @@ namespace Leak.Core.Repository
             return Task.Run(() =>
             {
                 int piece = 0;
-                bool seek = false;
+                MetainfoHash[] pieces = data.Context.Metainfo.Pieces;
 
-                Metainfo metainfo = data.Context.Metainfo;
-                string destination = data.Context.Destination;
+                data.Writing.Wait();
+                RotatingEntry buffer = data.Buffer.Next();
+                RepositoryViewReadCallback callback = null;
 
-                using (RepositoryStream stream = new RepositoryStream(destination, metainfo))
+                callback = args =>
                 {
-                    RotatingEntry buffer;
-                    int read = metainfo.Properties.PieceSize;
-
-                    stream.Seek(0, SeekOrigin.Begin);
-
-                    while (piece < metainfo.Properties.Pieces)
+                    lock (data.Pieces)
                     {
-                        if (data.Scope[piece])
+                        data.Pieces.Enqueue(new PieceData
                         {
-                            seek = true;
-                            piece++;
-                        }
-                        else
+                            Index = args.Piece,
+                            Hash = pieces[args.Piece],
+                            Data = buffer,
+                            Size = args.Count
+                        });
+
+                        if (data.Tasks.Count <= data.Pieces.Count)
                         {
-                            if (seek)
-                            {
-                                stream.Seek((long)piece * metainfo.Properties.PieceSize, SeekOrigin.Begin);
-                            }
-
-                            data.Writing.Wait();
-                            buffer = data.Buffer.Next();
-
-                            read = stream.Read(buffer.Bytes, 0, read);
-                            piece = piece + 1;
-
-                            lock (data.Pieces)
-                            {
-                                data.Pieces.Enqueue(new PieceData
-                                {
-                                    Index = piece - 1,
-                                    Hash = metainfo.Pieces[piece - 1],
-                                    Data = buffer,
-                                    Size = read
-                                });
-
-                                if (data.Tasks.Count <= data.Pieces.Count)
-                                {
-                                    AddWorker(data);
-                                }
-                            }
-
-                            data.Reading.Release(1);
+                            AddWorker(data);
                         }
                     }
-                }
+
+                    piece = piece + 1;
+                    data.Reading.Release(1);
+
+                    if (pieces.Length > piece)
+                    {
+                        data.Writing.Wait();
+                        buffer = data.Buffer.Next();
+                        data.Context.View.Read(buffer.Bytes, piece, callback);
+                    }
+                };
+
+                data.Context.View.Read(buffer.Bytes, piece, callback);
+
+                //if (data.Scope[piece])
+                //{
+                //    seek = true;
+                //    piece++;
+                //}
             });
         }
 

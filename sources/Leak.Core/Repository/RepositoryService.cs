@@ -9,7 +9,12 @@ namespace Leak.Core.Repository
 
         public RepositoryService(Action<RepositoryConfiguration> configurer)
         {
-            context = new RepositoryContext(configurer);
+            context = new RepositoryContext(null, configurer);
+        }
+
+        public RepositoryService(RepositoryService service, Action<RepositoryConfiguration> configurer)
+        {
+            context = new RepositoryContext(service.context, configurer);
         }
 
         public void Start()

@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
+using Leak.Core.Repository;
 using Leak.Core.Retriever;
 
 namespace Leak.Core.Scheduler
@@ -13,6 +14,8 @@ namespace Leak.Core.Scheduler
         public Bitfield Bitfield { get; set; }
 
         public RetrieverService Retriever { get; set; }
+
+        public RepositoryService Repository { get; set; }
 
         public SchedulerQueue Queue { get; set; }
 

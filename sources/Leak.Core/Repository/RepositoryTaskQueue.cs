@@ -1,7 +1,6 @@
 ﻿using Leak.Core.Core;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Leak.Core.Repository
 {
@@ -9,11 +8,13 @@ namespace Leak.Core.Repository
     {
         private readonly ConcurrentQueue<RepositoryTask> ready;
         private readonly ConcurrentQueue<RepositoryTask> items;
+        private readonly HashSet<object> keys;
 
         public RepositoryTaskQueue()
         {
             ready = new ConcurrentQueue<RepositoryTask>();
             items = new ConcurrentQueue<RepositoryTask>();
+            keys = new HashSet<object>();
         }
 
         public void Add(RepositoryTask task)
@@ -22,129 +23,52 @@ namespace Leak.Core.Repository
             onReady.Set();
         }
 
-        public void Clear()
+        public bool IsBlocked(object key)
         {
-            RepositoryTask task;
+            return keys.Contains(key);
+        }
 
-            while (items.TryDequeue(out task))
-            {
-            }
+        public void Block(object key)
+        {
+            keys.Add(key);
+        }
+
+        public void Release(object key)
+        {
+            keys.Remove(key);
         }
 
         protected override void OnProcess(RepositoryContext context)
         {
             RepositoryTask task;
-            Merge merge = new Merge(context);
 
             while (items.TryDequeue(out task))
             {
-                task.Accept(merge);
+                ready.Enqueue(task);
             }
 
-            merge.Handle(ready);
+            int count = ready.Count;
 
-            while (ready.TryDequeue(out task))
+            while (count-- > 0)
             {
-                task.Execute(context);
+                ready.TryDequeue(out task);
+
+                if (task.CanExecute(this))
+                {
+                    task.Block(this);
+                    task.Execute(context, OnCompleted);
+                }
+                else
+                {
+                    ready.Enqueue(task);
+                }
             }
         }
 
-        private class Merge : RepositoryTaskVisitor
+        private void OnCompleted(RepositoryTask task)
         {
-            private readonly RepositoryContext context;
-
-            private readonly List<RepositoryTask> before;
-            private readonly List<RepositoryTaskWriteBlock> writes;
-            private readonly List<RepositoryTask> after;
-
-            public Merge(RepositoryContext context)
-            {
-                this.context = context;
-
-                this.before = new List<RepositoryTask>();
-                this.writes = new List<RepositoryTaskWriteBlock>();
-                this.after = new List<RepositoryTask>();
-            }
-
-            public void Visit(RepositoryTaskAllocate task)
-            {
-                before.Add(task);
-            }
-
-            public void Visit(RepositoryTaskVerifyPiece task)
-            {
-                after.Add(task);
-            }
-
-            public void Visit(RepositoryTaskVerifyRange task)
-            {
-                before.Add(task);
-            }
-
-            public void Visit(RepositoryTaskWriteBlock task)
-            {
-                writes.Add(task);
-            }
-
-            public void Handle(ConcurrentQueue<RepositoryTask> tasks)
-            {
-                foreach (RepositoryTask task in before)
-                {
-                    tasks.Enqueue(task);
-                }
-
-                foreach (var byPiece in writes.GroupBy(x => x.Piece))
-                {
-                    List<RepositoryBlockData> blocks = new List<RepositoryBlockData>();
-
-                    foreach (var task in byPiece)
-                    {
-                        task.MergeInto(blocks);
-                    }
-
-                    foreach (var batch in Batch(blocks))
-                    {
-                        tasks.Enqueue(new RepositoryTaskWriteData(batch));
-                    }
-                }
-
-                foreach (RepositoryTask task in after)
-                {
-                    tasks.Enqueue(task);
-                }
-            }
-
-            private IEnumerable<RepositoryBlockData[]> Batch(IEnumerable<RepositoryBlockData> blocks)
-            {
-                int? next = null;
-                int size = context.Metainfo.Properties.BlockSize;
-                List<RepositoryBlockData> result = new List<RepositoryBlockData>();
-
-                foreach (RepositoryBlockData block in blocks.OrderBy(x => x.Offset))
-                {
-                    if (next == null || next == block.Offset)
-                    {
-                        result.Add(block);
-                        next = block.Offset + size;
-                    }
-                    else if (next != null && next > block.Offset)
-                    {
-                    }
-                    else if (result.Count > 0)
-                    {
-                        yield return result.ToArray();
-
-                        result.Clear();
-                        result.Add(block);
-                        next = block.Offset + size;
-                    }
-                }
-
-                if (result.Count > 0)
-                {
-                    yield return result.ToArray();
-                }
-            }
+            task.Release(this);
+            onReady.Set();
         }
     }
 }

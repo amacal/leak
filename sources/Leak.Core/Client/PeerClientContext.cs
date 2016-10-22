@@ -8,6 +8,8 @@ using Leak.Core.Listener;
 using Leak.Core.Network;
 using Leak.Core.Scheduler;
 using Leak.Core.Telegraph;
+using Leak.Files;
+using Leak.Suckets;
 using System;
 
 namespace Leak.Core.Client
@@ -24,6 +26,9 @@ namespace Leak.Core.Client
         private readonly TelegraphService telegraph;
         private readonly PeerConnector connector;
         private readonly LeakPipeline pipeline;
+
+        private readonly CompletionThread worker;
+        private readonly FileFactory files;
 
         public PeerClientContext(Action<PeerClientConfiguration> configurer)
         {
@@ -51,8 +56,12 @@ namespace Leak.Core.Client
                 configuration.PeerExchange.Apply(with);
             });
 
+            worker = new CompletionThread();
+            files = new FileFactory(worker);
+
             network = new NetworkPool(with =>
             {
+                with.Worker = worker;
                 with.Callback = collector.CreatePoolCallback();
             });
 
@@ -77,6 +86,7 @@ namespace Leak.Core.Client
 
             scheduler = new SchedulerService(with =>
             {
+                with.Files = files;
                 with.Collector = collector;
                 with.Pipeline = pipeline;
                 with.Callback = new PeerClientToScheduler(this);
@@ -101,6 +111,7 @@ namespace Leak.Core.Client
             telegraph?.Start(pipeline);
             collector?.Start(pipeline);
 
+            worker.Start();
             pipeline.Start();
         }
 

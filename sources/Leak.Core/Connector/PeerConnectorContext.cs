@@ -16,7 +16,6 @@ namespace Leak.Core.Connector
             {
                 with.Callback = new PeerConnectorCallbackNothing();
                 with.Peer = new PeerHash(Bytes.Random(20));
-                with.Pool = new NetworkPool();
             });
 
             queue = new LeakQueue<PeerConnectorContext>(this);

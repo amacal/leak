@@ -1,6 +1,5 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
-using System.IO;
 using System.Security.Cryptography;
 
 namespace Leak.Core.Repository
@@ -14,47 +13,85 @@ namespace Leak.Core.Repository
             this.piece = piece;
         }
 
-        public void Accept(RepositoryTaskVisitor visitor)
+        public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
-            visitor.Visit(this);
+            context.View.Read(context.Buffer, piece.Index, data =>
+            {
+                context.Queue.Add(new Complete(piece, data));
+            });
         }
 
-        public void Execute(RepositoryContext context)
+        public bool CanExecute(RepositoryTaskQueue queue)
         {
-            Metainfo metainfo = context.Metainfo;
-            string destination = context.Destination;
+            return queue.IsBlocked("all") == false;
+        }
 
-            bool result;
-            long position = (long)piece.Index * metainfo.Properties.PieceSize;
+        public void Block(RepositoryTaskQueue queue)
+        {
+            queue.Block("all");
+        }
 
-            using (HashAlgorithm algorithm = SHA1.Create())
-            using (RepositoryStream stream = new RepositoryStream(destination, metainfo))
+        public void Release(RepositoryTaskQueue queue)
+        {
+        }
+
+        private class Complete : RepositoryTask
+        {
+            private readonly PieceInfo piece;
+            private readonly RepositoryViewRead data;
+
+            public Complete(PieceInfo piece, RepositoryViewRead data)
             {
-                stream.Seek(position, SeekOrigin.Begin);
-
-                int read = stream.Read(context.Buffer, 0, context.Buffer.Length);
-                byte[] hash = algorithm.ComputeHash(context.Buffer, 0, read);
-
-                result = Bytes.Equals(hash, metainfo.Pieces[piece.Index].ToBytes());
+                this.piece = piece;
+                this.data = data;
             }
 
-            AcceptIfRequired(context, result);
-            RejectIfRequired(context, result);
-        }
-
-        private void AcceptIfRequired(RepositoryContext context, bool valid)
-        {
-            if (valid)
+            public bool CanExecute(RepositoryTaskQueue queue)
             {
-                context.Callback.OnAccepted(context.Metainfo.Hash, piece);
+                return true;
             }
-        }
 
-        private void RejectIfRequired(RepositoryContext context, bool valid)
-        {
-            if (valid == false)
+            public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
-                context.Callback.OnRejected(context.Metainfo.Hash, piece);
+                onCompleted.Invoke(this);
+
+                Metainfo metainfo = context.Metainfo;
+
+                using (HashAlgorithm algorithm = SHA1.Create())
+                {
+                    byte[] hash = algorithm.ComputeHash(context.Buffer, 0, data.Count);
+                    bool result = Bytes.Equals(hash, metainfo.Pieces[piece.Index].ToBytes());
+
+                    AcceptIfRequired(context, result);
+                    RejectIfRequired(context, result);
+
+                    onCompleted.Invoke(this);
+                }
+            }
+
+            public void Block(RepositoryTaskQueue queue)
+            {
+            }
+
+            public void Release(RepositoryTaskQueue queue)
+            {
+                queue.Release("all");
+            }
+
+            private void AcceptIfRequired(RepositoryContext context, bool valid)
+            {
+                if (valid)
+                {
+                    context.Callback.OnAccepted(context.Metainfo.Hash, piece);
+                }
+            }
+
+            private void RejectIfRequired(RepositoryContext context, bool valid)
+            {
+                if (valid == false)
+                {
+                    context.Callback.OnRejected(context.Metainfo.Hash, piece);
+                }
             }
         }
     }

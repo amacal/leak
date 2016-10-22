@@ -24,6 +24,7 @@ namespace Leak.Core.Scheduler
                 with.Bitfield = bitfield;
                 with.Metainfo = context.Metainfo;
                 with.Destination = context.Destination;
+                with.Repository = context.Repository;
             });
 
             context.Callback.OnResourceInitialized(hash, bitfield);
