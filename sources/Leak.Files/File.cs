@@ -9,5 +9,7 @@ namespace Leak.Files
         void Read(long position, FileBuffer buffer, FileReadCallback callback);
 
         void Write(long position, FileBuffer buffer, FileWriteCallback callback);
+
+        bool Flush();
     }
 }

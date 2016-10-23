@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
+using System;
 using System.Security.Cryptography;
 
 namespace Leak.Core.Repository
@@ -15,9 +16,11 @@ namespace Leak.Core.Repository
 
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
-            context.View.Read(context.Buffer, piece.Index, data =>
+            HashAlgorithm algorithm = SHA1.Create();
+
+            context.View.Read(context.Buffer, piece.Index, 0, args =>
             {
-                context.Queue.Add(new Complete(piece, data));
+                context.Queue.Add(new Continue(piece, args, algorithm));
             });
         }
 
@@ -35,15 +38,61 @@ namespace Leak.Core.Repository
         {
         }
 
+        private class Continue : RepositoryTask
+        {
+            private readonly PieceInfo piece;
+            private readonly RepositoryViewRead read;
+            private readonly HashAlgorithm algorithm;
+
+            public Continue(PieceInfo piece, RepositoryViewRead read, HashAlgorithm algorithm)
+            {
+                this.piece = piece;
+                this.read = read;
+                this.algorithm = algorithm;
+            }
+
+            public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
+            {
+                algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
+
+                context.View.Read(context.Buffer, piece.Index, read.Block + 1, args =>
+                {
+                    if (args.Count > 0 && args.Block + 1 < context.View.BlocksPerPiece)
+                    {
+                        context.Queue.Add(new Continue(piece, args, algorithm));
+                    }
+                    else
+                    {
+                        context.Queue.Add(new Complete(piece, args, algorithm));
+                    }
+                });
+            }
+
+            public bool CanExecute(RepositoryTaskQueue queue)
+            {
+                return true;
+            }
+
+            public void Block(RepositoryTaskQueue queue)
+            {
+            }
+
+            public void Release(RepositoryTaskQueue queue)
+            {
+            }
+        }
+
         private class Complete : RepositoryTask
         {
             private readonly PieceInfo piece;
-            private readonly RepositoryViewRead data;
+            private readonly RepositoryViewRead read;
+            private readonly HashAlgorithm algorithm;
 
-            public Complete(PieceInfo piece, RepositoryViewRead data)
+            public Complete(PieceInfo piece, RepositoryViewRead read, HashAlgorithm algorithm)
             {
                 this.piece = piece;
-                this.data = data;
+                this.read = read;
+                this.algorithm = algorithm;
             }
 
             public bool CanExecute(RepositoryTaskQueue queue)
@@ -53,18 +102,19 @@ namespace Leak.Core.Repository
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
+                algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
+
                 Metainfo metainfo = context.Metainfo;
+                byte[] expected = metainfo.Pieces[piece.Index].ToBytes();
 
-                using (HashAlgorithm algorithm = SHA1.Create())
-                {
-                    byte[] hash = algorithm.ComputeHash(context.Buffer, 0, data.Count);
-                    bool result = Bytes.Equals(hash, metainfo.Pieces[piece.Index].ToBytes());
+                byte[] hash = algorithm.Complete();
+                bool result = Bytes.Equals(hash, expected);
 
-                    AcceptIfRequired(context, result);
-                    RejectIfRequired(context, result);
+                AcceptIfRequired(context, result);
+                RejectIfRequired(context, result);
 
-                    onCompleted.Invoke(this);
-                }
+                algorithm.Dispose();
+                onCompleted.Invoke(this);
             }
 
             public void Block(RepositoryTaskQueue queue)

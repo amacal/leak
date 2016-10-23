@@ -51,6 +51,11 @@ namespace Leak.Files
             routine.Execute(result);
         }
 
+        public bool Flush()
+        {
+            return FileInterop.FlushFileBuffers(handle);
+        }
+
         public void Dispose()
         {
             FileInterop.CloseHandle(handle);

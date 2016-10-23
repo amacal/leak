@@ -100,6 +100,7 @@
     <Compile Include="Core\LeakPipelineTimer.cs" />
     <Compile Include="Core\LeakPipelineTrigger.cs" />
     <Compile Include="Core\LeakQueueBase.cs" />
+    <Compile Include="HashExtensions.cs" />
     <Compile Include="Listener\PeerListenerStarted.cs" />
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Repository\RepositoryContext.cs" />
     <Compile Include="Repository\RepositoryExtensions.cs" />
     <Compile Include="Repository\RepositoryTaskCallback.cs" />
+    <Compile Include="Repository\RepositoryTaskFlush.cs" />
     <Compile Include="Repository\RepositoryTaskQueue.cs" />
     <Compile Include="Repository\RepositoryService.cs" />
     <Compile Include="Repository\RepositoryTask.cs" />

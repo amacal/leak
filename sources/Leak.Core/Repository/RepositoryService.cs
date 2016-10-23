@@ -41,5 +41,10 @@ namespace Leak.Core.Repository
         {
             context.Queue.Add(new RepositoryTaskWriteBlock(block));
         }
+
+        public void Flush()
+        {
+            context.Queue.Add(new RepositoryTaskFlush());
+        }
     }
 }

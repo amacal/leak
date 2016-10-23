@@ -47,6 +47,7 @@ namespace Leak.Core.Retriever.Callbacks
 
         public override void OnFileCompleted(FileHash hash)
         {
+            context.Repository.Flush();
             context.Callback.OnFileCompleted(hash);
         }
 

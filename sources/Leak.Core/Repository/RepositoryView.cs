@@ -11,22 +11,29 @@ namespace Leak.Core.Repository
             this.cache = cache;
         }
 
+        public int BlocksPerPiece
+        {
+            get { return cache.PieceSize / cache.BlockSize; }
+        }
+
         public void Read(byte[] buffer, int piece, RepositoryViewReadCallback callback)
         {
-            long offset = piece * (long)cache.PieceSize;
-            RepositoryViewEntry[] entries = cache.Find(piece);
-            RepositoryViewReadRoutine routine = new RepositoryViewReadRoutine(piece, entries, buffer, offset, callback);
+            new RepositoryViewReadRoutine(cache, piece, buffer, callback).Execute();
+        }
 
-            routine.Execute();
+        public void Read(byte[] buffer, int piece, int block, RepositoryViewReadCallback callback)
+        {
+            new RepositoryViewReadRoutine(cache, piece, block, buffer, callback).Execute();
         }
 
         public void Write(FileBuffer buffer, int piece, int block, RepositoryViewWriteCallback callback)
         {
-            long offset = piece * (long)cache.PieceSize + block * cache.BlockSize;
-            RepositoryViewEntry[] entries = cache.Find(piece);
-            RepositoryViewWriteRoutine routine = new RepositoryViewWriteRoutine(piece, entries, buffer, offset, callback);
+            new RepositoryViewWriteRoutine(cache, piece, block, buffer, callback).Execute();
+        }
 
-            routine.Execute();
+        public void Flush()
+        {
+            cache.Flush();
         }
     }
 }

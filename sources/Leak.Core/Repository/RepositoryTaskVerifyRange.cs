@@ -151,37 +151,38 @@ namespace Leak.Core.Repository
                 PieceData piece = null;
                 TimeSpan delay = TimeSpan.FromSeconds(2);
 
-                using (HashAlgorithm algorithm = SHA1.Create())
+                do
                 {
-                    do
+                    if (data.Reading.Wait(delay))
                     {
-                        if (data.Reading.Wait(delay))
+                        lock (data.Pieces)
                         {
-                            lock (data.Pieces)
+                            piece = data.Pieces.Dequeue();
+                        }
+
+                        using (HashAlgorithm algorithm = SHA1.Create())
+                        {
+                            algorithm.Push(piece.Data.Bytes, 0, piece.Size);
+                            hash = algorithm.Complete();
+                        }
+
+                        if (Bytes.Equals(hash, piece.Hash.ToBytes()))
+                        {
+                            lock (data.Bitfield)
                             {
-                                piece = data.Pieces.Dequeue();
-                            }
-
-                            hash = algorithm.ComputeHash(piece.Data.Bytes, 0, piece.Size);
-
-                            if (Bytes.Equals(hash, piece.Hash.ToBytes()))
-                            {
-                                lock (data.Bitfield)
-                                {
-                                    data.Bitfield[piece.Index] = true;
-                                }
-                            }
-
-                            data.Buffer.Release(piece.Data);
-                            data.Writing.Release(1);
-
-                            lock (data)
-                            {
-                                data.Left--;
+                                data.Bitfield[piece.Index] = true;
                             }
                         }
-                    } while (data.Left > 0);
-                }
+
+                        data.Buffer.Release(piece.Data);
+                        data.Writing.Release(1);
+
+                        lock (data)
+                        {
+                            data.Left--;
+                        }
+                    }
+                } while (data.Left > 0);
             });
         }
 

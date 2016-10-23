@@ -9,22 +9,33 @@ namespace Leak.Core.Repository
         private readonly FileBuffer buffer;
         private readonly long offset;
         private readonly int piece;
+        private readonly int block;
 
-        public RepositoryViewWriteRoutine(int piece, RepositoryViewEntry[] entries, FileBuffer buffer, long offset, RepositoryViewWriteCallback callback)
+        public RepositoryViewWriteRoutine(RepositoryViewCache cache, int piece, int block, FileBuffer buffer, RepositoryViewWriteCallback callback)
         {
             this.piece = piece;
-            this.entries = entries;
+            this.block = block;
             this.buffer = buffer;
-            this.offset = offset;
             this.callback = callback;
+
+            this.entries = cache.Find(piece, block);
+            this.offset = piece * (long)cache.PieceSize + block * cache.BlockSize;
         }
 
         public void Execute()
         {
             long position = offset - entries[0].Start;
-            Receiver receiver = new Receiver(this);
+            long count = entries[0].Size - position;
 
-            entries[0].File.Write(position, buffer, receiver.OnCompleted);
+            if (count >= buffer.Count)
+            {
+                count = buffer.Count;
+            }
+
+            Receiver receiver = new Receiver(this);
+            FileBuffer data = new FileBuffer(buffer.Data, buffer.Offset, (int)count);
+
+            entries[0].File.Write(position, data, receiver.OnCompleted);
         }
 
         private class Receiver
@@ -53,12 +64,12 @@ namespace Leak.Core.Repository
                     long position = completed + data.Count + routine.offset - routine.entries[index].Start;
 
                     Receiver receiver = new Receiver(routine, index, completed + data.Count);
-                    File file = routine.entries[index].File;
+                    RepositoryViewEntry entry = routine.entries[index];
 
-                    if (routine.entries.Length > index + 1 && position >= routine.entries[index].Start)
+                    if (routine.entries.Length > index + 1 && position >= routine.entries[index].Size)
                     {
                         receiver = new Receiver(routine, index + 1, completed + data.Count);
-                        file = routine.entries[index + 1].File;
+                        entry = routine.entries[index + 1];
                         offset = 0;
                     }
 
@@ -67,13 +78,22 @@ namespace Leak.Core.Repository
                         routine.callback.Invoke(new RepositoryViewWrite
                         {
                             Piece = routine.piece,
+                            Block = routine.block,
                             Buffer = routine.buffer,
                             Count = routine.buffer.Count
                         });
                     }
                     else
                     {
-                        file.Write(offset, new FileBuffer(routine.buffer.Data, routine.buffer.Offset + data.Count, routine.buffer.Offset - data.Count), receiver.OnCompleted);
+                        int left = routine.buffer.Count - data.Count;
+                        long count = entry.End - position;
+
+                        if (count > left)
+                        {
+                            count = left;
+                        }
+
+                        entry.File.Write(offset, new FileBuffer(routine.buffer.Data, routine.buffer.Offset + data.Count, (int)count), receiver.OnCompleted);
                     }
                 }
                 else
@@ -81,6 +101,7 @@ namespace Leak.Core.Repository
                     routine.callback.Invoke(new RepositoryViewWrite
                     {
                         Piece = routine.piece,
+                        Block = routine.block,
                         Buffer = routine.buffer,
                         Count = completed
                     });

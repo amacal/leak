@@ -23,6 +23,7 @@ namespace Leak.Core.Repository
                 {
                     Start = position,
                     End = position + entries[i].Size,
+                    Size = entries[i].Size,
                     File = factory.OpenOrCreate(entries[i].GetPath(destination))
                 };
 

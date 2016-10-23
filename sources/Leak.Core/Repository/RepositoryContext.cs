@@ -32,7 +32,7 @@ namespace Leak.Core.Repository
 
             view = context?.view;
             queue = context?.queue ?? new RepositoryTaskQueue();
-            buffer = context?.buffer ?? new byte[configuration.Metainfo.Properties.PieceSize];
+            buffer = context?.buffer ?? new byte[16384];
         }
 
         public RepositoryConfiguration Configuration

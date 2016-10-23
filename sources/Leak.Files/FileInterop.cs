@@ -52,6 +52,10 @@ namespace Leak.Files
             [Out] out int umberOfBytesWritten,
             [In] NativeOverlapped* lpOverlapped);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool FlushFileBuffers(
+            [In] IntPtr handle);
+
         public static uint GetLastError()
         {
             return (uint)Marshal.GetLastWin32Error();

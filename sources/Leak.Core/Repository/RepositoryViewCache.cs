@@ -83,6 +83,14 @@ namespace Leak.Core.Repository
             return constrainted.ToArray();
         }
 
+        public void Flush()
+        {
+            foreach (RepositoryViewEntry entry in entries)
+            {
+                entry.File.Flush();
+            }
+        }
+
         public void Dispose()
         {
             foreach (RepositoryViewEntry entry in entries)
