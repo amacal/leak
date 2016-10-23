@@ -57,7 +57,7 @@ namespace Leak.Core.Repository
 
                 context.View.Read(context.Buffer, piece.Index, read.Block + 1, args =>
                 {
-                    if (args.Count > 0 && args.Block + 1 < context.View.BlocksPerPiece)
+                    if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + 1))
                     {
                         context.Queue.Add(new Continue(piece, args, algorithm));
                     }

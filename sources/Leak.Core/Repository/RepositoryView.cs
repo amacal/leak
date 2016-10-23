@@ -11,9 +11,9 @@ namespace Leak.Core.Repository
             this.cache = cache;
         }
 
-        public int BlocksPerPiece
+        public bool Exists(int piece, int block)
         {
-            get { return cache.PieceSize / cache.BlockSize; }
+            return cache.Exists(piece, block);
         }
 
         public void Read(byte[] buffer, int piece, RepositoryViewReadCallback callback)

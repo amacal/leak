@@ -80,6 +80,7 @@ namespace Leak.Core.Repository
                     {
                         receiver = new Receiver(routine, index + 1, completed + data.Count);
                         entry = routine.entries[index + 1];
+                        position = 0;
                         offset = 0;
                     }
 
@@ -95,15 +96,15 @@ namespace Leak.Core.Repository
                     }
                     else
                     {
-                        int left = routine.buffer.Count - data.Count;
-                        long count = entry.End - position;
+                        int left = routine.buffer.Count - completed - data.Count;
+                        long count = entry.Size - position;
 
                         if (count > left)
                         {
                             count = left;
                         }
 
-                        entry.File.Read(offset, new FileBuffer(routine.buffer.Data, routine.buffer.Offset + data.Count, (int)count), receiver.OnCompleted);
+                        entry.File.Read(offset, new FileBuffer(routine.buffer.Data, routine.buffer.Offset + completed + data.Count, (int)count), receiver.OnCompleted);
                     }
                 }
                 else

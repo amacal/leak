@@ -94,6 +94,7 @@ namespace Leak.Commands
             }
 
             handle.WaitOne();
+            Thread.Sleep(5000);
         }
     }
 }

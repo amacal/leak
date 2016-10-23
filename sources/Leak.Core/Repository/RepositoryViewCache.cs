@@ -57,6 +57,14 @@ namespace Leak.Core.Repository
             get { return blockSize; }
         }
 
+        public bool Exists(int piece, int block)
+        {
+            long offset = piece * (long)pieceSize + block * blockSize;
+            long end = entries[entries.Length - 1].End;
+
+            return offset < end && piece < pieces && block < (pieceSize / blockSize);
+        }
+
         public RepositoryViewEntry[] Find(int piece)
         {
             return data[piece];
@@ -69,7 +77,7 @@ namespace Leak.Core.Repository
             if (found.Length == 1)
                 return found;
 
-            long offset = piece * (long)pieceSize + block * 16384;
+            long offset = piece * (long)pieceSize + block * blockSize;
             List<RepositoryViewEntry> constrainted = new List<RepositoryViewEntry>(1);
 
             foreach (RepositoryViewEntry entry in found)
