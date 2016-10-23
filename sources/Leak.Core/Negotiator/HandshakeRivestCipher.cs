@@ -37,6 +37,11 @@ namespace Leak.Core.Negotiator
             return Handle(data);
         }
 
+        public byte[] Encrypt(byte[] data, int index, int count)
+        {
+            return Handle(data, true, index, count);
+        }
+
         public byte[] Decrypt(byte[] data)
         {
             return Handle(data);

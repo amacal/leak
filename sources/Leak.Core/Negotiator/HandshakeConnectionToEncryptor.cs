@@ -13,7 +13,7 @@ namespace Leak.Core.Negotiator
 
         public override byte[] Encrypt(byte[] data)
         {
-            return key.Encrypt(data);
+            return key.Encrypt(data, 0, data.Length);
         }
     }
 }

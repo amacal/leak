@@ -31,6 +31,11 @@ namespace Leak.Core.Negotiator
             return inner.Encrypt(data);
         }
 
+        public byte[] Encrypt(byte[] data, int index, int count)
+        {
+            return inner.Encrypt(data, index, count);
+        }
+
         public byte[] Decrypt(byte[] data)
         {
             return inner.Decrypt(data);
