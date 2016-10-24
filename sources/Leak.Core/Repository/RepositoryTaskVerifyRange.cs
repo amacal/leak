@@ -1,10 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Leak.Core.Repository
 {
@@ -19,55 +16,24 @@ namespace Leak.Core.Repository
 
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
-            FileHash hash = context.Metainfo.Hash;
-            Bitfield bitfield = context.Bitfile.Read();
-
             int length = context.Metainfo.Pieces.Length;
             int size = context.Metainfo.Properties.PieceSize;
 
+            Bitfield bitfield = context.Bitfile.Read();
             bitfield = bitfield ?? new Bitfield(length);
 
-            int count = Environment.ProcessorCount;
             Bitfield reduced = ReduceScope(bitfield);
-
-            TaskData data = new TaskData
-            {
-                Context = context,
-                Bitfield = bitfield,
-                Reading = new SemaphoreSlim(0, count),
-                Writing = new SemaphoreSlim(count, count),
-                Pieces = new Queue<PieceData>(),
-                Buffer = new RotatingBuffer(count, size),
-                //Left = reduced.Length - reduced.Completed,
-                Left = bitfield.Length,
-                Tasks = new List<Task>(),
-                Scope = reduced,
-            };
-
-            if (data.Left > 0)
-            {
-                AddWorker(data);
-                data.Tasks.Add(BufferPieces(data));
-
-                Task.WaitAll(data.Tasks.ToArray());
-                Task.WaitAll(data.Tasks.ToArray());
-            }
-
-            data.Context.Bitfile.Write(bitfield);
-
-            data.Reading.Dispose();
-            data.Writing.Dispose();
-
-            context.Callback.OnVerified(hash, bitfield);
+            context.Queue.Add(new Start(bitfield, 0));
         }
 
         public bool CanExecute(RepositoryTaskQueue queue)
         {
-            return true;
+            return queue.IsBlocked("all") == false;
         }
 
         public void Block(RepositoryTaskQueue queue)
         {
+            queue.Block("all");
         }
 
         public void Release(RepositoryTaskQueue queue)
@@ -88,179 +54,142 @@ namespace Leak.Core.Repository
             return reduced;
         }
 
-        private void AddWorker(TaskData data)
+        private class Start : RepositoryTask
         {
-            data.Tasks.Add(VerifyPieces(data));
-        }
+            private readonly HashAlgorithm algorithm;
+            private readonly Bitfield bitfield;
+            private readonly int piece;
 
-        private Task BufferPieces(TaskData data)
-        {
-            return Task.Run(() =>
+            public Start(Bitfield bitfield, int piece)
             {
-                int piece = 0;
-                MetainfoHash[] pieces = data.Context.Metainfo.Pieces;
+                this.algorithm = SHA1.Create();
+                this.bitfield = bitfield;
+                this.piece = piece;
+            }
 
-                data.Writing.Wait();
-                RotatingEntry buffer = data.Buffer.Next();
-                RepositoryViewReadCallback callback = null;
-
-                callback = args =>
-                {
-                    lock (data.Pieces)
-                    {
-                        data.Pieces.Enqueue(new PieceData
-                        {
-                            Index = args.Piece,
-                            Hash = pieces[args.Piece],
-                            Data = buffer,
-                            Size = args.Count
-                        });
-
-                        if (data.Tasks.Count <= data.Pieces.Count)
-                        {
-                            AddWorker(data);
-                        }
-                    }
-
-                    piece = piece + 1;
-                    data.Reading.Release(1);
-
-                    if (pieces.Length > piece)
-                    {
-                        data.Writing.Wait();
-                        buffer = data.Buffer.Next();
-                        data.Context.View.Read(buffer.Bytes, piece, callback);
-                    }
-                };
-
-                data.Context.View.Read(buffer.Bytes, piece, callback);
-
-                //if (data.Scope[piece])
-                //{
-                //    seek = true;
-                //    piece++;
-                //}
-            });
-        }
-
-        private Task VerifyPieces(TaskData data)
-        {
-            return Task.Run(() =>
+            public bool CanExecute(RepositoryTaskQueue queue)
             {
-                byte[] hash;
-                PieceData piece = null;
-                TimeSpan delay = TimeSpan.FromSeconds(2);
+                return true;
+            }
 
-                do
-                {
-                    if (data.Reading.Wait(delay))
-                    {
-                        lock (data.Pieces)
-                        {
-                            piece = data.Pieces.Dequeue();
-                        }
-
-                        using (HashAlgorithm algorithm = SHA1.Create())
-                        {
-                            algorithm.Push(piece.Data.Bytes, 0, piece.Size);
-                            hash = algorithm.Complete();
-                        }
-
-                        if (Bytes.Equals(hash, piece.Hash.ToBytes()))
-                        {
-                            lock (data.Bitfield)
-                            {
-                                data.Bitfield[piece.Index] = true;
-                            }
-                        }
-
-                        data.Buffer.Release(piece.Data);
-                        data.Writing.Release(1);
-
-                        lock (data)
-                        {
-                            data.Left--;
-                        }
-                    }
-                } while (data.Left > 0);
-            });
-        }
-
-        private class TaskData
-        {
-            public SemaphoreSlim Reading { get; set; }
-
-            public SemaphoreSlim Writing { get; set; }
-
-            public RepositoryContext Context { get; set; }
-
-            public Queue<PieceData> Pieces { get; set; }
-
-            public RotatingBuffer Buffer { get; set; }
-
-            public Bitfield Bitfield { get; set; }
-
-            public Bitfield Scope { get; set; }
-
-            public int Left { get; set; }
-
-            public List<Task> Tasks { get; set; }
-        }
-
-        private class PieceData
-        {
-            public int Index { get; set; }
-
-            public MetainfoHash Hash { get; set; }
-
-            public RotatingEntry Data { get; set; }
-
-            public int Size { get; set; }
-        }
-
-        private class RotatingBuffer
-        {
-            public readonly RotatingEntry[] entries;
-
-            public RotatingBuffer(int count, int size)
+            public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
-                entries = new RotatingEntry[count];
-
-                for (int i = 0; i < count; i++)
+                context.View.Read(context.Buffer, piece, 0, args =>
                 {
-                    entries[i] = new RotatingEntry
+                    if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + 1))
                     {
-                        Available = true,
-                        Bytes = new byte[size]
-                    };
+                        context.Queue.Add(new Continue(bitfield, algorithm, args));
+                    }
+                    else
+                    {
+                        context.Queue.Add(new Complete(bitfield, algorithm, args));
+                    }
+                });
+            }
+
+            public void Block(RepositoryTaskQueue queue)
+            {
+            }
+
+            public void Release(RepositoryTaskQueue queue)
+            {
+            }
+        }
+
+        private class Continue : RepositoryTask
+        {
+            private readonly Bitfield bitfield;
+            private readonly HashAlgorithm algorithm;
+            private readonly RepositoryViewRead read;
+
+            public Continue(Bitfield bitfield, HashAlgorithm algorithm, RepositoryViewRead read)
+            {
+                this.bitfield = bitfield;
+                this.algorithm = algorithm;
+                this.read = read;
+            }
+
+            public bool CanExecute(RepositoryTaskQueue queue)
+            {
+                return true;
+            }
+
+            public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
+            {
+                algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
+
+                context.View.Read(context.Buffer, read.Piece, read.Block + 1, args =>
+                {
+                    if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + 1))
+                    {
+                        context.Queue.Add(new Continue(bitfield, algorithm, args));
+                    }
+                    else
+                    {
+                        context.Queue.Add(new Complete(bitfield, algorithm, args));
+                    }
+                });
+            }
+
+            public void Block(RepositoryTaskQueue queue)
+            {
+            }
+
+            public void Release(RepositoryTaskQueue queue)
+            {
+            }
+        }
+
+        private class Complete : RepositoryTask
+        {
+            private readonly Bitfield bitfield;
+            private readonly HashAlgorithm algorithm;
+            private readonly RepositoryViewRead read;
+
+            public Complete(Bitfield bitfield, HashAlgorithm algorithm, RepositoryViewRead read)
+            {
+                this.bitfield = bitfield;
+                this.algorithm = algorithm;
+                this.read = read;
+            }
+
+            public bool CanExecute(RepositoryTaskQueue queue)
+            {
+                return true;
+            }
+
+            public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
+            {
+                algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
+
+                Metainfo metainfo = context.Metainfo;
+                byte[] expected = metainfo.Pieces[read.Piece].ToBytes();
+
+                byte[] hash = algorithm.Complete();
+                bool result = Bytes.Equals(hash, expected);
+
+                bitfield[read.Piece] = result;
+                algorithm.Dispose();
+
+                if (context.View.Exists(read.Piece + 1, 0))
+                {
+                    context.Queue.Add(new Start(bitfield, read.Piece + 1));
+                }
+                else
+                {
+                    onCompleted.Invoke(this);
+                    context.Callback.OnVerified(metainfo.Hash, bitfield);
                 }
             }
 
-            public RotatingEntry Next()
+            public void Block(RepositoryTaskQueue queue)
             {
-                for (int i = 0; i < entries.Length; i++)
-                {
-                    if (entries[i].Available)
-                    {
-                        entries[i].Available = false;
-                        return entries[i];
-                    }
-                }
-
-                return null;
             }
 
-            public void Release(RotatingEntry entry)
+            public void Release(RepositoryTaskQueue queue)
             {
-                entry.Available = true;
+                queue.Release("all");
             }
-        }
-
-        private class RotatingEntry
-        {
-            public bool Available { get; set; }
-
-            public byte[] Bytes { get; set; }
         }
     }
 }
