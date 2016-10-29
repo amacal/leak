@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Files", "Leak.Files\Le
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Files.Tests", "Leak.Files.Tests\Leak.Files.Tests.csproj", "{77C48D2B-08E9-4E0A-9EFF-ED342A5899BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Echo.Server", "Leak.Echo.Server\Leak.Echo.Server.csproj", "{93BB73C0-9ACE-4BA6-96E9-FCC4A827FDCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Echo.Benchmark", "Leak.Echo.Benchmark\Leak.Echo.Benchmark.csproj", "{26BB2835-0BAB-4021-976D-D293D3E11896}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{77C48D2B-08E9-4E0A-9EFF-ED342A5899BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77C48D2B-08E9-4E0A-9EFF-ED342A5899BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77C48D2B-08E9-4E0A-9EFF-ED342A5899BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93BB73C0-9ACE-4BA6-96E9-FCC4A827FDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93BB73C0-9ACE-4BA6-96E9-FCC4A827FDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93BB73C0-9ACE-4BA6-96E9-FCC4A827FDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93BB73C0-9ACE-4BA6-96E9-FCC4A827FDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26BB2835-0BAB-4021-976D-D293D3E11896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26BB2835-0BAB-4021-976D-D293D3E11896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26BB2835-0BAB-4021-976D-D293D3E11896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26BB2835-0BAB-4021-976D-D293D3E11896}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
