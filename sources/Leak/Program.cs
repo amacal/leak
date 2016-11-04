@@ -1,6 +1,5 @@
 ﻿using Leak.Commands;
-using Pargos.Core;
-using Pargos.Serialization;
+using Pargos;
 using System;
 
 namespace Leak
@@ -9,12 +8,14 @@ namespace Leak
     {
         public static void Main(string[] args)
         {
-            ArgumentCollection arguments = ArgumentFactory.Parse(args);
-            Options options = arguments.Deserialize<Options>();
+            Options options = Argument.Parse<Options>(args);
+            string command = options.Command;
 
-            if (options.Download != null)
+            switch (command)
             {
-                new DownloadCommand(options.Download).Execute();
+                case "download":
+                    new DownloadCommand(options.Download).Execute();
+                    break;
             }
 
             Environment.Exit(0);

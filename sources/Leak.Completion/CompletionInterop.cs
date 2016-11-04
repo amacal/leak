@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace Leak.Suckets
+namespace Leak.Completion
 {
     internal class CompletionInterop
     {

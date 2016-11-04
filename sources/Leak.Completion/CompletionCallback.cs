@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Leak.Suckets
+namespace Leak.Completion
 {
     public interface CompletionCallback
     {

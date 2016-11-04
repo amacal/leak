@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{93BB73C0-9ACE-4BA6-96E9-FCC4A827FDCB}</ProjectGuid>
+    <ProjectGuid>{1DCD0871-F232-42F4-9370-DC39BD07F624}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Echo.Server</RootNamespace>
-    <AssemblyName>Leak.Echo.Server</AssemblyName>
+    <RootNamespace>Leak.Echo</RootNamespace>
+    <AssemblyName>Leak.Echo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,12 +32,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\pargos.2.0.0\lib\net45\Pargos.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EchoWorkerFactory.cs" />
-    <Compile Include="EchoWorker.cs" />
+    <Compile Include="EchoBenchmark.cs" />
+    <Compile Include="EchoBenchmarkOptions.cs" />
+    <Compile Include="EchoBenchmarkStarter.cs" />
+    <Compile Include="EchoBenchmarkWorker.cs" />
+    <Compile Include="EchoOptions.cs" />
     <Compile Include="EchoServer.cs" />
+    <Compile Include="EchoServerOptions.cs" />
+    <Compile Include="EchoServerStarter.cs" />
+    <Compile Include="EchoServerWorker.cs" />
+    <Compile Include="EchoServerWorkerFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,6 +61,9 @@
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
       <Name>Leak.Sockets</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

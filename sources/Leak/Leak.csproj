@@ -38,16 +38,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Pargos.Attributes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\pargos.1.1.0\lib\net45\Pargos.Attributes.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Pargos.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\pargos.1.1.0\lib\net45\Pargos.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Pargos.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\pargos.1.1.0\lib\net45\Pargos.Serialization.dll</HintPath>
+    <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\pargos.2.0.0\lib\net45\Pargos.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

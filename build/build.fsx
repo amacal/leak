@@ -52,6 +52,7 @@ Target "Default" (fun _ ->
     ==> "Restore"
     ==> "BuildApp"
     ==> "BuildTests"
+    ==> "ExecuteTests"
     ==> "CreatePackage"
     ==> "Default"
 

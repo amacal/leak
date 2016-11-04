@@ -1,31 +1,19 @@
 ﻿using Leak.Core;
 using Leak.Deamon;
-using Pargos.Core;
 
 namespace Leak.Commands
 {
     public class DeamonCommand
     {
-        private readonly ArgumentCollection arguments;
-
-        public DeamonCommand(ArgumentCollection arguments)
+        public void Execute(DeamonOptions options)
         {
-            this.arguments = arguments;
-        }
-
-        public void Execute()
-        {
-            string routine = arguments.GetString(1);
-            string directory = arguments.GetString("directory");
-            string identifier = arguments.GetString("identifier");
-
             LeakDeamon deamon = new LeakDeamon(with =>
             {
-                with.Directory = directory;
-                with.Identifier = Bytes.Parse(identifier);
+                with.Directory = options.Directory;
+                with.Identifier = Bytes.Parse(options.Identifier);
             });
 
-            switch (routine)
+            switch (options.Command)
             {
                 case "start":
                     deamon.Start();

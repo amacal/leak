@@ -1,52 +1,52 @@
-﻿using Pargos.Attributes;
+﻿using Pargos;
 
 namespace Leak.Commands
 {
     public class DownloadOptions
     {
-        [NamedOption("destination")]
+        [Option("--destination")]
         public string Destination { get; set; }
 
-        [NamedOption("torrent")]
+        [Option("--torrent")]
         public string Torrent { get; set; }
 
-        [NamedOption("hash")]
+        [Option("--hash")]
         public string Hash { get; set; }
 
-        [NamedOption("tracker")]
+        [Option("--tracker")]
         public string[] Tracker { get; set; }
 
-        [NamedOption("listener")]
+        [Option("--listener")]
         public string Listener { get; set; }
 
-        [NamedOption("connector")]
+        [Option("--connector")]
         public string Connector { get; set; }
 
-        [NamedOption("metadata")]
+        [Option("--metadata")]
         public string Metadata { get; set; }
 
-        [NamedOption("peer-exchange")]
+        [Option("--peer-exchange")]
         public string PeerExchange { get; set; }
 
-        [NamedOption("download")]
+        [Option("--download")]
         public string Download { get; set; }
 
-        [NamedOption("port")]
-        public int Port { get; set; }
+        [Option("--port")]
+        public int? Port { get; set; }
 
-        [NamedOption("logging")]
+        [Option("--logging")]
         public string Logging { get; set; }
 
-        [NamedOption("logging-hash")]
+        [Option("--logging-hash")]
         public string LoggingHash { get; set; }
 
-        [NamedOption("logging-listener")]
+        [Option("--logging-listener")]
         public string LoggingListener { get; set; }
 
-        [NamedOption("logging-network")]
+        [Option("--logging-network")]
         public string LoggingNetwork { get; set; }
 
-        [NamedOption("logging-peer")]
+        [Option("--logging-peer")]
         public string LoggingPeer { get; set; }
     }
 }

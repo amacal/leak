@@ -24,6 +24,10 @@ namespace Leak.Sockets
 
         Task<TcpSocketConnect> Connect(IPEndPoint endpoint);
 
+        void Disconnect(TcpSocketDisconnectCallback callback);
+
+        Task<TcpSocketDisconnect> Disconnect();
+
         void Send(TcpSocketBuffer buffer, TcpSocketSendCallback callback);
 
         Task<TcpSocketSend> Send(TcpSocketBuffer buffer);

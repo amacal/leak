@@ -41,6 +41,7 @@
     <Compile Include="BindTests.cs" />
     <Compile Include="ConnectTests.cs" />
     <Compile Include="CreateTests.cs" />
+    <Compile Include="DisconnectTests.cs" />
     <Compile Include="EchoClient.cs" />
     <Compile Include="EchoServer.cs" />
     <Compile Include="EchoTests.cs" />

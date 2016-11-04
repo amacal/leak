@@ -1,13 +1,13 @@
 ﻿using Leak.Sockets;
 
-namespace Leak.Echo.Server
+namespace Leak.Echo
 {
-    public class EchoWorker
+    public class EchoServerWorker
     {
-        private readonly EchoWorkerFactory factory;
+        private readonly EchoServerWorkerFactory factory;
         private readonly byte[] data;
 
-        public EchoWorker(EchoWorkerFactory factory)
+        public EchoServerWorker(EchoServerWorkerFactory factory)
         {
             this.factory = factory;
             this.data = new byte[16384];

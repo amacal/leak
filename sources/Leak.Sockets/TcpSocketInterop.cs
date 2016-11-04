@@ -25,7 +25,7 @@ namespace Leak.Sockets
             out int lpdwBytesReceived,
             NativeOverlapped* lpOverlapped);
 
-        internal delegate void GetAcceptExSockaddrsDelegate(
+        public delegate void GetAcceptExSockaddrsDelegate(
                 IntPtr buffer,
                 int receiveDataLength,
                 int localAddressLength,
@@ -34,6 +34,12 @@ namespace Leak.Sockets
                 out int localSocketAddressLength,
                 out IntPtr remoteSocketAddress,
                 out int remoteSocketAddressLength);
+
+        public unsafe delegate int DisconnectExDelegate(
+            IntPtr socket,
+            NativeOverlapped* overlapped,
+            int dwFlags,
+            int reserved);
 
         [DllImport("ws2_32.dll", SetLastError = true)]
         public static extern IntPtr WSASocket(

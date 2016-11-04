@@ -3,7 +3,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Leak.Suckets;
+using Leak.Completion;
 
 namespace Leak.Sockets
 {
@@ -132,6 +132,24 @@ namespace Leak.Sockets
 
             routine.Execute(result);
             return task;
+        }
+
+        public void Disconnect(TcpSocketDisconnectCallback callback)
+        {
+            TcpSocketDisconnectRoutine routine = new TcpSocketDisconnectRoutine(handle);
+            TcpSocketDisconnectResult result = new TcpSocketDisconnectResult
+            {
+                Handle = handle,
+                Socket = this,
+                OnDisconnected = callback
+            };
+
+            routine.Execute(result);
+        }
+
+        public Task<TcpSocketDisconnect> Disconnect()
+        {
+            throw new NotImplementedException();
         }
 
         public void Send(TcpSocketBuffer buffer, TcpSocketSendCallback callback)

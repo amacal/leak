@@ -48,9 +48,9 @@ namespace Leak.Commands
                 {
                     with.Listener.Enable(listener =>
                     {
-                        if (options.Port > 0 && options.Port < 65536)
+                        if (options.Port != null && options.Port > 0 && options.Port < 65536)
                         {
-                            listener.Port = options.Port;
+                            listener.Port = options.Port.Value;
                         }
                     });
                 }

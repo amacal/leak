@@ -1,16 +1,16 @@
-﻿using Leak.Sockets;
-using System;
+﻿using System;
+using Leak.Sockets;
 
-namespace Leak.Echo.Server
+namespace Leak.Echo
 {
     public class EchoServer : IDisposable
     {
         private readonly TcpSocket socket;
-        private readonly EchoWorkerFactory workers;
+        private readonly EchoServerWorkerFactory serverWorkers;
 
         public EchoServer(TcpSocketFactory factory, int port)
         {
-            workers = new EchoWorkerFactory();
+            serverWorkers = new EchoServerWorkerFactory();
             socket = factory.Create();
 
             socket.Bind(port);
@@ -28,7 +28,7 @@ namespace Leak.Echo.Server
 
             if (data.Status == TcpSocketStatus.OK)
             {
-                workers.Next().Handle(data.Connection);
+                serverWorkers.Next().Handle(data.Connection);
             }
             else
             {

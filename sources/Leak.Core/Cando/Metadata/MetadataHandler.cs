@@ -38,7 +38,7 @@ namespace Leak.Core.Cando.Metadata
             BencodedValue value = Bencoder.Decode(payload.Data);
             int? type = value.Find("msg_type", x => x?.ToInt32());
             int? piece = value.Find("piece", x => x?.ToInt32());
-            int? size = value.Find("total_size", x => x.ToInt32());
+            int? size = value.Find("total_size", x => x?.ToInt32());
 
             if (type != null && piece != null)
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Leak.Suckets
+namespace Leak.Completion
 {
     public class CompletionThread : CompletionWorker, IDisposable
     {

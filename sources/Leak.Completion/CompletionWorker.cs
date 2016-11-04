@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Leak.Suckets
+namespace Leak.Completion
 {
     public interface CompletionWorker
     {

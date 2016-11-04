@@ -1,9 +1,9 @@
-﻿using Leak.Sockets;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Threading;
+using Leak.Sockets;
 
-namespace Leak.Echo.Benchmark
+namespace Leak.Echo
 {
     public class EchoBenchmark
     {
@@ -22,12 +22,9 @@ namespace Leak.Echo.Benchmark
 
             for (int i = 0; i < count; i++)
             {
-                TcpSocket socket = factory.Create();
-                EchoWorker worker = new EchoWorker(watch, socket, endpoint, message);
+                EchoBenchmarkWorker worker = new EchoBenchmarkWorker(watch, factory, endpoint, message);
 
-                socket.Bind();
                 worker.Start();
-
                 Thread.Sleep(100);
             }
         }

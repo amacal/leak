@@ -3,32 +3,38 @@ using System;
 using System.Diagnostics;
 using System.Net;
 
-namespace Leak.Echo.Benchmark
+namespace Leak.Echo
 {
-    public class EchoWorker
+    public class EchoBenchmarkWorker
     {
         private readonly Stopwatch watch;
-        private readonly TcpSocket socket;
+        private readonly TcpSocketFactory factory;
         private readonly IPEndPoint endpoint;
 
+        private Stopwatch session;
+        private TcpSocket socket;
         private TcpSocketBuffer outgoing;
         private TcpSocketBuffer incoming;
 
         private static long counter;
         private static long previous;
 
-        public EchoWorker(Stopwatch watch, TcpSocket socket, IPEndPoint endpoint, byte[] outgoing)
+        public EchoBenchmarkWorker(Stopwatch watch, TcpSocketFactory factory, IPEndPoint endpoint, byte[] outgoing)
         {
             this.watch = watch;
-            this.socket = socket;
             this.endpoint = endpoint;
 
             this.outgoing = outgoing;
             this.incoming = new byte[outgoing.Length];
+            this.session = Stopwatch.StartNew();
+
+            this.factory = factory;
+            this.socket = factory.Create();
         }
 
         public void Start()
         {
+            socket.Bind();
             socket.Connect(endpoint, OnConnected);
         }
 
@@ -64,7 +70,19 @@ namespace Leak.Echo.Benchmark
                     incoming = new TcpSocketBuffer(incoming.Data);
                     outgoing = new TcpSocketBuffer(outgoing.Data);
 
-                    socket.Send(outgoing, OnSent);
+                    if (session.Elapsed > TimeSpan.FromMinutes(1))
+                    {
+                        socket = factory.Create();
+                        session = Stopwatch.StartNew();
+
+                        socket.Bind();
+                        socket.Connect(endpoint, OnConnected);
+                        data.Socket.Dispose();
+                    }
+                    else
+                    {
+                        socket.Send(outgoing, OnSent);
+                    }
                 }
             }
             else
@@ -102,7 +120,19 @@ namespace Leak.Echo.Benchmark
                     incoming = new TcpSocketBuffer(incoming.Data);
                     outgoing = new TcpSocketBuffer(outgoing.Data);
 
-                    socket.Send(outgoing, OnSent);
+                    if (session.Elapsed > TimeSpan.FromMinutes(1))
+                    {
+                        socket = factory.Create();
+                        session = Stopwatch.StartNew();
+
+                        socket.Bind();
+                        socket.Connect(endpoint, OnConnected);
+                        data.Socket.Dispose();
+                    }
+                    else
+                    {
+                        socket.Send(outgoing, OnSent);
+                    }
                 }
             }
             else
