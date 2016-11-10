@@ -35,8 +35,9 @@ namespace Leak.Core.Bouncer
 
                 bool canAcceptMoreConnections = count < context.Configuration.Connections;
                 bool canAcceptRemote = context.Collection.FindOrDefaultByRemote(remote.ToString()) == null;
+                bool canAcceptCountry = context.Geolocator?.Verify(remote) != false;
 
-                return canAcceptMoreConnections && canAcceptRemote;
+                return canAcceptMoreConnections && canAcceptRemote && canAcceptCountry;
             }
         }
 

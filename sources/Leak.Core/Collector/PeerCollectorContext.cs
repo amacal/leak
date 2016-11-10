@@ -33,6 +33,7 @@ namespace Leak.Core.Collector
             {
                 with.Callback = new PeerCollectorCallbackNothing();
                 with.Extensions = new PeerCollectorExtensionBuilder(this);
+                with.Countries = new string[0];
             });
 
             peers = new InfantryService(with =>
@@ -53,6 +54,7 @@ namespace Leak.Core.Collector
             bouncer = new PeerBouncerService(with =>
             {
                 with.Callback = new PeerCollectorToBouncer();
+                with.Countries = configuration.Countries;
                 with.Connections = 32;
             });
 

@@ -4,6 +4,8 @@
     {
         public int Connections { get; set; }
 
+        public string[] Countries { get; set; }
+
         public PeerBouncerCallback Callback { get; set; }
     }
 }

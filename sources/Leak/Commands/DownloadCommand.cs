@@ -60,6 +60,11 @@ namespace Leak.Commands
                     with.Connector.Enable();
                 }
 
+                if (options.Accept != null)
+                {
+                    with.Countries = options.Accept;
+                }
+
                 switch (options.Download)
                 {
                     case "rarest-first":

@@ -1,4 +1,5 @@
-﻿using Leak.Core.Client.Callbacks;
+﻿using Leak.Completion;
+using Leak.Core.Client.Callbacks;
 using Leak.Core.Client.Configuration;
 using Leak.Core.Collector;
 using Leak.Core.Common;
@@ -10,7 +11,6 @@ using Leak.Core.Scheduler;
 using Leak.Core.Telegraph;
 using Leak.Files;
 using System;
-using Leak.Completion;
 
 namespace Leak.Core.Client
 {
@@ -35,6 +35,7 @@ namespace Leak.Core.Client
             configuration = configurer.Configure(with =>
             {
                 with.Peer = PeerHash.Random();
+                with.Countries = new string[0];
                 with.Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
                 with.Callback = new PeerClientCallbackNothing();
                 with.Connector = new PeerClientConnectorBuilder();
@@ -51,6 +52,7 @@ namespace Leak.Core.Client
             collector = new PeerCollector(with =>
             {
                 with.Callback = new PeerClientToCollector(this);
+                with.Countries = configuration.Countries;
 
                 configuration.Metadata.Apply(with);
                 configuration.PeerExchange.Apply(with);

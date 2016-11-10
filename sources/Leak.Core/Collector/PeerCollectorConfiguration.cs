@@ -5,5 +5,7 @@
         public PeerCollectorCallback Callback { get; set; }
 
         public PeerCollectorExtensionBuilder Extensions { get; set; }
+
+        public string[] Countries { get; set; }
     }
 }

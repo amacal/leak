@@ -9,6 +9,8 @@ namespace Leak.Core.Client
 
         public string Destination { get; set; }
 
+        public string[] Countries { get; set; }
+
         public PeerClientCallback Callback { get; set; }
 
         public PeerClientListenerBuilder Listener { get; set; }

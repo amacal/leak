@@ -16,6 +16,9 @@ namespace Leak.Commands
         [Option("--tracker")]
         public string[] Tracker { get; set; }
 
+        [Option("--accept")]
+        public string[] Accept { get; set; }
+
         [Option("--listener")]
         public string Listener { get; set; }
 
