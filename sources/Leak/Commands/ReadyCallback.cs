@@ -1,21 +1,19 @@
-using Leak.Core.Client;
-using Leak.Core.Common;
+using Leak.Core.Core;
 using System.Threading;
 
 namespace Leak.Commands
 {
-    public class ReadyCallback : PeerClientCallbackBase
+    public static class ReadyCallback
     {
-        private readonly ManualResetEvent handle;
-
-        public ReadyCallback(ManualResetEvent handle)
+        public static LeakBusCallback Complete(ManualResetEvent handle)
         {
-            this.handle = handle;
-        }
-
-        public override void OnFileCompleted(FileHash hash)
-        {
-            handle.Set();
+            return (name, payload) =>
+            {
+                if (name == "file-completed")
+                {
+                    handle.Set();
+                }
+            };
         }
     }
 }

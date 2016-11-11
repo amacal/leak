@@ -7,34 +7,6 @@ namespace Leak.Core.Client
 {
     public abstract class PeerClientCallbackBase : PeerClientCallback
     {
-        public virtual void OnFileScheduled(FileHash hash)
-        {
-        }
-
-        public virtual void OnFileDiscovered(FileHash hash)
-        {
-        }
-
-        public virtual void OnFileInitialized(FileHash hash, FileInitializedEvent @event)
-        {
-        }
-
-        public virtual void OnFileStarted(FileHash hash)
-        {
-        }
-
-        public virtual void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
-        {
-        }
-
-        public virtual void OnFileCompleted(FileHash hash)
-        {
-        }
-
-        public virtual void OnListenerStarted(PeerHash local)
-        {
-        }
-
         public virtual void OnPeerConnectingTo(FileHash hash, PeerAddress peer)
         {
         }
@@ -100,10 +72,6 @@ namespace Leak.Core.Client
         }
 
         public virtual void OnAnnounceStarted(FileHash hash)
-        {
-        }
-
-        public virtual void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event)
         {
         }
 

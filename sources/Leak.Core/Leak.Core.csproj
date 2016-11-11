@@ -76,12 +76,15 @@
     <Compile Include="Client\Configuration\PeerClientMetadataStatus.cs" />
     <Compile Include="Client\Configuration\PeerClientPeerExchangeBuilder.cs" />
     <Compile Include="Client\Configuration\PeerClientPeerExchangeStatus.cs" />
-    <Compile Include="Client\Events\FileAnnouncedEvent.cs" />
+    <Compile Include="Client\Events\FileChanged.cs" />
+    <Compile Include="Client\Events\FileCompleted.cs" />
+    <Compile Include="Client\Events\FileDiscovered.cs" />
+    <Compile Include="Client\Events\FileInitialized.cs" />
+    <Compile Include="Client\Events\FileScheduled.cs" />
+    <Compile Include="Client\Events\FileStarted.cs" />
     <Compile Include="Client\Events\PieceRejectedEvent.cs" />
-    <Compile Include="Client\PeerClientCallbackFile.cs" />
     <Compile Include="Client\PeerClientCallbackNetwork.cs" />
     <Compile Include="Client\PeerClientCallbackTracker.cs" />
-    <Compile Include="Client\PeerClientCollection.cs" />
     <Compile Include="Client\PeerClientContext.cs" />
     <Compile Include="Client\PeerClientEntry.cs" />
     <Compile Include="Client\Callbacks\PeerClientToScheduler.cs" />
@@ -92,7 +95,6 @@
     <Compile Include="Collector\Extensions\PeerExchangeInstaller.cs" />
     <Compile Include="Collector\PeerCollectorExtension.cs" />
     <Compile Include="Collector\PeerCollectorBlockFactory.cs" />
-    <Compile Include="Collector\Events\PeerCollectorListenerStarted.cs" />
     <Compile Include="Collector\PeerCollectorExtensionBuilder.cs" />
     <Compile Include="Common\BitfieldInfo.cs" />
     <Compile Include="Common\PeerSession.cs" />
@@ -101,12 +103,15 @@
     <Compile Include="Connector\PeerConnectorContext.cs" />
     <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
     <Compile Include="Connector\PeerConnectorTaskHandle.cs" />
+    <Compile Include="Core\LeakBus.cs" />
+    <Compile Include="Core\LeakBusCallback.cs" />
+    <Compile Include="Core\LeakBusResource.cs" />
     <Compile Include="Core\LeakPipeline.cs" />
     <Compile Include="Core\LeakPipelineTimer.cs" />
     <Compile Include="Core\LeakPipelineTrigger.cs" />
     <Compile Include="Core\LeakQueueBase.cs" />
     <Compile Include="HashExtensions.cs" />
-    <Compile Include="Listener\PeerListenerStarted.cs" />
+    <Compile Include="Listener\Events\ListenerStarted.cs" />
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
@@ -233,7 +238,6 @@
     <Compile Include="Client\Configuration\PeerClientListenerConfiguration.cs" />
     <Compile Include="Client\Configuration\PeerClientListenerStatus.cs" />
     <Compile Include="Client\PeerClientMessage.cs" />
-    <Compile Include="Client\Events\FileInitializedEvent.cs" />
     <Compile Include="Client\PeerClient.cs" />
     <Compile Include="Client\PeerClientCallback.cs" />
     <Compile Include="Client\PeerClientCallbackBase.cs" />
@@ -463,6 +467,7 @@
     <Compile Include="Responder\ResponderEntry.cs" />
     <Compile Include="Responder\ResponderService.cs" />
     <Compile Include="Scheduler\SchedulerService.cs" />
+    <Compile Include="Client\Events\FileAnnounced.cs" />
     <Compile Include="Telegraph\TelegraphCollection.cs" />
     <Compile Include="Telegraph\TelegraphEntry.cs" />
     <Compile Include="Telegraph\TelegraphCallbackBase.cs" />
@@ -496,6 +501,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Telegraph\Events\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

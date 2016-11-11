@@ -1,17 +1,26 @@
-﻿using Leak.Core.Client;
+﻿using System;
 
 namespace Leak.Loggers
 {
-    public class HashLogger : PeerClientCallbackBase
+    public class HashLogger
     {
-        public static PeerClientCallback Off()
+        public static HashLogger Off()
         {
             return new HashLogger();
         }
 
-        public static PeerClientCallback Normal()
+        public static HashLogger Normal()
         {
             return new HashLoggerNormal();
+        }
+
+        public void Handle(string name, dynamic payload)
+        {
+            Handle(name, payload, new Action(() => { }));
+        }
+
+        protected virtual void Handle(string name, dynamic payload, Action next)
+        {
         }
     }
 }

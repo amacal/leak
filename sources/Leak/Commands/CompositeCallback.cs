@@ -21,62 +21,6 @@ namespace Leak.Commands
             items.Add(item);
         }
 
-        public override void OnFileScheduled(FileHash hash)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnFileScheduled(hash);
-            }
-        }
-
-        public override void OnFileDiscovered(FileHash hash)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnFileDiscovered(hash);
-            }
-        }
-
-        public override void OnFileInitialized(FileHash hash, FileInitializedEvent @event)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnFileInitialized(hash, @event);
-            }
-        }
-
-        public override void OnFileStarted(FileHash hash)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnFileStarted(hash);
-            }
-        }
-
-        public override void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnFileChanged(hash, bitfield);
-            }
-        }
-
-        public override void OnFileCompleted(FileHash hash)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnFileCompleted(hash);
-            }
-        }
-
-        public override void OnListenerStarted(PeerHash local)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnListenerStarted(local);
-            }
-        }
-
         public override void OnPeerConnectingTo(FileHash hash, PeerAddress peer)
         {
             foreach (PeerClientCallback item in items)
@@ -210,14 +154,6 @@ namespace Leak.Commands
             foreach (PeerClientCallback item in items)
             {
                 item.OnAnnounceStarted(hash);
-            }
-        }
-
-        public override void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnAnnounceCompleted(hash, @event);
             }
         }
 

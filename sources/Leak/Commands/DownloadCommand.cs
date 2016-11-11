@@ -22,17 +22,19 @@ namespace Leak.Commands
 
             callback.Add(factory.Bouncer());
             callback.Add(factory.Connector());
-            callback.Add(factory.Hash());
-            callback.Add(factory.Listener());
             callback.Add(factory.Network());
             callback.Add(factory.Peer());
-
-            callback.Add(new ReadyCallback(handle));
 
             PeerClient client = new PeerClient(with =>
             {
                 with.Destination = options.Destination;
                 with.Callback = callback;
+
+                with.Subscribers = new[]
+                {
+                    factory.Subscriber(),
+                    ReadyCallback.Complete(handle)
+                };
 
                 if (options.Metadata != "off")
                 {

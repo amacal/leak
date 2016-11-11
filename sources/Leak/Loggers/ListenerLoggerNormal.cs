@@ -1,13 +1,19 @@
-﻿using Leak.Core.Common;
-using System;
+﻿using System;
 
 namespace Leak.Loggers
 {
     public class ListenerLoggerNormal : ListenerLogger
     {
-        public override void OnListenerStarted(PeerHash local)
+        protected override void Handle(string name, dynamic payload, Action next)
         {
-            Console.WriteLine($"{local}: listener started");
+            switch (name)
+            {
+                case "listener-started":
+                    Console.WriteLine($"{payload.Peer}: listener started on port {payload.Port}");
+                    break;
+            }
+
+            next.Invoke();
         }
     }
 }

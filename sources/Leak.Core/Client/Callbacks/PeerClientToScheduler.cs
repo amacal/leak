@@ -15,12 +15,20 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnMetadataCompleted(FileHash hash)
         {
-            context.Callback.OnFileDiscovered(hash);
+            context.Bus.Publish("file-discovered", new FileDiscovered
+            {
+                Hash = hash
+            });
         }
 
         public override void OnResourceInitialized(FileHash hash, Bitfield bitfield)
         {
-            context.Callback.OnFileInitialized(hash, new FileInitializedEvent(bitfield));
+            context.Bus.Publish("file-initialized", new FileInitialized
+            {
+                Hash = hash,
+                Total = bitfield.Length,
+                Completed = bitfield.Completed,
+            });
         }
 
         public override void OnPieceVerified(FileHash hash, PieceInfo piece)
@@ -35,17 +43,28 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnDownloadStarted(FileHash hash)
         {
-            context.Callback.OnFileStarted(hash);
+            context.Bus.Publish("file-started", new FileStarted
+            {
+                Hash = hash
+            });
         }
 
         public override void OnDownloadChanged(FileHash hash, BitfieldInfo bitfield)
         {
-            context.Callback.OnFileChanged(hash, bitfield);
+            context.Bus.Publish("file-changed", new FileChanged
+            {
+                Hash = hash,
+                Total = bitfield.Total,
+                Completed = bitfield.Completed,
+            });
         }
 
         public override void OnDownloadCompleted(FileHash hash)
         {
-            context.Callback.OnFileCompleted(hash);
+            context.Bus.Publish("file-completed", new FileCompleted
+            {
+                Hash = hash
+            });
         }
     }
 }

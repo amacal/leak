@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Listener.Events;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Sockets;
@@ -32,9 +33,13 @@ namespace Leak.Core.Listener
 
             socket.Bind(port);
             socket.Listen(8);
-
             socket.Accept(OnAccept);
-            configuration.Callback.OnStarted(new PeerListenerStarted(peer, port));
+
+            configuration.Bus.Publish("listener-started", new ListenerStarted
+            {
+                Peer = peer,
+                Port = port
+            });
         }
 
         private void OnAccept(TcpSocketAccept data)

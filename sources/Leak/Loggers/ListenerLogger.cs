@@ -1,10 +1,10 @@
-﻿using Leak.Core.Client;
+﻿using System;
 
 namespace Leak.Loggers
 {
-    public class ListenerLogger : PeerClientCallbackBase
+    public class ListenerLogger
     {
-        public static PeerClientCallback Off()
+        public static ListenerLogger Off()
         {
             return new ListenerLogger();
         }
@@ -12,6 +12,15 @@ namespace Leak.Loggers
         public static ListenerLogger Normal()
         {
             return new ListenerLoggerNormal();
+        }
+
+        public void Handle(string name, dynamic payload)
+        {
+            Handle(name, payload, new Action(() => { }));
+        }
+
+        protected virtual void Handle(string name, dynamic payload, Action next)
+        {
         }
     }
 }

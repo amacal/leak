@@ -1,4 +1,4 @@
-﻿using Leak.Core.Client;
+﻿using Leak.Core.Core;
 using Leak.Loggers;
 
 namespace Leak.Commands
@@ -12,17 +12,37 @@ namespace Leak.Commands
             this.options = options;
         }
 
-        public PeerClientCallback Bouncer()
+        public LeakBusCallback Subscriber()
+        {
+            BouncerLogger bounder = Bouncer();
+            ConnectorLogger connector = Connector();
+            HashLogger hash = Hash();
+            ListenerLogger listener = Listener();
+            NetworkLogger network = Network();
+            PeerLogger peer = Peer();
+
+            return (name, payload) =>
+            {
+                bounder.Handle(name, payload);
+                connector.Handle(name, payload);
+                hash.Handle(name, payload);
+                listener.Handle(name, payload);
+                network.Handle(name, payload);
+                peer.Handle(name, payload);
+            };
+        }
+
+        public BouncerLogger Bouncer()
         {
             return BouncerLogger.Off();
         }
 
-        public PeerClientCallback Connector()
+        public ConnectorLogger Connector()
         {
             return ConnectorLogger.Off();
         }
 
-        public PeerClientCallback Hash()
+        public HashLogger Hash()
         {
             switch (Severity(options.LoggingHash))
             {
@@ -34,7 +54,7 @@ namespace Leak.Commands
             }
         }
 
-        public PeerClientCallback Listener()
+        public ListenerLogger Listener()
         {
             switch (Severity(options.LoggingListener))
             {
@@ -46,7 +66,7 @@ namespace Leak.Commands
             }
         }
 
-        public PeerClientCallback Network()
+        public NetworkLogger Network()
         {
             switch (Severity(options.LoggingNetwork))
             {
@@ -61,7 +81,7 @@ namespace Leak.Commands
             }
         }
 
-        public PeerClientCallback Peer()
+        public PeerLogger Peer()
         {
             switch (Severity(options.LoggingPeer))
             {

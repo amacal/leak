@@ -5,7 +5,7 @@ using Leak.Core.Messages;
 
 namespace Leak.Core.Client
 {
-    public interface PeerClientCallback : PeerClientCallbackFile, PeerClientCallbackNetwork, PeerClientCallbackTracker
+    public interface PeerClientCallback : PeerClientCallbackNetwork, PeerClientCallbackTracker
     {
         void OnPeerRejected(FileHash hash, PeerAddress peer);
 

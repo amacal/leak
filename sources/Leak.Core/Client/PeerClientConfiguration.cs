@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Client.Configuration;
 using Leak.Core.Common;
+using Leak.Core.Core;
 
 namespace Leak.Core.Client
 {
@@ -10,6 +11,8 @@ namespace Leak.Core.Client
         public string Destination { get; set; }
 
         public string[] Countries { get; set; }
+
+        public LeakBusCallback[] Subscribers { get; set; }
 
         public PeerClientCallback Callback { get; set; }
 

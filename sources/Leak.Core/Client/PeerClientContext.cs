@@ -17,7 +17,6 @@ namespace Leak.Core.Client
     public class PeerClientContext
     {
         private readonly PeerClientConfiguration configuration;
-        private readonly PeerClientCollection collection;
         private readonly FileHashCollection hashes;
         private readonly SchedulerService scheduler;
         private readonly NetworkPool network;
@@ -26,6 +25,7 @@ namespace Leak.Core.Client
         private readonly TelegraphService telegraph;
         private readonly PeerConnector connector;
         private readonly LeakPipeline pipeline;
+        private readonly LeakBus bus;
 
         private readonly CompletionThread worker;
         private readonly FileFactory files;
@@ -36,6 +36,7 @@ namespace Leak.Core.Client
             {
                 with.Peer = PeerHash.Random();
                 with.Countries = new string[0];
+                with.Subscribers = new LeakBusCallback[0];
                 with.Destination = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.Create);
                 with.Callback = new PeerClientCallbackNothing();
                 with.Connector = new PeerClientConnectorBuilder();
@@ -45,9 +46,14 @@ namespace Leak.Core.Client
                 with.Download = new PeerClientDownloadBuilder();
             });
 
-            collection = new PeerClientCollection();
             hashes = new FileHashCollection();
             pipeline = new LeakPipeline();
+            bus = new LeakBus();
+
+            foreach (LeakBusCallback subscriber in configuration.Subscribers)
+            {
+                bus.Subscribe(subscriber);
+            }
 
             collector = new PeerCollector(with =>
             {
@@ -71,6 +77,7 @@ namespace Leak.Core.Client
             {
                 listener = configuration.Listener.Build(with =>
                 {
+                    with.Bus = bus;
                     with.Callback = collector.CreateListenerCallback();
                     with.Peer = configuration.Peer;
                     with.Extensions = true;
@@ -168,6 +175,11 @@ namespace Leak.Core.Client
         public FileHashCollection Hashes
         {
             get { return hashes; }
+        }
+
+        public LeakBus Bus
+        {
+            get { return bus; }
         }
     }
 }

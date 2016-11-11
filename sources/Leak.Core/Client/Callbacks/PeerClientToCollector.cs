@@ -16,11 +16,6 @@ namespace Leak.Core.Client.Callbacks
             this.context = context;
         }
 
-        public override void OnListenerStarted(PeerCollectorListenerStarted started)
-        {
-            context.Callback.OnListenerStarted(context.Peer);
-        }
-
         public override void OnConnectingTo(FileHash hash, PeerAddress peer)
         {
             context.Callback.OnPeerConnectingTo(hash, peer);

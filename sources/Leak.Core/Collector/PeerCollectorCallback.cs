@@ -9,13 +9,6 @@ namespace Leak.Core.Collector
     public interface PeerCollectorCallback
     {
         /// <summary>
-        /// Called when the listener was activated and started
-        /// receiving incoming connections.
-        /// </summary>
-        /// <param name="started">Describes the listener state.</param>
-        void OnListenerStarted(PeerCollectorListenerStarted started);
-
-        /// <summary>
         /// Called when the new outgoing connection is being established.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>

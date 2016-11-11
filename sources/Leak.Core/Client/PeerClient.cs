@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Client.Events;
+using Leak.Core.Common;
 using Leak.Core.Metadata;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,10 @@ namespace Leak.Core.Client
             });
 
             context.Hashes.Add(metainfo.Data.Hash);
-            context.Callback.OnFileScheduled(metainfo.Data.Hash);
+            context.Bus.Publish("file-scheduled", new FileScheduled
+            {
+                Hash = metainfo.Data.Hash
+            });
 
             foreach (string tracker in metainfo.Trackers)
             {
@@ -49,7 +53,10 @@ namespace Leak.Core.Client
             });
 
             context.Hashes.Add(configuration.Hash);
-            context.Callback.OnFileScheduled(configuration.Hash);
+            context.Bus.Publish("file-scheduled", new FileScheduled
+            {
+                Hash = configuration.Hash
+            });
 
             foreach (string tracker in configuration.Trackers)
             {

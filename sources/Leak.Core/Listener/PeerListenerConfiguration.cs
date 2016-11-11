@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 using Leak.Core.Network;
 
 namespace Leak.Core.Listener
@@ -12,6 +13,8 @@ namespace Leak.Core.Listener
         public FileHashCollection Hashes { get; set; }
 
         public PeerListenerCallback Callback { get; set; }
+
+        public LeakBus Bus { get; set; }
 
         public NetworkPool Pool { get; set; }
 

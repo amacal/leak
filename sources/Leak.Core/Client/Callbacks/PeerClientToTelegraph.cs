@@ -16,7 +16,12 @@ namespace Leak.Core.Client.Callbacks
 
         public override void OnAnnouncingCompleted(TrackerAnnounce announce)
         {
-            context.Callback.OnAnnounceCompleted(announce.Hash, new FileAnnouncedEvent(announce));
+            context.Bus.Publish("file-announced", new FileAnnounced
+            {
+                Hash = announce.Hash,
+                Peer = announce.Peer,
+                Count = announce.Peers.Length
+            });
 
             if (context.Connector != null)
             {

@@ -1,22 +1,32 @@
 ﻿using Leak.Core.Client;
+using System;
 
 namespace Leak.Loggers
 {
     public class NetworkLogger : PeerClientCallbackBase
     {
-        public static PeerClientCallback Off()
+        public static NetworkLogger Off()
         {
             return new NetworkLogger();
         }
 
-        public static PeerClientCallback Normal()
+        public static NetworkLogger Normal()
         {
             return new NetworkLoggerNormal();
         }
 
-        public static PeerClientCallback Verbose()
+        public static NetworkLogger Verbose()
         {
             return new NetworkLoggerVerbose();
+        }
+
+        public void Handle(string name, dynamic payload)
+        {
+            Handle(name, payload, new Action(() => { }));
+        }
+
+        protected virtual void Handle(string name, dynamic payload, Action next)
+        {
         }
     }
 }

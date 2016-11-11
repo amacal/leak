@@ -1,44 +1,43 @@
-﻿using Leak.Core.Client.Events;
-using Leak.Core.Common;
-using System;
+﻿using System;
 
 namespace Leak.Loggers
 {
     public class HashLoggerNormal : HashLogger
     {
-        public override void OnFileScheduled(FileHash hash)
+        protected override void Handle(string name, dynamic payload, Action next)
         {
-            Console.WriteLine($"{hash}: scheduled");
-        }
+            switch (name)
+            {
+                case "file-scheduled":
+                    Console.WriteLine($"{payload.Hash}: scheduled");
+                    break;
 
-        public override void OnFileDiscovered(FileHash hash)
-        {
-            Console.WriteLine($"{hash}: discovered");
-        }
+                case "file-announced":
+                    Console.WriteLine($"{payload.Hash}: announced; peers={payload.Count}");
+                    break;
 
-        public override void OnFileInitialized(FileHash hash, FileInitializedEvent @event)
-        {
-            Console.WriteLine($"{hash}: initialized; completed={@event.Completed}; total={@event.Total}");
-        }
+                case "file-discovered":
+                    Console.WriteLine($"{payload.Hash}: discovered");
+                    break;
 
-        public override void OnFileStarted(FileHash hash)
-        {
-            Console.WriteLine($"{hash}: started");
-        }
+                case "file-started":
+                    Console.WriteLine($"{payload.Hash}: started");
+                    break;
 
-        public override void OnFileChanged(FileHash hash, BitfieldInfo bitfield)
-        {
-            Console.WriteLine($"{hash}: changed; completed={bitfield.Completed}; total={bitfield.Total}");
-        }
+                case "file-initialized":
+                    Console.WriteLine($"{payload.Hash}: initialized; completed={payload.Completed}; total={payload.Total}");
+                    break;
 
-        public override void OnFileCompleted(FileHash hash)
-        {
-            Console.WriteLine($"{hash}: completed");
-        }
+                case "file-changed":
+                    Console.WriteLine($"{payload.Hash}: changed; completed={payload.Completed}; total={payload.Total}");
+                    break;
 
-        public override void OnAnnounceCompleted(FileHash hash, FileAnnouncedEvent @event)
-        {
-            Console.WriteLine($"{hash}: announced; peers={@event.Peers}");
+                case "file-completed":
+                    Console.WriteLine($"{payload.Hash}: completed");
+                    break;
+            }
+
+            next.Invoke();
         }
     }
 }

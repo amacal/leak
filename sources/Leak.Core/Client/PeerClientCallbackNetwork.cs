@@ -5,13 +5,6 @@ namespace Leak.Core.Client
     public interface PeerClientCallbackNetwork
     {
         /// <summary>
-        /// Called when the listener started and it is ready to
-        /// accept incoming connections.
-        /// </summary>
-        /// <param name="local">The local peer hash.</param>
-        void OnListenerStarted(PeerHash local);
-
-        /// <summary>
         /// Called when the outgoing connection is being established.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
