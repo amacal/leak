@@ -23,6 +23,10 @@ options:
 
         Listen on specified port.
 
+    --accept #countries (default: nothing)
+
+        Accepts only peers from the given countries; example: RU UA
+
     --metadata (on|off) (default: on)
 
         Use ut_metadata extension.
