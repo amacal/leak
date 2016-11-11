@@ -1,25 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Leak.Core.Core
 {
     public class LeakBus
     {
         private readonly List<Resource> subscribers;
+        private readonly Trigger trigger;
 
         public LeakBus()
         {
             subscribers = new List<Resource>();
+            trigger = new Trigger(this);
+        }
+
+        public void Start(LeakPipeline pipeline)
+        {
+            pipeline.Register(trigger);
         }
 
         public void Publish(string name, object payload)
         {
-            lock (subscribers)
-            {
-                foreach (Resource subscriber in subscribers)
-                {
-                    subscriber.Push(name, payload);
-                }
-            }
+            trigger.Publish(name, payload);
         }
 
         public LeakBusResource Subscribe(LeakBusCallback callback)
@@ -55,6 +58,58 @@ namespace Leak.Core.Core
                 lock (this)
                 {
                     bus.subscribers.Remove(this);
+                }
+            }
+        }
+
+        private class Event
+        {
+            public string Name;
+            public object Payload;
+        }
+
+        private class Trigger : LeakPipelineTrigger
+        {
+            private readonly LeakBus bus;
+            private readonly ConcurrentQueue<Event> events;
+
+            private ManualResetEvent ready;
+
+            public Trigger(LeakBus bus)
+            {
+                this.bus = bus;
+                this.events = new ConcurrentQueue<Event>();
+            }
+
+            public void Register(ManualResetEvent watch)
+            {
+                ready = watch;
+            }
+
+            public void Publish(string name, object payload)
+            {
+                events.Enqueue(new Event
+                {
+                    Name = name,
+                    Payload = payload
+                });
+
+                ready.Set();
+            }
+
+            public void Execute()
+            {
+                Event data;
+
+                while (events.TryDequeue(out data))
+                {
+                    lock (bus.subscribers)
+                    {
+                        foreach (Resource subscriber in bus.subscribers)
+                        {
+                            subscriber.Push(data.Name, data.Payload);
+                        }
+                    }
                 }
             }
         }

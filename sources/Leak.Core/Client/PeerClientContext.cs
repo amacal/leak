@@ -114,6 +114,7 @@ namespace Leak.Core.Client
                 });
             }
 
+            bus?.Start(pipeline);
             network?.Start(pipeline);
             connector?.Start(pipeline);
             listener?.Start(pipeline);
