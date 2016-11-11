@@ -24,6 +24,8 @@ namespace Leak.Core.Client
         private readonly PeerListener listener;
         private readonly TelegraphService telegraph;
         private readonly PeerConnector connector;
+
+        private readonly PeerClientSubscriber subscriber;
         private readonly LeakPipeline pipeline;
         private readonly LeakBus bus;
 
@@ -46,13 +48,16 @@ namespace Leak.Core.Client
                 with.Download = new PeerClientDownloadBuilder();
             });
 
+            subscriber = new PeerClientSubscriber(this);
             hashes = new FileHashCollection();
             pipeline = new LeakPipeline();
-            bus = new LeakBus();
 
-            foreach (LeakBusCallback subscriber in configuration.Subscribers)
+            bus = new LeakBus();
+            bus.Subscribe(subscriber.Handle);
+
+            foreach (LeakBusCallback callback in configuration.Subscribers)
             {
-                bus.Subscribe(subscriber);
+                bus.Subscribe(callback);
             }
 
             collector = new PeerCollector(with =>
@@ -88,9 +93,9 @@ namespace Leak.Core.Client
 
             telegraph = new TelegraphService(with =>
             {
+                with.Bus = bus;
                 with.Peer = configuration.Peer;
                 with.Port = configuration.Listener.Port;
-                with.Callback = new PeerClientToTelegraph(this);
             });
 
             scheduler = new SchedulerService(with =>

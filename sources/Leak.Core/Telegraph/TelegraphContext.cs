@@ -15,7 +15,6 @@ namespace Leak.Core.Telegraph
         {
             configuration = configurer.Configure(with =>
             {
-                with.Callback = new TelegraphCallbackNothing();
             });
 
             synchronized = new object();
@@ -44,9 +43,9 @@ namespace Leak.Core.Telegraph
             get { return configuration; }
         }
 
-        public TelegraphCallback Callback
+        public LeakBus Bus
         {
-            get { return configuration.Callback; }
+            get { return configuration.Bus; }
         }
     }
 }

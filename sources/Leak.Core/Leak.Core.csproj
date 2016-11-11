@@ -36,6 +36,7 @@
       <HintPath>..\..\packages\geon.1.0\lib\net45\Geon.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
@@ -88,6 +89,7 @@
     <Compile Include="Client\PeerClientContext.cs" />
     <Compile Include="Client\PeerClientEntry.cs" />
     <Compile Include="Client\Callbacks\PeerClientToScheduler.cs" />
+    <Compile Include="Client\PeerClientSubscriber.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorToBattlefield.cs" />
     <Compile Include="Collector\Criterions\IsBitfieldKnown.cs" />
     <Compile Include="Collector\Criterions\OrderByBitfield.cs" />
@@ -246,7 +248,6 @@
     <Compile Include="Client\Events\PieceVerifiedEvent.cs" />
     <Compile Include="Client\PeerClientStartConfiguration.cs" />
     <Compile Include="Client\Callbacks\PeerClientToCollector.cs" />
-    <Compile Include="Client\Callbacks\PeerClientToTelegraph.cs" />
     <Compile Include="Collector\Callbacks\PeerCollectorToBouncer.cs" />
     <Compile Include="Collector\PeerCollectorCallback.cs" />
     <Compile Include="Collector\PeerCollectorCallbackBase.cs" />
@@ -468,16 +469,16 @@
     <Compile Include="Responder\ResponderService.cs" />
     <Compile Include="Scheduler\SchedulerService.cs" />
     <Compile Include="Client\Events\FileAnnounced.cs" />
+    <Compile Include="Telegraph\Events\TrackerAnnounceCompleted.cs" />
+    <Compile Include="Telegraph\Events\TrackerAnnounceStarted.cs" />
+    <Compile Include="Telegraph\Events\TrackerAnnounceFailed.cs" />
     <Compile Include="Telegraph\TelegraphCollection.cs" />
     <Compile Include="Telegraph\TelegraphEntry.cs" />
-    <Compile Include="Telegraph\TelegraphCallbackBase.cs" />
-    <Compile Include="Telegraph\TelegraphCallbackNothing.cs" />
     <Compile Include="Telegraph\TelegraphConfiguration.cs" />
     <Compile Include="Telegraph\TelegraphContext.cs" />
     <Compile Include="Telegraph\TelegraphTaskAnnounce.cs" />
     <Compile Include="Telegraph\TelegraphTaskSchedule.cs" />
     <Compile Include="Tracker\TrackerAnnounce.cs" />
-    <Compile Include="Telegraph\TelegraphCallback.cs" />
     <Compile Include="Tracker\TrackerRequest.cs" />
     <Compile Include="Tracker\TrackerClient.cs" />
     <Compile Include="Tracker\TrackerClientFactory.cs" />
@@ -502,9 +503,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Telegraph\Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

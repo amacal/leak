@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Core;
 
 namespace Leak.Core.Telegraph
 {
@@ -8,6 +9,6 @@ namespace Leak.Core.Telegraph
 
         public PeerHash Peer { get; set; }
 
-        public TelegraphCallback Callback { get; set; }
+        public LeakBus Bus { get; set; }
     }
 }
