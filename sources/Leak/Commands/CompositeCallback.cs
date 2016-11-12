@@ -29,27 +29,11 @@ namespace Leak.Commands
             }
         }
 
-        public override void OnPeerConnectingFrom(PeerHash local, PeerAddress peer)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnPeerConnectingFrom(local, peer);
-            }
-        }
-
         public override void OnPeerConnectedTo(FileHash hash, PeerClientConnected connected)
         {
             foreach (PeerClientCallback item in items)
             {
                 item.OnPeerConnectedTo(hash, connected);
-            }
-        }
-
-        public override void OnPeerConnectedFrom(PeerHash local, PeerClientConnected connected)
-        {
-            foreach (PeerClientCallback item in items)
-            {
-                item.OnPeerConnectedFrom(local, connected);
             }
         }
 

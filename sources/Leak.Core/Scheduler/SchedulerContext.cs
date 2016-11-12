@@ -47,6 +47,11 @@ namespace Leak.Core.Scheduler
             get { return configuration.Files; }
         }
 
+        public LeakBus Bus
+        {
+            get { return configuration.Bus; }
+        }
+
         public SchedulerQueue Queue
         {
             get { return queue; }

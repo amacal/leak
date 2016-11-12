@@ -20,11 +20,8 @@ namespace Leak.Core.Collector.Callbacks
                 if (context.Bouncer.Accept(connecting.Connection) == false)
                 {
                     connecting.Reject();
-                    return;
                 }
             }
-
-            context.Callback.OnConnectingFrom(connecting.Connection.Remote);
         }
 
         public override void OnRejected(NetworkConnection connection)

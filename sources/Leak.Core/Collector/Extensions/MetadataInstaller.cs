@@ -16,6 +16,7 @@ namespace Leak.Core.Collector.Extensions
         {
             cando.Extensions.Metadata(with =>
             {
+                with.Bus = cando.Bus;
                 with.Callback = new PeerCollectorToMetadata(context);
             });
         }

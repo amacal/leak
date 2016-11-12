@@ -17,6 +17,10 @@ namespace Leak.Loggers
                 case "extension-exchanged":
                     Console.WriteLine($"{payload.Peer}: extensions exchanged; supported: {String.Join(", ", payload.Extensions)}");
                     break;
+
+                case "metadata-size-received":
+                    Console.WriteLine($"{payload.Peer}: metadata size received; size={payload.Size}");
+                    break;
             }
         }
     }

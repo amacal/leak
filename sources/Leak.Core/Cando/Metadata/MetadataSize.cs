@@ -13,5 +13,10 @@
         {
             get { return bytes; }
         }
+
+        public override string ToString()
+        {
+            return bytes.ToString();
+        }
     }
 }

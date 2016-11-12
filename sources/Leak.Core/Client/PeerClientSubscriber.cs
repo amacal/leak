@@ -19,6 +19,10 @@ namespace Leak.Core.Client
                 case "tracker-announce-completed":
                     HandleTrackerAnnounceCompleted(payload);
                     break;
+
+                case "metadata-size-received":
+                    HandleMetadataSizeReceived(payload);
+                    break;
             }
         }
 
@@ -38,6 +42,14 @@ namespace Leak.Core.Client
                     context.Connector.ConnectTo(payload.Hash, peer);
                 }
             }
+        }
+
+        private void HandleMetadataSizeReceived(dynamic payload)
+        {
+            context.Scheduler.Handle(with =>
+            {
+                with.OnMetadataSize(payload.Peer, payload.Size);
+            });
         }
     }
 }

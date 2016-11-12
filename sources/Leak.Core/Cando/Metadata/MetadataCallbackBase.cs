@@ -4,10 +4,6 @@ namespace Leak.Core.Cando.Metadata
 {
     public abstract class MetadataCallbackBase : MetadataCallback
     {
-        public virtual void OnSize(PeerSession session, MetadataSize size)
-        {
-        }
-
         public virtual void OnRequest(PeerSession session, MetadataRequest request)
         {
         }

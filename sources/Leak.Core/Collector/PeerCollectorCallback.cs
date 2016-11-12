@@ -16,25 +16,12 @@ namespace Leak.Core.Collector
         void OnConnectingTo(FileHash hash, PeerAddress peer);
 
         /// <summary>
-        /// Called when the new incoming connection is being established.
-        /// </summary>
-        /// <param name="peer">The remote peer address.</param>
-        void OnConnectingFrom(PeerAddress peer);
-
-        /// <summary>
         /// Called when the new outgoing connection was successfully
         /// established with the remote peer.
         /// </summary>
         /// <param name="hash">The hash of the affected resource.</param>
         /// <param name="connected">Describes the current state.</param>
         void OnConnectedTo(FileHash hash, PeerCollectorConnected connected);
-
-        /// <summary>
-        /// Called when the new incoming connection was successfully
-        /// established with the remote peer.
-        /// </summary>
-        /// <param name="connected">Describes the current state.</param>
-        void OnConnectedFrom(PeerCollectorConnected connected);
 
         void OnDisconnected(PeerSession session);
 
@@ -55,8 +42,6 @@ namespace Leak.Core.Collector
         void OnBitfield(PeerSession session, Bitfield bitfield);
 
         void OnPiece(PeerEndpoint endpoint, PieceMessage message);
-
-        void OnMetadataSize(PeerSession session, MetadataSize size);
 
         void OnMetadataReceived(PeerSession session, MetadataData data);
 

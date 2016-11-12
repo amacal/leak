@@ -11,15 +11,7 @@ namespace Leak.Core.Client
         {
         }
 
-        public virtual void OnPeerConnectingFrom(PeerHash local, PeerAddress peer)
-        {
-        }
-
         public virtual void OnPeerConnectedTo(FileHash hash, PeerClientConnected connected)
-        {
-        }
-
-        public virtual void OnPeerConnectedFrom(PeerHash local, PeerClientConnected connected)
         {
         }
 

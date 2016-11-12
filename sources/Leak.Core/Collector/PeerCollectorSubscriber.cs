@@ -1,6 +1,4 @@
-﻿using Leak.Core.Collector.Events;
-using Leak.Core.Common;
-using Leak.Core.Network;
+﻿using Leak.Core.Network;
 
 namespace Leak.Core.Collector
 {
@@ -25,7 +23,6 @@ namespace Leak.Core.Collector
 
         private void HandleConnected(NetworkConnection connection)
         {
-            int total = 0;
             bool accepted = false;
 
             lock (context.Synchronized)
@@ -33,18 +30,10 @@ namespace Leak.Core.Collector
                 if (context.Bouncer.AcceptRemote(connection))
                 {
                     accepted = true;
-                    total = context.Bouncer.Count();
                 }
             }
 
-            if (accepted)
-            {
-                PeerAddress peer = connection.Remote;
-                PeerCollectorConnected connected = new PeerCollectorConnected(peer, total);
-
-                context.Callback.OnConnectedFrom(connected);
-            }
-            else
+            if (accepted == false)
             {
                 connection.Terminate();
             }

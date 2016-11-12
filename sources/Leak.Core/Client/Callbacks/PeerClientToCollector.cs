@@ -21,19 +21,9 @@ namespace Leak.Core.Client.Callbacks
             context.Callback.OnPeerConnectingTo(hash, peer);
         }
 
-        public override void OnConnectingFrom(PeerAddress peer)
-        {
-            context.Callback.OnPeerConnectingFrom(context.Peer, peer);
-        }
-
         public override void OnConnectedTo(FileHash hash, PeerCollectorConnected connected)
         {
             context.Callback.OnPeerConnectedTo(hash, new PeerClientConnected(connected));
-        }
-
-        public override void OnConnectedFrom(PeerCollectorConnected connected)
-        {
-            context.Callback.OnPeerConnectedFrom(context.Peer, new PeerClientConnected(connected));
         }
 
         public override void OnRejected(PeerAddress peer)
@@ -83,14 +73,6 @@ namespace Leak.Core.Client.Callbacks
             context.Scheduler.Handle(with =>
             {
                 with.OnPeerPiece(endpoint.Session.Peer, message.ToPiece());
-            });
-        }
-
-        public override void OnMetadataSize(PeerSession session, MetadataSize size)
-        {
-            context.Scheduler.Handle(with =>
-            {
-                with.OnMetadataSize(session.Peer, size);
             });
         }
 

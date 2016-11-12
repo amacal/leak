@@ -12,15 +12,7 @@ namespace Leak.Core.Collector
         {
         }
 
-        public virtual void OnConnectingFrom(PeerAddress peer)
-        {
-        }
-
         public virtual void OnConnectedTo(FileHash hash, PeerCollectorConnected connected)
-        {
-        }
-
-        public virtual void OnConnectedFrom(PeerCollectorConnected connected)
         {
         }
 
@@ -61,10 +53,6 @@ namespace Leak.Core.Collector
         }
 
         public virtual void OnPiece(PeerEndpoint endpoint, PieceMessage message)
-        {
-        }
-
-        public virtual void OnMetadataSize(PeerSession session, MetadataSize size)
         {
         }
 

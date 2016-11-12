@@ -52,6 +52,11 @@ namespace Leak.Core.Metaget
             get { return configuration.Callback; }
         }
 
+        public LeakBus Bus
+        {
+            get { return configuration.Bus; }
+        }
+
         public LeakQueue<MetagetContext> Queue
         {
             get { return queue; }

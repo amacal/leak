@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Bencoding;
+using Leak.Core.Cando.Metadata.Events;
 using Leak.Core.Common;
 using Leak.Core.Messages;
 using System;
@@ -28,8 +29,12 @@ namespace Leak.Core.Cando.Metadata
 
             if (bytes != null && bytes > 0)
             {
-                MetadataSize size = new MetadataSize(bytes.Value);
-                configuration.Callback.OnSize(session, size);
+                configuration.Bus.Publish("metadata-size-received", new MetadataSizeReceived
+                {
+                    Hash = session.Hash,
+                    Peer = session.Peer,
+                    Size = new MetadataSize(bytes.Value)
+                });
             }
         }
 

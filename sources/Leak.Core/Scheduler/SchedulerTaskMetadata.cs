@@ -26,7 +26,9 @@ namespace Leak.Core.Scheduler
         {
             inside.Metaget = new MetagetService(with =>
             {
+                with.Bus = context.Bus;
                 with.Hash = inside.Hash;
+
                 with.Destination = Path.Combine(inside.Destination, $"{inside.Hash}");
                 with.Collector = context.Collector.CreateView(inside.Hash);
                 with.Callback = new SchedulerTaskMetadataMetagetCallback(inside);

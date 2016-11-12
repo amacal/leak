@@ -72,6 +72,7 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Events\ExtensionExchanged.cs" />
+    <Compile Include="Cando\Metadata\Events\MetadataSizeReceived.cs" />
     <Compile Include="Cando\Metadata\MetadataSize.cs" />
     <Compile Include="Client\Configuration\PeerClientDownloadBuilder.cs" />
     <Compile Include="Client\Configuration\PeerClientMetadataBuilder.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Loop\Events\MessageArrived.cs" />
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
+    <Compile Include="Metaget\Events\MetadataMeasured.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
     <Compile Include="Network\NetworkBufferView.cs" />

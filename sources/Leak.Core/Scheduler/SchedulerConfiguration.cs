@@ -16,5 +16,7 @@ namespace Leak.Core.Scheduler
         public LeakPipeline Pipeline { get; set; }
 
         public FileFactory Files { get; set; }
+
+        public LeakBus Bus { get; set; }
     }
 }

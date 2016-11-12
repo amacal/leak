@@ -101,6 +101,7 @@ namespace Leak.Core.Client
 
             scheduler = new SchedulerService(with =>
             {
+                with.Bus = bus;
                 with.Files = files;
                 with.Collector = collector;
                 with.Pipeline = pipeline;

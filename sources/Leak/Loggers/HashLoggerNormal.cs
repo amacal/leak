@@ -16,6 +16,10 @@ namespace Leak.Loggers
                     Console.WriteLine($"{payload.Hash}: announced; peers={payload.Count}");
                     break;
 
+                case "metadata-measured":
+                    Console.WriteLine($"{payload.Hash}: metadata measured; size={payload.Size}");
+                    break;
+
                 case "file-discovered":
                     Console.WriteLine($"{payload.Hash}: discovered");
                     break;
