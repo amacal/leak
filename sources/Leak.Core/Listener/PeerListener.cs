@@ -28,39 +28,51 @@ namespace Leak.Core.Listener
 
         public void Start(LeakPipeline pipeline)
         {
-            int port = configuration.Port;
-            PeerHash peer = configuration.Peer;
-
-            socket.Bind(port);
+            socket.Bind(configuration.Port);
             socket.Listen(8);
             socket.Accept(OnAccept);
 
             configuration.Bus.Publish("listener-started", new ListenerStarted
             {
-                Peer = peer,
-                Port = port
+                Local = configuration.Peer,
+                Port = configuration.Port
             });
         }
 
         private void OnAccept(TcpSocketAccept data)
         {
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status != TcpSocketStatus.NotSocket)
             {
                 data.Socket.Accept(OnAccept);
+            }
 
-                if (OnConnecting(data.GetRemote()) == false)
+            if (data.Status == TcpSocketStatus.OK)
+            {
+                IPEndPoint endpoint = data.GetRemote();
+                PeerAddress remote = PeerAddress.Parse(endpoint);
+
+                configuration.Bus.Publish("listener-accepting", new ListenerAccepted
+                {
+                    Local = configuration.Peer,
+                    Remote = remote
+                });
+
+                if (OnConnecting(remote) == false)
                 {
                     data.Connection.Dispose();
                     return;
                 }
 
-                TcpSocket accepted = data.Connection;
-                IPEndPoint remote = data.GetRemote();
-
-                NetworkConnection connection = configuration.Pool.Create(accepted, NetworkDirection.Incoming, remote);
+                NetworkConnection connection = configuration.Pool.Create(data.Connection, NetworkDirection.Incoming, endpoint);
                 PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
 
-                OnConnected(connection);
+                configuration.Bus.Publish("listener-accepted", new ListenerAccepted
+                {
+                    Local = configuration.Peer,
+                    Remote = remote,
+                    Connection = connection
+                });
+
                 Negotiate(context, connection);
             }
             else
@@ -69,20 +81,15 @@ namespace Leak.Core.Listener
             }
         }
 
-        private bool OnConnecting(IPEndPoint endpoint)
+        private bool OnConnecting(PeerAddress remote)
         {
             bool accepted = true;
 
-            NetworkConnectionInfo connection = new NetworkConnectionInfo(PeerAddress.Parse(endpoint), NetworkDirection.Incoming);
+            NetworkConnectionInfo connection = new NetworkConnectionInfo(remote, NetworkDirection.Incoming);
             PeerListenerConnecting connecting = new PeerListenerConnecting(connection, () => accepted = false);
 
             configuration.Callback.OnConnecting(connecting);
             return accepted;
-        }
-
-        private void OnConnected(NetworkConnection connection)
-        {
-            configuration.Callback.OnConnected(connection);
         }
 
         private void Negotiate(PeerListenerNegotiatorContext context, NetworkConnection connection)

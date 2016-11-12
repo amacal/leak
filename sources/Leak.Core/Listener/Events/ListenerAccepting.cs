@@ -2,10 +2,10 @@
 
 namespace Leak.Core.Listener.Events
 {
-    public class ListenerStarted
+    public class ListenerAccepting
     {
         public PeerHash Local;
 
-        public int Port;
+        public PeerAddress Remote;
     }
 }

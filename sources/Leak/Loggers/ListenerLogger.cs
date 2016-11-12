@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Leak.Loggers
+﻿namespace Leak.Loggers
 {
     public class ListenerLogger
     {
@@ -14,12 +12,12 @@ namespace Leak.Loggers
             return new ListenerLoggerNormal();
         }
 
-        public void Handle(string name, dynamic payload)
+        public static ListenerLogger Verbose()
         {
-            Handle(name, payload, new Action(() => { }));
+            return new ListenerLoggerVerbose();
         }
 
-        protected virtual void Handle(string name, dynamic payload, Action next)
+        public virtual void Handle(string name, object payload)
         {
         }
     }

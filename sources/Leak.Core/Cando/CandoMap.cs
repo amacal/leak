@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Bencoding;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leak.Core.Cando
 {
@@ -21,6 +22,11 @@ namespace Leak.Core.Cando
                 byId.Add(value, name);
                 byName.Add(name, value);
             }
+        }
+
+        public string[] All()
+        {
+            return byName.Keys.ToArray();
         }
 
         public string Translate(byte id)

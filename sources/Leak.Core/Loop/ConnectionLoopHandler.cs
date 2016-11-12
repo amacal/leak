@@ -31,7 +31,9 @@ namespace Leak.Core.Loop
         {
             if (message.Length == 4)
             {
+                Notify("keep-alive");
                 Dispatch(message, configuration.Callback.OnKeepAlive);
+
                 return;
             }
 
@@ -75,6 +77,10 @@ namespace Leak.Core.Loop
         {
             message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
             connection.Receive(OnMessageHeader, 4);
+        }
+
+        private void Notify(string type)
+        {
         }
 
         private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel> callback)

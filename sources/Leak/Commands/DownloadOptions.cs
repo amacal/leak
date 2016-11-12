@@ -46,6 +46,9 @@ namespace Leak.Commands
         [Option("--logging-listener")]
         public string LoggingListener { get; set; }
 
+        [Option("--logging-extension")]
+        public string LoggingExtension { get; set; }
+
         [Option("--logging-network")]
         public string LoggingNetwork { get; set; }
 

@@ -73,7 +73,7 @@ namespace Leak.Core.Core
             private readonly LeakBus bus;
             private readonly ConcurrentQueue<Event> events;
 
-            private ManualResetEvent ready;
+            private ManualResetEvent onReady;
 
             public Trigger(LeakBus bus)
             {
@@ -83,7 +83,7 @@ namespace Leak.Core.Core
 
             public void Register(ManualResetEvent watch)
             {
-                ready = watch;
+                onReady = watch;
             }
 
             public void Publish(string name, object payload)
@@ -94,12 +94,13 @@ namespace Leak.Core.Core
                     Payload = payload
                 });
 
-                ready.Set();
+                onReady.Set();
             }
 
             public void Execute()
             {
                 Event data;
+                onReady.Reset();
 
                 while (events.TryDequeue(out data))
                 {

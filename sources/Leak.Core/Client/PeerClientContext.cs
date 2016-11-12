@@ -62,6 +62,7 @@ namespace Leak.Core.Client
 
             collector = new PeerCollector(with =>
             {
+                with.Bus = bus;
                 with.Callback = new PeerClientToCollector(this);
                 with.Countries = configuration.Countries;
 
@@ -119,15 +120,15 @@ namespace Leak.Core.Client
                 });
             }
 
+            worker.Start();
+            pipeline.Start();
+
             bus?.Start(pipeline);
             network?.Start(pipeline);
             connector?.Start(pipeline);
             listener?.Start(pipeline);
             telegraph?.Start(pipeline);
             collector?.Start(pipeline);
-
-            worker.Start();
-            pipeline.Start();
         }
 
         /// <summary>

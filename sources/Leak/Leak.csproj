@@ -56,10 +56,14 @@
     <Compile Include="Deamon\LeakMonitorConfiguration.cs" />
     <Compile Include="Loggers\BouncerLogger.cs" />
     <Compile Include="Loggers\ConnectorLogger.cs" />
+    <Compile Include="Loggers\ExtensionLogger.cs" />
+    <Compile Include="Loggers\ExtensionLoggerNormal.cs" />
+    <Compile Include="Loggers\ExtensionLoggerVerbose.cs" />
     <Compile Include="Loggers\HashLogger.cs" />
     <Compile Include="Loggers\HashLoggerNormal.cs" />
     <Compile Include="Loggers\ListenerLogger.cs" />
     <Compile Include="Loggers\ListenerLoggerNormal.cs" />
+    <Compile Include="Loggers\ListenerLoggerVerbose.cs" />
     <Compile Include="Loggers\NetworkLogger.cs" />
     <Compile Include="Loggers\NetworkLoggerNormal.cs" />
     <Compile Include="Loggers\NetworkLoggerVerbose.cs" />

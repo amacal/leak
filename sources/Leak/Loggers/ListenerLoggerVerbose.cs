@@ -2,7 +2,7 @@
 
 namespace Leak.Loggers
 {
-    public class ListenerLoggerNormal : ListenerLogger
+    public class ListenerLoggerVerbose : ListenerLoggerNormal
     {
         public override void Handle(string name, object payload)
         {
@@ -14,8 +14,12 @@ namespace Leak.Loggers
         {
             switch (name)
             {
-                case "listener-started":
-                    Console.WriteLine($"{payload.Local}: started listening on port {payload.Port}");
+                case "listener-accepting":
+                    Console.WriteLine($"{payload.Local}: accepting {payload.Remote}");
+                    break;
+
+                case "listener-accepted":
+                    Console.WriteLine($"{payload.Local}: accepted {payload.Remote}");
                     break;
             }
         }

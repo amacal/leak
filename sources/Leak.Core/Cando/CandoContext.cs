@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leak.Core.Core;
+using System;
 
 namespace Leak.Core.Cando
 {
@@ -33,6 +34,11 @@ namespace Leak.Core.Cando
         public CandoCallback Callback
         {
             get { return configuration.Callback; }
+        }
+
+        public LeakBus Bus
+        {
+            get { return configuration.Bus; }
         }
 
         public CandoCollection Collection

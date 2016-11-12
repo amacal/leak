@@ -23,6 +23,7 @@ namespace Leak.Core.Core
 
         public void Start()
         {
+            Register(new Terminator());
             worker.Start();
         }
 
@@ -79,6 +80,17 @@ namespace Leak.Core.Core
                         trigger.Execute();
                     }
                 }
+            }
+        }
+
+        private class Terminator : LeakPipelineTrigger
+        {
+            public void Register(ManualResetEvent watch)
+            {
+            }
+
+            public void Execute()
+            {
             }
         }
     }

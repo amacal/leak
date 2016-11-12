@@ -17,6 +17,7 @@ namespace Leak.Commands
             BouncerLogger bounder = Bouncer();
             ConnectorLogger connector = Connector();
             HashLogger hash = Hash();
+            ExtensionLogger extension = Extension();
             ListenerLogger listener = Listener();
             NetworkLogger network = Network();
             PeerLogger peer = Peer();
@@ -26,6 +27,7 @@ namespace Leak.Commands
                 bounder.Handle(name, payload);
                 connector.Handle(name, payload);
                 hash.Handle(name, payload);
+                extension.Handle(name, payload);
                 listener.Handle(name, payload);
                 network.Handle(name, payload);
                 peer.Handle(name, payload);
@@ -54,12 +56,30 @@ namespace Leak.Commands
             }
         }
 
+        public ExtensionLogger Extension()
+        {
+            switch (Severity(options.LoggingExtension))
+            {
+                case "off":
+                    return ExtensionLogger.Off();
+
+                case "verbose":
+                    return ExtensionLogger.Verbose();
+
+                default:
+                    return ExtensionLogger.Normal();
+            }
+        }
+
         public ListenerLogger Listener()
         {
             switch (Severity(options.LoggingListener))
             {
                 case "off":
                     return ListenerLogger.Off();
+
+                case "verbose":
+                    return ListenerLogger.Verbose();
 
                 default:
                     return ListenerLogger.Normal();

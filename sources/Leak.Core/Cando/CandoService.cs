@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Bencoding;
+using Leak.Core.Cando.Events;
 using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Listener;
@@ -120,6 +121,12 @@ namespace Leak.Core.Cando
 
                 CallHandshakeOnEachHandler(entry, handshake);
                 CallHandshakeIfRequired(entry);
+
+                context.Bus.Publish("extension-exchanged", new ExtensionExchanged
+                {
+                    Peer = entry.Session.Peer,
+                    Extensions = entry.Remote.All()
+                });
             }
         }
 

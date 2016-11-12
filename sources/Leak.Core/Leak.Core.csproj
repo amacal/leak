@@ -71,6 +71,7 @@
     <Compile Include="Cando\CandoHandler.cs" />
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
+    <Compile Include="Cando\Events\ExtensionExchanged.cs" />
     <Compile Include="Cando\Metadata\MetadataSize.cs" />
     <Compile Include="Client\Configuration\PeerClientDownloadBuilder.cs" />
     <Compile Include="Client\Configuration\PeerClientMetadataBuilder.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Collector\PeerCollectorExtension.cs" />
     <Compile Include="Collector\PeerCollectorBlockFactory.cs" />
     <Compile Include="Collector\PeerCollectorExtensionBuilder.cs" />
+    <Compile Include="Collector\PeerCollectorSubscriber.cs" />
     <Compile Include="Common\BitfieldInfo.cs" />
     <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Common\PieceInfo.cs" />
@@ -113,7 +115,10 @@
     <Compile Include="Core\LeakPipelineTrigger.cs" />
     <Compile Include="Core\LeakQueueBase.cs" />
     <Compile Include="HashExtensions.cs" />
+    <Compile Include="Listener\Events\ListenerAccepted.cs" />
+    <Compile Include="Listener\Events\ListenerAccepting.cs" />
     <Compile Include="Listener\Events\ListenerStarted.cs" />
+    <Compile Include="Loop\Events\MessageArrived.cs" />
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />

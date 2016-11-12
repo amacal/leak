@@ -2,7 +2,7 @@
 
 namespace Leak.Loggers
 {
-    public class ListenerLoggerNormal : ListenerLogger
+    public class ExtensionLoggerVerbose : ExtensionLoggerNormal
     {
         public override void Handle(string name, object payload)
         {
@@ -14,8 +14,8 @@ namespace Leak.Loggers
         {
             switch (name)
             {
-                case "listener-started":
-                    Console.WriteLine($"{payload.Local}: started listening on port {payload.Port}");
+                case "extension-exchanged":
+                    Console.WriteLine($"{payload.Peer}: extensions exchanged; supported: {String.Join(", ", payload.Extensions)}");
                     break;
             }
         }

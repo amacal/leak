@@ -18,13 +18,10 @@ namespace Leak.Core.Collector.Criterions
                     Completed = context.Battlefield.Get(session)?.Completed
                 };
 
-                if (peer.Completed != null)
-                {
-                    result.Add(peer);
-                }
+                result.Add(peer);
             }
 
-            return result.OrderByDescending(x => x.Completed.Value).Select(x => x.Session);
+            return result.OrderByDescending(x => x.Completed).Select(x => x.Session);
         }
 
         private struct Peer

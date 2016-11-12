@@ -26,6 +26,7 @@ namespace Leak.Core.Collector
         private readonly RankingService ranking;
         private readonly BattlefieldService battlefield;
         private readonly PeerCollectorBlockFactory blockFactory;
+        private readonly PeerCollectorSubscriber subscriber;
 
         public PeerCollectorContext(Action<PeerCollectorConfiguration> configurer)
         {
@@ -68,7 +69,9 @@ namespace Leak.Core.Collector
 
             cando = new CandoService(with =>
             {
+                with.Bus = configuration.Bus;
                 with.Callback = new PeerCollectorToCando(this);
+
                 configuration.Extensions.Apply(with);
             });
 
@@ -85,6 +88,9 @@ namespace Leak.Core.Collector
 
             synchronized = new object();
             blockFactory = new PeerCollectorBlockFactory();
+
+            subscriber = new PeerCollectorSubscriber(this);
+            configuration.Bus.Subscribe(subscriber.Handle);
         }
 
         public object Synchronized

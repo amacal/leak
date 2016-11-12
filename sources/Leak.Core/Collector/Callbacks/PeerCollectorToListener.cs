@@ -1,5 +1,4 @@
-﻿using Leak.Core.Collector.Events;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Listener;
 using Leak.Core.Network;
 
@@ -26,33 +25,6 @@ namespace Leak.Core.Collector.Callbacks
             }
 
             context.Callback.OnConnectingFrom(connecting.Connection.Remote);
-        }
-
-        public override void OnConnected(NetworkConnection connection)
-        {
-            int total = 0;
-            bool accepted = false;
-
-            lock (context.Synchronized)
-            {
-                if (context.Bouncer.AcceptRemote(connection))
-                {
-                    accepted = true;
-                    total = context.Bouncer.Count();
-                }
-            }
-
-            if (accepted)
-            {
-                PeerAddress peer = connection.Remote;
-                PeerCollectorConnected connected = new PeerCollectorConnected(peer, total);
-
-                context.Callback.OnConnectedFrom(connected);
-            }
-            else
-            {
-                connection.Terminate();
-            }
         }
 
         public override void OnRejected(NetworkConnection connection)

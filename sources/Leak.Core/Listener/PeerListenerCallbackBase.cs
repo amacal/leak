@@ -13,10 +13,6 @@ namespace Leak.Core.Listener
         {
         }
 
-        public virtual void OnConnected(NetworkConnection connection)
-        {
-        }
-
         public virtual void OnRejected(NetworkConnection connection)
         {
         }
