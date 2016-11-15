@@ -33,6 +33,7 @@ namespace Leak.Core.Loop
         {
             if (message.Length == 4)
             {
+                hooks.CallMessageReceived(peer, "keep-alive", message);
                 hooks.CallOnPeerKeepAliveMessageReceived(peer);
                 message.Acknowledge(4);
             }

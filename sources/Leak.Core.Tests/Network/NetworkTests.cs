@@ -103,7 +103,7 @@ namespace Leak.Core.Tests.Network
                 pool.Create(socket, direction, remote);
             }
 
-            handler.Verify();
+            handler.Complete().Should().BeTrue();
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace Leak.Core.Tests.Network
                 pool.Create(socket, direction, remote).Terminate();
             }
 
-            handler.Verify();
+            handler.Complete().Should().BeTrue();
         }
 
         [Test, Ignore("")]
@@ -155,7 +155,7 @@ namespace Leak.Core.Tests.Network
                 connection.Send(null);
             }
 
-            handler.Verify();
+            handler.Complete().Should().BeTrue();
         }
     }
 }

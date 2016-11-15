@@ -5,6 +5,8 @@ namespace Leak.Core.Loop
 {
     public class ConnectionLoopHooks
     {
+        public Action<MessageReceived> OnMessageReceived;
+
         public Action<PeerKeepAliveMessageReceived> OnPeerKeepAliveMessageReceived;
         public Action<PeerChokeMessageReceived> OnPeerChokeMessageReceived;
         public Action<PeerUnchokeMessageReceived> OnPeerUnchokeMessageReceived;

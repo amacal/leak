@@ -39,6 +39,16 @@ namespace Leak.Core.Loop
             return new BitfieldMessage(incoming.ToBytes()).ToBitfield();
         }
 
+        public static void CallMessageReceived(this ConnectionLoopHooks hooks, PeerHash peer, string type, NetworkIncomingMessage payload)
+        {
+            hooks.OnMessageReceived?.Invoke(new MessageReceived
+            {
+                Peer = peer,
+                Type = type,
+                Payload = payload
+            });
+        }
+
         public static void CallOnPeerKeepAliveMessageReceived(this ConnectionLoopHooks hooks, PeerHash peer)
         {
             hooks?.OnPeerKeepAliveMessageReceived?.Invoke(new PeerKeepAliveMessageReceived

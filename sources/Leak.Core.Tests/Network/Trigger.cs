@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
 using System.Threading;
 
 namespace Leak.Core.Tests.Network
@@ -13,12 +12,12 @@ namespace Leak.Core.Tests.Network
         {
             this.callback = payload =>
             {
-                called = true;
                 callback.Invoke(payload);
+                called = true;
             };
         }
 
-        public void Verify()
+        public bool Complete()
         {
             for (int i = 0; i < 500; i++)
             {
@@ -28,7 +27,7 @@ namespace Leak.Core.Tests.Network
                 }
             }
 
-            called.Should().BeTrue();
+            return called;
         }
 
         public static implicit operator Action<T>(Trigger<T> trigger)

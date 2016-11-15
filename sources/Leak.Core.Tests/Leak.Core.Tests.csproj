@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Network\ConnectorTests.cs" />
     <Compile Include="Network\ListenerTests.cs" />
+    <Compile Include="Network\LoopyTests.cs" />
     <Compile Include="Network\NetworkTests.cs" />
     <Compile Include="Network\Trigger.cs" />
     <Compile Include="Network\TriggerExtensions.cs" />
