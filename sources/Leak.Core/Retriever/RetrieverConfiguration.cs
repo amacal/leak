@@ -1,5 +1,4 @@
-﻿using Leak.Core.Collector;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Metadata;
 using Leak.Core.Repository;
 using Leak.Files;
@@ -15,8 +14,6 @@ namespace Leak.Core.Retriever
         public Bitfield Bitfield { get; set; }
 
         public FileFactory Files { get; set; }
-
-        public PeerCollectorView Collector { get; set; }
 
         public RetrieverCallback Callback { get; set; }
 

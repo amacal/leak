@@ -35,5 +35,10 @@
         {
             return new FileHash(Bytes.Parse(data));
         }
+
+        public static FileHash Random()
+        {
+            return new FileHash(Bytes.Random(20));
+        }
     }
 }

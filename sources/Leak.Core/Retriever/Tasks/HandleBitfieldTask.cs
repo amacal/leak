@@ -18,8 +18,8 @@ namespace Leak.Core.Retriever.Tasks
         public void Execute(RetrieverContext context)
         {
             context.Omnibus.Add(peer, bitfield);
-            context.Collector.SendBitfield(peer, new Bitfield(bitfield.Length));
-            context.Collector.SendLocalInterested(peer);
+            //context.Collector.SendBitfield(peer, new Bitfield(bitfield.Length));
+            //context.Collector.SendLocalInterested(peer);
         }
     }
 }

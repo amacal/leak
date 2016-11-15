@@ -9,9 +9,9 @@ namespace Leak.Core.Metaget
     {
         private readonly MetagetContext context;
 
-        public MetagetService(Action<MetagetConfiguration> configurer)
+        public MetagetService(FileHash hash, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
         {
-            context = new MetagetContext(configurer);
+            context = new MetagetContext(hash, destination, hooks, configuration);
         }
 
         public void Start(LeakPipeline pipeline)

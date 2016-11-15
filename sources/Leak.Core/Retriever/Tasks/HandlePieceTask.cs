@@ -21,7 +21,7 @@ namespace Leak.Core.Retriever.Tasks
             if (context.Omnibus.IsComplete(piece.Index) == false)
             {
                 context.Repository.Write(piece.Index, piece.Offset, piece.Data);
-                context.Collector.Increase(peer, 2);
+                //context.Collector.Increase(peer, 2);
             }
         }
     }

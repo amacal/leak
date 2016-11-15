@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Common
+﻿using System;
+
+namespace Leak.Core.Common
 {
     public class Bitfield
     {
@@ -9,6 +11,14 @@
         {
             this.items = new bool[length];
             this.completed = 0;
+        }
+
+        public Bitfield(int length, Bitfield other)
+        {
+            this.items = new bool[length];
+            this.completed = other.completed;
+
+            Array.Copy(other.items, items, length);
         }
 
         public int Length

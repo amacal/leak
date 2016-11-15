@@ -1,9 +1,5 @@
-﻿using Leak.Core.Collector;
-using Leak.Core.Collector.Criterions;
-using Leak.Core.Common;
-using Leak.Core.Core;
+﻿using Leak.Core.Core;
 using Leak.Core.Retriever.Components;
-using System.Linq;
 
 namespace Leak.Core.Retriever.Tasks
 {
@@ -19,16 +15,16 @@ namespace Leak.Core.Retriever.Tasks
 
         private void Schedule(RetrieverContext context, int ranking, int count, int pieces)
         {
-            PeerCollectorCriterion[] criterion =
-            {
-                new IsLocalNotChokedByRemote(),
-                new OrderByRanking(ranking),
-            };
+            //PeerCollectorCriterion[] criterion =
+            //{
+            //    new IsLocalNotChokedByRemote(),
+            //    new OrderByRanking(ranking),
+            //};
 
-            foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))
-            {
-                context.Omnibus.Schedule(context.Configuration.Strategy.ToOmnibus(), session.Peer, pieces);
-            }
+            //foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))
+            //{
+            //    context.Omnibus.Schedule(context.Configuration.Strategy.ToOmnibus(), session.Peer, pieces);
+            //}
         }
     }
 }

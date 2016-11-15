@@ -1,9 +1,4 @@
-﻿using Leak.Core.Client;
-using Leak.Core.Common;
-using Leak.Core.Metadata;
-using System.Threading;
-
-namespace Leak.Commands
+﻿namespace Leak.Commands
 {
     public class DownloadCommand
     {
@@ -16,92 +11,92 @@ namespace Leak.Commands
 
         public void Execute()
         {
-            ManualResetEvent handle = new ManualResetEvent(false);
-            CompositeCallback callback = new CompositeCallback();
-            LoggerFactory factory = new LoggerFactory(options);
+            //ManualResetEvent handle = new ManualResetEvent(false);
+            //CompositeCallback callback = new CompositeCallback();
+            //LoggerFactory factory = new LoggerFactory(options);
 
-            callback.Add(factory.Bouncer());
-            callback.Add(factory.Connector());
-            callback.Add(factory.Network());
-            callback.Add(factory.Peer());
+            //callback.Add(factory.Bouncer());
+            //callback.Add(factory.Connector());
+            //callback.Add(factory.Network());
+            //callback.Add(factory.Peer());
 
-            PeerClient client = new PeerClient(with =>
-            {
-                with.Destination = options.Destination;
-                with.Callback = callback;
+            //PeerClient client = new PeerClient(with =>
+            //{
+            //    with.Destination = options.Destination;
+            //    with.Callback = callback;
 
-                with.Subscribers = new[]
-                {
-                    factory.Subscriber(),
-                    ReadyCallback.Complete(handle)
-                };
+            //    with.Subscribers = new[]
+            //    {
+            //        factory.Subscriber(),
+            //        ReadyCallback.Complete(handle)
+            //    };
 
-                if (options.Metadata != "off")
-                {
-                    with.Metadata.Enable();
-                }
+            //    if (options.Metadata != "off")
+            //    {
+            //        with.Metadata.Enable();
+            //    }
 
-                if (options.PeerExchange != "off")
-                {
-                    with.PeerExchange.Enable();
-                }
+            //    if (options.PeerExchange != "off")
+            //    {
+            //        with.PeerExchange.Enable();
+            //    }
 
-                if (options.Listener == "on")
-                {
-                    with.Listener.Enable(listener =>
-                    {
-                        if (options.Port != null && options.Port > 0 && options.Port < 65536)
-                        {
-                            listener.Port = options.Port.Value;
-                        }
-                    });
-                }
+            //    if (options.Listener == "on")
+            //    {
+            //        with.Listener.Enable(listener =>
+            //        {
+            //            if (options.Port != null && options.Port > 0 && options.Port < 65536)
+            //            {
+            //                listener.Port = options.Port.Value;
+            //            }
+            //        });
+            //    }
 
-                if (options.Connector != "off")
-                {
-                    with.Connector.Enable();
-                }
+            //    if (options.Connector != "off")
+            //    {
+            //        with.Connector.Enable();
+            //    }
 
-                if (options.Accept != null)
-                {
-                    with.Countries = options.Accept;
-                }
+            //    if (options.Accept != null)
+            //    {
+            //        with.Countries = options.Accept;
+            //    }
 
-                switch (options.Download)
-                {
-                    case "rarest-first":
-                        with.Download.RarestFirst();
-                        break;
+            //    switch (options.Download)
+            //    {
+            //        case "rarest-first":
+            //            with.Download.RarestFirst();
+            //            break;
 
-                    case "sequential":
-                        with.Download.Sequential();
-                        break;
-                }
-            });
+            //        case "sequential":
+            //            with.Download.Sequential();
+            //            break;
+            //    }
+            //});
 
-            if (options.Torrent != null)
-            {
-                client.Start(MetainfoFactory.FromFile(options.Torrent));
-            }
+            //if (options.Torrent != null)
+            //{
+            //    client.Start(MetainfoFactory.FromFile(options.Torrent));
+            //}
 
-            if (options.Hash != null)
-            {
-                client.Start(with =>
-                {
-                    with.Hash = FileHash.Parse(options.Hash);
+            //if (options.Hash != null)
+            //{
+            //    client.Start(with =>
+            //    {
+            //        with.Hash = FileHash.Parse(options.Hash);
 
-                    if (options.Tracker != null)
-                    {
-                        foreach (string tracker in options.Tracker)
-                        {
-                            with.Trackers.Add(tracker);
-                        }
-                    }
-                });
-            }
+            //        if (options.Tracker != null)
+            //        {
+            //            foreach (string tracker in options.Tracker)
+            //            {
+            //                with.Trackers.Add(tracker);
+            //            }
+            //        }
+            //    });
+            //}
 
-            handle.WaitOne();
-            Thread.Sleep(5000);
+            //handle.WaitOne();
+            //Thread.Sleep(5000);
         }
     }
 }

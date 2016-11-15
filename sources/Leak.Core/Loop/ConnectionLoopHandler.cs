@@ -1,99 +1,87 @@
-﻿using Leak.Core.Network;
-using System;
+﻿using Leak.Core.Common;
+using Leak.Core.Messages;
+using Leak.Core.Network;
 
 namespace Leak.Core.Loop
 {
     public class ConnectionLoopHandler
     {
-        private readonly ConnectionLoopConfiguration configuration;
+        private readonly PeerHash peer;
+        private readonly DataBlockFactory factory;
         private readonly ConnectionLoopConnection connection;
-        private readonly ConnectionLoopHandshake handshake;
+        private readonly ConnectionLoopHooks hooks;
 
-        public ConnectionLoopHandler(ConnectionLoopConfiguration configuration, ConnectionLoopConnection connection, ConnectionLoopHandshake handshake)
+        public ConnectionLoopHandler(PeerHash peer, DataBlockFactory factory, ConnectionLoopConnection connection, ConnectionLoopHooks hooks)
         {
-            this.configuration = configuration;
-            this.handshake = handshake;
+            this.peer = peer;
+            this.factory = factory;
+            this.hooks = hooks;
             this.connection = connection;
         }
 
         public void Execute()
         {
-            configuration.Callback.OnAttached(new ConnectionLoopChannel(configuration, connection, handshake));
             connection.Receive(OnMessageHeader, 4);
         }
 
         private void OnMessageHeader(NetworkIncomingMessage message)
         {
-            connection.Receive(OnMessageData, ConnectionLoopMessage.GetMessageSize(message) + 4);
+            connection.Receive(OnMessageData, message.GetSize() + 4);
         }
 
         private void OnMessageData(NetworkIncomingMessage message)
         {
             if (message.Length == 4)
             {
-                Notify("keep-alive");
-                Dispatch(message, configuration.Callback.OnKeepAlive);
-
-                return;
+                hooks.CallOnPeerKeepAliveMessageReceived(peer);
+                message.Acknowledge(4);
             }
-
-            switch (message[4])
+            else
             {
-                case 0:
-                    Dispatch(message, configuration.Callback.OnChoke);
-                    break;
+                switch (message[4])
+                {
+                    case 0:
+                        hooks.CallOnPeerChokeMessageReceived(peer);
+                        break;
 
-                case 1:
-                    Dispatch(message, configuration.Callback.OnUnchoke);
-                    break;
+                    case 1:
+                        hooks.CallOnPeerUnchokeMessageReceived(peer);
+                        break;
 
-                case 2:
-                    Dispatch(message, configuration.Callback.OnInterested);
-                    break;
+                    case 2:
+                        hooks.CallOnPeerInterestedMessageReceived(peer);
+                        break;
 
-                case 4:
-                    Dispatch(message, configuration.Callback.OnHave);
-                    break;
+                    case 4:
+                        hooks.CallOnPeerHaveMessageReceived(peer, message);
+                        break;
 
-                case 5:
-                    Dispatch(message, configuration.Callback.OnBitfield);
-                    break;
+                    case 5:
+                        hooks.CallOnPeerBitfieldMessageReceived(peer, message);
+                        break;
 
-                case 7:
-                    Dispatch(message, configuration.Callback.OnPiece);
-                    break;
+                    case 7:
+                        hooks.CallOnPeerPieceMessageReceived(peer, message, factory);
+                        break;
 
-                case 20:
-                    Dispatch(message, configuration.Callback.OnExtended);
-                    break;
+                    case 20:
+                        hooks.CallOnPeerExtendedMessageReceived(peer, message);
+                        break;
+                }
 
-                default:
-                    Ignore(message);
-                    break;
+                Acknowledge(message);
             }
+
+            Next();
         }
 
-        private void Ignore(NetworkIncomingMessage message)
+        private void Acknowledge(NetworkIncomingMessage message)
         {
-            message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
-            connection.Receive(OnMessageHeader, 4);
+            message.Acknowledge(message.GetSize() + 4);
         }
 
-        private void Notify(string type)
+        private void Next()
         {
-        }
-
-        private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel> callback)
-        {
-            message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
-            callback.Invoke(new ConnectionLoopChannel(configuration, connection, handshake));
-            connection.Receive(OnMessageHeader, 4);
-        }
-
-        private void Dispatch(NetworkIncomingMessage message, Action<ConnectionLoopChannel, ConnectionLoopMessage> callback)
-        {
-            message.Acknowledge(ConnectionLoopMessage.GetMessageSize(message) + 4);
-            callback.Invoke(new ConnectionLoopChannel(configuration, connection, handshake), new ConnectionLoopMessage(message));
             connection.Receive(OnMessageHeader, 4);
         }
     }

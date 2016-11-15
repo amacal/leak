@@ -5,13 +5,11 @@ namespace Leak.Core.Loop
 {
     public class ConnectionLoopConnectionToBytes : NetworkIncomingMessageHandler
     {
-        private readonly ConnectionLoopConnectionContext connection;
         private readonly Action<NetworkIncomingMessage> callback;
         private readonly int bytes;
 
-        public ConnectionLoopConnectionToBytes(ConnectionLoopConnectionContext connection, Action<NetworkIncomingMessage> callback, int bytes)
+        public ConnectionLoopConnectionToBytes(Action<NetworkIncomingMessage> callback, int bytes)
         {
-            this.connection = connection;
             this.callback = callback;
             this.bytes = bytes;
         }
@@ -30,12 +28,10 @@ namespace Leak.Core.Loop
 
         public void OnException(Exception ex)
         {
-            connection.OnException(ex);
         }
 
         public void OnDisconnected()
         {
-            connection.OnDisconnected();
         }
     }
 }

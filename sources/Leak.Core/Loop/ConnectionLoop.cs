@@ -1,38 +1,26 @@
-﻿using Leak.Core.Connector;
-using Leak.Core.Listener;
+﻿using Leak.Core.Common;
+using Leak.Core.Messages;
 using Leak.Core.Network;
-using System;
 
 namespace Leak.Core.Loop
 {
     public class ConnectionLoop
     {
+        private readonly DataBlockFactory factory;
+        private readonly ConnectionLoopHooks hooks;
         private readonly ConnectionLoopConfiguration configuration;
 
-        public ConnectionLoop(Action<ConnectionLoopConfiguration> configurer)
+        public ConnectionLoop(DataBlockFactory factory, ConnectionLoopHooks hooks, ConnectionLoopConfiguration configuration)
         {
-            this.configuration = new ConnectionLoopConfiguration
-            {
-                Callback = new ConnectionLoopCallbackNothing()
-            };
-
-            configurer.Invoke(configuration);
+            this.factory = factory;
+            this.hooks = hooks;
+            this.configuration = configuration;
         }
 
-        public void StartProcessing(NetworkConnection connection, PeerListenerHandshake handshake)
+        public void StartProcessing(PeerHash peer, NetworkConnection connection)
         {
-            StartProcessing(connection, new ConnectionLoopHandshakeToListener(handshake));
-        }
-
-        public void StartProcessing(NetworkConnection connection, PeerConnectorHandshake handshake)
-        {
-            StartProcessing(connection, new ConnectionLoopHandshakeToConnector(handshake));
-        }
-
-        private void StartProcessing(NetworkConnection network, ConnectionLoopHandshake handshake)
-        {
-            ConnectionLoopConnection connection = new ConnectionLoopConnection(configuration, network, handshake);
-            ConnectionLoopHandler handler = new ConnectionLoopHandler(configuration, connection, handshake);
+            ConnectionLoopConnection wrapped = new ConnectionLoopConnection(connection);
+            ConnectionLoopHandler handler = new ConnectionLoopHandler(peer, factory, wrapped, hooks);
 
             handler.Execute();
         }

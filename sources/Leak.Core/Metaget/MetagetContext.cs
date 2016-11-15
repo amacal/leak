@@ -1,30 +1,32 @@
-﻿using Leak.Core.Collector;
+﻿using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Metafile;
 using Leak.Core.Metamine;
-using System;
 
 namespace Leak.Core.Metaget
 {
     public class MetagetContext
     {
+        private readonly FileHash hash;
+        private readonly string destination;
+        private readonly MetagetHooks hooks;
         private readonly MetagetConfiguration configuration;
         private readonly LeakQueue<MetagetContext> queue;
         private readonly MetafileService metafile;
 
         private MetamineBitfield metamine;
 
-        public MetagetContext(Action<MetagetConfiguration> configurer)
+        public MetagetContext(FileHash hash, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new MetagetCallbackNothing();
-            });
+            this.hash = hash;
+            this.destination = destination;
+            this.hooks = hooks;
+            this.configuration = configuration;
 
             metafile = new MetafileService(with =>
             {
-                with.Hash = configuration.Hash;
-                with.Destination = configuration.Destination + ".metainfo";
+                with.Hash = hash;
+                with.Destination = destination + ".metainfo";
                 with.Callback = new MetagetMetafile(this);
             });
 
@@ -40,21 +42,6 @@ namespace Leak.Core.Metaget
         public MetagetConfiguration Configuration
         {
             get { return configuration; }
-        }
-
-        public PeerCollectorView View
-        {
-            get { return configuration.Collector; }
-        }
-
-        public MetagetCallback Callback
-        {
-            get { return configuration.Callback; }
-        }
-
-        public LeakBus Bus
-        {
-            get { return configuration.Bus; }
         }
 
         public LeakQueue<MetagetContext> Queue

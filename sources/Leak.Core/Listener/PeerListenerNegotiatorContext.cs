@@ -38,27 +38,27 @@ namespace Leak.Core.Listener
 
         public FileHashCollection Hashes
         {
-            get { return configuration.Hashes; }
+            get { return null; }
         }
 
         public void OnRejected(HandshakeRejection rejection)
         {
-            configuration.Callback.OnRejected(connection);
+            //configuration.Callback.OnRejected(connection);
         }
 
         public void OnHandshake(NetworkConnection negotiated, Handshake handshake)
         {
-            configuration.Callback.OnHandshake(negotiated, new PeerListenerHandshake(handshake));
+            //configuration.Callback.OnHandshake(negotiated, new PeerListenerHandshake(handshake));
         }
 
         public void OnException(Exception ex)
         {
-            configuration.Callback.OnException(connection, ex);
+            //configuration.Callback.OnException(connection, ex);
         }
 
         public void OnDisconnected()
         {
-            configuration.Callback.OnDisconnected(connection);
+            //configuration.Callback.OnDisconnected(connection);
         }
     }
 }

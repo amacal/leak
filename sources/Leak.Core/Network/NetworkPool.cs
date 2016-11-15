@@ -1,4 +1,5 @@
-﻿using Leak.Core.Core;
+﻿using Leak.Completion;
+using Leak.Core.Core;
 using Leak.Sockets;
 using System;
 using System.Collections.Generic;
@@ -9,27 +10,21 @@ namespace Leak.Core.Network
 {
     public class NetworkPool : NetworkPoolListener
     {
+        private readonly NetworkPoolHooks hooks;
         private readonly Dictionary<long, NetworkPoolEntry> items;
-        private readonly NetworkPoolConfiguration configuration;
-        private readonly NetworkPoolCallback callback;
 
         private readonly LeakQueue<NetworkPool> queue;
         private readonly TcpSocketFactory factory;
 
         private long sequence;
 
-        public NetworkPool(Action<NetworkPoolConfiguration> configurer)
+        public NetworkPool(CompletionWorker worker, NetworkPoolHooks hooks)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new NetworkPoolCallbackNothing();
-            });
+            this.hooks = hooks;
+            this.factory = new TcpSocketFactory(worker);
 
             items = new Dictionary<long, NetworkPoolEntry>();
-            callback = configuration.Callback;
-
             queue = new LeakQueue<NetworkPool>(this);
-            factory = new TcpSocketFactory(configuration.Worker);
         }
 
         public void Start(LeakPipeline pipeline)
@@ -56,7 +51,7 @@ namespace Leak.Core.Network
                 });
             }
 
-            callback.OnAttached(connection);
+            hooks.CallConnectionAttached(connection);
             return connection;
         }
 
@@ -104,7 +99,7 @@ namespace Leak.Core.Network
                 entry.IsAvailable = false;
                 entry.Connection.Dispose();
 
-                callback.OnDisconnected(entry.Connection);
+                hooks.CallConnectionDropped(entry.Connection);
             }
         }
 
@@ -122,7 +117,7 @@ namespace Leak.Core.Network
                 entry.IsAvailable = false;
                 entry.Connection.Dispose();
 
-                callback.OnException(entry.Connection, ex);
+                hooks.CallConnectionDropped(entry.Connection, ex.Message);
             }
         }
 

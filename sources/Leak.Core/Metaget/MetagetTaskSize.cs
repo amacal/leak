@@ -1,7 +1,6 @@
 ﻿using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
 using Leak.Core.Core;
-using Leak.Core.Metaget.Events;
 using Leak.Core.Metamine;
 
 namespace Leak.Core.Metaget
@@ -24,12 +23,6 @@ namespace Leak.Core.Metaget
                 context.Metamine = new MetamineBitfield(with =>
                 {
                     with.Size = size.Bytes;
-                });
-
-                context.Bus.Publish("metadata-measured", new MetadataMeasured
-                {
-                    Size = size,
-                    Hash = context.Configuration.Hash
                 });
             }
         }

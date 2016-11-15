@@ -1,5 +1,5 @@
-﻿using Leak.Core.Collector;
-using Leak.Core.Core;
+﻿using Leak.Core.Core;
+using Leak.Core.Glue;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
@@ -46,9 +46,9 @@ namespace Leak.Core.Retriever.Components
             get { return configuration; }
         }
 
-        public PeerCollectorView Collector
+        public GlueService Glue
         {
-            get { return configuration.Collector; }
+            get { return null; }
         }
 
         public RetrieverCallback Callback
