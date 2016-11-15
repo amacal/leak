@@ -4,6 +4,7 @@
     {
         OK = 0,
         NotSocket = 10038,
-        TimedOut = 10060
+        TimedOut = 10060,
+        ConnectionRefused = 10061,
     }
 }

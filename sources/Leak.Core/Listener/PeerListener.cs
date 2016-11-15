@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Core;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Sockets;
@@ -13,6 +12,7 @@ namespace Leak.Core.Listener
         private readonly NetworkPool network;
         private readonly PeerListenerHooks hooks;
         private readonly PeerListenerConfiguration configuration;
+        private readonly FileHashCollection hashes;
 
         public PeerListener(NetworkPool network, PeerListenerHooks hooks, PeerListenerConfiguration configuration)
         {
@@ -20,19 +20,27 @@ namespace Leak.Core.Listener
             this.hooks = hooks;
             this.configuration = configuration;
 
-            socket = network.New();
+            this.socket = network.New();
+            hashes = new FileHashCollection();
         }
 
-        public void Start(LeakPipeline pipeline)
+        public void Start()
         {
             socket.Bind(configuration.Port);
             socket.Listen(8);
+
             socket.Accept(OnAccept);
             hooks.CallListenerStarted(configuration);
         }
 
+        public void Stop()
+        {
+            socket.Dispose();
+        }
+
         public void Enable(FileHash hash)
         {
+            hashes.Add(hash);
         }
 
         public void Disable(FileHash hash)
@@ -51,6 +59,8 @@ namespace Leak.Core.Listener
                 IPEndPoint endpoint = data.GetRemote();
                 PeerAddress remote = PeerAddress.Parse(endpoint);
 
+                hooks.CallConnectionArrived(remote);
+
                 if (OnConnecting(remote) == false)
                 {
                     data.Connection.Dispose();
@@ -58,7 +68,7 @@ namespace Leak.Core.Listener
                 }
 
                 NetworkConnection connection = network.Create(data.Connection, NetworkDirection.Incoming, endpoint);
-                PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(configuration, connection);
+                PeerListenerNegotiatorContext context = new PeerListenerNegotiatorContext(connection, hashes, hooks, configuration);
 
                 Negotiate(context, connection);
             }

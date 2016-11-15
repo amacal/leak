@@ -99,7 +99,7 @@ namespace Leak.Core.Network
                 entry.IsAvailable = false;
                 entry.Connection.Dispose();
 
-                hooks.CallConnectionDropped(entry.Connection);
+                hooks.CallConnectionTerminated(entry.Connection);
             }
         }
 

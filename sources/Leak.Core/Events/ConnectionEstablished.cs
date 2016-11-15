@@ -1,7 +1,12 @@
-﻿namespace Leak.Core.Events
+﻿using Leak.Core.Common;
+using Leak.Core.Network;
+
+namespace Leak.Core.Events
 {
     public class ConnectionEstablished
     {
-        public string Remote;
+        public PeerAddress Remote;
+
+        public NetworkConnection Connection;
     }
 }

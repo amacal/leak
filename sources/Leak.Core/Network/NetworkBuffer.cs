@@ -1,6 +1,5 @@
-﻿using System;
-using System.Net.Sockets;
-using Leak.Sockets;
+﻿using Leak.Sockets;
+using System;
 
 namespace Leak.Core.Network
 {
@@ -80,31 +79,23 @@ namespace Leak.Core.Network
         {
             if (listener.IsAvailable(identifier))
             {
-                try
+                lock (configuration.Synchronized)
                 {
-                    lock (configuration.Synchronized)
+                    int receiveOffset;
+                    int receiveSize;
+
+                    if (offset + length >= configuration.Size)
                     {
-                        int receiveOffset;
-                        int receiveSize;
-
-                        if (offset + length >= configuration.Size)
-                        {
-                            receiveOffset = offset + length - configuration.Size;
-                            receiveSize = offset - (offset + length) % configuration.Size;
-                        }
-                        else
-                        {
-                            receiveOffset = offset + length;
-                            receiveSize = configuration.Size - offset - length;
-                        }
-
-                        socket.Receive(new TcpSocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
+                        receiveOffset = offset + length - configuration.Size;
+                        receiveSize = offset - (offset + length) % configuration.Size;
                     }
-                }
-                catch (SocketException ex)
-                {
-                    listener.OnException(identifier, ex);
-                    handler.OnException(ex);
+                    else
+                    {
+                        receiveOffset = offset + length;
+                        receiveSize = configuration.Size - offset - length;
+                    }
+
+                    socket.Receive(new TcpSocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
                 }
             }
         }

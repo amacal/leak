@@ -1,15 +1,16 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Network;
 
 namespace Leak.Core.Connector
 {
     public class PeerConnectorConfiguration
     {
+        public PeerConnectorConfiguration()
+        {
+            Peer = PeerHash.Random();
+            Extensions = true;
+        }
+
         public PeerHash Peer { get; set; }
-
-        public PeerConnectorCallback Callback { get; set; }
-
-        public NetworkPool Pool { get; set; }
 
         public bool Extensions { get; set; }
     }

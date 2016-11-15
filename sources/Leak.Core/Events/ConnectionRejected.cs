@@ -1,7 +1,9 @@
-﻿namespace Leak.Core.Events
+﻿using Leak.Core.Common;
+
+namespace Leak.Core.Events
 {
     public class ConnectionRejected
     {
-        public string Remote;
+        public PeerAddress Remote;
     }
 }

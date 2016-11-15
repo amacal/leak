@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
-using System;
+using Leak.Core.Network;
 
 namespace Leak.Core.Connector
 {
@@ -8,9 +8,9 @@ namespace Leak.Core.Connector
     {
         private readonly PeerConnectorContext context;
 
-        public PeerConnector(Action<PeerConnectorConfiguration> configurer)
+        public PeerConnector(NetworkPool pool, PeerConnectorHooks hooks, PeerConnectorConfiguration configuration)
         {
-            context = new PeerConnectorContext(configurer);
+            context = new PeerConnectorContext(pool, hooks, configuration);
         }
 
         public void Start(LeakPipeline pipeline)

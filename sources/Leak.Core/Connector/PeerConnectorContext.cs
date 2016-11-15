@@ -1,22 +1,20 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Core;
+﻿using Leak.Core.Core;
 using Leak.Core.Network;
-using System;
 
 namespace Leak.Core.Connector
 {
     public class PeerConnectorContext
     {
+        private readonly NetworkPool pool;
+        private readonly PeerConnectorHooks hooks;
         private readonly PeerConnectorConfiguration configuration;
         private readonly LeakQueue<PeerConnectorContext> queue;
 
-        public PeerConnectorContext(Action<PeerConnectorConfiguration> configurer)
+        public PeerConnectorContext(NetworkPool pool, PeerConnectorHooks hooks, PeerConnectorConfiguration configuration)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new PeerConnectorCallbackNothing();
-                with.Peer = new PeerHash(Bytes.Random(20));
-            });
+            this.pool = pool;
+            this.hooks = hooks;
+            this.configuration = configuration;
 
             queue = new LeakQueue<PeerConnectorContext>(this);
         }
@@ -28,12 +26,17 @@ namespace Leak.Core.Connector
 
         public NetworkPool Pool
         {
-            get { return configuration.Pool; }
+            get { return pool; }
         }
 
         public LeakQueue<PeerConnectorContext> Queue
         {
             get { return queue; }
+        }
+
+        public PeerConnectorHooks Hooks
+        {
+            get { return hooks; }
         }
     }
 }

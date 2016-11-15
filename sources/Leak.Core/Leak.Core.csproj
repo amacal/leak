@@ -79,8 +79,11 @@
     <Compile Include="Common\PieceInfo.cs" />
     <Compile Include="Connector\PeerConnectorConnected.cs" />
     <Compile Include="Connector\PeerConnectorContext.cs" />
+    <Compile Include="Connector\PeerConnectorExtensions.cs" />
+    <Compile Include="Connector\PeerConnectorHooks.cs" />
     <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
-    <Compile Include="Connector\PeerConnectorTaskHandle.cs" />
+    <Compile Include="Connector\PeerConnectorTaskAccept.cs" />
+    <Compile Include="Connector\PeerConnectorTaskReject.cs" />
     <Compile Include="Core\LeakBus.cs" />
     <Compile Include="Core\LeakBusCallback.cs" />
     <Compile Include="Core\LeakBusResource.cs" />
@@ -243,9 +246,6 @@
     <Compile Include="Congestion\PeerCongestionExtensions.cs" />
     <Compile Include="Congestion\PeerCongestionState.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
-    <Compile Include="Connector\PeerConnectorCallback.cs" />
-    <Compile Include="Connector\PeerConnectorCallbackBase.cs" />
-    <Compile Include="Connector\PeerConnectorCallbackNothing.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
     <Compile Include="Connector\PeerConnectorConnecting.cs" />
     <Compile Include="Connector\PeerConnectorHandshake.cs" />

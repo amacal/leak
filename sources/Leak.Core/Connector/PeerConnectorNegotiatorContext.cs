@@ -8,19 +8,19 @@ namespace Leak.Core.Connector
     public class PeerConnectorNegotiatorContext : HandshakeNegotiatorActiveContext
     {
         private readonly FileHash hash;
-        private readonly PeerConnectorConfiguration configuration;
+        private readonly PeerConnectorContext context;
         private readonly NetworkConnection connection;
 
-        public PeerConnectorNegotiatorContext(FileHash hash, PeerConnectorConfiguration configuration, NetworkConnection connection)
+        public PeerConnectorNegotiatorContext(FileHash hash, PeerConnectorContext context, NetworkConnection connection)
         {
             this.hash = hash;
-            this.configuration = configuration;
+            this.context = context;
             this.connection = connection;
         }
 
         public PeerHash Peer
         {
-            get { return configuration.Peer; }
+            get { return context.Configuration.Peer; }
         }
 
         public FileHash Hash
@@ -34,7 +34,7 @@ namespace Leak.Core.Connector
             {
                 HandshakeOptions options = HandshakeOptions.None;
 
-                if (configuration.Extensions)
+                if (context.Configuration.Extensions)
                 {
                     options = options | HandshakeOptions.Extended;
                 }
@@ -45,17 +45,16 @@ namespace Leak.Core.Connector
 
         public void OnHandshake(NetworkConnection negotiated, Handshake handshake)
         {
-            configuration.Callback.OnHandshake(negotiated, new PeerConnectorHandshake(handshake));
+            context.Hooks.CallHandshakeCompleted(negotiated, handshake);
         }
 
         public void OnException(Exception ex)
         {
-            configuration.Callback.OnException(connection, ex);
         }
 
         public void OnDisconnected()
         {
-            configuration.Callback.OnDisconnected(connection);
+            context.Hooks.CallHandshakeRejected(connection);
         }
     }
 }

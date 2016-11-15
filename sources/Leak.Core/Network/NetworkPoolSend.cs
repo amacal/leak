@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Core;
-using System;
 using Leak.Sockets;
 
 namespace Leak.Core.Network
@@ -19,14 +18,7 @@ namespace Leak.Core.Network
 
         public void Execute(NetworkPool context)
         {
-            try
-            {
-                socket.Send(data, null);
-            }
-            catch (Exception ex)
-            {
-                context.OnException(identifier, ex);
-            }
+            socket.Send(data, null);
         }
     }
 }

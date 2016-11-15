@@ -11,20 +11,27 @@ namespace Leak.Core.Core
 
         private WaitHandle[] handles;
         private LeakPipelineTrigger[] triggers;
+        private ManualResetEvent terminator;
 
         public LeakPipeline()
         {
             worker = new Thread(Execute);
             ticks = new List<LeakPipelineTimer>();
 
-            handles = new WaitHandle[0];
-            triggers = new LeakPipelineTrigger[0];
+            terminator = new ManualResetEvent(false);
+            handles = new WaitHandle[] { terminator };
+            triggers = new LeakPipelineTrigger[] { new Terminator() };
         }
 
         public void Start()
         {
-            Register(new Terminator());
             worker.Start();
+        }
+
+        public void Stop()
+        {
+            terminator.Set();
+            worker.Join();
         }
 
         public void Register(TimeSpan period, Action callback)
@@ -72,6 +79,9 @@ namespace Leak.Core.Core
                         tick.Execute(now);
                     }
                 }
+
+                if (found == 0)
+                    break;
 
                 if (WaitHandle.WaitTimeout != found)
                 {

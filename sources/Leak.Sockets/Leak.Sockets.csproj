@@ -50,6 +50,7 @@
     <Compile Include="TcpSocketDisconnectCallback.cs" />
     <Compile Include="TcpSocketDisconnectResult.cs" />
     <Compile Include="TcpSocketDisconnectRoutine.cs" />
+    <Compile Include="TcpSocketExtensions.cs" />
     <Compile Include="TcpSocketInfo.cs" />
     <Compile Include="TcpSocketInfoRoutine.cs" />
     <Compile Include="TcpSocketInstance.cs" />

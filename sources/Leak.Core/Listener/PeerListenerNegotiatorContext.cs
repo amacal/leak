@@ -9,11 +9,15 @@ namespace Leak.Core.Listener
     {
         private readonly PeerListenerConfiguration configuration;
         private readonly NetworkConnection connection;
+        private readonly FileHashCollection hashes;
+        private readonly PeerListenerHooks hooks;
 
-        public PeerListenerNegotiatorContext(PeerListenerConfiguration configuration, NetworkConnection connection)
+        public PeerListenerNegotiatorContext(NetworkConnection connection, FileHashCollection hashes, PeerListenerHooks hooks, PeerListenerConfiguration configuration)
         {
             this.configuration = configuration;
             this.connection = connection;
+            this.hashes = hashes;
+            this.hooks = hooks;
         }
 
         public PeerHash Peer
@@ -38,17 +42,17 @@ namespace Leak.Core.Listener
 
         public FileHashCollection Hashes
         {
-            get { return null; }
+            get { return hashes; }
         }
 
         public void OnRejected(HandshakeRejection rejection)
         {
-            //configuration.Callback.OnRejected(connection);
+            hooks.CallHandshakeRejected(connection);
         }
 
         public void OnHandshake(NetworkConnection negotiated, Handshake handshake)
         {
-            //configuration.Callback.OnHandshake(negotiated, new PeerListenerHandshake(handshake));
+            hooks.CallHandshakeCompleted(negotiated, handshake);
         }
 
         public void OnException(Exception ex)
