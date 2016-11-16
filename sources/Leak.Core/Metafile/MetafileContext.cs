@@ -1,23 +1,22 @@
-﻿using System;
+﻿using Leak.Core.Common;
 
 namespace Leak.Core.Metafile
 {
     public class MetafileContext
     {
-        private readonly object synchronized;
-        private readonly MetafileConfiguration configuration;
+        private readonly FileHash hash;
+        private readonly string path;
+        private readonly MetafileHooks hooks;
         private readonly MetafileDestination destination;
 
         private bool isCompleted;
 
-        public MetafileContext(Action<MetafileConfiguration> configurer)
+        public MetafileContext(FileHash hash, string path, MetafileHooks hooks)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new MetafileCallbackNothing();
-            });
+            this.hash = hash;
+            this.path = path;
+            this.hooks = hooks;
 
-            synchronized = new object();
             destination = new MetafileDestination(this);
         }
 
@@ -27,24 +26,24 @@ namespace Leak.Core.Metafile
             set { isCompleted = value; }
         }
 
-        public object Synchronized
-        {
-            get { return synchronized; }
-        }
-
         public MetafileDestination Destination
         {
             get { return destination; }
         }
 
-        public MetafileCallback Callback
+        public FileHash Hash
         {
-            get { return configuration.Callback; }
+            get { return hash; }
         }
 
-        public MetafileConfiguration Configuration
+        public string Path
         {
-            get { return configuration; }
+            get { return path; }
+        }
+
+        public MetafileHooks Hooks
+        {
+            get { return hooks; }
         }
     }
 }

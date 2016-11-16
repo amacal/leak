@@ -23,14 +23,16 @@ namespace Leak.Core.Metaget
             this.hooks = hooks;
             this.configuration = configuration;
 
-            metafile = new MetafileService(with =>
-            {
-                with.Hash = hash;
-                with.Destination = destination + ".metainfo";
-                with.Callback = new MetagetMetafile(this);
-            });
-
+            metafile = CreateMetafile();
             queue = new LeakQueue<MetagetContext>(this);
+        }
+
+        private MetafileService CreateMetafile()
+        {
+            string path = destination + ".metainfo";
+            MetafileHooks hooks = new MetafileHooks();
+
+            return new MetafileService(hash, path, hooks);
         }
 
         public MetamineBitfield Metamine

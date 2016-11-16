@@ -56,7 +56,10 @@
     <Compile Include="Network\GlueTests.cs" />
     <Compile Include="Network\ListenerTests.cs" />
     <Compile Include="Network\LoopyTests.cs" />
+    <Compile Include="Network\MetafileTests.cs" />
     <Compile Include="Network\NetworkTests.cs" />
+    <Compile Include="Network\Sandbox.cs" />
+    <Compile Include="Network\SandboxExtensions.cs" />
     <Compile Include="Network\Trigger.cs" />
     <Compile Include="Network\TriggerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

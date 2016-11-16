@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Leak.Core.Common;
 
 namespace Leak.Core.Metafile
 {
@@ -6,40 +6,31 @@ namespace Leak.Core.Metafile
     {
         private readonly MetafileContext context;
 
-        public MetafileService(Action<MetafileConfiguration> configurer)
+        public MetafileService(FileHash hash, string destination, MetafileHooks hooks)
         {
-            context = new MetafileContext(configurer);
+            context = new MetafileContext(hash, destination, hooks);
         }
 
         public void Write(int block, byte[] data)
         {
-            lock (context.Synchronized)
+            if (context.IsCompleted == false)
             {
-                if (context.IsCompleted == false)
-                {
-                    context.Destination.Write(block, data);
-                    context.Destination.Verify();
-                }
+                context.Destination.Write(block, data);
+                context.Destination.Verify();
             }
         }
 
         public void Verify()
         {
-            lock (context.Synchronized)
+            if (context.IsCompleted == false)
             {
-                if (context.IsCompleted == false)
-                {
-                    context.Destination.Verify();
-                }
+                context.Destination.Verify();
             }
         }
 
         public bool IsCompleted()
         {
-            lock (context.Synchronized)
-            {
-                return context.IsCompleted;
-            }
+            return context.IsCompleted;
         }
     }
 }

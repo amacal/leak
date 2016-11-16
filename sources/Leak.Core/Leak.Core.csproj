@@ -137,6 +137,9 @@
     <Compile Include="Events\MetadataMeasured.cs" />
     <Compile Include="Messages\HaveOutgoingMessage.cs" />
     <Compile Include="Messages\PieceOutgoingMessage.cs" />
+    <Compile Include="Metadata\MetainfoBuilder.cs" />
+    <Compile Include="Metafile\MetafileExtensions.cs" />
+    <Compile Include="Metafile\MetafileHooks.cs" />
     <Compile Include="Metaget\MetagetHooks.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
@@ -270,10 +273,6 @@
     <Compile Include="Metadata\MetainfoEntry.cs" />
     <Compile Include="Metadata\MetainfoHash.cs" />
     <Compile Include="Metadata\MetainfoProperties.cs" />
-    <Compile Include="Metafile\MetafileCallback.cs" />
-    <Compile Include="Metafile\MetafileCallbackBase.cs" />
-    <Compile Include="Metafile\MetafileCallbackNothing.cs" />
-    <Compile Include="Metafile\MetafileConfiguration.cs" />
     <Compile Include="Metafile\MetafileContext.cs" />
     <Compile Include="Metafile\MetafileDestination.cs" />
     <Compile Include="Metafile\MetafileService.cs" />
