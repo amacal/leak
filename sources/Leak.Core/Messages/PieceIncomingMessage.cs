@@ -1,13 +1,13 @@
 ﻿namespace Leak.Core.Messages
 {
-    public class PieceMessage
+    public class PieceIncomingMessage
     {
         private readonly DataBlock data;
 
         private readonly int piece;
         private readonly int offset;
 
-        public PieceMessage(DataBlock block)
+        public PieceIncomingMessage(DataBlock block)
         {
             data = block.Scope(8);
             piece = block[3] + block[2] * 256 + block[1] * 256 * 256;

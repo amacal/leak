@@ -36,7 +36,7 @@ namespace Leak.Core.Loop
 
         public static Bitfield GetBitfield(this NetworkIncomingMessage incoming)
         {
-            return new BitfieldMessage(incoming.ToBytes()).ToBitfield();
+            return new BitfieldIncomingMessage(incoming.ToBytes()).ToBitfield();
         }
 
         public static void CallMessageReceived(this ConnectionLoopHooks hooks, PeerHash peer, string type, NetworkIncomingMessage payload)

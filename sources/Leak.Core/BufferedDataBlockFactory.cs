@@ -29,7 +29,7 @@ namespace Leak.Core
                 data = new byte[size];
             }
 
-            callback.Invoke(data, 0, count);
+            callback?.Invoke(data, 0, count);
             return new DataBlockInstance(data, 0, count, buffer);
         }
 

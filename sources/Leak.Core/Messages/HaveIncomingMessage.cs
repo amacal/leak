@@ -1,10 +1,10 @@
 ﻿namespace Leak.Core.Messages
 {
-    public class HaveMessage
+    public class HaveIncomingMessage
     {
         private readonly byte[] data;
 
-        public HaveMessage(byte[] data)
+        public HaveIncomingMessage(byte[] data)
         {
             this.data = data;
         }

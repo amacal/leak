@@ -23,5 +23,40 @@ namespace Leak.Core.Communicator
         {
             connection.Send(new KeepAliveMessage());
         }
+
+        public void SendChoke()
+        {
+            connection.Send(new ChokeMessage());
+        }
+
+        public void SendUnchoke()
+        {
+            connection.Send(new UnchokeMessage());
+        }
+
+        public void SendInterested()
+        {
+            connection.Send(new InterestedMessage());
+        }
+
+        public void SendHave(int piece)
+        {
+            connection.Send(new HaveOutgoingMessage(piece));
+        }
+
+        public void SendBitfield(Bitfield bitfield)
+        {
+            connection.Send(new BitfieldOutgoingMessage(bitfield));
+        }
+
+        public void SendPiece(Piece piece)
+        {
+            connection.Send(new PieceOutgoingMessage(piece));
+        }
+
+        public void SendExtended(Extended extended)
+        {
+            connection.Send(new ExtendedOutgoingMessage(extended));
+        }
     }
 }
