@@ -90,14 +90,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendKeepAlive();
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentChoke()
+        public void ShouldTriggerMessageSentWhenChoke()
         {
             FileHash hash = FileHash.Random();
 
@@ -113,14 +113,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendChoke();
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentUnchoke()
+        public void ShouldTriggerMessageSentWhenUnchoke()
         {
             FileHash hash = FileHash.Random();
 
@@ -136,14 +136,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendUnchoke();
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentInterested()
+        public void ShouldTriggerMessageSentWhenInterested()
         {
             FileHash hash = FileHash.Random();
 
@@ -159,14 +159,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendInterested();
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentHave()
+        public void ShouldTriggerMessageSentWhenHave()
         {
             FileHash hash = FileHash.Random();
 
@@ -182,14 +182,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendHave(2);
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentBitfield()
+        public void ShouldTriggerMessageSentWhenBitfield()
         {
             FileHash hash = FileHash.Random();
 
@@ -205,14 +205,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendBitfield(new Bitfield(20));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentPiece()
+        public void ShouldTriggerMessageSentWhenPiece()
         {
             FileHash hash = FileHash.Random();
             DataBlock block = blocks.New(10, null);
@@ -229,14 +229,14 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendPiece(new Piece(1, 2, block));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerMessageSentExtended()
+        public void ShouldTriggerMessageSentWhenExtended()
         {
             FileHash hash = FileHash.Random();
 
@@ -252,10 +252,10 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            connected.Complete();
+            connected.Wait();
             communicator.SendExtended(new Extended(17, new byte[2]));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
     }
 }

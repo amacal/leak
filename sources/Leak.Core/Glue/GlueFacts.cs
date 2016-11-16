@@ -1,17 +1,16 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Metadata;
 
 namespace Leak.Core.Glue
 {
     public class GlueFacts
     {
-        private Metainfo metainfo;
+        private int? pieces;
         private readonly GlueMore more;
 
         public GlueFacts(GlueConfiguration configuration)
         {
             more = new GlueMore();
-            metainfo = configuration.Metainfo;
+            pieces = configuration.Pieces;
         }
 
         public void Install(GluePlugin[] plugins)
@@ -22,16 +21,16 @@ namespace Leak.Core.Glue
             }
         }
 
-        public void ApplyMetainfo(Metainfo value)
+        public void ApplyPieces(int value)
         {
-            metainfo = value;
+            pieces = value;
         }
 
         public Bitfield ApplyHave(Bitfield bitfield, int piece)
         {
-            if (bitfield == null && metainfo != null)
+            if (bitfield == null && pieces != null)
             {
-                bitfield = new Bitfield(metainfo.Pieces.Length);
+                bitfield = new Bitfield(pieces.Value);
             }
 
             if (bitfield != null && bitfield.Length > piece)
@@ -44,9 +43,9 @@ namespace Leak.Core.Glue
 
         public Bitfield ApplyBitfield(Bitfield bitfield, Bitfield received)
         {
-            if (metainfo != null)
+            if (pieces != null)
             {
-                received = new Bitfield(metainfo.Pieces.Length, received);
+                received = new Bitfield(pieces.Value, received);
             }
 
             return received;

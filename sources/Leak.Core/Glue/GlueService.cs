@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Common;
-using Leak.Core.Metadata;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
 
@@ -13,6 +12,16 @@ namespace Leak.Core.Glue
 
         bool Disconnect(NetworkConnection connection);
 
-        void AddMetainfo(Metainfo metainfo);
+        void SetPieces(int pieces);
+
+        void SendChoke(PeerHash peer);
+
+        void SendUnchoke(PeerHash peer);
+
+        void SendInterested(PeerHash peer);
+
+        void SendBitfield(PeerHash peer, Bitfield bitfield);
+
+        void SendHave(PeerHash peer, int piece);
     }
 }

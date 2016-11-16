@@ -1,24 +1,25 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Network;
 
 namespace Leak.Core.Messages
 {
     public class BitfieldIncomingMessage
     {
-        private readonly byte[] data;
+        private readonly NetworkIncomingMessage message;
 
-        public BitfieldIncomingMessage(byte[] data)
+        public BitfieldIncomingMessage(NetworkIncomingMessage message)
         {
-            this.data = data;
+            this.message = message;
         }
 
         public bool this[int index]
         {
-            get { return (data[index / 8] & (1 << (byte)(7 - index % 8))) > 0; }
+            get { return (message[5 + index / 8] & (1 << (byte)(7 - index % 8))) > 0; }
         }
 
         public int Size
         {
-            get { return data.Length * 8; }
+            get { return message.Length * 8 - 40; }
         }
 
         public Bitfield ToBitfield()

@@ -1,11 +1,10 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Communicator;
 using Leak.Core.Events;
 using Leak.Core.Loop;
 using Leak.Core.Messages;
-using Leak.Core.Metadata;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
-using System;
 
 namespace Leak.Core.Glue
 {
@@ -37,13 +36,15 @@ namespace Leak.Core.Glue
 
         public bool Connect(NetworkConnection connection, Handshake handshake)
         {
-            ConnectionLoop loop = CreateLoopy();
             GlueEntry entry = collection.Add(connection, handshake);
 
             if (entry != null)
             {
+                entry.Loopy = CreateLoopy();
+                entry.Commy = CreateCommy(entry.Peer, connection);
+
                 hooks.CallPeerConnected(entry.Peer);
-                loop.StartProcessing(entry.Peer, connection);
+                entry.Loopy.StartProcessing(entry.Peer, connection);
             }
 
             return entry != null;
@@ -61,9 +62,65 @@ namespace Leak.Core.Glue
             return entry != null;
         }
 
-        public void AddMetainfo(Metainfo metainfo)
+        public void SetPieces(int pieces)
         {
-            facts.ApplyMetainfo(metainfo);
+            facts.ApplyPieces(pieces);
+        }
+
+        public void SendChoke(PeerHash peer)
+        {
+            GlueEntry entry = collection.Find(peer);
+
+            if (entry != null)
+            {
+                entry.Commy.SendChoke();
+                entry.State |= GlueState.IsLocalChockingRemote;
+                hooks.CallPeerStateChanged(peer, entry.State);
+            }
+        }
+
+        public void SendUnchoke(PeerHash peer)
+        {
+            GlueEntry entry = collection.Find(peer);
+
+            if (entry != null)
+            {
+                entry.Commy.SendUnchoke();
+                entry.State &= ~GlueState.IsLocalChockingRemote;
+                hooks.CallPeerStateChanged(peer, entry.State);
+            }
+        }
+
+        public void SendInterested(PeerHash peer)
+        {
+            GlueEntry entry = collection.Find(peer);
+
+            if (entry != null)
+            {
+                entry.Commy.SendInterested();
+                entry.State |= GlueState.IsLocalInterestedInRemote;
+                hooks.CallPeerStateChanged(peer, entry.State);
+            }
+        }
+
+        public void SendBitfield(PeerHash peer, Bitfield bitfield)
+        {
+            GlueEntry entry = collection.Find(peer);
+
+            if (entry != null)
+            {
+                entry.Commy.SendBitfield(bitfield);
+            }
+        }
+
+        public void SendHave(PeerHash peer, int piece)
+        {
+            GlueEntry entry = collection.Find(peer);
+
+            if (entry != null)
+            {
+                entry.Commy.SendHave(piece);
+            }
         }
 
         private ConnectionLoop CreateLoopy()
@@ -78,102 +135,52 @@ namespace Leak.Core.Glue
         {
             return new ConnectionLoopHooks
             {
-                OnPeerKeepAliveMessageReceived = OnPeerKeepAliveMessageReceived,
-                OnPeerChokeMessageReceived = OnPeerChokeMessageReceived,
-                OnPeerUnchokeMessageReceived = OnPeerUnchokeMessageReceived,
-                OnPeerInterestedMessageReceived = OnPeerInterestedMessageReceived,
-                OnPeerHaveMessageReceived = OnPeerHaveMessageReceived,
-                OnPeerBitfieldMessageReceived = OnPeerBitfieldMessageReceived,
-                OnPeerPieceMessageReceived = OnPeerPieceMessageReceived,
-                OnPeerExtendedMessageReceived = OnPeerExtendedMessageReceived,
+                OnMessageReceived = OnMessageReceived
             };
         }
 
-        private void OnPeerKeepAliveMessageReceived(PeerKeepAliveMessageReceived data)
+        private CommunicatorService CreateCommy(PeerHash peer, NetworkConnection connection)
         {
-            WithPeer(data.Peer, hooks?.OnPeerKeepAliveMessageReceived, data, entry =>
-            {
-            });
+            CommunicatorHooks hooks = new CommunicatorHooks();
+            CommunicatorConfiguration config = new CommunicatorConfiguration();
+
+            return new CommunicatorService(peer, connection, hooks, config);
         }
 
-        private void OnPeerChokeMessageReceived(PeerChokeMessageReceived data)
+        private void OnMessageReceived(MessageReceived data)
         {
-            WithPeer(data.Peer, hooks?.OnPeerChokeMessageReceived, data, entry =>
-            {
-                entry.State |= GlueState.IsRemoteChockingLocal;
-                hooks.CallPeerStateChanged(entry.Peer, entry.State);
-            });
-        }
-
-        private void OnPeerUnchokeMessageReceived(PeerUnchokeMessageReceived data)
-        {
-            WithPeer(data.Peer, hooks?.OnPeerUnchokeMessageReceived, data, entry =>
-            {
-                entry.State &= ~GlueState.IsRemoteChockingLocal;
-                hooks.CallPeerStateChanged(entry.Peer, entry.State);
-            });
-        }
-
-        private void OnPeerInterestedMessageReceived(PeerInterestedMessageReceived data)
-        {
-            WithPeer(data.Peer, hooks?.OnPeerInterestedMessageReceived, data, entry =>
-            {
-                entry.State |= GlueState.IsRemoteChockingLocal;
-                hooks.CallPeerStateChanged(entry.Peer, entry.State);
-            });
-        }
-
-        private void OnPeerHaveMessageReceived(PeerHaveMessageReceived data)
-        {
-            WithPeer(data.Peer, hooks?.OnPeerHaveMessageReceived, data, entry =>
-            {
-                entry.Bitfield = facts.ApplyHave(entry.Bitfield, data.Piece);
-                hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
-            });
-        }
-
-        private void OnPeerBitfieldMessageReceived(PeerBitfieldMessageReceived data)
-        {
-            WithPeer(data.Peer, hooks?.OnPeerBitfieldMessageReceived, data, entry =>
-            {
-                entry.Bitfield = facts.ApplyBitfield(entry.Bitfield, data.Bitfield);
-                hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
-            });
-        }
-
-        private void OnPeerPieceMessageReceived(PeerPieceMessageReceived data)
-        {
-            WithPeer(data.Peer, hooks?.OnPeerPieceMessageReceived, data, entry =>
-            {
-            });
-        }
-
-        private void OnPeerExtendedMessageReceived(PeerExtendedMessageReceived data)
-        {
-            WithPeer(data.Peer, hooks?.OnPeerExtendedMessageReceived, data, entry =>
-            {
-            });
-        }
-
-        private void WithPeer<T>(PeerHash peer, Action<T> forwarder, T payload, Action<GlueEntry> callback)
-        {
-            GlueEntry entry = collection.Find(peer);
-
-            if (forwarder != null)
-            {
-                forwarder.Invoke(payload);
-            }
+            GlueEntry entry = collection.Find(data.Peer);
 
             if (entry != null)
             {
-                SetTimestamp(entry);
-                callback.Invoke(entry);
-            }
-        }
+                switch (data.Type)
+                {
+                    case "choke":
+                        entry.State |= GlueState.IsRemoteChockingLocal;
+                        hooks.CallPeerStateChanged(entry.Peer, entry.State);
+                        break;
 
-        private void SetTimestamp(GlueEntry entry)
-        {
-            entry.Timestamp = DateTime.Now;
+                    case "unchoke":
+                        entry.State &= ~GlueState.IsRemoteChockingLocal;
+                        hooks.CallPeerStateChanged(entry.Peer, entry.State);
+                        break;
+
+                    case "interested":
+                        entry.State |= GlueState.IsRemoteInterestedInLocal;
+                        hooks.CallPeerStateChanged(entry.Peer, entry.State);
+                        break;
+
+                    case "have":
+                        entry.Bitfield = facts.ApplyHave(entry.Bitfield, data.Payload.GetInt32(0));
+                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
+                        break;
+
+                    case "bitfield":
+                        entry.Bitfield = facts.ApplyBitfield(entry.Bitfield, data.Payload.GetBitfield());
+                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
+                        break;
+                }
+            }
         }
     }
 }

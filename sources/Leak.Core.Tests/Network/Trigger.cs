@@ -17,7 +17,7 @@ namespace Leak.Core.Tests.Network
             };
         }
 
-        public bool Complete()
+        public bool Wait()
         {
             for (int i = 0; i < 500; i++)
             {

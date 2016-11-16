@@ -64,7 +64,7 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 7999));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace Leak.Core.Tests.Network
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace Leak.Core.Tests.Network
             hooks.OnHandshakeRejected = handler;
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
 
-            handler.Complete().Should().BeTrue();
+            handler.Wait().Should().BeTrue();
         }
     }
 }

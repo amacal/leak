@@ -1,4 +1,6 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Communicator;
+using Leak.Core.Loop;
 using Leak.Core.Network;
 using System;
 
@@ -21,5 +23,9 @@ namespace Leak.Core.Glue
         public DateTime Timestamp;
 
         public GlueMore More;
+
+        public ConnectionLoop Loopy;
+
+        public CommunicatorService Commy;
     }
 }

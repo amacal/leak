@@ -131,14 +131,6 @@
     <Compile Include="Listener\PeerListenerHooks.cs" />
     <Compile Include="Loop\ConnectionLoopExtensions.cs" />
     <Compile Include="Loop\ConnectionLoopHooks.cs" />
-    <Compile Include="Events\PeerBitfieldMessageReceived.cs" />
-    <Compile Include="Events\PeerChokeMessageReceived.cs" />
-    <Compile Include="Events\PeerExtendedMessageReceived.cs" />
-    <Compile Include="Events\PeerHaveMessageReceived.cs" />
-    <Compile Include="Events\PeerInterestedMessageReceived.cs" />
-    <Compile Include="Events\PeerKeepAliveMessageReceived.cs" />
-    <Compile Include="Events\PeerPieceMessageReceived.cs" />
-    <Compile Include="Events\PeerUnchokeMessageReceived.cs" />
     <Compile Include="Messages\BitfieldOutgoingMessage.cs" />
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />

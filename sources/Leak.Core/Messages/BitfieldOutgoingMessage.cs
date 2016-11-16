@@ -10,6 +10,14 @@ namespace Leak.Core.Messages
         public BitfieldOutgoingMessage(Bitfield bitfield)
         {
             this.data = new byte[(bitfield.Length - 1) / 8 + 1];
+
+            for (int i = 0; i < bitfield.Length; i++)
+            {
+                if (bitfield[i])
+                {
+                    data[i / 8] += (byte)(1 << (byte)(7 - i % 8));
+                }
+            }
         }
 
         public int Length

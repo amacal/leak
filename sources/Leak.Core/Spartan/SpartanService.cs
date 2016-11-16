@@ -77,7 +77,7 @@ namespace Leak.Core.Spartan
 
             facts.Complete(SpartanGoal.Discover);
             hooks.OnMetadataDiscovered?.Invoke(data);
-            glue.AddMetainfo(data.Metainfo);
+            glue.SetPieces(data.Metainfo.Pieces.Length);
 
             ScheduleNextGoal();
         }

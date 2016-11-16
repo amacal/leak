@@ -34,7 +34,6 @@ namespace Leak.Core.Loop
             if (message.Length == 4)
             {
                 hooks.CallMessageReceived(peer, "keep-alive", message);
-                hooks.CallOnPeerKeepAliveMessageReceived(peer);
                 message.Acknowledge(4);
             }
             else
@@ -43,37 +42,30 @@ namespace Leak.Core.Loop
                 {
                     case 0:
                         hooks.CallMessageReceived(peer, "choke", message);
-                        hooks.CallOnPeerChokeMessageReceived(peer);
                         break;
 
                     case 1:
                         hooks.CallMessageReceived(peer, "unchoke", message);
-                        hooks.CallOnPeerUnchokeMessageReceived(peer);
                         break;
 
                     case 2:
                         hooks.CallMessageReceived(peer, "interested", message);
-                        hooks.CallOnPeerInterestedMessageReceived(peer);
                         break;
 
                     case 4:
                         hooks.CallMessageReceived(peer, "have", message);
-                        hooks.CallOnPeerHaveMessageReceived(peer, message);
                         break;
 
                     case 5:
                         hooks.CallMessageReceived(peer, "bitfield", message);
-                        hooks.CallOnPeerBitfieldMessageReceived(peer, message);
                         break;
 
                     case 7:
                         hooks.CallMessageReceived(peer, "piece", message);
-                        hooks.CallOnPeerPieceMessageReceived(peer, message, factory);
                         break;
 
                     case 20:
                         hooks.CallMessageReceived(peer, "extended", message);
-                        hooks.CallOnPeerExtendedMessageReceived(peer, message);
                         break;
                 }
 

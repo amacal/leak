@@ -47,5 +47,45 @@ namespace Leak.Core.Common
                 }
             }
         }
+
+        public override int GetHashCode()
+        {
+            return completed;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Bitfield other = obj as Bitfield;
+
+            return other != null && Equals(this, other);
+        }
+
+        private static bool Equals(Bitfield left, Bitfield right)
+        {
+            if (left.Length != right.Length)
+                return false;
+
+            if (left.completed != right.completed)
+                return false;
+
+            for (int i = 0; i < left.Length; i++)
+                if (left[i] != right[i])
+                    return false;
+
+            return true;
+        }
+
+        public static Bitfield Random(byte length)
+        {
+            byte[] random = Bytes.Random(length);
+            Bitfield result = new Bitfield(length);
+
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = random[i] % 2 == 0;
+            }
+
+            return result;
+        }
     }
 }
