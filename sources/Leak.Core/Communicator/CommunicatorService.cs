@@ -21,42 +21,48 @@ namespace Leak.Core.Communicator
 
         public void SendKeepAlive()
         {
-            connection.Send(new KeepAliveMessage());
+            SendAndCall(new KeepAliveMessage(), "keep-alive");
         }
 
         public void SendChoke()
         {
-            connection.Send(new ChokeMessage());
+            SendAndCall(new ChokeMessage(), "choke");
         }
 
         public void SendUnchoke()
         {
-            connection.Send(new UnchokeMessage());
+            SendAndCall(new UnchokeMessage(), "unchoke");
         }
 
         public void SendInterested()
         {
-            connection.Send(new InterestedMessage());
+            SendAndCall(new InterestedMessage(), "interested");
         }
 
         public void SendHave(int piece)
         {
-            connection.Send(new HaveOutgoingMessage(piece));
+            SendAndCall(new HaveOutgoingMessage(piece), "have");
         }
 
         public void SendBitfield(Bitfield bitfield)
         {
-            connection.Send(new BitfieldOutgoingMessage(bitfield));
+            SendAndCall(new BitfieldOutgoingMessage(bitfield), "bitfield");
         }
 
         public void SendPiece(Piece piece)
         {
-            connection.Send(new PieceOutgoingMessage(piece));
+            SendAndCall(new PieceOutgoingMessage(piece), "piece");
         }
 
         public void SendExtended(Extended extended)
         {
-            connection.Send(new ExtendedOutgoingMessage(extended));
+            SendAndCall(new ExtendedOutgoingMessage(extended), "extended");
+        }
+
+        private void SendAndCall(NetworkOutgoingMessage message, string type)
+        {
+            connection.Send(message);
+            hooks.CallMessageSent(peer, type, message);
         }
     }
 }

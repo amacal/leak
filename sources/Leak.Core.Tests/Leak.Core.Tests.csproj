@@ -51,6 +51,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\CommunicatorTests.cs" />
     <Compile Include="Network\ConnectorTests.cs" />
     <Compile Include="Network\ListenerTests.cs" />
     <Compile Include="Network\LoopyTests.cs" />

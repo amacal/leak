@@ -69,6 +69,7 @@
     <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Common\PieceInfo.cs" />
     <Compile Include="Communicator\CommunicatorConfiguration.cs" />
+    <Compile Include="Communicator\CommunicatorExtensions.cs" />
     <Compile Include="Communicator\CommunicatorHooks.cs" />
     <Compile Include="Communicator\CommunicatorService.cs" />
     <Compile Include="Connector\PeerConnectorConnected.cs" />
