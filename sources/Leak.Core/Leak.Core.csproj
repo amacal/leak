@@ -103,6 +103,9 @@
     <Compile Include="Events\MetadataDiscovered.cs" />
     <Compile Include="Events\MetadataPieceReceived.cs" />
     <Compile Include="Events\MetadataPieceRequested.cs" />
+    <Compile Include="Events\MetafileRejected.cs" />
+    <Compile Include="Events\MetafileVerified.cs" />
+    <Compile Include="Events\MetafileWritten.cs" />
     <Compile Include="Events\PeerBitfieldChanged.cs" />
     <Compile Include="Events\PeerConnected.cs" />
     <Compile Include="Events\PeerStateChanged.cs" />

@@ -32,7 +32,15 @@ namespace Leak.Core.Metadata
             return bytes;
         }
 
-        public FileHash GetHash()
+        public Metainfo ToMetainfo()
+        {
+            BencodedValue entries = Build();
+            byte[] bytes = Bencoder.Encode(entries);
+
+            return MetainfoFactory.FromBytes(bytes);
+        }
+
+        public FileHash ToHash()
         {
             BencodedValue entries = Build();
             byte[] bytes = Bencoder.Encode(entries);

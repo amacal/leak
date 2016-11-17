@@ -11,11 +11,11 @@ namespace Leak.Core.Metafile
             context = new MetafileContext(hash, destination, hooks);
         }
 
-        public void Write(int block, byte[] data)
+        public void Write(int piece, byte[] data)
         {
             if (context.IsCompleted == false)
             {
-                context.Destination.Write(block, data);
+                context.Destination.Write(piece, data);
                 context.Destination.Verify();
             }
         }

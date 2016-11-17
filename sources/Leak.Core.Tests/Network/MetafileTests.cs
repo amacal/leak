@@ -4,6 +4,7 @@ using Leak.Core.Common;
 using Leak.Core.Metadata;
 using Leak.Core.Metafile;
 using NUnit.Framework;
+using System.IO;
 
 namespace Leak.Core.Tests.Network
 {
@@ -14,12 +15,12 @@ namespace Leak.Core.Tests.Network
         private MetafileHooks hooks;
         private FileSandbox sandbox;
 
+        private byte[] metadata;
+        private string path;
+
         [SetUp]
         public void SetUp()
         {
-            byte[] data;
-            string path;
-
             using (FileSandbox forBuilder = Sandbox.New())
             {
                 MetainfoBuilder builder = new MetainfoBuilder(forBuilder.Directory);
@@ -27,12 +28,12 @@ namespace Leak.Core.Tests.Network
 
                 builder.AddFile(file);
 
-                hash = builder.GetHash();
-                data = builder.ToBytes();
+                hash = builder.ToHash();
+                metadata = builder.ToBytes();
             }
 
             sandbox = Sandbox.New();
-            path = sandbox.CreateFile($"{hash}.metainfo", data);
+            path = sandbox.CreateFile($"{hash}.metainfo");
 
             hooks = new MetafileHooks();
             metafile = new MetafileService(hash, path, hooks);
@@ -45,19 +46,88 @@ namespace Leak.Core.Tests.Network
         }
 
         [Test]
-        public void ShouldTriggerMetafileDiscoveredWhenCompleted()
+        public void ShouldTriggerMetafileVerifiedWhenCompleted()
         {
-            var handler = hooks.OnMetadataDiscovered.Trigger(data =>
+            var handler = hooks.OnMetafileVerified.Trigger(data =>
             {
                 data.Hash.Should().Be(hash);
                 data.Metainfo.Should().NotBeNull();
                 data.Metainfo.Hash.Should().Be(hash);
             });
 
-            hooks.OnMetadataDiscovered = handler;
+            hooks.OnMetafileVerified = handler;
+            File.WriteAllBytes(path, metadata);
 
             metafile.Verify();
             handler.Wait().Should().BeTrue();
+
+            metafile.IsCompleted().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetafileVerifiedWhenWritten()
+        {
+            var handler = hooks.OnMetafileVerified.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Metainfo.Should().NotBeNull();
+                data.Metainfo.Hash.Should().Be(hash);
+            });
+
+            hooks.OnMetafileVerified = handler;
+
+            metafile.Write(0, metadata);
+            handler.Wait().Should().BeTrue();
+
+            metafile.IsCompleted().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetafileWrittenWhenWritten()
+        {
+            var handler = hooks.OnMetafileWritten.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Piece.Should().Be(1);
+                data.Size.Should().Be(16384);
+            });
+
+            hooks.OnMetafileWritten = handler;
+
+            metafile.Write(1, new byte[16384]);
+            handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetafileRejectedWhenWritten()
+        {
+            var handler = hooks.OnMetafileRejected.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+            });
+
+            hooks.OnMetafileRejected = handler;
+
+            metafile.Write(1, new byte[16384]);
+            handler.Wait().Should().BeTrue();
+
+            metafile.IsCompleted().Should().BeFalse();
+        }
+
+        [Test]
+        public void ShouldTriggerMetafileRejectedWhenVerified()
+        {
+            var handler = hooks.OnMetafileRejected.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+            });
+
+            hooks.OnMetafileRejected = handler;
+
+            metafile.Verify();
+            handler.Wait().Should().BeTrue();
+
+            metafile.IsCompleted().Should().BeFalse();
         }
     }
 }

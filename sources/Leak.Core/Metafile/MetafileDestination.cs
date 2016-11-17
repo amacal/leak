@@ -14,9 +14,9 @@ namespace Leak.Core.Metafile
             this.context = context;
         }
 
-        public void Write(int block, byte[] data)
+        public void Write(int piece, byte[] data)
         {
-            int offset = block * 16384;
+            int offset = piece * 16384;
             string path = context.Path;
 
             using (FileStream stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, 16384, FileOptions.None))
@@ -27,6 +27,8 @@ namespace Leak.Core.Metafile
                 stream.Flush();
                 stream.Close();
             }
+
+            context.Hooks.CallMetafileWritten(context.Hash, piece, data.Length);
         }
 
         public void Verify()
@@ -48,7 +50,12 @@ namespace Leak.Core.Metafile
                     Metainfo metainfo = MetainfoFactory.FromBytes(bytes);
 
                     context.IsCompleted = true;
-                    context.Hooks.CallMetadataDiscovered(computed, metainfo);
+                    context.Hooks.CallMetafileVerified(context.Hash, metainfo);
+                }
+                else
+                {
+                    context.IsCompleted = false;
+                    context.Hooks.CallMetafileRejected(context.Hash);
                 }
             }
         }
