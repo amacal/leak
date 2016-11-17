@@ -5,6 +5,7 @@ using Leak.Core.Connector;
 using Leak.Core.Core;
 using Leak.Core.Events;
 using Leak.Core.Glue;
+using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Listener;
 using Leak.Core.Network;
 using NUnit.Framework;
@@ -413,6 +414,33 @@ namespace Leak.Core.Tests.Network
             handler.Wait().Should().BeTrue();
         }
 
+        [Test]
+        public void ShouldTriggerMetadataRequestReceived()
+        {
+            FileHash hash = FileHash.Random();
+            MetadataHooks metahooks = new MetadataHooks();
+            MetadataPlugin plugin = new MetadataPlugin(metahooks);
+
+            var extended = rightHooks.OnExtensionListSent.Trigger();
+            var handler = metahooks.OnMetadataRequestReceived.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Peer.Should().Be(rightHash);
+                data.Piece.Should().Be(7);
+            });
+
+            metahooks.OnMetadataRequestReceived = handler;
+            leftConfiguration.Plugins.Add(plugin);
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            extended.Wait();
+            right.SendMetadataRequest(leftHash, 7);
+
+            handler.Wait().Should().BeTrue();
+        }
+
         private class Plugin : GluePlugin, GlueHandler
         {
             private readonly string name;
@@ -425,6 +453,10 @@ namespace Leak.Core.Tests.Network
             public void Install(GlueMore more)
             {
                 more.Add(name, this);
+            }
+
+            public void Handle(FileHash hash, PeerHash peer, byte[] payload)
+            {
             }
         }
     }

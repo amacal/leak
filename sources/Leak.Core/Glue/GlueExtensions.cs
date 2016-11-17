@@ -28,6 +28,11 @@ namespace Leak.Core.Glue
             return incoming.Length - 6;
         }
 
+        public static byte[] GetExtensionData(this NetworkIncomingMessage incoming)
+        {
+            return incoming.ToBytes(6);
+        }
+
         public static BencodedValue GetBencoded(this NetworkIncomingMessage incoming)
         {
             byte[] binary = incoming.ToBytes(6);

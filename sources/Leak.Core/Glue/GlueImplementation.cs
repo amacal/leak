@@ -253,10 +253,12 @@ namespace Leak.Core.Glue
         {
             if (data.Payload.IsExtensionHandshake() == false)
             {
+                GlueHandler handler;
                 byte id = data.Payload.GetExtensionIdentifier();
-                string code = facts.Translate(id);
+                string code = facts.Translate(id, out handler);
 
                 hooks.CallExtensionDataReceived(entry.Peer, code, data.Payload.GetExtensionSize());
+                handler.Handle(hash, entry.Peer, data.Payload.GetExtensionData());
             }
         }
     }

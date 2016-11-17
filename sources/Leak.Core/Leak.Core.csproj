@@ -110,6 +110,11 @@
     <Compile Include="Events\PeerConnected.cs" />
     <Compile Include="Events\PeerStateChanged.cs" />
     <Compile Include="Events\PeerDisconnected.cs" />
+    <Compile Include="Glue\Extensions\Metadata\MetadataExtensions.cs" />
+    <Compile Include="Glue\Extensions\Metadata\MetadataHandler.cs" />
+    <Compile Include="Glue\Extensions\Metadata\MetadataHooks.cs" />
+    <Compile Include="Glue\Extensions\Metadata\MetadataPlugin.cs" />
+    <Compile Include="Glue\Extensions\Metadata\MetadataRequest.cs" />
     <Compile Include="Glue\GlueCollection.cs" />
     <Compile Include="Glue\GlueConfiguration.cs" />
     <Compile Include="Glue\GlueEntry.cs" />

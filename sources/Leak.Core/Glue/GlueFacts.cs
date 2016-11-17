@@ -67,9 +67,12 @@ namespace Leak.Core.Glue
             return more.ToArray();
         }
 
-        public string Translate(byte id)
+        public string Translate(byte id, out GlueHandler handler)
         {
-            return more.Translate(id);
+            string code = more.Translate(id);
+            handler = more.GetHandler(code);
+
+            return code;
         }
     }
 }
