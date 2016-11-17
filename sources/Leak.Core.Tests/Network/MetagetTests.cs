@@ -1,9 +1,9 @@
 ﻿using F2F.Sandbox;
 using FluentAssertions;
 using Leak.Completion;
-using Leak.Core.Cando.Metadata;
 using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Metaget;
 using NUnit.Framework;
 using System.IO;
@@ -55,6 +55,13 @@ namespace Leak.Core.Tests.Network
         [Test]
         public void ShouldTriggerMetafileMeasured()
         {
+            MetadataMeasured measured = new MetadataMeasured
+            {
+                Hash = hash,
+                Peer = PeerHash.Random(),
+                Size = 17456
+            };
+
             var handler = hooks.OnMetadataMeasured.Trigger(data =>
             {
                 data.Hash.Should().Be(hash);
@@ -64,7 +71,7 @@ namespace Leak.Core.Tests.Network
             metaget.Start(pipeline);
             hooks.OnMetadataMeasured = handler;
 
-            metaget.OnSize(PeerHash.Random(), new MetadataSize(17456));
+            metaget.HandleMetadataMeasured(measured);
             handler.Wait().Should().BeTrue();
         }
 
@@ -88,6 +95,21 @@ namespace Leak.Core.Tests.Network
         [Test]
         public void ShouldTriggerMetafileDiscoveredWhenPopulated()
         {
+            MetadataMeasured measured = new MetadataMeasured
+            {
+                Hash = hash,
+                Peer = PeerHash.Random(),
+                Size = metadata.Length
+            };
+
+            MetadataReceived received = new MetadataReceived
+            {
+                Hash = hash,
+                Peer = PeerHash.Random(),
+                Piece = 0,
+                Data = metadata
+            };
+
             var handler = hooks.OnMetadataDiscovered.Trigger(data =>
             {
                 data.Hash.Should().Be(hash);
@@ -98,8 +120,8 @@ namespace Leak.Core.Tests.Network
             metaget.Start(pipeline);
             hooks.OnMetadataDiscovered = handler;
 
-            metaget.OnSize(PeerHash.Random(), new MetadataSize(metadata.Length));
-            metaget.OnData(PeerHash.Random(), new MetadataData(0, metadata.Length, metadata));
+            metaget.HandleMetadataMeasured(measured);
+            metaget.HandleMetadataReceived(received);
 
             handler.Wait().Should().BeTrue();
         }

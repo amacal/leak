@@ -258,7 +258,7 @@ namespace Leak.Core.Glue
                 string code = facts.Translate(id, out handler);
 
                 hooks.CallExtensionDataReceived(entry.Peer, code, data.Payload.GetExtensionSize());
-                handler.Handle(hash, entry.Peer, data.Payload.GetExtensionData());
+                handler.HandleMessage(hash, entry.Peer, data.Payload.GetExtensionData());
             }
         }
     }

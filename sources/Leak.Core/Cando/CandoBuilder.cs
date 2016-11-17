@@ -1,5 +1,4 @@
-﻿using Leak.Core.Cando.Metadata;
-using Leak.Core.Cando.PeerExchange;
+﻿using Leak.Core.Cando.PeerExchange;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +12,6 @@ namespace Leak.Core.Cando
         public CandoBuilder()
         {
             items = new Dictionary<string, CandoHandler>();
-        }
-
-        public void Metadata(Action<MetadataConfiguration> configurer)
-        {
-            items.Add("ut_metadata", new MetadataHandler(configurer));
         }
 
         public void PeerExchange(Action<PeerExchangeConfiguration> configurer)

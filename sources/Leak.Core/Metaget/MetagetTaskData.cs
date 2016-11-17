@@ -1,5 +1,4 @@
-﻿using Leak.Core.Cando.Metadata;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Core;
 
 namespace Leak.Core.Metaget
@@ -7,11 +6,13 @@ namespace Leak.Core.Metaget
     public class MetagetTaskData : LeakTask<MetagetContext>
     {
         private readonly PeerHash peer;
-        private readonly MetadataData data;
+        private readonly int piece;
+        private readonly byte[] data;
 
-        public MetagetTaskData(PeerHash peer, MetadataData data)
+        public MetagetTaskData(PeerHash peer, int piece, byte[] data)
         {
             this.peer = peer;
+            this.piece = piece;
             this.data = data;
         }
 
@@ -20,8 +21,8 @@ namespace Leak.Core.Metaget
             if (context.Metamine != null && context.Metafile.IsCompleted() == false)
             {
                 //context.Callback.OnMetadataReceived(peer, data.Block);
-                context.Metamine.Complete(data.Block, data.Size);
-                context.Metafile.Write(data.Block, data.Payload);
+                context.Metamine.Complete(piece, data.Length);
+                context.Metafile.Write(piece, data);
             }
         }
     }

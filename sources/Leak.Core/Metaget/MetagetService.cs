@@ -1,6 +1,6 @@
-﻿using Leak.Core.Cando.Metadata;
-using Leak.Core.Common;
+﻿using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Glue.Extensions.Metadata;
 using System;
 
 namespace Leak.Core.Metaget
@@ -32,14 +32,14 @@ namespace Leak.Core.Metaget
             context.Queue.Clear();
         }
 
-        public void OnSize(PeerHash peer, MetadataSize size)
+        public void HandleMetadataMeasured(MetadataMeasured data)
         {
-            context.Queue.Add(new MetagetTaskSize(peer, size));
+            context.Queue.Add(new MetagetTaskSize(data.Peer, data.Size));
         }
 
-        public void OnData(PeerHash peer, MetadataData data)
+        public void HandleMetadataReceived(MetadataReceived data)
         {
-            context.Queue.Add(new MetagetTaskData(peer, data));
+            context.Queue.Add(new MetagetTaskData(data.Peer, data.Piece, data.Data));
         }
 
         private void OnTick()

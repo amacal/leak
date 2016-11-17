@@ -415,21 +415,21 @@ namespace Leak.Core.Tests.Network
         }
 
         [Test]
-        public void ShouldTriggerMetadataRequestReceived()
+        public void ShouldTriggerMetadataRequested()
         {
             FileHash hash = FileHash.Random();
             MetadataHooks metahooks = new MetadataHooks();
             MetadataPlugin plugin = new MetadataPlugin(metahooks);
 
             var extended = rightHooks.OnExtensionListSent.Trigger();
-            var handler = metahooks.OnMetadataRequestReceived.Trigger(data =>
+            var handler = metahooks.OnMetadataRequested.Trigger(data =>
             {
                 data.Hash.Should().Be(hash);
                 data.Peer.Should().Be(rightHash);
                 data.Piece.Should().Be(7);
             });
 
-            metahooks.OnMetadataRequestReceived = handler;
+            metahooks.OnMetadataRequested = handler;
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
@@ -437,6 +437,89 @@ namespace Leak.Core.Tests.Network
 
             extended.Wait();
             right.SendMetadataRequest(leftHash, 7);
+
+            handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetadataRejected()
+        {
+            FileHash hash = FileHash.Random();
+            MetadataHooks metahooks = new MetadataHooks();
+            MetadataPlugin plugin = new MetadataPlugin(metahooks);
+
+            var extended = rightHooks.OnExtensionListSent.Trigger();
+            var handler = metahooks.OnMetadataRejected.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Peer.Should().Be(rightHash);
+                data.Piece.Should().Be(7);
+            });
+
+            metahooks.OnMetadataRejected = handler;
+            leftConfiguration.Plugins.Add(plugin);
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            extended.Wait();
+            right.SendMetadataReject(leftHash, 7);
+
+            handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetadataReceived()
+        {
+            FileHash hash = FileHash.Random();
+            MetadataHooks metahooks = new MetadataHooks();
+            MetadataPlugin plugin = new MetadataPlugin(metahooks);
+
+            var extended = rightHooks.OnExtensionListSent.Trigger();
+            var handler = metahooks.OnMetadataReceived.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Peer.Should().Be(rightHash);
+                data.Piece.Should().Be(7);
+                data.Data.Should().NotBeNull();
+                data.Data.Length.Should().Be(1023);
+            });
+
+            metahooks.OnMetadataReceived = handler;
+            leftConfiguration.Plugins.Add(plugin);
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            extended.Wait();
+            right.SendMetadataPiece(leftHash, 7, 128, new byte[1023]);
+
+            handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetadataMeasured()
+        {
+            FileHash hash = FileHash.Random();
+            MetadataHooks metahooks = new MetadataHooks();
+            MetadataPlugin plugin = new MetadataPlugin(metahooks);
+
+            var extended = rightHooks.OnExtensionListSent.Trigger();
+            var handler = metahooks.OnMetadataMeasured.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Peer.Should().Be(rightHash);
+                data.Size.Should().Be(128);
+            });
+
+            metahooks.OnMetadataMeasured = handler;
+            leftConfiguration.Plugins.Add(plugin);
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            extended.Wait();
+            right.SendMetadataPiece(leftHash, 7, 128, new byte[1023]);
 
             handler.Wait().Should().BeTrue();
         }
@@ -455,7 +538,7 @@ namespace Leak.Core.Tests.Network
                 more.Add(name, this);
             }
 
-            public void Handle(FileHash hash, PeerHash peer, byte[] payload)
+            public void HandleMessage(FileHash hash, PeerHash peer, byte[] payload)
             {
             }
         }
