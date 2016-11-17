@@ -13,9 +13,19 @@ namespace Leak.Core.Glue
             return new BitfieldIncomingMessage(incoming).ToBitfield();
         }
 
-        public static bool IsHandshake(this NetworkIncomingMessage incoming)
+        public static bool IsExtensionHandshake(this NetworkIncomingMessage incoming)
         {
             return incoming[5] == 0;
+        }
+
+        public static byte GetExtensionIdentifier(this NetworkIncomingMessage incoming)
+        {
+            return incoming[5];
+        }
+
+        public static int GetExtensionSize(this NetworkIncomingMessage incoming)
+        {
+            return incoming.Length - 6;
         }
 
         public static BencodedValue GetBencoded(this NetworkIncomingMessage incoming)
@@ -90,6 +100,26 @@ namespace Leak.Core.Glue
             {
                 Peer = peer,
                 Extensions = extensions
+            });
+        }
+
+        public static void CallExtensionDataReceived(this GlueHooks hooks, PeerHash peer, string extension, int size)
+        {
+            hooks.OnExtensionDataReceived?.Invoke(new ExtensionDataReceived
+            {
+                Peer = peer,
+                Extension = extension,
+                Size = size
+            });
+        }
+
+        public static void CallExtensionDataSent(this GlueHooks hooks, PeerHash peer, string extension, int size)
+        {
+            hooks.OnExtensionDataSent?.Invoke(new ExtensionDataSent
+            {
+                Peer = peer,
+                Extension = extension,
+                Size = size
             });
         }
     }

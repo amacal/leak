@@ -7,5 +7,7 @@ namespace Leak.Core.Events
         public PeerHash Peer;
 
         public string Extension;
+
+        public int Size;
     }
 }

@@ -34,7 +34,22 @@ namespace Leak.Core.Glue
             return byCode.Keys.ToArray();
         }
 
-        private static void Decode(BencodedValue bencoded, IDictionary<byte, string> byId, IDictionary<string, byte> byName)
+        public bool Supports(string code)
+        {
+            return byCode.ContainsKey(code);
+        }
+
+        public byte Translate(string code)
+        {
+            return byCode[code];
+        }
+
+        public string Translate(byte id)
+        {
+            return byId[id];
+        }
+
+        private static void Decode(BencodedValue bencoded, IDictionary<byte, string> byId, IDictionary<string, byte> byCode)
         {
             BencodedValue received = bencoded.Find("m", x => x);
 
@@ -43,12 +58,12 @@ namespace Leak.Core.Glue
                 foreach (BencodedEntry entry in received.Dictionary)
                 {
                     byte? id = entry.Value?.Number?.ToByte();
-                    string name = entry.Key?.Text?.GetString();
+                    string code = entry.Key?.Text?.GetString();
 
-                    if (id != null && name != null)
+                    if (id != null && code != null)
                     {
-                        byId.Add(id.Value, name.ToLower());
-                        byName.Add(name.ToLower(), id.Value);
+                        byId.Add(id.Value, code.ToLower());
+                        byCode.Add(code.ToLower(), id.Value);
                     }
                 }
             }

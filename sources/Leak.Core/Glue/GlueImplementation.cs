@@ -42,6 +42,8 @@ namespace Leak.Core.Glue
             {
                 entry.Loopy = CreateLoopy();
                 entry.Commy = CreateCommy(entry.Peer, connection);
+
+                entry.More = new GlueMore();
                 entry.Extensions = handshake.Options.HasFlag(HandshakeOptions.Extended);
 
                 hooks.CallPeerConnected(entry.Peer);
@@ -59,18 +61,6 @@ namespace Leak.Core.Glue
             bool isOutgoing = entry.Direction == NetworkDirection.Outgoing;
 
             if (supportExtensions && isOutgoing)
-            {
-                entry.Commy.SendExtended(facts.GetHandshake());
-                hooks.CallExtensionListSent(entry.Peer, facts.GetExtensions());
-            }
-        }
-
-        private void SendPassiveHandshakeWithExtensionsIfNeeded(GlueEntry entry)
-        {
-            bool supportExtensions = entry.Extensions;
-            bool isIncoming = entry.Direction == NetworkDirection.Incoming;
-
-            if (supportExtensions && isIncoming)
             {
                 entry.Commy.SendExtended(facts.GetHandshake());
                 hooks.CallExtensionListSent(entry.Peer, facts.GetExtensions());
@@ -152,12 +142,21 @@ namespace Leak.Core.Glue
 
         public void SendExtension(PeerHash peer, string extension, byte[] payload)
         {
-            throw new System.NotImplementedException();
+            GlueEntry entry = collection.Find(peer);
+
+            if (entry != null)
+            {
+                byte identifier = entry.More.Translate(extension);
+                Extended extended = new Extended(identifier, payload);
+
+                entry.Commy.SendExtended(extended);
+                hooks.CallExtensionDataSent(entry.Peer, extension, payload.Length);
+            }
         }
 
         public bool IsSupported(PeerHash peer, string extension)
         {
-            throw new System.NotImplementedException();
+            return collection.Find(peer)?.More.Supports(extension) == true;
         }
 
         private ConnectionLoop CreateLoopy()
@@ -219,7 +218,8 @@ namespace Leak.Core.Glue
 
                     case "extended":
                         HandleHandshakeWithExtensionsIfNeeded(entry, data);
-                        SendPassiveHandshakeWithExtensionsIfNeeded(entry);
+                        SendPassiveHandshakeWithExtensionsIfNeeded(entry, data);
+                        HandleExtensionIfNeeded(entry, data);
                         break;
                 }
             }
@@ -227,10 +227,36 @@ namespace Leak.Core.Glue
 
         private void HandleHandshakeWithExtensionsIfNeeded(GlueEntry entry, MessageReceived data)
         {
-            if (data.Payload.IsHandshake())
+            if (data.Payload.IsExtensionHandshake())
             {
                 entry.More = new GlueMore(data.Payload.GetBencoded());
                 hooks.CallExtensionListReceived(entry.Peer, entry.More.ToArray());
+            }
+        }
+
+        private void SendPassiveHandshakeWithExtensionsIfNeeded(GlueEntry entry, MessageReceived data)
+        {
+            if (data.Payload.IsExtensionHandshake())
+            {
+                bool supportExtensions = entry.Extensions;
+                bool isIncoming = entry.Direction == NetworkDirection.Incoming;
+
+                if (supportExtensions && isIncoming)
+                {
+                    entry.Commy.SendExtended(facts.GetHandshake());
+                    hooks.CallExtensionListSent(entry.Peer, facts.GetExtensions());
+                }
+            }
+        }
+
+        private void HandleExtensionIfNeeded(GlueEntry entry, MessageReceived data)
+        {
+            if (data.Payload.IsExtensionHandshake() == false)
+            {
+                byte id = data.Payload.GetExtensionIdentifier();
+                string code = facts.Translate(id);
+
+                hooks.CallExtensionDataReceived(entry.Peer, code, data.Payload.GetExtensionSize());
             }
         }
     }

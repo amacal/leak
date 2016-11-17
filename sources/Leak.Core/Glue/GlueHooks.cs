@@ -13,5 +13,8 @@ namespace Leak.Core.Glue
 
         public Action<ExtensionListReceived> OnExtensionListReceived;
         public Action<ExtensionListSent> OnExtensionListSent;
+
+        public Action<ExtensionDataReceived> OnExtensionDataReceived;
+        public Action<ExtensionDataSent> OnExtensionDataSent;
     }
 }

@@ -340,6 +340,79 @@ namespace Leak.Core.Tests.Network
             rightHandler.Wait().Should().BeTrue();
         }
 
+        [Test]
+        public void ShouldFindOutIfExtensionIsSupported()
+        {
+            FileHash hash = FileHash.Random();
+
+            var handler = leftHooks.OnExtensionListReceived.Trigger(data =>
+            {
+                data.Peer.Should().Be(rightHash);
+            });
+
+            leftHooks.OnExtensionListReceived = handler;
+            rightConfiguration.Plugins.Add(new Plugin("right-a"));
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            handler.Wait().Should().BeTrue();
+
+            left.IsSupported(rightHash, "right-a").Should().BeTrue();
+            left.IsSupported(rightHash, "right-b").Should().BeFalse();
+        }
+
+        [Test]
+        public void ShouldTriggerExtensionDataReceived()
+        {
+            FileHash hash = FileHash.Random();
+
+            var extended = leftHooks.OnExtensionListReceived.Trigger();
+            var handler = leftHooks.OnExtensionDataReceived.Trigger(data =>
+            {
+                data.Peer.Should().Be(rightHash);
+                data.Extension.Should().Be("left-a");
+                data.Size.Should().Be(10);
+            });
+
+            leftHooks.OnExtensionListReceived = extended;
+            leftHooks.OnExtensionDataReceived = handler;
+            leftConfiguration.Plugins.Add(new Plugin("left-a"));
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            extended.Wait();
+            right.SendExtension(leftHash, "left-a", new byte[10]);
+
+            handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerExtensionDataSent()
+        {
+            FileHash hash = FileHash.Random();
+
+            var extended = rightHooks.OnExtensionListSent.Trigger();
+            var handler = rightHooks.OnExtensionDataSent.Trigger(data =>
+            {
+                data.Peer.Should().Be(rightHash);
+                data.Extension.Should().Be("left-a");
+                data.Size.Should().Be(10);
+            });
+
+            rightHooks.OnExtensionDataSent = handler;
+            leftConfiguration.Plugins.Add(new Plugin("left-a"));
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            extended.Wait();
+            right.SendExtension(leftHash, "left-a", new byte[10]);
+
+            handler.Wait().Should().BeTrue();
+        }
+
         private class Plugin : GluePlugin, GlueHandler
         {
             private readonly string name;

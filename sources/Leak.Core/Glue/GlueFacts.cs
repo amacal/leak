@@ -66,5 +66,10 @@ namespace Leak.Core.Glue
         {
             return more.ToArray();
         }
+
+        public string Translate(byte id)
+        {
+            return more.Translate(id);
+        }
     }
 }
