@@ -1,7 +1,6 @@
 ﻿using F2F.Sandbox;
 using FluentAssertions;
 using Leak.Core.Common;
-using Leak.Core.Metadata;
 using Leak.Core.Metafile;
 using NUnit.Framework;
 using System.IO;
@@ -21,16 +20,7 @@ namespace Leak.Core.Tests.Network
         [SetUp]
         public void SetUp()
         {
-            using (FileSandbox forBuilder = Sandbox.New())
-            {
-                MetainfoBuilder builder = new MetainfoBuilder(forBuilder.Directory);
-                string file = forBuilder.CreateFile("abc.txt");
-
-                builder.AddFile(file);
-
-                hash = builder.ToHash();
-                metadata = builder.ToBytes();
-            }
+            Fixture.Metainfo(out hash, out metadata);
 
             sandbox = Sandbox.New();
             path = sandbox.CreateFile($"{hash}.metainfo");

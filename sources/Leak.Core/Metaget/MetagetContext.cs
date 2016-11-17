@@ -30,7 +30,13 @@ namespace Leak.Core.Metaget
         private MetafileService CreateMetafile()
         {
             string path = destination + ".metainfo";
-            MetafileHooks hooks = new MetafileHooks();
+            MetafileHooks hooks = new MetafileHooks
+            {
+                OnMetafileVerified = data =>
+                {
+                    this.hooks.CallMetadataDiscovered(data.Hash, data.Metainfo);
+                }
+            };
 
             return new MetafileService(hash, path, hooks);
         }
@@ -54,6 +60,16 @@ namespace Leak.Core.Metaget
         public MetafileService Metafile
         {
             get { return metafile; }
+        }
+
+        public MetagetHooks Hooks
+        {
+            get { return hooks; }
+        }
+
+        public FileHash Hash
+        {
+            get { return hash; }
         }
     }
 }

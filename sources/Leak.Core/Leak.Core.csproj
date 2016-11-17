@@ -137,7 +137,7 @@
     <Compile Include="Messages\BitfieldOutgoingMessage.cs" />
     <Compile Include="Messages\DataBlock.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
-    <Compile Include="Events\MetadataMeasured.cs" />
+    <Compile Include="Events\MetafileMeasured.cs" />
     <Compile Include="Messages\HaveOutgoingMessage.cs" />
     <Compile Include="Messages\PieceOutgoingMessage.cs" />
     <Compile Include="Metadata\MetainfoBuilder.cs" />

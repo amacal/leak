@@ -1,13 +1,15 @@
-﻿namespace Leak.Core.Glue
+﻿using System.Collections.Generic;
+
+namespace Leak.Core.Glue
 {
     public class GlueConfiguration
     {
         public GlueConfiguration()
         {
-            Plugins = new GluePlugin[0];
+            Plugins = new List<GluePlugin>();
         }
 
-        public GluePlugin[] Plugins;
+        public List<GluePlugin> Plugins;
 
         public int? Pieces;
     }

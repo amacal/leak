@@ -1,4 +1,5 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Bencoding;
+using Leak.Core.Common;
 using Leak.Core.Events;
 using Leak.Core.Messages;
 using Leak.Core.Network;
@@ -10,6 +11,19 @@ namespace Leak.Core.Glue
         public static Bitfield GetBitfield(this NetworkIncomingMessage incoming)
         {
             return new BitfieldIncomingMessage(incoming).ToBitfield();
+        }
+
+        public static bool IsHandshake(this NetworkIncomingMessage incoming)
+        {
+            return incoming[5] == 0;
+        }
+
+        public static BencodedValue GetBencoded(this NetworkIncomingMessage incoming)
+        {
+            byte[] binary = incoming.ToBytes(6);
+            BencodedValue bencoded = Bencoder.Decode(binary);
+
+            return bencoded;
         }
 
         public static int GetInt32(this NetworkIncomingMessage incoming, int offset)
@@ -58,6 +72,24 @@ namespace Leak.Core.Glue
                 IsLocalInterestedInRemote = state.HasFlag(GlueState.IsLocalInterestedInRemote),
                 IsRemoteChokingLocal = state.HasFlag(GlueState.IsRemoteChockingLocal),
                 IsRemoteInterestedInLocal = state.HasFlag(GlueState.IsRemoteInterestedInLocal)
+            });
+        }
+
+        public static void CallExtensionListReceived(this GlueHooks hooks, PeerHash peer, string[] extensions)
+        {
+            hooks.OnExtensionListReceived?.Invoke(new ExtensionListReceived
+            {
+                Peer = peer,
+                Extensions = extensions
+            });
+        }
+
+        public static void CallExtensionListSent(this GlueHooks hooks, PeerHash peer, string[] extensions)
+        {
+            hooks.OnExtensionListSent?.Invoke(new ExtensionListSent
+            {
+                Peer = peer,
+                Extensions = extensions
             });
         }
     }

@@ -1,4 +1,7 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Core.Bencoding;
+using Leak.Core.Common;
+using Leak.Core.Messages;
+using System.Collections.Generic;
 
 namespace Leak.Core.Glue
 {
@@ -13,7 +16,7 @@ namespace Leak.Core.Glue
             pieces = configuration.Pieces;
         }
 
-        public void Install(GluePlugin[] plugins)
+        public void Install(IReadOnlyCollection<GluePlugin> plugins)
         {
             foreach (GluePlugin plugin in plugins)
             {
@@ -49,6 +52,19 @@ namespace Leak.Core.Glue
             }
 
             return received;
+        }
+
+        public Extended GetHandshake()
+        {
+            BencodedValue encoded = more.Encode();
+            byte[] binary = Bencoder.Encode(encoded);
+
+            return new Extended(0, binary);
+        }
+
+        public string[] GetExtensions()
+        {
+            return more.ToArray();
         }
     }
 }

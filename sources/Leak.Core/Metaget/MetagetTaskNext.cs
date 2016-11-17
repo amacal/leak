@@ -12,21 +12,21 @@ namespace Leak.Core.Metaget
 
         public void Execute(MetagetContext context)
         {
-            //if (context.Metamine != null && context.Metafile.IsCompleted() == false)
-            //{
-            //    foreach (PeerSession session in context.View.GetPeers(Criterions))
-            //    {
-            //        MetamineStrategy strategy = MetamineStrategy.Sequential;
-            //        MetamineBlock[] blocks = context.Metamine.Next(strategy, session.Peer);
+            if (context.Metamine != null && context.Metafile.IsCompleted() == false)
+            {
+                //    foreach (PeerSession session in context.View.GetPeers(Criterions))
+                //    {
+                //        MetamineStrategy strategy = MetamineStrategy.Sequential;
+                //        MetamineBlock[] blocks = context.Metamine.Next(strategy, session.Peer);
 
-            //        foreach (MetamineBlock block in blocks)
-            //        {
-            //            context.Metamine.Reserve(session.Peer, block);
-            //            context.View.SendMetadataRequest(session, block.Index);
-            //            context.Callback.OnMetadataRequested(session.Peer, block.Index);
-            //        }
-            //    }
-            //}
+                //        foreach (MetamineBlock block in blocks)
+                //        {
+                //            context.Metamine.Reserve(session.Peer, block);
+                //            context.View.SendMetadataRequest(session, block.Index);
+                //            context.Callback.OnMetadataRequested(session.Peer, block.Index);
+                //        }
+                //    }
+            }
         }
     }
 }

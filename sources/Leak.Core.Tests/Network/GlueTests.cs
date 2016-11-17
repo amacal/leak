@@ -22,8 +22,10 @@ namespace Leak.Core.Tests.Network
         private GlueService left;
         private PeerHash leftHash;
         private GlueHooks leftHooks;
+        private GlueConfiguration leftConfiguration;
         private GlueService right;
         private GlueHooks rightHooks;
+        private GlueConfiguration rightConfiguration;
         private PeerHash rightHash;
 
         private Trigger<HandshakeCompleted> leftConnected;
@@ -35,15 +37,19 @@ namespace Leak.Core.Tests.Network
             pipeline = new LeakPipeline();
             worker = new CompletionThread();
 
+            leftConfiguration = new GlueConfiguration();
+            rightConfiguration = new GlueConfiguration();
+
             NetworkPool pool = new NetworkPool(worker, new NetworkPoolHooks());
-            GlueFactory factory = new GlueFactory(new BufferedBlockFactory(), new GlueConfiguration());
+            GlueFactory leftFactory = new GlueFactory(new BufferedBlockFactory(), leftConfiguration);
+            GlueFactory rightFactory = new GlueFactory(new BufferedBlockFactory(), rightConfiguration);
 
             PeerListenerHooks listenerHooks = new PeerListenerHooks
             {
                 OnHandshakeCompleted = rightConnected = new Trigger<HandshakeCompleted>(data =>
                 {
                     leftHash = data.Handshake.Remote;
-                    right = factory.Create(data.Handshake.Hash, rightHooks);
+                    right = rightFactory.Create(data.Handshake.Hash, rightHooks);
                     right.Connect(data.Connection, data.Handshake);
                 })
             };
@@ -53,7 +59,7 @@ namespace Leak.Core.Tests.Network
                 OnHandshakeCompleted = leftConnected = new Trigger<HandshakeCompleted>(data =>
                 {
                     rightHash = data.Handshake.Remote;
-                    left = factory.Create(data.Handshake.Hash, leftHooks);
+                    left = leftFactory.Create(data.Handshake.Hash, leftHooks);
                     left.Connect(data.Connection, data.Handshake);
                 })
             };
@@ -270,6 +276,83 @@ namespace Leak.Core.Tests.Network
             right.SendHave(leftHash, 17);
 
             handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerExtensionListReceived()
+        {
+            FileHash hash = FileHash.Random();
+
+            var leftHandler = leftHooks.OnExtensionListReceived.Trigger(data =>
+            {
+                data.Peer.Should().Be(rightHash);
+                data.Extensions.Should().BeEquivalentTo("right-c");
+            });
+
+            var rightHandler = rightHooks.OnExtensionListReceived.Trigger(data =>
+            {
+                data.Peer.Should().Be(leftHash);
+                data.Extensions.Should().BeEquivalentTo("left-a", "left-b");
+            });
+
+            leftHooks.OnExtensionListReceived = leftHandler;
+            rightHooks.OnExtensionListReceived = rightHandler;
+
+            leftConfiguration.Plugins.Add(new Plugin("left-a"));
+            leftConfiguration.Plugins.Add(new Plugin("left-b"));
+            rightConfiguration.Plugins.Add(new Plugin("right-c"));
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            leftHandler.Wait().Should().BeTrue();
+            rightHandler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerExtensionListSent()
+        {
+            FileHash hash = FileHash.Random();
+
+            var leftHandler = leftHooks.OnExtensionListSent.Trigger(data =>
+            {
+                data.Peer.Should().Be(rightHash);
+                data.Extensions.Should().BeEquivalentTo("left-a", "left-b");
+            });
+
+            var rightHandler = rightHooks.OnExtensionListSent.Trigger(data =>
+            {
+                data.Peer.Should().Be(leftHash);
+                data.Extensions.Should().BeEquivalentTo("right-c");
+            });
+
+            leftHooks.OnExtensionListSent = leftHandler;
+            rightHooks.OnExtensionListSent = rightHandler;
+
+            leftConfiguration.Plugins.Add(new Plugin("left-a"));
+            leftConfiguration.Plugins.Add(new Plugin("left-b"));
+            rightConfiguration.Plugins.Add(new Plugin("right-c"));
+
+            listener.Enable(hash);
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+
+            leftHandler.Wait().Should().BeTrue();
+            rightHandler.Wait().Should().BeTrue();
+        }
+
+        private class Plugin : GluePlugin, GlueHandler
+        {
+            private readonly string name;
+
+            public Plugin(string name)
+            {
+                this.name = name;
+            }
+
+            public void Install(GlueMore more)
+            {
+                more.Add(name, this);
+            }
         }
     }
 }

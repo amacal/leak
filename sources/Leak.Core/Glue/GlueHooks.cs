@@ -10,5 +10,8 @@ namespace Leak.Core.Glue
 
         public Action<PeerStateChanged> OnPeerStateChanged;
         public Action<PeerBitfieldChanged> OnPeerBitfieldChanged;
+
+        public Action<ExtensionListReceived> OnExtensionListReceived;
+        public Action<ExtensionListSent> OnExtensionListSent;
     }
 }

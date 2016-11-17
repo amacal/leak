@@ -11,7 +11,6 @@ namespace Leak.Core.Metamine
     /// </summary>
     public class MetamineBitfield
     {
-        private readonly object synchronized;
         private readonly MetamineConfiguration configuration;
         private readonly MetamineBlockCollection blocks;
         private readonly MetamineReservationCollection reservations;
@@ -22,42 +21,32 @@ namespace Leak.Core.Metamine
             {
             });
 
-            synchronized = new object();
             blocks = new MetamineBlockCollection();
             reservations = new MetamineReservationCollection();
         }
 
         public MetamineBlock[] Next(MetamineStrategy strategy, PeerHash peer)
         {
-            lock (synchronized)
+            MetamineStrategyContext context = new MetamineStrategyContext
             {
-                MetamineStrategyContext context = new MetamineStrategyContext
-                {
-                    Peer = peer,
-                    Blocks = blocks,
-                    Configuration = configuration,
-                    Reservations = reservations
-                };
+                Peer = peer,
+                Blocks = blocks,
+                Configuration = configuration,
+                Reservations = reservations
+            };
 
-                return strategy.Next(context).ToArray();
-            }
+            return strategy.Next(context).ToArray();
         }
 
         public PeerHash Reserve(PeerHash peer, MetamineBlock block)
         {
-            lock (synchronized)
-            {
-                return reservations.Add(peer, block);
-            }
+            return reservations.Add(peer, block);
         }
 
         public void Complete(MetamineBlock block)
         {
-            lock (synchronized)
-            {
-                blocks.Complete(block);
-                reservations.Complete(block);
-            }
+            blocks.Complete(block);
+            reservations.Complete(block);
         }
     }
 }

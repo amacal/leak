@@ -20,10 +20,8 @@ namespace Leak.Core.Metaget
         {
             if (context.Metamine == null && context.Metafile.IsCompleted() == false)
             {
-                context.Metamine = new MetamineBitfield(with =>
-                {
-                    with.Size = size.Bytes;
-                });
+                context.Hooks.CallMetafileMeasured(context.Hash, size.Bytes);
+                context.Metamine = new MetamineBitfield(with => { with.Size = size.Bytes; });
             }
         }
     }

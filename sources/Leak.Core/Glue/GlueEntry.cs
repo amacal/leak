@@ -16,6 +16,8 @@ namespace Leak.Core.Glue
 
         public NetworkDirection Direction;
 
+        public bool Extensions;
+
         public Bitfield Bitfield;
 
         public GlueState State;

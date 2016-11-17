@@ -53,10 +53,12 @@
   <ItemGroup>
     <Compile Include="Network\CommunicatorTests.cs" />
     <Compile Include="Network\ConnectorTests.cs" />
+    <Compile Include="Network\Fixture.cs" />
     <Compile Include="Network\GlueTests.cs" />
     <Compile Include="Network\ListenerTests.cs" />
     <Compile Include="Network\LoopyTests.cs" />
     <Compile Include="Network\MetafileTests.cs" />
+    <Compile Include="Network\MetagetTests.cs" />
     <Compile Include="Network\NetworkTests.cs" />
     <Compile Include="Network\Sandbox.cs" />
     <Compile Include="Network\SandboxExtensions.cs" />
