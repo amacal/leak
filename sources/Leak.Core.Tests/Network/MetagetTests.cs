@@ -21,6 +21,8 @@ namespace Leak.Core.Tests.Network
         private MetagetHooks hooks;
         private MetagetConfiguration configuration;
 
+        private Swarm swarm;
+
         private byte[] metadata;
         private string path;
 
@@ -35,12 +37,21 @@ namespace Leak.Core.Tests.Network
             sandbox = Sandbox.New();
             path = sandbox.CreateFile($"{hash}.metainfo");
 
-            hooks = new MetagetHooks();
-            configuration = new MetagetConfiguration();
-            metaget = new MetagetService(hash, sandbox.CreateDirectory($"{hash}"), hooks, configuration);
-
             worker.Start();
             pipeline.Start();
+
+            swarm = new Swarm(hash);
+            swarm.Start();
+
+            swarm.Listen("bob", 8091);
+            swarm.Connect("sue", 8091);
+
+            swarm["bob"].Exchanged.Wait();
+            swarm["sue"].Exchanged.Wait();
+
+            hooks = new MetagetHooks();
+            configuration = new MetagetConfiguration();
+            metaget = new MetagetService(swarm["bob"].Glue, sandbox.CreateDirectory($"{hash}"), hooks, configuration);
         }
 
         [TearDown]
@@ -50,6 +61,7 @@ namespace Leak.Core.Tests.Network
             pipeline.Stop();
             sandbox.Dispose();
             metaget.Stop(pipeline);
+            swarm.Dispose();
         }
 
         [Test]
@@ -122,6 +134,31 @@ namespace Leak.Core.Tests.Network
 
             metaget.HandleMetadataMeasured(measured);
             metaget.HandleMetadataReceived(received);
+
+            handler.Wait().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerMetadataPieceRequested()
+        {
+            MetadataMeasured measured = new MetadataMeasured
+            {
+                Hash = hash,
+                Peer = PeerHash.Random(),
+                Size = metadata.Length
+            };
+
+            var handler = hooks.OnMetadataPieceRequested.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Peer.Should().NotBeNull();
+                data.Piece.Should().Be(0);
+            });
+
+            hooks.OnMetadataPieceRequested = handler;
+
+            metaget.Start(pipeline);
+            metaget.HandleMetadataMeasured(measured);
 
             handler.Wait().Should().BeTrue();
         }

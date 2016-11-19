@@ -1,6 +1,7 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Glue
 {
@@ -27,5 +28,7 @@ namespace Leak.Core.Glue
         void SendExtension(PeerHash peer, string extension, byte[] payload);
 
         bool IsSupported(PeerHash peer, string extension);
+
+        void ForEachPeer(Action<PeerHash> callback);
     }
 }

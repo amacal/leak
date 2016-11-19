@@ -1,5 +1,5 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Core;
+﻿using Leak.Core.Core;
+using Leak.Core.Glue;
 using Leak.Core.Metafile;
 using Leak.Core.Metamine;
 
@@ -7,7 +7,7 @@ namespace Leak.Core.Metaget
 {
     public class MetagetContext
     {
-        private readonly FileHash hash;
+        private readonly GlueService glue;
         private readonly string destination;
         private readonly MetagetHooks hooks;
         private readonly MetagetConfiguration configuration;
@@ -16,9 +16,9 @@ namespace Leak.Core.Metaget
 
         private MetamineBitfield metamine;
 
-        public MetagetContext(FileHash hash, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
+        public MetagetContext(GlueService glue, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
         {
-            this.hash = hash;
+            this.glue = glue;
             this.destination = destination;
             this.hooks = hooks;
             this.configuration = configuration;
@@ -38,7 +38,7 @@ namespace Leak.Core.Metaget
                 }
             };
 
-            return new MetafileService(hash, path, hooks);
+            return new MetafileService(glue.Hash, path, hooks);
         }
 
         public MetamineBitfield Metamine
@@ -67,9 +67,9 @@ namespace Leak.Core.Metaget
             get { return hooks; }
         }
 
-        public FileHash Hash
+        public GlueService Glue
         {
-            get { return hash; }
+            get { return glue; }
         }
     }
 }

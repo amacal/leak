@@ -1,5 +1,5 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Core;
+﻿using Leak.Core.Core;
+using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 using System;
 
@@ -9,9 +9,9 @@ namespace Leak.Core.Metaget
     {
         private readonly MetagetContext context;
 
-        public MetagetService(FileHash hash, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
+        public MetagetService(GlueService glue, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
         {
-            context = new MetagetContext(hash, destination, hooks, configuration);
+            context = new MetagetContext(glue, destination, hooks, configuration);
         }
 
         public void Start(LeakPipeline pipeline)
@@ -25,11 +25,6 @@ namespace Leak.Core.Metaget
         public void Stop(LeakPipeline pipeline)
         {
             pipeline.Remove(OnTick);
-        }
-
-        public void Dispose()
-        {
-            context.Queue.Clear();
         }
 
         public void HandleMetadataMeasured(MetadataMeasured data)

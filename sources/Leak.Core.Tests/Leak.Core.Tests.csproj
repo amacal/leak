@@ -62,6 +62,8 @@
     <Compile Include="Network\NetworkTests.cs" />
     <Compile Include="Network\Sandbox.cs" />
     <Compile Include="Network\SandboxExtensions.cs" />
+    <Compile Include="Network\Swarm.cs" />
+    <Compile Include="Network\SwarmEntry.cs" />
     <Compile Include="Network\Trigger.cs" />
     <Compile Include="Network\TriggerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

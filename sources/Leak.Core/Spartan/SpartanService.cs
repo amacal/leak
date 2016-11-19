@@ -35,7 +35,7 @@ namespace Leak.Core.Spartan
                 MetagetHooks hooks = CreateMetagetHooks();
                 MetagetConfiguration configuration = CreateMetagetConfiguration();
 
-                facts.MetaGet = new MetagetService(hash, destination, hooks, configuration);
+                facts.MetaGet = new MetagetService(glue, destination, hooks, configuration);
                 facts.MetaGet.Start(null);
 
                 facts.Start(SpartanGoal.Discover);
@@ -72,7 +72,6 @@ namespace Leak.Core.Spartan
         private void OnMetadataDiscovered(MetadataDiscovered data)
         {
             facts.MetaGet.Stop(null);
-            facts.MetaGet.Dispose();
             facts.MetaGet = null;
 
             facts.Complete(SpartanGoal.Discover);

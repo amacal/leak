@@ -2,11 +2,12 @@
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Sockets;
+using System;
 using System.Net;
 
 namespace Leak.Core.Listener
 {
-    public class PeerListener
+    public class PeerListener : IDisposable
     {
         private readonly TcpSocket socket;
         private readonly NetworkPool network;
@@ -86,6 +87,11 @@ namespace Leak.Core.Listener
         private void Negotiate(PeerListenerNegotiatorContext context, NetworkConnection connection)
         {
             new HandshakeNegotiatorPassive(network, connection, context).Execute();
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }

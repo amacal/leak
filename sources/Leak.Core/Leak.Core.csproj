@@ -285,7 +285,6 @@
     <Compile Include="Metaget\MetagetTaskData.cs" />
     <Compile Include="Metaget\MetagetTaskNext.cs" />
     <Compile Include="Metaget\MetagetTaskSize.cs" />
-    <Compile Include="Metaget\MetagetMetafile.cs" />
     <Compile Include="Metamine\MetamineBitfield.cs" />
     <Compile Include="Metamine\MetamineBlockCollection.cs" />
     <Compile Include="Metamine\MetamineBlock.cs" />

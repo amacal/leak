@@ -51,5 +51,10 @@ namespace Leak.Core.Glue
             byPeer.TryGetValue(peer, out entry);
             return entry;
         }
+
+        public IEnumerable<GlueEntry> All()
+        {
+            return byPeer.Values;
+        }
     }
 }

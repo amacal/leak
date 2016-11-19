@@ -1,31 +1,27 @@
 ﻿using Leak.Core.Core;
+using Leak.Core.Glue.Extensions.Metadata;
+using Leak.Core.Metamine;
 
 namespace Leak.Core.Metaget
 {
     public class MetagetTaskNext : LeakTask<MetagetContext>
     {
-        //private static readonly PeerCollectorCriterion[] Criterions =
-        //{
-        //    new IsMetadataSupportedByRemote(),
-        //    new OrderByBitfield()
-        //};
-
         public void Execute(MetagetContext context)
         {
             if (context.Metamine != null && context.Metafile.IsCompleted() == false)
             {
-                //    foreach (PeerSession session in context.View.GetPeers(Criterions))
-                //    {
-                //        MetamineStrategy strategy = MetamineStrategy.Sequential;
-                //        MetamineBlock[] blocks = context.Metamine.Next(strategy, session.Peer);
+                context.Glue.ForEachPeer(peer =>
+                {
+                    MetamineStrategy strategy = MetamineStrategy.Sequential;
+                    MetamineBlock[] blocks = context.Metamine.Next(strategy, peer);
 
-                //        foreach (MetamineBlock block in blocks)
-                //        {
-                //            context.Metamine.Reserve(session.Peer, block);
-                //            context.View.SendMetadataRequest(session, block.Index);
-                //            context.Callback.OnMetadataRequested(session.Peer, block.Index);
-                //        }
-                //    }
+                    foreach (MetamineBlock block in blocks)
+                    {
+                        context.Metamine.Reserve(peer, block);
+                        context.Glue.SendMetadataRequest(peer, block.Index);
+                        context.Hooks.CallMetadataPieceRequested(context.Glue.Hash, peer, block.Index);
+                    }
+                });
             }
         }
     }

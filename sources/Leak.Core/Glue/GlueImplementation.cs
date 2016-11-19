@@ -5,6 +5,7 @@ using Leak.Core.Loop;
 using Leak.Core.Messages;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
+using System;
 
 namespace Leak.Core.Glue
 {
@@ -157,6 +158,14 @@ namespace Leak.Core.Glue
         public bool IsSupported(PeerHash peer, string extension)
         {
             return collection.Find(peer)?.More.Supports(extension) == true;
+        }
+
+        public void ForEachPeer(Action<PeerHash> callback)
+        {
+            foreach (GlueEntry entry in collection.All())
+            {
+                callback.Invoke(entry.Peer);
+            }
         }
 
         private ConnectionLoop CreateLoopy()
