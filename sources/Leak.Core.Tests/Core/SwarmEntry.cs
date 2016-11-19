@@ -2,7 +2,7 @@
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Core
 {
     public class SwarmEntry
     {

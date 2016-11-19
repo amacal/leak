@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Core
 {
     public class Trigger<T>
     {

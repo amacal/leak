@@ -1,14 +1,15 @@
-﻿using F2F.Sandbox;
+﻿using System.IO;
+using F2F.Sandbox;
 using FluentAssertions;
 using Leak.Completion;
 using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Metaget;
+using Leak.Core.Tests.Core;
 using NUnit.Framework;
-using System.IO;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Components
 {
     public class MetagetTests
     {

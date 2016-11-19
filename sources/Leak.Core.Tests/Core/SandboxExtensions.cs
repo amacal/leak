@@ -1,7 +1,7 @@
-﻿using F2F.Sandbox;
-using System.IO;
+﻿using System.IO;
+using F2F.Sandbox;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Core
 {
     public static class SandboxExtensions
     {

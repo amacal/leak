@@ -108,6 +108,8 @@
     <Compile Include="Events\PeerConnected.cs" />
     <Compile Include="Events\PeerStateChanged.cs" />
     <Compile Include="Events\PeerDisconnected.cs" />
+    <Compile Include="Events\TaskCompleted.cs" />
+    <Compile Include="Events\TaskStarted.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataMeasured.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataReceived.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataExtensions.cs" />
@@ -373,7 +375,7 @@
     <Compile Include="Spartan\SpartanConfiguration.cs" />
     <Compile Include="Spartan\SpartanExtensions.cs" />
     <Compile Include="Spartan\SpartanFacts.cs" />
-    <Compile Include="Spartan\SpartanGoal.cs" />
+    <Compile Include="Spartan\SpartanTasks.cs" />
     <Compile Include="Spartan\SpartanHooks.cs" />
     <Compile Include="Spartan\SpartanService.cs" />
     <Compile Include="Telegraph\Events\TrackerAnnounceCompleted.cs" />

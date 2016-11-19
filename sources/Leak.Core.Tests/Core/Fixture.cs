@@ -2,7 +2,7 @@
 using Leak.Core.Common;
 using Leak.Core.Metadata;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Core
 {
     public static class Fixture
     {

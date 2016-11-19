@@ -6,32 +6,37 @@ namespace Leak.Core.Spartan
 {
     public class SpartanFacts
     {
-        private SpartanGoal completed;
-        private SpartanGoal ongoing;
-        private SpartanGoal pending;
+        private SpartanTasks completed;
+        private SpartanTasks ongoing;
+        private SpartanTasks pending;
 
         public SpartanFacts(SpartanConfiguration configuration)
         {
-            completed = SpartanGoal.None;
-            ongoing = SpartanGoal.None;
-            pending = configuration.Goal;
+            completed = SpartanTasks.None;
+            ongoing = SpartanTasks.None;
+            pending = configuration.Tasks;
         }
 
-        public bool CanStart(SpartanGoal goal)
+        public bool CanStart(SpartanTasks tasks)
         {
-            return pending.HasFlag(goal) && ongoing == SpartanGoal.None;
+            return pending.HasFlag(tasks) && ongoing == SpartanTasks.None;
         }
 
-        public void Start(SpartanGoal goal)
+        public bool IsOngoing(SpartanTasks tasks)
         {
-            pending &= ~goal;
-            ongoing |= goal;
+            return ongoing.HasFlag(tasks);
         }
 
-        public void Complete(SpartanGoal goal)
+        public void Start(SpartanTasks tasks)
         {
-            ongoing &= ~goal;
-            completed |= goal;
+            pending &= ~tasks;
+            ongoing |= tasks;
+        }
+
+        public void Complete(SpartanTasks tasks)
+        {
+            ongoing &= ~tasks;
+            completed |= tasks;
         }
 
         public MetagetService MetaGet;

@@ -2,6 +2,6 @@
 {
     public class SpartanConfiguration
     {
-        public SpartanGoal Goal;
+        public SpartanTasks Tasks;
     }
 }

@@ -1,4 +1,6 @@
-﻿using Leak.Completion;
+﻿using System;
+using System.Collections.Generic;
+using Leak.Completion;
 using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Core;
@@ -7,10 +9,8 @@ using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Listener;
 using Leak.Core.Messages;
 using Leak.Core.Network;
-using System;
-using System.Collections.Generic;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Core
 {
     public class Swarm : IDisposable
     {

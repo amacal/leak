@@ -34,7 +34,7 @@ namespace Leak.Core.Leakage
             entry.Destination = registrant.Destination;
             entry.Glue = glue.Create(entry.Hash, CreateGlueHooks());
 
-            entry.Spartan = new SpartanService(entry.Hash, entry.Destination, entry.Glue, CreateSpartanHooks(), CreateSpartanConfiguration());
+            entry.Spartan = new SpartanService(entry.Destination, entry.Glue, CreateSpartanHooks(), CreateSpartanConfiguration());
             entry.Spartan.Start();
 
             listener.Enable(entry.Hash);

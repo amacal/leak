@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Core;
+using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Metafile;
 using Leak.Core.Metamine;
@@ -32,13 +33,15 @@ namespace Leak.Core.Metaget
             string path = destination + ".metainfo";
             MetafileHooks hooks = new MetafileHooks
             {
-                OnMetafileVerified = data =>
-                {
-                    this.hooks.CallMetadataDiscovered(data.Hash, data.Metainfo);
-                }
+                OnMetafileVerified = OnMetafileVerified
             };
 
             return new MetafileService(glue.Hash, path, hooks);
+        }
+
+        private void OnMetafileVerified(MetafileVerified data)
+        {
+            this.hooks.CallMetadataDiscovered(data.Hash, data.Metainfo);
         }
 
         public MetamineBitfield Metamine

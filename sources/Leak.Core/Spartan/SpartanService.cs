@@ -1,5 +1,4 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Events;
+﻿using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Metaget;
 
@@ -7,15 +6,13 @@ namespace Leak.Core.Spartan
 {
     public class SpartanService
     {
-        private readonly FileHash hash;
         private readonly string destination;
         private readonly GlueService glue;
         private readonly SpartanHooks hooks;
         private readonly SpartanFacts facts;
 
-        public SpartanService(FileHash hash, string destination, GlueService glue, SpartanHooks hooks, SpartanConfiguration configuration)
+        public SpartanService(string destination, GlueService glue, SpartanHooks hooks, SpartanConfiguration configuration)
         {
-            this.hash = hash;
             this.destination = destination;
             this.glue = glue;
             this.hooks = hooks;
@@ -30,7 +27,7 @@ namespace Leak.Core.Spartan
 
         private void ScheduleNextGoal()
         {
-            if (facts.CanStart(SpartanGoal.Discover))
+            if (facts.CanStart(SpartanTasks.Discover))
             {
                 MetagetHooks hooks = CreateMetagetHooks();
                 MetagetConfiguration configuration = CreateMetagetConfiguration();
@@ -38,15 +35,15 @@ namespace Leak.Core.Spartan
                 facts.MetaGet = new MetagetService(glue, destination, hooks, configuration);
                 facts.MetaGet.Start(null);
 
-                facts.Start(SpartanGoal.Discover);
+                facts.Start(SpartanTasks.Discover);
                 return;
             }
 
-            if (facts.CanStart(SpartanGoal.Verify))
+            if (facts.CanStart(SpartanTasks.Verify))
             {
             }
 
-            if (facts.CanStart(SpartanGoal.Download))
+            if (facts.CanStart(SpartanTasks.Download))
             {
             }
         }
@@ -74,7 +71,7 @@ namespace Leak.Core.Spartan
             facts.MetaGet.Stop(null);
             facts.MetaGet = null;
 
-            facts.Complete(SpartanGoal.Discover);
+            facts.Complete(SpartanTasks.Discover);
             hooks.OnMetadataDiscovered?.Invoke(data);
             glue.SetPieces(data.Metainfo.Pieces.Length);
 

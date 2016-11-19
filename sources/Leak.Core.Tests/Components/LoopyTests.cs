@@ -9,9 +9,10 @@ using Leak.Core.Listener;
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using Leak.Core.Network;
+using Leak.Core.Tests.Core;
 using NUnit.Framework;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Components
 {
     public class LoopyTests
     {

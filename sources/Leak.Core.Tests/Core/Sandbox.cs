@@ -1,6 +1,6 @@
 ﻿using F2F.Sandbox;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Core
 {
     public static class Sandbox
     {

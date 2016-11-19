@@ -5,19 +5,20 @@ using Leak.Core.Connector;
 using Leak.Core.Core;
 using Leak.Core.Listener;
 using Leak.Core.Network;
+using Leak.Core.Tests.Core;
 using NUnit.Framework;
 
-namespace Leak.Core.Tests.Network
+namespace Leak.Core.Tests.Components
 {
-    public class ConnectorTests
+    public class ListenerTests
     {
         private LeakPipeline pipeline;
         private CompletionThread worker;
         private NetworkPool pool;
-        private PeerConnector connector;
-        private PeerConnectorHooks hooks;
-        private PeerConnectorConfiguration configuration;
         private PeerListener listener;
+        private PeerListenerHooks hooks;
+        private PeerListenerConfiguration configuration;
+        private PeerConnector connector;
 
         [SetUp]
         public void SetUp()
@@ -26,17 +27,16 @@ namespace Leak.Core.Tests.Network
             worker = new CompletionThread();
 
             pool = new NetworkPool(worker, new NetworkPoolHooks());
-            listener = new PeerListener(pool, new PeerListenerHooks(), new PeerListenerConfiguration());
+            connector = new PeerConnector(pool, new PeerConnectorHooks(), new PeerConnectorConfiguration());
 
-            hooks = new PeerConnectorHooks();
-            configuration = new PeerConnectorConfiguration();
-            connector = new PeerConnector(pool, hooks, configuration);
+            hooks = new PeerListenerHooks();
+            configuration = new PeerListenerConfiguration();
+            listener = new PeerListener(pool, hooks, configuration);
 
             worker.Start();
             pipeline.Start();
             pool.Start(pipeline);
             connector.Start(pipeline);
-            listener.Start();
         }
 
         [TearDown]
@@ -48,42 +48,43 @@ namespace Leak.Core.Tests.Network
         }
 
         [Test]
-        public void ShouldTriggerConnectionEstablished()
+        public void ShouldTriggerListenerStarted()
         {
-            FileHash hash = FileHash.Random();
+            configuration.Port = 8081;
+            configuration.Peer = PeerHash.Random();
 
-            var handler = hooks.OnConnectionEstablished.Trigger(data =>
+            var handler = hooks.OnListenerStarted.Trigger(data =>
             {
-                data.Remote.Should().NotBeNull();
-                data.Remote.Host.Should().Be("127.0.0.1");
-                data.Remote.Port.Should().Be(8080);
+                AssertionExtensions.Should((int) data.Port).Be(configuration.Port);
+                AssertionExtensions.Should((object) data.Peer).Be(configuration.Peer);
             });
 
-            hooks.OnConnectionEstablished = handler;
+            hooks.OnListenerStarted = handler;
 
-            listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
-
+            listener.Start();
             handler.Wait().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldTriggerConnectionRejected()
+        public void ShouldTriggerOnConnectionArrived()
         {
             FileHash hash = FileHash.Random();
 
-            var handler = hooks.OnConnectionRejected.Trigger(data =>
+            configuration.Port = 8081;
+            configuration.Peer = PeerHash.Random();
+
+            var handler = hooks.OnConnectionArrived.Trigger(data =>
             {
                 data.Remote.Should().NotBeNull();
                 data.Remote.Host.Should().Be("127.0.0.1");
-                data.Remote.Port.Should().Be(7999);
+                data.Remote.Port.Should().BeGreaterThan(0);
+                data.Remote.Port.Should().NotBe(configuration.Port);
             });
 
-            hooks.OnConnectionRejected = handler;
+            hooks.OnConnectionArrived = handler;
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8081));
 
-            listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 7999));
-
+            listener.Start();
             handler.Wait().Should().BeTrue();
         }
 
@@ -91,6 +92,9 @@ namespace Leak.Core.Tests.Network
         public void ShouldTriggerOnHandshakeCompleted()
         {
             FileHash hash = FileHash.Random();
+
+            configuration.Port = 8081;
+            configuration.Peer = PeerHash.Random();
 
             var handler = hooks.OnHandshakeCompleted.Trigger(data =>
             {
@@ -101,8 +105,9 @@ namespace Leak.Core.Tests.Network
             hooks.OnHandshakeCompleted = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8081));
 
+            listener.Start();
             handler.Wait().Should().BeTrue();
         }
 
@@ -111,14 +116,18 @@ namespace Leak.Core.Tests.Network
         {
             FileHash hash = FileHash.Random();
 
+            configuration.Port = 8081;
+            configuration.Peer = PeerHash.Random();
+
             var handler = hooks.OnHandshakeRejected.Trigger(data =>
             {
                 data.Connection.Should().NotBeNull();
             });
 
             hooks.OnHandshakeRejected = handler;
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8081));
 
+            listener.Start();
             handler.Wait().Should().BeTrue();
         }
     }
