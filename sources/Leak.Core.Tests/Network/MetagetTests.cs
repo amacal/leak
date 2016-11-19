@@ -162,5 +162,39 @@ namespace Leak.Core.Tests.Network
 
             handler.Wait().Should().BeTrue();
         }
+
+        [Test]
+        public void ShouldTriggerMetadataPieceReceived()
+        {
+            MetadataMeasured measured = new MetadataMeasured
+            {
+                Hash = hash,
+                Peer = PeerHash.Random(),
+                Size = metadata.Length
+            };
+
+            MetadataReceived received = new MetadataReceived
+            {
+                Hash = hash,
+                Peer = PeerHash.Random(),
+                Piece = 1,
+                Data = new byte[1024]
+            };
+
+            var handler = hooks.OnMetadataPieceReceived.Trigger(data =>
+            {
+                data.Hash.Should().Be(hash);
+                data.Peer.Should().NotBeNull();
+                data.Piece.Should().Be(1);
+            });
+
+            hooks.OnMetadataPieceReceived = handler;
+
+            metaget.Start(pipeline);
+            metaget.HandleMetadataMeasured(measured);
+            metaget.HandleMetadataReceived(received);
+
+            handler.Wait().Should().BeTrue();
+        }
     }
 }

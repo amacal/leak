@@ -26,6 +26,16 @@ namespace Leak.Core.Metaget
             });
         }
 
+        public static void CallMetadataPieceReceived(this MetagetHooks hooks, FileHash hash, PeerHash peer, int piece)
+        {
+            hooks.OnMetadataPieceReceived?.Invoke(new MetadataPieceReceived
+            {
+                Hash = hash,
+                Peer = peer,
+                Piece = piece
+            });
+        }
+
         public static void CallMetadataDiscovered(this MetagetHooks hooks, FileHash hash, Metainfo metainfo)
         {
             hooks.OnMetadataDiscovered?.Invoke(new MetadataDiscovered

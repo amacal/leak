@@ -20,7 +20,7 @@ namespace Leak.Core.Metaget
         {
             if (context.Metamine != null && context.Metafile.IsCompleted() == false)
             {
-                //context.Callback.OnMetadataReceived(peer, data.Block);
+                context.Hooks.CallMetadataPieceReceived(context.Glue.Hash, peer, piece);
                 context.Metamine.Complete(piece, data.Length);
                 context.Metafile.Write(piece, data);
             }
