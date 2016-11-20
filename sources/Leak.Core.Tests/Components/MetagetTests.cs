@@ -1,5 +1,4 @@
-﻿using System.IO;
-using F2F.Sandbox;
+﻿using F2F.Sandbox;
 using FluentAssertions;
 using Leak.Completion;
 using Leak.Core.Common;
@@ -8,6 +7,7 @@ using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Metaget;
 using Leak.Core.Tests.Core;
 using NUnit.Framework;
+using System.IO;
 
 namespace Leak.Core.Tests.Components
 {
