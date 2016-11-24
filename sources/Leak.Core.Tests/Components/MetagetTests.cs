@@ -50,7 +50,7 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerMetafileMeasured()
         {
-            Trigger handler = Trigger.Bind(ref hooks.OnMetadataMeasured, data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnMetafileMeasured, data =>
             {
                 data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
                 data.Size.Should().Be(fixture.Metadata.Debian.Size);

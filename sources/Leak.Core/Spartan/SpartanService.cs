@@ -76,7 +76,7 @@ namespace Leak.Core.Spartan
             return new MetagetHooks
             {
                 OnMetadataDiscovered = OnMetadataDiscovered,
-                OnMetadataMeasured = hooks.OnMetadataMeasured,
+                OnMetafileMeasured = hooks.OnMetafileMeasured,
                 OnMetadataPieceReceived = hooks.OnMetadataPieceReceived,
                 OnMetadataPieceRequested = hooks.OnMetadataPieceRequested
             };

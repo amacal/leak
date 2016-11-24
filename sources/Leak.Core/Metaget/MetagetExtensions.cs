@@ -9,7 +9,7 @@ namespace Leak.Core.Metaget
     {
         public static void CallMetafileMeasured(this MetagetHooks hooks, FileHash hash, int size)
         {
-            hooks.OnMetadataMeasured?.Invoke(new MetafileMeasured
+            hooks.OnMetafileMeasured?.Invoke(new MetafileMeasured
             {
                 Hash = hash,
                 Size = size
