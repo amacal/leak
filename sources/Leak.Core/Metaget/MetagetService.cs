@@ -5,7 +5,7 @@ using System;
 
 namespace Leak.Core.Metaget
 {
-    public class MetagetService
+    public class MetagetService : IDisposable
     {
         private readonly MetagetContext context;
 
@@ -40,6 +40,10 @@ namespace Leak.Core.Metaget
         private void OnTick()
         {
             context.Queue.Add(new MetagetTaskNext());
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

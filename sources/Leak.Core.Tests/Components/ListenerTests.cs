@@ -55,8 +55,8 @@ namespace Leak.Core.Tests.Components
 
             var handler = hooks.OnListenerStarted.Trigger(data =>
             {
-                AssertionExtensions.Should((int) data.Port).Be(configuration.Port);
-                AssertionExtensions.Should((object) data.Peer).Be(configuration.Peer);
+                data.Port.Should().Be(configuration.Port);
+                data.Peer.Should().Be(configuration.Peer);
             });
 
             hooks.OnListenerStarted = handler;

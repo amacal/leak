@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Leak.Completion;
+﻿using Leak.Completion;
 using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Core;
@@ -9,6 +7,8 @@ using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Listener;
 using Leak.Core.Messages;
 using Leak.Core.Network;
+using System;
+using System.Collections.Generic;
 
 namespace Leak.Core.Tests.Core
 {
@@ -45,7 +45,8 @@ namespace Leak.Core.Tests.Core
             SwarmEntry entry = new SwarmEntry
             {
                 Hooks = new GlueHooks(),
-                Metadata = new MetadataHooks()
+                Metadata = new MetadataHooks(),
+                Peer = PeerHash.Random()
             };
 
             GlueConfiguration configuration = new GlueConfiguration
@@ -71,7 +72,7 @@ namespace Leak.Core.Tests.Core
             PeerListenerConfiguration listenerConfiguration = new PeerListenerConfiguration
             {
                 Port = port,
-                Peer = PeerHash.Random(),
+                Peer = entry.Peer
             };
 
             PeerListener listener = new PeerListener(pool, listenerHooks, listenerConfiguration);
@@ -94,7 +95,8 @@ namespace Leak.Core.Tests.Core
             SwarmEntry entry = new SwarmEntry
             {
                 Hooks = new GlueHooks(),
-                Metadata = new MetadataHooks()
+                Metadata = new MetadataHooks(),
+                Peer = PeerHash.Random()
             };
 
             GlueConfiguration configuration = new GlueConfiguration
@@ -119,7 +121,7 @@ namespace Leak.Core.Tests.Core
 
             PeerConnectorConfiguration connectorConfiguration = new PeerConnectorConfiguration
             {
-                Peer = PeerHash.Random()
+                Peer = entry.Peer
             };
 
             PeerConnector connector = new PeerConnector(pool, connectorHooks, connectorConfiguration);

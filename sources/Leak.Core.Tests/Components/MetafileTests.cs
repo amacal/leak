@@ -21,7 +21,7 @@ namespace Leak.Core.Tests.Components
         [SetUp]
         public void SetUp()
         {
-            Fixture.Metainfo(out hash, out metadata);
+            Fixture.Sample(out hash, out metadata);
 
             sandbox = Sandbox.New();
             path = sandbox.CreateFile($"{hash}.metainfo");

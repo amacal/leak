@@ -30,7 +30,7 @@ namespace Leak.Core.Tests.Components
         [SetUp]
         public void SetUp()
         {
-            Fixture.Metainfo(out hash, out metadata);
+            Fixture.Sample(out hash, out metadata);
 
             swarm = new Swarm(hash);
             swarm.Start();
@@ -77,9 +77,8 @@ namespace Leak.Core.Tests.Components
             using (SpartanService spartan = new SpartanService(pipeline, destination, bob, hooks, configuration))
             {
                 spartan.Start();
+                handler.Wait().Should().BeTrue();
             }
-
-            handler.Wait().Should().BeTrue();
         }
 
         [Test]

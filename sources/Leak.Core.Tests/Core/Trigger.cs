@@ -3,7 +3,21 @@ using System.Threading;
 
 namespace Leak.Core.Tests.Core
 {
-    public class Trigger<T>
+    public abstract class Trigger
+    {
+        public abstract bool Wait();
+
+        public static Trigger Bind<T>(ref Action<T> target, Action<T> callback)
+        {
+            Trigger<T> trigger = new Trigger<T>(callback);
+            Trigger result = trigger;
+
+            target = trigger;
+            return result;
+        }
+    }
+
+    public class Trigger<T> : Trigger
     {
         private readonly Action<T> callback;
         private bool called;
@@ -17,7 +31,7 @@ namespace Leak.Core.Tests.Core
             };
         }
 
-        public bool Wait()
+        public override bool Wait()
         {
             for (int i = 0; i < 500; i++)
             {
