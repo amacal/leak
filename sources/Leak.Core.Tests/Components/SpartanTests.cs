@@ -1,80 +1,63 @@
-﻿using F2F.Sandbox;
-using FluentAssertions;
-using Leak.Core.Common;
-using Leak.Core.Core;
-using Leak.Core.Glue;
-using Leak.Core.Glue.Extensions.Metadata;
+﻿using FluentAssertions;
 using Leak.Core.Spartan;
 using Leak.Core.Tests.Core;
 using NUnit.Framework;
-using System.IO;
 
 namespace Leak.Core.Tests.Components
 {
     public class SpartanTests
     {
-        private Swarm swarm;
-        private FileHash hash;
-        private byte[] metadata;
-
         private SpartanHooks hooks;
         private SpartanConfiguration configuration;
 
-        private FileSandbox sandbox;
-        private string destination;
-        private LeakPipeline pipeline;
+        private Fixture fixture;
+        private Environment environemnt;
 
-        private GlueService bob;
-        private GlueService sue;
+        [OneTimeSetUp]
+        public void OneSetUp()
+        {
+            fixture = new Fixture();
+        }
+
+        [OneTimeTearDown]
+        public void OneTearDown()
+        {
+            fixture.Dispose();
+            fixture = null;
+        }
 
         [SetUp]
         public void SetUp()
         {
-            Fixture.Sample(out hash, out metadata);
+            environemnt = new Environment(fixture.Metadata.Debian);
 
-            swarm = new Swarm(hash);
-            swarm.Start();
-
-            swarm.Listen("bob", 8091);
-            swarm.Connect("sue", 8091);
-
-            swarm["bob"].Exchanged.Wait();
-            swarm["sue"].Exchanged.Wait();
-
-            hooks = new SpartanHooks();
             configuration = new SpartanConfiguration();
-
-            sandbox = Sandbox.New();
-            destination = Path.Combine(sandbox.Directory, hash.ToString());
-
-            pipeline = new LeakPipeline();
-            pipeline.Start();
-
-            bob = swarm["bob"].Glue;
-            sue = swarm["bob"].Glue;
+            hooks = new SpartanHooks();
         }
 
         [TearDown]
         public void TearDown()
         {
-            swarm.Dispose();
-            pipeline.Stop();
-            sandbox.Dispose();
+            environemnt.Dispose();
+            environemnt = null;
+        }
+
+        private SpartanService NewSpartanService(SpartanTasks task)
+        {
+            configuration.Tasks = task;
+            return new SpartanService(environemnt.Pipeline, environemnt.Destination, environemnt.Peers.Bob.Entry.Glue, hooks, configuration);
         }
 
         [Test]
         public void ShouldTriggerTaskStartedWithDiscovery()
         {
-            var handler = hooks.OnTaskStarted.Trigger(data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnTaskStarted, data =>
             {
-                data.Hash.Should().Be(hash);
+                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
                 data.Task.Should().Be(SpartanTasks.Discover);
             });
 
-            hooks.OnTaskStarted = handler;
-            configuration.Tasks = SpartanTasks.Discover;
-
-            using (SpartanService spartan = new SpartanService(pipeline, destination, bob, hooks, configuration))
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
                 handler.Wait().Should().BeTrue();
@@ -84,26 +67,16 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerMetadataMeasuredWhenReceivedTotalSize()
         {
-            MetadataMeasured measured = new MetadataMeasured
+            Trigger handler = Trigger.Bind(ref hooks.OnMetadataMeasured, data =>
             {
-                Hash = hash,
-                Peer = PeerHash.Random(),
-                Size = 7186
-            };
-
-            var handler = hooks.OnMetadataMeasured.Trigger(data =>
-            {
-                data.Hash.Should().Be(hash);
-                data.Size.Should().Be(7186);
+                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
+                data.Size.Should().Be(fixture.Metadata.Debian.Size);
             });
 
-            hooks.OnMetadataMeasured = handler;
-            configuration.Tasks = SpartanTasks.Discover;
-
-            using (SpartanService spartan = new SpartanService(pipeline, destination, bob, hooks, configuration))
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(measured);
+                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -112,36 +85,18 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerMetadataDiscoveredWhenReceivedAllMetadata()
         {
-            MetadataMeasured measured = new MetadataMeasured
+            Trigger handler = Trigger.Bind(ref hooks.OnMetadataDiscovered, data =>
             {
-                Hash = hash,
-                Peer = PeerHash.Random(),
-                Size = metadata.Length
-            };
-
-            MetadataReceived received = new MetadataReceived
-            {
-                Hash = hash,
-                Peer = PeerHash.Random(),
-                Piece = 0,
-                Data = metadata
-            };
-
-            var handler = hooks.OnMetadataDiscovered.Trigger(data =>
-            {
-                data.Hash.Should().Be(hash);
+                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
                 data.Metainfo.Should().NotBeNull();
-                data.Metainfo.Hash.Should().Be(hash);
+                data.Metainfo.Hash.Should().Be(data.Hash);
             });
 
-            hooks.OnMetadataDiscovered = handler;
-            configuration.Tasks = SpartanTasks.Discover;
-
-            using (SpartanService spartan = new SpartanService(pipeline, destination, bob, hooks, configuration))
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(measured);
-                spartan.HandleMetadataReceived(received);
+                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
+                spartan.HandleMetadataReceived(fixture.Metadata.Debian.Events.MetadataReceived);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -150,35 +105,17 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerTaskCompletedWhenReceivedAllMetadata()
         {
-            MetadataMeasured measured = new MetadataMeasured
+            Trigger handler = Trigger.Bind(ref hooks.OnTaskCompleted, data =>
             {
-                Hash = hash,
-                Peer = PeerHash.Random(),
-                Size = metadata.Length
-            };
-
-            MetadataReceived received = new MetadataReceived
-            {
-                Hash = hash,
-                Peer = PeerHash.Random(),
-                Piece = 0,
-                Data = metadata
-            };
-
-            var handler = hooks.OnTaskCompleted.Trigger(data =>
-            {
-                data.Hash.Should().Be(hash);
+                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
                 data.Task.Should().Be(SpartanTasks.Discover);
             });
 
-            hooks.OnTaskCompleted = handler;
-            configuration.Tasks = SpartanTasks.Discover;
-
-            using (SpartanService spartan = new SpartanService(pipeline, destination, bob, hooks, configuration))
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(measured);
-                spartan.HandleMetadataReceived(received);
+                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
+                spartan.HandleMetadataReceived(fixture.Metadata.Debian.Events.MetadataReceived);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -187,27 +124,17 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerMetadataPieceRequested()
         {
-            MetadataMeasured measured = new MetadataMeasured
+            Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceRequested, data =>
             {
-                Hash = hash,
-                Peer = PeerHash.Random(),
-                Size = metadata.Length
-            };
-
-            var handler = hooks.OnMetadataPieceRequested.Trigger(data =>
-            {
-                data.Hash.Should().Be(hash);
+                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
                 data.Peer.Should().NotBeNull();
                 data.Piece.Should().Be(0);
             });
 
-            hooks.OnMetadataPieceRequested = handler;
-            configuration.Tasks = SpartanTasks.Discover;
-
-            using (SpartanService spartan = new SpartanService(pipeline, destination, bob, hooks, configuration))
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(measured);
+                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
 
                 handler.Wait().Should().BeTrue();
             }

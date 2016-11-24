@@ -42,7 +42,7 @@ namespace Leak.Core.Tests.Components
             environemnt = null;
         }
 
-        private MetagetService Create()
+        private MetagetService NewMetaGetService()
         {
             return new MetagetService(environemnt.Peers.Bob.Entry.Glue, environemnt.Destination, hooks, configuration);
         }
@@ -56,7 +56,7 @@ namespace Leak.Core.Tests.Components
                 data.Size.Should().Be(fixture.Metadata.Debian.Size);
             });
 
-            using (MetagetService metaget = Create())
+            using (MetagetService metaget = NewMetaGetService())
             {
                 metaget.Start(environemnt.Pipeline);
                 metaget.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
@@ -76,7 +76,7 @@ namespace Leak.Core.Tests.Components
                 data.Metainfo.Hash.Should().Be(fixture.Metadata.Debian.Hash);
             });
 
-            using (MetagetService metaget = Create())
+            using (MetagetService metaget = NewMetaGetService())
             {
                 metaget.Start(environemnt.Pipeline);
                 handler.Wait().Should().BeTrue();
@@ -93,7 +93,7 @@ namespace Leak.Core.Tests.Components
                 data.Metainfo.Hash.Should().Be(fixture.Metadata.Debian.Hash);
             });
 
-            using (MetagetService metaget = Create())
+            using (MetagetService metaget = NewMetaGetService())
             {
                 metaget.Start(environemnt.Pipeline);
 
@@ -114,7 +114,7 @@ namespace Leak.Core.Tests.Components
                 data.Piece.Should().Be(0);
             });
 
-            using (MetagetService metaget = Create())
+            using (MetagetService metaget = NewMetaGetService())
             {
                 metaget.Start(environemnt.Pipeline);
                 metaget.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
@@ -133,7 +133,7 @@ namespace Leak.Core.Tests.Components
                 data.Piece.Should().Be(0);
             });
 
-            using (MetagetService metaget = Create())
+            using (MetagetService metaget = NewMetaGetService())
             {
                 metaget.Start(environemnt.Pipeline);
 
