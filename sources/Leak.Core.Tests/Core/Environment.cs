@@ -2,6 +2,7 @@
 using Leak.Completion;
 using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Files;
 using System;
 using System.IO;
 
@@ -9,21 +10,23 @@ namespace Leak.Core.Tests.Core
 {
     public class Environment : IDisposable
     {
-        private readonly Fixture.MetadataFixture.HashFixture fixture;
+        private readonly MetadataFixture fixture;
 
         public readonly FileSandbox Sandbox;
         public readonly CompletionThread Worker;
         public readonly LeakPipeline Pipeline;
+        public readonly FileFactory Files;
         public readonly SwarmEnvironment Peers;
         public readonly string Destination;
 
-        public Environment(Fixture.MetadataFixture.HashFixture fixture)
+        public Environment(MetadataFixture fixture)
         {
             this.fixture = fixture;
 
             Sandbox = new FileSandbox(new EmptyFileLocator());
             Worker = new CompletionThread();
             Pipeline = new LeakPipeline();
+            Files = new FileFactory(Worker);
             Destination = Path.Combine(Sandbox.Directory, fixture.Hash.ToString());
             Peers = new SwarmEnvironment(this);
 

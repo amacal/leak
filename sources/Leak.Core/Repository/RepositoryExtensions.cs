@@ -1,4 +1,6 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Common;
+using Leak.Core.Events;
+using Leak.Core.Metadata;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +9,24 @@ namespace Leak.Core.Repository
 {
     public static class RepositoryExtensions
     {
+        public static void CallDataAllocated(this RepositoryHooks hooks, FileHash hash, string directory)
+        {
+            hooks.OnDataAllocated?.Invoke(new DataAllocated
+            {
+                Hash = hash,
+                Directory = directory
+            });
+        }
+
+        public static void CallDataVerified(this RepositoryHooks hooks, FileHash hash, Bitfield bitfield)
+        {
+            hooks.OnDataVerified?.Invoke(new DataVerified
+            {
+                Hash = hash,
+                Bitfield = bitfield
+            });
+        }
+
         public static RepositoryBlock ToBlock(this RepositoryBlockData data)
         {
             return new RepositoryBlock(data.Piece, data.Offset, data.Length);

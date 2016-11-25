@@ -30,7 +30,7 @@ namespace Leak.Core.Repository
             else
             {
                 onCompleted.Invoke(this);
-                context.Callback.OnVerified(context.Metainfo.Hash, bitfield);
+                //context.Callback.OnVerified(context.Metainfo.Hash, bitfield);
             }
         }
 
@@ -208,7 +208,7 @@ namespace Leak.Core.Repository
                 {
                     onCompleted.Invoke(this);
                     context.Bitfile.Write(bitfield);
-                    context.Callback.OnVerified(metainfo.Hash, bitfield);
+                    context.Hooks.CallDataVerified(metainfo.Hash, bitfield);
                 }
             }
 

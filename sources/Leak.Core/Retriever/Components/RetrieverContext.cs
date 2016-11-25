@@ -23,13 +23,12 @@ namespace Leak.Core.Retriever.Components
                 with.Strategy = RetrieverStrategy.RarestFirst;
             });
 
-            repository = new RepositoryService(configuration.Repository, with =>
-            {
-                with.Files = configuration.Files;
-                with.Metainfo = configuration.Metainfo;
-                with.Destination = configuration.Destination;
-                with.Callback = new RetrieverToRepository(this);
-            });
+            //repository = new RepositoryService(configuration.Repository, with =>
+            //{
+            //    with.Files = configuration.Files;
+            //    with.Metainfo = configuration.Metainfo;
+            //    with.Destination = configuration.Destination;
+            //});
 
             omnibus = new OmnibusService(with =>
             {

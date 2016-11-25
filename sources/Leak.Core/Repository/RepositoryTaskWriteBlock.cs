@@ -61,7 +61,7 @@ namespace Leak.Core.Repository
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
                 onCompleted.Invoke(this);
-                context.Callback.OnWritten(context.Metainfo.Hash, data.ToBlock());
+                //context.Callback.OnWritten(context.Metainfo.Hash, data.ToBlock());
                 data.Dispose();
             }
 

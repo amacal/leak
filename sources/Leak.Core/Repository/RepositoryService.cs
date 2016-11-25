@@ -1,29 +1,22 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Metadata;
+using Leak.Files;
 using System;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryService
+    public class RepositoryService : IDisposable
     {
         private readonly RepositoryContext context;
 
-        public RepositoryService(Action<RepositoryConfiguration> configurer)
+        public RepositoryService(Metainfo metainfo, string destination, FileFactory files, RepositoryHooks hooks, RepositoryConfiguration configuration)
         {
-            context = new RepositoryContext(null, configurer);
-        }
-
-        public RepositoryService(RepositoryService service, Action<RepositoryConfiguration> configurer)
-        {
-            context = new RepositoryContext(service.context, configurer);
+            context = new RepositoryContext(metainfo, destination, files, hooks, configuration);
         }
 
         public void Start()
         {
             context.Queue.Start(context);
-        }
-
-        public void Allocate()
-        {
             context.Queue.Add(new RepositoryTaskAllocate());
         }
 
@@ -45,6 +38,11 @@ namespace Leak.Core.Repository
         public void Flush()
         {
             context.Queue.Add(new RepositoryTaskFlush());
+        }
+
+        public void Dispose()
+        {
+            context.View?.Dispose();
         }
     }
 }

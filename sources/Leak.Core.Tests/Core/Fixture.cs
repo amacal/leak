@@ -10,16 +10,16 @@ namespace Leak.Core.Tests.Core
 {
     public class Fixture : IDisposable
     {
-        public readonly MetadataFixture Metadata;
+        public readonly DataFixture Debian;
 
         public Fixture()
         {
-            Metadata = new MetadataFixture();
+            Debian = new DataFixture();
         }
 
         public void Dispose()
         {
-            Metadata.Dispose();
+            Debian.Dispose();
         }
 
         public static void Sample(out FileHash hash, out byte[] metadata)
@@ -35,100 +35,129 @@ namespace Leak.Core.Tests.Core
                 metadata = builder.ToBytes();
             }
         }
+    }
 
-        public class MetadataFixture : IDisposable
+    public class DataFixture : IDisposable
+    {
+        public readonly MetadataFixture Metadata;
+        public readonly EventsFixture Events;
+        public readonly BinaryFixture Binary;
+
+        public DataFixture()
         {
-            public readonly HashFixture Debian;
+            Binary = CreateDebianBinary();
+            Metadata = CreateDebianMetadata(Binary);
+            Events = new EventsFixture(Metadata);
+        }
 
-            public MetadataFixture()
+        public void Dispose()
+        {
+            Binary.Sandbox.Dispose();
+        }
+
+        private static BinaryFixture CreateDebianBinary()
+        {
+            FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
+            List<string> files = new List<string>();
+
+            byte[] data = Bytes.Random(16384 * 2 + 187);
+            files.Add(sandbox.CreateFile("debian-8.5.0-amd64-CD-1.iso", data));
+
+            return new BinaryFixture
             {
-                Debian = CreateDebian();
+                Sandbox = sandbox,
+                Size = data.Length,
+                Files = files.ToArray(),
+                Pieces = data.Length / 16384 + 1
+            };
+        }
+
+        private static MetadataFixture CreateDebianMetadata(BinaryFixture binary)
+        {
+            MetainfoBuilder builder = new MetainfoBuilder(binary.Sandbox.Directory);
+
+            foreach (string file in binary.Files)
+            {
+                builder.AddFile(file);
             }
 
-            public void Dispose()
+            byte[] content = builder.ToBytes();
+            MetadataFixture metadata = new MetadataFixture
             {
-            }
+                Hash = builder.ToHash(),
+                Metainfo = MetainfoFactory.FromBytes(content),
+                Pieces = Split(content),
+                Content = content,
+                Size = content.Length,
+            };
 
-            private static HashFixture CreateDebian()
+            return metadata;
+        }
+
+        private static MetadataPieceFixture[] Split(byte[] data)
+        {
+            int size = 16384;
+            List<MetadataPieceFixture> blocks = new List<MetadataPieceFixture>();
+
+            for (int i = 0; i < data.Length; i += size)
             {
-                using (FileSandbox forBuilder = Sandbox.New())
+                blocks.Add(new MetadataPieceFixture
                 {
-                    MetainfoBuilder builder = new MetainfoBuilder(forBuilder.Directory);
-                    string file = forBuilder.CreateFile("debian-8.5.0-amd64-CD-1.iso", Bytes.Random(1024));
-
-                    builder.AddFile(file);
-
-                    byte[] content = builder.ToBytes();
-                    HashFixture hash = new HashFixture
-                    {
-                        Hash = builder.ToHash(),
-                        Pieces = Split(content),
-                        Content = content,
-                        Size = content.Length,
-                    };
-
-                    hash.Events = new EventsFixture(hash);
-                    return hash;
-                }
+                    Index = i / size,
+                    Size = (data.Length - i / size) % size,
+                    Data = data.Skip(i).Take(size).ToArray()
+                });
             }
 
-            private static PieceFixture[] Split(byte[] data)
+            return blocks.ToArray();
+        }
+    }
+
+    public class MetadataFixture
+    {
+        public FileHash Hash { get; set; }
+        public Metainfo Metainfo { get; set; }
+        public MetadataPieceFixture[] Pieces { get; set; }
+        public byte[] Content { get; set; }
+        public int Size { get; set; }
+    }
+
+    public class MetadataPieceFixture
+    {
+        public int Index { get; set; }
+        public int Size { get; set; }
+        public byte[] Data { get; set; }
+    }
+
+    public class BinaryFixture
+    {
+        public FileSandbox Sandbox { get; set; }
+        public string[] Files { get; set; }
+        public int Pieces { get; set; }
+        public long Size { get; set; }
+    }
+
+    public class EventsFixture
+    {
+        public readonly MetadataMeasured MetadataMeasured;
+        public readonly MetadataReceived MetadataReceived;
+
+        public EventsFixture(MetadataFixture parent)
+        {
+            MetadataMeasured = new MetadataMeasured
             {
-                int size = 16384;
-                List<PieceFixture> blocks = new List<PieceFixture>();
+                Hash = parent.Hash,
+                Peer = PeerHash.Random(),
+                Size = parent.Size
+            };
 
-                for (int i = 0; i < data.Length; i += size)
-                {
-                    blocks.Add(new PieceFixture
-                    {
-                        Index = i / size,
-                        Size = (data.Length - i / size) % size,
-                        Data = data.Skip(i).Take(size).ToArray()
-                    });
-                }
-
-                return blocks.ToArray();
-            }
-
-            public class HashFixture
+            MetadataReceived = new MetadataReceived
             {
-                public FileHash Hash { get; set; }
-                public PieceFixture[] Pieces { get; set; }
-                public byte[] Content { get; set; }
-                public int Size { get; set; }
-                public EventsFixture Events { get; set; }
-            }
-
-            public class PieceFixture
-            {
-                public int Index { get; set; }
-                public int Size { get; set; }
-                public byte[] Data { get; set; }
-            }
-
-            public class EventsFixture
-            {
-                public readonly MetadataMeasured MetadataMeasured;
-                public readonly MetadataReceived MetadataReceived;
-
-                public EventsFixture(HashFixture parent)
-                {
-                    MetadataMeasured = new MetadataMeasured
-                    {
-                        Hash = parent.Hash,
-                        Peer = PeerHash.Random(),
-                        Size = parent.Size
-                    };
-
-                    MetadataReceived = new MetadataReceived
-                    {
-                        Hash = parent.Hash,
-                        Peer = PeerHash.Random(),
-                        Piece = parent.Pieces[0].Index,
-                        Data = parent.Pieces[0].Data
-                    };
-                }
-            }
+                Hash = parent.Hash,
+                Peer = PeerHash.Random(),
+                Piece = parent.Pieces[0].Index,
+                Data = parent.Pieces[0].Data
+            };
         }
     }
 }

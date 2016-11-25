@@ -1,8 +1,9 @@
 ﻿using Leak.Files;
+using System;
 
 namespace Leak.Core.Repository
 {
-    public class RepositoryView
+    public class RepositoryView : IDisposable
     {
         private readonly RepositoryViewCache cache;
 
@@ -34,6 +35,11 @@ namespace Leak.Core.Repository
         public void Flush()
         {
             cache.Flush();
+        }
+
+        public void Dispose()
+        {
+            cache.Dispose();
         }
     }
 }

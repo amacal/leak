@@ -18,7 +18,7 @@ namespace Leak.Core.Metadata
 
         public void AddFile(string path)
         {
-            string name = path.Substring(directory.Length);
+            string name = path.Substring(directory.Length + 1);
             long size = new FileInfo(path).Length;
 
             entries.Add(new MetainfoEntry(name, size));
@@ -65,7 +65,7 @@ namespace Leak.Core.Metadata
                         },
                         Value = new BencodedValue
                         {
-                            Text = new BencodedText("abc")
+                            Text = new BencodedText(this.entries[0].Name[0])
                         }
                     },
                     new BencodedEntry
@@ -76,7 +76,7 @@ namespace Leak.Core.Metadata
                         },
                         Value = new BencodedValue
                         {
-                            Number = new BencodedNumber(123)
+                            Number = new BencodedNumber(this.entries[0].Size)
                         }
                     },
                     new BencodedEntry
@@ -87,7 +87,7 @@ namespace Leak.Core.Metadata
                         },
                         Value = new BencodedValue
                         {
-                            Data = new BencodedData(new byte[20])
+                            Data = new BencodedData(new byte[20 * ((this.entries[0].Size - 1) / 16384 + 1)])
                         }
                     },
                     new BencodedEntry

@@ -29,7 +29,7 @@ namespace Leak.Core.Tests.Components
         [SetUp]
         public void SetUp()
         {
-            environemnt = new Environment(fixture.Metadata.Debian);
+            environemnt = new Environment(fixture.Debian.Metadata);
 
             configuration = new SpartanConfiguration();
             hooks = new SpartanHooks();
@@ -53,7 +53,7 @@ namespace Leak.Core.Tests.Components
         {
             Trigger handler = Trigger.Bind(ref hooks.OnTaskStarted, data =>
             {
-                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Task.Should().Be(SpartanTasks.Discover);
             });
 
@@ -69,14 +69,14 @@ namespace Leak.Core.Tests.Components
         {
             Trigger handler = Trigger.Bind(ref hooks.OnMetafileMeasured, data =>
             {
-                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
-                data.Size.Should().Be(fixture.Metadata.Debian.Size);
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Size.Should().Be(fixture.Debian.Metadata.Size);
             });
 
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
+                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -87,7 +87,7 @@ namespace Leak.Core.Tests.Components
         {
             Trigger handler = Trigger.Bind(ref hooks.OnMetadataDiscovered, data =>
             {
-                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Metainfo.Should().NotBeNull();
                 data.Metainfo.Hash.Should().Be(data.Hash);
             });
@@ -95,8 +95,8 @@ namespace Leak.Core.Tests.Components
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
-                spartan.HandleMetadataReceived(fixture.Metadata.Debian.Events.MetadataReceived);
+                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -107,15 +107,15 @@ namespace Leak.Core.Tests.Components
         {
             Trigger handler = Trigger.Bind(ref hooks.OnTaskCompleted, data =>
             {
-                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Task.Should().Be(SpartanTasks.Discover);
             });
 
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
-                spartan.HandleMetadataReceived(fixture.Metadata.Debian.Events.MetadataReceived);
+                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -126,7 +126,7 @@ namespace Leak.Core.Tests.Components
         {
             Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceRequested, data =>
             {
-                data.Hash.Should().Be(fixture.Metadata.Debian.Hash);
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Peer.Should().NotBeNull();
                 data.Piece.Should().Be(0);
             });
@@ -134,7 +134,7 @@ namespace Leak.Core.Tests.Components
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
                 spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Metadata.Debian.Events.MetadataMeasured);
+                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
 
                 handler.Wait().Should().BeTrue();
             }

@@ -1,12 +1,15 @@
 ﻿using Leak.Core.Bitfile;
 using Leak.Core.Metadata;
 using Leak.Files;
-using System;
 
 namespace Leak.Core.Repository
 {
     public class RepositoryContext
     {
+        private readonly Metainfo metainfo;
+        private readonly string destination;
+        private readonly FileFactory files;
+        private readonly RepositoryHooks hooks;
         private readonly RepositoryConfiguration configuration;
         private readonly BitfileService bitfile;
         private readonly RepositoryTaskQueue queue;
@@ -14,25 +17,22 @@ namespace Leak.Core.Repository
         private readonly byte[] buffer;
         private RepositoryView view;
 
-        public RepositoryContext(RepositoryContext context, Action<RepositoryConfiguration> configurer)
+        public RepositoryContext(Metainfo metainfo, string destination, FileFactory files, RepositoryHooks hooks, RepositoryConfiguration configuration)
         {
-            configuration = configurer.Configure(with =>
+            this.metainfo = metainfo;
+            this.destination = destination;
+            this.files = files;
+            this.hooks = hooks;
+            this.configuration = configuration;
+
+            bitfile = new BitfileService(with =>
             {
-                with.Metainfo = context?.configuration.Metainfo;
-                with.Destination = context?.configuration.Destination;
-                with.Files = context?.configuration.Files;
-                with.Callback = new RepositoryCallbackNothing();
+                with.Hash = metainfo.Hash;
+                with.Destination = destination + ".bitfield";
             });
 
-            bitfile = context?.bitfile ?? new BitfileService(with =>
-            {
-                with.Hash = configuration.Metainfo.Hash;
-                with.Destination = configuration.Destination + ".bitfield";
-            });
-
-            view = context?.view;
-            queue = context?.queue ?? new RepositoryTaskQueue();
-            buffer = context?.buffer ?? new byte[16384];
+            queue = new RepositoryTaskQueue();
+            buffer = new byte[16384];
         }
 
         public RepositoryConfiguration Configuration
@@ -40,24 +40,19 @@ namespace Leak.Core.Repository
             get { return configuration; }
         }
 
-        public RepositoryCallback Callback
-        {
-            get { return configuration.Callback; }
-        }
-
         public FileFactory Files
         {
-            get { return configuration.Files; }
+            get { return files; }
         }
 
         public Metainfo Metainfo
         {
-            get { return configuration.Metainfo; }
+            get { return metainfo; }
         }
 
         public string Destination
         {
-            get { return configuration.Destination; }
+            get { return destination; }
         }
 
         public RepositoryTaskQueue Queue
@@ -79,6 +74,11 @@ namespace Leak.Core.Repository
         {
             get { return view; }
             set { view = value; }
+        }
+
+        public RepositoryHooks Hooks
+        {
+            get { return hooks; }
         }
     }
 }

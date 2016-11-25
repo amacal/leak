@@ -39,7 +39,7 @@ namespace Leak.Core.Repository
             RepositoryViewCache cache = allocator.Allocate(context.Destination, entries, pieceSize, blockSize);
 
             context.View = new RepositoryView(cache);
-            context.Callback.OnAllocated(context.Metainfo.Hash, allocation);
+            context.Hooks.CallDataAllocated(context.Metainfo.Hash, context.Destination);
         }
 
         public void Block(RepositoryTaskQueue queue)
