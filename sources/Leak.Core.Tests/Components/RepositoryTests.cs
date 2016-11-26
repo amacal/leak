@@ -64,7 +64,7 @@ namespace Leak.Core.Tests.Components
             using (RepositoryService repository = NewRepositoryService())
             {
                 repository.Start();
-                repository.Verify(new Bitfield(fixture.Debian.Binary.Pieces));
+                repository.Verify(new Bitfield(fixture.Debian.Binary.Pieces.Length));
 
                 handler.Wait().Should().BeTrue();
             }
@@ -80,13 +80,95 @@ namespace Leak.Core.Tests.Components
                 data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Bitfield.Should().NotBeNull();
                 data.Bitfield.Completed.Should().Be(0);
-                data.Bitfield.Length.Should().Be(fixture.Debian.Binary.Pieces);
+                data.Bitfield.Length.Should().Be(fixture.Debian.Binary.Pieces.Length);
             });
 
             using (RepositoryService repository = NewRepositoryService())
             {
                 repository.Start();
-                repository.Verify(new Bitfield(fixture.Debian.Binary.Pieces));
+                repository.Verify(new Bitfield(fixture.Debian.Binary.Pieces.Length));
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataVerifiedWithCompletedBitfield()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnDataVerified, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Bitfield.Should().NotBeNull();
+                data.Bitfield.Completed.Should().Be(fixture.Debian.Binary.Pieces.Length);
+                data.Bitfield.Length.Should().Be(fixture.Debian.Binary.Pieces.Length);
+            });
+
+            using (RepositoryService repository = NewRepositoryService())
+            {
+                repository.Start();
+
+                for (int i = 0; i < fixture.Debian.Binary.Pieces.Length; i++)
+                {
+                    repository.Write(fixture.Debian.Binary.Pieces[i].Blocks[0].Data);
+                }
+
+                repository.Verify(new Bitfield(fixture.Debian.Binary.Pieces.Length));
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataWritten()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnDataWritten, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(0);
+                data.Block.Should().Be(0);
+                data.Size.Should().Be(16384);
+            });
+
+            using (RepositoryService repository = NewRepositoryService())
+            {
+                repository.Start();
+                repository.Write(fixture.Debian.Binary.Pieces[0].Blocks[0].Data);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataAccepted()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnDataAccepted, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(0);
+            });
+
+            using (RepositoryService repository = NewRepositoryService())
+            {
+                repository.Start();
+                repository.Write(fixture.Debian.Binary.Pieces[0].Blocks[0].Data);
+                repository.Verify(new PieceInfo(0));
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataRejected()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnDataRejected, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(0);
+            });
+
+            using (RepositoryService repository = NewRepositoryService())
+            {
+                repository.Start();
+                repository.Verify(new PieceInfo(0));
 
                 handler.Wait().Should().BeTrue();
             }

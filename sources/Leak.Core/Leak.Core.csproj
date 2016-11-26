@@ -183,7 +183,6 @@
     <Compile Include="Omnibus\Tasks\CompletePieceTask.cs" />
     <Compile Include="Repository\RepositoryAllocation.cs" />
     <Compile Include="Repository\RepositoryAllocationRange.cs" />
-    <Compile Include="Repository\RepositoryBlock.cs" />
     <Compile Include="Repository\RepositoryBlockData.cs" />
     <Compile Include="Repository\RepositoryConfiguration.cs" />
     <Compile Include="Repository\RepositoryContext.cs" />

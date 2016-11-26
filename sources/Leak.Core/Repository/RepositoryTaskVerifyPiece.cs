@@ -20,7 +20,14 @@ namespace Leak.Core.Repository
 
             context.View.Read(context.Buffer, piece.Index, 0, args =>
             {
-                context.Queue.Add(new Continue(piece, args, algorithm));
+                if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + 1))
+                {
+                    context.Queue.Add(new Continue(piece, args, algorithm));
+                }
+                else
+                {
+                    context.Queue.Add(new Complete(piece, args, algorithm));
+                }
             });
         }
 
@@ -130,7 +137,7 @@ namespace Leak.Core.Repository
             {
                 if (valid)
                 {
-                    //context.Callback.OnAccepted(context.Metainfo.Hash, piece);
+                    context.Hooks.CallDataAccepted(context.Metainfo.Hash, piece.Index);
                 }
             }
 
@@ -138,7 +145,7 @@ namespace Leak.Core.Repository
             {
                 if (valid == false)
                 {
-                    //context.Callback.OnRejected(context.Metainfo.Hash, piece);
+                    context.Hooks.CallDataRejected(context.Metainfo.Hash, piece.Index);
                 }
             }
         }

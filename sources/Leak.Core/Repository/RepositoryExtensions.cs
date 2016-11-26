@@ -27,9 +27,33 @@ namespace Leak.Core.Repository
             });
         }
 
-        public static RepositoryBlock ToBlock(this RepositoryBlockData data)
+        public static void CallDataWritten(this RepositoryHooks hooks, FileHash hash, RepositoryBlockData data)
         {
-            return new RepositoryBlock(data.Piece, data.Offset, data.Length);
+            hooks.OnDataWritten?.Invoke(new DataWritten
+            {
+                Hash = hash,
+                Piece = data.Piece,
+                Block = data.Offset % 16384,
+                Size = data.Length
+            });
+        }
+
+        public static void CallDataAccepted(this RepositoryHooks hooks, FileHash hash, int piece)
+        {
+            hooks.OnDataAccepted?.Invoke(new DataAccepted
+            {
+                Hash = hash,
+                Piece = piece
+            });
+        }
+
+        public static void CallDataRejected(this RepositoryHooks hooks, FileHash hash, int piece)
+        {
+            hooks.OnDataRejected?.Invoke(new DataRejected
+            {
+                Hash = hash,
+                Piece = piece
+            });
         }
 
         public static string GetPath(this MetainfoEntry entry, string destination)

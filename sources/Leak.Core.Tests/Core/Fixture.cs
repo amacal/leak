@@ -1,7 +1,9 @@
 ﻿using F2F.Sandbox;
 using Leak.Core.Common;
 using Leak.Core.Glue.Extensions.Metadata;
+using Leak.Core.Messages;
 using Leak.Core.Metadata;
+using Leak.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,17 +60,38 @@ namespace Leak.Core.Tests.Core
         private static BinaryFixture CreateDebianBinary()
         {
             FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
+            List<BinaryPieceFixture> pieces = new List<BinaryPieceFixture>();
             List<string> files = new List<string>();
 
             byte[] data = Bytes.Random(16384 * 2 + 187);
             files.Add(sandbox.CreateFile("debian-8.5.0-amd64-CD-1.iso", data));
+
+            for (int i = 0; i < data.Length; i += 16384)
+            {
+                int size = Math.Min(16384, data.Length - i);
+
+                pieces.Add(new BinaryPieceFixture
+                {
+                    Index = i / 16384,
+                    Size = size,
+                    Blocks = new[]
+                    {
+                        new BinaryBlockFixture
+                        {
+                            Index = 0,
+                            Size = size,
+                            Data = new RepositoryBlockData(i / 16384, 0, new BinaryBlockData(data.Skip(i).Take(size).ToArray()))
+                        }
+                    }
+                });
+            }
 
             return new BinaryFixture
             {
                 Sandbox = sandbox,
                 Size = data.Length,
                 Files = files.ToArray(),
-                Pieces = data.Length / 16384 + 1
+                Pieces = pieces.ToArray()
             };
         }
 
@@ -133,8 +156,63 @@ namespace Leak.Core.Tests.Core
     {
         public FileSandbox Sandbox { get; set; }
         public string[] Files { get; set; }
-        public int Pieces { get; set; }
+        public BinaryPieceFixture[] Pieces { get; set; }
         public long Size { get; set; }
+    }
+
+    public class BinaryPieceFixture
+    {
+        public int Index { get; set; }
+        public int Size { get; set; }
+        public BinaryBlockFixture[] Blocks { get; set; }
+    }
+
+    public class BinaryBlockFixture
+    {
+        public int Index { get; set; }
+        public int Size { get; set; }
+        public RepositoryBlockData Data { get; set; }
+    }
+
+    public class BinaryBlockData : DataBlock
+    {
+        private readonly byte[] data;
+        private readonly int offset;
+
+        public BinaryBlockData(byte[] data)
+        {
+            this.data = data;
+        }
+
+        private BinaryBlockData(byte[] data, int offset)
+        {
+            this.data = data;
+            this.offset = offset;
+        }
+
+        public int Size
+        {
+            get { return data.Length - offset; }
+        }
+
+        public byte this[int index]
+        {
+            get { return data[index + offset]; }
+        }
+
+        public void Write(Action<byte[], int, int> stream)
+        {
+            stream.Invoke(data, offset, data.Length - offset);
+        }
+
+        public DataBlock Scope(int other)
+        {
+            return new BinaryBlockData(data, offset + other);
+        }
+
+        public void Dispose()
+        {
+        }
     }
 
     public class EventsFixture
