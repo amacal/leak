@@ -31,7 +31,7 @@
 
         public OmnibusPiece Complete()
         {
-            return new OmnibusPieceReady(blocks);
+            return new OmnibusPieceCompleted(blocks);
         }
 
         public OmnibusPiece Complete(int block)

@@ -1,5 +1,6 @@
 ﻿using F2F.Sandbox;
 using Leak.Core.Common;
+using Leak.Core.Events;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
@@ -49,7 +50,7 @@ namespace Leak.Core.Tests.Core
         {
             Binary = CreateDebianBinary();
             Metadata = CreateDebianMetadata(Binary);
-            Events = new EventsFixture(Metadata);
+            Events = new EventsFixture(this);
         }
 
         public void Dispose()
@@ -91,7 +92,8 @@ namespace Leak.Core.Tests.Core
                 Sandbox = sandbox,
                 Size = data.Length,
                 Files = files.ToArray(),
-                Pieces = pieces.ToArray()
+                Pieces = pieces.ToArray(),
+                Content = data
             };
         }
 
@@ -157,6 +159,7 @@ namespace Leak.Core.Tests.Core
         public FileSandbox Sandbox { get; set; }
         public string[] Files { get; set; }
         public BinaryPieceFixture[] Pieces { get; set; }
+        public byte[] Content { get; set; }
         public long Size { get; set; }
     }
 
@@ -220,22 +223,40 @@ namespace Leak.Core.Tests.Core
         public readonly MetadataMeasured MetadataMeasured;
         public readonly MetadataReceived MetadataReceived;
 
-        public EventsFixture(MetadataFixture parent)
+        public readonly DataReceived[] DataReceived;
+
+        public EventsFixture(DataFixture owner)
         {
             MetadataMeasured = new MetadataMeasured
             {
-                Hash = parent.Hash,
+                Hash = owner.Metadata.Hash,
                 Peer = PeerHash.Random(),
-                Size = parent.Size
+                Size = owner.Metadata.Size
             };
 
             MetadataReceived = new MetadataReceived
             {
-                Hash = parent.Hash,
+                Hash = owner.Metadata.Hash,
                 Peer = PeerHash.Random(),
-                Piece = parent.Pieces[0].Index,
-                Data = parent.Pieces[0].Data
+                Piece = owner.Metadata.Pieces[0].Index,
+                Data = owner.Metadata.Pieces[0].Data
             };
+
+            DataReceived = new DataReceived[owner.Binary.Pieces.Length];
+
+            for (int i = 0; i < DataReceived.Length; i++)
+            {
+                byte[] data = owner.Binary.Content.Skip(i * 16384).Take(16384).ToArray();
+
+                DataReceived[i] = new DataReceived
+                {
+                    Hash = owner.Metadata.Hash,
+                    Peer = PeerHash.Random(),
+                    Piece = i,
+                    Block = 0,
+                    Payload = new BinaryBlockData(data)
+                };
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Leak.Core.Messages;
+﻿using Leak.Core.Common;
+using Leak.Core.Events;
+using Leak.Core.Messages;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using System;
@@ -24,6 +26,23 @@ namespace Leak.Core.Retriever.Components
             }
 
             throw new NotSupportedException();
+        }
+
+        public static void CallDataChanged(this RetrieverHooks hooks, FileHash hash, int completed)
+        {
+            hooks.OnDataChanged?.Invoke(new DataChanged
+            {
+                Hash = hash,
+                Completed = completed
+            });
+        }
+
+        public static void CallDataCompleted(this RetrieverHooks hooks, FileHash hash)
+        {
+            hooks.OnDataCompleted?.Invoke(new DataCompleted
+            {
+                Hash = hash
+            });
         }
     }
 }

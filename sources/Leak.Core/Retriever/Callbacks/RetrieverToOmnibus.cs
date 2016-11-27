@@ -19,7 +19,7 @@ namespace Leak.Core.Retriever.Callbacks
 
         public override void OnProgressChanged(FileHash hash, BitfieldInfo bitfield)
         {
-            context.Callback.OnFileChanged(hash, bitfield);
+            context.Hooks.CallDataChanged(hash, bitfield.Completed);
         }
 
         public override void OnPieceReady(FileHash hash, PieceInfo piece)
@@ -48,7 +48,7 @@ namespace Leak.Core.Retriever.Callbacks
         public override void OnFileCompleted(FileHash hash)
         {
             context.Repository.Flush();
-            context.Callback.OnFileCompleted(hash);
+            context.Hooks.CallDataCompleted(hash);
         }
 
         public override void OnScheduleRequested(FileHash hash, PeerHash peer)

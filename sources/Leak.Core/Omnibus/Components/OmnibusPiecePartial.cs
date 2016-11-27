@@ -34,7 +34,7 @@
 
         public OmnibusPiece Complete()
         {
-            return new OmnibusPieceReady(blocks.Length);
+            return new OmnibusPieceCompleted(blocks.Length);
         }
 
         public OmnibusPiece Complete(int block)
