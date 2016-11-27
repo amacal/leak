@@ -1,113 +1,64 @@
 ﻿using Leak.Core.Core;
-using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
-using Leak.Core.Metaget;
+using Leak.Files;
 using System;
 
 namespace Leak.Core.Spartan
 {
     public class SpartanService : IDisposable
     {
-        private readonly LeakPipeline pipeline;
-        private readonly string destination;
-        private readonly GlueService glue;
-        private readonly SpartanHooks hooks;
-        private readonly SpartanFacts facts;
+        private readonly SpartanContext context;
 
-        public SpartanService(LeakPipeline pipeline, string destination, GlueService glue, SpartanHooks hooks, SpartanConfiguration configuration)
+        public SpartanService(LeakPipeline pipeline, string destination, GlueService glue, FileFactory files, SpartanHooks hooks, SpartanConfiguration configuration)
         {
-            this.pipeline = pipeline;
-            this.destination = destination;
-            this.glue = glue;
-            this.hooks = hooks;
+            context = new SpartanContext
+            {
+                Destination = destination,
+                Pipeline = pipeline,
+                Glue = glue,
+                Files = files,
+                Hooks = hooks,
+                Facts = new SpartanFacts(configuration),
+            };
 
-            this.facts = new SpartanFacts(configuration);
+            context.Queue = new LeakQueue<SpartanContext>(context);
         }
 
         public void Start()
         {
-            ScheduleNextGoal();
+            context.Pipeline.Register(context.Queue);
+            context.Queue.Add(new SpartanScheduleNext());
         }
 
         public void HandleMetadataMeasured(MetadataMeasured data)
         {
-            if (facts.IsOngoing(SpartanTasks.Discover))
+            if (context.Facts.IsOngoing(SpartanTasks.Discover))
             {
-                facts.MetaGet.HandleMetadataMeasured(data);
+                context.Facts.MetaGet.HandleMetadataMeasured(data);
             }
         }
 
         public void HandleMetadataReceived(MetadataReceived data)
         {
-            if (facts.IsOngoing(SpartanTasks.Discover))
+            if (context.Facts.IsOngoing(SpartanTasks.Discover))
             {
-                facts.MetaGet.HandleMetadataReceived(data);
+                context.Facts.MetaGet.HandleMetadataReceived(data);
             }
-        }
-
-        private void ScheduleNextGoal()
-        {
-            if (facts.CanStart(SpartanTasks.Discover))
-            {
-                MetagetHooks other = CreateMetagetHooks();
-                MetagetConfiguration configuration = CreateMetagetConfiguration();
-
-                facts.MetaGet = new MetagetService(glue, destination, other, configuration);
-                facts.MetaGet.Start(pipeline);
-
-                facts.Start(SpartanTasks.Discover);
-                hooks.CallTaskStarted(glue.Hash, SpartanTasks.Discover);
-
-                return;
-            }
-
-            if (facts.CanStart(SpartanTasks.Verify))
-            {
-            }
-
-            if (facts.CanStart(SpartanTasks.Download))
-            {
-            }
-        }
-
-        private MetagetHooks CreateMetagetHooks()
-        {
-            return new MetagetHooks
-            {
-                OnMetadataDiscovered = OnMetadataDiscovered,
-                OnMetafileMeasured = hooks.OnMetafileMeasured,
-                OnMetadataPieceReceived = hooks.OnMetadataPieceReceived,
-                OnMetadataPieceRequested = hooks.OnMetadataPieceRequested
-            };
-        }
-
-        private MetagetConfiguration CreateMetagetConfiguration()
-        {
-            return new MetagetConfiguration
-            {
-            };
-        }
-
-        private void OnMetadataDiscovered(MetadataDiscovered data)
-        {
-            facts.MetaGet.Stop(pipeline);
-            facts.MetaGet = null;
-
-            facts.Complete(SpartanTasks.Discover);
-            hooks.CallTaskCompleted(glue.Hash, SpartanTasks.Discover);
-
-            hooks.CallMetadataDiscovered(data);
-            glue.SetPieces(data.Metainfo.Pieces.Length);
-
-            ScheduleNextGoal();
         }
 
         public void Dispose()
         {
-            if (facts.IsOngoing(SpartanTasks.Discover))
+            if (context.Facts.IsOngoing(SpartanTasks.Discover))
             {
-                facts.MetaGet.Stop(pipeline);
+                context.Facts.MetaGet.Stop(context.Pipeline);
+                context.Facts.MetaGet = null;
+            }
+
+            if (context.Facts.IsOngoing(SpartanTasks.Verify))
+            {
+                context.Facts.Repository.Dispose();
+                context.Facts.Repository = null;
             }
         }
     }

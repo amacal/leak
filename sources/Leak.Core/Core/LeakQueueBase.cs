@@ -8,6 +8,7 @@ namespace Leak.Core.Core
         protected readonly ManualResetEventSlim onReady;
 
         private TContext data;
+        private bool completed;
 
         protected LeakQueueBase()
         {
@@ -22,9 +23,15 @@ namespace Leak.Core.Core
             onReady.Set();
         }
 
+        public void Stop()
+        {
+            completed = true;
+            worker.Join();
+        }
+
         private void Process()
         {
-            while (true)
+            while (completed == false)
             {
                 if (onReady.Wait(1000))
                 {

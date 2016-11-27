@@ -5,14 +5,35 @@ namespace Leak.Core.Repository
 {
     public class RepositoryHooks
     {
+        /// <summary>
+        /// Called when repository data was successfully allocated
+        /// in the destination directory and there was a change
+        /// which affected the file system.
+        /// </summary>
         public Action<DataAllocated> OnDataAllocated;
 
+        /// <summary>
+        /// Called when repository data was verified against metafile
+        /// and the actual bitfield is known.
+        /// </summary>
         public Action<DataVerified> OnDataVerified;
 
+        /// <summary>
+        /// Called when some block of some piece was successfully
+        /// persisted in the file system.
+        /// </summary>
         public Action<DataWritten> OnDataWritten;
 
+        /// <summary>
+        /// Called when some piece was successfully verified against
+        /// the hash and there is no need for changing the piece.
+        /// </summary>
         public Action<DataAccepted> OnDataAccepted;
 
+        /// <summary>
+        /// Called when some piece was unsuccessfully verified against
+        /// the hash and it should be once again written and verified.
+        /// </summary>
         public Action<DataRejected> OnDataRejected;
     }
 }

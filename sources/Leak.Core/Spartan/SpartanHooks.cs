@@ -40,5 +40,18 @@ namespace Leak.Core.Spartan
         /// process can be completed.
         /// </summary>
         public Action<MetadataDiscovered> OnMetadataDiscovered;
+
+        /// <summary>
+        /// Called when repository data was successfully allocated
+        /// in the destination directory and there was a change
+        /// which affected the file system.
+        /// </summary>
+        public Action<DataAllocated> OnDataAllocated;
+
+        /// <summary>
+        /// Called when repository data was verified against metafile
+        /// and the actual bitfield is known.
+        /// </summary>
+        public Action<DataVerified> OnDataVerified;
     }
 }

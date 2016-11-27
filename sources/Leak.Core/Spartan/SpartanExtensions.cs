@@ -27,5 +27,10 @@ namespace Leak.Core.Spartan
         {
             hooks.OnMetadataDiscovered?.Invoke(data);
         }
+
+        public static void CallDataVerified(this SpartanHooks hooks, DataVerified data)
+        {
+            hooks.OnDataVerified?.Invoke(data);
+        }
     }
 }

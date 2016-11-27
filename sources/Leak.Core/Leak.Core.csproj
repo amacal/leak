@@ -373,9 +373,13 @@
     <Compile Include="Omnibus\Components\OmnibusReservation.cs" />
     <Compile Include="Omnibus\Components\OmnibusReservationCollection.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCollection.cs" />
+    <Compile Include="Spartan\SpartanCompleteDiscover.cs" />
+    <Compile Include="Spartan\SpartanCompleteVerify.cs" />
     <Compile Include="Spartan\SpartanConfiguration.cs" />
+    <Compile Include="Spartan\SpartanContext.cs" />
     <Compile Include="Spartan\SpartanExtensions.cs" />
     <Compile Include="Spartan\SpartanFacts.cs" />
+    <Compile Include="Spartan\SpartanScheduleNext.cs" />
     <Compile Include="Spartan\SpartanTasks.cs" />
     <Compile Include="Spartan\SpartanHooks.cs" />
     <Compile Include="Spartan\SpartanService.cs" />

@@ -2,6 +2,7 @@
 using Leak.Core.Spartan;
 using Leak.Core.Tests.Core;
 using NUnit.Framework;
+using System.IO;
 
 namespace Leak.Core.Tests.Components
 {
@@ -45,7 +46,8 @@ namespace Leak.Core.Tests.Components
         private SpartanService NewSpartanService(SpartanTasks task)
         {
             configuration.Tasks = task;
-            return new SpartanService(environemnt.Pipeline, environemnt.Destination, environemnt.Peers.Bob.Entry.Glue, hooks, configuration);
+
+            return new SpartanService(environemnt.Pipeline, environemnt.Destination, environemnt.Peers.Bob.Entry.Glue, environemnt.Files, hooks, configuration);
         }
 
         [Test]
@@ -75,9 +77,15 @@ namespace Leak.Core.Tests.Components
 
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
-                spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                    }
+                };
 
+                spartan.Start();
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -94,10 +102,42 @@ namespace Leak.Core.Tests.Components
 
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
-                spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
-                spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+                };
 
+                spartan.Start();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerMetadataPieceReceivedWhenReceivedAllMetadata()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceReceived, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Peer.Should().NotBeNull();
+                data.Piece.Should().Be(0);
+            });
+
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
+            {
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+                };
+
+                spartan.Start();
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -113,10 +153,16 @@ namespace Leak.Core.Tests.Components
 
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
-                spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
-                spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+                };
 
+                spartan.Start();
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -133,9 +179,99 @@ namespace Leak.Core.Tests.Components
 
             using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
             {
-                spartan.Start();
-                spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                    }
+                };
 
+                spartan.Start();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataAllocated()
+        {
+            string path = Path.Combine(environemnt.Sandbox.Directory, fixture.Debian.Metadata.Hash.ToString());
+            string file = Path.Combine(path, "debian-8.5.0-amd64-CD-1.iso");
+
+            Trigger handler = Trigger.Bind(ref hooks.OnDataAllocated, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Directory.Should().EndWith(path);
+            });
+
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover | SpartanTasks.Verify))
+            {
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+                };
+
+                spartan.Start();
+                handler.Wait().Should().BeTrue();
+            }
+
+            environemnt.Sandbox.ExistsFile(file).Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldTriggerDataVerified()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnDataVerified, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Bitfield.Should().NotBeNull();
+                data.Bitfield.Completed.Should().Be(0);
+                data.Bitfield.Length.Should().Be(fixture.Debian.Binary.Pieces.Length);
+            });
+
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover | SpartanTasks.Verify))
+            {
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+                };
+
+                spartan.Start();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerTaskCompletedWhenVerified()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnTaskCompleted, data =>
+            {
+                if (data.Task == SpartanTasks.Verify)
+                {
+                    data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                }
+            });
+
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover | SpartanTasks.Verify))
+            {
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+                };
+
+                spartan.Start();
                 handler.Wait().Should().BeTrue();
             }
         }

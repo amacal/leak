@@ -1,4 +1,5 @@
-﻿using Leak.Core.Metaget;
+﻿using Leak.Core.Metadata;
+using Leak.Core.Metaget;
 using Leak.Core.Repository;
 using Leak.Core.Retriever;
 
@@ -38,6 +39,8 @@ namespace Leak.Core.Spartan
             ongoing &= ~tasks;
             completed |= tasks;
         }
+
+        public Metainfo Metainfo;
 
         public MetagetService MetaGet;
 

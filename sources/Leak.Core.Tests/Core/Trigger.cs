@@ -37,7 +37,7 @@ namespace Leak.Core.Tests.Core
             {
                 if (called == false)
                 {
-                    Thread.Sleep(10);
+                    Thread.Sleep(20);
                 }
             }
 

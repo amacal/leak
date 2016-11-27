@@ -58,6 +58,11 @@ namespace Leak.Core.Metafile
                     context.Hooks.CallMetafileRejected(context.Hash);
                 }
             }
+            else
+            {
+                context.IsCompleted = false;
+                context.Hooks.CallMetafileRejected(context.Hash);
+            }
         }
     }
 }

@@ -13,7 +13,9 @@ namespace Leak.Core.Core
         public LeakQueue(TContext context)
         {
             this.context = context;
+
             items = new ConcurrentQueue<LeakTask<TContext>>();
+            onReady = new ManualResetEvent(false);
         }
 
         public void Add(LeakTask<TContext> task)
