@@ -7,6 +7,15 @@ namespace Leak.Core.Tests.Core
     {
         public abstract bool Wait();
 
+        public static Trigger Bind<T>(ref Action<T> target)
+        {
+            Trigger<T> trigger = new Trigger<T>(data => { });
+            Trigger result = trigger;
+
+            target = trigger;
+            return result;
+        }
+
         public static Trigger Bind<T>(ref Action<T> target, Action<T> callback)
         {
             Trigger<T> trigger = new Trigger<T>(callback);

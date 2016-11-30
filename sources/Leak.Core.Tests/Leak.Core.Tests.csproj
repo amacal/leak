@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Components\CommunicatorTests.cs" />
     <Compile Include="Components\ConnectorTests.cs" />
+    <Compile Include="Components\OmnibusTests.cs" />
     <Compile Include="Components\RepositoryTests.cs" />
     <Compile Include="Components\RetrieverTests.cs" />
     <Compile Include="Core\Environment.cs" />

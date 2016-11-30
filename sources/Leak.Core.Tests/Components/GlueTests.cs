@@ -369,16 +369,14 @@ namespace Leak.Core.Tests.Components
         {
             FileHash hash = FileHash.Random();
 
-            var extended = leftHooks.OnExtensionListReceived.Trigger();
-            var handler = leftHooks.OnExtensionDataReceived.Trigger(data =>
+            Trigger extended = Trigger.Bind(ref leftHooks.OnExtensionListReceived);
+            Trigger handler = Trigger.Bind(ref leftHooks.OnExtensionDataReceived, data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.Extension.Should().Be("left-a");
                 data.Size.Should().Be(10);
             });
 
-            leftHooks.OnExtensionListReceived = extended;
-            leftHooks.OnExtensionDataReceived = handler;
             leftConfiguration.Plugins.Add(new Plugin("left-a"));
 
             listener.Enable(hash);
@@ -395,15 +393,14 @@ namespace Leak.Core.Tests.Components
         {
             FileHash hash = FileHash.Random();
 
-            var extended = rightHooks.OnExtensionListSent.Trigger();
-            var handler = rightHooks.OnExtensionDataSent.Trigger(data =>
+            Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
+            Trigger handler = Trigger.Bind(ref rightHooks.OnExtensionDataSent, data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.Extension.Should().Be("left-a");
                 data.Size.Should().Be(10);
             });
 
-            rightHooks.OnExtensionDataSent = handler;
             leftConfiguration.Plugins.Add(new Plugin("left-a"));
 
             listener.Enable(hash);
@@ -422,15 +419,14 @@ namespace Leak.Core.Tests.Components
             MetadataHooks metahooks = new MetadataHooks();
             MetadataPlugin plugin = new MetadataPlugin(metahooks);
 
-            var extended = rightHooks.OnExtensionListSent.Trigger();
-            var handler = metahooks.OnMetadataRequested.Trigger(data =>
+            Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
+            Trigger handler = Trigger.Bind(ref metahooks.OnMetadataRequested, data =>
             {
                 data.Hash.Should().Be(hash);
                 data.Peer.Should().Be(rightHash);
                 data.Piece.Should().Be(7);
             });
 
-            metahooks.OnMetadataRequested = handler;
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
@@ -449,15 +445,14 @@ namespace Leak.Core.Tests.Components
             MetadataHooks metahooks = new MetadataHooks();
             MetadataPlugin plugin = new MetadataPlugin(metahooks);
 
-            var extended = rightHooks.OnExtensionListSent.Trigger();
-            var handler = metahooks.OnMetadataRejected.Trigger(data =>
+            Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListSent);
+            Trigger handler = Trigger.Bind(ref metahooks.OnMetadataRejected, data =>
             {
                 data.Hash.Should().Be(hash);
                 data.Peer.Should().Be(rightHash);
                 data.Piece.Should().Be(7);
             });
 
-            metahooks.OnMetadataRejected = handler;
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
@@ -476,8 +471,8 @@ namespace Leak.Core.Tests.Components
             MetadataHooks metahooks = new MetadataHooks();
             MetadataPlugin plugin = new MetadataPlugin(metahooks);
 
-            var extended = rightHooks.OnExtensionListSent.Trigger();
-            var handler = metahooks.OnMetadataReceived.Trigger(data =>
+            Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
+            Trigger handler = Trigger.Bind(ref metahooks.OnMetadataReceived, data =>
             {
                 data.Hash.Should().Be(hash);
                 data.Peer.Should().Be(rightHash);
@@ -486,7 +481,6 @@ namespace Leak.Core.Tests.Components
                 data.Data.Length.Should().Be(1023);
             });
 
-            metahooks.OnMetadataReceived = handler;
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
@@ -505,15 +499,14 @@ namespace Leak.Core.Tests.Components
             MetadataHooks metahooks = new MetadataHooks();
             MetadataPlugin plugin = new MetadataPlugin(metahooks);
 
-            var extended = rightHooks.OnExtensionListSent.Trigger();
-            var handler = metahooks.OnMetadataMeasured.Trigger(data =>
+            Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
+            Trigger handler = Trigger.Bind(ref metahooks.OnMetadataMeasured, data =>
             {
                 data.Hash.Should().Be(hash);
                 data.Peer.Should().Be(rightHash);
                 data.Size.Should().Be(128);
             });
 
-            metahooks.OnMetadataMeasured = handler;
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
