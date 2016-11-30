@@ -27,9 +27,9 @@ namespace Leak.Core.Repository
             });
         }
 
-        public static void CallDataWritten(this RepositoryHooks hooks, FileHash hash, RepositoryBlockData data)
+        public static void CallBlockWritten(this RepositoryHooks hooks, FileHash hash, RepositoryBlockData data)
         {
-            hooks.OnDataWritten?.Invoke(new DataWritten
+            hooks.OnBlockWritten?.Invoke(new BlockWritten
             {
                 Hash = hash,
                 Piece = data.Piece,
@@ -38,18 +38,18 @@ namespace Leak.Core.Repository
             });
         }
 
-        public static void CallDataAccepted(this RepositoryHooks hooks, FileHash hash, int piece)
+        public static void CallPieceAccepted(this RepositoryHooks hooks, FileHash hash, int piece)
         {
-            hooks.OnDataAccepted?.Invoke(new DataAccepted
+            hooks.OnPieceAccepted?.Invoke(new PieceAccepted
             {
                 Hash = hash,
                 Piece = piece
             });
         }
 
-        public static void CallDataRejected(this RepositoryHooks hooks, FileHash hash, int piece)
+        public static void CallPieceRejected(this RepositoryHooks hooks, FileHash hash, int piece)
         {
-            hooks.OnDataRejected?.Invoke(new DataRejected
+            hooks.OnPieceRejected?.Invoke(new PieceRejected
             {
                 Hash = hash,
                 Piece = piece

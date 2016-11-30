@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Events
 {
-    public class DataAccepted
+    public class PieceReady
     {
         public FileHash Hash;
 

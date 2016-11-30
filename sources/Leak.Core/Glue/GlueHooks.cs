@@ -8,8 +8,7 @@ namespace Leak.Core.Glue
         public Action<PeerConnected> OnPeerConnected;
         public Action<PeerDisconnected> OnPeerDisconnected;
 
-        public Action<PeerStateChanged> OnPeerStateChanged;
-        public Action<PeerBitfieldChanged> OnPeerBitfieldChanged;
+        public Action<PeerChanged> OnPeerChanged;
 
         public Action<ExtensionListReceived> OnExtensionListReceived;
         public Action<ExtensionListSent> OnExtensionListSent;

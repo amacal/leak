@@ -22,18 +22,18 @@ namespace Leak.Core.Repository
         /// Called when some block of some piece was successfully
         /// persisted in the file system.
         /// </summary>
-        public Action<DataWritten> OnDataWritten;
+        public Action<BlockWritten> OnBlockWritten;
 
         /// <summary>
         /// Called when some piece was successfully verified against
         /// the hash and there is no need for changing the piece.
         /// </summary>
-        public Action<DataAccepted> OnDataAccepted;
+        public Action<PieceAccepted> OnPieceAccepted;
 
         /// <summary>
         /// Called when some piece was unsuccessfully verified against
         /// the hash and it should be once again written and verified.
         /// </summary>
-        public Action<DataRejected> OnDataRejected;
+        public Action<PieceRejected> OnPieceRejected;
     }
 }

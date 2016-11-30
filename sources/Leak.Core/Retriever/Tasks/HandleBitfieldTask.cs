@@ -1,23 +1,21 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Core;
+﻿using Leak.Core.Core;
+using Leak.Core.Events;
 using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
 {
     public class HandleBitfieldTask : LeakTask<RetrieverContext>
     {
-        private readonly PeerHash peer;
-        private readonly Bitfield bitfield;
+        private readonly PeerChanged data;
 
-        public HandleBitfieldTask(PeerHash peer, Bitfield bitfield)
+        public HandleBitfieldTask(PeerChanged data)
         {
-            this.peer = peer;
-            this.bitfield = bitfield;
+            this.data = data;
         }
 
         public void Execute(RetrieverContext context)
         {
-            context.Omnibus.Add(peer, bitfield);
+            context.Omnibus.Handle(data);
             //context.Collector.SendBitfield(peer, new Bitfield(bitfield.Length));
             //context.Collector.SendLocalInterested(peer);
         }

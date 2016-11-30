@@ -137,7 +137,7 @@ namespace Leak.Core.Repository
             {
                 if (valid)
                 {
-                    context.Hooks.CallDataAccepted(context.Metainfo.Hash, piece.Index);
+                    context.Hooks.CallPieceAccepted(context.Metainfo.Hash, piece.Index);
                 }
             }
 
@@ -145,7 +145,7 @@ namespace Leak.Core.Repository
             {
                 if (valid == false)
                 {
-                    context.Hooks.CallDataRejected(context.Metainfo.Hash, piece.Index);
+                    context.Hooks.CallPieceRejected(context.Metainfo.Hash, piece.Index);
                 }
             }
         }

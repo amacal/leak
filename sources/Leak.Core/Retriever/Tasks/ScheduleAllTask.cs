@@ -1,4 +1,6 @@
-﻿using Leak.Core.Core;
+﻿using Leak.Core.Common;
+using Leak.Core.Core;
+using Leak.Core.Omnibus;
 using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
@@ -15,16 +17,12 @@ namespace Leak.Core.Retriever.Tasks
 
         private void Schedule(RetrieverContext context, int ranking, int count, int pieces)
         {
-            //PeerCollectorCriterion[] criterion =
-            //{
-            //    new IsLocalNotChokedByRemote(),
-            //    new OrderByRanking(ranking),
-            //};
+            OmnibusStrategy strategy = context.Configuration.Strategy.ToOmnibus();
 
-            //foreach (PeerSession session in context.Collector.GetPeers(criterion).Take(count))
-            //{
-            //    context.Omnibus.Schedule(context.Configuration.Strategy.ToOmnibus(), session.Peer, pieces);
-            //}
+            foreach (PeerHash peer in context.Omnibus.Find(ranking, count))
+            {
+                context.Omnibus.Schedule(strategy, peer, pieces);
+            }
         }
     }
 }

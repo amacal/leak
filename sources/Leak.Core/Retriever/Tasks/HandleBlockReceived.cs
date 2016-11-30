@@ -4,11 +4,11 @@ using Leak.Core.Retriever.Components;
 
 namespace Leak.Core.Retriever.Tasks
 {
-    public class HandleDataReceived : LeakTask<RetrieverContext>
+    public class HandleBlockReceived : LeakTask<RetrieverContext>
     {
-        private readonly DataReceived data;
+        private readonly BlockReceived data;
 
-        public HandleDataReceived(DataReceived data)
+        public HandleBlockReceived(BlockReceived data)
         {
             this.data = data;
         }
@@ -18,6 +18,7 @@ namespace Leak.Core.Retriever.Tasks
             if (context.Omnibus.IsComplete(data.Piece) == false)
             {
                 context.Repository.Write(data.Piece, data.Block * 16384, data.Payload);
+                context.Hooks.CallBlockHandled(data.Hash, data.Peer, data.Piece, data.Block, data.Payload.Size);
                 //context.Collector.Increase(peer, 2);
             }
         }

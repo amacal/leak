@@ -1,8 +1,9 @@
 ﻿using Leak.Core.Common;
+using Leak.Core.Messages;
 
 namespace Leak.Core.Events
 {
-    public class DataRequested
+    public class BlockReceived
     {
         public FileHash Hash;
 
@@ -11,5 +12,7 @@ namespace Leak.Core.Events
         public int Piece;
 
         public int Block;
+
+        public DataBlock Payload;
     }
 }

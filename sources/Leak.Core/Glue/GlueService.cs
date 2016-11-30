@@ -23,6 +23,8 @@ namespace Leak.Core.Glue
 
         void SendBitfield(PeerHash peer, Bitfield bitfield);
 
+        void SendRequest(PeerHash peer, int piece, int offset, int size);
+
         void SendHave(PeerHash peer, int piece);
 
         void SendExtension(PeerHash peer, string extension, byte[] payload);

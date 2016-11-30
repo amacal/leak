@@ -120,7 +120,7 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerDataWritten()
         {
-            Trigger handler = Trigger.Bind(ref hooks.OnDataWritten, data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnBlockWritten, data =>
             {
                 data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Piece.Should().Be(0);
@@ -140,7 +140,7 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerDataAccepted()
         {
-            Trigger handler = Trigger.Bind(ref hooks.OnDataAccepted, data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnPieceAccepted, data =>
             {
                 data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Piece.Should().Be(0);
@@ -159,7 +159,7 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerDataRejected()
         {
-            Trigger handler = Trigger.Bind(ref hooks.OnDataRejected, data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnPieceRejected, data =>
             {
                 data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
                 data.Piece.Should().Be(0);

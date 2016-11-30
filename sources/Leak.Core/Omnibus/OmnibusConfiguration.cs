@@ -1,16 +1,14 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Metadata;
-using System;
+﻿using System;
 
 namespace Leak.Core.Omnibus
 {
     public class OmnibusConfiguration
     {
-        public Metainfo Metainfo { get; set; }
-
-        public Bitfield Bitfield { get; set; }
-
-        public OmnibusCallback Callback { get; set; }
+        public OmnibusConfiguration()
+        {
+            LeaseDuration = TimeSpan.FromSeconds(15);
+            SchedulerThreshold = 20;
+        }
 
         public TimeSpan LeaseDuration { get; set; }
 

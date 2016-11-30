@@ -49,6 +49,11 @@ namespace Leak.Core.Communicator
             SendAndCall(new BitfieldOutgoingMessage(bitfield), "bitfield");
         }
 
+        public void SendRequest(Request request)
+        {
+            SendAndCall(new RequestOutgoingMessage(request), "request");
+        }
+
         public void SendPiece(Piece piece)
         {
             SendAndCall(new PieceOutgoingMessage(piece), "piece");

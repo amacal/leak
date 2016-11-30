@@ -1,5 +1,4 @@
-﻿using Leak.Core.Common;
-using System;
+﻿using System;
 
 namespace Leak.Core.Omnibus.Components
 {
@@ -102,27 +101,24 @@ namespace Leak.Core.Omnibus.Components
 
         private void CallChanged()
         {
-            FileHash hash = context.Metainfo.Hash;
-            BitfieldInfo bitfield = new BitfieldInfo(items.Length, completed);
-
-            context.Callback.OnProgressChanged(hash, bitfield);
+            context.Hooks.CallDataChanged(context.Metainfo.Hash, completed);
         }
 
         private void CallPieceReady(int piece)
         {
-            context.Callback.OnPieceReady(context.Metainfo.Hash, new PieceInfo(piece));
+            context.Hooks.CallPieceReady(context.Metainfo.Hash, piece);
         }
 
         private void CallPieceCompleted(int piece)
         {
-            context.Callback.OnPieceCompleted(context.Metainfo.Hash, new PieceInfo(piece));
+            context.Hooks.CallPieceCompleted(context.Metainfo.Hash, piece);
         }
 
         private void CallFileCompleted()
         {
             if (items.Length == completed)
             {
-                context.Callback.OnFileCompleted(context.Metainfo.Hash);
+                context.Hooks.CallDataCompleted(context.Metainfo.Hash);
             }
         }
     }

@@ -8,12 +8,13 @@ namespace Leak.Core.Retriever
         /// <summary>
         /// Called when some data is requested from remote peer.
         /// </summary>
-        public Action<DataRequested> OnDataRequested;
+        public Action<BlockRequested> OnBlockRequested;
 
         /// <summary>
-        /// Called when some data is received from remote peer.
+        /// Called when some data is received from remote peer
+        /// and successfully handled by the component.
         /// </summary>
-        public Action<DataReceived> OnDataReceived;
+        public Action<BlockHandled> OnBlockHandled;
 
         /// <summary>
         /// Called when some piece was successfully verified and therefore

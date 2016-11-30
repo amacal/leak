@@ -1,4 +1,6 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Common;
+using Leak.Core.Events;
+using Leak.Core.Metadata;
 
 namespace Leak.Core.Omnibus.Components
 {
@@ -12,6 +14,53 @@ namespace Leak.Core.Omnibus.Components
         public static int GetBlocksInTotal(this Metainfo metainfo)
         {
             return (int)((metainfo.Properties.TotalSize - 1) / metainfo.Properties.BlockSize + 1);
+        }
+
+        public static void CallDataChanged(this OmnibusHooks hooks, FileHash hash, int completed)
+        {
+            hooks.OnDataChanged?.Invoke(new DataChanged
+            {
+                Hash = hash,
+                Completed = completed
+            });
+        }
+
+        public static void CallDataCompleted(this OmnibusHooks hooks, FileHash hash)
+        {
+            hooks.OnDataCompleted?.Invoke(new DataCompleted
+            {
+                Hash = hash
+            });
+        }
+
+        public static void CallPieceReady(this OmnibusHooks hooks, FileHash hash, int piece)
+        {
+            hooks.OnPieceReady?.Invoke(new PieceReady
+            {
+                Hash = hash,
+                Piece = piece
+            });
+        }
+
+        public static void CallPieceCompleted(this OmnibusHooks hooks, FileHash hash, int piece)
+        {
+            hooks.OnPieceCompleted?.Invoke(new PieceCompleted
+            {
+                Hash = hash,
+                Piece = piece
+            });
+        }
+
+        public static void CallBlockReserved(this OmnibusHooks hooks, FileHash hash, PeerHash peer, OmnibusBlock block)
+        {
+            hooks.OnBlockReserved?.Invoke(new BlockReserved
+            {
+                Hash = hash,
+                Peer = peer,
+                Piece = block.Piece,
+                Block = block.Offset / 16384,
+                Size = block.Size
+            });
         }
     }
 }

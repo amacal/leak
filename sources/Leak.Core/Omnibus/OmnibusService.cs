@@ -1,7 +1,9 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Events;
+using Leak.Core.Metadata;
 using Leak.Core.Omnibus.Tasks;
-using System;
+using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus
 {
@@ -14,9 +16,9 @@ namespace Leak.Core.Omnibus
     {
         private readonly OmnibusContext context;
 
-        public OmnibusService(Action<OmnibusConfiguration> configurer)
+        public OmnibusService(Metainfo metainfo, Bitfield bitfield, OmnibusHooks hooks, OmnibusConfiguration configuration)
         {
-            context = new OmnibusContext(configurer);
+            context = new OmnibusContext(metainfo, bitfield, hooks, configuration);
         }
 
         public void Start(LeakPipeline pipeline)
@@ -34,20 +36,17 @@ namespace Leak.Core.Omnibus
             return context.Pieces.IsComplete(piece);
         }
 
-        /// <summary>
-        /// Registers a bitfield belonging to the peer.
-        /// </summary>
-        /// <param name="peer">The peer affected by a bitfield.</param>
-        /// <param name="bitfield">The bitfield of requested hash.</param>
-        public void Add(PeerHash peer, Bitfield bitfield)
+        public IEnumerable<PeerHash> Find(int ranking, int count)
         {
-            context.Queue.Add(new AddBitfieldTask(peer, bitfield));
+            return context.States.Find(ranking, count);
         }
 
-        /// <summary>
-        /// Reports completeness of the received block.
-        /// </summary>
-        /// <param name="block">The received block structure.</param>
+        public void Handle(PeerChanged data)
+        {
+            context.States.Handle(data);
+            context.Bitfields.Add(data.Peer, data.Bitfield);
+        }
+
         public void Complete(OmnibusBlock block)
         {
             context.Queue.Add(new CompleteBlockTask(block));

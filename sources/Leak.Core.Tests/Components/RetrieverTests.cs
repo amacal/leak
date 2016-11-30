@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Leak.Core.Common;
 using Leak.Core.Events;
+using Leak.Core.Glue;
 using Leak.Core.Metadata;
 using Leak.Core.Retriever;
 using Leak.Core.Tests.Core;
@@ -49,8 +50,9 @@ namespace Leak.Core.Tests.Components
         {
             Metainfo metainfo = fixture.Debian.Metadata.Metainfo;
             Bitfield bitfield = new Bitfield(metainfo.Pieces.Length);
+            GlueService glue = environemnt.Peers.Bob.Entry.Glue;
 
-            return new RetrieverService(metainfo, environemnt.Destination, bitfield, environemnt.Files, environemnt.Pipeline, hooks, configuration);
+            return new RetrieverService(metainfo, environemnt.Destination, bitfield, glue, environemnt.Files, environemnt.Pipeline, hooks, configuration);
         }
 
         [Test]
@@ -65,7 +67,28 @@ namespace Leak.Core.Tests.Components
             using (RetrieverService retriever = NewRetrieverService())
             {
                 retriever.Start();
-                retriever.HandleDataReceived(fixture.Debian.Events.DataReceived[0]);
+                retriever.HandleBlockReceived(fixture.Debian.Events.BlockReceived[0]);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataHandled()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnBlockHandled, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Peer.Should().NotBeNull();
+                data.Piece.Should().Be(1);
+                data.Block.Should().Be(0);
+                data.Size.Should().Be(16384);
+            });
+
+            using (RetrieverService retriever = NewRetrieverService())
+            {
+                retriever.Start();
+                retriever.HandleBlockReceived(fixture.Debian.Events.BlockReceived[1]);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -83,10 +106,37 @@ namespace Leak.Core.Tests.Components
             {
                 retriever.Start();
 
-                foreach (DataReceived data in fixture.Debian.Events.DataReceived)
+                foreach (BlockReceived data in fixture.Debian.Events.BlockReceived)
                 {
-                    retriever.HandleDataReceived(data);
+                    retriever.HandleBlockReceived(data);
                 }
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataRequested()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnBlockRequested, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Peer.Should().Be(environemnt.Peers.Sue.Hash);
+                data.Piece.Should().Be(1);
+                data.Block.Should().Be(0);
+            });
+
+            PeerChanged changed = new PeerChanged
+            {
+                Peer = environemnt.Peers.Sue.Hash,
+                Bitfield = Bitfield.Sequence(false, true, false),
+                IsLocalInterestedInRemote = true
+            };
+
+            using (RetrieverService retriever = NewRetrieverService())
+            {
+                retriever.Start();
+                retriever.HandlePeerChanged(changed);
 
                 handler.Wait().Should().BeTrue();
             }

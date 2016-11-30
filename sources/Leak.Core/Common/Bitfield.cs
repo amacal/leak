@@ -75,7 +75,7 @@ namespace Leak.Core.Common
             return true;
         }
 
-        public static Bitfield Random(byte length)
+        public static Bitfield Random(int length)
         {
             byte[] random = Bytes.Random(length);
             Bitfield result = new Bitfield(length);
@@ -83,6 +83,30 @@ namespace Leak.Core.Common
             for (int i = 0; i < length; i++)
             {
                 result[i] = random[i] % 2 == 0;
+            }
+
+            return result;
+        }
+
+        public static Bitfield Complete(int length)
+        {
+            Bitfield result = new Bitfield(length);
+
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = true;
+            }
+
+            return result;
+        }
+
+        public static Bitfield Sequence(params bool[] data)
+        {
+            Bitfield result = new Bitfield(data.Length);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                result[i] = data[i];
             }
 
             return result;

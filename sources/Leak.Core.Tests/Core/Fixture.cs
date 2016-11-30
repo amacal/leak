@@ -223,7 +223,7 @@ namespace Leak.Core.Tests.Core
         public readonly MetadataMeasured MetadataMeasured;
         public readonly MetadataReceived MetadataReceived;
 
-        public readonly DataReceived[] DataReceived;
+        public readonly BlockReceived[] BlockReceived;
 
         public EventsFixture(DataFixture owner)
         {
@@ -242,13 +242,13 @@ namespace Leak.Core.Tests.Core
                 Data = owner.Metadata.Pieces[0].Data
             };
 
-            DataReceived = new DataReceived[owner.Binary.Pieces.Length];
+            BlockReceived = new BlockReceived[owner.Binary.Pieces.Length];
 
-            for (int i = 0; i < DataReceived.Length; i++)
+            for (int i = 0; i < BlockReceived.Length; i++)
             {
                 byte[] data = owner.Binary.Content.Skip(i * 16384).Take(16384).ToArray();
 
-                DataReceived[i] = new DataReceived
+                BlockReceived[i] = new BlockReceived
                 {
                     Hash = owner.Metadata.Hash,
                     Peer = PeerHash.Random(),

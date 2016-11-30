@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
-using Leak.Core.Omnibus.Events;
+using Leak.Core.Omnibus.Components;
 using System;
 
 namespace Leak.Core.Omnibus.Tasks
@@ -39,15 +39,12 @@ namespace Leak.Core.Omnibus.Tasks
 
                         if (previous != null)
                         {
-                            context.Callback.OnBlockExpired(hash, previous, block);
+                            //context.Callback.OnBlockExpired(hash, previous, block);
                         }
+
+                        context.Hooks.CallBlockReserved(hash, peer, block);
                     }
                 }
-            }
-
-            if (context.Cache.Blocks != null)
-            {
-                context.Callback.OnBlockReserved(hash, new OmnibusReservationEvent(peer, context.Cache.Blocks));
             }
         }
     }

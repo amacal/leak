@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Events
 {
-    public class DataWritten
+    public class BlockWritten
     {
         public FileHash Hash;
 

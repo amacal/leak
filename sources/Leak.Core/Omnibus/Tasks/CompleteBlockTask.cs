@@ -25,7 +25,7 @@ namespace Leak.Core.Omnibus.Tasks
 
             if (peer != null && left == context.SchedulerThreshold)
             {
-                context.Callback.OnScheduleRequested(context.Metainfo.Hash, peer);
+                //context.Callback.OnScheduleRequested(context.Metainfo.Hash, peer);
             }
         }
     }

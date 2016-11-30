@@ -5,7 +5,7 @@ using Leak.Core.Glue;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
-using Leak.Core.Retriever.Callbacks;
+using Leak.Core.Retriever.Tasks;
 using Leak.Files;
 
 namespace Leak.Core.Retriever.Components
@@ -13,6 +13,7 @@ namespace Leak.Core.Retriever.Components
     public class RetrieverContext
     {
         private readonly Metainfo metainfo;
+        private readonly GlueService glue;
         private readonly LeakPipeline pipeline;
         private readonly RetrieverHooks hooks;
         private readonly RetrieverConfiguration configuration;
@@ -20,21 +21,16 @@ namespace Leak.Core.Retriever.Components
         private readonly OmnibusService omnibus;
         private readonly LeakQueue<RetrieverContext> queue;
 
-        public RetrieverContext(Metainfo metainfo, string destination, Bitfield bitfield, FileFactory files, LeakPipeline pipeline, RetrieverHooks hooks, RetrieverConfiguration configuration)
+        public RetrieverContext(Metainfo metainfo, string destination, Bitfield bitfield, GlueService glue, FileFactory files, LeakPipeline pipeline, RetrieverHooks hooks, RetrieverConfiguration configuration)
         {
             this.metainfo = metainfo;
+            this.glue = glue;
             this.pipeline = pipeline;
             this.hooks = hooks;
             this.configuration = configuration;
 
             repository = CreateRepositoryService(destination, files);
-
-            omnibus = new OmnibusService(with =>
-            {
-                with.Metainfo = metainfo;
-                with.Bitfield = bitfield;
-                with.Callback = new RetrieverToOmnibus(this);
-            });
+            omnibus = CreateOmnibusService(bitfield);
 
             queue = new LeakQueue<RetrieverContext>(this);
         }
@@ -51,27 +47,56 @@ namespace Leak.Core.Retriever.Components
         {
             return new RepositoryHooks
             {
-                OnDataWritten = OnDataWritten,
-                OnDataAccepted = OnDataAccepted,
-                OnDataRejected = OnDataRejected
+                OnBlockWritten = OnBlockWritten,
+                OnPieceAccepted = OnPieceAccepted,
+                OnPieceRejected = OnPieceRejected
             };
         }
 
-        private void OnDataWritten(DataWritten data)
+        private void OnBlockWritten(BlockWritten data)
         {
             omnibus.Complete(new OmnibusBlock(data.Piece, data.Block * 16384, data.Size));
         }
 
-        private void OnDataAccepted(DataAccepted data)
+        private void OnPieceAccepted(PieceAccepted data)
         {
             omnibus.Complete(data.Piece);
             //context.Callback.OnPieceVerified(hash, piece)
         }
 
-        private void OnDataRejected(DataRejected data)
+        private void OnPieceRejected(PieceRejected data)
         {
             omnibus.Invalidate(data.Piece);
             //context.Callback.OnPieceRejected(hash, piece);
+        }
+
+        private OmnibusService CreateOmnibusService(Bitfield bitfield)
+        {
+            OmnibusHooks hooks = CreateOmnibusHooks();
+            OmnibusConfiguration configuration = new OmnibusConfiguration();
+
+            return new OmnibusService(metainfo, bitfield, hooks, configuration);
+        }
+
+        private OmnibusHooks CreateOmnibusHooks()
+        {
+            return new OmnibusHooks
+            {
+                OnDataChanged = hooks.OnDataChanged,
+                OnDataCompleted = hooks.OnDataCompleted,
+                OnPieceReady = OnPieceReady,
+                OnBlockReserved = OnBlockReserved
+            };
+        }
+
+        private void OnPieceReady(PieceReady data)
+        {
+            repository.Verify(new PieceInfo(data.Piece));
+        }
+
+        private void OnBlockReserved(BlockReserved data)
+        {
+            queue.Add(new RequestBlockTask(data));
         }
 
         public RetrieverConfiguration Configuration
@@ -81,7 +106,7 @@ namespace Leak.Core.Retriever.Components
 
         public GlueService Glue
         {
-            get { return null; }
+            get { return glue; }
         }
 
         public Metainfo Metainfo

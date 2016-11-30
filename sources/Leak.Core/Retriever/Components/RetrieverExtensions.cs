@@ -28,20 +28,26 @@ namespace Leak.Core.Retriever.Components
             throw new NotSupportedException();
         }
 
-        public static void CallDataChanged(this RetrieverHooks hooks, FileHash hash, int completed)
+        public static void CallBlockHandled(this RetrieverHooks hooks, FileHash hash, PeerHash peer, int piece, int block, int size)
         {
-            hooks.OnDataChanged?.Invoke(new DataChanged
+            hooks.OnBlockHandled?.Invoke(new BlockHandled
             {
                 Hash = hash,
-                Completed = completed
+                Peer = peer,
+                Piece = piece,
+                Block = block,
+                Size = size
             });
         }
 
-        public static void CallDataCompleted(this RetrieverHooks hooks, FileHash hash)
+        public static void CallBlockRequested(this RetrieverHooks hooks, FileHash hash, PeerHash peer, int piece, int block)
         {
-            hooks.OnDataCompleted?.Invoke(new DataCompleted
+            hooks.OnBlockRequested?.Invoke(new BlockRequested
             {
-                Hash = hash
+                Hash = hash,
+                Peer = peer,
+                Piece = piece,
+                Block = block
             });
         }
     }

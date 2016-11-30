@@ -26,6 +26,7 @@ namespace Leak.Core.Core
         public void Stop()
         {
             completed = true;
+            onReady.Set();
             worker.Join();
         }
 
@@ -33,7 +34,7 @@ namespace Leak.Core.Core
         {
             while (completed == false)
             {
-                if (onReady.Wait(1000))
+                if (onReady.Wait(200))
                 {
                     onReady.Reset();
                     OnProcess(data);

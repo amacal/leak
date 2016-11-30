@@ -2,34 +2,37 @@
 using Leak.Core.Core;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus.Components;
-using System;
 
 namespace Leak.Core.Omnibus
 {
     public class OmnibusContext
     {
+        private readonly Metainfo metainfo;
+        private readonly Bitfield bitfield;
+        private readonly OmnibusHooks hooks;
         private readonly OmnibusConfiguration configuration;
         private readonly OmnibusCache cache;
         private readonly OmnibusBitfieldCollection bitfields;
         private readonly OmnibusPieceCollection pieces;
         private readonly OmnibusReservationCollection reservations;
+        private readonly OmnibusStateCollection states;
+
         private readonly LeakQueue<OmnibusContext> queue;
 
-        public OmnibusContext(Action<OmnibusConfiguration> configurer)
+        public OmnibusContext(Metainfo metainfo, Bitfield bitfield, OmnibusHooks hooks, OmnibusConfiguration configuration)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new OmnibusCallbackNothing();
-                with.LeaseDuration = TimeSpan.FromSeconds(30);
-                with.SchedulerThreshold = 16;
-            });
+            this.metainfo = metainfo;
+            this.bitfield = bitfield;
+            this.hooks = hooks;
+            this.configuration = configuration;
 
-            cache = new OmnibusCache(configuration.Metainfo.Properties.Pieces);
+            cache = new OmnibusCache(metainfo.Properties.Pieces);
             bitfields = new OmnibusBitfieldCollection(cache);
             reservations = new OmnibusReservationCollection(configuration.LeaseDuration);
 
             queue = new LeakQueue<OmnibusContext>(this);
             pieces = new OmnibusPieceCollection(this);
+            states = new OmnibusStateCollection();
         }
 
         public int SchedulerThreshold
@@ -39,17 +42,17 @@ namespace Leak.Core.Omnibus
 
         public Metainfo Metainfo
         {
-            get { return configuration.Metainfo; }
+            get { return metainfo; }
         }
 
         public Bitfield Bitfield
         {
-            get { return configuration.Bitfield; }
+            get { return bitfield; }
         }
 
-        public OmnibusCallback Callback
+        public OmnibusHooks Hooks
         {
-            get { return configuration.Callback; }
+            get { return hooks; }
         }
 
         public OmnibusBitfieldCollection Bitfields
@@ -75,6 +78,11 @@ namespace Leak.Core.Omnibus
         public OmnibusCache Cache
         {
             get { return cache; }
+        }
+
+        public OmnibusStateCollection States
+        {
+            get { return states; }
         }
     }
 }

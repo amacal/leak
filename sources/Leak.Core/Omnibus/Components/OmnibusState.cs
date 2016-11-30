@@ -1,10 +1,11 @@
 ﻿using Leak.Core.Common;
 
-namespace Leak.Core.Events
+namespace Leak.Core.Omnibus.Components
 {
-    public class PeerStateChanged
+    public class OmnibusState
     {
-        public PeerHash Peer;
+        public PeerHash Peer { get; set; }
+        public int Ranking { get; set; }
 
         public bool IsLocalInterestedInRemote;
         public bool IsLocalChokingRemote;

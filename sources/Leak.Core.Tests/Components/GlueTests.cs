@@ -126,7 +126,7 @@ namespace Leak.Core.Tests.Components
         {
             FileHash hash = FileHash.Random();
 
-            var leftHandler = leftHooks.OnPeerStateChanged.Trigger(data =>
+            var leftHandler = leftHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.IsLocalChokingRemote.Should().BeTrue();
@@ -135,7 +135,7 @@ namespace Leak.Core.Tests.Components
                 data.IsRemoteInterestedInLocal.Should().BeFalse();
             });
 
-            var rightHandler = rightHooks.OnPeerStateChanged.Trigger(data =>
+            var rightHandler = rightHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(leftHash);
                 data.IsLocalChokingRemote.Should().BeFalse();
@@ -144,8 +144,8 @@ namespace Leak.Core.Tests.Components
                 data.IsRemoteInterestedInLocal.Should().BeFalse();
             });
 
-            leftHooks.OnPeerStateChanged = leftHandler;
-            rightHooks.OnPeerStateChanged = rightHandler;
+            leftHooks.OnPeerChanged = leftHandler;
+            rightHooks.OnPeerChanged = rightHandler;
 
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
@@ -162,7 +162,7 @@ namespace Leak.Core.Tests.Components
         {
             FileHash hash = FileHash.Random();
 
-            var leftHandler = leftHooks.OnPeerStateChanged.Trigger(data =>
+            var leftHandler = leftHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.IsLocalChokingRemote.Should().BeTrue();
@@ -171,7 +171,7 @@ namespace Leak.Core.Tests.Components
                 data.IsRemoteInterestedInLocal.Should().BeFalse();
             });
 
-            var rightHandler = rightHooks.OnPeerStateChanged.Trigger(data =>
+            var rightHandler = rightHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(leftHash);
                 data.IsLocalChokingRemote.Should().BeTrue();
@@ -180,8 +180,8 @@ namespace Leak.Core.Tests.Components
                 data.IsRemoteInterestedInLocal.Should().BeFalse();
             });
 
-            leftHooks.OnPeerStateChanged = leftHandler;
-            rightHooks.OnPeerStateChanged = rightHandler;
+            leftHooks.OnPeerChanged = leftHandler;
+            rightHooks.OnPeerChanged = rightHandler;
 
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
@@ -198,7 +198,7 @@ namespace Leak.Core.Tests.Components
         {
             FileHash hash = FileHash.Random();
 
-            var leftHandler = leftHooks.OnPeerStateChanged.Trigger(data =>
+            var leftHandler = leftHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.IsLocalChokingRemote.Should().BeTrue();
@@ -207,7 +207,7 @@ namespace Leak.Core.Tests.Components
                 data.IsRemoteInterestedInLocal.Should().BeTrue();
             });
 
-            var rightHandler = rightHooks.OnPeerStateChanged.Trigger(data =>
+            var rightHandler = rightHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(leftHash);
                 data.IsLocalChokingRemote.Should().BeTrue();
@@ -216,8 +216,8 @@ namespace Leak.Core.Tests.Components
                 data.IsRemoteInterestedInLocal.Should().BeFalse();
             });
 
-            leftHooks.OnPeerStateChanged = leftHandler;
-            rightHooks.OnPeerStateChanged = rightHandler;
+            leftHooks.OnPeerChanged = leftHandler;
+            rightHooks.OnPeerChanged = rightHandler;
 
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
@@ -235,13 +235,13 @@ namespace Leak.Core.Tests.Components
             FileHash hash = FileHash.Random();
             Bitfield bitfield = Bitfield.Random(24);
 
-            var handler = leftHooks.OnPeerBitfieldChanged.Trigger(data =>
+            var handler = leftHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.Bitfield.Should().Be(bitfield);
             });
 
-            leftHooks.OnPeerBitfieldChanged = handler;
+            leftHooks.OnPeerChanged = handler;
 
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
@@ -258,14 +258,14 @@ namespace Leak.Core.Tests.Components
             FileHash hash = FileHash.Random();
             Bitfield bitfield = new Bitfield(24);
 
-            var handler = leftHooks.OnPeerBitfieldChanged.Trigger(data =>
+            var handler = leftHooks.OnPeerChanged.Trigger(data =>
             {
                 data.Peer.Should().Be(rightHash);
                 data.Bitfield.Should().NotBeNull();
                 data.Bitfield[17].Should().BeTrue();
             });
 
-            leftHooks.OnPeerBitfieldChanged = handler;
+            leftHooks.OnPeerChanged = handler;
 
             listener.Enable(hash);
             connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
