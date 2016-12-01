@@ -22,7 +22,7 @@ namespace Leak.Core.Retriever
         public void Start()
         {
             context.Repository.Start();
-            context.Omnibus.Start(context.Pipeline);
+            context.Omnibus.Start();
 
             context.Pipeline.Register(context.Queue);
             context.Pipeline.Register(TimeSpan.FromMilliseconds(250), OnTick);

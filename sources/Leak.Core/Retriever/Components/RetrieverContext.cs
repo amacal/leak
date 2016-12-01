@@ -75,7 +75,7 @@ namespace Leak.Core.Retriever.Components
             OmnibusHooks hooks = CreateOmnibusHooks();
             OmnibusConfiguration configuration = new OmnibusConfiguration();
 
-            return new OmnibusService(metainfo, bitfield, hooks, configuration);
+            return new OmnibusService(metainfo, bitfield, pipeline, hooks, configuration);
         }
 
         private OmnibusHooks CreateOmnibusHooks()

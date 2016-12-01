@@ -3,6 +3,7 @@ using Leak.Core.Core;
 using Leak.Core.Events;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus.Tasks;
+using System;
 using System.Collections.Generic;
 
 namespace Leak.Core.Omnibus
@@ -12,16 +13,18 @@ namespace Leak.Core.Omnibus
     /// which announced their bitfield, tracks all requested pieces/blocks and
     /// monitors completed pieces.
     /// </summary>
-    public class OmnibusService
+    public class OmnibusService : IDisposable
     {
+        private readonly LeakPipeline pipeline;
         private readonly OmnibusContext context;
 
-        public OmnibusService(Metainfo metainfo, Bitfield bitfield, OmnibusHooks hooks, OmnibusConfiguration configuration)
+        public OmnibusService(Metainfo metainfo, Bitfield bitfield, LeakPipeline pipeline, OmnibusHooks hooks, OmnibusConfiguration configuration)
         {
+            this.pipeline = pipeline;
             context = new OmnibusContext(metainfo, bitfield, hooks, configuration);
         }
 
-        public void Start(LeakPipeline pipeline)
+        public void Start()
         {
             pipeline.Register(context.Queue);
         }
@@ -65,6 +68,10 @@ namespace Leak.Core.Omnibus
         public void Schedule(OmnibusStrategy strategy, PeerHash peer, int count)
         {
             context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
+        }
+
+        public void Dispose()
+        {
         }
     }
 }
