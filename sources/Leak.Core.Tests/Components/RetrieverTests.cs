@@ -95,7 +95,7 @@ namespace Leak.Core.Tests.Components
         }
 
         [Test]
-        public void ShouldTriggerOnDataCompleted()
+        public void ShouldTriggerDataCompleted()
         {
             Trigger handler = Trigger.Bind(ref hooks.OnDataCompleted, data =>
             {

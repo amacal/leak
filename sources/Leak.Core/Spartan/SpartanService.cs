@@ -1,4 +1,5 @@
 ﻿using Leak.Core.Core;
+using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Files;
@@ -28,7 +29,7 @@ namespace Leak.Core.Spartan
         public void Start()
         {
             context.Pipeline.Register(context.Queue);
-            context.Queue.Add(new SpartanScheduleNext());
+            context.Queue.Add(new SpartanScheduleNext(context));
         }
 
         public void HandleMetadataMeasured(MetadataMeasured data)
@@ -47,6 +48,22 @@ namespace Leak.Core.Spartan
             }
         }
 
+        public void HandlePeerChanged(PeerChanged data)
+        {
+            if (context.Facts.IsOngoing(SpartanTasks.Download))
+            {
+                context.Facts.Retriever.HandlePeerChanged(data);
+            }
+        }
+
+        public void HandleBlockReceived(BlockReceived data)
+        {
+            if (context.Facts.IsOngoing(SpartanTasks.Download))
+            {
+                context.Facts.Retriever.HandleBlockReceived(data);
+            }
+        }
+
         public void Dispose()
         {
             if (context.Facts.IsOngoing(SpartanTasks.Discover))
@@ -58,6 +75,12 @@ namespace Leak.Core.Spartan
             if (context.Facts.IsOngoing(SpartanTasks.Verify))
             {
                 context.Facts.Repository.Dispose();
+                context.Facts.Repository = null;
+            }
+
+            if (context.Facts.IsOngoing(SpartanTasks.Download))
+            {
+                context.Facts.Retriever.Dispose();
                 context.Facts.Repository = null;
             }
         }

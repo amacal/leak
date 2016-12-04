@@ -1,4 +1,5 @@
-﻿using Leak.Core.Metadata;
+﻿using Leak.Core.Common;
+using Leak.Core.Metadata;
 using Leak.Core.Metaget;
 using Leak.Core.Repository;
 using Leak.Core.Retriever;
@@ -41,6 +42,8 @@ namespace Leak.Core.Spartan
         }
 
         public Metainfo Metainfo;
+
+        public Bitfield Bitfield;
 
         public MetagetService MetaGet;
 

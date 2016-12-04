@@ -1,17 +1,26 @@
 ﻿using Leak.Core.Common;
 using Leak.Core.Core;
+using Leak.Core.Events;
 using Leak.Core.Metaget;
 using Leak.Core.Repository;
+using Leak.Core.Retriever;
 
 namespace Leak.Core.Spartan
 {
     public class SpartanScheduleNext : LeakTask<SpartanContext>
     {
-        public void Execute(SpartanContext context)
+        private readonly SpartanContext context;
+
+        public SpartanScheduleNext(SpartanContext context)
+        {
+            this.context = context;
+        }
+
+        public void Execute(SpartanContext remove)
         {
             if (context.Facts.CanStart(SpartanTasks.Discover))
             {
-                MetagetHooks hooks = CreateMetagetHooks(context);
+                MetagetHooks hooks = CreateMetagetHooks();
                 MetagetConfiguration configuration = CreateMetagetConfiguration();
 
                 context.Facts.MetaGet = new MetagetService(context.Glue, context.Destination, hooks, configuration);
@@ -25,7 +34,7 @@ namespace Leak.Core.Spartan
 
             if (context.Facts.CanStart(SpartanTasks.Verify))
             {
-                RepositoryHooks hooks = CreateRepositoryHooks(context);
+                RepositoryHooks hooks = CreateRepositoryHooks();
                 RepositoryConfiguration configuration = CreateRepositoryConfiguration();
 
                 context.Facts.Repository = new RepositoryService(context.Facts.Metainfo, context.Destination, context.Files, hooks, configuration);
@@ -39,10 +48,18 @@ namespace Leak.Core.Spartan
 
             if (context.Facts.CanStart(SpartanTasks.Download))
             {
+                RetrieverHooks hooks = CreateRetrieverHooks();
+                RetrieverConfiguration configuration = CreateRetrieverConfiguration();
+
+                context.Facts.Retriever = new RetrieverService(context.Facts.Metainfo, context.Destination, context.Facts.Bitfield, context.Glue, context.Files, context.Pipeline, hooks, configuration);
+                context.Facts.Start(SpartanTasks.Download);
+
+                context.Hooks.CallTaskStarted(context.Glue.Hash, SpartanTasks.Download);
+                context.Facts.Retriever.Start();
             }
         }
 
-        private MetagetHooks CreateMetagetHooks(SpartanContext context)
+        private MetagetHooks CreateMetagetHooks()
         {
             return new MetagetHooks
             {
@@ -60,18 +77,44 @@ namespace Leak.Core.Spartan
             };
         }
 
-        private RepositoryHooks CreateRepositoryHooks(SpartanContext context)
+        private RepositoryHooks CreateRepositoryHooks()
         {
             return new RepositoryHooks
             {
                 OnDataAllocated = context.Hooks.OnDataAllocated,
-                OnDataVerified = data => context.Queue.Add(new SpartanCompleteVerify(data))
+                OnDataVerified = OnDataVerified
             };
+        }
+
+        private void OnDataVerified(DataVerified data)
+        {
+            context.Queue.Add(new SpartanCompleteVerify(data));
         }
 
         private RepositoryConfiguration CreateRepositoryConfiguration()
         {
             return new RepositoryConfiguration
+            {
+            };
+        }
+
+        private RetrieverHooks CreateRetrieverHooks()
+        {
+            return new RetrieverHooks
+            {
+                OnDataCompleted = OnDataCompleted,
+                OnDataChanged = context.Hooks.OnDataChanged
+            };
+        }
+
+        private void OnDataCompleted(DataCompleted data)
+        {
+            context.Queue.Add(new SpartanCompleteDownload(data));
+        }
+
+        private RetrieverConfiguration CreateRetrieverConfiguration()
+        {
+            return new RetrieverConfiguration
             {
             };
         }

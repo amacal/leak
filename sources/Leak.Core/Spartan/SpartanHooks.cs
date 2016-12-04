@@ -53,5 +53,18 @@ namespace Leak.Core.Spartan
         /// and the actual bitfield is known.
         /// </summary>
         public Action<DataVerified> OnDataVerified;
+
+        /// <summary>
+        /// Called when some piece was successfully downloaded, verified
+        /// and therefore the retrieving process changed.
+        /// </summary>
+        public Action<DataChanged> OnDataChanged;
+
+        /// <summary>
+        /// Called when the all pieces were successfully retrieved
+        /// and validated against file hash. It means there is no
+        /// more pieces to download and no more progress can be made.
+        /// </summary>
+        public Action<DataCompleted> OnDataCompleted;
     }
 }

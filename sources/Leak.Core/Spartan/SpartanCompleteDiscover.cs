@@ -24,7 +24,7 @@ namespace Leak.Core.Spartan
             context.Glue.SetPieces(data.Metainfo.Pieces.Length);
             context.Facts.Metainfo = data.Metainfo;
 
-            context.Queue.Add(new SpartanScheduleNext());
+            context.Queue.Add(new SpartanScheduleNext(context));
         }
     }
 }

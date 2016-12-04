@@ -380,6 +380,7 @@
     <Compile Include="Omnibus\Components\OmnibusReservationCollection.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCollection.cs" />
     <Compile Include="Spartan\SpartanCompleteDiscover.cs" />
+    <Compile Include="Spartan\SpartanCompleteDownload.cs" />
     <Compile Include="Spartan\SpartanCompleteVerify.cs" />
     <Compile Include="Spartan\SpartanConfiguration.cs" />
     <Compile Include="Spartan\SpartanContext.cs" />

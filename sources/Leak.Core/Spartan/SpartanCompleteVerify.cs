@@ -14,6 +14,8 @@ namespace Leak.Core.Spartan
 
         public void Execute(SpartanContext context)
         {
+            context.Facts.Bitfield = data.Bitfield;
+
             context.Facts.Repository.Dispose();
             context.Facts.Repository = null;
 
@@ -21,7 +23,7 @@ namespace Leak.Core.Spartan
             context.Hooks.CallTaskCompleted(context.Glue.Hash, SpartanTasks.Verify);
 
             context.Hooks.CallDataVerified(data);
-            context.Queue.Add(new SpartanScheduleNext());
+            context.Queue.Add(new SpartanScheduleNext(context));
         }
     }
 }
