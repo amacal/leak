@@ -95,6 +95,51 @@ namespace Leak.Core.Tests.Components
         }
 
         [Test]
+        public void ShouldTriggerPieceAccepted()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnPieceAccepted, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(1);
+            });
+
+            using (RetrieverService retriever = NewRetrieverService())
+            {
+                retriever.Start();
+                retriever.HandleBlockReceived(fixture.Debian.Events.BlockReceived[1]);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerPieceRejected()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnPieceRejected, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(1);
+            });
+
+            BlockReceived received = new BlockReceived
+            {
+                Peer = PeerHash.Random(),
+                Hash = fixture.Debian.Metadata.Hash,
+                Piece = 1,
+                Block = 0,
+                Payload = fixture.Debian.Events.BlockReceived[0].Payload
+            };
+
+            using (RetrieverService retriever = NewRetrieverService())
+            {
+                retriever.Start();
+                retriever.HandleBlockReceived(received);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
         public void ShouldTriggerDataCompleted()
         {
             Trigger handler = Trigger.Bind(ref hooks.OnDataCompleted, data =>

@@ -17,6 +17,18 @@ namespace Leak.Core.Retriever
         public Action<BlockHandled> OnBlockHandled;
 
         /// <summary>
+        /// Called when some piece was successfully verified against
+        /// the hash and the piece is considered to be completed.
+        /// </summary>
+        public Action<PieceAccepted> OnPieceAccepted;
+
+        /// <summary>
+        /// Called when some piece was unsuccessfully verified against
+        /// the hash and the piece is considered to be incompleted.
+        /// </summary>
+        public Action<PieceRejected> OnPieceRejected;
+
+        /// <summary>
         /// Called when some piece was successfully verified and therefore
         /// the retrieving process changed.
         /// </summary>

@@ -66,5 +66,17 @@ namespace Leak.Core.Spartan
         /// more pieces to download and no more progress can be made.
         /// </summary>
         public Action<DataCompleted> OnDataCompleted;
+
+        /// <summary>
+        /// Called when some piece was successfully verified against
+        /// the hash and the piece is considered to be completed.
+        /// </summary>
+        public Action<PieceAccepted> OnPieceAccepted;
+
+        /// <summary>
+        /// Called when some piece was unsuccessfully verified against
+        /// the hash and the piece is considered to be incompleted.
+        /// </summary>
+        public Action<PieceRejected> OnPieceRejected;
     }
 }

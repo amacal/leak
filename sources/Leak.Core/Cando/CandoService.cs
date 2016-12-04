@@ -1,8 +1,6 @@
 ﻿using Leak.Core.Bencoding;
 using Leak.Core.Cando.Events;
 using Leak.Core.Common;
-using Leak.Core.Connector;
-using Leak.Core.Listener;
 using Leak.Core.Messages;
 using System;
 
@@ -15,50 +13,6 @@ namespace Leak.Core.Cando
         public CandoService(Action<CandoConfiguration> configurer)
         {
             context = new CandoContext(configurer);
-        }
-
-        public void Register(PeerConnectorHandshake handshake)
-        {
-            lock (context.Synchronized)
-            {
-                PeerSession session = handshake.Session;
-                CandoEntry entry = context.Collection.GetOrCreate(session);
-
-                entry.HasExtensions = handshake.HasExtensions;
-                entry.Direction = PeerDirection.Outgoing;
-
-                entry.Handlers = context.Configuration.Extensions.ToHandlers();
-                entry.Local = context.Configuration.Extensions.ToMap();
-            }
-        }
-
-        public void Register(PeerListenerHandshake handshake)
-        {
-            lock (context.Synchronized)
-            {
-                PeerSession session = handshake.Session;
-                CandoEntry entry = context.Collection.GetOrCreate(session);
-
-                entry.HasExtensions = handshake.HasExtensions;
-                entry.Direction = PeerDirection.Incoming;
-
-                entry.Handlers = context.Configuration.Extensions.ToHandlers();
-                entry.Local = context.Configuration.Extensions.ToMap();
-            }
-        }
-
-        public void Start(PeerSession session)
-        {
-            lock (context.Synchronized)
-            {
-                CandoEntry entry = context.Collection.GetOrCreate(session);
-                PeerDirection direction = entry.Direction;
-
-                if (direction == PeerDirection.Outgoing)
-                {
-                    CallHandshakeIfRequired(entry);
-                }
-            }
         }
 
         public void Handle(PeerSession session, ExtendedIncomingMessage message)

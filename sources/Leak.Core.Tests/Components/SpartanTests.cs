@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Leak.Core.Common;
 using Leak.Core.Events;
 using Leak.Core.Spartan;
 using Leak.Core.Tests.Core;
@@ -331,6 +332,75 @@ namespace Leak.Core.Tests.Components
                     if (data.Task == SpartanTasks.Download)
                     {
                         spartan.HandleBlockReceived(fixture.Debian.Events.BlockReceived[1]);
+                    }
+                };
+
+                spartan.Start();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerPieceAccepted()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnPieceAccepted, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(1);
+            });
+
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover | SpartanTasks.Verify | SpartanTasks.Download))
+            {
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+
+                    if (data.Task == SpartanTasks.Download)
+                    {
+                        spartan.HandleBlockReceived(fixture.Debian.Events.BlockReceived[1]);
+                    }
+                };
+
+                spartan.Start();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerPieceRejected()
+        {
+            Trigger handler = Trigger.Bind(ref hooks.OnPieceRejected, data =>
+            {
+                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
+                data.Piece.Should().Be(1);
+            });
+
+            BlockReceived received = new BlockReceived
+            {
+                Peer = PeerHash.Random(),
+                Hash = fixture.Debian.Metadata.Hash,
+                Piece = 1,
+                Block = 0,
+                Payload = fixture.Debian.Events.BlockReceived[0].Payload
+            };
+
+            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover | SpartanTasks.Verify | SpartanTasks.Download))
+            {
+                hooks.OnTaskStarted = data =>
+                {
+                    if (data.Task == SpartanTasks.Discover)
+                    {
+                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
+                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
+                    }
+
+                    if (data.Task == SpartanTasks.Download)
+                    {
+                        spartan.HandleBlockReceived(received);
                     }
                 };
 

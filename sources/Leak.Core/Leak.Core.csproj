@@ -63,7 +63,6 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Events\ExtensionExchanged.cs" />
-    <Compile Include="Common\BitfieldInfo.cs" />
     <Compile Include="Common\PeerSession.cs" />
     <Compile Include="Common\PieceInfo.cs" />
     <Compile Include="Communicator\CommunicatorConfiguration.cs" />
@@ -231,7 +230,6 @@
     <Compile Include="Bytes.cs" />
     <Compile Include="Common\PeerAddress.cs" />
     <Compile Include="Common\PeerDirection.cs" />
-    <Compile Include="Common\PeerEndpoint.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />

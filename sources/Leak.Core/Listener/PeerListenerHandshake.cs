@@ -1,5 +1,4 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Negotiator;
+﻿using Leak.Core.Negotiator;
 
 namespace Leak.Core.Listener
 {
@@ -10,11 +9,6 @@ namespace Leak.Core.Listener
         public PeerListenerHandshake(Handshake handshake)
         {
             this.handshake = handshake;
-        }
-
-        public PeerSession Session
-        {
-            get { return new PeerSession(handshake.Hash, handshake.Remote); }
         }
 
         public bool HasExtensions

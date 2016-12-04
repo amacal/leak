@@ -61,13 +61,13 @@ namespace Leak.Core.Retriever.Components
         private void OnPieceAccepted(PieceAccepted data)
         {
             omnibus.Complete(data.Piece);
-            //context.Callback.OnPieceVerified(hash, piece)
+            hooks.CallPieceAccepted(data);
         }
 
         private void OnPieceRejected(PieceRejected data)
         {
             omnibus.Invalidate(data.Piece);
-            //context.Callback.OnPieceRejected(hash, piece);
+            hooks.CallPieceRejected(data);
         }
 
         private OmnibusService CreateOmnibusService(Bitfield bitfield)

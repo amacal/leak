@@ -103,7 +103,9 @@ namespace Leak.Core.Spartan
             return new RetrieverHooks
             {
                 OnDataCompleted = OnDataCompleted,
-                OnDataChanged = context.Hooks.OnDataChanged
+                OnDataChanged = context.Hooks.OnDataChanged,
+                OnPieceAccepted = context.Hooks.OnPieceAccepted,
+                OnPieceRejected = context.Hooks.OnPieceRejected
             };
         }
 

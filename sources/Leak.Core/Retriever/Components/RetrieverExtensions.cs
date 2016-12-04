@@ -50,5 +50,15 @@ namespace Leak.Core.Retriever.Components
                 Block = block
             });
         }
+
+        public static void CallPieceAccepted(this RetrieverHooks hooks, PieceAccepted data)
+        {
+            hooks.OnPieceAccepted?.Invoke(data);
+        }
+
+        public static void CallPieceRejected(this RetrieverHooks hooks, PieceRejected data)
+        {
+            hooks.OnPieceRejected?.Invoke(data);
+        }
     }
 }
