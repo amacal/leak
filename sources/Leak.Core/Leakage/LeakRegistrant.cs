@@ -8,15 +8,15 @@ namespace Leak.Core.Leakage
         public LeakRegistrant()
         {
             Trackers = new List<string>();
-            Peers = new List<string>();
+            Peers = new List<PeerAddress>();
         }
 
         public FileHash Hash;
 
         public string Destination;
 
-        public List<string> Trackers;
+        public ICollection<string> Trackers;
 
-        public List<string> Peers;
+        public ICollection<PeerAddress> Peers;
     }
 }

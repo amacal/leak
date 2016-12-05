@@ -26,10 +26,10 @@ namespace Leak.Core.Tests.Components
             };
 
             Trigger trigger = Trigger.Bind(ref hooks.OnListenerStarted, data =>
-             {
-                 data.Port.Should().Be(configuration.Port);
-                 data.Peer.Should().Be(configuration.Peer);
-             });
+            {
+                data.Port.Should().Be(configuration.Port);
+                data.Peer.Should().Be(configuration.Peer);
+            });
 
             using (LeakClient client = new LeakClient(hooks, configuration))
             {
@@ -47,6 +47,35 @@ namespace Leak.Core.Tests.Components
 
             using (LeakClient client = new LeakClient(hooks, configuration))
             {
+            }
+        }
+
+        [Test]
+        public void ShouldConnectToSue()
+        {
+            using (Sue sue = new Sue())
+            {
+                LeakConfiguration configuration = new LeakConfiguration
+                {
+                    Peer = PeerHash.Random()
+                };
+
+                Trigger trigger = Trigger.Bind(ref hooks.OnPeerConnected, data =>
+                {
+                    data.Peer.Should().Be(sue.Peer);
+                });
+
+                LeakRegistrant registrant = new LeakRegistrant
+                {
+                    Hash = sue.Hash,
+                    Peers = new[] { sue.Endpoint }
+                };
+
+                using (LeakClient client = new LeakClient(hooks, configuration))
+                {
+                    client.Register(registrant);
+                    trigger.Wait().Should().BeTrue();
+                }
             }
         }
     }

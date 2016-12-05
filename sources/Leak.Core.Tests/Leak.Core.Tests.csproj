@@ -68,6 +68,7 @@
     <Compile Include="Core\Sandbox.cs" />
     <Compile Include="Core\SandboxExtensions.cs" />
     <Compile Include="Components\SpartanTests.cs" />
+    <Compile Include="Core\Sue.cs" />
     <Compile Include="Core\Swarm.cs" />
     <Compile Include="Core\SwarmEntry.cs" />
     <Compile Include="Core\Trigger.cs" />

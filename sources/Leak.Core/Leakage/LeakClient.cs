@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Completion;
+using Leak.Core.Connector;
 using Leak.Core.Core;
 using Leak.Core.Events;
 using Leak.Core.Glue;
@@ -8,6 +9,7 @@ using Leak.Core.Listener;
 using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Core.Spartan;
+using Leak.Files;
 using System;
 using System.Collections.Generic;
 
@@ -25,6 +27,7 @@ namespace Leak.Core.Leakage
         private readonly CompletionThread worker;
         private readonly LeakCollection collections;
         private readonly LeakPipeline pipeline;
+        private readonly FileFactory files;
 
         public LeakClient(LeakHooks hooks, LeakConfiguration configuration)
         {
@@ -34,15 +37,16 @@ namespace Leak.Core.Leakage
             collections = new LeakCollection();
             worker = new CompletionThread();
             pipeline = new LeakPipeline();
-
-            network = new NetworkPool(pipeline, worker, CreateNetworkHooks());
-            listener = CreateAndStartListener();
-
-            glue = new GlueFactory(new BufferedBlockFactory());
+            files = new FileFactory(worker);
 
             pipeline.Start();
             worker.Start();
+
+            network = new NetworkPool(pipeline, worker, CreateNetworkHooks());
             network.Start();
+
+            listener = CreateAndStartListener();
+            glue = new GlueFactory(new BufferedBlockFactory());
         }
 
         private PeerListener CreateAndStartListener()
@@ -66,12 +70,40 @@ namespace Leak.Core.Leakage
             LeakEntry entry = collections.Register(registrant);
 
             entry.Destination = registrant.Destination;
-            entry.Glue = glue.Create(entry.Hash, CreateGlueHooks(entry), CreateGlueConfiguration(entry));
+            entry.MetadataHooks = new MetadataHooks();
 
-            entry.Spartan = new SpartanService(null, entry.Destination, entry.Glue, null, CreateSpartanHooks(), CreateSpartanConfiguration());
+            entry.GlueHooks = new GlueHooks();
+            entry.Glue = glue.Create(entry.Hash, entry.GlueHooks, CreateGlueConfiguration(entry));
+
+            entry.SpartaHooks = new SpartanHooks();
+            entry.Spartan = new SpartanService(pipeline, entry.Destination, entry.Glue, files, CreateSpartanHooks(), CreateSpartanConfiguration());
+
+            entry.ConnectorHooks = new PeerConnectorHooks();
+            entry.Connector = new PeerConnector(network, entry.ConnectorHooks, new PeerConnectorConfiguration());
+
+            AttachHooks(entry);
+
             entry.Spartan.Start();
+            entry.Connector.Start(pipeline);
 
-            listener.Enable(entry.Hash);
+            listener?.Enable(entry.Hash);
+
+            foreach (PeerAddress peer in registrant.Peers)
+            {
+                entry.Connector.ConnectTo(registrant.Hash, peer);
+            }
+        }
+
+        private void AttachHooks(LeakEntry entry)
+        {
+            entry.GlueHooks.OnPeerChanged = entry.Spartan.HandlePeerChanged;
+            entry.GlueHooks.OnBlockReceived = entry.Spartan.HandleBlockReceived;
+            entry.GlueHooks.OnPeerConnected = hooks.OnPeerConnected;
+
+            entry.MetadataHooks.OnMetadataMeasured = entry.Spartan.HandleMetadataMeasured;
+            entry.MetadataHooks.OnMetadataReceived = entry.Spartan.HandleMetadataReceived;
+
+            entry.ConnectorHooks.OnHandshakeCompleted = OnHandshakeCompleted;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()
@@ -100,32 +132,14 @@ namespace Leak.Core.Leakage
             };
         }
 
-        private GlueHooks CreateGlueHooks(LeakEntry entry)
-        {
-            return new GlueHooks
-            {
-                OnPeerChanged = entry.Spartan.HandlePeerChanged,
-                OnBlockReceived = entry.Spartan.HandleBlockReceived
-            };
-        }
-
         private GlueConfiguration CreateGlueConfiguration(LeakEntry entry)
         {
             return new GlueConfiguration
             {
                 Plugins = new List<GluePlugin>
                 {
-                    new MetadataPlugin(CreateMetadataHooks(entry))
+                    new MetadataPlugin(entry.MetadataHooks)
                 }
-            };
-        }
-
-        private MetadataHooks CreateMetadataHooks(LeakEntry entry)
-        {
-            return new MetadataHooks
-            {
-                OnMetadataMeasured = entry.Spartan.HandleMetadataMeasured,
-                OnMetadataReceived = entry.Spartan.HandleMetadataReceived
             };
         }
 
