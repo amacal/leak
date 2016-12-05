@@ -63,8 +63,6 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Events\ExtensionExchanged.cs" />
-    <Compile Include="Common\PeerSession.cs" />
-    <Compile Include="Common\PieceInfo.cs" />
     <Compile Include="Communicator\CommunicatorConfiguration.cs" />
     <Compile Include="Communicator\CommunicatorExtensions.cs" />
     <Compile Include="Communicator\CommunicatorHooks.cs" />
@@ -227,9 +225,6 @@
     <Compile Include="Retriever\Tasks\HandleBlockReceived.cs" />
     <Compile Include="Retriever\Tasks\ScheduleItTask.cs" />
     <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
-    <Compile Include="Bytes.cs" />
-    <Compile Include="Common\PeerAddress.cs" />
-    <Compile Include="Common\PeerDirection.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
@@ -260,7 +255,6 @@
     <Compile Include="Loop\ConnectionLoopConnection.cs" />
     <Compile Include="Loop\ConnectionLoopConnectionToBytes.cs" />
     <Compile Include="Loop\ConnectionLoopHandler.cs" />
-    <Compile Include="Common\Bitfield.cs" />
     <Compile Include="Messages\BitfieldIncomingMessage.cs" />
     <Compile Include="Messages\ChokeMessage.cs" />
     <Compile Include="Messages\Extended.cs" />
@@ -313,8 +307,6 @@
     <Compile Include="Negotiator\HandshakeCryptoHashMessage.cs" />
     <Compile Include="Negotiator\HandshakeCryptoPayload.cs" />
     <Compile Include="Negotiator\HandshakeCryptoPayloadMessage.cs" />
-    <Compile Include="Common\FileHash.cs" />
-    <Compile Include="Common\FileHashCollection.cs" />
     <Compile Include="Negotiator\HandshakeMatch.cs" />
     <Compile Include="Negotiator\HandshakeKey.cs" />
     <Compile Include="Negotiator\HandshakeKeyExchange.cs" />
@@ -330,7 +322,6 @@
     <Compile Include="Negotiator\HandshakeNegotiatorPassive.cs" />
     <Compile Include="Negotiator\HandshakeNegotiatorPassiveContext.cs" />
     <Compile Include="Negotiator\HandshakeOptions.cs" />
-    <Compile Include="Common\PeerHash.cs" />
     <Compile Include="Negotiator\HandshakeRejection.cs" />
     <Compile Include="Negotiator\HandshakeRivestCipher.cs" />
     <Compile Include="Network\NetworkBufferDecryptor.cs" />
@@ -406,6 +397,10 @@
     <Compile Include="Telegraph\TelegraphService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
       <Name>Leak.Completion</Name>

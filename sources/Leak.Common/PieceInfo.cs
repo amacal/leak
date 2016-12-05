@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Common
+﻿namespace Leak.Common
 {
     public class PieceInfo
     {

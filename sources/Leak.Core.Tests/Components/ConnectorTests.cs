@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Common;
 using Leak.Core.Connector;
 using Leak.Core.Core;
 using Leak.Core.Listener;
@@ -55,9 +55,9 @@ namespace Leak.Core.Tests.Components
 
             var handler = hooks.OnConnectionEstablished.Trigger(data =>
             {
-                AssertionExtensions.Should((object) data.Remote).NotBeNull();
-                AssertionExtensions.Should((string) data.Remote.Host).Be("127.0.0.1");
-                AssertionExtensions.Should((int) data.Remote.Port).Be(8080);
+                AssertionExtensions.Should((object)data.Remote).NotBeNull();
+                AssertionExtensions.Should((string)data.Remote.Host).Be("127.0.0.1");
+                AssertionExtensions.Should((int)data.Remote.Port).Be(8080);
             });
 
             hooks.OnConnectionEstablished = handler;

@@ -1,4 +1,4 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Common;
 
 namespace Leak.Core.Listener
 {

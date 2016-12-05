@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Leak.Core.Common
+namespace Leak.Common
 {
     public class PeerAddress
     {

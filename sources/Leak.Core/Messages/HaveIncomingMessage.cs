@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Messages
+﻿using Leak.Common;
+
+namespace Leak.Core.Messages
 {
     public class HaveIncomingMessage
     {

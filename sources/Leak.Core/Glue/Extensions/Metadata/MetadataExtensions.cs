@@ -1,5 +1,5 @@
-﻿using Leak.Core.Bencoding;
-using Leak.Core.Common;
+﻿using Leak.Common;
+using Leak.Core.Bencoding;
 
 namespace Leak.Core.Glue.Extensions.Metadata
 {

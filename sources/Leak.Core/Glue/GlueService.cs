@@ -1,7 +1,7 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Negotiator;
+﻿using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using System;
+using Leak.Common;
 
 namespace Leak.Core.Glue
 {

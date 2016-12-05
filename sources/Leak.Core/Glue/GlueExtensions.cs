@@ -1,5 +1,5 @@
-﻿using Leak.Core.Bencoding;
-using Leak.Core.Common;
+﻿using Leak.Common;
+using Leak.Core.Bencoding;
 using Leak.Core.Events;
 using Leak.Core.Messages;
 using Leak.Core.Network;

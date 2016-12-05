@@ -1,5 +1,5 @@
-﻿using Leak.Core.Common;
-using System;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Core.Bitfile
 {

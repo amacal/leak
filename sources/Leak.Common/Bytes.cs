@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Leak.Core
+namespace Leak.Common
 {
     public static class Bytes
     {

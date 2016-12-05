@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Leak.Core.Common
+namespace Leak.Common
 {
     public class FileHashCollection : IEnumerable<FileHash>
     {

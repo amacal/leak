@@ -1,6 +1,6 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Metadata;
+﻿using Leak.Core.Metadata;
 using System.Collections.Generic;
+using Leak.Common;
 
 namespace Leak.Core.Repository
 {

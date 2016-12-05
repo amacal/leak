@@ -1,10 +1,10 @@
-﻿namespace Leak.Core.Common
+﻿namespace Leak.Common
 {
-    public class FileHash
+    public class PeerHash
     {
         private readonly byte[] value;
 
-        public FileHash(byte[] value)
+        public PeerHash(byte[] value)
         {
             this.value = value;
         }
@@ -16,12 +16,12 @@
 
         public override int GetHashCode()
         {
-            return 0;
+            return value[19] * 256 + value[18];
         }
 
         public override bool Equals(object obj)
         {
-            FileHash other = obj as FileHash;
+            PeerHash other = obj as PeerHash;
 
             return other != null && Bytes.Equals(other.value, value);
         }
@@ -31,14 +31,18 @@
             return Bytes.ToString(value);
         }
 
-        public static FileHash Parse(string data)
+        public static PeerHash Random()
         {
-            return new FileHash(Bytes.Parse(data));
+            return new PeerHash(Bytes.Random(20));
         }
 
-        public static FileHash Random()
+        public static PeerHash Random(string prefix)
         {
-            return new FileHash(Bytes.Random(20));
+            byte[] value = Bytes.Parse(prefix);
+            byte[] random = Bytes.Random(20 - value.Length);
+
+            Bytes.Append(ref value, random);
+            return new PeerHash(value);
         }
     }
 }

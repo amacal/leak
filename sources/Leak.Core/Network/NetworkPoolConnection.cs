@@ -1,7 +1,7 @@
-﻿using Leak.Core.Common;
-using Leak.Sockets;
+﻿using Leak.Sockets;
 using System;
 using System.Net;
+using Leak.Common;
 
 namespace Leak.Core.Network
 {

@@ -1,7 +1,7 @@
-﻿using Leak.Core.Common;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using Leak.Common;
 
 namespace Leak.Core.Bitfile
 {

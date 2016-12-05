@@ -77,6 +77,10 @@
     <Compile Include="Repository\ViewTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
       <Name>Leak.Completion</Name>

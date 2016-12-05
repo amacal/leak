@@ -1,5 +1,5 @@
-﻿using Leak.Completion;
-using Leak.Core.Common;
+﻿using Leak.Common;
+using Leak.Completion;
 using Leak.Core.Connector;
 using Leak.Core.Core;
 using Leak.Core.Glue;

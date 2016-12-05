@@ -1,7 +1,7 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Network;
+﻿using Leak.Core.Network;
 using System;
 using System.Text;
+using Leak.Common;
 
 namespace Leak.Core.Negotiator
 {

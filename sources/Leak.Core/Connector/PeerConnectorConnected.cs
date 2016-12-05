@@ -1,4 +1,4 @@
-﻿using Leak.Core.Common;
+﻿using Leak.Common;
 using Leak.Core.Network;
 
 namespace Leak.Core.Connector

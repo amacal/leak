@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Leak.Core.Common;
+using Leak.Common;
 using Leak.Core.Events;
 using Leak.Core.Spartan;
 using Leak.Core.Tests.Core;

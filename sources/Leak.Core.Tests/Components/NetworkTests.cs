@@ -1,14 +1,14 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Common;
 using Leak.Core.Core;
 using Leak.Core.Events;
 using Leak.Core.Network;
 using Leak.Core.Tests.Core;
 using Leak.Sockets;
 using NUnit.Framework;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Leak.Core.Tests.Components
 {

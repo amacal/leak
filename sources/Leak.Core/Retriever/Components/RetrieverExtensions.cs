@@ -1,9 +1,9 @@
-﻿using Leak.Core.Common;
-using Leak.Core.Events;
+﻿using Leak.Core.Events;
 using Leak.Core.Messages;
 using Leak.Core.Omnibus;
 using Leak.Core.Repository;
 using System;
+using Leak.Common;
 
 namespace Leak.Core.Retriever.Components
 {

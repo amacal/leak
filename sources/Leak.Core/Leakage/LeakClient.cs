@@ -1,5 +1,4 @@
 ﻿using Leak.Completion;
-using Leak.Core.Common;
 using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
@@ -9,6 +8,7 @@ using Leak.Core.Network;
 using Leak.Core.Spartan;
 using System;
 using System.Collections.Generic;
+using Leak.Common;
 
 namespace Leak.Core.Leakage
 {
