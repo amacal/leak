@@ -6,15 +6,13 @@ namespace Leak.Core.Glue
     public class GlueFactory
     {
         private readonly DataBlockFactory factory;
-        private readonly GlueConfiguration configuration;
 
-        public GlueFactory(DataBlockFactory factory, GlueConfiguration configuration)
+        public GlueFactory(DataBlockFactory factory)
         {
             this.factory = factory;
-            this.configuration = configuration;
         }
 
-        public GlueService Create(FileHash hash, GlueHooks hooks)
+        public GlueService Create(FileHash hash, GlueHooks hooks, GlueConfiguration configuration)
         {
             return new GlueImplementation(hash, factory, hooks, configuration);
         }

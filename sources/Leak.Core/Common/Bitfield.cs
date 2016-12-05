@@ -50,7 +50,7 @@ namespace Leak.Core.Common
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return items.Length;
         }
 
         public override bool Equals(object obj)

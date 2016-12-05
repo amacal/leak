@@ -43,15 +43,15 @@ namespace Leak.Core.Tests.Components
             rightConfiguration = new GlueConfiguration();
 
             NetworkPool pool = new NetworkPool(worker, new NetworkPoolHooks());
-            GlueFactory leftFactory = new GlueFactory(new BufferedBlockFactory(), leftConfiguration);
-            GlueFactory rightFactory = new GlueFactory(new BufferedBlockFactory(), rightConfiguration);
+            GlueFactory leftFactory = new GlueFactory(new BufferedBlockFactory());
+            GlueFactory rightFactory = new GlueFactory(new BufferedBlockFactory());
 
             PeerListenerHooks listenerHooks = new PeerListenerHooks
             {
                 OnHandshakeCompleted = rightConnected = new Trigger<HandshakeCompleted>(data =>
                 {
                     leftHash = data.Handshake.Remote;
-                    right = rightFactory.Create(data.Handshake.Hash, rightHooks);
+                    right = rightFactory.Create(data.Handshake.Hash, rightHooks, rightConfiguration);
                     right.Connect(data.Connection, data.Handshake);
                 })
             };
@@ -61,7 +61,7 @@ namespace Leak.Core.Tests.Components
                 OnHandshakeCompleted = leftConnected = new Trigger<HandshakeCompleted>(data =>
                 {
                     rightHash = data.Handshake.Remote;
-                    left = leftFactory.Create(data.Handshake.Hash, leftHooks);
+                    left = leftFactory.Create(data.Handshake.Hash, leftHooks, leftConfiguration);
                     left.Connect(data.Connection, data.Handshake);
                 })
             };

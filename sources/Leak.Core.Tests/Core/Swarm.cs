@@ -58,13 +58,13 @@ namespace Leak.Core.Tests.Core
             };
 
             DataBlockFactory blocks = new BufferedBlockFactory();
-            GlueFactory factory = new GlueFactory(blocks, configuration);
+            GlueFactory factory = new GlueFactory(blocks);
 
             PeerListenerHooks listenerHooks = new PeerListenerHooks
             {
                 OnHandshakeCompleted = data =>
                 {
-                    entry.Glue = factory.Create(hash, entry.Hooks);
+                    entry.Glue = factory.Create(hash, entry.Hooks, configuration);
                     entry.Glue.Connect(data.Connection, data.Handshake);
                 }
             };
@@ -108,13 +108,13 @@ namespace Leak.Core.Tests.Core
             };
 
             DataBlockFactory blocks = new BufferedBlockFactory();
-            GlueFactory factory = new GlueFactory(blocks, configuration);
+            GlueFactory factory = new GlueFactory(blocks);
 
             PeerConnectorHooks connectorHooks = new PeerConnectorHooks
             {
                 OnHandshakeCompleted = data =>
                 {
-                    entry.Glue = factory.Create(hash, entry.Hooks);
+                    entry.Glue = factory.Create(hash, entry.Hooks, configuration);
                     entry.Glue.Connect(data.Connection, data.Handshake);
                 }
             };
