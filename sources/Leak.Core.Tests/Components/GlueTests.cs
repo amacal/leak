@@ -42,7 +42,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration = new GlueConfiguration();
             rightConfiguration = new GlueConfiguration();
 
-            NetworkPool pool = new NetworkPool(worker, new NetworkPoolHooks());
+            NetworkPool pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
             GlueFactory leftFactory = new GlueFactory(new BufferedBlockFactory());
             GlueFactory rightFactory = new GlueFactory(new BufferedBlockFactory());
 
@@ -74,7 +74,7 @@ namespace Leak.Core.Tests.Components
 
             worker.Start();
             pipeline.Start();
-            pool.Start(pipeline);
+            pool.Start();
             connector.Start(pipeline);
             listener.Start();
         }

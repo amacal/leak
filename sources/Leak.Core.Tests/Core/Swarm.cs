@@ -30,7 +30,7 @@ namespace Leak.Core.Tests.Core
             worker = new CompletionThread();
             pipeline = new LeakPipeline();
 
-            pool = new NetworkPool(worker, new NetworkPoolHooks());
+            pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
             entries = new Dictionary<string, SwarmEntry>();
             disposables = new List<IDisposable>();
         }
@@ -141,7 +141,7 @@ namespace Leak.Core.Tests.Core
         {
             pipeline.Start();
             worker.Start();
-            pool.Start(pipeline);
+            pool.Start();
         }
 
         public void Dispose()

@@ -26,7 +26,7 @@ namespace Leak.Core.Tests.Components
             pipeline = new LeakPipeline();
             worker = new CompletionThread();
 
-            pool = new NetworkPool(worker, new NetworkPoolHooks());
+            pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
             connector = new PeerConnector(pool, new PeerConnectorHooks(), new PeerConnectorConfiguration());
 
             hooks = new PeerListenerHooks();
@@ -35,7 +35,7 @@ namespace Leak.Core.Tests.Components
 
             worker.Start();
             pipeline.Start();
-            pool.Start(pipeline);
+            pool.Start();
             connector.Start(pipeline);
         }
 

@@ -144,8 +144,10 @@
     <Compile Include="HashExtensions.cs" />
     <Compile Include="Leakage\LeakClient.cs" />
     <Compile Include="Leakage\LeakCollection.cs" />
+    <Compile Include="Leakage\LeakConfiguration.cs" />
     <Compile Include="Leakage\LeakEntry.cs" />
     <Compile Include="Leakage\LeakFactory.cs" />
+    <Compile Include="Leakage\LeakHooks.cs" />
     <Compile Include="Leakage\LeakRegistrant.cs" />
     <Compile Include="Events\ConnectionTerminated.cs" />
     <Compile Include="Listener\PeerListenerExtensions.cs" />

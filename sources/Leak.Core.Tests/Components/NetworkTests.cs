@@ -26,11 +26,11 @@ namespace Leak.Core.Tests.Components
             worker = new CompletionThread();
 
             hooks = new NetworkPoolHooks();
-            pool = new NetworkPool(worker, hooks);
+            pool = new NetworkPool(pipeline, worker, hooks);
 
             worker.Start();
             pipeline.Start();
-            pool.Start(pipeline);
+            pool.Start();
         }
 
         [TearDown]

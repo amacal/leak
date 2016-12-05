@@ -10,6 +10,7 @@ namespace Leak.Core.Network
 {
     public class NetworkPool : NetworkPoolListener
     {
+        private readonly LeakPipeline pipeline;
         private readonly NetworkPoolHooks hooks;
         private readonly Dictionary<long, NetworkPoolEntry> items;
 
@@ -18,16 +19,17 @@ namespace Leak.Core.Network
 
         private long sequence;
 
-        public NetworkPool(CompletionWorker worker, NetworkPoolHooks hooks)
+        public NetworkPool(LeakPipeline pipeline, CompletionWorker worker, NetworkPoolHooks hooks)
         {
             this.hooks = hooks;
+            this.pipeline = pipeline;
             this.factory = new TcpSocketFactory(worker);
 
             items = new Dictionary<long, NetworkPoolEntry>();
             queue = new LeakQueue<NetworkPool>(this);
         }
 
-        public void Start(LeakPipeline pipeline)
+        public void Start()
         {
             pipeline.Register(queue);
         }

@@ -1,4 +1,6 @@
-﻿using Leak.Completion;
+﻿using Leak.Common;
+using Leak.Completion;
+using Leak.Core.Core;
 using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
@@ -8,28 +10,55 @@ using Leak.Core.Network;
 using Leak.Core.Spartan;
 using System;
 using System.Collections.Generic;
-using Leak.Common;
 
 namespace Leak.Core.Leakage
 {
     public class LeakClient : IDisposable
     {
+        private readonly LeakHooks hooks;
+        private readonly LeakConfiguration configuration;
+
         private readonly NetworkPool network;
         private readonly PeerListener listener;
         private readonly GlueFactory glue;
 
         private readonly CompletionThread worker;
         private readonly LeakCollection collections;
+        private readonly LeakPipeline pipeline;
 
-        public LeakClient()
+        public LeakClient(LeakHooks hooks, LeakConfiguration configuration)
         {
+            this.hooks = hooks;
+            this.configuration = configuration;
+
             collections = new LeakCollection();
             worker = new CompletionThread();
+            pipeline = new LeakPipeline();
 
-            network = new NetworkPool(worker, CreateNetworkHooks());
-            listener = new PeerListener(network, CreateListenerHooks(), CreateListenerConfiguration());
+            network = new NetworkPool(pipeline, worker, CreateNetworkHooks());
+            listener = CreateAndStartListener();
 
             glue = new GlueFactory(new BufferedBlockFactory());
+
+            pipeline.Start();
+            worker.Start();
+            network.Start();
+        }
+
+        private PeerListener CreateAndStartListener()
+        {
+            PeerListener instance = null;
+
+            if (this.configuration.Port.HasValue)
+            {
+                PeerListenerHooks hooks = CreateListenerHooks();
+                PeerListenerConfiguration configuration = CreateListenerConfiguration();
+
+                instance = new PeerListener(network, hooks, configuration);
+                instance.Start();
+            }
+
+            return instance;
         }
 
         public void Register(LeakRegistrant registrant)
@@ -37,7 +66,7 @@ namespace Leak.Core.Leakage
             LeakEntry entry = collections.Register(registrant);
 
             entry.Destination = registrant.Destination;
-            entry.Glue = glue.Create(entry.Hash, CreateGlueHooks(), CreateGlueConfiguration(entry));
+            entry.Glue = glue.Create(entry.Hash, CreateGlueHooks(entry), CreateGlueConfiguration(entry));
 
             entry.Spartan = new SpartanService(null, entry.Destination, entry.Glue, null, CreateSpartanHooks(), CreateSpartanConfiguration());
             entry.Spartan.Start();
@@ -56,6 +85,7 @@ namespace Leak.Core.Leakage
         {
             return new PeerListenerHooks
             {
+                OnListenerStarted = hooks.OnListenerStarted,
                 OnHandshakeCompleted = OnHandshakeCompleted
             };
         }
@@ -64,13 +94,18 @@ namespace Leak.Core.Leakage
         {
             return new PeerListenerConfiguration
             {
+                Port = configuration.Port.Value,
+                Peer = configuration.Peer,
+                Extensions = true
             };
         }
 
-        private GlueHooks CreateGlueHooks()
+        private GlueHooks CreateGlueHooks(LeakEntry entry)
         {
             return new GlueHooks
             {
+                OnPeerChanged = entry.Spartan.HandlePeerChanged,
+                OnBlockReceived = entry.Spartan.HandleBlockReceived
             };
         }
 
@@ -124,6 +159,9 @@ namespace Leak.Core.Leakage
 
         public void Dispose()
         {
+            pipeline.Stop();
+            listener?.Stop();
+            worker.Dispose();
         }
     }
 }

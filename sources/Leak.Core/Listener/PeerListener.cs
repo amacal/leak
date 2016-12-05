@@ -1,9 +1,9 @@
-﻿using Leak.Core.Negotiator;
+﻿using Leak.Common;
+using Leak.Core.Negotiator;
 using Leak.Core.Network;
 using Leak.Sockets;
 using System;
 using System.Net;
-using Leak.Common;
 
 namespace Leak.Core.Listener
 {
@@ -75,7 +75,7 @@ namespace Leak.Core.Listener
             }
             else
             {
-                data.Connection.Dispose();
+                data.Connection?.Dispose();
             }
         }
 
