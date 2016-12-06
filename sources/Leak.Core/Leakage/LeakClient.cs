@@ -53,7 +53,7 @@ namespace Leak.Core.Leakage
         {
             PeerListener instance = null;
 
-            if (this.configuration.Port.HasValue)
+            if (this.configuration.Port != LeakPort.Nothing)
             {
                 PeerListenerHooks hooks = CreateListenerHooks();
                 PeerListenerConfiguration configuration = CreateListenerConfiguration();
@@ -124,9 +124,16 @@ namespace Leak.Core.Leakage
 
         private PeerListenerConfiguration CreateListenerConfiguration()
         {
+            PeerListenerPort port = new PeerListenerPortRandom();
+
+            if (configuration.Port != LeakPort.Random)
+            {
+                port = new PeerListenerPortValue(configuration.Port.Value);
+            }
+
             return new PeerListenerConfiguration
             {
-                Port = configuration.Port.Value,
+                Port = port,
                 Peer = configuration.Peer,
                 Extensions = true
             };

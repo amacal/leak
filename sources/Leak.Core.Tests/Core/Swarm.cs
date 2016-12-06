@@ -40,7 +40,7 @@ namespace Leak.Core.Tests.Core
             get { return entries[name]; }
         }
 
-        public void Listen(string name, int port)
+        public void Listen(string name)
         {
             SwarmEntry entry = new SwarmEntry
             {
@@ -66,13 +66,17 @@ namespace Leak.Core.Tests.Core
                 {
                     entry.Glue = factory.Create(hash, entry.Hooks, configuration);
                     entry.Glue.Connect(data.Connection, data.Handshake);
+                },
+                OnListenerStarted = data =>
+                {
+                    entry.Port = data.Port;
                 }
             };
 
             PeerListenerConfiguration listenerConfiguration = new PeerListenerConfiguration
             {
-                Port = port,
-                Peer = entry.Peer
+                Peer = entry.Peer,
+                Port = new PeerListenerPortRandom()
             };
 
             PeerListener listener = new PeerListener(pool, listenerHooks, listenerConfiguration);
@@ -90,7 +94,7 @@ namespace Leak.Core.Tests.Core
             listener.Start();
         }
 
-        public void Connect(string name, int port)
+        public void Connect(string name, string other)
         {
             SwarmEntry entry = new SwarmEntry
             {
@@ -134,7 +138,7 @@ namespace Leak.Core.Tests.Core
 
             entries.Add(name, entry);
             connector.Start(pipeline);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", entries[other].Port.Value));
         }
 
         public void Start()

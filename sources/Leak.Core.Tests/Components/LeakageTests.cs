@@ -21,13 +21,13 @@ namespace Leak.Core.Tests.Components
         {
             LeakConfiguration configuration = new LeakConfiguration
             {
-                Port = 8099,
+                Port = LeakPort.Random,
                 Peer = PeerHash.Random()
             };
 
             Trigger trigger = Trigger.Bind(ref hooks.OnListenerStarted, data =>
             {
-                data.Port.Should().Be(configuration.Port);
+                data.Port.Should().BeGreaterThan(0);
                 data.Peer.Should().Be(configuration.Peer);
             });
 
@@ -42,7 +42,6 @@ namespace Leak.Core.Tests.Components
         {
             LeakConfiguration configuration = new LeakConfiguration
             {
-                Peer = PeerHash.Random()
             };
 
             using (LeakClient client = new LeakClient(hooks, configuration))
@@ -57,7 +56,6 @@ namespace Leak.Core.Tests.Components
             {
                 LeakConfiguration configuration = new LeakConfiguration
                 {
-                    Peer = PeerHash.Random()
                 };
 
                 Trigger trigger = Trigger.Bind(ref hooks.OnPeerConnected, data =>

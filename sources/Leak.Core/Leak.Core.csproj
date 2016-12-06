@@ -148,10 +148,14 @@
     <Compile Include="Leakage\LeakEntry.cs" />
     <Compile Include="Leakage\LeakFactory.cs" />
     <Compile Include="Leakage\LeakHooks.cs" />
+    <Compile Include="Leakage\LeakPort.cs" />
     <Compile Include="Leakage\LeakRegistrant.cs" />
     <Compile Include="Events\ConnectionTerminated.cs" />
     <Compile Include="Listener\PeerListenerExtensions.cs" />
     <Compile Include="Listener\PeerListenerHooks.cs" />
+    <Compile Include="Listener\PeerListenerPort.cs" />
+    <Compile Include="Listener\PeerListenerPortRandom.cs" />
+    <Compile Include="Listener\PeerListenerPortValue.cs" />
     <Compile Include="Loop\ConnectionLoopExtensions.cs" />
     <Compile Include="Loop\ConnectionLoopHooks.cs" />
     <Compile Include="Messages\BitfieldOutgoingMessage.cs" />

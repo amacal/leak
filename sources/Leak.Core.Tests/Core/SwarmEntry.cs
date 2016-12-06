@@ -7,6 +7,8 @@ namespace Leak.Core.Tests.Core
 {
     public class SwarmEntry
     {
+        public int? Port;
+
         public PeerHash Peer;
 
         public GlueService Glue;

@@ -59,8 +59,8 @@ namespace Leak.Core.Tests.Core
                 Swarm = new Swarm(environment.fixture.Hash);
                 Swarm.Start();
 
-                Swarm.Listen("bob", 8091);
-                Swarm.Connect("sue", 8091);
+                Swarm.Listen("bob");
+                Swarm.Connect("sue", "bob");
 
                 Swarm["bob"].Exchanged.Wait();
                 Swarm["sue"].Exchanged.Wait();

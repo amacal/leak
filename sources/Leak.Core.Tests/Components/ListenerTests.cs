@@ -3,6 +3,7 @@ using Leak.Common;
 using Leak.Completion;
 using Leak.Core.Connector;
 using Leak.Core.Core;
+using Leak.Core.Events;
 using Leak.Core.Listener;
 using Leak.Core.Network;
 using Leak.Core.Tests.Core;
@@ -50,12 +51,12 @@ namespace Leak.Core.Tests.Components
         [Test]
         public void ShouldTriggerListenerStarted()
         {
-            configuration.Port = 8081;
+            configuration.Port = new PeerListenerPortRandom();
             configuration.Peer = PeerHash.Random();
 
             var handler = hooks.OnListenerStarted.Trigger(data =>
             {
-                data.Port.Should().Be(configuration.Port);
+                data.Port.Should().BeGreaterThan(0);
                 data.Peer.Should().Be(configuration.Peer);
             });
 
@@ -69,22 +70,25 @@ namespace Leak.Core.Tests.Components
         public void ShouldTriggerOnConnectionArrived()
         {
             FileHash hash = FileHash.Random();
+            ListenerStarted started = null;
 
-            configuration.Port = 8081;
+            configuration.Port = new PeerListenerPortRandom();
             configuration.Peer = PeerHash.Random();
+
+            hooks.OnListenerStarted = data => started = data;
 
             var handler = hooks.OnConnectionArrived.Trigger(data =>
             {
                 data.Remote.Should().NotBeNull();
                 data.Remote.Host.Should().Be("127.0.0.1");
                 data.Remote.Port.Should().BeGreaterThan(0);
-                data.Remote.Port.Should().NotBe(configuration.Port);
+                data.Remote.Port.Should().NotBe(started.Port);
             });
 
             hooks.OnConnectionArrived = handler;
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8081));
-
             listener.Start();
+
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", started.Port));
             handler.Wait().Should().BeTrue();
         }
 
@@ -92,9 +96,12 @@ namespace Leak.Core.Tests.Components
         public void ShouldTriggerOnHandshakeCompleted()
         {
             FileHash hash = FileHash.Random();
+            ListenerStarted started = null;
 
-            configuration.Port = 8081;
+            configuration.Port = new PeerListenerPortRandom();
             configuration.Peer = PeerHash.Random();
+
+            hooks.OnListenerStarted = data => started = data;
 
             var handler = hooks.OnHandshakeCompleted.Trigger(data =>
             {
@@ -105,9 +112,9 @@ namespace Leak.Core.Tests.Components
             hooks.OnHandshakeCompleted = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8081));
-
             listener.Start();
+
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", started.Port));
             handler.Wait().Should().BeTrue();
         }
 
@@ -115,9 +122,12 @@ namespace Leak.Core.Tests.Components
         public void ShouldTriggerOnHandshakeRejected()
         {
             FileHash hash = FileHash.Random();
+            ListenerStarted started = null;
 
-            configuration.Port = 8081;
+            configuration.Port = new PeerListenerPortRandom();
             configuration.Peer = PeerHash.Random();
+
+            hooks.OnListenerStarted = data => started = data;
 
             var handler = hooks.OnHandshakeRejected.Trigger(data =>
             {
@@ -125,9 +135,9 @@ namespace Leak.Core.Tests.Components
             });
 
             hooks.OnHandshakeRejected = handler;
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8081));
-
             listener.Start();
+
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", started.Port));
             handler.Wait().Should().BeTrue();
         }
     }

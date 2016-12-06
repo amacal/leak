@@ -15,6 +15,8 @@ namespace Leak.Core.Listener
         private readonly PeerListenerConfiguration configuration;
         private readonly FileHashCollection hashes;
 
+        private int assignedPort;
+
         public PeerListener(NetworkPool network, PeerListenerHooks hooks, PeerListenerConfiguration configuration)
         {
             this.network = network;
@@ -27,11 +29,12 @@ namespace Leak.Core.Listener
 
         public void Start()
         {
-            socket.Bind(configuration.Port);
-            socket.Listen(8);
+            assignedPort = configuration.Port.Bind(socket);
 
+            socket.Listen(8);
             socket.Accept(OnAccept);
-            hooks.CallListenerStarted(configuration);
+
+            hooks.CallListenerStarted(configuration, assignedPort);
         }
 
         public void Stop()

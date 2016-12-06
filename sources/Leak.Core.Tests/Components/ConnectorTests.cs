@@ -19,6 +19,7 @@ namespace Leak.Core.Tests.Components
         private PeerConnectorHooks hooks;
         private PeerConnectorConfiguration configuration;
         private PeerListener listener;
+        private int port;
 
         [SetUp]
         public void SetUp()
@@ -27,7 +28,13 @@ namespace Leak.Core.Tests.Components
             worker = new CompletionThread();
 
             pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
-            listener = new PeerListener(pool, new PeerListenerHooks(), new PeerListenerConfiguration());
+            listener = new PeerListener(pool, new PeerListenerHooks
+            {
+                OnListenerStarted = data => port = data.Port
+            }, new PeerListenerConfiguration
+            {
+                Port = new PeerListenerPortRandom()
+            });
 
             hooks = new PeerConnectorHooks();
             configuration = new PeerConnectorConfiguration();
@@ -55,15 +62,15 @@ namespace Leak.Core.Tests.Components
 
             var handler = hooks.OnConnectionEstablished.Trigger(data =>
             {
-                AssertionExtensions.Should((object)data.Remote).NotBeNull();
-                AssertionExtensions.Should((string)data.Remote.Host).Be("127.0.0.1");
-                AssertionExtensions.Should((int)data.Remote.Port).Be(8080);
+                data.Remote.Should().NotBeNull();
+                data.Remote.Host.Should().Be("127.0.0.1");
+                data.Remote.Port.Should().Be(port);
             });
 
             hooks.OnConnectionEstablished = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             handler.Wait().Should().BeTrue();
         }
@@ -102,7 +109,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnHandshakeCompleted = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             handler.Wait().Should().BeTrue();
         }
@@ -118,7 +125,7 @@ namespace Leak.Core.Tests.Components
             });
 
             hooks.OnHandshakeRejected = handler;
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             handler.Wait().Should().BeTrue();
         }

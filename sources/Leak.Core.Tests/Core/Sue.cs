@@ -12,15 +12,21 @@ namespace Leak.Core.Tests.Core
         private readonly LeakRegistrant registrant;
         private readonly FileSandbox sandbox;
 
+        private int port;
+
         public Sue()
         {
             LeakHooks hooks = new LeakHooks
             {
+                OnListenerStarted = data =>
+                {
+                    port = data.Port;
+                }
             };
 
             configuration = new LeakConfiguration
             {
-                Port = 8091,
+                Port = LeakPort.Random,
                 Peer = PeerHash.Random()
             };
 
@@ -48,7 +54,7 @@ namespace Leak.Core.Tests.Core
 
         public PeerAddress Endpoint
         {
-            get { return new PeerAddress("127.0.0.1", configuration.Port.Value); }
+            get { return new PeerAddress("127.0.0.1", port); }
         }
 
         public void Dispose()

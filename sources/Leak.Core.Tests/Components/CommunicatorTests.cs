@@ -27,6 +27,7 @@ namespace Leak.Core.Tests.Components
         private ConnectionLoop loopy;
         private Trigger<HandshakeCompleted> connected;
         private BufferedBlockFactory blocks;
+        private int port;
 
         [SetUp]
         public void SetUp()
@@ -44,14 +45,19 @@ namespace Leak.Core.Tests.Components
                 OnHandshakeCompleted = data =>
                 {
                     communicator = new CommunicatorService(data.Handshake.Remote, data.Connection, hooks, configuration);
-                }
+                },
+                OnListenerStarted = data => port = data.Port
             };
 
             pipeline = new LeakPipeline();
             worker = new CompletionThread();
 
             pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
-            listener = new PeerListener(pool, listenerHooks, new PeerListenerConfiguration());
+            listener = new PeerListener(pool, listenerHooks, new PeerListenerConfiguration
+            {
+                Port = new PeerListenerPortRandom()
+            });
+
             connector = new PeerConnector(pool, connectorHooks, new PeerConnectorConfiguration());
             blocks = new BufferedBlockFactory();
 
@@ -89,7 +95,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendKeepAlive();
@@ -112,7 +118,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendChoke();
@@ -135,7 +141,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendUnchoke();
@@ -158,7 +164,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendInterested();
@@ -181,7 +187,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendHave(2);
@@ -204,7 +210,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendBitfield(new Bitfield(20));
@@ -228,7 +234,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendPiece(new Piece(1, 2, block));
@@ -251,7 +257,7 @@ namespace Leak.Core.Tests.Components
             hooks.OnMessageSent = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             connected.Wait();
             communicator.SendExtended(new Extended(17, new byte[2]));

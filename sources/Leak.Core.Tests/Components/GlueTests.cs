@@ -20,6 +20,7 @@ namespace Leak.Core.Tests.Components
 
         private PeerListener listener;
         private PeerConnector connector;
+        private int port;
 
         private GlueService left;
         private PeerHash leftHash;
@@ -53,7 +54,8 @@ namespace Leak.Core.Tests.Components
                     leftHash = data.Handshake.Remote;
                     right = rightFactory.Create(data.Handshake.Hash, rightHooks, rightConfiguration);
                     right.Connect(data.Connection, data.Handshake);
-                })
+                }),
+                OnListenerStarted = data => port = data.Port
             };
 
             PeerConnectorHooks connectorHooks = new PeerConnectorHooks
@@ -70,7 +72,10 @@ namespace Leak.Core.Tests.Components
             rightHooks = new GlueHooks();
 
             connector = new PeerConnector(pool, connectorHooks, new PeerConnectorConfiguration());
-            listener = new PeerListener(pool, listenerHooks, new PeerListenerConfiguration());
+            listener = new PeerListener(pool, listenerHooks, new PeerListenerConfiguration
+            {
+                Port = new PeerListenerPortRandom()
+            });
 
             worker.Start();
             pipeline.Start();
@@ -99,7 +104,7 @@ namespace Leak.Core.Tests.Components
             leftHooks.OnPeerConnected = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             handler.Wait().Should().BeTrue();
         }
@@ -116,7 +121,7 @@ namespace Leak.Core.Tests.Components
             leftHooks.OnPeerConnected = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             handler.Wait().Should().BeTrue();
         }
@@ -148,7 +153,7 @@ namespace Leak.Core.Tests.Components
             rightHooks.OnPeerChanged = rightHandler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             rightConnected.Wait();
             right.SendUnchoke(leftHash);
@@ -184,7 +189,7 @@ namespace Leak.Core.Tests.Components
             rightHooks.OnPeerChanged = rightHandler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             rightConnected.Wait();
             right.SendChoke(leftHash);
@@ -220,7 +225,7 @@ namespace Leak.Core.Tests.Components
             rightHooks.OnPeerChanged = rightHandler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             rightConnected.Wait();
             right.SendInterested(leftHash);
@@ -244,7 +249,7 @@ namespace Leak.Core.Tests.Components
             leftHooks.OnPeerChanged = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             rightConnected.Wait();
             right.SendBitfield(leftHash, bitfield);
@@ -268,7 +273,7 @@ namespace Leak.Core.Tests.Components
             leftHooks.OnPeerChanged = handler;
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             leftConnected.Wait();
             left.SetPieces(24);
@@ -305,7 +310,7 @@ namespace Leak.Core.Tests.Components
             rightConfiguration.Plugins.Add(new Plugin("right-c"));
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             leftHandler.Wait().Should().BeTrue();
             rightHandler.Wait().Should().BeTrue();
@@ -336,7 +341,7 @@ namespace Leak.Core.Tests.Components
             rightConfiguration.Plugins.Add(new Plugin("right-c"));
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             leftHandler.Wait().Should().BeTrue();
             rightHandler.Wait().Should().BeTrue();
@@ -356,7 +361,7 @@ namespace Leak.Core.Tests.Components
             rightConfiguration.Plugins.Add(new Plugin("right-a"));
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             handler.Wait().Should().BeTrue();
 
@@ -380,7 +385,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration.Plugins.Add(new Plugin("left-a"));
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             extended.Wait();
             right.SendExtension(leftHash, "left-a", new byte[10]);
@@ -404,7 +409,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration.Plugins.Add(new Plugin("left-a"));
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             extended.Wait();
             right.SendExtension(leftHash, "left-a", new byte[10]);
@@ -430,7 +435,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             extended.Wait();
             right.SendMetadataRequest(leftHash, 7);
@@ -456,7 +461,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             extended.Wait();
             right.SendMetadataReject(leftHash, 7);
@@ -484,7 +489,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             extended.Wait();
             right.SendMetadataPiece(leftHash, 7, 128, new byte[1023]);
@@ -510,7 +515,7 @@ namespace Leak.Core.Tests.Components
             leftConfiguration.Plugins.Add(plugin);
 
             listener.Enable(hash);
-            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", 8080));
+            connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
 
             extended.Wait();
             right.SendMetadataPiece(leftHash, 7, 128, new byte[1023]);

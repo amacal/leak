@@ -7,9 +7,10 @@ namespace Leak.Core.Leakage
         public LeakConfiguration()
         {
             Peer = PeerHash.Random();
+            Port = LeakPort.Nothing;
         }
 
-        public int? Port;
+        public LeakPort Port;
 
         public PeerHash Peer;
     }
