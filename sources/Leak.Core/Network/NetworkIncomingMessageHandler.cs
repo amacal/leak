@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Leak.Core.Network
+﻿namespace Leak.Core.Network
 {
     /// <summary>
     /// Describes the way how the incoming messages should be handled.
@@ -12,14 +10,6 @@ namespace Leak.Core.Network
         /// </summary>
         /// <param name="message">The incoming message containing the payload.</param>
         void OnMessage(NetworkIncomingMessage message);
-
-        /// <summary>
-        /// Called when any exception happened and the channel is not able to
-        /// send or receive more messages. The callers should not use this channel
-        /// any more.
-        /// </summary>
-        /// <param name="ex">The exception caused the channel stopped working.</param>
-        void OnException(Exception ex);
 
         /// <summary>
         /// Called when the channel was disconnected and is not able to send or

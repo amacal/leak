@@ -1,7 +1,6 @@
-﻿using Leak.Core.Negotiator;
+﻿using Leak.Common;
+using Leak.Core.Negotiator;
 using Leak.Core.Network;
-using System;
-using Leak.Common;
 
 namespace Leak.Core.Connector
 {
@@ -46,10 +45,6 @@ namespace Leak.Core.Connector
         public void OnHandshake(NetworkConnection negotiated, Handshake handshake)
         {
             context.Hooks.CallHandshakeCompleted(negotiated, handshake);
-        }
-
-        public void OnException(Exception ex)
-        {
         }
 
         public void OnDisconnected()

@@ -1,7 +1,6 @@
-﻿using Leak.Core.Negotiator;
+﻿using Leak.Common;
+using Leak.Core.Negotiator;
 using Leak.Core.Network;
-using System;
-using Leak.Common;
 
 namespace Leak.Core.Listener
 {
@@ -55,14 +54,8 @@ namespace Leak.Core.Listener
             hooks.CallHandshakeCompleted(negotiated, handshake);
         }
 
-        public void OnException(Exception ex)
-        {
-            //configuration.Callback.OnException(connection, ex);
-        }
-
         public void OnDisconnected()
         {
-            //configuration.Callback.OnDisconnected(connection);
         }
     }
 }

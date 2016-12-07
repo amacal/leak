@@ -28,11 +28,6 @@ namespace Leak.Core.Negotiator
             }
         }
 
-        public void OnException(Exception ex)
-        {
-            context.OnException(ex);
-        }
-
         public void OnDisconnected()
         {
             context.OnDisconnected();

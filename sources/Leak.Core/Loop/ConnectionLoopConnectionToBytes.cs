@@ -26,10 +26,6 @@ namespace Leak.Core.Loop
             }
         }
 
-        public void OnException(Exception ex)
-        {
-        }
-
         public void OnDisconnected()
         {
         }
