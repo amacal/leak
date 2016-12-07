@@ -31,9 +31,9 @@ namespace Leak.Core.Repository
             get { return data.Size; }
         }
 
-        public void Write(Action<byte[], int, int> stream)
+        public void Write(DataBlockCallback callback)
         {
-            data.Write(stream);
+            data.Write(callback);
         }
 
         public void Dispose()

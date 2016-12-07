@@ -1,5 +1,4 @@
 ﻿using Leak.Core.Messages;
-using System;
 using System.Collections.Concurrent;
 
 namespace Leak.Core
@@ -20,7 +19,7 @@ namespace Leak.Core
             return new DataBlockInstance(data, offset, count, null);
         }
 
-        public DataBlock New(int count, Action<byte[], int, int> callback)
+        public DataBlock New(int count, DataBlockCallback callback)
         {
             byte[] data;
 
@@ -58,9 +57,9 @@ namespace Leak.Core
                 get { return data[index + start]; }
             }
 
-            public void Write(Action<byte[], int, int> stream)
+            public void Write(DataBlockCallback callback)
             {
-                stream.Invoke(data, start, count);
+                callback.Invoke(data, start, count);
             }
 
             public DataBlock Scope(int offset)

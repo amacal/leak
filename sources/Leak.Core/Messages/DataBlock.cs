@@ -8,7 +8,7 @@ namespace Leak.Core.Messages
 
         byte this[int index] { get; }
 
-        void Write(Action<byte[], int, int> stream);
+        void Write(DataBlockCallback callback);
 
         DataBlock Scope(int offset);
     }

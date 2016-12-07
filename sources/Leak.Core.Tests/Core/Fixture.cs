@@ -203,9 +203,9 @@ namespace Leak.Core.Tests.Core
             get { return data[index + offset]; }
         }
 
-        public void Write(Action<byte[], int, int> stream)
+        public void Write(DataBlockCallback callback)
         {
-            stream.Invoke(data, offset, data.Length - offset);
+            callback.Invoke(data, offset, data.Length - offset);
         }
 
         public DataBlock Scope(int other)

@@ -160,6 +160,7 @@
     <Compile Include="Loop\ConnectionLoopHooks.cs" />
     <Compile Include="Messages\BitfieldOutgoingMessage.cs" />
     <Compile Include="Messages\DataBlock.cs" />
+    <Compile Include="Messages\DataBlockCallback.cs" />
     <Compile Include="Messages\DataBlockFactory.cs" />
     <Compile Include="Events\MetafileMeasured.cs" />
     <Compile Include="Messages\HaveOutgoingMessage.cs" />
