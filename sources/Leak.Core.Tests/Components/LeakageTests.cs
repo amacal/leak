@@ -31,7 +31,7 @@ namespace Leak.Core.Tests.Components
                 data.Peer.Should().Be(configuration.Peer);
             });
 
-            using (LeakClient client = new LeakClient(hooks, configuration))
+            using (new LeakClient(hooks, configuration))
             {
                 trigger.Wait().Should().BeTrue();
             }

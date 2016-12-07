@@ -53,7 +53,11 @@ namespace Leak.Core.Listener
 
         private void OnAccept(TcpSocketAccept data)
         {
-            if (data.Status != TcpSocketStatus.NotSocket)
+            bool canAcceptMore =
+                data.Status != TcpSocketStatus.NotSocket &&
+                data.Status != TcpSocketStatus.OperationAborted;
+
+            if (canAcceptMore)
             {
                 data.Socket.Accept(OnAccept);
             }
