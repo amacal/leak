@@ -33,13 +33,48 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockExpired.cs" />
+    <Compile Include="BlockHandled.cs" />
+    <Compile Include="BlockReceived.cs" />
+    <Compile Include="BlockRequested.cs" />
+    <Compile Include="BlockReserved.cs" />
+    <Compile Include="BlockWritten.cs" />
     <Compile Include="ConnectionArrived.cs" />
     <Compile Include="ConnectionAttached.cs" />
     <Compile Include="ConnectionDropped.cs" />
     <Compile Include="ConnectionEstablished.cs" />
     <Compile Include="ConnectionRejected.cs" />
     <Compile Include="ConnectionTerminated.cs" />
+    <Compile Include="DataAllocated.cs" />
+    <Compile Include="DataChanged.cs" />
+    <Compile Include="DataCompleted.cs" />
+    <Compile Include="DataVerified.cs" />
+    <Compile Include="ExtensionDataReceived.cs" />
+    <Compile Include="ExtensionDataSent.cs" />
+    <Compile Include="ExtensionListReceived.cs" />
+    <Compile Include="ExtensionListSent.cs" />
+    <Compile Include="HandshakeCompleted.cs" />
+    <Compile Include="HandshakeRejected.cs" />
+    <Compile Include="ListenerStarted.cs" />
+    <Compile Include="MessageReceived.cs" />
+    <Compile Include="MessageSent.cs" />
+    <Compile Include="MetadataDiscovered.cs" />
+    <Compile Include="MetadataPieceReceived.cs" />
+    <Compile Include="MetadataPieceRequested.cs" />
+    <Compile Include="MetafileMeasured.cs" />
+    <Compile Include="MetafileRejected.cs" />
+    <Compile Include="MetafileVerified.cs" />
+    <Compile Include="MetafileWritten.cs" />
+    <Compile Include="PeerChanged.cs" />
+    <Compile Include="PeerConnected.cs" />
+    <Compile Include="PeerDisconnected.cs" />
+    <Compile Include="PieceAccepted.cs" />
+    <Compile Include="PieceCompleted.cs" />
+    <Compile Include="PieceReady.cs" />
+    <Compile Include="PieceRejected.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskCompleted.cs" />
+    <Compile Include="TaskStarted.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

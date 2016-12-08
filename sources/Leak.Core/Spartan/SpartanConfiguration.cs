@@ -1,4 +1,6 @@
-﻿namespace Leak.Core.Spartan
+﻿using Leak.Common;
+
+namespace Leak.Core.Spartan
 {
     public class SpartanConfiguration
     {

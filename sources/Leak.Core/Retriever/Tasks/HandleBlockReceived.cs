@@ -1,6 +1,6 @@
 ﻿using Leak.Core.Core;
-using Leak.Core.Events;
 using Leak.Core.Retriever.Components;
+using Leak.Events;
 
 namespace Leak.Core.Retriever.Tasks
 {

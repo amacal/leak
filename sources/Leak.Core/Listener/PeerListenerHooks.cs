@@ -1,5 +1,4 @@
-﻿using Leak.Core.Events;
-using System;
+﻿using System;
 using Leak.Events;
 
 namespace Leak.Core.Listener

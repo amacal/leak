@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Leak.Common;
-using Leak.Core.Events;
 using Leak.Core.Spartan;
 using Leak.Core.Tests.Core;
 using NUnit.Framework;
 using System.IO;
+using Leak.Events;
 
 namespace Leak.Core.Tests.Components
 {

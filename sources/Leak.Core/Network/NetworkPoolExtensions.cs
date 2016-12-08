@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Core.Events;
 using Leak.Events;
 
 namespace Leak.Core.Network

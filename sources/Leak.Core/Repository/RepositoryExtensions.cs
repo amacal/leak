@@ -1,9 +1,9 @@
-﻿using Leak.Core.Events;
-using Leak.Core.Metadata;
+﻿using Leak.Core.Metadata;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Leak.Common;
+using Leak.Events;
 
 namespace Leak.Core.Repository
 {

@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
-using Leak.Core.Events;
 using Leak.Core.Messages;
 using Leak.Core.Network;
+using Leak.Events;
 
 namespace Leak.Core.Loop
 {

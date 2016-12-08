@@ -4,6 +4,7 @@ using Leak.Core.Repository;
 using Leak.Files;
 using NUnit.Framework;
 using System.IO;
+using Leak.Common;
 using Leak.Completion;
 using File = System.IO.File;
 

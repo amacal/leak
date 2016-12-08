@@ -40,6 +40,12 @@
     <Compile Include="DataBlockFactory.cs" />
     <Compile Include="FileHash.cs" />
     <Compile Include="FileHashCollection.cs" />
+    <Compile Include="Handshake.cs" />
+    <Compile Include="HandshakeOptions.cs" />
+    <Compile Include="Metainfo.cs" />
+    <Compile Include="MetainfoEntry.cs" />
+    <Compile Include="MetainfoHash.cs" />
+    <Compile Include="MetainfoProperties.cs" />
     <Compile Include="NetworkConnection.cs" />
     <Compile Include="NetworkDirection.cs" />
     <Compile Include="NetworkIncomingMessage.cs" />
@@ -50,6 +56,7 @@
     <Compile Include="PeerSession.cs" />
     <Compile Include="PieceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpartanTasks.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

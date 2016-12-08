@@ -1,6 +1,5 @@
 ﻿using F2F.Sandbox;
 using Leak.Common;
-using Leak.Core.Events;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Messages;
 using Leak.Core.Metadata;
@@ -8,6 +7,7 @@ using Leak.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Leak.Events;
 
 namespace Leak.Core.Tests.Core
 {

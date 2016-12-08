@@ -2,7 +2,6 @@
 using Leak.Completion;
 using Leak.Core.Connector;
 using Leak.Core.Core;
-using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Listener;
@@ -12,6 +11,7 @@ using Leak.Core.Spartan;
 using Leak.Files;
 using System;
 using System.Collections.Generic;
+using Leak.Events;
 
 namespace Leak.Core.Leakage
 {

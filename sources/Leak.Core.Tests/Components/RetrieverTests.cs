@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Leak.Common;
-using Leak.Core.Events;
 using Leak.Core.Glue;
 using Leak.Core.Metadata;
 using Leak.Core.Retriever;
 using Leak.Core.Tests.Core;
+using Leak.Events;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Components

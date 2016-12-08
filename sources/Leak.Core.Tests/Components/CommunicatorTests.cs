@@ -4,12 +4,12 @@ using Leak.Completion;
 using Leak.Core.Communicator;
 using Leak.Core.Connector;
 using Leak.Core.Core;
-using Leak.Core.Events;
 using Leak.Core.Listener;
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using Leak.Core.Network;
 using Leak.Core.Tests.Core;
+using Leak.Events;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Components
