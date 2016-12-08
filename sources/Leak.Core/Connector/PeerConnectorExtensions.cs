@@ -1,6 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Core.Negotiator;
-using Leak.Core.Network;
 using Leak.Events;
 
 namespace Leak.Core.Connector

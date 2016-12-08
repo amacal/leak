@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Core;
+using Leak.Tasks;
 
 namespace Leak.Core.Connector
 {

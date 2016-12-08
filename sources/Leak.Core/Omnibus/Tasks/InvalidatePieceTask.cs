@@ -1,4 +1,4 @@
-﻿using Leak.Core.Core;
+﻿using Leak.Tasks;
 
 namespace Leak.Core.Omnibus.Tasks
 {

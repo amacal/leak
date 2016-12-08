@@ -74,13 +74,6 @@
     <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
     <Compile Include="Connector\PeerConnectorTaskAccept.cs" />
     <Compile Include="Connector\PeerConnectorTaskReject.cs" />
-    <Compile Include="Core\LeakBus.cs" />
-    <Compile Include="Core\LeakBusCallback.cs" />
-    <Compile Include="Core\LeakBusResource.cs" />
-    <Compile Include="Core\LeakPipeline.cs" />
-    <Compile Include="Core\LeakPipelineTimer.cs" />
-    <Compile Include="Core\LeakPipelineTrigger.cs" />
-    <Compile Include="Core\LeakQueueBase.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataMeasured.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataReceived.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataExtensions.cs" />
@@ -127,12 +120,6 @@
     <Compile Include="Metaget\MetagetHooks.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
-    <Compile Include="Network\NetworkBufferView.cs" />
-    <Compile Include="Network\NetworkPoolDecrypt.cs" />
-    <Compile Include="Network\NetworkPoolExtensions.cs" />
-    <Compile Include="Network\NetworkPoolHooks.cs" />
-    <Compile Include="Network\NetworkPoolReceive.cs" />
-    <Compile Include="Network\NetworkPoolSend.cs" />
     <Compile Include="Omnibus\Components\OmnibusCache.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCompleted.cs" />
@@ -187,7 +174,6 @@
     <Compile Include="Retriever\Tasks\HandleBlockReceived.cs" />
     <Compile Include="Retriever\Tasks\ScheduleItTask.cs" />
     <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
-    <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
     <Compile Include="Connector\PeerConnectorConnecting.cs" />
@@ -238,9 +224,7 @@
     <Compile Include="Metaget\MetagetConfiguration.cs" />
     <Compile Include="Metaget\MetagetContext.cs" />
     <Compile Include="Metaget\MetagetExtensions.cs" />
-    <Compile Include="Core\LeakQueue.cs" />
     <Compile Include="Metaget\MetagetService.cs" />
-    <Compile Include="Core\LeakTask.cs" />
     <Compile Include="Metaget\MetagetTaskData.cs" />
     <Compile Include="Metaget\MetagetTaskNext.cs" />
     <Compile Include="Metaget\MetagetTaskSize.cs" />
@@ -280,26 +264,8 @@
     <Compile Include="Negotiator\HandshakeNegotiatorPassiveContext.cs" />
     <Compile Include="Negotiator\HandshakeRejection.cs" />
     <Compile Include="Negotiator\HandshakeRivestCipher.cs" />
-    <Compile Include="Network\NetworkBufferDecryptor.cs" />
-    <Compile Include="Network\NetworkBufferDecryptorToNothing.cs" />
-    <Compile Include="Network\NetworkConnectionDecryptor.cs" />
-    <Compile Include="Network\NetworkConnectionDecryptorToBuffer.cs" />
-    <Compile Include="Network\NetworkConnectionDecryptorToNothing.cs" />
-    <Compile Include="Network\NetworkConnectionEncryptor.cs" />
-    <Compile Include="Network\NetworkConnectionEncryptorToNothing.cs" />
-    <Compile Include="Network\NetworkConnectionInfo.cs" />
-    <Compile Include="Network\NetworkBufferMessage.cs" />
-    <Compile Include="Network\NetworkIncomingMessageExtensions.cs" />
     <Compile Include="Negotiator\HandshakeConnection.cs" />
     <Compile Include="Negotiator\HandshakeConnectionToCall.cs" />
-    <Compile Include="Network\NetworkBuffer.cs" />
-    <Compile Include="Network\NetworkBufferConfiguration.cs" />
-    <Compile Include="Network\NetworkPoolConnection.cs" />
-    <Compile Include="Network\NetworkConnectionConfiguration.cs" />
-    <Compile Include="Network\NetworkOutgoingMessageBytes.cs" />
-    <Compile Include="Network\NetworkPool.cs" />
-    <Compile Include="Network\NetworkPoolEntry.cs" />
-    <Compile Include="Network\NetworkPoolListener.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldCollection.cs" />
     <Compile Include="Omnibus\OmnibusBlock.cs" />
     <Compile Include="Omnibus\OmnibusConfiguration.cs" />
@@ -364,15 +330,25 @@
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
+      <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
+      <Name>Leak.Networking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
       <Name>Leak.Sockets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
+      <Name>Leak.Tasks</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,7 +2,6 @@
 using Leak.Core.Loop;
 using Leak.Core.Messages;
 using Leak.Core.Negotiator;
-using Leak.Core.Network;
 using System;
 using Leak.Common;
 using Leak.Events;

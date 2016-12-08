@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Network;
+using Leak.Networking;
 
 namespace Leak.Core.Negotiator
 {

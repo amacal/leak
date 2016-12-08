@@ -1,9 +1,9 @@
 ﻿using Leak.Common;
 using Leak.Core.Negotiator;
-using Leak.Core.Network;
 using Leak.Sockets;
 using System;
 using System.Net;
+using Leak.Networking;
 
 namespace Leak.Core.Listener
 {

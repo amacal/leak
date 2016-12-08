@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
-using Leak.Core.Core;
-using Leak.Core.Network;
+using Leak.Networking;
+using Leak.Tasks;
 
 namespace Leak.Core.Connector
 {

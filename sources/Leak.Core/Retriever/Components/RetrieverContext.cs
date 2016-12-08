@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Core.Core;
 using Leak.Core.Glue;
 using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
@@ -7,6 +6,7 @@ using Leak.Core.Repository;
 using Leak.Core.Retriever.Tasks;
 using Leak.Events;
 using Leak.Files;
+using Leak.Tasks;
 
 namespace Leak.Core.Retriever.Components
 {

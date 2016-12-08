@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Common", "Leak.Common\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Events", "Leak.Events\Leak.Events.csproj", "{9866F76F-64E9-4B0C-B2C5-34281B416803}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Networking", "Leak.Networking\Leak.Networking.csproj", "{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Tasks", "Leak.Tasks\Leak.Tasks.csproj", "{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
