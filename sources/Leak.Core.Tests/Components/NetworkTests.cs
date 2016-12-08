@@ -9,6 +9,7 @@ using Leak.Sockets;
 using NUnit.Framework;
 using System.Net;
 using System.Threading.Tasks;
+using Leak.Events;
 
 namespace Leak.Core.Tests.Components
 {

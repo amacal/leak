@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Echo", "Leak.Echo\Leak
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Common", "Leak.Common\Leak.Common.csproj", "{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Events", "Leak.Events\Leak.Events.csproj", "{9866F76F-64E9-4B0C-B2C5-34281B416803}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9866F76F-64E9-4B0C-B2C5-34281B416803}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

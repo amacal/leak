@@ -1,12 +1,13 @@
 ﻿using Leak.Common;
-using Leak.Core.Network;
 
-namespace Leak.Core.Events
+namespace Leak.Events
 {
-    public class ConnectionAttached
+    public class ConnectionDropped
     {
         public PeerAddress Remote;
 
         public NetworkConnection Connection;
+
+        public string Reason;
     }
 }

@@ -91,6 +91,10 @@
       <Project>{c5760143-0cfc-4638-af74-069d1a8985d6}</Project>
       <Name>Leak.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>

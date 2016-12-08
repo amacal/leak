@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
 
-namespace Leak.Core.Events
+namespace Leak.Events
 {
-    public class ConnectionArrived
+    public class ConnectionRejected
     {
         public PeerAddress Remote;
     }
