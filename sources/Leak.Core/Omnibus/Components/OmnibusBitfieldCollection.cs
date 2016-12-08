@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Leak.Common;
+using System.Collections.Generic;
 using System.Linq;
-using Leak.Common;
 
 namespace Leak.Core.Omnibus.Components
 {

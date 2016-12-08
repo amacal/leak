@@ -2,9 +2,9 @@
 using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
+using Leak.Tasks;
 using System;
 using System.IO;
-using Leak.Tasks;
 
 namespace Leak.Core.Tests.Core
 {

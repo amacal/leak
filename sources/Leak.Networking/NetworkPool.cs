@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Completion;
 using Leak.Sockets;
 using Leak.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
 
 namespace Leak.Networking
 {
-    public class NetworkPool : NetworkPoolListener
+    public class NetworkPool
     {
         private readonly LeakPipeline pipeline;
         private readonly NetworkPoolHooks hooks;
@@ -43,7 +43,8 @@ namespace Leak.Networking
         public NetworkConnection Create(TcpSocket socket, NetworkDirection direction, IPEndPoint remote)
         {
             long identifier = Interlocked.Increment(ref sequence);
-            NetworkPoolConnection connection = new NetworkPoolConnection(this, socket, direction, identifier, remote);
+            NetworkPoolListener listener = new NetworkPoolListener(items, queue, hooks);
+            NetworkPoolConnection connection = new NetworkPoolConnection(listener, socket, direction, identifier, remote);
 
             lock (items)
             {
@@ -74,59 +75,6 @@ namespace Leak.Networking
             }
 
             throw new InvalidOperationException();
-        }
-
-        bool NetworkPoolListener.IsAvailable(long id)
-        {
-            NetworkPoolEntry entry;
-
-            lock (items)
-            {
-                items.TryGetValue(id, out entry);
-            }
-
-            return entry?.IsAvailable == true;
-        }
-
-        public void OnDisconnected(long id)
-        {
-            NetworkPoolEntry entry;
-
-            lock (items)
-            {
-                items.TryGetValue(id, out entry);
-            }
-
-            if (entry != null)
-            {
-                entry.IsAvailable = false;
-                entry.Connection.Dispose();
-
-                hooks.CallConnectionTerminated(entry.Connection);
-            }
-        }
-
-        public void OnException(long id, Exception ex)
-        {
-            NetworkPoolEntry entry;
-
-            lock (items)
-            {
-                items.TryGetValue(id, out entry);
-            }
-
-            if (entry != null)
-            {
-                entry.IsAvailable = false;
-                entry.Connection.Dispose();
-
-                hooks.CallConnectionDropped(entry.Connection, ex.Message);
-            }
-        }
-
-        void NetworkPoolListener.Schedule(LeakTask<NetworkPool> task)
-        {
-            queue.Add(task);
         }
     }
 }

@@ -4,11 +4,10 @@ using Leak.Core.Connector;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Listener;
-using Leak.Core.Messages;
-using System;
-using System.Collections.Generic;
 using Leak.Networking;
 using Leak.Tasks;
+using System;
+using System.Collections.Generic;
 
 namespace Leak.Core.Tests.Core
 {

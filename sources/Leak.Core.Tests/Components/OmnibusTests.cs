@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Leak.Common;
-using Leak.Core.Metadata;
 using Leak.Core.Omnibus;
 using Leak.Core.Tests.Core;
 using Leak.Events;

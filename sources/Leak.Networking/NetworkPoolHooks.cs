@@ -1,14 +1,19 @@
-﻿using System;
-using Leak.Events;
+﻿using Leak.Events;
+using System;
 
 namespace Leak.Networking
 {
     public class NetworkPoolHooks
     {
+        /// <summary>
+        /// Called when a socket was converted to the connection.
+        /// </summary>
         public Action<ConnectionAttached> OnConnectionAttached;
 
-        public Action<ConnectionDropped> OnConnectionDropped;
-
+        /// <summary>
+        /// Called when an existing connection was terminated either
+        /// by local or by remote host.
+        /// </summary>
         public Action<ConnectionTerminated> OnConnectionTerminated;
     }
 }

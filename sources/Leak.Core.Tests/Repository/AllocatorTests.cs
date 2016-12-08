@@ -1,11 +1,10 @@
 ﻿using F2F.Sandbox;
-using Leak.Core.Metadata;
+using Leak.Common;
+using Leak.Completion;
 using Leak.Core.Repository;
 using Leak.Files;
 using NUnit.Framework;
 using System.IO;
-using Leak.Common;
-using Leak.Completion;
 using File = System.IO.File;
 
 namespace Leak.Core.Tests.Repository

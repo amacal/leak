@@ -1,8 +1,8 @@
-﻿using Leak.Core.Negotiator;
+﻿using Leak.Common;
+using Leak.Core.Negotiator;
 using Leak.Sockets;
-using System.Net;
-using Leak.Common;
 using Leak.Tasks;
+using System.Net;
 
 namespace Leak.Core.Connector
 {

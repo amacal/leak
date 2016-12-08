@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Leak.Completion;
+using NUnit.Framework;
+using System;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Leak.Completion;
-using NUnit.Framework;
 
 namespace Leak.Sockets.Tests
 {

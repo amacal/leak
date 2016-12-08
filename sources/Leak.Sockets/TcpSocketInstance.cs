@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Leak.Completion;
+using System;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Leak.Completion;
 
 namespace Leak.Sockets
 {

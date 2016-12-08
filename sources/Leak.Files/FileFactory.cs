@@ -1,5 +1,5 @@
-﻿using System;
-using Leak.Completion;
+﻿using Leak.Completion;
+using System;
 
 namespace Leak.Files
 {

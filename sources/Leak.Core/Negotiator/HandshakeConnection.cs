@@ -1,6 +1,6 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Networking;
+using System;
 
 namespace Leak.Core.Negotiator
 {

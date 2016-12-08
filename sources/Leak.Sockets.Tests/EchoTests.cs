@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Leak.Completion;
+﻿using Leak.Completion;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Leak.Sockets.Tests
 {

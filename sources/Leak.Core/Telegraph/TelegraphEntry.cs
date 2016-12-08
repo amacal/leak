@@ -1,6 +1,6 @@
-﻿using Leak.Core.Tracker;
+﻿using Leak.Common;
+using Leak.Core.Tracker;
 using System;
-using Leak.Common;
 
 namespace Leak.Core.Telegraph
 {

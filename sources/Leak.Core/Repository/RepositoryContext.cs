@@ -1,6 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Core.Bitfile;
-using Leak.Core.Metadata;
 using Leak.Files;
 
 namespace Leak.Core.Repository

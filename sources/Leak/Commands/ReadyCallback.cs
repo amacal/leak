@@ -1,5 +1,5 @@
-using System.Threading;
 using Leak.Tasks;
+using System.Threading;
 
 namespace Leak.Commands
 {

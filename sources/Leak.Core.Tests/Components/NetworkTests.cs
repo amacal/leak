@@ -2,13 +2,13 @@
 using Leak.Common;
 using Leak.Completion;
 using Leak.Core.Tests.Core;
+using Leak.Events;
+using Leak.Networking;
 using Leak.Sockets;
+using Leak.Tasks;
 using NUnit.Framework;
 using System.Net;
 using System.Threading.Tasks;
-using Leak.Events;
-using Leak.Networking;
-using Leak.Tasks;
 
 namespace Leak.Core.Tests.Components
 {
@@ -133,7 +133,7 @@ namespace Leak.Core.Tests.Components
         public async Task ShouldTriggerConnectionDropped()
         {
             NetworkDirection direction = NetworkDirection.Outgoing;
-            Trigger<ConnectionDropped> handler;
+            Trigger<ConnectionTerminated> handler;
 
             using (TcpSocket host = pool.New())
             using (TcpSocket socket = pool.New())
@@ -141,14 +141,14 @@ namespace Leak.Core.Tests.Components
                 TcpSocketInfo info = host.BindAndInfo();
                 IPEndPoint endpoint = info.Endpoint;
 
-                handler = hooks.OnConnectionDropped.Trigger(data =>
+                handler = hooks.OnConnectionTerminated.Trigger(data =>
                 {
                     data.Remote.Should().Be(PeerAddress.Parse(endpoint));
                     data.Connection.Should().NotBeNull();
                 });
 
                 host.Accept(null);
-                hooks.OnConnectionDropped = handler;
+                hooks.OnConnectionTerminated = handler;
 
                 NetworkConnection connection = pool.Create(socket, direction, endpoint);
 

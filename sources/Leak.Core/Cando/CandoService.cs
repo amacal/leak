@@ -1,8 +1,8 @@
-﻿using Leak.Core.Bencoding;
+﻿using Leak.Common;
+using Leak.Core.Bencoding;
 using Leak.Core.Cando.Events;
 using Leak.Core.Messages;
 using System;
-using Leak.Common;
 
 namespace Leak.Core.Cando
 {

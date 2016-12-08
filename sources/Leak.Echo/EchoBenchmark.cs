@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Leak.Sockets;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
-using Leak.Sockets;
 
 namespace Leak.Echo
 {

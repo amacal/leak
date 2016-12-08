@@ -1,9 +1,9 @@
-﻿using Leak.Core.Bencoding;
+﻿using Leak.Common;
+using Leak.Core.Bencoding;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Leak.Common;
 
 namespace Leak.Core.Tracker
 {

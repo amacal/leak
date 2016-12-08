@@ -1,10 +1,10 @@
-﻿using Leak.Core.Bencoding;
+﻿using Leak.Common;
+using Leak.Core.Bencoding;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using Leak.Common;
 
 namespace Leak.Core.Metadata
 {

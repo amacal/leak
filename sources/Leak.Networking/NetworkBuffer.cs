@@ -1,7 +1,7 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Sockets;
 using Leak.Tasks;
+using System;
 
 namespace Leak.Networking
 {
@@ -148,7 +148,7 @@ namespace Leak.Networking
                 }
                 else
                 {
-                    listener.OnDisconnected(identifier);
+                    listener.Disconnect(identifier);
                     handler.OnDisconnected();
                 }
             }

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Leak.Completion;
+using System;
 using System.Net.Sockets;
-using Leak.Completion;
 
 namespace Leak.Sockets
 {

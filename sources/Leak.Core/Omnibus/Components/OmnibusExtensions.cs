@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Core.Metadata;
 using Leak.Events;
 
 namespace Leak.Core.Omnibus.Components
