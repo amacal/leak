@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Network
+﻿namespace Leak.Common
 {
     /// <summary>
     /// Indicates who is the initiator of the connection.

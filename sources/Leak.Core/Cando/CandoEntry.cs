@@ -21,8 +21,6 @@ namespace Leak.Core.Cando
 
         public bool KnowsLocalExtensions { get; set; }
 
-        public PeerDirection Direction { get; set; }
-
         public CandoMap Local { get; set; }
 
         public CandoMap Remote { get; set; }

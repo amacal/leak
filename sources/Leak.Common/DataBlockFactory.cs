@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Messages
+﻿namespace Leak.Common
 {
     public interface DataBlockFactory
     {

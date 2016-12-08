@@ -1,6 +1,4 @@
-﻿using Leak.Core.Messages;
-
-namespace Leak.Core.Network
+﻿namespace Leak.Common
 {
     public interface NetworkIncomingMessage
     {

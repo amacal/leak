@@ -35,10 +35,17 @@
   <ItemGroup>
     <Compile Include="Bitfield.cs" />
     <Compile Include="Bytes.cs" />
+    <Compile Include="DataBlock.cs" />
+    <Compile Include="DataBlockCallback.cs" />
+    <Compile Include="DataBlockFactory.cs" />
     <Compile Include="FileHash.cs" />
     <Compile Include="FileHashCollection.cs" />
+    <Compile Include="NetworkConnection.cs" />
+    <Compile Include="NetworkDirection.cs" />
+    <Compile Include="NetworkIncomingMessage.cs" />
+    <Compile Include="NetworkIncomingMessageHandler.cs" />
+    <Compile Include="NetworkOutgoingMessage.cs" />
     <Compile Include="PeerAddress.cs" />
-    <Compile Include="PeerDirection.cs" />
     <Compile Include="PeerHash.cs" />
     <Compile Include="PeerSession.cs" />
     <Compile Include="PieceInfo.cs" />

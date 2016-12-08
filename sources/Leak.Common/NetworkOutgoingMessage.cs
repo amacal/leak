@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Network
+﻿namespace Leak.Common
 {
     public interface NetworkOutgoingMessage
     {

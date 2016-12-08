@@ -159,9 +159,6 @@
     <Compile Include="Loop\ConnectionLoopExtensions.cs" />
     <Compile Include="Loop\ConnectionLoopHooks.cs" />
     <Compile Include="Messages\BitfieldOutgoingMessage.cs" />
-    <Compile Include="Messages\DataBlock.cs" />
-    <Compile Include="Messages\DataBlockCallback.cs" />
-    <Compile Include="Messages\DataBlockFactory.cs" />
     <Compile Include="Events\MetafileMeasured.cs" />
     <Compile Include="Messages\HaveOutgoingMessage.cs" />
     <Compile Include="Messages\PieceOutgoingMessage.cs" />
@@ -172,7 +169,6 @@
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
     <Compile Include="Network\NetworkBufferView.cs" />
-    <Compile Include="Network\NetworkIncomingMessage.cs" />
     <Compile Include="Network\NetworkPoolDecrypt.cs" />
     <Compile Include="Network\NetworkPoolExtensions.cs" />
     <Compile Include="Network\NetworkPoolHooks.cs" />
@@ -333,7 +329,6 @@
     <Compile Include="Negotiator\HandshakeRivestCipher.cs" />
     <Compile Include="Network\NetworkBufferDecryptor.cs" />
     <Compile Include="Network\NetworkBufferDecryptorToNothing.cs" />
-    <Compile Include="Network\NetworkConnection.cs" />
     <Compile Include="Network\NetworkConnectionDecryptor.cs" />
     <Compile Include="Network\NetworkConnectionDecryptorToBuffer.cs" />
     <Compile Include="Network\NetworkConnectionDecryptorToNothing.cs" />
@@ -342,11 +337,8 @@
     <Compile Include="Network\NetworkConnectionInfo.cs" />
     <Compile Include="Network\NetworkBufferMessage.cs" />
     <Compile Include="Network\NetworkIncomingMessageExtensions.cs" />
-    <Compile Include="Network\NetworkIncomingMessageHandler.cs" />
     <Compile Include="Negotiator\HandshakeConnection.cs" />
     <Compile Include="Negotiator\HandshakeConnectionToCall.cs" />
-    <Compile Include="Network\NetworkOutgoingMessage.cs" />
-    <Compile Include="Network\NetworkDirection.cs" />
     <Compile Include="Network\NetworkBuffer.cs" />
     <Compile Include="Network\NetworkBufferConfiguration.cs" />
     <Compile Include="Network\NetworkPoolConnection.cs" />

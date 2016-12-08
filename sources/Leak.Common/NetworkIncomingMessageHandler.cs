@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Network
+﻿namespace Leak.Common
 {
     /// <summary>
     /// Describes the way how the incoming messages should be handled.

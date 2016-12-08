@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Messages
+﻿namespace Leak.Common
 {
     public delegate void DataBlockCallback(byte[] buffer, int offset, int count);
 }

@@ -1,5 +1,6 @@
 ﻿using Leak.Core.Messages;
 using System;
+using Leak.Common;
 
 namespace Leak.Core.Repository
 {

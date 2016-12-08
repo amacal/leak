@@ -1,6 +1,4 @@
-﻿using Leak.Common;
-
-namespace Leak.Core.Network
+﻿namespace Leak.Common
 {
     public interface NetworkConnection
     {
