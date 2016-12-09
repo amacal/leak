@@ -2,7 +2,7 @@
 
 namespace Leak.Core.Negotiator
 {
-    public class HandshakeConnectionToDecryptor : NetworkConnectionDecryptor
+    public class HandshakeConnectionToDecryptor : NetworkDecryptor
     {
         private readonly HandshakeKey key;
 

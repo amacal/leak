@@ -3,9 +3,7 @@
     public interface NetworkConnection
     {
         long Identifier { get; }
-
         PeerAddress Remote { get; }
-
         NetworkDirection Direction { get; }
 
         void Receive(NetworkIncomingMessageHandler handler);

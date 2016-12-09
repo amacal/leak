@@ -1,6 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Sockets;
-using Leak.Tasks;
 using System;
 using System.Net;
 
@@ -15,12 +14,11 @@ namespace Leak.Networking
         private readonly TcpSocket socket;
         private readonly PeerAddress remote;
         private readonly long identifier;
-        private readonly object synchronized;
 
         private readonly NetworkBuffer buffer;
         private readonly NetworkDirection direction;
         private readonly NetworkPoolListener listener;
-        private readonly NetworkConnectionConfiguration configuration;
+        private readonly NetworkEncryptor encryptor;
 
         /// <summary>
         /// Creates a new instance of the network connection relying on the
@@ -38,21 +36,10 @@ namespace Leak.Networking
             this.direction = direction;
             this.identifier = identifier;
 
-            this.configuration = new NetworkConnectionConfiguration
-            {
-                Encryptor = NetworkConnectionEncryptor.Nothing,
-                Decryptor = NetworkConnectionDecryptor.Nothing,
-            };
-
             this.remote = PeerAddress.Parse(remote);
-            this.synchronized = new object();
 
-            this.buffer = new NetworkBuffer(listener, socket, identifier, with =>
-            {
-                with.Size = 40000;
-                with.Decryptor = NetworkBufferDecryptor.Nothing;
-                with.Synchronized = synchronized;
-            });
+            buffer = new NetworkBuffer(listener, socket, identifier);
+            encryptor = NetworkEncryptor.Nothing;
         }
 
         /// <summary>
@@ -61,26 +48,17 @@ namespace Leak.Networking
         /// can decide how the encryption and decryption will work.
         /// </summary>
         /// <param name="connection">The existing instance of the connection.</param>
-        /// <param name="configurer">The configurer to parametrize newly created instance.</param>
-        public NetworkPoolConnection(NetworkPoolConnection connection, Action<NetworkConnectionConfiguration> configurer)
+        /// <param name="configurer">The new configuration.</param>
+        public NetworkPoolConnection(NetworkPoolConnection connection, NetworkConnectionConfiguration configurer)
         {
+            encryptor = configurer.Encryptor;
             listener = connection.listener;
             socket = connection.socket;
             remote = connection.remote;
             direction = connection.direction;
             identifier = connection.identifier;
-            synchronized = connection.synchronized;
 
-            configuration = configurer.Configure(with =>
-            {
-                with.Encryptor = connection.configuration.Encryptor;
-                with.Decryptor = connection.configuration.Decryptor;
-            });
-
-            buffer = new NetworkBuffer(connection.buffer, with =>
-            {
-                with.Decryptor = new NetworkConnectionDecryptorToBuffer(configuration.Decryptor);
-            });
+            buffer = new NetworkBuffer(connection.buffer, configurer.Decryptor);
         }
 
         public long Identifier
@@ -123,13 +101,10 @@ namespace Leak.Networking
         {
             if (listener.IsAvailable(identifier))
             {
-                lock (synchronized)
-                {
-                    byte[] decrypted = message.ToBytes();
-                    byte[] encrypted = configuration.Encryptor.Encrypt(decrypted);
+                byte[] decrypted = message.ToBytes();
+                byte[] encrypted = encryptor.Encrypt(decrypted);
 
-                    listener.Schedule(new NetworkPoolSend(identifier, socket, encrypted));
-                }
+                listener.Schedule(new NetworkPoolSend(socket, encrypted));
             }
         }
 

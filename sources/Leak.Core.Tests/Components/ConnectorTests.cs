@@ -27,7 +27,7 @@ namespace Leak.Core.Tests.Components
             pipeline = new LeakPipeline();
             worker = new CompletionThread();
 
-            pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
+            pool = new NetworkPoolFactory(pipeline, worker).CreateInstance(new NetworkPoolHooks());
             listener = new PeerListener(pool, new PeerListenerHooks
             {
                 OnListenerStarted = data => port = data.Port

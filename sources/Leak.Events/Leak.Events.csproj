@@ -41,6 +41,7 @@
     <Compile Include="BlockWritten.cs" />
     <Compile Include="ConnectionArrived.cs" />
     <Compile Include="ConnectionAttached.cs" />
+    <Compile Include="ConnectionEncrypted.cs" />
     <Compile Include="ConnectionEstablished.cs" />
     <Compile Include="ConnectionRejected.cs" />
     <Compile Include="ConnectionTerminated.cs" />

@@ -3,7 +3,7 @@ using Leak.Tasks;
 
 namespace Leak.Networking
 {
-    public class NetworkPoolDecrypt : LeakTask<NetworkPool>
+    public class NetworkPoolDecrypt : LeakTask<NetworkPoolInstance>
     {
         private readonly NetworkBuffer buffer;
         private readonly NetworkIncomingMessageHandler handler;
@@ -16,7 +16,7 @@ namespace Leak.Networking
             this.count = count;
         }
 
-        public void Execute(NetworkPool context)
+        public void Execute(NetworkPoolInstance context)
         {
             buffer.Process(handler, count);
         }

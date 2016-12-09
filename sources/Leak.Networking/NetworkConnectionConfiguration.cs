@@ -2,8 +2,13 @@
 {
     public class NetworkConnectionConfiguration
     {
-        public NetworkConnectionEncryptor Encryptor { get; set; }
+        public NetworkConnectionConfiguration()
+        {
+            Encryptor = NetworkEncryptor.Nothing;
+            Decryptor = NetworkDecryptor.Nothing;
+        }
 
-        public NetworkConnectionDecryptor Decryptor { get; set; }
+        public NetworkEncryptor Encryptor { get; set; }
+        public NetworkDecryptor Decryptor { get; set; }
     }
 }

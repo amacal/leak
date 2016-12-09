@@ -1,6 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Sockets;
-using Leak.Tasks;
 using System;
 
 namespace Leak.Networking
@@ -12,10 +11,11 @@ namespace Leak.Networking
     public class NetworkBuffer
     {
         private readonly NetworkPoolListener listener;
+        private readonly NetworkDecryptor decryptor;
+
         private readonly TcpSocket socket;
         private readonly long identifier;
         private readonly byte[] data;
-        private readonly NetworkBufferConfiguration configuration;
 
         private int offset;
         private int length;
@@ -25,24 +25,17 @@ namespace Leak.Networking
         /// connected socket instance and configuration defining the buffer size
         /// and how the incoming data should be decrypted.
         /// </summary>
-        /// <param name="listener"></param>
+        /// <param name="listener">The listener who knows the pool.</param>
         /// <param name="socket">The already connected socket.</param>
-        /// <param name="identifier"></param>
-        /// <param name="configurer">The configurer to parametrize newly created instance.</param>
-        public NetworkBuffer(NetworkPoolListener listener, TcpSocket socket, long identifier, Action<NetworkBufferConfiguration> configurer)
+        /// <param name="identifier">The unique connection identifier.</param>
+        public NetworkBuffer(NetworkPoolListener listener, TcpSocket socket, long identifier)
         {
-            this.configuration = configurer.Configure(with =>
-            {
-                with.Size = 40000;
-                with.Decryptor = NetworkBufferDecryptor.Nothing;
-                with.Synchronized = new object();
-            });
-
             this.listener = listener;
             this.socket = socket;
             this.identifier = identifier;
 
-            this.data = new byte[configuration.Size];
+            data = new byte[40000];
+            decryptor = NetworkDecryptor.Nothing;
         }
 
         /// <summary>
@@ -51,22 +44,17 @@ namespace Leak.Networking
         /// copied, but the caller can change the buffer size and decryption algorithm.
         /// </summary>
         /// <param name="buffer">The existing instance of the newtwork buffer.</param>
-        /// <param name="configurer">The configurer to parametrize newly created instance.</param>
-        public NetworkBuffer(NetworkBuffer buffer, Action<NetworkBufferConfiguration> configurer)
+        /// <param name="decryptor">The new decryptor.</param>
+        public NetworkBuffer(NetworkBuffer buffer, NetworkDecryptor decryptor)
         {
+            this.decryptor = decryptor;
+
             listener = buffer.listener;
             socket = buffer.socket;
             identifier = buffer.identifier;
             data = buffer.data;
             length = buffer.length;
             offset = buffer.offset;
-
-            configuration = configurer.Configure(with =>
-            {
-                with.Size = buffer.configuration.Size;
-                with.Decryptor = buffer.configuration.Decryptor;
-                with.Synchronized = buffer.configuration.Synchronized;
-            });
 
             Decrypt(offset, length);
         }
@@ -81,24 +69,21 @@ namespace Leak.Networking
         {
             if (listener.IsAvailable(identifier))
             {
-                lock (configuration.Synchronized)
+                int receiveOffset;
+                int receiveSize;
+
+                if (offset + length >= data.Length)
                 {
-                    int receiveOffset;
-                    int receiveSize;
-
-                    if (offset + length >= configuration.Size)
-                    {
-                        receiveOffset = offset + length - configuration.Size;
-                        receiveSize = offset - (offset + length) % configuration.Size;
-                    }
-                    else
-                    {
-                        receiveOffset = offset + length;
-                        receiveSize = configuration.Size - offset - length;
-                    }
-
-                    socket.Receive(new TcpSocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
+                    receiveOffset = offset + length - data.Length;
+                    receiveSize = offset - (offset + length) % data.Length;
                 }
+                else
+                {
+                    receiveOffset = offset + length;
+                    receiveSize = data.Length - offset - length;
+                }
+
+                socket.Receive(new TcpSocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
             }
         }
 
@@ -134,9 +119,9 @@ namespace Leak.Networking
             {
                 if (count > 0)
                 {
-                    if (offset + length >= configuration.Size)
+                    if (offset + length >= data.Length)
                     {
-                        Decrypt(offset + length - configuration.Size, count);
+                        Decrypt(offset + length - data.Length, count);
                     }
                     else
                     {
@@ -161,16 +146,16 @@ namespace Leak.Networking
                 throw new InvalidOperationException();
             }
 
-            offset = (offset + bytes) % configuration.Size;
+            offset = (offset + bytes) % data.Length;
             length = length - bytes;
         }
 
         private void Decrypt(int start, int count)
         {
-            int min = Math.Min(count, configuration.Size - start);
+            int min = Math.Min(count, data.Length - start);
 
-            configuration.Decryptor.Decrypt(data, start, min);
-            configuration.Decryptor.Decrypt(data, 0, count - min);
+            decryptor.Decrypt(data, start, min);
+            decryptor.Decrypt(data, 0, count - min);
         }
 
         public NetworkBufferView View()

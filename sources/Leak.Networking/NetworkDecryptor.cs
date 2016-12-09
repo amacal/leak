@@ -4,13 +4,13 @@
     /// Described the way how the bytes should be decrypted after
     /// receiving them from the remote endpoint.
     /// </summary>
-    public abstract class NetworkConnectionDecryptor
+    public abstract class NetworkDecryptor
     {
         /// <summary>
         /// Defines a default decryptor which passes bytes
         /// directly from the remote endpoint without any decryption.
         /// </summary>
-        public static readonly NetworkConnectionDecryptor Nothing = new NetworkConnectionDecryptorToNothing();
+        public static readonly NetworkDecryptor Nothing = new NetworkDecryptorToNothing();
 
         /// <summary>
         /// Decrypts the given bytes array in place.

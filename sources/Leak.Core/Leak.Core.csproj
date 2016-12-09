@@ -67,7 +67,6 @@
     <Compile Include="Communicator\CommunicatorExtensions.cs" />
     <Compile Include="Communicator\CommunicatorHooks.cs" />
     <Compile Include="Communicator\CommunicatorService.cs" />
-    <Compile Include="Connector\PeerConnectorConnected.cs" />
     <Compile Include="Connector\PeerConnectorContext.cs" />
     <Compile Include="Connector\PeerConnectorExtensions.cs" />
     <Compile Include="Connector\PeerConnectorHooks.cs" />
@@ -176,7 +175,6 @@
     <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
     <Compile Include="Connector\PeerConnector.cs" />
     <Compile Include="Connector\PeerConnectorConfiguration.cs" />
-    <Compile Include="Connector\PeerConnectorConnecting.cs" />
     <Compile Include="Connector\PeerConnectorHandshake.cs" />
     <Compile Include="Connector\PeerConnectorNegotiatorContext.cs" />
     <Compile Include="Bencoding\BencodedData.cs" />

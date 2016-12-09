@@ -11,6 +11,12 @@ namespace Leak.Networking
         public Action<ConnectionAttached> OnConnectionAttached;
 
         /// <summary>
+        /// Called when an existing connection was switched into
+        /// encryption mode.
+        /// </summary>
+        public Action<ConnectionEncrypted> OnConnectionEncrypted;
+
+        /// <summary>
         /// Called when an existing connection was terminated either
         /// by local or by remote host.
         /// </summary>

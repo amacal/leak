@@ -21,10 +21,8 @@ namespace Leak.Core.Connector
 
         public void Execute(PeerConnectorContext context)
         {
-            PeerConnectorConnected connected;
             NetworkConnection connection = context.Pool.Create(socket, NetworkDirection.Outgoing, endpoint);
 
-            connected = new PeerConnectorConnected(hash, connection);
             context.Hooks.CallConnectionEstablished(connection);
 
             PeerConnectorNegotiatorContext forNegotiator = new PeerConnectorNegotiatorContext(hash, context, connection);

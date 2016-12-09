@@ -22,5 +22,14 @@ namespace Leak.Networking
                 Remote = connection.Remote
             });
         }
+
+        public static void CallConnectionEncrypted(this NetworkPoolHooks hooks, NetworkConnection connection)
+        {
+            hooks.OnConnectionEncrypted?.Invoke(new ConnectionEncrypted
+            {
+                Connection = connection,
+                Remote = connection.Remote
+            });
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Leak.Core.Tests.Components
             worker = new CompletionThread();
 
             hooks = new NetworkPoolHooks();
-            pool = new NetworkPool(pipeline, worker, hooks);
+            pool = new NetworkPoolFactory(pipeline, worker).CreateInstance(hooks);
 
             worker.Start();
             pipeline.Start();
@@ -77,7 +77,7 @@ namespace Leak.Core.Tests.Components
             using (TcpSocket socket = pool.New())
             {
                 NetworkConnection origin = pool.Create(socket, direction, remote);
-                NetworkConnection changed = pool.Change(origin, with => { });
+                NetworkConnection changed = pool.Change(origin, new NetworkConnectionConfiguration());
 
                 changed.Should().NotBeNull();
                 changed.Should().NotBeSameAs(origin);

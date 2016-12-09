@@ -34,23 +34,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NetworkBuffer.cs" />
-    <Compile Include="NetworkBufferConfiguration.cs" />
-    <Compile Include="NetworkBufferDecryptor.cs" />
-    <Compile Include="NetworkBufferDecryptorToNothing.cs" />
     <Compile Include="NetworkBufferMessage.cs" />
     <Compile Include="NetworkBufferView.cs" />
     <Compile Include="NetworkConnectionConfiguration.cs" />
-    <Compile Include="NetworkConnectionDecryptor.cs" />
-    <Compile Include="NetworkConnectionDecryptorToBuffer.cs" />
-    <Compile Include="NetworkConnectionDecryptorToNothing.cs" />
-    <Compile Include="NetworkConnectionEncryptor.cs" />
-    <Compile Include="NetworkConnectionEncryptorToNothing.cs" />
-    <Compile Include="NetworkConnectionInfo.cs" />
-    <Compile Include="NetworkIncomingMessageExtensions.cs" />
-    <Compile Include="NetworkOutgoingMessageBytes.cs" />
+    <Compile Include="NetworkDecryptor.cs" />
+    <Compile Include="NetworkDecryptorToNothing.cs" />
+    <Compile Include="NetworkEncryptor.cs" />
+    <Compile Include="NetworkEncryptorToNothing.cs" />
     <Compile Include="NetworkPool.cs" />
+    <Compile Include="NetworkPoolFactory.cs" />
+    <Compile Include="NetworkPoolInstance.cs" />
     <Compile Include="NetworkPoolConnection.cs" />
     <Compile Include="NetworkPoolDecrypt.cs" />
+    <Compile Include="NetworkPoolDependency.cs" />
     <Compile Include="NetworkPoolEntry.cs" />
     <Compile Include="NetworkPoolExtensions.cs" />
     <Compile Include="NetworkPoolHooks.cs" />

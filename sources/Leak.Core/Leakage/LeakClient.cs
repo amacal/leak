@@ -41,7 +41,7 @@ namespace Leak.Core.Leakage
             pipeline.Start();
             worker.Start();
 
-            network = new NetworkPool(pipeline, worker, CreateNetworkHooks());
+            network = new NetworkPoolFactory(pipeline, worker).CreateInstance(CreateNetworkHooks());
             network.Start();
 
             listener = CreateAndStartListener();

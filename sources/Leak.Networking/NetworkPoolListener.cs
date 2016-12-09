@@ -7,10 +7,10 @@ namespace Leak.Networking
     public class NetworkPoolListener
     {
         private readonly NetworkPoolHooks hooks;
+        private readonly LeakQueue<NetworkPoolInstance> queue;
         private readonly Dictionary<long, NetworkPoolEntry> items;
-        private readonly LeakQueue<NetworkPool> queue;
 
-        public NetworkPoolListener(Dictionary<long, NetworkPoolEntry> items, LeakQueue<NetworkPool> queue, NetworkPoolHooks hooks)
+        public NetworkPoolListener(Dictionary<long, NetworkPoolEntry> items, LeakQueue<NetworkPoolInstance> queue, NetworkPoolHooks hooks)
         {
             this.items = items;
             this.queue = queue;
@@ -65,7 +65,7 @@ namespace Leak.Networking
             }
         }
 
-        public void Schedule(LeakTask<NetworkPool> task)
+        public void Schedule(LeakTask<NetworkPoolInstance> task)
         {
             queue.Add(task);
         }

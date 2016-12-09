@@ -29,7 +29,7 @@ namespace Leak.Core.Tests.Core
             worker = new CompletionThread();
             pipeline = new LeakPipeline();
 
-            pool = new NetworkPool(pipeline, worker, new NetworkPoolHooks());
+            pool = new NetworkPoolFactory(pipeline, worker).CreateInstance(new NetworkPoolHooks());
             entries = new Dictionary<string, SwarmEntry>();
             disposables = new List<IDisposable>();
         }

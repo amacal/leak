@@ -54,10 +54,10 @@ namespace Leak.Core.Negotiator
 
         public NetworkConnection StartEncryption(HandshakeKeyContainer pair)
         {
-            return pool.Change(connection, with =>
+            return pool.Change(connection, new NetworkConnectionConfiguration
             {
-                with.Encryptor = new HandshakeConnectionToEncryptor(pair.Local);
-                with.Decryptor = new HandshakeConnectionToDecryptor(pair.Remote);
+                Encryptor = new HandshakeConnectionToEncryptor(pair.Local),
+                Decryptor = new HandshakeConnectionToDecryptor(pair.Remote)
             });
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Leak.Networking
 {
-    public class NetworkConnectionEncryptorToNothing : NetworkConnectionEncryptor
+    public class NetworkEncryptorToNothing : NetworkEncryptor
     {
         public override byte[] Encrypt(byte[] data)
         {
