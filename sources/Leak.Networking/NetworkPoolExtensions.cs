@@ -31,5 +31,25 @@ namespace Leak.Networking
                 Remote = connection.Remote
             });
         }
+
+        public static void CallConnectionSent(this NetworkPoolHooks hooks, NetworkConnection connection, int bytes)
+        {
+            hooks.OnConnectionSent?.Invoke(new ConnectionSent
+            {
+                Connection = connection,
+                Remote = connection.Remote,
+                Bytes = bytes
+            });
+        }
+
+        public static void CallConnectionReceived(this NetworkPoolHooks hooks, NetworkConnection connection, int bytes)
+        {
+            hooks.OnConnectionReceived?.Invoke(new ConnectionReceived
+            {
+                Connection = connection,
+                Remote = connection.Remote,
+                Bytes = bytes
+            });
+        }
     }
 }

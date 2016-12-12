@@ -65,6 +65,36 @@ namespace Leak.Networking
             }
         }
 
+        public void HandleSent(long identifier, int bytes)
+        {
+            NetworkPoolEntry entry;
+
+            lock (items)
+            {
+                items.TryGetValue(identifier, out entry);
+            }
+
+            if (entry != null)
+            {
+                hooks.CallConnectionSent(entry.Connection, bytes);
+            }
+        }
+
+        public void HandleReceived(long identifier, int bytes)
+        {
+            NetworkPoolEntry entry;
+
+            lock (items)
+            {
+                items.TryGetValue(identifier, out entry);
+            }
+
+            if (entry != null)
+            {
+                hooks.CallConnectionReceived(entry.Connection, bytes);
+            }
+        }
+
         public void Schedule(LeakTask<NetworkPoolInstance> task)
         {
             queue.Add(task);

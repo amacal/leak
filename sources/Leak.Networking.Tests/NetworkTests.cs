@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Leak.Common;
-using Leak.Completion;
 using Leak.Sockets;
-using Leak.Tasks;
 using Leak.Testing;
 using NUnit.Framework;
 using System.Net;
@@ -12,36 +10,35 @@ namespace Leak.Networking.Tests
 {
     public class NetworkTests
     {
-        private LeakPipeline pipeline;
-        private CompletionThread worker;
-        private NetworkPool pool;
-        private NetworkPoolHooks hooks;
+        private NetworkFixture fixture;
 
         [SetUp]
         public void SetUp()
         {
-            pipeline = new LeakPipeline();
-            worker = new CompletionThread();
-
-            hooks = new NetworkPoolHooks();
-            pool = new NetworkPoolFactory(pipeline, worker).CreateInstance(hooks);
-
-            worker.Start();
-            pipeline.Start();
-            pool.Start();
+            fixture = new NetworkFixture();
+            fixture.Start();
         }
 
         [TearDown]
         public void TearDown()
         {
-            worker.Dispose();
-            pipeline.Stop();
+            fixture.Stop();
+        }
+
+        public NetworkPool Pool
+        {
+            get { return fixture.Pool; }
+        }
+
+        public NetworkPoolHooks Hooks
+        {
+            get { return fixture.Hooks; }
         }
 
         [Test]
         public void ShouldCreateNewTcpSocket()
         {
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket socket = Pool.New())
             {
                 socket.Should().NotBeNull();
             }
@@ -54,9 +51,9 @@ namespace Leak.Networking.Tests
             IPEndPoint remote = new IPEndPoint(address, 8080);
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket socket = Pool.New())
             {
-                NetworkConnection connection = pool.Create(socket, direction, remote);
+                NetworkConnection connection = Pool.Create(socket, direction, remote);
 
                 connection.Should().NotBeNull();
                 connection.Direction.Should().Be(direction);
@@ -72,10 +69,10 @@ namespace Leak.Networking.Tests
             IPEndPoint remote = new IPEndPoint(address, 8080);
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket socket = Pool.New())
             {
-                NetworkConnection origin = pool.Create(socket, direction, remote);
-                NetworkConnection changed = pool.Change(origin, new NetworkConfiguration());
+                NetworkConnection origin = Pool.Create(socket, direction, remote);
+                NetworkConnection changed = Pool.Change(origin, new NetworkConfiguration());
 
                 changed.Should().NotBeNull();
                 changed.Should().NotBeSameAs(origin);
@@ -90,15 +87,15 @@ namespace Leak.Networking.Tests
             IPEndPoint remote = new IPEndPoint(address, 8080);
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            Trigger handler = Trigger.Bind(ref hooks.OnConnectionAttached, data =>
+            Trigger handler = Trigger.Bind(ref Hooks.OnConnectionAttached, data =>
             {
                 data.Remote.Should().Be(PeerAddress.Parse(remote));
                 data.Connection.Should().NotBeNull();
             });
 
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket socket = Pool.New())
             {
-                pool.Create(socket, direction, remote);
+                Pool.Create(socket, direction, remote);
             }
 
             handler.Wait().Should().BeTrue();
@@ -111,15 +108,15 @@ namespace Leak.Networking.Tests
             IPEndPoint remote = new IPEndPoint(address, 8080);
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            Trigger handler = Trigger.Bind(ref hooks.OnConnectionTerminated, data =>
+            Trigger handler = Trigger.Bind(ref Hooks.OnConnectionTerminated, data =>
             {
                 data.Remote.Should().Be(PeerAddress.Parse(remote));
                 data.Connection.Should().NotBeNull();
             });
 
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket socket = Pool.New())
             {
-                pool.Create(socket, direction, remote).Terminate();
+                Pool.Create(socket, direction, remote).Terminate();
             }
 
             handler.Wait().Should().BeTrue();
@@ -130,8 +127,8 @@ namespace Leak.Networking.Tests
         {
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            using (TcpSocket host = pool.New())
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket host = Pool.New())
+            using (TcpSocket socket = Pool.New())
             {
                 TcpSocketInfo info = host.BindAndInfo();
                 int port = info.Endpoint.Port;
@@ -148,8 +145,8 @@ namespace Leak.Networking.Tests
                 accept.Status.Should().Be(TcpSocketStatus.OK);
                 accept.Connection.Dispose();
 
-                NetworkConnection connection = pool.Create(socket, direction, endpoint);
-                Trigger handler = Trigger.Bind(ref hooks.OnConnectionTerminated, data =>
+                NetworkConnection connection = Pool.Create(socket, direction, endpoint);
+                Trigger handler = Trigger.Bind(ref Hooks.OnConnectionTerminated, data =>
                 {
                     data.Remote.Should().Be(PeerAddress.Parse(endpoint));
                     data.Connection.Should().NotBeNull();
@@ -165,8 +162,8 @@ namespace Leak.Networking.Tests
         {
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            using (TcpSocket host = pool.New())
-            using (TcpSocket socket = pool.New())
+            using (TcpSocket host = Pool.New())
+            using (TcpSocket socket = Pool.New())
             {
                 TcpSocketInfo info = host.BindAndInfo();
                 int port = info.Endpoint.Port;
@@ -183,40 +180,87 @@ namespace Leak.Networking.Tests
                 accept.Status.Should().Be(TcpSocketStatus.OK);
                 accept.Connection.Dispose();
 
-                NetworkConnection connection = pool.Create(socket, direction, endpoint);
-                Trigger handler = Trigger.Bind(ref hooks.OnConnectionTerminated, data =>
+                NetworkConnection connection = Pool.Create(socket, direction, endpoint);
+                Trigger handler = Trigger.Bind(ref Hooks.OnConnectionTerminated, data =>
                 {
                     data.Remote.Should().Be(PeerAddress.Parse(endpoint));
                     data.Connection.Should().NotBeNull();
                 });
 
                 for (int i = 0; i < 10; i++)
-                    connection.Send(new RandomMessage());
+                {
+                    connection.Send(new OneByteMessage());
+                }
+
                 handler.Wait().Should().BeTrue();
             }
         }
 
-        private class RandomMessage : NetworkOutgoingMessage
+        [Test]
+        public async Task ShouldTriggerConnectionSentWhenSentSomeBytes()
         {
-            public int Length
-            {
-                get { return 100000; }
-            }
+            NetworkDirection direction = NetworkDirection.Outgoing;
+            NetworkOutgoingMessage message = new RandomMessage(113);
 
-            public byte[] ToBytes()
+            using (TcpSocket host = Pool.New())
+            using (TcpSocket socket = Pool.New())
             {
-                return Bytes.Random(100000);
+                TcpSocketInfo info = host.BindAndInfo();
+                int port = info.Endpoint.Port;
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port);
+
+                socket.Bind();
+                host.Listen(10);
+                host.Accept(null);
+
+                await socket.Connect(endpoint);
+
+                NetworkConnection connection = Pool.Create(socket, direction, endpoint);
+                Trigger handler = Trigger.Bind(ref Hooks.OnConnectionSent, data =>
+                {
+                    data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                    data.Connection.Should().Be(connection);
+                    data.Bytes.Should().Be(message.Length);
+                });
+
+                connection.Send(message);
+                handler.Wait().Should().BeTrue();
             }
         }
 
-        private class NullReceiver : NetworkIncomingMessageHandler
+        [Test]
+        public async Task ShouldTriggerConnectionReceivedWhenReceivedSomeBytes()
         {
-            public void OnMessage(NetworkIncomingMessage message)
-            {
-            }
+            NetworkDirection direction = NetworkDirection.Outgoing;
+            NetworkOutgoingMessage message = new RandomMessage(113);
 
-            public void OnDisconnected()
+            using (TcpSocket host = Pool.New())
+            using (TcpSocket socket = Pool.New())
             {
+                TcpSocketInfo info = host.BindAndInfo();
+                int port = info.Endpoint.Port;
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port);
+
+                socket.Bind();
+                host.Listen(10);
+
+                Task<TcpSocketAccept> task = host.Accept();
+                await socket.Connect(endpoint);
+                TcpSocketAccept accept = await task;
+
+                NetworkConnection connection = Pool.Create(socket, direction, endpoint);
+
+                Trigger handler = Trigger.Bind(ref Hooks.OnConnectionReceived, data =>
+                {
+                    data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                    data.Connection.Should().NotBeNull();
+                    data.Bytes.Should().Be(message.Length);
+                });
+
+                connection.Receive(new NullReceiver());
+                accept.Connection.Send(new TcpSocketBuffer(message.ToBytes()), null);
+
+                handler.Wait().Should().BeTrue();
             }
         }
     }

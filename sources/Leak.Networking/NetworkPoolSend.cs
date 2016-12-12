@@ -34,6 +34,11 @@ namespace Leak.Networking
                 {
                     listener.Disconnect(identifier);
                 }
+
+                if (sent.Count > 0)
+                {
+                    listener.HandleSent(identifier, sent.Count);
+                }
             }
         }
     }

@@ -17,6 +17,18 @@ namespace Leak.Networking
         public Action<ConnectionEncrypted> OnConnectionEncrypted;
 
         /// <summary>
+        /// Called when the connection successfully transmitted some bytes
+        /// to the remote endpoint.
+        /// </summary>
+        public Action<ConnectionSent> OnConnectionSent;
+
+        /// <summary>
+        /// Called when the connection successfully received some bytes
+        /// from the remote endpoint.
+        /// </summary>
+        public Action<ConnectionReceived> OnConnectionReceived;
+
+        /// <summary>
         /// Called when an existing connection was terminated either
         /// by local or by remote host.
         /// </summary>

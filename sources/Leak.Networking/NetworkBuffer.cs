@@ -110,7 +110,7 @@ namespace Leak.Networking
 
         private void OnReceived(TcpSocketReceive context, NetworkIncomingMessageHandler handler)
         {
-            listener.Schedule(new NetworkPoolDecrypt(this, handler, context.Count));
+            listener.Schedule(new NetworkPoolDecrypt(listener, identifier, this, handler, context.Count));
         }
 
         public void Process(NetworkIncomingMessageHandler handler, int count)
