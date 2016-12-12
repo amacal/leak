@@ -4,6 +4,7 @@ using Leak.Core.Omnibus;
 using Leak.Core.Tests.Core;
 using Leak.Events;
 using Leak.Tasks;
+using Leak.Testing;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Components

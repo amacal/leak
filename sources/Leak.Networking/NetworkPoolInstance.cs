@@ -59,7 +59,7 @@ namespace Leak.Networking
             return connection;
         }
 
-        public NetworkConnection Change(NetworkConnection connection, NetworkConnectionConfiguration configurer)
+        public NetworkConnection Change(NetworkConnection connection, NetworkConfiguration configurer)
         {
             NetworkPoolEntry entry;
             long identifier = connection.Identifier;

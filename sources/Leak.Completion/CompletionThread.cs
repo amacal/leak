@@ -21,13 +21,13 @@ namespace Leak.Completion
         {
             while (completed == false)
             {
-                uint bytesRead;
+                uint bytesProcessed;
                 uint completionKey;
                 NativeOverlapped* native;
 
                 bool result = CompletionInterop.GetQueuedCompletionStatus(
                     port,
-                    out bytesRead,
+                    out bytesProcessed,
                     out completionKey,
                     &native, 1000);
 
@@ -38,7 +38,7 @@ namespace Leak.Completion
 
                     if (result)
                     {
-                        callback?.Complete((int)bytesRead);
+                        callback?.Complete(native, (int)bytesProcessed);
                     }
                     else
                     {

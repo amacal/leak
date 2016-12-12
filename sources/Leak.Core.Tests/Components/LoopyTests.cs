@@ -10,6 +10,7 @@ using Leak.Core.Tests.Core;
 using Leak.Events;
 using Leak.Networking;
 using Leak.Tasks;
+using Leak.Testing;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Components

@@ -2,6 +2,7 @@
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Events;
+using Leak.Testing;
 
 namespace Leak.Core.Tests.Core
 {

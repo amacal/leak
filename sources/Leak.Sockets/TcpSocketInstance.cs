@@ -149,7 +149,18 @@ namespace Leak.Sockets
 
         public Task<TcpSocketDisconnect> Disconnect()
         {
-            throw new NotImplementedException();
+            TcpSocketDisconnectResult result = new TcpSocketDisconnectResult
+            {
+                Handle = handle,
+                Socket = this,
+                Event = new ManualResetEvent(false)
+            };
+
+            Task<TcpSocketDisconnect> task = Task.Factory.FromAsync(result, ar => ((TcpSocketDisconnectResult)ar).CreateData());
+            TcpSocketDisconnectRoutine routine = new TcpSocketDisconnectRoutine(handle);
+
+            routine.Execute(result);
+            return task;
         }
 
         public void Send(TcpSocketBuffer buffer, TcpSocketSendCallback callback)

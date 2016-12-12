@@ -46,7 +46,7 @@ namespace Leak.Sockets
             {
                 if (received > 0)
                 {
-                    target.Complete(received);
+                    target.Complete(native, received);
                 }
             }
             else if (result == 0 && error != 997)

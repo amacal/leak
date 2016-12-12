@@ -41,6 +41,13 @@ namespace Leak.Sockets
             int dwFlags,
             int reserved);
 
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct WSABuffer
+        {
+            public int length;
+            public IntPtr buffer;
+        }
+
         [DllImport("ws2_32.dll", SetLastError = true)]
         public static extern IntPtr WSASocket(
             [In] int addressFamily,
@@ -88,8 +95,18 @@ namespace Leak.Sockets
             [In] IntPtr hFile,
             [Out] IntPtr lpBuffer,
             [In] int numberOfBytesToWrite,
-            [Out] out int umberOfBytesWritten,
+            [Out] out int numberOfBytesWritten,
             [In] NativeOverlapped* lpOverlapped);
+
+        [DllImport("ws2_32.dll", SetLastError = true)]
+        public static extern unsafe uint WSASend(
+            [In] IntPtr socket,
+            [In] WSABuffer* lpBuffers,
+            [In] int buffersCount,
+            [Out] out int numberOfBytesSent,
+            [In] int dwFlags,
+            [In] NativeOverlapped* lpOverlapped,
+            [In] IntPtr lpCompletionRoutine);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern unsafe uint ReadFile(
@@ -106,6 +123,9 @@ namespace Leak.Sockets
             [Out] out uint ptrBytesTransferred,
             [In] bool wait,
             [Out] out uint flags);
+
+        [DllImport("ws2_32.dll", SetLastError = true)]
+        public static extern uint WSAGetLastError();
 
         public static uint GetLastError()
         {

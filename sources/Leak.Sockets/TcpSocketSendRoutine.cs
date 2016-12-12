@@ -21,13 +21,19 @@ namespace Leak.Sockets
 
             Overlapped overlapped = new Overlapped { AsyncResult = target };
             NativeOverlapped* native = overlapped.UnsafePack(null, null);
-            IntPtr reference = Marshal.UnsafeAddrOfPinnedArrayElement(buffer.Data, 0);
+            IntPtr reference = Marshal.UnsafeAddrOfPinnedArrayElement(buffer.Data, buffer.Offset);
+
+            TcpSocketInterop.WSABuffer data = new TcpSocketInterop.WSABuffer
+            {
+                length = buffer.Count,
+                buffer = reference
+            };
 
             int written;
-            uint result = TcpSocketInterop.WriteFile(handle, reference, buffer.Count, out written, native);
-            uint error = TcpSocketInterop.GetLastError();
+            uint result = TcpSocketInterop.WSASend(handle, &data, 1, out written, 0, native, IntPtr.Zero);
+            uint error = TcpSocketInterop.WSAGetLastError();
 
-            if (result == 0 && error != 997)
+            if (result != 0 && error != 997)
             {
                 target.Fail(error);
             }

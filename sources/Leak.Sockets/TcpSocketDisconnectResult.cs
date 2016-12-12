@@ -13,6 +13,11 @@ namespace Leak.Sockets
             return new TcpSocketDisconnect(Status, Socket);
         }
 
+        public TcpSocketDisconnect CreateData()
+        {
+            return new TcpSocketDisconnect(Status, Socket);
+        }
+
         protected override void OnCompleted(int affected)
         {
             OnDisconnected?.Invoke(new TcpSocketDisconnect(Status, Socket));

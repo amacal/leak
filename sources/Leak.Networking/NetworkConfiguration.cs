@@ -1,8 +1,8 @@
 ﻿namespace Leak.Networking
 {
-    public class NetworkConnectionConfiguration
+    public class NetworkConfiguration
     {
-        public NetworkConnectionConfiguration()
+        public NetworkConfiguration()
         {
             Encryptor = NetworkEncryptor.Nothing;
             Decryptor = NetworkDecryptor.Nothing;

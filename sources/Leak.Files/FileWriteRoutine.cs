@@ -40,7 +40,7 @@ namespace Leak.Files
 
             if (result == 1)
             {
-                target.Complete(read);
+                target.Complete(native, read);
             }
         }
     }

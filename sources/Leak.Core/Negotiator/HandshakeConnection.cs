@@ -54,7 +54,7 @@ namespace Leak.Core.Negotiator
 
         public NetworkConnection StartEncryption(HandshakeKeyContainer pair)
         {
-            return pool.Change(connection, new NetworkConnectionConfiguration
+            return pool.Change(connection, new NetworkConfiguration
             {
                 Encryptor = new HandshakeConnectionToEncryptor(pair.Local),
                 Decryptor = new HandshakeConnectionToDecryptor(pair.Remote)

@@ -12,6 +12,6 @@ namespace Leak.Networking
 
         NetworkConnection Create(TcpSocket socket, NetworkDirection direction, IPEndPoint remote);
 
-        NetworkConnection Change(NetworkConnection connection, NetworkConnectionConfiguration configurer);
+        NetworkConnection Change(NetworkConnection connection, NetworkConfiguration configurer);
     }
 }

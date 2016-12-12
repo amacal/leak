@@ -4,6 +4,7 @@ using Leak.Core.Repository;
 using Leak.Core.Tests.Core;
 using NUnit.Framework;
 using System.IO;
+using Leak.Testing;
 
 namespace Leak.Core.Tests.Components
 {

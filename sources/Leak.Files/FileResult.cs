@@ -39,7 +39,7 @@ namespace Leak.Files
             Pinned = GCHandle.Alloc(instance, GCHandleType.Pinned);
         }
 
-        public void Complete(int affected)
+        public unsafe void Complete(NativeOverlapped* overlapped, int affected)
         {
             Affected = affected;
             IsCompleted = true;

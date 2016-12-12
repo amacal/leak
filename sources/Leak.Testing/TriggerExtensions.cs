@@ -1,6 +1,6 @@
 using System;
 
-namespace Leak.Core.Tests.Core
+namespace Leak.Testing
 {
     public static class TriggerExtensions
     {

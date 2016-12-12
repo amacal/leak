@@ -1,16 +1,14 @@
 ﻿using FluentAssertions;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Tests.Core;
-using Leak.Events;
-using Leak.Networking;
 using Leak.Sockets;
 using Leak.Tasks;
+using Leak.Testing;
 using NUnit.Framework;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Leak.Core.Tests.Components
+namespace Leak.Networking.Tests
 {
     public class NetworkTests
     {
@@ -77,7 +75,7 @@ namespace Leak.Core.Tests.Components
             using (TcpSocket socket = pool.New())
             {
                 NetworkConnection origin = pool.Create(socket, direction, remote);
-                NetworkConnection changed = pool.Change(origin, new NetworkConnectionConfiguration());
+                NetworkConnection changed = pool.Change(origin, new NetworkConfiguration());
 
                 changed.Should().NotBeNull();
                 changed.Should().NotBeSameAs(origin);
@@ -92,7 +90,7 @@ namespace Leak.Core.Tests.Components
             IPEndPoint remote = new IPEndPoint(address, 8080);
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            var handler = hooks.OnConnectionAttached.Trigger(data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnConnectionAttached, data =>
             {
                 data.Remote.Should().Be(PeerAddress.Parse(remote));
                 data.Connection.Should().NotBeNull();
@@ -100,7 +98,6 @@ namespace Leak.Core.Tests.Components
 
             using (TcpSocket socket = pool.New())
             {
-                hooks.OnConnectionAttached = handler;
                 pool.Create(socket, direction, remote);
             }
 
@@ -108,13 +105,13 @@ namespace Leak.Core.Tests.Components
         }
 
         [Test]
-        public void ShouldTriggerConnectionTerminated()
+        public void ShouldTriggerConnectionTerminatedWhenTerminated()
         {
             IPAddress address = IPAddress.Parse("127.0.0.1");
             IPEndPoint remote = new IPEndPoint(address, 8080);
             NetworkDirection direction = NetworkDirection.Outgoing;
 
-            var handler = hooks.OnConnectionTerminated.Trigger(data =>
+            Trigger handler = Trigger.Bind(ref hooks.OnConnectionTerminated, data =>
             {
                 data.Remote.Should().Be(PeerAddress.Parse(remote));
                 data.Connection.Should().NotBeNull();
@@ -122,41 +119,105 @@ namespace Leak.Core.Tests.Components
 
             using (TcpSocket socket = pool.New())
             {
-                hooks.OnConnectionTerminated = handler;
                 pool.Create(socket, direction, remote).Terminate();
             }
 
             handler.Wait().Should().BeTrue();
         }
 
-        [Test, Ignore("")]
-        public async Task ShouldTriggerConnectionDropped()
+        [Test]
+        public async Task ShouldTriggerConnectionTerminatedWhenReceiving()
         {
             NetworkDirection direction = NetworkDirection.Outgoing;
-            Trigger<ConnectionTerminated> handler;
 
             using (TcpSocket host = pool.New())
             using (TcpSocket socket = pool.New())
             {
                 TcpSocketInfo info = host.BindAndInfo();
-                IPEndPoint endpoint = info.Endpoint;
+                int port = info.Endpoint.Port;
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port);
 
-                handler = hooks.OnConnectionTerminated.Trigger(data =>
+                socket.Bind();
+                host.Listen(10);
+
+                Task<TcpSocketAccept> task = host.Accept();
+                TcpSocketConnect connect = await socket.Connect(endpoint);
+                TcpSocketAccept accept = await task;
+
+                connect.Status.Should().Be(TcpSocketStatus.OK);
+                accept.Status.Should().Be(TcpSocketStatus.OK);
+                accept.Connection.Dispose();
+
+                NetworkConnection connection = pool.Create(socket, direction, endpoint);
+                Trigger handler = Trigger.Bind(ref hooks.OnConnectionTerminated, data =>
                 {
                     data.Remote.Should().Be(PeerAddress.Parse(endpoint));
                     data.Connection.Should().NotBeNull();
                 });
 
-                host.Accept(null);
-                hooks.OnConnectionTerminated = handler;
+                connection.Receive(new NullReceiver());
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public async Task ShouldTriggerConnectionTerminatedWhenSending()
+        {
+            NetworkDirection direction = NetworkDirection.Outgoing;
+
+            using (TcpSocket host = pool.New())
+            using (TcpSocket socket = pool.New())
+            {
+                TcpSocketInfo info = host.BindAndInfo();
+                int port = info.Endpoint.Port;
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port);
+
+                socket.Bind();
+                host.Listen(10);
+
+                Task<TcpSocketAccept> task = host.Accept();
+                TcpSocketConnect connect = await socket.Connect(endpoint);
+                TcpSocketAccept accept = await task;
+
+                connect.Status.Should().Be(TcpSocketStatus.OK);
+                accept.Status.Should().Be(TcpSocketStatus.OK);
+                accept.Connection.Dispose();
 
                 NetworkConnection connection = pool.Create(socket, direction, endpoint);
+                Trigger handler = Trigger.Bind(ref hooks.OnConnectionTerminated, data =>
+                {
+                    data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                    data.Connection.Should().NotBeNull();
+                });
 
-                await socket.Connect(endpoint);
-                connection.Send(null);
+                for (int i = 0; i < 10; i++)
+                    connection.Send(new RandomMessage());
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        private class RandomMessage : NetworkOutgoingMessage
+        {
+            public int Length
+            {
+                get { return 100000; }
             }
 
-            handler.Wait().Should().BeTrue();
+            public byte[] ToBytes()
+            {
+                return Bytes.Random(100000);
+            }
+        }
+
+        private class NullReceiver : NetworkIncomingMessageHandler
+        {
+            public void OnMessage(NetworkIncomingMessage message)
+            {
+            }
+
+            public void OnDisconnected()
+            {
+            }
         }
     }
 }

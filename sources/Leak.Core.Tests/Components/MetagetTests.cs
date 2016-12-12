@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Leak.Core.Metaget;
 using Leak.Core.Tests.Core;
+using Leak.Testing;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Components

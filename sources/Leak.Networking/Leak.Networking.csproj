@@ -36,7 +36,7 @@
     <Compile Include="NetworkBuffer.cs" />
     <Compile Include="NetworkBufferMessage.cs" />
     <Compile Include="NetworkBufferView.cs" />
-    <Compile Include="NetworkConnectionConfiguration.cs" />
+    <Compile Include="NetworkConfiguration.cs" />
     <Compile Include="NetworkDecryptor.cs" />
     <Compile Include="NetworkDecryptorToNothing.cs" />
     <Compile Include="NetworkEncryptor.cs" />

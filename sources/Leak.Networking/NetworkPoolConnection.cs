@@ -49,7 +49,7 @@ namespace Leak.Networking
         /// </summary>
         /// <param name="connection">The existing instance of the connection.</param>
         /// <param name="configurer">The new configuration.</param>
-        public NetworkPoolConnection(NetworkPoolConnection connection, NetworkConnectionConfiguration configurer)
+        public NetworkPoolConnection(NetworkPoolConnection connection, NetworkConfiguration configurer)
         {
             encryptor = configurer.Encryptor;
             listener = connection.listener;
@@ -104,7 +104,7 @@ namespace Leak.Networking
                 byte[] decrypted = message.ToBytes();
                 byte[] encrypted = encryptor.Encrypt(decrypted);
 
-                listener.Schedule(new NetworkPoolSend(socket, encrypted));
+                listener.Schedule(new NetworkPoolSend(listener, identifier, socket, encrypted));
             }
         }
 
