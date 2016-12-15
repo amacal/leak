@@ -1,9 +1,10 @@
 ﻿using Leak.Completion;
 using Leak.Tasks;
+using System;
 
 namespace Leak.Networking.Tests
 {
-    public class NetworkFixture
+    public class NetworkFixture : IDisposable
     {
         private readonly LeakPipeline pipeline;
         private readonly CompletionThread worker;
@@ -13,10 +14,14 @@ namespace Leak.Networking.Tests
         public NetworkFixture()
         {
             pipeline = new LeakPipeline();
+            pipeline.Start();
+
             worker = new CompletionThread();
+            worker.Start();
 
             hooks = new NetworkPoolHooks();
             pool = new NetworkPoolFactory(pipeline, worker).CreateInstance(hooks);
+            pool.Start();
         }
 
         public NetworkPool Pool
@@ -29,17 +34,10 @@ namespace Leak.Networking.Tests
             get { return hooks; }
         }
 
-        public void Start()
+        public void Dispose()
         {
-            worker.Start();
-            pipeline.Start();
-            pool.Start();
-        }
-
-        public void Stop()
-        {
-            worker.Dispose();
-            pipeline.Stop();
+            worker?.Dispose();
+            pipeline?.Stop();
         }
     }
 }

@@ -1,0 +1,28 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <IgnoredTests>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.ConnectTests.CanConnectUsingCallbackToExampleSite</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.ConnectTests.CanConnectUsingTasksToExampleSite</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.ConnectTests.CanConnectUsingTasksToNotAvailableSite</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.ReceiveTests.CanReceiveDataUsingCallbackToExampleSite</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.ReceiveTests.CanReceiveDataUsingTasksToExampleSite</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.SendTests.CanSendDataUsingAsyncToExampleSite</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Leak.Sockets.Tests.SendTests.CanSendDataUsingCallbackToExampleSite</TestName>
+      </NamedTestSelector>
+    </IgnoredTests>
+    <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
+  </Settings>
+</ProjectConfiguration>

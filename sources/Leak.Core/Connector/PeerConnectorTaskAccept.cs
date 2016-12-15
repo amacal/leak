@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Negotiator;
+using Leak.Negotiator;
 using Leak.Sockets;
 using Leak.Tasks;
 using System.Net;
@@ -26,7 +26,7 @@ namespace Leak.Core.Connector
             context.Hooks.CallConnectionEstablished(connection);
 
             PeerConnectorNegotiatorContext forNegotiator = new PeerConnectorNegotiatorContext(hash, context, connection);
-            HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(context.Pool, connection, forNegotiator);
+            HandshakeNegotiatorActive negotiator = new HandshakeNegotiatorActive(context.Pool, connection, forNegotiator, new HandshakeNegotiatorHooks());
 
             negotiator.Execute();
         }

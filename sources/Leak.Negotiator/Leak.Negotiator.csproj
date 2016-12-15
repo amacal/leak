@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Leak.Negotiator</RootNamespace>
+    <AssemblyName>Leak.Negotiator</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HandshakeConnection.cs" />
+    <Compile Include="HandshakeConnectionEncryptedMessage.cs" />
+    <Compile Include="HandshakeConnectionToBytes.cs" />
+    <Compile Include="HandshakeConnectionToCall.cs" />
+    <Compile Include="HandshakeConnectionToDecryptor.cs" />
+    <Compile Include="HandshakeConnectionToEncryptor.cs" />
+    <Compile Include="HandshakeConnectionToPeek.cs" />
+    <Compile Include="HandshakeCredentials.cs" />
+    <Compile Include="HandshakeCryptography.cs" />
+    <Compile Include="HandshakeCryptoHashMessage.cs" />
+    <Compile Include="HandshakeCryptoMessage.cs" />
+    <Compile Include="HandshakeCryptoPayload.cs" />
+    <Compile Include="HandshakeCryptoPayloadMessage.cs" />
+    <Compile Include="HandshakeKey.cs" />
+    <Compile Include="HandshakeKeyContainer.cs" />
+    <Compile Include="HandshakeKeyExchange.cs" />
+    <Compile Include="HandshakeKeyExchangeMessage.cs" />
+    <Compile Include="HandshakeKeyMessage.cs" />
+    <Compile Include="HandshakeKeyOwnership.cs" />
+    <Compile Include="HandshakeKeyScope.cs" />
+    <Compile Include="HandshakeMatch.cs" />
+    <Compile Include="HandshakeMatchExtensions.cs" />
+    <Compile Include="HandshakeMessage.cs" />
+    <Compile Include="HandshakeNegotiator.cs" />
+    <Compile Include="HandshakeNegotiatorActiveInstance.cs" />
+    <Compile Include="HandshakeNegotiatorExtensions.cs" />
+    <Compile Include="HandshakeNegotiatorInstance.cs" />
+    <Compile Include="HandshakeNegotiatorActive.cs" />
+    <Compile Include="HandshakeNegotiatorActiveContext.cs" />
+    <Compile Include="HandshakeNegotiatorContext.cs" />
+    <Compile Include="HandshakeNegotiatorFactory.cs" />
+    <Compile Include="HandshakeNegotiatorHooks.cs" />
+    <Compile Include="HandshakeNegotiatorPassive.cs" />
+    <Compile Include="HandshakeNegotiatorPassiveContext.cs" />
+    <Compile Include="HandshakeNegotiatorPassiveInstance.cs" />
+    <Compile Include="HandshakeRejection.cs" />
+    <Compile Include="HandshakeRivestCipher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
+      <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
+      <Name>Leak.Networking</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

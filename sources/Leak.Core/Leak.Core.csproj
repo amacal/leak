@@ -38,7 +38,6 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bitfile\BitfileCallback.cs" />
@@ -118,7 +117,6 @@
     <Compile Include="Metafile\MetafileHooks.cs" />
     <Compile Include="Metaget\MetagetHooks.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
-    <Compile Include="Negotiator\HandshakeKeyMessage.cs" />
     <Compile Include="Omnibus\Components\OmnibusCache.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceCompleted.cs" />
@@ -235,35 +233,6 @@
     <Compile Include="Metamine\MetamineStrategy.cs" />
     <Compile Include="Metamine\MetamineStrategyContext.cs" />
     <Compile Include="Metamine\MetamineStrategySequential.cs" />
-    <Compile Include="Negotiator\HandshakeConnectionEncryptedMessage.cs" />
-    <Compile Include="Negotiator\HandshakeConnectionToBytes.cs" />
-    <Compile Include="Negotiator\HandshakeConnectionToDecryptor.cs" />
-    <Compile Include="Negotiator\HandshakeConnectionToEncryptor.cs" />
-    <Compile Include="Negotiator\HandshakeConnectionToPeek.cs" />
-    <Compile Include="Negotiator\HandshakeCredentials.cs" />
-    <Compile Include="Negotiator\HandshakeCryptography.cs" />
-    <Compile Include="Negotiator\HandshakeCryptoMessage.cs" />
-    <Compile Include="Negotiator\HandshakeCryptoHashMessage.cs" />
-    <Compile Include="Negotiator\HandshakeCryptoPayload.cs" />
-    <Compile Include="Negotiator\HandshakeCryptoPayloadMessage.cs" />
-    <Compile Include="Negotiator\HandshakeMatch.cs" />
-    <Compile Include="Negotiator\HandshakeKey.cs" />
-    <Compile Include="Negotiator\HandshakeKeyExchange.cs" />
-    <Compile Include="Negotiator\HandshakeKeyExchangeMessage.cs" />
-    <Compile Include="Negotiator\HandshakeKeyContainer.cs" />
-    <Compile Include="Negotiator\HandshakeKeyOwnership.cs" />
-    <Compile Include="Negotiator\HandshakeKeyScope.cs" />
-    <Compile Include="Negotiator\HandshakeMatchExtensions.cs" />
-    <Compile Include="Negotiator\HandshakeMessage.cs" />
-    <Compile Include="Negotiator\HandshakeNegotiatorActive.cs" />
-    <Compile Include="Negotiator\HandshakeNegotiatorActiveContext.cs" />
-    <Compile Include="Negotiator\HandshakeNegotiatorContext.cs" />
-    <Compile Include="Negotiator\HandshakeNegotiatorPassive.cs" />
-    <Compile Include="Negotiator\HandshakeNegotiatorPassiveContext.cs" />
-    <Compile Include="Negotiator\HandshakeRejection.cs" />
-    <Compile Include="Negotiator\HandshakeRivestCipher.cs" />
-    <Compile Include="Negotiator\HandshakeConnection.cs" />
-    <Compile Include="Negotiator\HandshakeConnectionToCall.cs" />
     <Compile Include="Omnibus\Components\OmnibusBitfieldCollection.cs" />
     <Compile Include="Omnibus\OmnibusBlock.cs" />
     <Compile Include="Omnibus\OmnibusConfiguration.cs" />
@@ -327,6 +296,10 @@
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
+      <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>
+      <Name>Leak.Negotiator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>

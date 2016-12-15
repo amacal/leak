@@ -24,6 +24,15 @@ namespace Leak.Testing
             target = trigger;
             return result;
         }
+
+        public static Trigger Bind<T>(ref Action<T> target, Func<T, bool> callback)
+        {
+            Trigger<T> trigger = new Trigger<T>(callback);
+            Trigger result = trigger;
+
+            target = trigger;
+            return result;
+        }
     }
 
     public class Trigger<T> : Trigger
@@ -37,6 +46,17 @@ namespace Leak.Testing
             {
                 callback.Invoke(payload);
                 called = true;
+            };
+        }
+
+        public Trigger(Func<T, bool> callback)
+        {
+            this.callback = payload =>
+            {
+                if (callback.Invoke(payload))
+                {
+                    called = true;
+                }
             };
         }
 

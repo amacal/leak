@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Negotiator;
+using Leak.Negotiator;
 using Leak.Networking;
 using Leak.Sockets;
 using System;
@@ -93,7 +93,7 @@ namespace Leak.Core.Listener
 
         private void Negotiate(PeerListenerNegotiatorContext context, NetworkConnection connection)
         {
-            new HandshakeNegotiatorPassive(network, connection, context).Execute();
+            new HandshakeNegotiatorPassive(network, connection, context, new HandshakeNegotiatorHooks()).Execute();
         }
 
         public void Dispose()

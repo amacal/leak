@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Networking.Tests", "Le
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Testing", "Leak.Testing\Leak.Testing.csproj", "{56E41A71-1AC5-49D0-A8EC-B0E4767C7BF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Negotiator", "Leak.Negotiator\Leak.Negotiator.csproj", "{ACAE4BA0-3596-447C-822A-E9FCE74D6486}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Negotiator.Tests", "Leak.Negotiator.Tests\Leak.Negotiator.Tests.csproj", "{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,14 @@ Global
 		{56E41A71-1AC5-49D0-A8EC-B0E4767C7BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56E41A71-1AC5-49D0-A8EC-B0E4767C7BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56E41A71-1AC5-49D0-A8EC-B0E4767C7BF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACAE4BA0-3596-447C-822A-E9FCE74D6486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACAE4BA0-3596-447C-822A-E9FCE74D6486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACAE4BA0-3596-447C-822A-E9FCE74D6486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACAE4BA0-3596-447C-822A-E9FCE74D6486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

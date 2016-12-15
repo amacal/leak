@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Negotiator;
+using Leak.Negotiator;
 
 namespace Leak.Core.Listener
 {
