@@ -1,13 +1,13 @@
 ﻿using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Connector;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
-using Leak.Core.Listener;
 using Leak.Networking;
 using Leak.Tasks;
 using System;
 using System.Collections.Generic;
+using Leak.Connector;
+using Leak.Listener;
 using Leak.Testing;
 
 namespace Leak.Core.Tests.Core
@@ -62,11 +62,11 @@ namespace Leak.Core.Tests.Core
 
             PeerListenerHooks listenerHooks = new PeerListenerHooks
             {
-                OnHandshakeCompleted = data =>
-                {
-                    entry.Glue = factory.Create(hash, entry.Hooks, configuration);
-                    entry.Glue.Connect(data.Connection, data.Handshake);
-                },
+                //OnHandshakeCompleted = data =>
+                //{
+                //    entry.Glue = factory.Create(hash, entry.Hooks, configuration);
+                //    entry.Glue.Connect(data.Connection, data.Handshake);
+                //},
                 OnListenerStarted = data =>
                 {
                     entry.Port = data.Port;
@@ -116,11 +116,11 @@ namespace Leak.Core.Tests.Core
 
             PeerConnectorHooks connectorHooks = new PeerConnectorHooks
             {
-                OnHandshakeCompleted = data =>
-                {
-                    entry.Glue = factory.Create(hash, entry.Hooks, configuration);
-                    entry.Glue.Connect(data.Connection, data.Handshake);
-                }
+                //OnHandshakeCompleted = data =>
+                //{
+                //    entry.Glue = factory.Create(hash, entry.Hooks, configuration);
+                //    entry.Glue.Connect(data.Connection, data.Handshake);
+                //}
             };
 
             PeerConnectorConfiguration connectorConfiguration = new PeerConnectorConfiguration

@@ -10,6 +10,6 @@ namespace Leak.Common
 
         void Write(DataBlockCallback callback);
 
-        DataBlock Scope(int offset);
+        DataBlock Scope(int shift);
     }
 }

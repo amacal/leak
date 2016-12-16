@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Core.Bencoding;
-using Leak.Core.Messages;
 using System.Collections.Generic;
+using Leak.Communicator.Messages;
 
 namespace Leak.Core.Glue
 {

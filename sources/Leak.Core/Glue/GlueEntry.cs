@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
-using Leak.Core.Communicator;
 using Leak.Core.Loop;
 using System;
+using Leak.Communicator;
 
 namespace Leak.Core.Glue
 {

@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Messages;
+using Leak.Communicator.Messages;
 
 namespace Leak.Core.Cando
 {

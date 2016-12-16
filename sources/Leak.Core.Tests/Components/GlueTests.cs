@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Connector;
+using Leak.Connector;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
-using Leak.Core.Listener;
 using Leak.Core.Tests.Core;
 using Leak.Events;
+using Leak.Listener;
 using Leak.Networking;
 using Leak.Tasks;
 using Leak.Testing;
@@ -50,23 +50,23 @@ namespace Leak.Core.Tests.Components
 
             PeerListenerHooks listenerHooks = new PeerListenerHooks
             {
-                OnHandshakeCompleted = rightConnected = new Trigger<HandshakeCompleted>(data =>
-                {
-                    leftHash = data.Handshake.Remote;
-                    right = rightFactory.Create(data.Handshake.Hash, rightHooks, rightConfiguration);
-                    right.Connect(data.Connection, data.Handshake);
-                }),
+                //OnHandshakeCompleted = rightConnected = new Trigger<HandshakeCompleted>(data =>
+                //{
+                //    leftHash = data.Handshake.Remote;
+                //    right = rightFactory.Create(data.Handshake.Hash, rightHooks, rightConfiguration);
+                //    right.Connect(data.Connection, data.Handshake);
+                //}),
                 OnListenerStarted = data => port = data.Port
             };
 
             PeerConnectorHooks connectorHooks = new PeerConnectorHooks
             {
-                OnHandshakeCompleted = leftConnected = new Trigger<HandshakeCompleted>(data =>
-                {
-                    rightHash = data.Handshake.Remote;
-                    left = leftFactory.Create(data.Handshake.Hash, leftHooks, leftConfiguration);
-                    left.Connect(data.Connection, data.Handshake);
-                })
+                //OnHandshakeCompleted = leftConnected = new Trigger<HandshakeCompleted>(data =>
+                //{
+                //    rightHash = data.Handshake.Remote;
+                //    left = leftFactory.Create(data.Handshake.Hash, leftHooks, leftConfiguration);
+                //    left.Connect(data.Connection, data.Handshake);
+                //})
             };
 
             leftHooks = new GlueHooks();

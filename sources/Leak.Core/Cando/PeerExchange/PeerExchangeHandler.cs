@@ -1,10 +1,10 @@
 ﻿using Leak.Common;
 using Leak.Core.Bencoding;
-using Leak.Core.Messages;
 using Leak.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Leak.Communicator.Messages;
 
 namespace Leak.Core.Cando.PeerExchange
 {

@@ -207,9 +207,9 @@ namespace Leak.Core.Tests.Core
             callback.Invoke(data, offset, data.Length - offset);
         }
 
-        public DataBlock Scope(int other)
+        public DataBlock Scope(int shift)
         {
-            return new BinaryBlockData(data, offset + other);
+            return new BinaryBlockData(data, offset + shift);
         }
 
         public void Dispose()

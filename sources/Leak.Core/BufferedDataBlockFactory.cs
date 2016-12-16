@@ -62,9 +62,9 @@ namespace Leak.Core
                 callback.Invoke(data, start, count);
             }
 
-            public DataBlock Scope(int offset)
+            public DataBlock Scope(int shift)
             {
-                return new DataBlockInstance(data, start + offset, count - offset, buffer);
+                return new DataBlockInstance(data, start + shift, count - shift, buffer);
             }
 
             public void Dispose()

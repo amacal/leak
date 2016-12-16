@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
 using Leak.Common;
+using Leak.Communicator;
+using Leak.Communicator.Messages;
 using Leak.Completion;
-using Leak.Core.Communicator;
-using Leak.Core.Connector;
-using Leak.Core.Listener;
+using Leak.Connector;
 using Leak.Core.Loop;
-using Leak.Core.Messages;
 using Leak.Core.Tests.Core;
 using Leak.Events;
+using Leak.Listener;
 using Leak.Networking;
 using Leak.Tasks;
 using Leak.Testing;
@@ -35,18 +35,18 @@ namespace Leak.Core.Tests.Components
         {
             PeerConnectorHooks connectorHooks = new PeerConnectorHooks
             {
-                OnHandshakeCompleted = connected = new Trigger<HandshakeCompleted>(data =>
-                {
-                    loopy.StartProcessing(data.Handshake.Remote, data.Connection);
-                })
+                //OnHandshakeCompleted = connected = new Trigger<HandshakeCompleted>(data =>
+                //{
+                //    loopy.StartProcessing(data.Handshake.Remote, data.Connection);
+                //})
             };
 
             PeerListenerHooks listenerHooks = new PeerListenerHooks
             {
-                OnHandshakeCompleted = data =>
-                {
-                    communicator = new CommunicatorService(data.Handshake.Remote, data.Connection, new CommunicatorHooks(), new CommunicatorConfiguration());
-                },
+                //OnHandshakeCompleted = data =>
+                //{
+                //    communicator = new CommunicatorService(data.Handshake.Remote, data.Connection, new CommunicatorHooks(), new CommunicatorConfiguration());
+                //},
                 OnListenerStarted = data => port = data.Port
             };
 

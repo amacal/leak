@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Connector;
+using Leak.Connector;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Core.Spartan;

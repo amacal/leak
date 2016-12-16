@@ -1,9 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Connector;
 using Leak.Core.Glue;
 using Leak.Core.Glue.Extensions.Metadata;
-using Leak.Core.Listener;
 using Leak.Core.Spartan;
 using Leak.Events;
 using Leak.Files;
@@ -11,6 +9,8 @@ using Leak.Networking;
 using Leak.Tasks;
 using System;
 using System.Collections.Generic;
+using Leak.Connector;
+using Leak.Listener;
 
 namespace Leak.Core.Leakage
 {
@@ -102,7 +102,7 @@ namespace Leak.Core.Leakage
             entry.MetadataHooks.OnMetadataMeasured = entry.Spartan.HandleMetadataMeasured;
             entry.MetadataHooks.OnMetadataReceived = entry.Spartan.HandleMetadataReceived;
 
-            entry.ConnectorHooks.OnHandshakeCompleted = OnHandshakeCompleted;
+            //entry.ConnectorHooks.OnHandshakeCompleted = OnHandshakeCompleted;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()
@@ -117,7 +117,7 @@ namespace Leak.Core.Leakage
             return new PeerListenerHooks
             {
                 OnListenerStarted = hooks.OnListenerStarted,
-                OnHandshakeCompleted = OnHandshakeCompleted
+                //OnHandshakeCompleted = OnHandshakeCompleted
             };
         }
 

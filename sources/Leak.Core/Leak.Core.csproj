@@ -62,16 +62,6 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Events\ExtensionExchanged.cs" />
-    <Compile Include="Communicator\CommunicatorConfiguration.cs" />
-    <Compile Include="Communicator\CommunicatorExtensions.cs" />
-    <Compile Include="Communicator\CommunicatorHooks.cs" />
-    <Compile Include="Communicator\CommunicatorService.cs" />
-    <Compile Include="Connector\PeerConnectorContext.cs" />
-    <Compile Include="Connector\PeerConnectorExtensions.cs" />
-    <Compile Include="Connector\PeerConnectorHooks.cs" />
-    <Compile Include="Connector\PeerConnectorTaskConnect.cs" />
-    <Compile Include="Connector\PeerConnectorTaskAccept.cs" />
-    <Compile Include="Connector\PeerConnectorTaskReject.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataMeasured.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataReceived.cs" />
     <Compile Include="Glue\Extensions\Metadata\MetadataExtensions.cs" />
@@ -102,16 +92,8 @@
     <Compile Include="Leakage\LeakHooks.cs" />
     <Compile Include="Leakage\LeakPort.cs" />
     <Compile Include="Leakage\LeakRegistrant.cs" />
-    <Compile Include="Listener\PeerListenerExtensions.cs" />
-    <Compile Include="Listener\PeerListenerHooks.cs" />
-    <Compile Include="Listener\PeerListenerPort.cs" />
-    <Compile Include="Listener\PeerListenerPortRandom.cs" />
-    <Compile Include="Listener\PeerListenerPortValue.cs" />
     <Compile Include="Loop\ConnectionLoopExtensions.cs" />
     <Compile Include="Loop\ConnectionLoopHooks.cs" />
-    <Compile Include="Messages\BitfieldOutgoingMessage.cs" />
-    <Compile Include="Messages\HaveOutgoingMessage.cs" />
-    <Compile Include="Messages\PieceOutgoingMessage.cs" />
     <Compile Include="Metadata\MetainfoBuilder.cs" />
     <Compile Include="Metafile\MetafileExtensions.cs" />
     <Compile Include="Metafile\MetafileHooks.cs" />
@@ -171,10 +153,6 @@
     <Compile Include="Retriever\Tasks\HandleBlockReceived.cs" />
     <Compile Include="Retriever\Tasks\ScheduleItTask.cs" />
     <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
-    <Compile Include="Connector\PeerConnector.cs" />
-    <Compile Include="Connector\PeerConnectorConfiguration.cs" />
-    <Compile Include="Connector\PeerConnectorHandshake.cs" />
-    <Compile Include="Connector\PeerConnectorNegotiatorContext.cs" />
     <Compile Include="Bencoding\BencodedData.cs" />
     <Compile Include="Bencoding\BencodedEntry.cs" />
     <Compile Include="Bencoding\BencodedNumber.cs" />
@@ -190,28 +168,11 @@
     <Compile Include="Cando\PeerExchange\PeerExchangeExtensions.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
-    <Compile Include="Listener\PeerListener.cs" />
-    <Compile Include="Listener\PeerListenerConfiguration.cs" />
-    <Compile Include="Listener\PeerListenerNegotiatorContext.cs" />
-    <Compile Include="Listener\PeerListenerHandshake.cs" />
     <Compile Include="Loop\ConnectionLoop.cs" />
     <Compile Include="Loop\ConnectionLoopConfiguration.cs" />
     <Compile Include="Loop\ConnectionLoopConnection.cs" />
     <Compile Include="Loop\ConnectionLoopConnectionToBytes.cs" />
     <Compile Include="Loop\ConnectionLoopHandler.cs" />
-    <Compile Include="Messages\BitfieldIncomingMessage.cs" />
-    <Compile Include="Messages\ChokeMessage.cs" />
-    <Compile Include="Messages\Extended.cs" />
-    <Compile Include="Messages\ExtendedIncomingMessage.cs" />
-    <Compile Include="Messages\ExtendedOutgoingMessage.cs" />
-    <Compile Include="Messages\HaveIncomingMessage.cs" />
-    <Compile Include="Messages\InterestedMessage.cs" />
-    <Compile Include="Messages\KeepAliveMessage.cs" />
-    <Compile Include="Messages\Piece.cs" />
-    <Compile Include="Messages\PieceIncomingMessage.cs" />
-    <Compile Include="Messages\Request.cs" />
-    <Compile Include="Messages\RequestOutgoingMessage.cs" />
-    <Compile Include="Messages\UnchokeMessage.cs" />
     <Compile Include="Metadata\MetainfoFactory.cs" />
     <Compile Include="Metadata\MetainfoFile.cs" />
     <Compile Include="Metafile\MetafileContext.cs" />
@@ -285,9 +246,17 @@
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Communicator\Leak.Communicator.csproj">
+      <Project>{d0a3e78e-32b1-4db2-a6cb-58d47fddfe75}</Project>
+      <Name>Leak.Communicator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
       <Name>Leak.Completion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Connector\Leak.Connector.csproj">
+      <Project>{f060eb59-ff12-4d2f-8e88-01d09ac24bb6}</Project>
+      <Name>Leak.Connector</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
@@ -296,6 +265,10 @@
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Listener\Leak.Listener.csproj">
+      <Project>{b11e5e10-9f8d-4506-89a5-a4fb38bdbb65}</Project>
+      <Name>Leak.Listener</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>

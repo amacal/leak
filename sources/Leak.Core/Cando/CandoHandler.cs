@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
+using Leak.Communicator.Messages;
 using Leak.Core.Bencoding;
-using Leak.Core.Messages;
 
 namespace Leak.Core.Cando
 {

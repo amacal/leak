@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
+using Leak.Communicator.Messages;
 using Leak.Core.Bencoding;
-using Leak.Core.Messages;
 using Leak.Events;
 
 namespace Leak.Core.Glue
