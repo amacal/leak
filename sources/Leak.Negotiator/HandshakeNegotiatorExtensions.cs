@@ -15,6 +15,14 @@ namespace Leak.Negotiator
             });
         }
 
+        public static void CallHandshakeRejected(this HandshakeNegotiatorHooks hooks, NetworkConnection connection)
+        {
+            hooks.OnHandshakeRejected?.Invoke(new HandshakeRejected
+            {
+                Connection = connection
+            });
+        }
+
         public static void Start(this HandshakeNegotiator negotiator, NetworkConnection connecton, FileHash hash)
         {
             negotiator.Start(connecton, new HandshakeNegotiatorActiveInstance(hash, PeerHash.Random(), HandshakeOptions.Extended));

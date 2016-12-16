@@ -6,12 +6,24 @@ namespace Leak.Common
 {
     public static class Bytes
     {
+        private static Random Generator;
+
         public static byte[] Random(int size)
         {
             byte[] data = new byte[size];
-            Random random = new Random();
 
-            random.NextBytes(data);
+            if (Generator == null)
+            {
+                lock (typeof(Bytes))
+                {
+                    if (Generator == null)
+                    {
+                        Generator = new Random();
+                    }
+                }
+            }
+
+            Generator.NextBytes(data);
             return data;
         }
 

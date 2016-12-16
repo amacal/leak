@@ -5,13 +5,13 @@ namespace Leak.Negotiator
 {
     public class HandshakeConnectionToPeek : NetworkIncomingMessageHandler
     {
-        private readonly HandshakeNegotiatorHooks hooks;
+        private readonly HandshakeConnection connection;
         private readonly Action<NetworkIncomingMessage> callback;
         private readonly Func<NetworkIncomingMessage, bool> peek;
 
-        public HandshakeConnectionToPeek(HandshakeNegotiatorHooks hooks, Action<NetworkIncomingMessage> callback, Func<NetworkIncomingMessage, bool> peek)
+        public HandshakeConnectionToPeek(HandshakeConnection connection, Action<NetworkIncomingMessage> callback, Func<NetworkIncomingMessage, bool> peek)
         {
-            this.hooks = hooks;
+            this.connection = connection;
             this.callback = callback;
             this.peek = peek;
         }
@@ -30,7 +30,7 @@ namespace Leak.Negotiator
 
         public void OnDisconnected()
         {
-            //context.OnDisconnected();
+            connection.CallHandshakeRejected();
         }
     }
 }

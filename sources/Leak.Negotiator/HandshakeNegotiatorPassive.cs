@@ -60,6 +60,7 @@ namespace Leak.Negotiator
             if (found == null)
             {
                 context.OnRejected(new HandshakeRejection(match));
+                connection.CallHandshakeRejected();
                 connection.Terminate();
 
                 return;

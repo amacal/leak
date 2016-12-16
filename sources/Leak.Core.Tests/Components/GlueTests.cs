@@ -402,7 +402,7 @@ namespace Leak.Core.Tests.Components
             Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
             Trigger handler = Trigger.Bind(ref rightHooks.OnExtensionDataSent, data =>
             {
-                data.Peer.Should().Be(rightHash);
+                data.Peer.Should().Be(leftHash);
                 data.Extension.Should().Be("left-a");
                 data.Size.Should().Be(10);
             });

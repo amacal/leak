@@ -34,7 +34,7 @@ namespace Leak.Negotiator
 
         public void Receive(Action<NetworkIncomingMessage> callback, Func<NetworkIncomingMessage, bool> peek)
         {
-            connection.Receive(new HandshakeConnectionToPeek(hooks, callback, peek));
+            connection.Receive(new HandshakeConnectionToPeek(this, callback, peek));
         }
 
         public void Send(NetworkOutgoingMessage message)
@@ -45,6 +45,16 @@ namespace Leak.Negotiator
         public void Send(NetworkOutgoingMessage message, HandshakeKey key)
         {
             connection.Send(new HandshakeConnectionEncryptedMessage(message, key));
+        }
+
+        public void CallHandshakeCompleted(Handshake handshake)
+        {
+            hooks.CallHandshakeCompleted(connection, handshake);
+        }
+
+        public void CallHandshakeRejected()
+        {
+            hooks.CallHandshakeRejected(connection);
         }
 
         public void Terminate()

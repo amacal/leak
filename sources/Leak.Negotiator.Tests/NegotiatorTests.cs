@@ -63,5 +63,59 @@ namespace Leak.Negotiator.Tests
                 handler.Wait().Should().BeTrue();
             }
         }
+
+        [Test]
+        public async Task ShouldTriggersHandshakeRejectedWhenInvalidHashOnHandshakeInitiator()
+        {
+            FileHash valid = FileHash.Random();
+            FileHash invalid = FileHash.Random();
+
+            using (NegotiatorFixture fixture = new NegotiatorFixture())
+            using (NegotiatorFixturePair pair = await fixture.Create())
+            {
+                Trigger handler = Trigger.Bind(ref fixture.Hooks.OnHandshakeRejected, data =>
+                {
+                    data.Connection.Should().NotBeNull();
+
+                    if (data.Connection.Identifier == pair.Local.Identifier)
+                    {
+                    }
+
+                    return data.Connection.Identifier == pair.Local.Identifier;
+                });
+
+                fixture.Negotiator.Start(pair.Local, valid);
+                fixture.Negotiator.Handle(pair.Remote, invalid);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public async Task ShouldTriggersHandshakeRejectedWhenInvalidHashOnHandshakeReceiver()
+        {
+            FileHash valid = FileHash.Random();
+            FileHash invalid = FileHash.Random();
+
+            using (NegotiatorFixture fixture = new NegotiatorFixture())
+            using (NegotiatorFixturePair pair = await fixture.Create())
+            {
+                Trigger handler = Trigger.Bind(ref fixture.Hooks.OnHandshakeRejected, data =>
+                {
+                    data.Connection.Should().NotBeNull();
+
+                    if (data.Connection.Identifier == pair.Remote.Identifier)
+                    {
+                    }
+
+                    return data.Connection.Identifier == pair.Remote.Identifier;
+                });
+
+                fixture.Negotiator.Start(pair.Local, valid);
+                fixture.Negotiator.Handle(pair.Remote, invalid);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
     }
 }
