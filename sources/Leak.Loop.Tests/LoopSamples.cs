@@ -1,0 +1,45 @@
+﻿namespace Leak.Loop.Tests
+{
+    public class LoopSamples
+    {
+        public byte[] KeepAlive
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x00 }; }
+        }
+
+        public byte[] Choke
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00 }; }
+        }
+
+        public byte[] Unchoke
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x01, 0x01 }; }
+        }
+
+        public byte[] Interested
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x01, 0x02 }; }
+        }
+
+        public byte[] Have
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x05, 0x04, 0x00, 0x00, 0x01, 0x02 }; }
+        }
+
+        public byte[] Bitfield
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x02, 0x05, 0x0c }; }
+        }
+
+        public byte[] Piece
+        {
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x0f, 0x07, 0x00, 0x00, 0x01, 0x02, 0x00, 0x00, 0x40, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 }; }
+        }
+
+        public byte[] Extended
+        {
+            get { return new byte[] {0x00, 0x00, 0x00, 0x02, 0x14, 0x0f}; }
+        }
+    }
+}

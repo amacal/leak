@@ -57,8 +57,6 @@
     <Compile Include="Components\RetrieverTests.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\Fixture.cs" />
-    <Compile Include="Components\GlueTests.cs" />
-    <Compile Include="Components\LoopyTests.cs" />
     <Compile Include="Components\MetafileTests.cs" />
     <Compile Include="Components\MetagetTests.cs" />
     <Compile Include="Core\Sandbox.cs" />
@@ -101,9 +99,17 @@
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+      <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
+      <Name>Leak.Glue</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Listener\Leak.Listener.csproj">
       <Project>{b11e5e10-9f8d-4506-89a5-a4fb38bdbb65}</Project>
       <Name>Leak.Listener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Loop\Leak.Loop.csproj">
+      <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
+      <Name>Leak.Loop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>

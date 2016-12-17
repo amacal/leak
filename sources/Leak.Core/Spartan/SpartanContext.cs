@@ -1,5 +1,5 @@
-﻿using Leak.Core.Glue;
-using Leak.Files;
+﻿using Leak.Files;
+using Leak.Glue;
 using Leak.Tasks;
 
 namespace Leak.Core.Spartan

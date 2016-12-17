@@ -1,7 +1,7 @@
-﻿using Leak.Core.Glue;
-using Leak.Core.Glue.Extensions.Metadata;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 using System;
+using Leak.Glue;
+using Leak.Glue.Extensions.Metadata;
 
 namespace Leak.Core.Metaget
 {

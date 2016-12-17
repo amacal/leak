@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Leak.Common;
-using Leak.Core.Glue;
 using Leak.Core.Retriever;
 using Leak.Core.Tests.Core;
 using Leak.Events;
+using Leak.Glue;
 using Leak.Testing;
 using NUnit.Framework;
 

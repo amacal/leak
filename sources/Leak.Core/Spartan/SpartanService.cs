@@ -1,10 +1,10 @@
 ﻿using Leak.Common;
-using Leak.Core.Glue;
-using Leak.Core.Glue.Extensions.Metadata;
 using Leak.Events;
 using Leak.Files;
 using Leak.Tasks;
 using System;
+using Leak.Glue;
+using Leak.Glue.Extensions.Metadata;
 
 namespace Leak.Core.Spartan
 {

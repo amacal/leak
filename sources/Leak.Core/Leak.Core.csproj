@@ -47,7 +47,6 @@
     <Compile Include="Bitfile\BitfileContext.cs" />
     <Compile Include="Bitfile\BitfileDestination.cs" />
     <Compile Include="Bitfile\BitfileService.cs" />
-    <Compile Include="BufferedDataBlockFactory.cs" />
     <Compile Include="Cando\CandoBuilder.cs" />
     <Compile Include="Cando\CandoCallback.cs" />
     <Compile Include="Cando\CandoCallbackBase.cs" />
@@ -62,27 +61,6 @@
     <Compile Include="Cando\CandoMap.cs" />
     <Compile Include="Cando\CandoService.cs" />
     <Compile Include="Cando\Events\ExtensionExchanged.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataMeasured.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataReceived.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataExtensions.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataHandler.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataHooks.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataPlugin.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataRejected.cs" />
-    <Compile Include="Glue\Extensions\Metadata\MetadataRequested.cs" />
-    <Compile Include="Glue\GlueCollection.cs" />
-    <Compile Include="Glue\GlueConfiguration.cs" />
-    <Compile Include="Glue\GlueEntry.cs" />
-    <Compile Include="Glue\GlueExtensions.cs" />
-    <Compile Include="Glue\GlueFactory.cs" />
-    <Compile Include="Glue\GlueFacts.cs" />
-    <Compile Include="Glue\GlueHandler.cs" />
-    <Compile Include="Glue\GlueHooks.cs" />
-    <Compile Include="Glue\GlueImplementation.cs" />
-    <Compile Include="Glue\GlueMore.cs" />
-    <Compile Include="Glue\GluePlugin.cs" />
-    <Compile Include="Glue\GlueService.cs" />
-    <Compile Include="Glue\GlueState.cs" />
     <Compile Include="HashExtensions.cs" />
     <Compile Include="Leakage\LeakClient.cs" />
     <Compile Include="Leakage\LeakCollection.cs" />
@@ -92,8 +70,6 @@
     <Compile Include="Leakage\LeakHooks.cs" />
     <Compile Include="Leakage\LeakPort.cs" />
     <Compile Include="Leakage\LeakRegistrant.cs" />
-    <Compile Include="Loop\ConnectionLoopExtensions.cs" />
-    <Compile Include="Loop\ConnectionLoopHooks.cs" />
     <Compile Include="Metadata\MetainfoBuilder.cs" />
     <Compile Include="Metafile\MetafileExtensions.cs" />
     <Compile Include="Metafile\MetafileHooks.cs" />
@@ -153,14 +129,6 @@
     <Compile Include="Retriever\Tasks\HandleBlockReceived.cs" />
     <Compile Include="Retriever\Tasks\ScheduleItTask.cs" />
     <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
-    <Compile Include="Bencoding\BencodedData.cs" />
-    <Compile Include="Bencoding\BencodedEntry.cs" />
-    <Compile Include="Bencoding\BencodedNumber.cs" />
-    <Compile Include="Bencoding\BencodedText.cs" />
-    <Compile Include="Bencoding\BencodedValue.cs" />
-    <Compile Include="Bencoding\Bencoder.cs" />
-    <Compile Include="Bencoding\BencoderExtensions.cs" />
-    <Compile Include="Bencoding\BencoderDecoder.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallback.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallbackBase.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallbackNothing.cs" />
@@ -168,11 +136,6 @@
     <Compile Include="Cando\PeerExchange\PeerExchangeExtensions.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
-    <Compile Include="Loop\ConnectionLoop.cs" />
-    <Compile Include="Loop\ConnectionLoopConfiguration.cs" />
-    <Compile Include="Loop\ConnectionLoopConnection.cs" />
-    <Compile Include="Loop\ConnectionLoopConnectionToBytes.cs" />
-    <Compile Include="Loop\ConnectionLoopHandler.cs" />
     <Compile Include="Metadata\MetainfoFactory.cs" />
     <Compile Include="Metadata\MetainfoFile.cs" />
     <Compile Include="Metafile\MetafileContext.cs" />
@@ -242,6 +205,10 @@
     <Compile Include="Telegraph\TelegraphService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Leak.Bencoding\Leak.Bencoding.csproj">
+      <Project>{8b5aebe3-a280-4941-a934-f007087a11a8}</Project>
+      <Name>Leak.Bencoding</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
@@ -266,9 +233,17 @@
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+      <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
+      <Name>Leak.Glue</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Listener\Leak.Listener.csproj">
       <Project>{b11e5e10-9f8d-4506-89a5-a4fb38bdbb65}</Project>
       <Name>Leak.Listener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Loop\Leak.Loop.csproj">
+      <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
+      <Name>Leak.Loop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>

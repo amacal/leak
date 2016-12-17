@@ -1,5 +1,5 @@
-﻿using Leak.Core.Glue.Extensions.Metadata;
-using Leak.Core.Metamine;
+﻿using Leak.Core.Metamine;
+using Leak.Glue.Extensions.Metadata;
 using Leak.Tasks;
 
 namespace Leak.Core.Metaget

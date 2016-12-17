@@ -1,9 +1,9 @@
 ﻿using Leak.Common;
-using Leak.Core.Bencoding;
 using Leak.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Leak.Bencoding;
 using Leak.Communicator.Messages;
 
 namespace Leak.Core.Cando.PeerExchange
