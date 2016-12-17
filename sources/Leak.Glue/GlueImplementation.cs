@@ -158,9 +158,11 @@ namespace Leak.Glue
             {
                 byte identifier = entry.More.Translate(extension);
                 Extended extended = new Extended(identifier, payload);
+                GlueHandler handler = facts.GetHandler(extension);
 
                 entry.Commy.SendExtended(extended);
                 hooks.CallExtensionDataSent(entry.Peer, extension, payload.Length);
+                handler.OnMessageSent(hash, entry.Peer, payload);
             }
         }
 
@@ -276,7 +278,7 @@ namespace Leak.Glue
                 string code = facts.Translate(id, out handler);
 
                 hooks.CallExtensionDataReceived(entry.Peer, code, data.Payload.GetExtensionSize());
-                handler.HandleMessage(hash, entry.Peer, data.Payload.GetExtensionData());
+                handler.OnMessageReceived(hash, entry.Peer, data.Payload.GetExtensionData());
             }
         }
     }

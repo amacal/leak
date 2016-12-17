@@ -1,7 +1,8 @@
 ﻿using Leak.Bencoding;
 using Leak.Common;
+using Leak.Glue;
 
-namespace Leak.Glue.Extensions.Metadata
+namespace Leak.Extensions.Metadata
 {
     public static class MetadataExtensions
     {
@@ -15,9 +16,9 @@ namespace Leak.Glue.Extensions.Metadata
             });
         }
 
-        public static void CallMetadataRequested(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece)
+        public static void CallMetadataRequestSent(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece)
         {
-            hooks.OnMetadataRequested?.Invoke(new MetadataRequested
+            hooks.OnMetadataRequestSent?.Invoke(new MetadataRequested
             {
                 Hash = hash,
                 Peer = peer,
@@ -25,9 +26,9 @@ namespace Leak.Glue.Extensions.Metadata
             });
         }
 
-        public static void CallMetadataRejected(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece)
+        public static void CallMetadataRequestReceived(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece)
         {
-            hooks.OnMetadataRejected?.Invoke(new MetadataRejected
+            hooks.OnMetadataRequestReceived?.Invoke(new MetadataRequested
             {
                 Hash = hash,
                 Peer = peer,
@@ -35,9 +36,40 @@ namespace Leak.Glue.Extensions.Metadata
             });
         }
 
-        public static void CallMetadataReceived(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece, byte[] data)
+        public static void CallMetadataRejectSent(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece)
         {
-            hooks.OnMetadataReceived?.Invoke(new MetadataReceived
+            hooks.OnMetadataRejectSent?.Invoke(new MetadataRejected
+            {
+                Hash = hash,
+                Peer = peer,
+                Piece = piece
+            });
+        }
+
+        public static void CallMetadataRejectReceived(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece)
+        {
+            hooks.OnMetadataRejectReceived?.Invoke(new MetadataRejected
+            {
+                Hash = hash,
+                Peer = peer,
+                Piece = piece
+            });
+        }
+
+        public static void MetadataPieceSent(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece, byte[] data)
+        {
+            hooks.OnMetadataPieceSent?.Invoke(new MetadataReceived
+            {
+                Hash = hash,
+                Peer = peer,
+                Piece = piece,
+                Data = data
+            });
+        }
+
+        public static void MetadataPieceReceived(this MetadataHooks hooks, FileHash hash, PeerHash peer, int piece, byte[] data)
+        {
+            hooks.OnMetadataPieceReceived?.Invoke(new MetadataReceived
             {
                 Hash = hash,
                 Peer = peer,

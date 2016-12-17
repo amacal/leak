@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</ProjectGuid>
+    <ProjectGuid>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Glue</RootNamespace>
-    <AssemblyName>Leak.Glue</AssemblyName>
+    <RootNamespace>Leak.Memory</RootNamespace>
+    <AssemblyName>Leak.Memory</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,41 +33,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlueCollection.cs" />
-    <Compile Include="GlueConfiguration.cs" />
-    <Compile Include="GlueEntry.cs" />
-    <Compile Include="GlueExtensions.cs" />
-    <Compile Include="GlueFactory.cs" />
-    <Compile Include="GlueFacts.cs" />
-    <Compile Include="GlueHandler.cs" />
-    <Compile Include="GlueHooks.cs" />
-    <Compile Include="GlueImplementation.cs" />
-    <Compile Include="GlueMore.cs" />
-    <Compile Include="GluePlugin.cs" />
-    <Compile Include="GlueService.cs" />
-    <Compile Include="GlueState.cs" />
+    <Compile Include="BufferedDataBlockFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Bencoding\Leak.Bencoding.csproj">
-      <Project>{8b5aebe3-a280-4941-a934-f007087a11a8}</Project>
-      <Name>Leak.Bencoding</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Communicator\Leak.Communicator.csproj">
-      <Project>{d0a3e78e-32b1-4db2-a6cb-58d47fddfe75}</Project>
-      <Name>Leak.Communicator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
-      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
-      <Name>Leak.Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Loop\Leak.Loop.csproj">
-      <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
-      <Name>Leak.Loop</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Leak.Common;
 
-namespace Leak.Loop
+namespace Leak.Memory
 {
     public class BufferedBlockFactory : DataBlockFactory
     {

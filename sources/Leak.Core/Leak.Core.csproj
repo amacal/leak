@@ -229,6 +229,10 @@
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions.Metadata\Leak.Extensions.Metadata.csproj">
+      <Project>{49ac3ed3-5705-40a3-b38f-cbb0d1672ffb}</Project>
+      <Name>Leak.Extensions.Metadata</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
@@ -244,6 +248,10 @@
     <ProjectReference Include="..\Leak.Loop\Leak.Loop.csproj">
       <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
       <Name>Leak.Loop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
+      <Project>{6e91f6c7-b347-4618-9b9c-bcab07a83e89}</Project>
+      <Name>Leak.Memory</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>

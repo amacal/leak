@@ -6,7 +6,7 @@ using Leak.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Leak.Glue.Extensions.Metadata;
+using Leak.Extensions.Metadata;
 
 namespace Leak.Core.Tests.Core
 {

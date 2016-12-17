@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
 
-namespace Leak.Glue.Extensions.Metadata
+namespace Leak.Extensions.Metadata
 {
-    public class MetadataRejected
+    public class MetadataRequested
     {
         public FileHash Hash;
 

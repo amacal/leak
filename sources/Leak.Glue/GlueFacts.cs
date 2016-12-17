@@ -74,5 +74,10 @@ namespace Leak.Glue
 
             return code;
         }
+
+        public GlueHandler GetHandler(string code)
+        {
+            return more.GetHandler(code);
+        }
     }
 }

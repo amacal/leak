@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Glue.Extensions.Metadata
+namespace Leak.Extensions.Metadata
 {
     public class MetadataMeasured
     {

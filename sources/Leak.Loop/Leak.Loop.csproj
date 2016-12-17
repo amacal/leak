@@ -33,7 +33,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BufferedDataBlockFactory.cs" />
     <Compile Include="ConnectionLoop.cs" />
     <Compile Include="ConnectionLoopConfiguration.cs" />
     <Compile Include="ConnectionLoopConnection.cs" />

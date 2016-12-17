@@ -72,6 +72,10 @@
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Glue</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
+      <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
+      <Name>Leak.Memory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>

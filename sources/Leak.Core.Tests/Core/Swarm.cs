@@ -5,10 +5,11 @@ using Leak.Tasks;
 using System;
 using System.Collections.Generic;
 using Leak.Connector;
+using Leak.Extensions.Metadata;
 using Leak.Glue;
-using Leak.Glue.Extensions.Metadata;
 using Leak.Listener;
 using Leak.Loop;
+using Leak.Memory;
 using Leak.Testing;
 
 namespace Leak.Core.Tests.Core

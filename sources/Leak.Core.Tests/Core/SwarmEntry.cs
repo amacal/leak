@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
+using Leak.Extensions.Metadata;
 using Leak.Glue;
-using Leak.Glue.Extensions.Metadata;
 using Leak.Testing;
 
 namespace Leak.Core.Tests.Core

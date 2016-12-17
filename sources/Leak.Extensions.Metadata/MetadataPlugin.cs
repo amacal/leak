@@ -1,4 +1,6 @@
-﻿namespace Leak.Glue.Extensions.Metadata
+﻿using Leak.Glue;
+
+namespace Leak.Extensions.Metadata
 {
     public class MetadataPlugin : GluePlugin
     {

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5748E985-E51A-4CD1-86DF-092FAA19E987}</ProjectGuid>
+    <ProjectGuid>{E5EE575B-F48F-4CFE-A993-90A508BFF33C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Core.Tests</RootNamespace>
-    <AssemblyName>Leak.Core.Tests</AssemblyName>
+    <RootNamespace>Leak.Extensions.Metadata.Tests</RootNamespace>
+    <AssemblyName>Leak.Extensions.Metadata.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,66 +30,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="F2F.Sandbox, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+    <Reference Include="FluentAssertions">
       <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+    <Reference Include="FluentAssertions.Core">
       <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\LeakageTests.cs" />
-    <Compile Include="Components\OmnibusTests.cs" />
-    <Compile Include="Components\RepositoryTests.cs" />
-    <Compile Include="Components\RetrieverTests.cs" />
-    <Compile Include="Core\Environment.cs" />
-    <Compile Include="Core\Fixture.cs" />
-    <Compile Include="Components\MetafileTests.cs" />
-    <Compile Include="Components\MetagetTests.cs" />
-    <Compile Include="Core\Sandbox.cs" />
-    <Compile Include="Core\SandboxExtensions.cs" />
-    <Compile Include="Components\SpartanTests.cs" />
-    <Compile Include="Core\Sue.cs" />
-    <Compile Include="Core\Swarm.cs" />
-    <Compile Include="Core\SwarmEntry.cs" />
+    <Compile Include="MetadataFixture.cs" />
+    <Compile Include="MetadataInstance.cs" />
+    <Compile Include="MetadataSession.cs" />
+    <Compile Include="MetadataSide.cs" />
+    <Compile Include="MetadataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\AllocatorTests.cs" />
-    <Compile Include="Repository\CacheTests.cs" />
-    <Compile Include="Repository\ViewTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Communicator\Leak.Communicator.csproj">
-      <Project>{d0a3e78e-32b1-4db2-a6cb-58d47fddfe75}</Project>
-      <Name>Leak.Communicator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
       <Name>Leak.Completion</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Connector\Leak.Connector.csproj">
-      <Project>{f060eb59-ff12-4d2f-8e88-01d09ac24bb6}</Project>
-      <Name>Leak.Connector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Core\Leak.Core.csproj">
-      <Project>{c5760143-0cfc-4638-af74-069d1a8985d6}</Project>
-      <Name>Leak.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
@@ -99,36 +68,20 @@
       <Project>{49ac3ed3-5705-40a3-b38f-cbb0d1672ffb}</Project>
       <Name>Leak.Extensions.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
-      <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
-      <Name>Leak.Files</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Glue</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Listener\Leak.Listener.csproj">
-      <Project>{b11e5e10-9f8d-4506-89a5-a4fb38bdbb65}</Project>
-      <Name>Leak.Listener</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Loop\Leak.Loop.csproj">
-      <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
-      <Name>Leak.Loop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
       <Project>{6e91f6c7-b347-4618-9b9c-bcab07a83e89}</Project>
       <Name>Leak.Memory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
-      <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>
-      <Name>Leak.Negotiator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
-      <Project>{6E385E2D-365A-46AA-AE93-01B375C4E48F}</Project>
+      <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
       <Name>Leak.Sockets</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">

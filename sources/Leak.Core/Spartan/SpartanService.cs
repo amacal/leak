@@ -3,8 +3,8 @@ using Leak.Events;
 using Leak.Files;
 using Leak.Tasks;
 using System;
+using Leak.Extensions.Metadata;
 using Leak.Glue;
-using Leak.Glue.Extensions.Metadata;
 
 namespace Leak.Core.Spartan
 {

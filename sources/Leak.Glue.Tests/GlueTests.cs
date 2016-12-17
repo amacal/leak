@@ -254,7 +254,7 @@ namespace Leak.Glue.Tests
                 });
 
                 using (GlueInstance iLeft = session.Left.Build("left-a", "left-b"))
-                using (GlueInstance iRight = session.Right.Build("right-a"))
+                using (GlueInstance iRight = session.Right.Build("right-a", "left-a"))
                 {
                     iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
                     iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
@@ -282,7 +282,7 @@ namespace Leak.Glue.Tests
                 });
 
                 using (GlueInstance iLeft = session.Left.Build("left-a", "left-b"))
-                using (GlueInstance iRight = session.Right.Build("right-a"))
+                using (GlueInstance iRight = session.Right.Build("right-a", "left-a"))
                 {
                     iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
                     iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
@@ -294,111 +294,5 @@ namespace Leak.Glue.Tests
                 handler.Wait().Should().BeTrue();
             }
         }
-
-        //[Test]
-        //public void ShouldTriggerMetadataRequested()
-        //{
-        //    FileHash hash = FileHash.Random();
-        //    MetadataHooks metahooks = new MetadataHooks();
-        //    MetadataPlugin plugin = new MetadataPlugin(metahooks);
-
-        //    Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
-        //    Trigger handler = Trigger.Bind(ref metahooks.OnMetadataRequested, data =>
-        //    {
-        //        data.Hash.Should().Be(hash);
-        //        data.Peer.Should().Be(rightHash);
-        //        data.Piece.Should().Be(7);
-        //    });
-
-        //    leftConfiguration.Plugins.Add(plugin);
-
-        //    listener.Enable(hash);
-        //    connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
-
-        //    extended.Wait();
-        //    right.SendMetadataRequest(leftHash, 7);
-
-        //    handler.Wait().Should().BeTrue();
-        //}
-
-        //[Test]
-        //public void ShouldTriggerMetadataRejected()
-        //{
-        //    FileHash hash = FileHash.Random();
-        //    MetadataHooks metahooks = new MetadataHooks();
-        //    MetadataPlugin plugin = new MetadataPlugin(metahooks);
-
-        //    Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListSent);
-        //    Trigger handler = Trigger.Bind(ref metahooks.OnMetadataRejected, data =>
-        //    {
-        //        data.Hash.Should().Be(hash);
-        //        data.Peer.Should().Be(rightHash);
-        //        data.Piece.Should().Be(7);
-        //    });
-
-        //    leftConfiguration.Plugins.Add(plugin);
-
-        //    listener.Enable(hash);
-        //    connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
-
-        //    extended.Wait();
-        //    right.SendMetadataReject(leftHash, 7);
-
-        //    handler.Wait().Should().BeTrue();
-        //}
-
-        //[Test]
-        //public void ShouldTriggerMetadataReceived()
-        //{
-        //    FileHash hash = FileHash.Random();
-        //    MetadataHooks metahooks = new MetadataHooks();
-        //    MetadataPlugin plugin = new MetadataPlugin(metahooks);
-
-        //    Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
-        //    Trigger handler = Trigger.Bind(ref metahooks.OnMetadataReceived, data =>
-        //    {
-        //        data.Hash.Should().Be(hash);
-        //        data.Peer.Should().Be(rightHash);
-        //        data.Piece.Should().Be(7);
-        //        data.Data.Should().NotBeNull();
-        //        data.Data.Length.Should().Be(1023);
-        //    });
-
-        //    leftConfiguration.Plugins.Add(plugin);
-
-        //    listener.Enable(hash);
-        //    connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
-
-        //    extended.Wait();
-        //    right.SendMetadataPiece(leftHash, 7, 128, new byte[1023]);
-
-        //    handler.Wait().Should().BeTrue();
-        //}
-
-        //[Test]
-        //public void ShouldTriggerMetadataMeasured()
-        //{
-        //    FileHash hash = FileHash.Random();
-        //    MetadataHooks metahooks = new MetadataHooks();
-        //    MetadataPlugin plugin = new MetadataPlugin(metahooks);
-
-        //    Trigger extended = Trigger.Bind(ref rightHooks.OnExtensionListReceived);
-        //    Trigger handler = Trigger.Bind(ref metahooks.OnMetadataMeasured, data =>
-        //    {
-        //        data.Hash.Should().Be(hash);
-        //        data.Peer.Should().Be(rightHash);
-        //        data.Size.Should().Be(128);
-        //    });
-
-        //    leftConfiguration.Plugins.Add(plugin);
-
-        //    listener.Enable(hash);
-        //    connector.ConnectTo(hash, new PeerAddress("127.0.0.1", port));
-
-        //    extended.Wait();
-        //    right.SendMetadataPiece(leftHash, 7, 128, new byte[1023]);
-
-        //    handler.Wait().Should().BeTrue();
-        //}
     }
 }

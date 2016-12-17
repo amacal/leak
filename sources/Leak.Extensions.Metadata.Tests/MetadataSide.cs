@@ -1,19 +1,23 @@
 ﻿using System;
 using Leak.Common;
+using Leak.Glue;
 using Leak.Memory;
 
-namespace Leak.Glue.Tests
+namespace Leak.Extensions.Metadata.Tests
 {
-    public class GlueSide : IDisposable
+    public class MetadataSide : IDisposable
     {
         private readonly NetworkConnection connection;
         private readonly Handshake handshake;
+        private readonly MetadataHooks metadata;
         private readonly GlueHooks hooks;
 
-        public GlueSide(NetworkConnection connection, Handshake handshake)
+        public MetadataSide(NetworkConnection connection, Handshake handshake)
         {
             this.connection = connection;
             this.handshake = handshake;
+
+            this.metadata = new MetadataHooks();
             this.hooks = new GlueHooks();
         }
 
@@ -27,30 +31,32 @@ namespace Leak.Glue.Tests
             get { return handshake; }
         }
 
-        public GlueInstance Build(params string[] plugins)
+        public MetadataInstance Build()
         {
-            FileHash hash = FileHash.Random();
+            FileHash hash = handshake.Hash;
             GlueConfiguration configuration = new GlueConfiguration();
 
-            foreach (string plugin in plugins)
-            {
-                configuration.Plugins.Add(new GlueNamedPlugin(plugin));
-            }
+            configuration.Plugins.Add(new MetadataPlugin(metadata));
 
             GlueFactory factory = new GlueFactory(new BufferedBlockFactory());
             GlueService service = factory.Create(hash, hooks, configuration);
 
-            return new GlueInstance(service);
+            return new MetadataInstance(service);
         }
 
-        public GlueHooks Hooks
+        public MetadataHooks Metadata
         {
-            get { return hooks; }
+            get { return metadata; }
         }
 
         public NetworkConnection Connection
         {
             get { return connection; }
+        }
+
+        public GlueHooks Hooks
+        {
+            get { return hooks; }
         }
 
         public void Dispose()

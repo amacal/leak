@@ -16,7 +16,11 @@ namespace Leak.Glue.Tests
             more.Add(name, this);
         }
 
-        public void HandleMessage(FileHash hash, PeerHash peer, byte[] payload)
+        public void OnMessageReceived(FileHash hash, PeerHash peer, byte[] payload)
+        {
+        }
+
+        public void OnMessageSent(FileHash hash, PeerHash peer, byte[] payload)
         {
         }
     }

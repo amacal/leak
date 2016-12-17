@@ -8,10 +8,10 @@ using Leak.Tasks;
 using System;
 using System.Collections.Generic;
 using Leak.Connector;
+using Leak.Extensions.Metadata;
 using Leak.Glue;
-using Leak.Glue.Extensions.Metadata;
 using Leak.Listener;
-using Leak.Loop;
+using Leak.Memory;
 
 namespace Leak.Core.Leakage
 {
@@ -101,7 +101,7 @@ namespace Leak.Core.Leakage
             entry.GlueHooks.OnPeerConnected = hooks.OnPeerConnected;
 
             entry.MetadataHooks.OnMetadataMeasured = entry.Spartan.HandleMetadataMeasured;
-            entry.MetadataHooks.OnMetadataReceived = entry.Spartan.HandleMetadataReceived;
+            entry.MetadataHooks.OnMetadataPieceSent = entry.Spartan.HandleMetadataReceived;
 
             //entry.ConnectorHooks.OnHandshakeCompleted = OnHandshakeCompleted;
         }
