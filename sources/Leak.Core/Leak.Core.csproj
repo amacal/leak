@@ -40,28 +40,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitfile\BitfileCallback.cs" />
-    <Compile Include="Bitfile\BitfileCallbackBase.cs" />
-    <Compile Include="Bitfile\BitfileCallbackNothing.cs" />
-    <Compile Include="Bitfile\BitfileConfiguration.cs" />
-    <Compile Include="Bitfile\BitfileContext.cs" />
-    <Compile Include="Bitfile\BitfileDestination.cs" />
-    <Compile Include="Bitfile\BitfileService.cs" />
-    <Compile Include="Cando\CandoBuilder.cs" />
-    <Compile Include="Cando\CandoCallback.cs" />
-    <Compile Include="Cando\CandoCallbackBase.cs" />
-    <Compile Include="Cando\CandoCallbackNothing.cs" />
-    <Compile Include="Cando\CandoCollection.cs" />
-    <Compile Include="Cando\CandoConfiguration.cs" />
-    <Compile Include="Cando\CandoContext.cs" />
-    <Compile Include="Cando\CandoEntry.cs" />
-    <Compile Include="Cando\CandoExtensions.cs" />
-    <Compile Include="Cando\CandoFormatter.cs" />
-    <Compile Include="Cando\CandoHandler.cs" />
-    <Compile Include="Cando\CandoMap.cs" />
-    <Compile Include="Cando\CandoService.cs" />
-    <Compile Include="Cando\Events\ExtensionExchanged.cs" />
-    <Compile Include="HashExtensions.cs" />
     <Compile Include="Leakage\LeakClient.cs" />
     <Compile Include="Leakage\LeakCollection.cs" />
     <Compile Include="Leakage\LeakConfiguration.cs" />
@@ -70,7 +48,6 @@
     <Compile Include="Leakage\LeakHooks.cs" />
     <Compile Include="Leakage\LeakPort.cs" />
     <Compile Include="Leakage\LeakRegistrant.cs" />
-    <Compile Include="Metadata\MetainfoBuilder.cs" />
     <Compile Include="Metafile\MetafileExtensions.cs" />
     <Compile Include="Metafile\MetafileHooks.cs" />
     <Compile Include="Metaget\MetagetHooks.cs" />
@@ -89,32 +66,6 @@
     <Compile Include="Omnibus\Tasks\InvalidatePieceTask.cs" />
     <Compile Include="Omnibus\Tasks\SchedulePeerTask.cs" />
     <Compile Include="Omnibus\Tasks\CompletePieceTask.cs" />
-    <Compile Include="Repository\RepositoryAllocation.cs" />
-    <Compile Include="Repository\RepositoryAllocationRange.cs" />
-    <Compile Include="Repository\RepositoryBlockData.cs" />
-    <Compile Include="Repository\RepositoryConfiguration.cs" />
-    <Compile Include="Repository\RepositoryContext.cs" />
-    <Compile Include="Repository\RepositoryExtensions.cs" />
-    <Compile Include="Repository\RepositoryHooks.cs" />
-    <Compile Include="Repository\RepositoryTaskCallback.cs" />
-    <Compile Include="Repository\RepositoryTaskFlush.cs" />
-    <Compile Include="Repository\RepositoryTaskQueue.cs" />
-    <Compile Include="Repository\RepositoryService.cs" />
-    <Compile Include="Repository\RepositoryTask.cs" />
-    <Compile Include="Repository\RepositoryTaskAllocate.cs" />
-    <Compile Include="Repository\RepositoryTaskVerifyRange.cs" />
-    <Compile Include="Repository\RepositoryTaskVerifyPiece.cs" />
-    <Compile Include="Repository\RepositoryTaskWriteBlock.cs" />
-    <Compile Include="Repository\RepositoryView.cs" />
-    <Compile Include="Repository\RepositoryViewAllocator.cs" />
-    <Compile Include="Repository\RepositoryViewCache.cs" />
-    <Compile Include="Repository\RepositoryViewEntry.cs" />
-    <Compile Include="Repository\RepositoryViewRead.cs" />
-    <Compile Include="Repository\RepositoryViewReadCallback.cs" />
-    <Compile Include="Repository\RepositoryViewReadRoutine.cs" />
-    <Compile Include="Repository\RepositoryViewWrite.cs" />
-    <Compile Include="Repository\RepositoryViewWriteCallback.cs" />
-    <Compile Include="Repository\RepositoryViewWriteRoutine.cs" />
     <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
     <Compile Include="Retriever\RetrieverConfiguration.cs" />
     <Compile Include="Retriever\Components\RetrieverContext.cs" />
@@ -136,8 +87,6 @@
     <Compile Include="Cando\PeerExchange\PeerExchangeExtensions.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
-    <Compile Include="Metadata\MetainfoFactory.cs" />
-    <Compile Include="Metadata\MetainfoFile.cs" />
     <Compile Include="Metafile\MetafileContext.cs" />
     <Compile Include="Metafile\MetafileDestination.cs" />
     <Compile Include="Metafile\MetafileService.cs" />
@@ -164,11 +113,6 @@
     <Compile Include="Omnibus\OmnibusStrategy.cs" />
     <Compile Include="Omnibus\Strategies\OmnibusStrategySequential.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ranking\RankingCollection.cs" />
-    <Compile Include="Ranking\RankingConfiguration.cs" />
-    <Compile Include="Ranking\RankingContext.cs" />
-    <Compile Include="Ranking\RankingEntry.cs" />
-    <Compile Include="Ranking\RankingService.cs" />
     <Compile Include="Omnibus\OmnibusService.cs" />
     <Compile Include="Omnibus\Components\OmnibusPiece.cs" />
     <Compile Include="Omnibus\Components\OmnibusPieceReady.cs" />
@@ -253,6 +197,10 @@
       <Project>{6e91f6c7-b347-4618-9b9c-bcab07a83e89}</Project>
       <Name>Leak.Memory</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+      <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
+      <Name>Leak.Metadata</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>
       <Name>Leak.Negotiator</Name>
@@ -260,6 +208,10 @@
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+      <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
+      <Name>Leak.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>

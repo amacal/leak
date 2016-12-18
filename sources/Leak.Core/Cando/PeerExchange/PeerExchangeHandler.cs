@@ -8,7 +8,7 @@ using Leak.Communicator.Messages;
 
 namespace Leak.Core.Cando.PeerExchange
 {
-    public class PeerExchangeHandler : CandoHandler
+    public class PeerExchangeHandler
     {
         private readonly PeerExchangeConfiguration configuration;
 

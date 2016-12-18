@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D3DA777A-462A-4BF1-94B6-BFE1664991B8}</ProjectGuid>
+    <ProjectGuid>{73395DE7-5003-490C-8804-541DE647153D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Memory.Tests</RootNamespace>
-    <AssemblyName>Leak.Memory.Tests</AssemblyName>
+    <RootNamespace>Leak.Metadata</RootNamespace>
+    <AssemblyName>Leak.Metadata</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,26 +30,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions">
-      <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions.Core">
-      <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetainfoBuilder.cs" />
+    <Compile Include="MetainfoFactory.cs" />
+    <Compile Include="MetainfoFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
-      <Project>{6e91f6c7-b347-4618-9b9c-bcab07a83e89}</Project>
-      <Name>Leak.Memory</Name>
+    <ProjectReference Include="..\Leak.Bencoding\Leak.Bencoding.csproj">
+      <Project>{8b5aebe3-a280-4941-a934-f007087a11a8}</Project>
+      <Name>Leak.Bencoding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

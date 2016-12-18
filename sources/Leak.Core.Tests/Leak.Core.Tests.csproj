@@ -53,7 +53,6 @@
   <ItemGroup>
     <Compile Include="Components\LeakageTests.cs" />
     <Compile Include="Components\OmnibusTests.cs" />
-    <Compile Include="Components\RepositoryTests.cs" />
     <Compile Include="Components\RetrieverTests.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\Fixture.cs" />
@@ -119,6 +118,10 @@
       <Project>{6e91f6c7-b347-4618-9b9c-bcab07a83e89}</Project>
       <Name>Leak.Memory</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+      <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
+      <Name>Leak.Metadata</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>
       <Name>Leak.Negotiator</Name>
@@ -126,6 +129,10 @@
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+      <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
+      <Name>Leak.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6E385E2D-365A-46AA-AE93-01B375C4E48F}</Project>

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Leak.Repository</RootNamespace>
+    <AssemblyName>Leak.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BitfileContext.cs" />
+    <Compile Include="BitfileDestination.cs" />
+    <Compile Include="BitfileService.cs" />
+    <Compile Include="HashExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryAllocation.cs" />
+    <Compile Include="RepositoryAllocationRange.cs" />
+    <Compile Include="RepositoryBlockData.cs" />
+    <Compile Include="RepositoryConfiguration.cs" />
+    <Compile Include="RepositoryContext.cs" />
+    <Compile Include="RepositoryExtensions.cs" />
+    <Compile Include="RepositoryHooks.cs" />
+    <Compile Include="RepositoryService.cs" />
+    <Compile Include="RepositoryTask.cs" />
+    <Compile Include="RepositoryTaskAllocate.cs" />
+    <Compile Include="RepositoryTaskCallback.cs" />
+    <Compile Include="RepositoryTaskFlush.cs" />
+    <Compile Include="RepositoryTaskQueue.cs" />
+    <Compile Include="RepositoryTaskVerifyPiece.cs" />
+    <Compile Include="RepositoryTaskVerifyRange.cs" />
+    <Compile Include="RepositoryTaskWriteBlock.cs" />
+    <Compile Include="RepositoryView.cs" />
+    <Compile Include="RepositoryViewAllocator.cs" />
+    <Compile Include="RepositoryViewCache.cs" />
+    <Compile Include="RepositoryViewEntry.cs" />
+    <Compile Include="RepositoryViewRead.cs" />
+    <Compile Include="RepositoryViewReadCallback.cs" />
+    <Compile Include="RepositoryViewReadRoutine.cs" />
+    <Compile Include="RepositoryViewWrite.cs" />
+    <Compile Include="RepositoryViewWriteCallback.cs" />
+    <Compile Include="RepositoryViewWriteRoutine.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
+      <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
+      <Name>Leak.Files</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
+      <Name>Leak.Tasks</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
