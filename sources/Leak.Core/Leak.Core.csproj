@@ -48,8 +48,6 @@
     <Compile Include="Leakage\LeakHooks.cs" />
     <Compile Include="Leakage\LeakPort.cs" />
     <Compile Include="Leakage\LeakRegistrant.cs" />
-    <Compile Include="Metafile\MetafileExtensions.cs" />
-    <Compile Include="Metafile\MetafileHooks.cs" />
     <Compile Include="Metaget\MetagetHooks.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
     <Compile Include="Omnibus\Components\OmnibusCache.cs" />
@@ -87,9 +85,6 @@
     <Compile Include="Cando\PeerExchange\PeerExchangeExtensions.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
-    <Compile Include="Metafile\MetafileContext.cs" />
-    <Compile Include="Metafile\MetafileDestination.cs" />
-    <Compile Include="Metafile\MetafileService.cs" />
     <Compile Include="Metaget\MetagetConfiguration.cs" />
     <Compile Include="Metaget\MetagetContext.cs" />
     <Compile Include="Metaget\MetagetExtensions.cs" />
@@ -200,6 +195,10 @@
     <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
       <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
       <Name>Leak.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
+      <Project>{10b9b344-a0db-4ffb-b661-7a8d0d4d4f81}</Project>
+      <Name>Leak.Metafile</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>

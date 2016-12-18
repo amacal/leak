@@ -42,9 +42,15 @@ namespace Leak.Core.Metadata
 
         public Metainfo ToMetainfo()
         {
-            BencodedValue entries = Build();
-            byte[] bytes = Bencoder.Encode(entries);
+            byte[] ignore;
 
+            return ToMetainfo(out ignore);
+        }
+
+        public Metainfo ToMetainfo(out byte[] bytes)
+        {
+            BencodedValue entries = Build();
+            bytes = Bencoder.Encode(entries);
             return MetainfoFactory.FromBytes(bytes);
         }
 

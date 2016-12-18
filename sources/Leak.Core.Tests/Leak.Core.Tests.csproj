@@ -56,7 +56,6 @@
     <Compile Include="Components\RetrieverTests.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\Fixture.cs" />
-    <Compile Include="Components\MetafileTests.cs" />
     <Compile Include="Components\MetagetTests.cs" />
     <Compile Include="Core\Sandbox.cs" />
     <Compile Include="Core\SandboxExtensions.cs" />
