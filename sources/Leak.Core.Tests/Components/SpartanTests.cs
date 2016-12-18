@@ -120,32 +120,6 @@ namespace Leak.Core.Tests.Components
         }
 
         [Test]
-        public void ShouldTriggerMetadataPieceReceivedWhenReceivedAllMetadata()
-        {
-            Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceReceived, data =>
-            {
-                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
-                data.Peer.Should().NotBeNull();
-                data.Piece.Should().Be(0);
-            });
-
-            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
-            {
-                hooks.OnTaskStarted = data =>
-                {
-                    if (data.Task == SpartanTasks.Discover)
-                    {
-                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
-                        spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
-                    }
-                };
-
-                spartan.Start();
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
         public void ShouldTriggerTaskCompletedWhenReceivedAllMetadata()
         {
             Trigger handler = Trigger.Bind(ref hooks.OnTaskCompleted, data =>
@@ -162,31 +136,6 @@ namespace Leak.Core.Tests.Components
                     {
                         spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
                         spartan.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
-                    }
-                };
-
-                spartan.Start();
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerMetadataPieceRequested()
-        {
-            Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceRequested, data =>
-            {
-                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
-                data.Peer.Should().NotBeNull();
-                data.Piece.Should().Be(0);
-            });
-
-            using (SpartanService spartan = NewSpartanService(SpartanTasks.Discover))
-            {
-                hooks.OnTaskStarted = data =>
-                {
-                    if (data.Task == SpartanTasks.Discover)
-                    {
-                        spartan.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
                     }
                 };
 

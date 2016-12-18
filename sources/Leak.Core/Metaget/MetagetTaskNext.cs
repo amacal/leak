@@ -19,7 +19,6 @@ namespace Leak.Core.Metaget
                     {
                         context.Metamine.Reserve(peer, block);
                         context.Glue.SendMetadataRequest(peer, block.Index);
-                        context.Hooks.CallMetadataPieceRequested(context.Glue.Hash, peer, block.Index);
                     }
                 });
             }

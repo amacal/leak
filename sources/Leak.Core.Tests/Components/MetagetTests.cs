@@ -104,45 +104,5 @@ namespace Leak.Core.Tests.Components
                 handler.Wait().Should().BeTrue();
             }
         }
-
-        [Test]
-        public void ShouldTriggerMetadataPieceRequested()
-        {
-            Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceRequested, data =>
-            {
-                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
-                data.Peer.Should().Be(environemnt.Peers.Sue.Hash);
-                data.Piece.Should().Be(0);
-            });
-
-            using (MetagetService metaget = NewMetaGetService())
-            {
-                metaget.Start(environemnt.Pipeline);
-                metaget.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerMetadataPieceReceived()
-        {
-            Trigger handler = Trigger.Bind(ref hooks.OnMetadataPieceReceived, data =>
-            {
-                data.Hash.Should().Be(fixture.Debian.Metadata.Hash);
-                data.Peer.Should().NotBeNull();
-                data.Piece.Should().Be(0);
-            });
-
-            using (MetagetService metaget = NewMetaGetService())
-            {
-                metaget.Start(environemnt.Pipeline);
-
-                metaget.HandleMetadataMeasured(fixture.Debian.Events.MetadataMeasured);
-                metaget.HandleMetadataReceived(fixture.Debian.Events.MetadataReceived);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
     }
 }

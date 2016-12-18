@@ -61,8 +61,6 @@
     <Compile Include="MessageReceived.cs" />
     <Compile Include="MessageSent.cs" />
     <Compile Include="MetadataDiscovered.cs" />
-    <Compile Include="MetadataPieceReceived.cs" />
-    <Compile Include="MetadataPieceRequested.cs" />
     <Compile Include="MetafileMeasured.cs" />
     <Compile Include="MetafileRejected.cs" />
     <Compile Include="MetafileVerified.cs" />

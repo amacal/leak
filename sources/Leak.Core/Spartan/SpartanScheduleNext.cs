@@ -65,8 +65,6 @@ namespace Leak.Core.Spartan
             {
                 OnMetadataDiscovered = data => context.Queue.Add(new SpartanCompleteDiscover(data)),
                 OnMetafileMeasured = context.Hooks.OnMetafileMeasured,
-                OnMetadataPieceReceived = context.Hooks.OnMetadataPieceReceived,
-                OnMetadataPieceRequested = context.Hooks.OnMetadataPieceRequested
             };
         }
 
