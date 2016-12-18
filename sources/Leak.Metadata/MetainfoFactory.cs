@@ -1,13 +1,13 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Leak.Bencoding;
+using Leak.Common;
 
-namespace Leak.Core.Metadata
+namespace Leak.Metadata
 {
     public static class MetainfoFactory
     {

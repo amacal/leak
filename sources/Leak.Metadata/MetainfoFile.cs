@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Core.Metadata
+namespace Leak.Metadata
 {
     public class MetainfoFile
     {

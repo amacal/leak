@@ -2,8 +2,7 @@
 using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
-using Leak.Core.Metadata;
-using Leak.Core.Metafile;
+using Leak.Metadata;
 
 namespace Leak.Metafile.Tests
 {

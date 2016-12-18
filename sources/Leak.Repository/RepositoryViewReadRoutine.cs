@@ -1,6 +1,6 @@
 ﻿using Leak.Files;
 
-namespace Leak.Core.Repository
+namespace Leak.Repository
 {
     public class RepositoryViewReadRoutine
     {

@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Core.Metafile
+namespace Leak.Metafile
 {
     public class MetafileContext
     {

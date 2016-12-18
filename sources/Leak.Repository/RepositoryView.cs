@@ -1,7 +1,7 @@
-﻿using Leak.Files;
-using System;
+﻿using System;
+using Leak.Files;
 
-namespace Leak.Core.Repository
+namespace Leak.Repository
 {
     public class RepositoryView : IDisposable
     {

@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Common;
 
-namespace Leak.Core.Repository
+namespace Leak.Repository
 {
     public class RepositoryBlockData : IDisposable
     {

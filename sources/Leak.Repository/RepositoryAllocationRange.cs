@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Repository
+﻿namespace Leak.Repository
 {
     public class RepositoryAllocationRange
     {

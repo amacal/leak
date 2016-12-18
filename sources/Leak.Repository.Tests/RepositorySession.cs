@@ -1,7 +1,6 @@
 ﻿using System;
 using F2F.Sandbox;
 using Leak.Common;
-using Leak.Core.Repository;
 
 namespace Leak.Repository.Tests
 {

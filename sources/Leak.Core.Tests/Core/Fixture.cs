@@ -1,12 +1,12 @@
 ﻿using F2F.Sandbox;
 using Leak.Common;
-using Leak.Core.Metadata;
-using Leak.Core.Repository;
 using Leak.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Leak.Extensions.Metadata;
+using Leak.Metadata;
+using Leak.Repository;
 
 namespace Leak.Core.Tests.Core
 {

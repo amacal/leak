@@ -3,10 +3,8 @@ using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Metadata;
-using Leak.Core.Repository;
 using Leak.Files;
-
+using Leak.Metadata;
 using File = System.IO.File;
 
 namespace Leak.Repository.Tests

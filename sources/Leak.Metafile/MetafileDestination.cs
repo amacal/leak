@@ -1,9 +1,9 @@
-﻿using Leak.Common;
-using Leak.Core.Metadata;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
+using Leak.Common;
+using Leak.Metadata;
 
-namespace Leak.Core.Metafile
+namespace Leak.Metafile
 {
     public class MetafileDestination
     {

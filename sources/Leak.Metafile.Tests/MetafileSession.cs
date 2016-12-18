@@ -1,7 +1,6 @@
 ﻿using System;
 using F2F.Sandbox;
 using Leak.Common;
-using Leak.Core.Metafile;
 
 namespace Leak.Metafile.Tests
 {

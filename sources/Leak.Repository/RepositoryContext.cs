@@ -1,8 +1,7 @@
 ﻿using Leak.Common;
-using Leak.Core.Bitfile;
 using Leak.Files;
 
-namespace Leak.Core.Repository
+namespace Leak.Repository
 {
     public class RepositoryContext
     {

@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Core.Bitfile
+namespace Leak.Repository
 {
     public class BitfileContext
     {

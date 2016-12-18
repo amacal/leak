@@ -1,8 +1,8 @@
 ﻿using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Repository;
 using Leak.Files;
+using Leak.Repository;
 using NUnit.Framework;
 
 namespace Leak.Core.Tests.Repository

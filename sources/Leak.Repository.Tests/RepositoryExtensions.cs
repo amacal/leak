@@ -1,6 +1,4 @@
-﻿using Leak.Core.Repository;
-
-namespace Leak.Repository.Tests
+﻿namespace Leak.Repository.Tests
 {
     public static class RepositoryExtensions
     {

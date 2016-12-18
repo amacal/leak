@@ -1,8 +1,8 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Files;
-using System;
 
-namespace Leak.Core.Repository
+namespace Leak.Repository
 {
     public class RepositoryService : IDisposable
     {

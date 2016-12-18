@@ -1,12 +1,12 @@
 ﻿using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Repository;
 using Leak.Files;
 using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Threading;
+using Leak.Repository;
 
 namespace Leak.Core.Tests.Repository
 {
