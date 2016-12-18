@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4DB681D0-3C3C-43C9-8950-B73344427ADC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Leak.Omnibus.Tests</RootNamespace>
+    <AssemblyName>Leak.Omnibus.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="F2F.Sandbox">
+      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OmnibusFixture.cs" />
+    <Compile Include="OmnibusSession.cs" />
+    <Compile Include="OmnibusTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+      <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
+      <Name>Leak.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Omnibus.csproj">
+      <Project>{a69138d4-eaeb-4690-a040-5f612feddeb2}</Project>
+      <Name>Leak.Omnibus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
+      <Name>Leak.Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Testing\Leak.Testing.csproj">
+      <Project>{56e41a71-1ac5-49d0-a8ec-b0e4767c7bf7}</Project>
+      <Name>Leak.Testing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -83,6 +83,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metafile", "Leak.Metaf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metafile.Tests", "Leak.Metafile.Tests\Leak.Metafile.Tests.csproj", "{28E72068-BA9D-470D-83C3-B968ACCD1A91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Omnibus", "Leak.Omnibus\Leak.Omnibus.csproj", "{A69138D4-EAEB-4690-A040-5F612FEDDEB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Omnibus.Tests", "Leak.Omnibus.Tests\Leak.Omnibus.Tests.csproj", "{4DB681D0-3C3C-43C9-8950-B73344427ADC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -249,6 +253,14 @@ Global
 		{28E72068-BA9D-470D-83C3-B968ACCD1A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28E72068-BA9D-470D-83C3-B968ACCD1A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28E72068-BA9D-470D-83C3-B968ACCD1A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A69138D4-EAEB-4690-A040-5F612FEDDEB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A69138D4-EAEB-4690-A040-5F612FEDDEB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A69138D4-EAEB-4690-A040-5F612FEDDEB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A69138D4-EAEB-4690-A040-5F612FEDDEB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

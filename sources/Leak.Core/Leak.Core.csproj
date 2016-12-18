@@ -50,20 +50,6 @@
     <Compile Include="Leakage\LeakRegistrant.cs" />
     <Compile Include="Metaget\MetagetHooks.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
-    <Compile Include="Omnibus\Components\OmnibusCache.cs" />
-    <Compile Include="Omnibus\Components\OmnibusBitfieldRanking.cs" />
-    <Compile Include="Omnibus\Components\OmnibusPieceCompleted.cs" />
-    <Compile Include="Omnibus\Components\OmnibusReservationComparer.cs" />
-    <Compile Include="Omnibus\Components\OmnibusState.cs" />
-    <Compile Include="Omnibus\Components\OmnibusStateCollection.cs" />
-    <Compile Include="Omnibus\Events\OmnibusReservationEvent.cs" />
-    <Compile Include="Omnibus\OmnibusContext.cs" />
-    <Compile Include="Omnibus\OmnibusHooks.cs" />
-    <Compile Include="Omnibus\Strategies\OmnibusStrategyRarestFirst.cs" />
-    <Compile Include="Omnibus\Tasks\CompleteBlockTask.cs" />
-    <Compile Include="Omnibus\Tasks\InvalidatePieceTask.cs" />
-    <Compile Include="Omnibus\Tasks\SchedulePeerTask.cs" />
-    <Compile Include="Omnibus\Tasks\CompletePieceTask.cs" />
     <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
     <Compile Include="Retriever\RetrieverConfiguration.cs" />
     <Compile Include="Retriever\Components\RetrieverContext.cs" />
@@ -101,21 +87,7 @@
     <Compile Include="Metamine\MetamineStrategy.cs" />
     <Compile Include="Metamine\MetamineStrategyContext.cs" />
     <Compile Include="Metamine\MetamineStrategySequential.cs" />
-    <Compile Include="Omnibus\Components\OmnibusBitfieldCollection.cs" />
-    <Compile Include="Omnibus\OmnibusBlock.cs" />
-    <Compile Include="Omnibus\OmnibusConfiguration.cs" />
-    <Compile Include="Omnibus\Components\OmnibusExtensions.cs" />
-    <Compile Include="Omnibus\OmnibusStrategy.cs" />
-    <Compile Include="Omnibus\Strategies\OmnibusStrategySequential.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Omnibus\OmnibusService.cs" />
-    <Compile Include="Omnibus\Components\OmnibusPiece.cs" />
-    <Compile Include="Omnibus\Components\OmnibusPieceReady.cs" />
-    <Compile Include="Omnibus\Components\OmnibusPieceNothing.cs" />
-    <Compile Include="Omnibus\Components\OmnibusPiecePartial.cs" />
-    <Compile Include="Omnibus\Components\OmnibusReservation.cs" />
-    <Compile Include="Omnibus\Components\OmnibusReservationCollection.cs" />
-    <Compile Include="Omnibus\Components\OmnibusPieceCollection.cs" />
     <Compile Include="Spartan\SpartanCompleteDiscover.cs" />
     <Compile Include="Spartan\SpartanCompleteDownload.cs" />
     <Compile Include="Spartan\SpartanCompleteVerify.cs" />
@@ -207,6 +179,10 @@
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Omnibus.csproj">
+      <Project>{a69138d4-eaeb-4690-a040-5f612feddeb2}</Project>
+      <Name>Leak.Omnibus</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
       <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>

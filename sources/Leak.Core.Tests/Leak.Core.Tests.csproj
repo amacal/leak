@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\LeakageTests.cs" />
-    <Compile Include="Components\OmnibusTests.cs" />
     <Compile Include="Components\RetrieverTests.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\Fixture.cs" />
