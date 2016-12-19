@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
 using Leak.Core.Metaget;
-using Leak.Core.Retriever;
 using Leak.Events;
 using Leak.Repository;
+using Leak.Retriever;
 using Leak.Tasks;
 
 namespace Leak.Core.Spartan

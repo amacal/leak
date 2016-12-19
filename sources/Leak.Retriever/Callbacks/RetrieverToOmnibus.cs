@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Retriever.Callbacks
+﻿namespace Leak.Retriever.Callbacks
 {
     //    public override void OnBlockReserved(FileHash hash, OmnibusReservationEvent @event)
     //    {

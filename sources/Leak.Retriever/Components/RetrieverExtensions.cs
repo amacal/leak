@@ -1,10 +1,10 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
-using System;
 using Leak.Omnibus;
 using Leak.Repository;
 
-namespace Leak.Core.Retriever.Components
+namespace Leak.Retriever.Components
 {
     public static class RetrieverExtensions
     {
@@ -58,6 +58,16 @@ namespace Leak.Core.Retriever.Components
         public static void CallPieceRejected(this RetrieverHooks hooks, PieceRejected data)
         {
             hooks.OnPieceRejected?.Invoke(data);
+        }
+
+        public static void CallDataChanged(this RetrieverHooks hooks, DataChanged data)
+        {
+            hooks.OnDataChanged?.Invoke(data);
+        }
+
+        public static void CallDataCompleted(this RetrieverHooks hooks, DataCompleted data)
+        {
+            hooks.OnDataCompleted?.Invoke(data);
         }
     }
 }

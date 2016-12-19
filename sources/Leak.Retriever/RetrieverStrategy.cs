@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Retriever
+﻿namespace Leak.Retriever
 {
     public enum RetrieverStrategy
     {

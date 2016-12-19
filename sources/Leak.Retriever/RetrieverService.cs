@@ -1,13 +1,13 @@
-﻿using Leak.Common;
-using Leak.Core.Retriever.Components;
-using Leak.Core.Retriever.Tasks;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
 using Leak.Files;
-using Leak.Tasks;
-using System;
 using Leak.Glue;
+using Leak.Retriever.Components;
+using Leak.Retriever.Tasks;
+using Leak.Tasks;
 
-namespace Leak.Core.Retriever
+namespace Leak.Retriever
 {
     public class RetrieverService : IDisposable
     {

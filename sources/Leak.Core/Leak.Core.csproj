@@ -50,20 +50,6 @@
     <Compile Include="Leakage\LeakRegistrant.cs" />
     <Compile Include="Metaget\MetagetHooks.cs" />
     <Compile Include="Metaget\MetagetTaskVerify.cs" />
-    <Compile Include="Retriever\Callbacks\RetrieverToOmnibus.cs" />
-    <Compile Include="Retriever\RetrieverConfiguration.cs" />
-    <Compile Include="Retriever\Components\RetrieverContext.cs" />
-    <Compile Include="Retriever\Components\RetrieverExtensions.cs" />
-    <Compile Include="Retriever\RetrieverHooks.cs" />
-    <Compile Include="Retriever\RetrieverService.cs" />
-    <Compile Include="Retriever\RetrieverStrategy.cs" />
-    <Compile Include="Retriever\Tasks\HandleBitfieldTask.cs" />
-    <Compile Include="Retriever\Tasks\FindBitfieldsTask.cs" />
-    <Compile Include="Retriever\Tasks\RequestBlockTask.cs" />
-    <Compile Include="Retriever\Tasks\ScheduleAllTask.cs" />
-    <Compile Include="Retriever\Tasks\HandleBlockReceived.cs" />
-    <Compile Include="Retriever\Tasks\ScheduleItTask.cs" />
-    <Compile Include="Retriever\Tasks\VerifyPieceTask.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallback.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallbackBase.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallbackNothing.cs" />
@@ -188,6 +174,10 @@
       <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
       <Name>Leak.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Retriever\Leak.Retriever.csproj">
+      <Project>{61b61289-d4e4-45f2-916b-d60114a4bd66}</Project>
+      <Name>Leak.Retriever</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
       <Name>Leak.Sockets</Name>
@@ -200,7 +190,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Retriever\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

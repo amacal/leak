@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Core.Metaget;
-using Leak.Core.Retriever;
 using Leak.Repository;
+using Leak.Retriever;
 
 namespace Leak.Core.Spartan
 {

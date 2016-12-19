@@ -1,8 +1,8 @@
-﻿using Leak.Core.Retriever.Components;
-using Leak.Events;
+﻿using Leak.Events;
+using Leak.Retriever.Components;
 using Leak.Tasks;
 
-namespace Leak.Core.Retriever.Tasks
+namespace Leak.Retriever.Tasks
 {
     public class HandleBitfieldTask : LeakTask<RetrieverContext>
     {

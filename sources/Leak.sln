@@ -87,6 +87,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Omnibus", "Leak.Omnibu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Omnibus.Tests", "Leak.Omnibus.Tests\Leak.Omnibus.Tests.csproj", "{4DB681D0-3C3C-43C9-8950-B73344427ADC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Retriever", "Leak.Retriever\Leak.Retriever.csproj", "{61B61289-D4E4-45F2-916B-D60114A4BD66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Retriever.Tests", "Leak.Retriever.Tests\Leak.Retriever.Tests.csproj", "{7545567D-C0F9-4614-B16A-12DEEE138009}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -261,6 +265,14 @@ Global
 		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DB681D0-3C3C-43C9-8950-B73344427ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B61289-D4E4-45F2-916B-D60114A4BD66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B61289-D4E4-45F2-916B-D60114A4BD66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B61289-D4E4-45F2-916B-D60114A4BD66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B61289-D4E4-45F2-916B-D60114A4BD66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7545567D-C0F9-4614-B16A-12DEEE138009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7545567D-C0F9-4614-B16A-12DEEE138009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7545567D-C0F9-4614-B16A-12DEEE138009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7545567D-C0F9-4614-B16A-12DEEE138009}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

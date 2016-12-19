@@ -1,13 +1,13 @@
 ﻿using Leak.Common;
-using Leak.Core.Retriever.Tasks;
 using Leak.Events;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Omnibus;
 using Leak.Repository;
+using Leak.Retriever.Tasks;
 using Leak.Tasks;
 
-namespace Leak.Core.Retriever.Components
+namespace Leak.Retriever.Components
 {
     public class RetrieverContext
     {
@@ -81,8 +81,8 @@ namespace Leak.Core.Retriever.Components
         {
             return new OmnibusHooks
             {
-                OnDataChanged = hooks.OnDataChanged,
-                OnDataCompleted = hooks.OnDataCompleted,
+                OnDataChanged = hooks.CallDataChanged,
+                OnDataCompleted = hooks.CallDataCompleted,
                 OnPieceReady = OnPieceReady,
                 OnBlockReserved = OnBlockReserved
             };

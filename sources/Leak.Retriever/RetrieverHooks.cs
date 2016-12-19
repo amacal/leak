@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Core.Retriever
+namespace Leak.Retriever
 {
     public class RetrieverHooks
     {
