@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Core.Metamine
+namespace Leak.Metaget
 {
     public class MetamineStrategyContext
     {

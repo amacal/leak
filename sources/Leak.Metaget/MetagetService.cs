@@ -1,20 +1,22 @@
-﻿using Leak.Tasks;
-using System;
+﻿using System;
 using Leak.Extensions.Metadata;
 using Leak.Glue;
+using Leak.Tasks;
 
-namespace Leak.Core.Metaget
+namespace Leak.Metaget
 {
     public class MetagetService : IDisposable
     {
+        private readonly LeakPipeline pipeline;
         private readonly MetagetContext context;
 
-        public MetagetService(GlueService glue, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
+        public MetagetService(LeakPipeline pipeline, GlueService glue, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
         {
+            this.pipeline = pipeline;
             context = new MetagetContext(glue, destination, hooks, configuration);
         }
 
-        public void Start(LeakPipeline pipeline)
+        public void Start()
         {
             pipeline.Register(context.Queue);
             pipeline.Register(TimeSpan.FromSeconds(1), OnTick);
@@ -22,7 +24,7 @@ namespace Leak.Core.Metaget
             context.Queue.Add(new MetagetTaskVerify());
         }
 
-        public void Stop(LeakPipeline pipeline)
+        public void Stop()
         {
             pipeline.Remove(OnTick);
         }

@@ -1,10 +1,9 @@
-﻿using Leak.Core.Metamine;
-using Leak.Events;
+﻿using Leak.Events;
 using Leak.Glue;
 using Leak.Metafile;
 using Leak.Tasks;
 
-namespace Leak.Core.Metaget
+namespace Leak.Metaget
 {
     public class MetagetContext
     {

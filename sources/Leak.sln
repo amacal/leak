@@ -91,6 +91,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Retriever", "Leak.Retr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Retriever.Tests", "Leak.Retriever.Tests\Leak.Retriever.Tests.csproj", "{7545567D-C0F9-4614-B16A-12DEEE138009}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metaget", "Leak.Metaget\Leak.Metaget.csproj", "{DA5EF2F2-7938-44CF-8869-4530DFC95B89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metaget.Tests", "Leak.Metaget.Tests\Leak.Metaget.Tests.csproj", "{16059263-FAFC-46AF-83F4-D8999D10F4BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -273,6 +277,14 @@ Global
 		{7545567D-C0F9-4614-B16A-12DEEE138009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7545567D-C0F9-4614-B16A-12DEEE138009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7545567D-C0F9-4614-B16A-12DEEE138009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA5EF2F2-7938-44CF-8869-4530DFC95B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA5EF2F2-7938-44CF-8869-4530DFC95B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA5EF2F2-7938-44CF-8869-4530DFC95B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA5EF2F2-7938-44CF-8869-4530DFC95B89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

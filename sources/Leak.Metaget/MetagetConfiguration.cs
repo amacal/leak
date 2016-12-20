@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Metaget
+﻿namespace Leak.Metaget
 {
     public class MetagetConfiguration
     {

@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Metamine
+﻿namespace Leak.Metaget
 {
     public class MetamineBlock
     {

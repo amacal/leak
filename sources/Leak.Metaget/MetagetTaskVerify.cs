@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Core.Metaget
+namespace Leak.Metaget
 {
     public class MetagetTaskVerify : LeakTask<MetagetContext>
     {

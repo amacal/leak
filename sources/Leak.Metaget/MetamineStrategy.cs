@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Leak.Core.Metamine
+namespace Leak.Metaget
 {
     public abstract class MetamineStrategy
     {

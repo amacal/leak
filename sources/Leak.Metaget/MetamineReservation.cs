@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Common;
 
-namespace Leak.Core.Metamine
+namespace Leak.Metaget
 {
     public class MetamineReservation
     {

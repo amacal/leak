@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Core.Metaget
+namespace Leak.Metaget
 {
     public class MetagetTaskData : LeakTask<MetagetContext>
     {

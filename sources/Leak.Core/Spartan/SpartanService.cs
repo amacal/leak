@@ -69,7 +69,7 @@ namespace Leak.Core.Spartan
         {
             if (context.Facts.IsOngoing(SpartanTasks.Discover))
             {
-                context.Facts.MetaGet.Stop(context.Pipeline);
+                context.Facts.MetaGet.Stop();
                 context.Facts.MetaGet = null;
             }
 

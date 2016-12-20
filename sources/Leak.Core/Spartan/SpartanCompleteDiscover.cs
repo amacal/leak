@@ -15,7 +15,7 @@ namespace Leak.Core.Spartan
 
         public void Execute(SpartanContext context)
         {
-            context.Facts.MetaGet.Stop(context.Pipeline);
+            context.Facts.MetaGet.Stop();
             context.Facts.MetaGet = null;
 
             context.Facts.Complete(SpartanTasks.Discover);

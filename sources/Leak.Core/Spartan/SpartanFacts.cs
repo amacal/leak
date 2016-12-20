@@ -1,5 +1,5 @@
 ﻿using Leak.Common;
-using Leak.Core.Metaget;
+using Leak.Metaget;
 using Leak.Repository;
 using Leak.Retriever;
 

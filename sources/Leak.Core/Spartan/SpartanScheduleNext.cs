@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
-using Leak.Core.Metaget;
 using Leak.Events;
+using Leak.Metaget;
 using Leak.Repository;
 using Leak.Retriever;
 using Leak.Tasks;
@@ -23,11 +23,11 @@ namespace Leak.Core.Spartan
                 MetagetHooks hooks = CreateMetagetHooks();
                 MetagetConfiguration configuration = CreateMetagetConfiguration();
 
-                context.Facts.MetaGet = new MetagetService(context.Glue, context.Destination, hooks, configuration);
+                context.Facts.MetaGet = new MetagetService(context.Pipeline, context.Glue, context.Destination, hooks, configuration);
                 context.Facts.Start(SpartanTasks.Discover);
 
                 context.Hooks.CallTaskStarted(context.Glue.Hash, SpartanTasks.Discover);
-                context.Facts.MetaGet.Start(context.Pipeline);
+                context.Facts.MetaGet.Start();
 
                 return;
             }

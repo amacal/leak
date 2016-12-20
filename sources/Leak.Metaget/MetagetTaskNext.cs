@@ -1,8 +1,7 @@
-﻿using Leak.Core.Metamine;
-using Leak.Extensions.Metadata;
+﻿using Leak.Extensions.Metadata;
 using Leak.Tasks;
 
-namespace Leak.Core.Metaget
+namespace Leak.Metaget
 {
     public class MetagetTaskNext : LeakTask<MetagetContext>
     {

@@ -1,8 +1,7 @@
 ﻿using Leak.Common;
-using Leak.Core.Metamine;
 using Leak.Tasks;
 
-namespace Leak.Core.Metaget
+namespace Leak.Metaget
 {
     public class MetagetTaskSize : LeakTask<MetagetContext>
     {
