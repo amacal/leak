@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Core.Spartan
+namespace Leak.Spartan
 {
     public static class SpartanExtensions
     {

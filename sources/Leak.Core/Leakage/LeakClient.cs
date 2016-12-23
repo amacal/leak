@@ -1,6 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Completion;
-using Leak.Core.Spartan;
 using Leak.Events;
 using Leak.Files;
 using Leak.Networking;
@@ -12,6 +11,7 @@ using Leak.Extensions.Metadata;
 using Leak.Glue;
 using Leak.Listener;
 using Leak.Memory;
+using Leak.Spartan;
 
 namespace Leak.Core.Leakage
 {

@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
 using Leak.Connector;
-using Leak.Core.Spartan;
 using Leak.Extensions.Metadata;
 using Leak.Glue;
+using Leak.Spartan;
 
 namespace Leak.Core.Leakage
 {

@@ -5,7 +5,7 @@ using Leak.Repository;
 using Leak.Retriever;
 using Leak.Tasks;
 
-namespace Leak.Core.Spartan
+namespace Leak.Spartan
 {
     public class SpartanScheduleNext : LeakTask<SpartanContext>
     {

@@ -1,12 +1,12 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
-using Leak.Files;
-using Leak.Tasks;
-using System;
 using Leak.Extensions.Metadata;
+using Leak.Files;
 using Leak.Glue;
+using Leak.Tasks;
 
-namespace Leak.Core.Spartan
+namespace Leak.Spartan
 {
     public class SpartanService : IDisposable
     {

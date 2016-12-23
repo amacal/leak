@@ -95,6 +95,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metaget", "Leak.Metage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metaget.Tests", "Leak.Metaget.Tests\Leak.Metaget.Tests.csproj", "{16059263-FAFC-46AF-83F4-D8999D10F4BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Spartan", "Leak.Spartan\Leak.Spartan.csproj", "{4A2F6660-BEC0-42B3-BC79-704A4A06082D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Spartan.Tests", "Leak.Spartan.Tests\Leak.Spartan.Tests.csproj", "{46302737-96BC-44C9-89BA-F8A210E2EBBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,6 +289,14 @@ Global
 		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16059263-FAFC-46AF-83F4-D8999D10F4BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A2F6660-BEC0-42B3-BC79-704A4A06082D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2F6660-BEC0-42B3-BC79-704A4A06082D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2F6660-BEC0-42B3-BC79-704A4A06082D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2F6660-BEC0-42B3-BC79-704A4A06082D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

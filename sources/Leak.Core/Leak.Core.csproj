@@ -56,16 +56,6 @@
     <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Spartan\SpartanCompleteDiscover.cs" />
-    <Compile Include="Spartan\SpartanCompleteDownload.cs" />
-    <Compile Include="Spartan\SpartanCompleteVerify.cs" />
-    <Compile Include="Spartan\SpartanConfiguration.cs" />
-    <Compile Include="Spartan\SpartanContext.cs" />
-    <Compile Include="Spartan\SpartanExtensions.cs" />
-    <Compile Include="Spartan\SpartanFacts.cs" />
-    <Compile Include="Spartan\SpartanScheduleNext.cs" />
-    <Compile Include="Spartan\SpartanHooks.cs" />
-    <Compile Include="Spartan\SpartanService.cs" />
     <Compile Include="Telegraph\Events\TrackerAnnounceCompleted.cs" />
     <Compile Include="Telegraph\Events\TrackerAnnounceStarted.cs" />
     <Compile Include="Telegraph\Events\TrackerAnnounceFailed.cs" />
@@ -167,6 +157,10 @@
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
       <Name>Leak.Sockets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Spartan\Leak.Spartan.csproj">
+      <Project>{4a2f6660-bec0-42b3-bc79-704a4a06082d}</Project>
+      <Name>Leak.Spartan</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>

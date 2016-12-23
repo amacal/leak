@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Core.Spartan
+namespace Leak.Spartan
 {
     public class SpartanHooks
     {

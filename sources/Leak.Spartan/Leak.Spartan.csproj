@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{876E00CE-1E86-480D-A541-36FAD5F39C64}</ProjectGuid>
+    <ProjectGuid>{4A2F6660-BEC0-42B3-BC79-704A4A06082D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Connector.Tests</RootNamespace>
-    <AssemblyName>Leak.Connector.Tests</AssemblyName>
+    <RootNamespace>Leak.Spartan</RootNamespace>
+    <AssemblyName>Leak.Spartan</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,64 +30,58 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectorFixture.cs" />
-    <Compile Include="ConnectorSession.cs" />
-    <Compile Include="ConnectorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpartanCompleteDiscover.cs" />
+    <Compile Include="SpartanCompleteDownload.cs" />
+    <Compile Include="SpartanCompleteVerify.cs" />
+    <Compile Include="SpartanConfiguration.cs" />
+    <Compile Include="SpartanContext.cs" />
+    <Compile Include="SpartanExtensions.cs" />
+    <Compile Include="SpartanFacts.cs" />
+    <Compile Include="SpartanHooks.cs" />
+    <Compile Include="SpartanScheduleNext.cs" />
+    <Compile Include="SpartanService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
-      <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
-      <Name>Leak.Completion</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Connector\Leak.Connector.csproj">
-      <Project>{f060eb59-ff12-4d2f-8e88-01d09ac24bb6}</Project>
-      <Name>Leak.Connector</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
-      <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
-      <Name>Leak.Networking</Name>
+    <ProjectReference Include="..\Leak.Extensions.Metadata\Leak.Extensions.Metadata.csproj">
+      <Project>{49ac3ed3-5705-40a3-b38f-cbb0d1672ffb}</Project>
+      <Name>Leak.Extensions.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
-      <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
-      <Name>Leak.Sockets</Name>
+    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
+      <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
+      <Name>Leak.Files</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+      <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
+      <Name>Leak.Glue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metaget\Leak.Metaget.csproj">
+      <Project>{da5ef2f2-7938-44cf-8869-4530dfc95b89}</Project>
+      <Name>Leak.Metaget</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+      <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
+      <Name>Leak.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Retriever\Leak.Retriever.csproj">
+      <Project>{61b61289-d4e4-45f2-916b-d60114a4bd66}</Project>
+      <Name>Leak.Retriever</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
       <Name>Leak.Tasks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Testing\Leak.Testing.csproj">
-      <Project>{56e41a71-1ac5-49d0-a8ec-b0e4767c7bf7}</Project>
-      <Name>Leak.Testing</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

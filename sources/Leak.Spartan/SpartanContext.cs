@@ -2,7 +2,7 @@
 using Leak.Glue;
 using Leak.Tasks;
 
-namespace Leak.Core.Spartan
+namespace Leak.Spartan
 {
     public class SpartanContext
     {

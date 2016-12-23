@@ -3,7 +3,7 @@ using Leak.Metaget;
 using Leak.Repository;
 using Leak.Retriever;
 
-namespace Leak.Core.Spartan
+namespace Leak.Spartan
 {
     public class SpartanFacts
     {
