@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Leak.Extensions;
 
 namespace Leak.Glue
 {
@@ -6,10 +7,10 @@ namespace Leak.Glue
     {
         public GlueConfiguration()
         {
-            Plugins = new List<GluePlugin>();
+            Plugins = new List<MorePlugin>();
         }
 
-        public List<GluePlugin> Plugins;
+        public List<MorePlugin> Plugins;
 
         public int? Pieces;
     }

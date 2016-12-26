@@ -1,5 +1,6 @@
 ﻿using System;
 using Leak.Events;
+using Leak.Extensions.Peers;
 
 namespace Leak.Leakage
 {
@@ -8,5 +9,7 @@ namespace Leak.Leakage
         public Action<ListenerStarted> OnListenerStarted;
 
         public Action<PeerConnected> OnPeerConnected;
+
+        public Action<PeersReceived> OnPeerListReceived;
     }
 }

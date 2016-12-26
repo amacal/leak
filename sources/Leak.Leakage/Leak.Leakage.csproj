@@ -65,6 +65,14 @@
       <Project>{49ac3ed3-5705-40a3-b38f-cbb0d1672ffb}</Project>
       <Name>Leak.Extensions.Metadata</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions.Peers\Leak.Extensions.Peers.csproj">
+      <Project>{DAD7BECB-B423-4384-8EDC-0D496E164EEC}</Project>
+      <Name>Leak.Extensions.Peers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions\Leak.Extensions.csproj">
+      <Project>{3348C6C0-81B0-4FB3-BA1D-6826968F028E}</Project>
+      <Name>Leak.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>

@@ -39,11 +39,8 @@
     <Compile Include="GlueExtensions.cs" />
     <Compile Include="GlueFactory.cs" />
     <Compile Include="GlueFacts.cs" />
-    <Compile Include="GlueHandler.cs" />
     <Compile Include="GlueHooks.cs" />
     <Compile Include="GlueImplementation.cs" />
-    <Compile Include="GlueMore.cs" />
-    <Compile Include="GluePlugin.cs" />
     <Compile Include="GlueService.cs" />
     <Compile Include="GlueState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +61,10 @@
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions\Leak.Extensions.csproj">
+      <Project>{3348C6C0-81B0-4FB3-BA1D-6826968F028E}</Project>
+      <Name>Leak.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Loop\Leak.Loop.csproj">
       <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>

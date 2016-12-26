@@ -30,14 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions">
+    <Reference Include="FluentAssertions, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core">
+    <Reference Include="FluentAssertions.Core, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.4.18.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework">
+    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +70,10 @@
     <ProjectReference Include="..\Leak.Extensions.Metadata\Leak.Extensions.Metadata.csproj">
       <Project>{49ac3ed3-5705-40a3-b38f-cbb0d1672ffb}</Project>
       <Name>Leak.Extensions.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions\Leak.Extensions.csproj">
+      <Project>{3348c6c0-81b0-4fb3-ba1d-6826968f028e}</Project>
+      <Name>Leak.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>

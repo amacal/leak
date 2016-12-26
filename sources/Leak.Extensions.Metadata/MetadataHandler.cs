@@ -4,7 +4,7 @@ using Leak.Glue;
 
 namespace Leak.Extensions.Metadata
 {
-    public class MetadataHandler : GlueHandler
+    public class MetadataHandler : MoreHandler
     {
         private readonly MetadataHooks hooks;
 

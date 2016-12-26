@@ -3,6 +3,7 @@ using Leak.Common;
 using Leak.Communicator;
 using Leak.Communicator.Messages;
 using Leak.Events;
+using Leak.Extensions;
 using Leak.Loop;
 
 namespace Leak.Glue
@@ -42,7 +43,7 @@ namespace Leak.Glue
                 entry.Loopy = CreateLoopy();
                 entry.Commy = CreateCommy(entry.Peer, connection);
 
-                entry.More = new GlueMore();
+                entry.More = new MoreContainer();
                 entry.Extensions = handshake.Options.HasFlag(HandshakeOptions.Extended);
 
                 hooks.CallPeerConnected(entry.Peer);
@@ -158,7 +159,7 @@ namespace Leak.Glue
             {
                 byte identifier = entry.More.Translate(extension);
                 Extended extended = new Extended(identifier, payload);
-                GlueHandler handler = facts.GetHandler(extension);
+                MoreHandler handler = facts.GetHandler(extension);
 
                 entry.Commy.SendExtended(extended);
                 hooks.CallExtensionDataSent(entry.Peer, extension, payload.Length);
@@ -176,6 +177,22 @@ namespace Leak.Glue
             foreach (GlueEntry entry in collection.All())
             {
                 callback.Invoke(entry.Peer);
+            }
+        }
+
+        public void ForEachPeer(Action<PeerHash, PeerAddress> callback)
+        {
+            foreach (GlueEntry entry in collection.All())
+            {
+                callback.Invoke(entry.Peer, entry.Remote);
+            }
+        }
+
+        public void ForEachPeer(Action<PeerHash, PeerAddress, NetworkDirection> callback)
+        {
+            foreach (GlueEntry entry in collection.All())
+            {
+                callback.Invoke(entry.Peer, entry.Remote, entry.Direction);
             }
         }
 
@@ -249,7 +266,7 @@ namespace Leak.Glue
         {
             if (data.Payload.IsExtensionHandshake())
             {
-                entry.More = new GlueMore(data.Payload.GetBencoded());
+                entry.More = new MoreContainer(data.Payload.GetBencoded());
                 hooks.CallExtensionListReceived(entry.Peer, entry.More.ToArray());
             }
         }
@@ -273,7 +290,7 @@ namespace Leak.Glue
         {
             if (data.Payload.IsExtensionHandshake() == false)
             {
-                GlueHandler handler;
+                MoreHandler handler;
                 byte id = data.Payload.GetExtensionIdentifier();
                 string code = facts.Translate(id, out handler);
 

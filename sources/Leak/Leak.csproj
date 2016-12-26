@@ -33,7 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\pargos.2.1.0\lib\net45\Pargos.dll</HintPath>
       <Private>True</Private>
@@ -50,10 +49,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Core\Leak.Core.csproj">
-      <Project>{c5760143-0cfc-4638-af74-069d1a8985d6}</Project>
-      <Name>Leak.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
       <Name>Leak.Tasks</Name>

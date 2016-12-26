@@ -1,8 +1,6 @@
-﻿using Leak.Glue;
-
-namespace Leak.Extensions.Metadata
+﻿namespace Leak.Extensions.Metadata
 {
-    public class MetadataPlugin : GluePlugin
+    public class MetadataPlugin : MorePlugin
     {
         public static readonly string Name = "ut_metadata";
 
@@ -13,9 +11,9 @@ namespace Leak.Extensions.Metadata
             this.hooks = hooks;
         }
 
-        public void Install(GlueMore more)
+        public void Install(MoreMapping mapping)
         {
-            more.Add(Name, new MetadataHandler(hooks));
+            mapping.Add(Name, new MetadataHandler(hooks));
         }
     }
 }

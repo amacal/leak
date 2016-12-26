@@ -1,6 +1,7 @@
 ﻿using System;
 using Leak.Common;
 using Leak.Communicator;
+using Leak.Extensions;
 using Leak.Loop;
 
 namespace Leak.Glue
@@ -23,7 +24,7 @@ namespace Leak.Glue
 
         public DateTime Timestamp;
 
-        public GlueMore More;
+        public MoreContainer More;
 
         public ConnectionLoop Loopy;
 

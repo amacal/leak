@@ -6,11 +6,13 @@ namespace Leak.Leakage.Tests
     {
         private readonly LeakageNode sue;
         private readonly LeakageNode bob;
+        private readonly LeakageNode joe;
 
-        public LeakageSwarm(LeakageNode sue, LeakageNode bob)
+        public LeakageSwarm(LeakageNode sue, LeakageNode bob, LeakageNode joe)
         {
             this.sue = sue;
             this.bob = bob;
+            this.joe = joe;
         }
 
         public LeakageNode Sue
@@ -23,10 +25,16 @@ namespace Leak.Leakage.Tests
             get { return bob; }
         }
 
+        public LeakageNode Joe
+        {
+            get { return joe; }
+        }
+
         public void Dispose()
         {
             sue.Dispose();
             bob.Dispose();
+            joe.Dispose();
         }
     }
 }

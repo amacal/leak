@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Leak.Bencoding;
 using Leak.Common;
-using Leak.Glue;
 
 namespace Leak.Extensions.Peers
 {
-    public class PeersHandler : GlueHandler
+    public class PeersHandler : MoreHandler
     {
         private readonly PeersHooks hooks;
 

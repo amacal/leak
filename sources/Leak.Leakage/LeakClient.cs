@@ -4,7 +4,9 @@ using Leak.Common;
 using Leak.Completion;
 using Leak.Connector;
 using Leak.Events;
+using Leak.Extensions;
 using Leak.Extensions.Metadata;
+using Leak.Extensions.Peers;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Listener;
@@ -97,7 +99,13 @@ namespace Leak.Leakage
             LeakEntry entry = collections.Register(registrant);
 
             entry.Destination = registrant.Destination;
+            entry.PeersHooks = new PeersHooks();
+
             entry.MetadataHooks = new MetadataHooks();
+            entry.MetadataPlugin = new MetadataPlugin(entry.MetadataHooks);
+
+            entry.PeersHooks = new PeersHooks();
+            entry.PeersPlugin = new PeersPlugin(entry.PeersHooks);
 
             entry.NegotiatorHooks = CreateNegotiatorHooks(entry);
             entry.Negotiator = new HandshakeNegotiatorFactory(network).Create(entry.NegotiatorHooks);
@@ -128,12 +136,29 @@ namespace Leak.Leakage
         {
             entry.GlueHooks.OnPeerChanged = entry.Spartan.HandlePeerChanged;
             entry.GlueHooks.OnBlockReceived = entry.Spartan.HandleBlockReceived;
-            entry.GlueHooks.OnPeerConnected = hooks.OnPeerConnected;
+
+            entry.GlueHooks.OnPeerConnected = data =>
+            {
+                hooks.OnPeerConnected?.Invoke(data);
+            };
+
+            entry.GlueHooks.OnExtensionListReceived = data =>
+            {
+                entry.PeersPlugin.HandlePeerConnected(entry.Glue, data);
+            };
+
+            entry.PeersHooks.OnPeersDataReceived = data =>
+            {
+                hooks.OnPeerListReceived?.Invoke(data);
+
+                foreach (PeerAddress remote in data.Remotes)
+                {
+                    entry.Connector.ConnectTo(data.Hash, remote);
+                }
+            };
 
             entry.MetadataHooks.OnMetadataMeasured = entry.Spartan.HandleMetadataMeasured;
             entry.MetadataHooks.OnMetadataPieceSent = entry.Spartan.HandleMetadataReceived;
-
-            //entry.ConnectorHooks.OnHandshakeCompleted = OnHandshakeCompleted;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()
@@ -171,12 +196,15 @@ namespace Leak.Leakage
 
         private GlueConfiguration CreateGlueConfiguration(LeakEntry entry)
         {
+            List<MorePlugin> plugins = new List<MorePlugin>
+            {
+                entry.MetadataPlugin,
+                entry.PeersPlugin
+            };
+
             return new GlueConfiguration
             {
-                Plugins = new List<GluePlugin>
-                {
-                    new MetadataPlugin(entry.MetadataHooks)
-                }
+                Plugins = plugins
             };
         }
 

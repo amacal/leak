@@ -55,9 +55,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
@@ -73,6 +70,10 @@
     <ProjectReference Include="..\Leak.Extensions.Peers\Leak.Extensions.Peers.csproj">
       <Project>{dad7becb-b423-4384-8edc-0d496e164eec}</Project>
       <Name>Leak.Extensions.Peers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions\Leak.Extensions.csproj">
+      <Project>{3348c6c0-81b0-4fb3-ba1d-6826968f028e}</Project>
+      <Name>Leak.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
@@ -98,6 +99,9 @@
       <Project>{56e41a71-1ac5-49d0-a8ec-b0e4767c7bf7}</Project>
       <Name>Leak.Testing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using F2F.Sandbox;
-using FluentAssertions;
 using Leak.Common;
 using Leak.Metadata;
 
@@ -30,8 +29,9 @@ namespace Leak.Leakage.Tests
 
             LeakageNode sue = CreateNode(metainfo.Hash);
             LeakageNode bob = CreateNode(metainfo.Hash);
+            LeakageNode joe = CreateNode(metainfo.Hash);
 
-            return new LeakageSwarm(sue, bob);
+            return new LeakageSwarm(sue, bob, joe);
         }
 
         private LeakageNode CreateNode(FileHash hash)
@@ -46,9 +46,11 @@ namespace Leak.Leakage.Tests
             };
 
             TaskCompletionSource<bool> onListening = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> onConnected = new TaskCompletionSource<bool>();
             LeakageEvents events = new LeakageEvents
             {
-                Listening = onListening.Task
+                Listening = onListening.Task,
+                Connected = onConnected.Task
             };
 
             LeakHooks hooks = new LeakHooks();
@@ -64,6 +66,12 @@ namespace Leak.Leakage.Tests
             {
                 onListening.SetResult(true);
                 node.Address = PeerAddress.Parse(IPAddress.Loopback, data.Port);
+            };
+
+            hooks.OnPeerConnected = data =>
+            {
+                onConnected?.SetResult(true);
+                onConnected = null;
             };
 
             return node;

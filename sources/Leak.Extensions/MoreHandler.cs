@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
 
-namespace Leak.Glue
+namespace Leak.Extensions
 {
-    public interface GlueHandler
+    public interface MoreHandler
     {
         void OnMessageReceived(FileHash hash, PeerHash peer, byte[] payload);
 

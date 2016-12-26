@@ -1,8 +1,9 @@
 ﻿using Leak.Common;
+using Leak.Extensions;
 
 namespace Leak.Glue.Tests
 {
-    public class GlueNamedPlugin : GluePlugin, GlueHandler
+    public class GlueNamedPlugin : MorePlugin, MoreHandler
     {
         private readonly string name;
 
@@ -11,9 +12,9 @@ namespace Leak.Glue.Tests
             this.name = name;
         }
 
-        public void Install(GlueMore more)
+        public void Install(MoreMapping mapping)
         {
-            more.Add(name, this);
+            mapping.Add(name, this);
         }
 
         public void OnMessageReceived(FileHash hash, PeerHash peer, byte[] payload)

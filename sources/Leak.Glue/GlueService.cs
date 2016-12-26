@@ -30,5 +30,9 @@ namespace Leak.Glue
         bool IsSupported(PeerHash peer, string extension);
 
         void ForEachPeer(Action<PeerHash> callback);
+
+        void ForEachPeer(Action<PeerHash, PeerAddress> callback);
+
+        void ForEachPeer(Action<PeerHash, PeerAddress, NetworkDirection> callback);
     }
 }

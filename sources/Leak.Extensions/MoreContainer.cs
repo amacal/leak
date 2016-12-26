@@ -2,22 +2,22 @@
 using System.Linq;
 using Leak.Bencoding;
 
-namespace Leak.Glue
+namespace Leak.Extensions
 {
-    public class GlueMore
+    public class MoreContainer : MoreMapping
     {
         private readonly Dictionary<byte, string> byId;
         private readonly Dictionary<string, byte> byCode;
-        private readonly Dictionary<string, GlueHandler> handlers;
+        private readonly Dictionary<string, MoreHandler> handlers;
 
-        public GlueMore()
+        public MoreContainer()
         {
             byId = new Dictionary<byte, string>();
             byCode = new Dictionary<string, byte>();
-            handlers = new Dictionary<string, GlueHandler>();
+            handlers = new Dictionary<string, MoreHandler>();
         }
 
-        public GlueMore(BencodedValue bencoded)
+        public MoreContainer(BencodedValue bencoded)
         {
             byId = new Dictionary<byte, string>();
             byCode = new Dictionary<string, byte>();
@@ -25,7 +25,7 @@ namespace Leak.Glue
             Decode(bencoded, byId, byCode);
         }
 
-        public void Add(string code, GlueHandler handler)
+        public void Add(string code, MoreHandler handler)
         {
             byId.Add((byte)(byId.Count + 1), code);
             byCode.Add(code, (byte)(byCode.Count + 1));
@@ -52,7 +52,7 @@ namespace Leak.Glue
             return byId[id];
         }
 
-        public GlueHandler GetHandler(string code)
+        public MoreHandler GetHandler(string code)
         {
             return handlers[code];
         }
