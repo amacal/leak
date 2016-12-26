@@ -14,11 +14,12 @@ namespace Leak.Listener
             });
         }
 
-        public static void CallConnectionArrived(this PeerListenerHooks hooks, PeerAddress remote)
+        public static void CallConnectionArrived(this PeerListenerHooks hooks, PeerAddress remote, NetworkConnection connection)
         {
             hooks.OnConnectionArrived?.Invoke(new ConnectionArrived
             {
-                Remote = remote
+                Remote = remote,
+                Connection = connection
             });
         }
     }

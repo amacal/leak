@@ -12,7 +12,7 @@ namespace Leak.Testing
             Trigger<T> trigger = new Trigger<T>(data => { });
             Trigger result = trigger;
 
-            target = trigger;
+            target = target + trigger;
             return result;
         }
 
@@ -21,7 +21,7 @@ namespace Leak.Testing
             Trigger<T> trigger = new Trigger<T>(callback);
             Trigger result = trigger;
 
-            target = trigger;
+            target = target + trigger;
             return result;
         }
 
@@ -30,7 +30,7 @@ namespace Leak.Testing
             Trigger<T> trigger = new Trigger<T>(callback);
             Trigger result = trigger;
 
-            target = trigger;
+            target = target + trigger;
             return result;
         }
     }

@@ -2,9 +2,10 @@
 using Leak.Connector;
 using Leak.Extensions.Metadata;
 using Leak.Glue;
+using Leak.Negotiator;
 using Leak.Spartan;
 
-namespace Leak.Core.Leakage
+namespace Leak.Leakage
 {
     public class LeakEntry
     {
@@ -12,6 +13,9 @@ namespace Leak.Core.Leakage
         public string Destination;
 
         public MetadataHooks MetadataHooks;
+
+        public HandshakeNegotiator Negotiator;
+        public HandshakeNegotiatorHooks NegotiatorHooks;
 
         public GlueService Glue;
         public GlueHooks GlueHooks;

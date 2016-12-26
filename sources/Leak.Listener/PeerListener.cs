@@ -12,7 +12,6 @@ namespace Leak.Listener
         private readonly NetworkPool network;
         private readonly PeerListenerHooks hooks;
         private readonly PeerListenerConfiguration configuration;
-        private readonly FileHashCollection hashes;
 
         private int assignedPort;
 
@@ -23,7 +22,6 @@ namespace Leak.Listener
             this.configuration = configuration;
 
             this.socket = network.New();
-            hashes = new FileHashCollection();
         }
 
         public void Start()
@@ -39,15 +37,6 @@ namespace Leak.Listener
         public void Stop()
         {
             socket.Dispose();
-        }
-
-        public void Enable(FileHash hash)
-        {
-            hashes.Add(hash);
-        }
-
-        public void Disable(FileHash hash)
-        {
         }
 
         private void OnAccept(TcpSocketAccept data)
@@ -66,7 +55,10 @@ namespace Leak.Listener
                 IPEndPoint endpoint = data.GetRemote();
                 PeerAddress remote = PeerAddress.Parse(endpoint);
 
-                hooks.CallConnectionArrived(remote);
+                NetworkDirection direction = NetworkDirection.Incoming;
+                NetworkConnection connection = network.Create(data.Connection, direction, endpoint);
+
+                hooks.CallConnectionArrived(remote, connection);
             }
             else
             {

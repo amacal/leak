@@ -1,19 +1,20 @@
-﻿using Leak.Common;
-using Leak.Completion;
-using Leak.Events;
-using Leak.Files;
-using Leak.Networking;
-using Leak.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Leak.Common;
+using Leak.Completion;
 using Leak.Connector;
+using Leak.Events;
 using Leak.Extensions.Metadata;
+using Leak.Files;
 using Leak.Glue;
 using Leak.Listener;
 using Leak.Memory;
+using Leak.Negotiator;
+using Leak.Networking;
 using Leak.Spartan;
+using Leak.Tasks;
 
-namespace Leak.Core.Leakage
+namespace Leak.Leakage
 {
     public class LeakClient : IDisposable
     {
@@ -28,6 +29,9 @@ namespace Leak.Core.Leakage
         private readonly LeakCollection collections;
         private readonly LeakPipeline pipeline;
         private readonly FileFactory files;
+
+        private readonly HandshakeNegotiator negotiator;
+        private readonly HandshakeNegotiatorPassiveContext negotiatorContext;
 
         public LeakClient(LeakHooks hooks, LeakConfiguration configuration)
         {
@@ -45,24 +49,47 @@ namespace Leak.Core.Leakage
             network = new NetworkPoolFactory(pipeline, worker).CreateInstance(CreateNetworkHooks());
             network.Start();
 
-            listener = CreateAndStartListener();
+            listener = CreateListener();
             glue = new GlueFactory(new BufferedBlockFactory());
+
+            negotiatorContext = new HandshakeNegotiatorPassiveInstance(configuration.Peer);
+            negotiator = CreateNegotiator();
         }
 
-        private PeerListener CreateAndStartListener()
+        public PeerHash Peer
+        {
+            get { return configuration.Peer; }
+        }
+
+        private PeerListener CreateListener()
         {
             PeerListener instance = null;
 
             if (this.configuration.Port != LeakPort.Nothing)
             {
-                PeerListenerHooks hooks = CreateListenerHooks();
-                PeerListenerConfiguration configuration = CreateListenerConfiguration();
+                PeerListenerHooks listenerHooks = CreateListenerHooks();
+                PeerListenerConfiguration listenerConfiguration = CreateListenerConfiguration();
 
-                instance = new PeerListener(network, hooks, configuration);
-                instance.Start();
+                instance = new PeerListener(network, listenerHooks, listenerConfiguration);
             }
 
             return instance;
+        }
+
+        private HandshakeNegotiator CreateNegotiator()
+        {
+            HandshakeNegotiatorFactory factory = new HandshakeNegotiatorFactory(network);
+            HandshakeNegotiatorHooks handshakeHooks = new HandshakeNegotiatorHooks
+            {
+                OnHandshakeCompleted = OnHandshakeCompleted
+            };
+
+            return factory.Create(handshakeHooks);
+        }
+
+        public void Start()
+        {
+            listener?.Start();
         }
 
         public void Register(LeakRegistrant registrant)
@@ -72,13 +99,16 @@ namespace Leak.Core.Leakage
             entry.Destination = registrant.Destination;
             entry.MetadataHooks = new MetadataHooks();
 
+            entry.NegotiatorHooks = CreateNegotiatorHooks(entry);
+            entry.Negotiator = new HandshakeNegotiatorFactory(network).Create(entry.NegotiatorHooks);
+
             entry.GlueHooks = new GlueHooks();
             entry.Glue = glue.Create(entry.Hash, entry.GlueHooks, CreateGlueConfiguration(entry));
 
             entry.SpartaHooks = new SpartanHooks();
             entry.Spartan = new SpartanService(pipeline, entry.Destination, entry.Glue, files, CreateSpartanHooks(), CreateSpartanConfiguration());
 
-            entry.ConnectorHooks = new PeerConnectorHooks();
+            entry.ConnectorHooks = CreateConnectorHooks(entry);
             entry.Connector = new PeerConnector(network, entry.ConnectorHooks, new PeerConnectorConfiguration());
 
             AttachHooks(entry);
@@ -86,7 +116,7 @@ namespace Leak.Core.Leakage
             entry.Spartan.Start();
             entry.Connector.Start(pipeline);
 
-            listener?.Enable(entry.Hash);
+            negotiatorContext.Hashes.Add(entry.Hash);
 
             foreach (PeerAddress peer in registrant.Peers)
             {
@@ -117,8 +147,8 @@ namespace Leak.Core.Leakage
         {
             return new PeerListenerHooks
             {
-                OnListenerStarted = hooks.OnListenerStarted,
-                //OnHandshakeCompleted = OnHandshakeCompleted
+                OnListenerStarted = hooks.CallListenerStarted,
+                OnConnectionArrived = OnConnectionArrived
             };
         }
 
@@ -162,6 +192,32 @@ namespace Leak.Core.Leakage
             return new SpartanConfiguration
             {
             };
+        }
+
+        private HandshakeNegotiatorHooks CreateNegotiatorHooks(LeakEntry entry)
+        {
+            return new HandshakeNegotiatorHooks
+            {
+                OnHandshakeCompleted = OnHandshakeCompleted
+            };
+        }
+
+        private PeerConnectorHooks CreateConnectorHooks(LeakEntry entry)
+        {
+            return new PeerConnectorHooks
+            {
+                OnConnectionEstablished = data => OnConnectionEstablished(data, entry)
+            };
+        }
+
+        private void OnConnectionArrived(ConnectionArrived data)
+        {
+            negotiator.Handle(data.Connection, negotiatorContext);
+        }
+
+        private void OnConnectionEstablished(ConnectionEstablished data, LeakEntry entry)
+        {
+            entry.Negotiator.Start(data.Connection, entry.Hash);
         }
 
         private void OnHandshakeCompleted(HandshakeCompleted data)

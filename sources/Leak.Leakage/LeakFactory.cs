@@ -1,4 +1,4 @@
-﻿namespace Leak.Core.Leakage
+﻿namespace Leak.Leakage
 {
     public class LeakFactory
     {

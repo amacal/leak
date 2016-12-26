@@ -35,6 +35,7 @@ namespace Leak.Listener.Tests
                     data.Remote.Host.Should().Be("127.0.0.1");
                     data.Remote.Port.Should().BeGreaterThan(0);
                     data.Remote.Port.Should().NotBe(session.Endpoint.Port);
+                    data.Connection.Should().NotBeNull();
                 });
 
                 session.Client.Connect(session.Endpoint, null);

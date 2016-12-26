@@ -67,17 +67,6 @@ namespace Leak.Core.Tracker
             return data[4 + offset] * 256 + data[5 + offset];
         }
 
-        private static TrackerRequest Configure(Action<TrackerRequest> configurer)
-        {
-            TrackerRequest configuration = new TrackerRequest
-            {
-                Peer = PeerHash.Random()
-            };
-
-            configurer.Invoke(configuration);
-            return configuration;
-        }
-
         private static string BuildAnnounceUri(string tracker, TrackerRequest configuration)
         {
             StringBuilder request = new StringBuilder();

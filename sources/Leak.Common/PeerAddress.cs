@@ -18,6 +18,11 @@ namespace Leak.Common
             return new PeerAddress(remote.Address.ToString(), remote.Port);
         }
 
+        public static PeerAddress Parse(IPAddress address, int port)
+        {
+            return new PeerAddress(address.ToString(), port);
+        }
+
         public string Host
         {
             get { return host; }

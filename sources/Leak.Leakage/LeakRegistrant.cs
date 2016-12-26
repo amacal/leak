@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Leak.Common;
 
-namespace Leak.Core.Leakage
+namespace Leak.Leakage
 {
     public class LeakRegistrant
     {

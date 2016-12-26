@@ -99,6 +99,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Spartan", "Leak.Sparta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Spartan.Tests", "Leak.Spartan.Tests\Leak.Spartan.Tests.csproj", "{46302737-96BC-44C9-89BA-F8A210E2EBBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Leakage", "Leak.Leakage\Leak.Leakage.csproj", "{2DA8DB8E-41AD-4A9E-A969-3650A8E5349E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Leakage.Tests", "Leak.Leakage.Tests\Leak.Leakage.Tests.csproj", "{7CA43A8B-B313-48C8-B863-8BC99B100CFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -297,6 +301,14 @@ Global
 		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46302737-96BC-44C9-89BA-F8A210E2EBBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DA8DB8E-41AD-4A9E-A969-3650A8E5349E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA8DB8E-41AD-4A9E-A969-3650A8E5349E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA8DB8E-41AD-4A9E-A969-3650A8E5349E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA8DB8E-41AD-4A9E-A969-3650A8E5349E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CA43A8B-B313-48C8-B863-8BC99B100CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CA43A8B-B313-48C8-B863-8BC99B100CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CA43A8B-B313-48C8-B863-8BC99B100CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CA43A8B-B313-48C8-B863-8BC99B100CFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

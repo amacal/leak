@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Core.Leakage
+namespace Leak.Leakage
 {
     public class LeakConfiguration
     {

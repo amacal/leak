@@ -40,14 +40,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Leakage\LeakClient.cs" />
-    <Compile Include="Leakage\LeakCollection.cs" />
-    <Compile Include="Leakage\LeakConfiguration.cs" />
-    <Compile Include="Leakage\LeakEntry.cs" />
-    <Compile Include="Leakage\LeakFactory.cs" />
-    <Compile Include="Leakage\LeakHooks.cs" />
-    <Compile Include="Leakage\LeakPort.cs" />
-    <Compile Include="Leakage\LeakRegistrant.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallback.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallbackBase.cs" />
     <Compile Include="Cando\PeerExchange\PeerExchangeCallbackNothing.cs" />
