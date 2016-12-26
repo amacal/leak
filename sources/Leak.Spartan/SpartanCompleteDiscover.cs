@@ -18,8 +18,8 @@ namespace Leak.Spartan
             context.Facts.MetaGet.Stop();
             context.Facts.MetaGet = null;
 
-            context.Facts.Complete(SpartanTasks.Discover);
-            context.Hooks.CallTaskCompleted(context.Glue.Hash, SpartanTasks.Discover);
+            context.Facts.Complete(Goal.Discover);
+            context.Hooks.CallTaskCompleted(context.Glue.Hash, Goal.Discover);
 
             context.Hooks.CallMetadataDiscovered(data);
             context.Glue.SetPieces(data.Metainfo.Pieces.Length);

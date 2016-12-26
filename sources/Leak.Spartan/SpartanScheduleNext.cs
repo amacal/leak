@@ -18,43 +18,43 @@ namespace Leak.Spartan
 
         public void Execute(SpartanContext remove)
         {
-            if (context.Facts.CanStart(SpartanTasks.Discover))
+            if (context.Facts.CanStart(Goal.Discover))
             {
                 MetagetHooks hooks = CreateMetagetHooks();
                 MetagetConfiguration configuration = CreateMetagetConfiguration();
 
                 context.Facts.MetaGet = new MetagetService(context.Pipeline, context.Glue, context.Destination, hooks, configuration);
-                context.Facts.Start(SpartanTasks.Discover);
+                context.Facts.Start(Goal.Discover);
 
-                context.Hooks.CallTaskStarted(context.Glue.Hash, SpartanTasks.Discover);
+                context.Hooks.CallTaskStarted(context.Glue.Hash, Goal.Discover);
                 context.Facts.MetaGet.Start();
 
                 return;
             }
 
-            if (context.Facts.CanStart(SpartanTasks.Verify))
+            if (context.Facts.CanStart(Goal.Verify))
             {
                 RepositoryHooks hooks = CreateRepositoryHooks();
                 RepositoryConfiguration configuration = CreateRepositoryConfiguration();
 
                 context.Facts.Repository = new RepositoryService(context.Facts.Metainfo, context.Destination, context.Files, hooks, configuration);
-                context.Facts.Start(SpartanTasks.Verify);
+                context.Facts.Start(Goal.Verify);
 
-                context.Hooks.CallTaskStarted(context.Glue.Hash, SpartanTasks.Verify);
+                context.Hooks.CallTaskStarted(context.Glue.Hash, Goal.Verify);
                 context.Facts.Repository.Start();
 
                 context.Facts.Repository.Verify(new Bitfield(context.Facts.Metainfo.Pieces.Length));
             }
 
-            if (context.Facts.CanStart(SpartanTasks.Download))
+            if (context.Facts.CanStart(Goal.Download))
             {
                 RetrieverHooks hooks = CreateRetrieverHooks();
                 RetrieverConfiguration configuration = CreateRetrieverConfiguration();
 
                 context.Facts.Retriever = new RetrieverService(context.Facts.Metainfo, context.Destination, context.Facts.Bitfield, context.Glue, context.Files, context.Pipeline, hooks, configuration);
-                context.Facts.Start(SpartanTasks.Download);
+                context.Facts.Start(Goal.Download);
 
-                context.Hooks.CallTaskStarted(context.Glue.Hash, SpartanTasks.Download);
+                context.Hooks.CallTaskStarted(context.Glue.Hash, Goal.Download);
                 context.Facts.Retriever.Start();
             }
         }

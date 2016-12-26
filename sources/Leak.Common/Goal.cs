@@ -3,7 +3,7 @@
 namespace Leak.Common
 {
     [Flags]
-    public enum SpartanTasks
+    public enum Goal
     {
         None = 0,
         All = Discover | Verify | Download,

@@ -20,8 +20,8 @@ namespace Leak.Spartan
             context.Facts.Repository.Dispose();
             context.Facts.Repository = null;
 
-            context.Facts.Complete(SpartanTasks.Verify);
-            context.Hooks.CallTaskCompleted(context.Glue.Hash, SpartanTasks.Verify);
+            context.Facts.Complete(Goal.Verify);
+            context.Hooks.CallTaskCompleted(context.Glue.Hash, Goal.Verify);
 
             context.Hooks.CallDataVerified(data);
             context.Queue.Add(new SpartanScheduleNext(context));

@@ -22,11 +22,11 @@ namespace Leak.Spartan.Tests
             {
                 switch (data.Task)
                 {
-                    case SpartanTasks.Discover:
+                    case Goal.Discover:
                         onDiscovering.SetResult(true);
                         break;
 
-                    case SpartanTasks.Download:
+                    case Goal.Download:
                         onDownlading.SetResult(true);
                         break;
                 }
@@ -36,11 +36,11 @@ namespace Leak.Spartan.Tests
             {
                 switch (data.Task)
                 {
-                    case SpartanTasks.Discover:
+                    case Goal.Discover:
                         onDiscovered.SetResult(true);
                         break;
 
-                    case SpartanTasks.Download:
+                    case Goal.Download:
                         onDownloaded.SetResult(true);
                         break;
                 }

@@ -5,7 +5,7 @@ namespace Leak.Spartan
 {
     public static class SpartanExtensions
     {
-        public static void CallTaskStarted(this SpartanHooks hooks, FileHash hash, SpartanTasks task)
+        public static void CallTaskStarted(this SpartanHooks hooks, FileHash hash, Goal task)
         {
             hooks.OnTaskStarted?.Invoke(new TaskStarted
             {
@@ -14,7 +14,7 @@ namespace Leak.Spartan
             });
         }
 
-        public static void CallTaskCompleted(this SpartanHooks hooks, FileHash hash, SpartanTasks task)
+        public static void CallTaskCompleted(this SpartanHooks hooks, FileHash hash, Goal task)
         {
             hooks.OnTaskCompleted?.Invoke(new TaskCompleted
             {

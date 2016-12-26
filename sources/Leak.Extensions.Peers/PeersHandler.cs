@@ -1,37 +1,34 @@
-﻿using Leak.Common;
-using Leak.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Leak.Bencoding;
-using Leak.Communicator.Messages;
+using Leak.Common;
+using Leak.Glue;
 
-namespace Leak.Core.Cando.PeerExchange
+namespace Leak.Extensions.Peers
 {
-    public class PeerExchangeHandler
+    public class PeersHandler : GlueHandler
     {
-        private readonly PeerExchangeConfiguration configuration;
+        private readonly PeersHooks hooks;
 
-        public PeerExchangeHandler(Action<PeerExchangeConfiguration> configurer)
+        public PeersHandler(PeersHooks hooks)
         {
-            configuration = configurer.Configure(with =>
-            {
-                with.Callback = new PeerExchangeCallbackNothing();
-            });
+            this.hooks = hooks;
         }
 
-        public bool CanHandle(string name)
+        public void OnMessageReceived(FileHash hash, PeerHash peer, byte[] payload)
         {
-            return name == "ut_pex";
+            Handle(hash, peer, payload, hooks.CallPeersDataReceived);
         }
 
-        public void OnHandshake(PeerSession session, BencodedValue handshake)
+        public void OnMessageSent(FileHash hash, PeerHash peer, byte[] payload)
         {
+            Handle(hash, peer, payload, hooks.CallPeersDataSent);
         }
 
-        public void OnMessage(PeerSession session, Extended payload)
+        private static void Handle(FileHash hash, PeerHash peer, byte[] payload, Action<FileHash, PeerHash, PeerAddress[]> callback)
         {
-            BencodedValue value = Bencoder.Decode(payload.Data);
+            BencodedValue value = Bencoder.Decode(payload);
             byte[] added = value.Find("added", x => x?.Data?.GetBytes());
             List<PeerAddress> peers = new List<PeerAddress>();
 
@@ -51,7 +48,7 @@ namespace Leak.Core.Cando.PeerExchange
 
             if (added?.Length > 0)
             {
-                configuration.Callback.OnMessage(session, new PeerExchangeData(peers.ToArray()));
+                callback(hash, peer, peers.ToArray());
             }
         }
 

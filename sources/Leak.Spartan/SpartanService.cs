@@ -35,7 +35,7 @@ namespace Leak.Spartan
 
         public void HandleMetadataMeasured(MetadataMeasured data)
         {
-            if (context.Facts.IsOngoing(SpartanTasks.Discover))
+            if (context.Facts.IsOngoing(Goal.Discover))
             {
                 context.Facts.MetaGet.HandleMetadataMeasured(data);
             }
@@ -43,7 +43,7 @@ namespace Leak.Spartan
 
         public void HandleMetadataReceived(MetadataReceived data)
         {
-            if (context.Facts.IsOngoing(SpartanTasks.Discover))
+            if (context.Facts.IsOngoing(Goal.Discover))
             {
                 context.Facts.MetaGet.HandleMetadataReceived(data);
             }
@@ -51,7 +51,7 @@ namespace Leak.Spartan
 
         public void HandlePeerChanged(PeerChanged data)
         {
-            if (context.Facts.IsOngoing(SpartanTasks.Download))
+            if (context.Facts.IsOngoing(Goal.Download))
             {
                 context.Facts.Retriever.HandlePeerChanged(data);
             }
@@ -59,7 +59,7 @@ namespace Leak.Spartan
 
         public void HandleBlockReceived(BlockReceived data)
         {
-            if (context.Facts.IsOngoing(SpartanTasks.Download))
+            if (context.Facts.IsOngoing(Goal.Download))
             {
                 context.Facts.Retriever.HandleBlockReceived(data);
             }
@@ -67,19 +67,19 @@ namespace Leak.Spartan
 
         public void Dispose()
         {
-            if (context.Facts.IsOngoing(SpartanTasks.Discover))
+            if (context.Facts.IsOngoing(Goal.Discover))
             {
                 context.Facts.MetaGet.Stop();
                 context.Facts.MetaGet = null;
             }
 
-            if (context.Facts.IsOngoing(SpartanTasks.Verify))
+            if (context.Facts.IsOngoing(Goal.Verify))
             {
                 context.Facts.Repository.Dispose();
                 context.Facts.Repository = null;
             }
 
-            if (context.Facts.IsOngoing(SpartanTasks.Download))
+            if (context.Facts.IsOngoing(Goal.Download))
             {
                 context.Facts.Retriever.Dispose();
                 context.Facts.Repository = null;

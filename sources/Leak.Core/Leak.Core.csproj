@@ -40,13 +40,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cando\PeerExchange\PeerExchangeCallback.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeCallbackBase.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeCallbackNothing.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeConfiguration.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeExtensions.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeHandler.cs" />
-    <Compile Include="Cando\PeerExchange\PeerExchangeData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Telegraph\Events\TrackerAnnounceCompleted.cs" />
     <Compile Include="Telegraph\Events\TrackerAnnounceStarted.cs" />

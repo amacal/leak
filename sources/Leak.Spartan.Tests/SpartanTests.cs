@@ -13,12 +13,12 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerTaskStartedWithDiscovery()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover))
+            using (SpartanSession session = fixture.Start(Goal.Discover))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskStarted, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Task.Should().Be(SpartanTasks.Discover);
+                    data.Task.Should().Be(Goal.Discover);
                 });
 
                 session.Service.Start();
@@ -30,7 +30,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerMetafileMeasuredWhenReceivedTotalSize()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover))
+            using (SpartanSession session = fixture.Start(Goal.Discover))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnMetafileMeasured, data =>
                 {
@@ -50,7 +50,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerMetadataDiscoveredWhenReceivedAllMetadata()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover))
+            using (SpartanSession session = fixture.Start(Goal.Discover))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnMetadataDiscovered, data =>
                 {
@@ -73,12 +73,12 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerTaskCompletedWhenReceivedAllMetadata()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover))
+            using (SpartanSession session = fixture.Start(Goal.Discover))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskCompleted, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Task.Should().Be(SpartanTasks.Discover);
+                    data.Task.Should().Be(Goal.Discover);
                 });
 
                 session.Service.Start();
@@ -95,7 +95,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerDataAllocated()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
             {
                 string directory = Path.Combine(session.Sandbox.Directory, session.Hash.ToString());
                 string path = Path.Combine(directory, "debian-8.5.0-amd64-CD-1.iso");
@@ -121,7 +121,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerDataVerified()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnDataVerified, data =>
                 {
@@ -145,11 +145,11 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerTaskCompletedWhenVerified()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskCompleted, data =>
                 {
-                    if (data.Task == SpartanTasks.Verify)
+                    if (data.Task == Goal.Verify)
                     {
                         data.Hash.Should().Be(session.Hash);
                     }
@@ -169,7 +169,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerDataCompleted()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify | SpartanTasks.Download))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnDataCompleted, data =>
                 {
@@ -195,7 +195,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerDataChanged()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify | SpartanTasks.Download))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnDataChanged, data =>
                 {
@@ -220,7 +220,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerPieceAccepted()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify | SpartanTasks.Download))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceAccepted, data =>
                 {
@@ -245,7 +245,7 @@ namespace Leak.Spartan.Tests
         public void ShouldTriggerPieceRejected()
         {
             using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(SpartanTasks.Discover | SpartanTasks.Verify | SpartanTasks.Download))
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceRejected, data =>
                 {

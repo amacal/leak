@@ -6,6 +6,6 @@ namespace Leak.Events
     {
         public FileHash Hash;
 
-        public SpartanTasks Task;
+        public Goal Task;
     }
 }

@@ -18,8 +18,8 @@ namespace Leak.Spartan
             context.Facts.Retriever.Dispose();
             context.Facts.Retriever = null;
 
-            context.Facts.Complete(SpartanTasks.Download);
-            context.Hooks.CallTaskCompleted(context.Glue.Hash, SpartanTasks.Download);
+            context.Facts.Complete(Goal.Download);
+            context.Hooks.CallTaskCompleted(context.Glue.Hash, Goal.Download);
 
             context.Hooks.CallDataCompleted(data);
         }

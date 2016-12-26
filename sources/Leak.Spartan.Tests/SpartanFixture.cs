@@ -29,7 +29,7 @@ namespace Leak.Spartan.Tests
             files = new FileFactory(completion);
         }
 
-        public SpartanSession Start(SpartanTasks tasks)
+        public SpartanSession Start(Goal tasks)
         {
             byte[] bytes;
             Metainfo metainfo = null;
