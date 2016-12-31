@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Leak.Metashare</RootNamespace>
+    <AssemblyName>Leak.Metashare</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MetashareBuilder.cs" />
+    <Compile Include="MetashareCollection.cs" />
+    <Compile Include="MetashareConfiguration.cs" />
+    <Compile Include="MetashareContext.cs" />
+    <Compile Include="MetashareDependencies.cs" />
+    <Compile Include="MetashareEntry.cs" />
+    <Compile Include="MetashareExtensions.cs" />
+    <Compile Include="MetashareHooks.cs" />
+    <Compile Include="MetashareParameters.cs" />
+    <Compile Include="MetashareService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Extensions.Metadata\Leak.Extensions.Metadata.csproj">
+      <Project>{49AC3ED3-5705-40A3-B38F-CBB0D1672FFB}</Project>
+      <Name>Leak.Extensions.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+      <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
+      <Name>Leak.Glue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
+      <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>
+      <Name>Leak.Metafile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
+      <Name>Leak.Tasks</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

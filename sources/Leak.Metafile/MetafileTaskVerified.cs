@@ -63,7 +63,9 @@ namespace Leak.Metafile
                     }
 
                     context.IsCompleted = true;
-                    context.Hooks.CallMetafileVerified(context.Parameters.Hash, MetainfoFactory.FromBytes(bytes));
+                    context.TotalSize = size;
+
+                    context.Hooks.CallMetafileVerified(context.Parameters.Hash, MetainfoFactory.FromBytes(bytes), size);
                 }
                 else
                 {

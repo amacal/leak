@@ -109,6 +109,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Extensions.Peers.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Extensions", "Leak.Extensions\Leak.Extensions.csproj", "{3348C6C0-81B0-4FB3-BA1D-6826968F028E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metashare", "Leak.Metashare\Leak.Metashare.csproj", "{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metashare.Tests", "Leak.Metashare.Tests\Leak.Metashare.Tests.csproj", "{69F691CF-7D66-42B3-B941-6A8579533AC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -327,6 +331,14 @@ Global
 		{3348C6C0-81B0-4FB3-BA1D-6826968F028E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3348C6C0-81B0-4FB3-BA1D-6826968F028E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3348C6C0-81B0-4FB3-BA1D-6826968F028E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69F691CF-7D66-42B3-B941-6A8579533AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69F691CF-7D66-42B3-B941-6A8579533AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69F691CF-7D66-42B3-B941-6A8579533AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69F691CF-7D66-42B3-B941-6A8579533AC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

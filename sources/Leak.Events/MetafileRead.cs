@@ -8,6 +8,8 @@ namespace Leak.Events
 
         public int Piece;
 
-        public byte[] Data;
+        public int Total;
+
+        public byte[] Payload;
     }
 }

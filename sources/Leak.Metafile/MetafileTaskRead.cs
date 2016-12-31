@@ -19,7 +19,7 @@ namespace Leak.Metafile
 
         public void Execute(MetafileContext context)
         {
-            context.Hooks.CallMetafileRead(hash, piece, read.Buffer.ToBytes(read.Count));
+            context.Hooks.CallMetafileRead(hash, piece, context.TotalSize, read.Buffer.ToBytes(read.Count));
         }
     }
 }

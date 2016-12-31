@@ -5,13 +5,14 @@ namespace Leak.Metafile
 {
     public static class MetafileExtensions
     {
-        public static void CallMetafileRead(this MetafileHooks hooks, FileHash hash, int piece, byte[] data)
+        public static void CallMetafileRead(this MetafileHooks hooks, FileHash hash, int piece, int total, byte[] data)
         {
             hooks.OnMetafileRead?.Invoke(new MetafileRead
             {
                 Hash = hash,
                 Piece = piece,
-                Data = data
+                Total = total,
+                Payload = data
             });
         }
 
@@ -25,12 +26,13 @@ namespace Leak.Metafile
             });
         }
 
-        public static void CallMetafileVerified(this MetafileHooks hooks, FileHash hash, Metainfo metainfo)
+        public static void CallMetafileVerified(this MetafileHooks hooks, FileHash hash, Metainfo metainfo, int size)
         {
             hooks.OnMetafileVerified?.Invoke(new MetafileVerified
             {
                 Hash = hash,
-                Metainfo = metainfo
+                Metainfo = metainfo,
+                Size = size
             });
         }
 

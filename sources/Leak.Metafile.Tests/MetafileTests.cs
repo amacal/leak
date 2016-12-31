@@ -1,5 +1,4 @@
-﻿using System.IO;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Leak.Testing;
 using NUnit.Framework;
 
@@ -17,6 +16,7 @@ namespace Leak.Metafile.Tests
                 {
                     data.Hash.Should().Be(session.Hash);
                     data.Metainfo.Should().NotBeNull();
+                    data.Size.Should().Be(session.Data.Length);
                     data.Metainfo.Hash.Should().Be(session.Hash);
                 });
 
@@ -38,6 +38,7 @@ namespace Leak.Metafile.Tests
                 {
                     data.Hash.Should().Be(session.Hash);
                     data.Metainfo.Should().NotBeNull();
+                    data.Size.Should().Be(session.Data.Length);
                     data.Metainfo.Hash.Should().Be(session.Hash);
                 });
 
@@ -117,7 +118,8 @@ namespace Leak.Metafile.Tests
                 {
                     data.Hash.Should().Be(session.Hash);
                     data.Piece.Should().Be(0);
-                    data.Data.Should().BeEquivalentTo(session.Data);
+                    data.Total.Should().Be(session.Data.Length);
+                    data.Payload.Should().BeEquivalentTo(session.Data);
                 });
 
                 session.Service.Start();

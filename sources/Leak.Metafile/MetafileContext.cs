@@ -12,6 +12,7 @@ namespace Leak.Metafile
         private readonly LeakQueue<MetafileContext> queue;
 
         private bool isCompleted;
+        private int totalSize;
 
         public MetafileContext(MetafileParameters parameters, MetafileDependencies dependencies, MetafileHooks hooks)
         {
@@ -27,6 +28,12 @@ namespace Leak.Metafile
         {
             get { return isCompleted; }
             set { isCompleted = value; }
+        }
+
+        public int TotalSize
+        {
+            get { return totalSize; }
+            set { totalSize = value; }
         }
 
         public MetafileDestination Destination

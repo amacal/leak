@@ -7,5 +7,7 @@ namespace Leak.Events
         public FileHash Hash;
 
         public Metainfo Metainfo;
+
+        public int Size;
     }
 }
