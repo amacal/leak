@@ -9,6 +9,7 @@ using Leak.Memory;
 using Leak.Metadata;
 using Leak.Metafile;
 using Leak.Metaget;
+using Leak.Metashare;
 using Leak.Tasks;
 using File = System.IO.File;
 
@@ -73,6 +74,14 @@ namespace Leak.Spartan.Tests
                     .WithMetafile(metafile)
                     .Build();
 
+            MetashareService metashare =
+                new MetashareBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(glue)
+                    .WithMetafile(metafile)
+                    .Build();
+
             SpartanService spartan = 
                 new SpartanBuilder()
                     .WithHash(metainfo.Hash)
@@ -81,6 +90,7 @@ namespace Leak.Spartan.Tests
                     .WithFiles(files)
                     .WithGlue(glue)
                     .WithMetaget(metaget)
+                    .WithMetashare(metashare)
                     .WithGoal(goal)
                     .Build();
 

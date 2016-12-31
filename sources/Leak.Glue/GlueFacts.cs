@@ -2,19 +2,19 @@
 using Leak.Bencoding;
 using Leak.Common;
 using Leak.Communicator.Messages;
+using Leak.Events;
 using Leak.Extensions;
 
 namespace Leak.Glue
 {
     public class GlueFacts
     {
-        private int? pieces;
         private readonly MoreContainer more;
+        private MetafileVerified metadata;
 
-        public GlueFacts(GlueConfiguration configuration)
+        public GlueFacts()
         {
             more = new MoreContainer();
-            pieces = configuration.Pieces;
         }
 
         public void Install(IReadOnlyCollection<MorePlugin> plugins)
@@ -25,16 +25,16 @@ namespace Leak.Glue
             }
         }
 
-        public void ApplyPieces(int value)
+        public void Handle(MetafileVerified data)
         {
-            pieces = value;
+            metadata = data;
         }
 
         public Bitfield ApplyHave(Bitfield bitfield, int piece)
         {
-            if (bitfield == null && pieces != null)
+            if (bitfield == null && metadata?.Metainfo != null)
             {
-                bitfield = new Bitfield(pieces.Value);
+                bitfield = new Bitfield(metadata.Metainfo.Pieces.Length);
             }
 
             if (bitfield != null && bitfield.Length > piece)
@@ -47,9 +47,9 @@ namespace Leak.Glue
 
         public Bitfield ApplyBitfield(Bitfield bitfield, Bitfield received)
         {
-            if (pieces != null)
+            if (metadata?.Metainfo != null)
             {
-                received = new Bitfield(pieces.Value, received);
+                received = new Bitfield(metadata.Metainfo.Pieces.Length, received);
             }
 
             return received;
@@ -57,7 +57,7 @@ namespace Leak.Glue
 
         public Extended GetHandshake()
         {
-            BencodedValue encoded = more.Encode();
+            BencodedValue encoded = more.Encode(metadata?.Size);
             byte[] binary = Bencoder.Encode(encoded);
 
             return new Extended(0, binary);
@@ -79,6 +79,11 @@ namespace Leak.Glue
         public MoreHandler GetHandler(string code)
         {
             return more.GetHandler(code);
+        }
+
+        public IEnumerable<MoreHandler> AllHandlers()
+        {
+            return more.AllHandlers();
         }
     }
 }

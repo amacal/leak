@@ -100,5 +100,29 @@ namespace Leak.Leakage.Tests
                 trigger.Wait().Should().BeTrue();
             }
         }
+
+        [Test]
+        public void ShouldExchangeMetadata()
+        {
+            using (LeakageFixture fixture = new LeakageFixture())
+            using (LeakageSwarm swarm = fixture.Start())
+            {
+                Trigger trigger = Trigger.Bind(ref swarm.Joe.Hooks.OnMetadataDiscovered, data =>
+                {
+                    data.Hash.Should().Be(swarm.Hash);
+                    data.Metainfo.Should().NotBeNull();
+                    data.Metainfo.Hash.Should().Be(swarm.Hash);
+                });
+
+                swarm.Bob.Client.Start();
+                swarm.Bob.Client.Register(swarm.Bob.Registrant);
+                swarm.Bob.Events.Listening.Wait(5000).Should().BeTrue();
+
+                swarm.Joe.Client.Start();
+                swarm.Joe.Client.Register(swarm.Joe.Registrant.With(swarm.Bob.Address));
+
+                trigger.Wait().Should().BeTrue();
+            }
+        }
     }
 }

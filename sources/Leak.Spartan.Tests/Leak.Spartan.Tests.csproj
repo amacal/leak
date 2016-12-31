@@ -102,6 +102,10 @@
       <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
       <Name>Leak.Metaget</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Metashare\Leak.Metashare.csproj">
+      <Project>{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}</Project>
+      <Name>Leak.Metashare</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Spartan\Leak.Spartan.csproj">
       <Project>{4a2f6660-bec0-42b3-bc79-704a4a06082d}</Project>
       <Name>Leak.Spartan</Name>

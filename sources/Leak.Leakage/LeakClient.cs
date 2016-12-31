@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Leak.Common;
 using Leak.Completion;
 using Leak.Connector;
@@ -11,6 +12,7 @@ using Leak.Listener;
 using Leak.Memory;
 using Leak.Metafile;
 using Leak.Metaget;
+using Leak.Metashare;
 using Leak.Negotiator;
 using Leak.Networking;
 using Leak.Spartan;
@@ -125,13 +127,21 @@ namespace Leak.Leakage
             entry.Metafile =
                 new MetafileBuilder()
                     .WithHash(entry.Hash)
-                    .WithDestination(entry.Destination + ".metainfo")
+                    .WithDestination(Path.Combine(entry.Destination, entry.Hash.ToString()) + ".metainfo")
                     .WithFiles(files)
                     .WithPipeline(pipeline)
                     .Build();
 
             entry.Metaget =
                 new MetagetBuilder()
+                    .WithHash(entry.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(entry.Glue)
+                    .WithMetafile(entry.Metafile)
+                    .Build();
+
+            entry.Metashare =
+                new MetashareBuilder()
                     .WithHash(entry.Hash)
                     .WithPipeline(pipeline)
                     .WithGlue(entry.Glue)
@@ -146,6 +156,7 @@ namespace Leak.Leakage
                     .WithFiles(files)
                     .WithGlue(entry.Glue)
                     .WithMetaget(entry.Metaget)
+                    .WithMetashare(entry.Metashare)
                     .WithGoal(Goal.All)
                     .Build();
 
@@ -159,6 +170,7 @@ namespace Leak.Leakage
 
             entry.Spartan.Start();
             entry.Connector.Start();
+            entry.Metafile.Start();
 
             negotiatorContext.Hashes.Add(entry.Hash);
 
@@ -170,8 +182,8 @@ namespace Leak.Leakage
 
         private void AttachHooks(LeakEntry entry)
         {
-            entry.Glue.Hooks.OnPeerChanged += entry.Spartan.HandlePeerChanged;
-            entry.Glue.Hooks.OnBlockReceived += entry.Spartan.HandleBlockReceived;
+            entry.Glue.Hooks.OnPeerChanged += entry.Spartan.Handle;
+            entry.Glue.Hooks.OnBlockReceived += entry.Spartan.Handle;
 
             entry.Glue.Hooks.OnPeerConnected += data =>
             {
@@ -193,11 +205,15 @@ namespace Leak.Leakage
                 }
             };
 
-            entry.MetadataPlugin.Hooks.OnMetadataMeasured += entry.Spartan.HandleMetadataMeasured;
-            entry.MetadataPlugin.Hooks.OnMetadataPieceSent += entry.Spartan.HandleMetadataReceived;
+            entry.MetadataPlugin.Hooks.OnMetadataMeasured += entry.Spartan.Handle;
+            entry.MetadataPlugin.Hooks.OnMetadataPieceReceived += entry.Spartan.Handle;
+            entry.MetadataPlugin.Hooks.OnMetadataRequestReceived += entry.Spartan.Handle;
 
             entry.Connector.Hooks.OnConnectionEstablished += data => OnConnectionEstablished(data, entry);
             entry.Negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
+
+            entry.Metaget.Hooks.OnMetadataDiscovered += hooks.OnMetadataDiscovered;
+            entry.Metafile.Hooks.OnMetafileVerified += entry.Glue.Handle;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()
@@ -236,6 +252,7 @@ namespace Leak.Leakage
             pipeline.Stop();
             listener?.Stop();
             worker.Dispose();
+            collections.Dispose();
         }
     }
 }

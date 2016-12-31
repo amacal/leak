@@ -1,15 +1,18 @@
 ﻿using System;
+using Leak.Common;
 
 namespace Leak.Leakage.Tests
 {
     public class LeakageSwarm : IDisposable
     {
+        private readonly FileHash hash;
         private readonly LeakageNode sue;
         private readonly LeakageNode bob;
         private readonly LeakageNode joe;
 
-        public LeakageSwarm(LeakageNode sue, LeakageNode bob, LeakageNode joe)
+        public LeakageSwarm(FileHash hash, LeakageNode sue, LeakageNode bob, LeakageNode joe)
         {
+            this.hash = hash;
             this.sue = sue;
             this.bob = bob;
             this.joe = joe;
@@ -28,6 +31,11 @@ namespace Leak.Leakage.Tests
         public LeakageNode Joe
         {
             get { return joe; }
+        }
+
+        public FileHash Hash
+        {
+            get { return hash; }
         }
 
         public void Dispose()

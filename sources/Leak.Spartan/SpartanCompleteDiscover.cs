@@ -20,9 +20,7 @@ namespace Leak.Spartan
             context.Facts.Complete(Goal.Discover);
             context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Discover);
 
-            context.Dependencies.Glue.SetPieces(data.Metainfo.Pieces.Length);
             context.Facts.Metainfo = data.Metainfo;
-
             context.Queue.Add(new SpartanScheduleNext(context));
         }
     }

@@ -24,6 +24,7 @@ namespace Leak.Spartan
                 context.Facts.Start(Goal.Discover);
                 context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Discover);
                 context.Dependencies.Metaget.Start();
+                context.Dependencies.Metashare.Start();
 
                 return;
             }

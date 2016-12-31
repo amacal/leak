@@ -8,7 +8,7 @@ namespace Leak.Spartan.Tests
     {
         public static void HandleMetadataMeasured(this SpartanService service, FileHash hash, int size)
         {
-            service.HandleMetadataMeasured(new MetadataMeasured
+            service.Handle(new MetadataMeasured
             {
                 Hash = hash,
                 Size = size,
@@ -18,7 +18,7 @@ namespace Leak.Spartan.Tests
 
         public static void HandleMetadataReceived(this SpartanService service, FileHash hash, int piece, byte[] data)
         {
-            service.HandleMetadataReceived(new MetadataReceived
+            service.Handle(new MetadataReceived
             {
                 Hash = hash,
                 Peer = PeerHash.Random(),
@@ -29,7 +29,7 @@ namespace Leak.Spartan.Tests
 
         public static void HandleBlockReceived(this SpartanService service, FileHash hash, int piece, byte[] data)
         {
-            service.HandleBlockReceived(new BlockReceived
+            service.Handle(new BlockReceived
             {
                 Hash = hash,
                 Peer = PeerHash.Random(),

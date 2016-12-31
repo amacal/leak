@@ -5,6 +5,7 @@ using Leak.Extensions.Peers;
 using Leak.Glue;
 using Leak.Metafile;
 using Leak.Metaget;
+using Leak.Metashare;
 using Leak.Negotiator;
 using Leak.Spartan;
 
@@ -21,6 +22,7 @@ namespace Leak.Leakage
 
         public MetafileService Metafile;
         public MetagetService Metaget;
+        public MetashareService Metashare;
         public SpartanService Spartan;
 
         public PeerConnector Connector;

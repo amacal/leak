@@ -14,14 +14,14 @@ namespace Leak.Extensions.Metadata.Tests
             using (MetadataSession session = await fixture.Start())
             {
                 Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataRequestSent, data =>
+                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataRequestReceived, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.Hash.Should().Be(session.Hash);
                     data.Piece.Should().Be(7);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataRequestReceived, data =>
+                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataRequestSent, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
                     data.Hash.Should().Be(session.Hash);
@@ -50,14 +50,14 @@ namespace Leak.Extensions.Metadata.Tests
             using (MetadataSession session = await fixture.Start())
             {
                 Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataRejectSent, data =>
+                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataRejectReceived, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.Hash.Should().Be(session.Hash);
                     data.Piece.Should().Be(7);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataRejectReceived, data =>
+                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataRejectSent, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
                     data.Hash.Should().Be(session.Hash);
@@ -86,7 +86,7 @@ namespace Leak.Extensions.Metadata.Tests
             using (MetadataSession session = await fixture.Start())
             {
                 Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataPieceSent, data =>
+                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataPieceReceived, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.Hash.Should().Be(session.Hash);
@@ -95,7 +95,7 @@ namespace Leak.Extensions.Metadata.Tests
                     data.Data.Length.Should().Be(1023);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataPieceReceived, data =>
+                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataPieceSent, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
                     data.Hash.Should().Be(session.Hash);

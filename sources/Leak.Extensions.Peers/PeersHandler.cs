@@ -15,6 +15,10 @@ namespace Leak.Extensions.Peers
             this.hooks = hooks;
         }
 
+        public void OnHandshake(FileHash hash, PeerHash peer, byte[] payload)
+        {
+        }
+
         public void OnMessageReceived(FileHash hash, PeerHash peer, byte[] payload)
         {
             Handle(hash, peer, payload, hooks.CallPeersDataReceived);

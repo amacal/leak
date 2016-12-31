@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Leak.Common;
 
 namespace Leak.Leakage
 {
-    public class LeakCollection
+    public class LeakCollection : IDisposable
     {
         private readonly Dictionary<FileHash, LeakEntry> byHash;
 
@@ -29,6 +30,17 @@ namespace Leak.Leakage
             LeakEntry entry;
             byHash.TryGetValue(hash, out entry);
             return entry;
+        }
+
+        public void Dispose()
+        {
+            foreach (LeakEntry entry in byHash.Values)
+            {
+                entry.Metafile.Dispose();
+                entry.Spartan.Dispose();
+            }
+
+            byHash.Clear();
         }
     }
 }

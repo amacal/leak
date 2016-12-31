@@ -2,6 +2,7 @@
 using Leak.Files;
 using Leak.Glue;
 using Leak.Metaget;
+using Leak.Metashare;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -54,6 +55,12 @@ namespace Leak.Spartan
         public SpartanBuilder WithMetaget(MetagetService metaget)
         {
             dependencies.Metaget = metaget;
+            return this;
+        }
+
+        public SpartanBuilder WithMetashare(MetashareService metashare)
+        {
+            dependencies.Metashare = metashare;
             return this;
         }
 

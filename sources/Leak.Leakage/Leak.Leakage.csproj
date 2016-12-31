@@ -97,6 +97,10 @@
       <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
       <Name>Leak.Metaget</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Metashare\Leak.Metashare.csproj">
+      <Project>{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}</Project>
+      <Name>Leak.Metashare</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{acae4ba0-3596-447c-822a-e9fce74d6486}</Project>
       <Name>Leak.Negotiator</Name>

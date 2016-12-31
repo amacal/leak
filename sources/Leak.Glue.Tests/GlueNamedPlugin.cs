@@ -24,5 +24,9 @@ namespace Leak.Glue.Tests
         public void OnMessageSent(FileHash hash, PeerHash peer, byte[] payload)
         {
         }
+
+        public void OnHandshake(FileHash hash, PeerHash peer, byte[] payload)
+        {
+        }
     }
 }

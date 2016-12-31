@@ -57,6 +57,11 @@ namespace Leak.Extensions
             return handlers[code];
         }
 
+        public IEnumerable<MoreHandler> AllHandlers()
+        {
+            return handlers.Values;
+        }
+
         private static void Decode(BencodedValue bencoded, IDictionary<byte, string> byId, IDictionary<string, byte> byCode)
         {
             BencodedValue received = bencoded.Find("m", x => x);
@@ -77,8 +82,9 @@ namespace Leak.Extensions
             }
         }
 
-        public BencodedValue Encode()
+        public BencodedValue Encode(int? size)
         {
+            List<BencodedEntry> data = new List<BencodedEntry>();
             List<BencodedEntry> extensions = new List<BencodedEntry>();
 
             foreach (var item in byId)
@@ -90,19 +96,25 @@ namespace Leak.Extensions
                 });
             }
 
-            BencodedValue payload = new BencodedValue
+            data.Add(new BencodedEntry
             {
-                Dictionary = new[]
-                {
-                    new BencodedEntry
-                    {
-                        Key = new BencodedValue { Text = new BencodedText("m") },
-                        Value = new BencodedValue { Dictionary = extensions.ToArray() }
-                    }
-                }
-            };
+                Key = new BencodedValue { Text = new BencodedText("m") },
+                Value = new BencodedValue { Dictionary = extensions.ToArray() }
+            });
 
-            return payload;
+            if (size != null)
+            {
+                data.Add(new BencodedEntry
+                {
+                    Key = new BencodedValue { Text = new BencodedText("metadata_size") },
+                    Value = new BencodedValue { Number = new BencodedNumber(size.Value) }
+                });
+            }
+
+            return new BencodedValue
+            {
+                Dictionary = data.ToArray()
+            };
         }
     }
 }

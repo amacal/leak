@@ -27,7 +27,7 @@ namespace Leak.Glue
 
             collection = new GlueCollection();
 
-            facts = new GlueFacts(configuration);
+            facts = new GlueFacts();
             facts.Install(configuration.Plugins);
         }
 
@@ -101,9 +101,9 @@ namespace Leak.Glue
             return entry != null;
         }
 
-        public void SetPieces(int pieces)
+        public void Handle(MetafileVerified data)
         {
-            facts.ApplyPieces(pieces);
+            facts.Handle(data);
         }
 
         public void SendChoke(PeerHash peer)
@@ -310,6 +310,14 @@ namespace Leak.Glue
 
         private void HandleExtensionIfNeeded(GlueEntry entry, MessageReceived data)
         {
+            if (data.Payload.IsExtensionHandshake())
+            {
+                foreach (MoreHandler handler in facts.AllHandlers())
+                {
+                    handler.OnHandshake(parameters.Hash, entry.Peer, data.Payload.GetExtensionData());
+                }
+            }
+
             if (data.Payload.IsExtensionHandshake() == false)
             {
                 MoreHandler handler;

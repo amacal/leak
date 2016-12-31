@@ -11,5 +11,7 @@ namespace Leak.Leakage
         public Action<PeerConnected> OnPeerConnected;
 
         public Action<PeersReceived> OnPeerListReceived;
+
+        public Action<MetadataDiscovered> OnMetadataDiscovered;
     }
 }

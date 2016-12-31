@@ -57,7 +57,7 @@ namespace Leak.Spartan
             context.Queue.Add(new SpartanScheduleNext(context));
         }
 
-        public void HandleMetadataMeasured(MetadataMeasured data)
+        public void Handle(MetadataMeasured data)
         {
             if (context.Facts.IsOngoing(Goal.Discover))
             {
@@ -65,7 +65,7 @@ namespace Leak.Spartan
             }
         }
 
-        public void HandleMetadataReceived(MetadataReceived data)
+        public void Handle(MetadataReceived data)
         {
             if (context.Facts.IsOngoing(Goal.Discover))
             {
@@ -73,7 +73,7 @@ namespace Leak.Spartan
             }
         }
 
-        public void HandlePeerChanged(PeerChanged data)
+        public void Handle(PeerChanged data)
         {
             if (context.Facts.IsOngoing(Goal.Download))
             {
@@ -81,12 +81,17 @@ namespace Leak.Spartan
             }
         }
 
-        public void HandleBlockReceived(BlockReceived data)
+        public void Handle(BlockReceived data)
         {
             if (context.Facts.IsOngoing(Goal.Download))
             {
                 context.Facts.Retriever.HandleBlockReceived(data);
             }
+        }
+
+        public void Handle(MetadataRequested data)
+        {
+            context.Dependencies.Metashare.Handle(data);
         }
 
         public void Dispose()

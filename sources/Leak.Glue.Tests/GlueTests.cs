@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Leak.Common;
+using Leak.Events;
 using Leak.Testing;
 using NUnit.Framework;
 
@@ -138,7 +139,7 @@ namespace Leak.Glue.Tests
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.Bitfield.Should().NotBeNull();
-                    data.Bitfield[17].Should().BeTrue();
+                    data.Bitfield[1].Should().BeTrue();
                 });
 
                 using (GlueInstance iLeft = session.Left.Build())
@@ -147,8 +148,14 @@ namespace Leak.Glue.Tests
                     iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
                     iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
 
-                    iLeft.Service.SetPieces(24);
-                    iRight.Service.SendHave(session.Left.Peer, 17);
+                    iLeft.Service.Handle(new MetafileVerified
+                    {
+                        Hash = session.Metainfo.Hash,
+                        Metainfo = session.Metainfo,
+                        Size = 232
+                    });
+
+                    iRight.Service.SendHave(session.Left.Peer, 1);
                 }
 
                 handler.Wait().Should().BeTrue();

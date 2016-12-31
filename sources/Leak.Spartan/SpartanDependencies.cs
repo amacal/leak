@@ -1,6 +1,7 @@
 ﻿using Leak.Files;
 using Leak.Glue;
 using Leak.Metaget;
+using Leak.Metashare;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -14,5 +15,7 @@ namespace Leak.Spartan
         public FileFactory Files;
         
         public MetagetService Metaget;
+
+        public MetashareService Metashare;
     }
 }

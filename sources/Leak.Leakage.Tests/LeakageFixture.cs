@@ -13,7 +13,8 @@ namespace Leak.Leakage.Tests
     {
         public LeakageSwarm Start()
         {
-            Metainfo metainfo = null;
+            byte[] meta;
+            Metainfo metainfo;
             byte[] data = Bytes.Random(20000);
 
             using (FileSandbox temp = new FileSandbox(new EmptyFileLocator()))
@@ -24,17 +25,17 @@ namespace Leak.Leakage.Tests
                 File.WriteAllBytes(path, data);
                 builder.AddFile(path);
 
-                metainfo = builder.ToMetainfo();
+                metainfo = builder.ToMetainfo(out meta);
             }
 
-            LeakageNode sue = CreateNode(metainfo.Hash);
-            LeakageNode bob = CreateNode(metainfo.Hash);
+            LeakageNode sue = CreateNode(metainfo.Hash, meta);
+            LeakageNode bob = CreateNode(metainfo.Hash, meta);
             LeakageNode joe = CreateNode(metainfo.Hash);
 
-            return new LeakageSwarm(sue, bob, joe);
+            return new LeakageSwarm(metainfo.Hash, sue, bob, joe);
         }
 
-        private LeakageNode CreateNode(FileHash hash)
+        private LeakageNode CreateNode(FileHash hash, byte[] metadata = null)
         {
             FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             LeakRegistrant registrant = new LeakRegistrant
@@ -73,6 +74,11 @@ namespace Leak.Leakage.Tests
                 onConnected?.SetResult(true);
                 onConnected = null;
             };
+
+            if (metadata != null)
+            {
+                File.WriteAllBytes(Path.Combine(sandbox.Directory, hash.ToString()) + ".metainfo", metadata);
+            }
 
             return node;
         }

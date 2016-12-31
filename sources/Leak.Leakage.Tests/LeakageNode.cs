@@ -51,8 +51,8 @@ namespace Leak.Leakage.Tests
 
         public void Dispose()
         {
-            sandbox.Dispose();
             client.Dispose();
+            sandbox.Dispose();
         }
     }
 }

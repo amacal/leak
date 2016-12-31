@@ -226,7 +226,7 @@ namespace Leak.Spartan.Tests
                 session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
 
                 session.Stage.Downloading.Wait(5000).Should().BeTrue();
-                session.Service.HandleBlockReceived(received);
+                session.Service.Handle(received);
 
                 handler.Wait().Should().BeTrue();
             }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
+using Leak.Metadata;
 using Leak.Networking;
 using Leak.Sockets;
 using Leak.Tasks;
@@ -57,7 +60,21 @@ namespace Leak.Glue.Tests
             Handshake hRight = new Handshake(pRight, pLeft, hash, HandshakeOptions.Extended);
             GlueSide sRight = new GlueSide(receiver, hRight);
 
-            return new GlueSession(sLeft, sRight);
+            Metainfo metainfo;
+            byte[] data = Bytes.Random(20000);
+
+            using (FileSandbox temp = new FileSandbox(new EmptyFileLocator()))
+            {
+                MetainfoBuilder builder = new MetainfoBuilder(temp.Directory);
+                string path = temp.CreateFile("debian-8.5.0-amd64-CD-1.iso");
+
+                File.WriteAllBytes(path, data);
+                builder.AddFile(path);
+
+                metainfo = builder.ToMetainfo();
+            }
+
+            return new GlueSession(metainfo, sLeft, sRight);
         }
 
         public void Dispose()

@@ -1,5 +1,6 @@
 ﻿using System;
 using Leak.Common;
+using Leak.Events;
 
 namespace Leak.Glue
 {
@@ -19,7 +20,7 @@ namespace Leak.Glue
 
         bool Disconnect(NetworkConnection connection);
 
-        void SetPieces(int pieces);
+        void Handle(MetafileVerified data);
 
         void SendChoke(PeerHash peer);
 
