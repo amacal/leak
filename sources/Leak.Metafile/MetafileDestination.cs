@@ -1,71 +1,49 @@
-﻿using System.IO;
+﻿using System;
 using System.Security.Cryptography;
 using Leak.Common;
+using Leak.Files;
 using Leak.Metadata;
 
 namespace Leak.Metafile
 {
-    public class MetafileDestination
+    public class MetafileDestination : IDisposable
     {
         private readonly MetafileContext context;
+        private readonly File file;
 
         public MetafileDestination(MetafileContext context)
         {
+            string path = context.Parameters.Destination;
+
             this.context = context;
+            this.file = context.Dependencies.Files.OpenOrCreate(path);
         }
 
         public void Write(int piece, byte[] data)
         {
             int offset = piece * 16384;
             FileHash hash = context.Parameters.Hash;
-            string path = context.Parameters.Destination;
 
-            using (FileStream stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, 16384, FileOptions.None))
+            file.Write(offset, data, result =>
             {
-                stream.Seek(offset, SeekOrigin.Begin);
-                stream.Write(data, 0, data.Length);
-
-                stream.Flush();
-                stream.Close();
-            }
-
-            context.Hooks.CallMetafileWritten(hash, piece, data.Length);
+                context.Queue.Add(new MetafileTaskWritten(hash, piece, data.Length));
+            });
         }
 
         public void Verify()
         {
-            FileHash hash = context.Parameters.Hash;
-            string path = context.Parameters.Destination;
+            HashAlgorithm algorithm = SHA1.Create();
+            byte[] buffer = new byte[16384];
 
-            if (File.Exists(path))
+            file.Read(0, buffer, result =>
             {
-                FileHash computed;
+                context.Queue.Add(new MetafileTaskVerified(algorithm, result));
+            });
+        }
 
-                using (HashAlgorithm algorithm = SHA1.Create())
-                using (FileStream stream = File.OpenRead(path))
-                {
-                    computed = new FileHash(algorithm.ComputeHash(stream));
-                }
-
-                if (computed.Equals(hash))
-                {
-                    byte[] bytes = File.ReadAllBytes(path);
-                    Metainfo metainfo = MetainfoFactory.FromBytes(bytes);
-
-                    context.IsCompleted = true;
-                    context.Hooks.CallMetafileVerified(hash, metainfo);
-                }
-                else
-                {
-                    context.IsCompleted = false;
-                    context.Hooks.CallMetafileRejected(hash);
-                }
-            }
-            else
-            {
-                context.IsCompleted = false;
-                context.Hooks.CallMetafileRejected(hash);
-            }
+        public void Dispose()
+        {
+            file.Dispose();
         }
     }
 }

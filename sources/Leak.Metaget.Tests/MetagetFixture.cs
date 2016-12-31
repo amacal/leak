@@ -2,25 +2,35 @@
 using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
+using Leak.Completion;
+using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
 using Leak.Metafile;
 using Leak.Tasks;
+using File = System.IO.File;
 
 namespace Leak.Metaget.Tests
 {
     public class MetagetFixture : IDisposable
     {
         private readonly LeakPipeline pipeline;
+        private readonly CompletionThread completion;
+        private readonly FileFactory files;
 
         public MetagetFixture()
         {
             pipeline = new LeakPipeline();
             pipeline.Start();
+
+            completion = new CompletionThread();
+            completion.Start();
+
+            files = new FileFactory(completion);
         }
 
-        public MetagetSession Start()
+        public MetagetSession Start(bool completed = false)
         {
             Metainfo metainfo;
             byte[] bytes = Bytes.Random(20000);
@@ -41,6 +51,11 @@ namespace Leak.Metaget.Tests
 
             MetagetData data = new MetagetData(bytes);
 
+            if (completed)
+            {
+                File.WriteAllBytes(destination + ".metainfo", data.ToBytes());
+            }
+
             GlueService glue =
                 new GlueBuilder()
                     .WithHash(metainfo.Hash)
@@ -51,6 +66,8 @@ namespace Leak.Metaget.Tests
                 new MetafileBuilder()
                     .WithHash(metainfo.Hash)
                     .WithDestination(destination + ".metainfo")
+                    .WithFiles(files)
+                    .WithPipeline(pipeline)
                     .Build();
 
             MetagetService metaget =
@@ -61,11 +78,14 @@ namespace Leak.Metaget.Tests
                     .WithMetafile(metafile)
                     .Build();
 
-            return new MetagetSession(sandbox, destination + ".metainfo", metainfo.Hash, data, metaget);
+            metafile.Start();
+
+            return new MetagetSession(sandbox, destination + ".metainfo", metainfo.Hash, data, metaget, metafile);
         }
 
         public void Dispose()
         {
+            completion.Dispose();
             pipeline.Stop();
         }
     }

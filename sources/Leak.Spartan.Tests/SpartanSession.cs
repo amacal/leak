@@ -2,6 +2,7 @@
 using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
+using Leak.Metafile;
 
 namespace Leak.Spartan.Tests
 {
@@ -12,14 +13,16 @@ namespace Leak.Spartan.Tests
         private readonly SpartanData data;
         private readonly SpartanService service;
         private readonly SpartanStage stage;
+        private readonly MetafileService metafile;
 
-        public SpartanSession(IFileSandbox sandbox, SpartanMeta meta, SpartanData data, SpartanService service, SpartanStage stage)
+        public SpartanSession(IFileSandbox sandbox, SpartanMeta meta, SpartanData data, SpartanService service, SpartanStage stage, MetafileService metafile)
         {
             this.sandbox = sandbox;
             this.meta = meta;
             this.data = data;
             this.service = service;
             this.stage = stage;
+            this.metafile = metafile;
         }
 
         public SpartanService Service
@@ -64,6 +67,7 @@ namespace Leak.Spartan.Tests
 
         public void Dispose()
         {
+            metafile.Dispose();
             service.Dispose();
             sandbox.Dispose();
         }

@@ -101,8 +101,6 @@ namespace Leak.Leakage
         {
             LeakEntry entry = collections.Register(registrant);
 
-            entry.Destination = registrant.Destination;
-
             entry.MetadataPlugin =
                 new MetadataBuilder()
                     .Build();
@@ -128,6 +126,8 @@ namespace Leak.Leakage
                 new MetafileBuilder()
                     .WithHash(entry.Hash)
                     .WithDestination(entry.Destination + ".metainfo")
+                    .WithFiles(files)
+                    .WithPipeline(pipeline)
                     .Build();
 
             entry.Metaget =

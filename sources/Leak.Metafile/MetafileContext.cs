@@ -1,20 +1,25 @@
 ﻿using Leak.Common;
+using Leak.Tasks;
 
 namespace Leak.Metafile
 {
     public class MetafileContext
     {
         private readonly MetafileParameters parameters;
+        private readonly MetafileDependencies dependencies;
         private readonly MetafileHooks hooks;
         private readonly MetafileDestination destination;
+        private readonly LeakQueue<MetafileContext> queue;
 
         private bool isCompleted;
 
-        public MetafileContext(MetafileParameters parameters, MetafileHooks hooks)
+        public MetafileContext(MetafileParameters parameters, MetafileDependencies dependencies, MetafileHooks hooks)
         {
             this.parameters = parameters;
+            this.dependencies = dependencies;
             this.hooks = hooks;
 
+            queue = new LeakQueue<MetafileContext>(this);
             destination = new MetafileDestination(this);
         }
 
@@ -37,6 +42,16 @@ namespace Leak.Metafile
         public MetafileHooks Hooks
         {
             get { return hooks; }
+        }
+
+        public MetafileDependencies Dependencies
+        {
+            get { return dependencies; }
+        }
+
+        public LeakQueue<MetafileContext> Queue
+        {
+            get { return queue; }
         }
     }
 }

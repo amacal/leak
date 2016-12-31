@@ -1,16 +1,18 @@
 ﻿using Leak.Common;
+using Leak.Files;
+using Leak.Tasks;
 
 namespace Leak.Metafile
 {
     public class MetafileBuilder
     {
         private readonly MetafileParameters parameters;
-        private readonly MetafileHooks hooks;
+        private readonly MetafileDependencies dependencies;
 
         public MetafileBuilder()
         {
             parameters = new MetafileParameters();
-            hooks = new MetafileHooks();
+            dependencies = new MetafileDependencies();
         }
 
         public MetafileBuilder WithHash(FileHash hash)
@@ -25,9 +27,26 @@ namespace Leak.Metafile
             return this;
         }
 
+        public MetafileBuilder WithFiles(FileFactory files)
+        {
+            dependencies.Files = files;
+            return this;
+        }
+
+        public MetafileBuilder WithPipeline(LeakPipeline pipeline)
+        {
+            dependencies.Pipeline = pipeline;
+            return this;
+        }
+
         public MetafileService Build()
         {
-            return new MetafileService(parameters, hooks);
+            return Build(new MetafileHooks());
+        }
+
+        public MetafileService Build(MetafileHooks hooks)
+        {
+            return new MetafileService(parameters, dependencies, hooks);
         }
     }
 }

@@ -1,14 +1,15 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Metafile
 {
-    public class MetafileService
+    public class MetafileService : IDisposable
     {
         private readonly MetafileContext context;
 
-        public MetafileService(MetafileParameters parameters, MetafileHooks hooks)
+        public MetafileService(MetafileParameters parameters, MetafileDependencies dependencies, MetafileHooks hooks)
         {
-            context = new MetafileContext(parameters, hooks);
+            context = new MetafileContext(parameters, dependencies, hooks);
         }
 
         public FileHash Hash
@@ -16,14 +17,24 @@ namespace Leak.Metafile
             get { return context.Parameters.Hash; }
         }
 
+        public MetafileHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
         public MetafileParameters Parameters
         {
             get { return context.Parameters; }
         }
 
-        public MetafileHooks Hooks
+        public MetafileDependencies Dependencies
         {
-            get { return context.Hooks; }
+            get { return context.Dependencies; }
+        }
+
+        public void Start()
+        {
+            context.Dependencies.Pipeline.Register(context.Queue);
         }
 
         public void Write(int piece, byte[] data)
@@ -46,6 +57,11 @@ namespace Leak.Metafile
         public bool IsCompleted()
         {
             return context.IsCompleted;
+        }
+
+        public void Dispose()
+        {
+            context.Destination.Dispose();
         }
     }
 }

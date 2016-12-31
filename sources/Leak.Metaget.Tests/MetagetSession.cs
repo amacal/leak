@@ -1,6 +1,7 @@
 ﻿using System;
 using F2F.Sandbox;
 using Leak.Common;
+using Leak.Metafile;
 
 namespace Leak.Metaget.Tests
 {
@@ -11,14 +12,16 @@ namespace Leak.Metaget.Tests
         private readonly FileHash hash;
         private readonly MetagetData data;
         private readonly MetagetService service;
+        private readonly MetafileService metafile;
 
-        public MetagetSession(IFileSandbox sandbox, string destination, FileHash hash, MetagetData data, MetagetService service)
+        public MetagetSession(IFileSandbox sandbox, string destination, FileHash hash, MetagetData data, MetagetService service, MetafileService metafile)
         {
             this.sandbox = sandbox;
             this.destination = destination;
             this.hash = hash;
             this.data = data;
             this.service = service;
+            this.metafile = metafile;
         }
 
         public FileHash Hash
@@ -53,6 +56,7 @@ namespace Leak.Metaget.Tests
 
         public void Dispose()
         {
+            metafile.Dispose();
             sandbox.Dispose();
             service.Stop();
         }

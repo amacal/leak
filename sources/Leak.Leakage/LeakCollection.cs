@@ -16,7 +16,8 @@ namespace Leak.Leakage
         {
             LeakEntry entry = new LeakEntry
             {
-                Hash = registrant.Hash
+                Hash = registrant.Hash,
+                Destination = registrant.Destination
             };
 
             byHash.Add(entry.Hash, entry);

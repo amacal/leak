@@ -34,7 +34,7 @@ namespace Leak.Spartan.Tests
         public SpartanSession Start(Goal goal)
         {
             byte[] bytes;
-            Metainfo metainfo = null;
+            Metainfo metainfo;
             SpartanData data = new SpartanData(20000);
 
             using (FileSandbox temp = new FileSandbox(new EmptyFileLocator()))
@@ -61,6 +61,8 @@ namespace Leak.Spartan.Tests
                 new MetafileBuilder()
                     .WithHash(metainfo.Hash)
                     .WithDestination(destination + ".metainfo")
+                    .WithFiles(files)
+                    .WithPipeline(pipeline)
                     .Build();
 
             MetagetService metaget =
@@ -85,7 +87,9 @@ namespace Leak.Spartan.Tests
             SpartanMeta meta = new SpartanMeta(metainfo.Hash, bytes);
             SpartanStage stage = new SpartanStage(spartan.Hooks);
 
-            return new SpartanSession(sandbox, meta, data, spartan, stage);
+            metafile.Start();
+
+            return new SpartanSession(sandbox, meta, data, spartan, stage, metafile);
         }
 
         public void Dispose()

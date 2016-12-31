@@ -11,7 +11,7 @@ namespace Leak.Metafile.Tests
         public void ShouldTriggerMetafileVerifiedWhenCompleted()
         {
             using (MetafileFixture fixture = new MetafileFixture())
-            using (MetafileSession session = fixture.Start())
+            using (MetafileSession session = fixture.Start(true))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnMetafileVerified, data =>
                 {
@@ -20,7 +20,7 @@ namespace Leak.Metafile.Tests
                     data.Metainfo.Hash.Should().Be(session.Hash);
                 });
 
-                File.WriteAllBytes(session.Path, session.Data);
+                session.Service.Start();
                 session.Service.Verify();
 
                 handler.Wait().Should().BeTrue();
@@ -41,9 +41,10 @@ namespace Leak.Metafile.Tests
                     data.Metainfo.Hash.Should().Be(session.Hash);
                 });
 
+                session.Service.Start();
                 session.Service.Write(0, session.Data);
-                handler.Wait().Should().BeTrue();
 
+                handler.Wait().Should().BeTrue();
                 session.Service.IsCompleted().Should().BeTrue();
             }
         }
@@ -61,7 +62,9 @@ namespace Leak.Metafile.Tests
                     data.Size.Should().Be(16384);
                 });
 
+                session.Service.Start();
                 session.Service.Write(1, new byte[16384]);
+
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -77,9 +80,10 @@ namespace Leak.Metafile.Tests
                     data.Hash.Should().Be(session.Hash);
                 });
 
+                session.Service.Start();
                 session.Service.Write(1, new byte[16384]);
-                handler.Wait().Should().BeTrue();
 
+                handler.Wait().Should().BeTrue();
                 session.Service.IsCompleted().Should().BeFalse();
             }
         }
@@ -95,9 +99,10 @@ namespace Leak.Metafile.Tests
                     data.Hash.Should().Be(session.Hash);
                 });
 
+                session.Service.Start();
                 session.Service.Verify();
-                handler.Wait().Should().BeTrue();
 
+                handler.Wait().Should().BeTrue();
                 session.Service.IsCompleted().Should().BeFalse();
             }
         }

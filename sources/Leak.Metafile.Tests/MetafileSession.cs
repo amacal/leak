@@ -48,6 +48,7 @@ namespace Leak.Metafile.Tests
 
         public void Dispose()
         {
+            service.Dispose();
             sandbox.Dispose();
         }
     }

@@ -30,11 +30,8 @@ namespace Leak.Metaget.Tests
         public void ShouldTriggerMetafileDiscoveredWhenInitiallyDone()
         {
             using (MetagetFixture fixture = new MetagetFixture())
-            using (MetagetSession session = fixture.Start())
+            using (MetagetSession session = fixture.Start(true))
             {
-                // completed
-                File.WriteAllBytes(session.Destination, session.Data.ToBytes());
-
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnMetadataDiscovered, data =>
                 {
                     data.Hash.Should().Be(session.Hash);

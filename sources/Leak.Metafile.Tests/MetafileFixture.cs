@@ -2,13 +2,32 @@
 using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
+using Leak.Completion;
+using Leak.Files;
 using Leak.Metadata;
+using Leak.Tasks;
+using File = System.IO.File;
 
 namespace Leak.Metafile.Tests
 {
     public class MetafileFixture : IDisposable
     {
-        public MetafileSession Start()
+        private readonly LeakPipeline pipeline;
+        private readonly CompletionThread completion;
+        private readonly FileFactory files;
+
+        public MetafileFixture()
+        {
+            pipeline = new LeakPipeline();
+            pipeline.Start();
+
+            completion = new CompletionThread();
+            completion.Start();
+
+            files = new FileFactory(completion);
+        }
+
+        public MetafileSession Start(bool completed = false)
         {
             Metainfo metainfo = null;
             byte[] data = null;
@@ -27,16 +46,17 @@ namespace Leak.Metafile.Tests
             IFileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
 
-            MetafileParameters parameters = new MetafileParameters
+            if (completed)
             {
-                Hash = metainfo.Hash,
-                Destination = destination
-            };
+                File.WriteAllBytes(destination, data);
+            }
 
             MetafileService service =
                 new MetafileBuilder()
                     .WithHash(metainfo.Hash)
                     .WithDestination(destination)
+                    .WithFiles(files)
+                    .WithPipeline(pipeline)
                     .Build();
 
             return new MetafileSession(sandbox, metainfo, destination, data, service);
@@ -44,6 +64,8 @@ namespace Leak.Metafile.Tests
 
         public void Dispose()
         {
+            completion.Dispose();
+            pipeline.Stop();
         }
     }
 }
