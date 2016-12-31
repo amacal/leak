@@ -106,5 +106,28 @@ namespace Leak.Metafile.Tests
                 session.Service.IsCompleted().Should().BeFalse();
             }
         }
+
+        [Test]
+        public void ShouldTriggerMetafileRead()
+        {
+            using (MetafileFixture fixture = new MetafileFixture())
+            using (MetafileSession session = fixture.Start(true))
+            {
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnMetafileRead, data =>
+                {
+                    data.Hash.Should().Be(session.Hash);
+                    data.Piece.Should().Be(0);
+                    data.Data.Should().BeEquivalentTo(session.Data);
+                });
+
+                session.Service.Start();
+                session.Service.Verify();
+
+                session.Verified.Wait(5000).Should().BeTrue();
+                session.Service.Read(0);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
     }
 }

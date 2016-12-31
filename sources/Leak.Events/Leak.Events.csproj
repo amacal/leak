@@ -62,6 +62,7 @@
     <Compile Include="MessageSent.cs" />
     <Compile Include="MetadataDiscovered.cs" />
     <Compile Include="MetafileMeasured.cs" />
+    <Compile Include="MetafileRead.cs" />
     <Compile Include="MetafileRejected.cs" />
     <Compile Include="MetafileVerified.cs" />
     <Compile Include="MetafileWritten.cs" />

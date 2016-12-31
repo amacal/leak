@@ -19,6 +19,18 @@ namespace Leak.Metafile
             this.file = context.Dependencies.Files.OpenOrCreate(path);
         }
 
+        public void Read(int piece)
+        {
+            int offset = piece * 16384;
+            FileHash hash = context.Parameters.Hash;
+            FileBuffer buffer = new FileBuffer(16384);
+
+            file.Read(offset, buffer, result =>
+            {
+                context.Queue.Add(new MetafileTaskRead(hash, piece, result));
+            });
+        }
+
         public void Write(int piece, byte[] data)
         {
             int offset = piece * 16384;

@@ -46,7 +46,7 @@ namespace Leak.Metafile
 
         public MetafileService Build(MetafileHooks hooks)
         {
-            return new MetafileService(parameters, dependencies, hooks);
+            return new MetafileImplementation(parameters, dependencies, hooks);
         }
     }
 }

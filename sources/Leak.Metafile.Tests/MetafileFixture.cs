@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
@@ -59,7 +60,11 @@ namespace Leak.Metafile.Tests
                     .WithPipeline(pipeline)
                     .Build();
 
-            return new MetafileSession(sandbox, metainfo, destination, data, service);
+            TaskCompletionSource<bool> onVerified = new TaskCompletionSource<bool>();
+
+            service.Hooks.OnMetafileVerified += _ => onVerified.SetResult(true);
+
+            return new MetafileSession(sandbox, metainfo, destination, data, service, onVerified.Task);
         }
 
         public void Dispose()

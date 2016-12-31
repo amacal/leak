@@ -3,65 +3,24 @@ using Leak.Common;
 
 namespace Leak.Metafile
 {
-    public class MetafileService : IDisposable
+    public interface MetafileService : IDisposable
     {
-        private readonly MetafileContext context;
+        FileHash Hash { get; }
 
-        public MetafileService(MetafileParameters parameters, MetafileDependencies dependencies, MetafileHooks hooks)
-        {
-            context = new MetafileContext(parameters, dependencies, hooks);
-        }
+        MetafileHooks Hooks { get; }
 
-        public FileHash Hash
-        {
-            get { return context.Parameters.Hash; }
-        }
+        MetafileParameters Parameters { get; }
 
-        public MetafileHooks Hooks
-        {
-            get { return context.Hooks; }
-        }
+        MetafileDependencies Dependencies { get; }
 
-        public MetafileParameters Parameters
-        {
-            get { return context.Parameters; }
-        }
+        void Start();
 
-        public MetafileDependencies Dependencies
-        {
-            get { return context.Dependencies; }
-        }
+        void Read(int piece);
 
-        public void Start()
-        {
-            context.Dependencies.Pipeline.Register(context.Queue);
-        }
+        void Write(int piece, byte[] data);
 
-        public void Write(int piece, byte[] data)
-        {
-            if (context.IsCompleted == false)
-            {
-                context.Destination.Write(piece, data);
-                context.Destination.Verify();
-            }
-        }
+        void Verify();
 
-        public void Verify()
-        {
-            if (context.IsCompleted == false)
-            {
-                context.Destination.Verify();
-            }
-        }
-
-        public bool IsCompleted()
-        {
-            return context.IsCompleted;
-        }
-
-        public void Dispose()
-        {
-            context.Destination.Dispose();
-        }
+        bool IsCompleted();
     }
 }

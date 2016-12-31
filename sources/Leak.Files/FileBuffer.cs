@@ -61,7 +61,7 @@ namespace Leak.Files
             if (offset == 0 && count == size)
                 return data;
 
-            byte[] result = new byte[count];
+            byte[] result = new byte[size];
             Array.Copy(data, offset, result, 0, size);
             return result;
         }

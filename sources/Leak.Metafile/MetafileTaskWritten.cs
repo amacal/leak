@@ -19,6 +19,7 @@ namespace Leak.Metafile
         public void Execute(MetafileContext context)
         {
             context.Hooks.CallMetafileWritten(hash, piece, length);
+            context.Destination.Verify();
         }
     }
 }

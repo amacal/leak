@@ -5,6 +5,16 @@ namespace Leak.Metafile
 {
     public static class MetafileExtensions
     {
+        public static void CallMetafileRead(this MetafileHooks hooks, FileHash hash, int piece, byte[] data)
+        {
+            hooks.OnMetafileRead?.Invoke(new MetafileRead
+            {
+                Hash = hash,
+                Piece = piece,
+                Data = data
+            });
+        }
+
         public static void CallMetafileWritten(this MetafileHooks hooks, FileHash hash, int piece, int size)
         {
             hooks.OnMetafileWritten?.Invoke(new MetafileWritten

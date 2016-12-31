@@ -41,7 +41,9 @@
     <Compile Include="MetafileExtensions.cs" />
     <Compile Include="MetafileHooks.cs" />
     <Compile Include="MetafileParameters.cs" />
+    <Compile Include="MetafileImplementation.cs" />
     <Compile Include="MetafileService.cs" />
+    <Compile Include="MetafileTaskRead.cs" />
     <Compile Include="MetafileTaskVerified.cs" />
     <Compile Include="MetafileTaskWritten.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
