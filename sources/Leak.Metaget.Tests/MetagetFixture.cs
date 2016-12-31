@@ -5,6 +5,7 @@ using Leak.Common;
 using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
+using Leak.Metafile;
 using Leak.Tasks;
 
 namespace Leak.Metaget.Tests
@@ -39,15 +40,28 @@ namespace Leak.Metaget.Tests
             string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
 
             MetagetData data = new MetagetData(bytes);
-            DataBlockFactory blocks = new BufferedBlockFactory();
 
-            MetagetHooks hooks = new MetagetHooks();
-            MetagetConfiguration configuration = new MetagetConfiguration();
+            GlueService glue =
+                new GlueBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .Build();
 
-            GlueService glue = new GlueFactory(blocks).Create(metainfo.Hash, new GlueHooks(), new GlueConfiguration());
-            MetagetService service = new MetagetService(pipeline, glue, destination, hooks, configuration);
+            MetafileService metafile =
+                new MetafileBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination + ".metainfo")
+                    .Build();
 
-            return new MetagetSession(sandbox, destination + ".metainfo", metainfo.Hash, data, service, hooks);
+            MetagetService metaget =
+                new MetagetBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(glue)
+                    .WithMetafile(metafile)
+                    .Build();
+
+            return new MetagetSession(sandbox, destination + ".metainfo", metainfo.Hash, data, metaget);
         }
 
         public void Dispose()

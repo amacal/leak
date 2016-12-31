@@ -19,7 +19,7 @@ namespace Leak.Spartan
             context.Facts.Retriever = null;
 
             context.Facts.Complete(Goal.Download);
-            context.Hooks.CallTaskCompleted(context.Glue.Hash, Goal.Download);
+            context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Download);
 
             context.Hooks.CallDataCompleted(data);
         }

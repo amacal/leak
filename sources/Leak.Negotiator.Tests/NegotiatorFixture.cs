@@ -28,7 +28,10 @@ namespace Leak.Negotiator.Tests
             pool.Start();
 
             hooks = new HandshakeNegotiatorHooks();
-            negotiator = new HandshakeNegotiatorFactory(pool).Create(hooks);
+            negotiator =
+                new HandshakeNegotiatorBuilder()
+                    .WithNetwork(pool)
+                    .Build(hooks);
         }
 
         public HandshakeNegotiator Negotiator

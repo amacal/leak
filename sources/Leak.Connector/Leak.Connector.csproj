@@ -35,8 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PeerConnector.cs" />
+    <Compile Include="PeerConnectorBuilder.cs" />
     <Compile Include="PeerConnectorConfiguration.cs" />
     <Compile Include="PeerConnectorContext.cs" />
+    <Compile Include="PeerConnectorDependencies.cs" />
     <Compile Include="PeerConnectorExtensions.cs" />
     <Compile Include="PeerConnectorHandshake.cs" />
     <Compile Include="PeerConnectorHooks.cs" />

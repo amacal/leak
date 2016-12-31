@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Leak.Common;
+using Leak.Networking;
 using Leak.Sockets;
 using Leak.Tasks;
 
@@ -20,7 +21,8 @@ namespace Leak.Connector
 
         public void Execute(PeerConnectorContext context)
         {
-            NetworkConnection connection = context.Pool.Create(socket, NetworkDirection.Outgoing, endpoint);
+            NetworkPool pool = context.Dependencies.Network;
+            NetworkConnection connection = pool.Create(socket, NetworkDirection.Outgoing, endpoint);
 
             context.Hooks.CallConnectionEstablished(connection);
         }

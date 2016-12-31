@@ -1,6 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Networking;
-using Leak.Tasks;
 
 namespace Leak.Connector
 {
@@ -8,14 +6,29 @@ namespace Leak.Connector
     {
         private readonly PeerConnectorContext context;
 
-        public PeerConnector(NetworkPool pool, PeerConnectorHooks hooks, PeerConnectorConfiguration configuration)
+        public PeerConnector(PeerConnectorDependencies dependencies, PeerConnectorHooks hooks, PeerConnectorConfiguration configuration)
         {
-            context = new PeerConnectorContext(pool, hooks, configuration);
+            context = new PeerConnectorContext(dependencies, hooks, configuration);
         }
 
-        public void Start(LeakPipeline pipeline)
+        public PeerConnectorDependencies Dependencies
         {
-            pipeline.Register(context.Queue);
+            get { return context.Dependencies; }
+        }
+
+        public PeerConnectorConfiguration Configuration
+        {
+            get { return context.Configuration; }
+        }
+
+        public PeerConnectorHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
+        public void Start()
+        {
+            context.Dependencies.Pipeline.Register(context.Queue);
         }
 
         public void ConnectTo(FileHash hash, PeerAddress peer)

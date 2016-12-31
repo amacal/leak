@@ -34,14 +34,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpartanBuilder.cs" />
     <Compile Include="SpartanCompleteDiscover.cs" />
     <Compile Include="SpartanCompleteDownload.cs" />
     <Compile Include="SpartanCompleteVerify.cs" />
     <Compile Include="SpartanConfiguration.cs" />
     <Compile Include="SpartanContext.cs" />
+    <Compile Include="SpartanDependencies.cs" />
     <Compile Include="SpartanExtensions.cs" />
     <Compile Include="SpartanFacts.cs" />
     <Compile Include="SpartanHooks.cs" />
+    <Compile Include="SpartanParameters.cs" />
     <Compile Include="SpartanScheduleNext.cs" />
     <Compile Include="SpartanService.cs" />
   </ItemGroup>
@@ -65,6 +68,10 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Glue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
+      <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>
+      <Name>Leak.Metafile</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Metaget\Leak.Metaget.csproj">
       <Project>{da5ef2f2-7938-44cf-8869-4530dfc95b89}</Project>

@@ -3,6 +3,8 @@ using Leak.Connector;
 using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
 using Leak.Glue;
+using Leak.Metafile;
+using Leak.Metaget;
 using Leak.Negotiator;
 using Leak.Spartan;
 
@@ -14,21 +16,14 @@ namespace Leak.Leakage
         public string Destination;
 
         public MetadataPlugin MetadataPlugin;
-        public MetadataHooks MetadataHooks;
-
         public PeersPlugin PeersPlugin;
-        public PeersHooks PeersHooks;
-
-        public HandshakeNegotiator Negotiator;
-        public HandshakeNegotiatorHooks NegotiatorHooks;
-
         public GlueService Glue;
-        public GlueHooks GlueHooks;
 
+        public MetafileService Metafile;
+        public MetagetService Metaget;
         public SpartanService Spartan;
-        public SpartanHooks SpartaHooks;
 
         public PeerConnector Connector;
-        public PeerConnectorHooks ConnectorHooks;
+        public HandshakeNegotiator Negotiator;
     }
 }

@@ -21,7 +21,7 @@ namespace Leak.Spartan
             context.Facts.Repository = null;
 
             context.Facts.Complete(Goal.Verify);
-            context.Hooks.CallTaskCompleted(context.Glue.Hash, Goal.Verify);
+            context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Verify);
 
             context.Hooks.CallDataVerified(data);
             context.Queue.Add(new SpartanScheduleNext(context));

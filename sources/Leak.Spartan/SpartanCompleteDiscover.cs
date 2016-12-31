@@ -15,14 +15,12 @@ namespace Leak.Spartan
 
         public void Execute(SpartanContext context)
         {
-            context.Facts.MetaGet.Stop();
-            context.Facts.MetaGet = null;
+            context.Dependencies.Metaget.Stop();
 
             context.Facts.Complete(Goal.Discover);
-            context.Hooks.CallTaskCompleted(context.Glue.Hash, Goal.Discover);
+            context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Discover);
 
-            context.Hooks.CallMetadataDiscovered(data);
-            context.Glue.SetPieces(data.Metainfo.Pieces.Length);
+            context.Dependencies.Glue.SetPieces(data.Metainfo.Pieces.Length);
             context.Facts.Metainfo = data.Metainfo;
 
             context.Queue.Add(new SpartanScheduleNext(context));

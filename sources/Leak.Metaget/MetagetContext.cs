@@ -7,35 +7,24 @@ namespace Leak.Metaget
 {
     public class MetagetContext
     {
-        private readonly GlueService glue;
-        private readonly string destination;
+        private readonly MetagetParameters parameters;
+        private readonly MetagetDependencies dependencies;
         private readonly MetagetHooks hooks;
         private readonly MetagetConfiguration configuration;
         private readonly LeakQueue<MetagetContext> queue;
-        private readonly MetafileService metafile;
 
         private MetamineBitfield metamine;
 
-        public MetagetContext(GlueService glue, string destination, MetagetHooks hooks, MetagetConfiguration configuration)
+        public MetagetContext(MetagetParameters parameters, MetagetDependencies dependencies, MetagetHooks hooks, MetagetConfiguration configuration)
         {
-            this.glue = glue;
-            this.destination = destination;
+            this.parameters = parameters;
+            this.dependencies = dependencies;
             this.hooks = hooks;
             this.configuration = configuration;
 
-            metafile = CreateMetafile();
             queue = new LeakQueue<MetagetContext>(this);
-        }
 
-        private MetafileService CreateMetafile()
-        {
-            string path = destination + ".metainfo";
-            MetafileHooks hooks = new MetafileHooks
-            {
-                OnMetafileVerified = OnMetafileVerified
-            };
-
-            return new MetafileService(glue.Hash, path, hooks);
+            dependencies.Metafile.Hooks.OnMetafileVerified += OnMetafileVerified;
         }
 
         private void OnMetafileVerified(MetafileVerified data)
@@ -49,6 +38,21 @@ namespace Leak.Metaget
             set { metamine = value; }
         }
 
+        public MetagetParameters Parameters
+        {
+            get { return parameters; }
+        }
+
+        public MetagetDependencies Dependencies
+        {
+            get {  return dependencies; }
+        }
+
+        public MetagetHooks Hooks
+        {
+            get { return hooks; }
+        }
+
         public MetagetConfiguration Configuration
         {
             get { return configuration; }
@@ -57,21 +61,6 @@ namespace Leak.Metaget
         public LeakQueue<MetagetContext> Queue
         {
             get { return queue; }
-        }
-
-        public MetafileService Metafile
-        {
-            get { return metafile; }
-        }
-
-        public MetagetHooks Hooks
-        {
-            get { return hooks; }
-        }
-
-        public GlueService Glue
-        {
-            get { return glue; }
         }
     }
 }

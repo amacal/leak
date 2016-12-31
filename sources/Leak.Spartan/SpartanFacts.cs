@@ -15,7 +15,7 @@ namespace Leak.Spartan
         {
             completed = Goal.None;
             ongoing = Goal.None;
-            pending = configuration.Tasks;
+            pending = configuration.Goal;
         }
 
         public bool CanStart(Goal tasks)
@@ -43,8 +43,6 @@ namespace Leak.Spartan
         public Metainfo Metainfo;
 
         public Bitfield Bitfield;
-
-        public MetagetService MetaGet;
 
         public RepositoryService Repository;
 

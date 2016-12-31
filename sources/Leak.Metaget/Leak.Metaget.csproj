@@ -33,10 +33,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetagetBuilder.cs" />
     <Compile Include="MetagetConfiguration.cs" />
     <Compile Include="MetagetContext.cs" />
+    <Compile Include="MetagetDependencies.cs" />
     <Compile Include="MetagetExtensions.cs" />
     <Compile Include="MetagetHooks.cs" />
+    <Compile Include="MetagetParameters.cs" />
     <Compile Include="MetagetService.cs" />
     <Compile Include="MetagetTaskData.cs" />
     <Compile Include="MetagetTaskNext.cs" />

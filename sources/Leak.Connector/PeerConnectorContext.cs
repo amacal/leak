@@ -5,14 +5,14 @@ namespace Leak.Connector
 {
     public class PeerConnectorContext
     {
-        private readonly NetworkPool pool;
+        private readonly PeerConnectorDependencies dependencies;
         private readonly PeerConnectorHooks hooks;
         private readonly PeerConnectorConfiguration configuration;
         private readonly LeakQueue<PeerConnectorContext> queue;
 
-        public PeerConnectorContext(NetworkPool pool, PeerConnectorHooks hooks, PeerConnectorConfiguration configuration)
+        public PeerConnectorContext(PeerConnectorDependencies dependencies, PeerConnectorHooks hooks, PeerConnectorConfiguration configuration)
         {
-            this.pool = pool;
+            this.dependencies = dependencies;
             this.hooks = hooks;
             this.configuration = configuration;
 
@@ -24,9 +24,9 @@ namespace Leak.Connector
             get { return configuration; }
         }
 
-        public NetworkPool Pool
+        public PeerConnectorDependencies Dependencies
         {
-            get { return pool; }
+            get { return dependencies; }
         }
 
         public LeakQueue<PeerConnectorContext> Queue

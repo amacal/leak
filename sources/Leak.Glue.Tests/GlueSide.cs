@@ -30,15 +30,18 @@ namespace Leak.Glue.Tests
         public GlueInstance Build(params string[] plugins)
         {
             FileHash hash = FileHash.Random();
-            GlueConfiguration configuration = new GlueConfiguration();
+            GlueBuilder builder = new GlueBuilder();
 
             foreach (string plugin in plugins)
             {
-                configuration.Plugins.Add(new GlueNamedPlugin(plugin));
+                builder.WithPlugin(new GlueNamedPlugin(plugin));
             }
 
-            GlueFactory factory = new GlueFactory(new BufferedBlockFactory());
-            GlueService service = factory.Create(hash, hooks, configuration);
+            GlueService service =
+                builder
+                    .WithHash(hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .Build(hooks);
 
             return new GlueInstance(service);
         }

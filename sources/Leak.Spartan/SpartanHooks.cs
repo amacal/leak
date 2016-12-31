@@ -17,19 +17,6 @@ namespace Leak.Spartan
         public Action<TaskCompleted> OnTaskCompleted;
 
         /// <summary>
-        /// Called when the metafile was the initially measured. It means
-        /// that before the exact size of the metafile was not known.
-        /// </summary>
-        public Action<MetafileMeasured> OnMetafileMeasured;
-
-        /// <summary>
-        /// Called when the all pieces were received and the metadata was
-        /// verified against the file-hash. It also indicates that discovery
-        /// process can be completed.
-        /// </summary>
-        public Action<MetadataDiscovered> OnMetadataDiscovered;
-
-        /// <summary>
         /// Called when repository data was successfully allocated
         /// in the destination directory and there was a change
         /// which affected the file system.

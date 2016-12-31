@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetadataBuilder.cs" />
     <Compile Include="MetadataExtensions.cs" />
     <Compile Include="MetadataHandler.cs" />
     <Compile Include="MetadataHooks.cs" />

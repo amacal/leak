@@ -2,8 +2,6 @@
 using Leak.Common;
 using Leak.Events;
 using Leak.Extensions.Metadata;
-using Leak.Files;
-using Leak.Glue;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -12,24 +10,50 @@ namespace Leak.Spartan
     {
         private readonly SpartanContext context;
 
-        public SpartanService(LeakPipeline pipeline, string destination, GlueService glue, FileFactory files, SpartanHooks hooks, SpartanConfiguration configuration)
+        public SpartanService(SpartanParameters parameters, SpartanDependencies dependencies, SpartanHooks hooks, SpartanConfiguration configuration)
         {
             context = new SpartanContext
             {
-                Destination = destination,
-                Pipeline = pipeline,
-                Glue = glue,
-                Files = files,
+                Parameters = parameters,
+                Dependencies = dependencies,
+                Configuration = configuration,
                 Hooks = hooks,
                 Facts = new SpartanFacts(configuration),
             };
 
             context.Queue = new LeakQueue<SpartanContext>(context);
+
+            context.Dependencies.Metaget.Hooks.OnMetadataDiscovered += data => context.Queue.Add(new SpartanCompleteDiscover(data));
+        }
+
+        public FileHash Hash
+        {
+            get { return context.Parameters.Hash; }
+        }
+
+        public SpartanParameters Parameters
+        {
+            get { return context.Parameters; }
+        }
+
+        public SpartanDependencies Dependencies
+        {
+            get { return context.Dependencies; }
+        }
+
+        public SpartanHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
+        public SpartanConfiguration Configuration
+        {
+            get { return context.Configuration; }
         }
 
         public void Start()
         {
-            context.Pipeline.Register(context.Queue);
+            context.Dependencies.Pipeline.Register(context.Queue);
             context.Queue.Add(new SpartanScheduleNext(context));
         }
 
@@ -37,7 +61,7 @@ namespace Leak.Spartan
         {
             if (context.Facts.IsOngoing(Goal.Discover))
             {
-                context.Facts.MetaGet.HandleMetadataMeasured(data);
+                context.Dependencies.Metaget.HandleMetadataMeasured(data);
             }
         }
 
@@ -45,7 +69,7 @@ namespace Leak.Spartan
         {
             if (context.Facts.IsOngoing(Goal.Discover))
             {
-                context.Facts.MetaGet.HandleMetadataReceived(data);
+                context.Dependencies.Metaget.HandleMetadataReceived(data);
             }
         }
 
@@ -69,8 +93,7 @@ namespace Leak.Spartan
         {
             if (context.Facts.IsOngoing(Goal.Discover))
             {
-                context.Facts.MetaGet.Stop();
-                context.Facts.MetaGet = null;
+                context.Dependencies.Metaget.Stop();
             }
 
             if (context.Facts.IsOngoing(Goal.Verify))

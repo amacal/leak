@@ -30,7 +30,7 @@ namespace Leak.Listener.Tests
 
         public void Dispose()
         {
-            client?.Dispose();
+            client.Dispose();
         }
     }
 }

@@ -27,49 +27,6 @@ namespace Leak.Spartan.Tests
         }
 
         [Test]
-        public void ShouldTriggerMetafileMeasuredWhenReceivedTotalSize()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnMetafileMeasured, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Size.Should().Be(session.Meta.Size);
-                });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerMetadataDiscoveredWhenReceivedAllMetadata()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnMetadataDiscovered, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Metainfo.Should().NotBeNull();
-                    data.Metainfo.Hash.Should().Be(data.Hash);
-                });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
         public void ShouldTriggerTaskCompletedWhenReceivedAllMetadata()
         {
             using (SpartanFixture fixture = new SpartanFixture())

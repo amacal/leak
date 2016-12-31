@@ -10,18 +10,20 @@ namespace Leak.Glue
 {
     public class GlueImplementation : GlueService
     {
-        private readonly FileHash hash;
-        private readonly DataBlockFactory factory;
+        private readonly GlueParameters parameters;
+        private readonly GlueDependencies dependencies;
         private readonly GlueHooks hooks;
+        private readonly GlueConfiguration configuration;
 
         private readonly GlueFacts facts;
         private readonly GlueCollection collection;
 
-        public GlueImplementation(FileHash hash, DataBlockFactory factory, GlueHooks hooks, GlueConfiguration configuration)
+        public GlueImplementation(GlueParameters parameters, GlueDependencies dependencies, GlueHooks hooks, GlueConfiguration configuration)
         {
-            this.hash = hash;
-            this.factory = factory;
+            this.parameters = parameters;
+            this.dependencies = dependencies;
             this.hooks = hooks;
+            this.configuration = configuration;
 
             collection = new GlueCollection();
 
@@ -31,7 +33,27 @@ namespace Leak.Glue
 
         public FileHash Hash
         {
-            get { return hash; }
+            get { return parameters.Hash; }
+        }
+
+        public GlueParameters Parameters
+        {
+            get { return parameters; }
+        }
+
+        public GlueDependencies Dependencies
+        {
+            get { return dependencies; }
+        }
+
+        public GlueHooks Hooks
+        {
+            get { return hooks; }
+        }
+
+        public GlueConfiguration Configuration
+        {
+            get { return configuration; }
         }
 
         public bool Connect(NetworkConnection connection, Handshake handshake)
@@ -163,7 +185,7 @@ namespace Leak.Glue
 
                 entry.Commy.SendExtended(extended);
                 hooks.CallExtensionDataSent(entry.Peer, extension, payload.Length);
-                handler.OnMessageSent(hash, entry.Peer, payload);
+                handler.OnMessageSent(parameters.Hash, entry.Peer, payload);
             }
         }
 
@@ -201,7 +223,7 @@ namespace Leak.Glue
             ConnectionLoopHooks other = CreateLoopyHooks();
             ConnectionLoopConfiguration config = new ConnectionLoopConfiguration();
 
-            return new ConnectionLoop(factory, other, config);
+            return new ConnectionLoop(dependencies.Blocks, other, config);
         }
 
         private ConnectionLoopHooks CreateLoopyHooks()
@@ -295,7 +317,7 @@ namespace Leak.Glue
                 string code = facts.Translate(id, out handler);
 
                 hooks.CallExtensionDataReceived(entry.Peer, code, data.Payload.GetExtensionSize());
-                handler.OnMessageReceived(hash, entry.Peer, data.Payload.GetExtensionData());
+                handler.OnMessageReceived(parameters.Hash, entry.Peer, data.Payload.GetExtensionData());
             }
         }
     }

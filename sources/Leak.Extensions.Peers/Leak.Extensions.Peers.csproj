@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PeersBuilder.cs" />
     <Compile Include="PeersExtensions.cs" />
     <Compile Include="PeersHandler.cs" />
     <Compile Include="PeersHooks.cs" />

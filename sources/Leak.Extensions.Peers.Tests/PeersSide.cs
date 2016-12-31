@@ -33,13 +33,12 @@ namespace Leak.Extensions.Peers.Tests
 
         public PeersInstance Build()
         {
-            FileHash hash = handshake.Hash;
-            GlueConfiguration configuration = new GlueConfiguration();
-
-            configuration.Plugins.Add(new PeersPlugin(peers));
-
-            GlueFactory factory = new GlueFactory(new BufferedBlockFactory());
-            GlueService service = factory.Create(hash, hooks, configuration);
+            GlueService service =
+                new GlueBuilder()
+                    .WithHash(handshake.Hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .WithPlugin(new PeersPlugin(peers))
+                    .Build(hooks);
 
             return new PeersInstance(service);
         }

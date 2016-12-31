@@ -94,6 +94,14 @@
       <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
       <Name>Leak.Metadata</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
+      <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>
+      <Name>Leak.Metafile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metaget\Leak.Metaget.csproj">
+      <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
+      <Name>Leak.Metaget</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Spartan\Leak.Spartan.csproj">
       <Project>{4a2f6660-bec0-42b3-bc79-704a4a06082d}</Project>
       <Name>Leak.Spartan</Name>

@@ -9,19 +9,34 @@ namespace Leak.Listener
     public class PeerListener : IDisposable
     {
         private readonly TcpSocket socket;
-        private readonly NetworkPool network;
+        private readonly PeerListenerDependencies dependencies;
         private readonly PeerListenerHooks hooks;
         private readonly PeerListenerConfiguration configuration;
 
         private int assignedPort;
 
-        public PeerListener(NetworkPool network, PeerListenerHooks hooks, PeerListenerConfiguration configuration)
+        public PeerListener(PeerListenerDependencies dependencies, PeerListenerHooks hooks, PeerListenerConfiguration configuration)
         {
-            this.network = network;
+            this.dependencies = dependencies;
             this.hooks = hooks;
             this.configuration = configuration;
 
-            this.socket = network.New();
+            this.socket = dependencies.Network.New();
+        }
+
+        public PeerListenerDependencies Dependencies
+        {
+            get { return dependencies; }
+        }
+
+        public PeerListenerHooks Hooks
+        {
+            get { return hooks; }
+        }
+
+        public PeerListenerConfiguration Configuration
+        {
+            get { return configuration; }
         }
 
         public void Start()
@@ -56,7 +71,7 @@ namespace Leak.Listener
                 PeerAddress remote = PeerAddress.Parse(endpoint);
 
                 NetworkDirection direction = NetworkDirection.Incoming;
-                NetworkConnection connection = network.Create(data.Connection, direction, endpoint);
+                NetworkConnection connection = dependencies.Network.Create(data.Connection, direction, endpoint);
 
                 hooks.CallConnectionArrived(remote, connection);
             }

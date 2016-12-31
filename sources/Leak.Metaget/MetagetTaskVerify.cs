@@ -6,9 +6,9 @@ namespace Leak.Metaget
     {
         public void Execute(MetagetContext context)
         {
-            if (context.Metafile.IsCompleted() == false)
+            if (context.Dependencies.Metafile.IsCompleted() == false)
             {
-                context.Metafile.Verify();
+                context.Dependencies.Metafile.Verify();
             }
         }
     }

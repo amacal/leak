@@ -4,17 +4,15 @@ namespace Leak.Metafile
 {
     public class MetafileContext
     {
-        private readonly FileHash hash;
-        private readonly string path;
+        private readonly MetafileParameters parameters;
         private readonly MetafileHooks hooks;
         private readonly MetafileDestination destination;
 
         private bool isCompleted;
 
-        public MetafileContext(FileHash hash, string path, MetafileHooks hooks)
+        public MetafileContext(MetafileParameters parameters, MetafileHooks hooks)
         {
-            this.hash = hash;
-            this.path = path;
+            this.parameters = parameters;
             this.hooks = hooks;
 
             destination = new MetafileDestination(this);
@@ -31,14 +29,9 @@ namespace Leak.Metafile
             get { return destination; }
         }
 
-        public FileHash Hash
+        public MetafileParameters Parameters
         {
-            get { return hash; }
-        }
-
-        public string Path
-        {
-            get { return path; }
+            get { return parameters; }
         }
 
         public MetafileHooks Hooks

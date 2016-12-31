@@ -18,10 +18,10 @@ namespace Leak.Metaget
 
         public void Execute(MetagetContext context)
         {
-            if (context.Metamine != null && context.Metafile.IsCompleted() == false)
+            if (context.Metamine != null && context.Dependencies.Metafile.IsCompleted() == false)
             {
                 context.Metamine.Complete(piece, data.Length);
-                context.Metafile.Write(piece, data);
+                context.Dependencies.Metafile.Write(piece, data);
             }
         }
     }

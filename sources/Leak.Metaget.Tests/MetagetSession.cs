@@ -11,16 +11,14 @@ namespace Leak.Metaget.Tests
         private readonly FileHash hash;
         private readonly MetagetData data;
         private readonly MetagetService service;
-        private readonly MetagetHooks hooks;
 
-        public MetagetSession(IFileSandbox sandbox, string destination, FileHash hash, MetagetData data, MetagetService service, MetagetHooks hooks)
+        public MetagetSession(IFileSandbox sandbox, string destination, FileHash hash, MetagetData data, MetagetService service)
         {
             this.sandbox = sandbox;
             this.destination = destination;
             this.hash = hash;
             this.data = data;
             this.service = service;
-            this.hooks = hooks;
         }
 
         public FileHash Hash
@@ -35,7 +33,7 @@ namespace Leak.Metaget.Tests
 
         public MetagetHooks Hooks
         {
-            get { return hooks; }
+            get { return service.Hooks; }
         }
 
         public int Size

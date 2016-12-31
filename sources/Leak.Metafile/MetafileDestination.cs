@@ -17,7 +17,8 @@ namespace Leak.Metafile
         public void Write(int piece, byte[] data)
         {
             int offset = piece * 16384;
-            string path = context.Path;
+            FileHash hash = context.Parameters.Hash;
+            string path = context.Parameters.Destination;
 
             using (FileStream stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, 16384, FileOptions.None))
             {
@@ -28,40 +29,42 @@ namespace Leak.Metafile
                 stream.Close();
             }
 
-            context.Hooks.CallMetafileWritten(context.Hash, piece, data.Length);
+            context.Hooks.CallMetafileWritten(hash, piece, data.Length);
         }
 
         public void Verify()
         {
-            FileHash computed;
-            string path = context.Path;
+            FileHash hash = context.Parameters.Hash;
+            string path = context.Parameters.Destination;
 
             if (File.Exists(path))
             {
+                FileHash computed;
+
                 using (HashAlgorithm algorithm = SHA1.Create())
                 using (FileStream stream = File.OpenRead(path))
                 {
                     computed = new FileHash(algorithm.ComputeHash(stream));
                 }
 
-                if (computed.Equals(context.Hash))
+                if (computed.Equals(hash))
                 {
                     byte[] bytes = File.ReadAllBytes(path);
                     Metainfo metainfo = MetainfoFactory.FromBytes(bytes);
 
                     context.IsCompleted = true;
-                    context.Hooks.CallMetafileVerified(context.Hash, metainfo);
+                    context.Hooks.CallMetafileVerified(hash, metainfo);
                 }
                 else
                 {
                     context.IsCompleted = false;
-                    context.Hooks.CallMetafileRejected(context.Hash);
+                    context.Hooks.CallMetafileRejected(hash);
                 }
             }
             else
             {
                 context.IsCompleted = false;
-                context.Hooks.CallMetafileRejected(context.Hash);
+                context.Hooks.CallMetafileRejected(hash);
             }
         }
     }

@@ -27,10 +27,19 @@ namespace Leak.Metafile.Tests
             IFileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
 
-            MetafileHooks hooks = new MetafileHooks();
-            MetafileService service = new MetafileService(metainfo.Hash, destination, hooks);
+            MetafileParameters parameters = new MetafileParameters
+            {
+                Hash = metainfo.Hash,
+                Destination = destination
+            };
 
-            return new MetafileSession(sandbox, metainfo, destination, data, service, hooks);
+            MetafileService service =
+                new MetafileBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination)
+                    .Build();
+
+            return new MetafileSession(sandbox, metainfo, destination, data, service);
         }
 
         public void Dispose()

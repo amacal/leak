@@ -35,7 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PeerListener.cs" />
+    <Compile Include="PeerListenerBuilder.cs" />
     <Compile Include="PeerListenerConfiguration.cs" />
+    <Compile Include="PeerListenerDependencies.cs" />
     <Compile Include="PeerListenerExtensions.cs" />
     <Compile Include="PeerListenerHandshake.cs" />
     <Compile Include="PeerListenerHooks.cs" />

@@ -62,13 +62,13 @@ namespace Leak.Leakage.Tests
             LeakClient client = new LeakClient(hooks, configuration);
             LeakageNode node = new LeakageNode(hooks, client, registrant, sandbox, events);
 
-            hooks.OnListenerStarted = data =>
+            hooks.OnListenerStarted += data =>
             {
                 onListening.SetResult(true);
                 node.Address = PeerAddress.Parse(IPAddress.Loopback, data.Port);
             };
 
-            hooks.OnPeerConnected = data =>
+            hooks.OnPeerConnected += data =>
             {
                 onConnected?.SetResult(true);
                 onConnected = null;

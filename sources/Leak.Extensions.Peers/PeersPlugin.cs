@@ -17,6 +17,11 @@ namespace Leak.Extensions.Peers
             this.hooks = hooks;
         }
 
+        public PeersHooks Hooks
+        {
+            get { return hooks; }
+        }
+
         public void Install(MoreMapping mapping)
         {
             mapping.Add(Name, new PeersHandler(hooks));

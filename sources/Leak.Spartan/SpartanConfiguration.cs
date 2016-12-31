@@ -4,6 +4,6 @@ namespace Leak.Spartan
 {
     public class SpartanConfiguration
     {
-        public Goal Tasks;
+        public Goal Goal;
     }
 }

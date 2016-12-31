@@ -11,16 +11,14 @@ namespace Leak.Spartan.Tests
         private readonly SpartanMeta meta;
         private readonly SpartanData data;
         private readonly SpartanService service;
-        private readonly SpartanHooks hooks;
         private readonly SpartanStage stage;
 
-        public SpartanSession(IFileSandbox sandbox, SpartanMeta meta, SpartanData data, SpartanService service, SpartanHooks hooks, SpartanStage stage)
+        public SpartanSession(IFileSandbox sandbox, SpartanMeta meta, SpartanData data, SpartanService service, SpartanStage stage)
         {
             this.sandbox = sandbox;
             this.meta = meta;
             this.data = data;
             this.service = service;
-            this.hooks = hooks;
             this.stage = stage;
         }
 
@@ -31,7 +29,7 @@ namespace Leak.Spartan.Tests
 
         public SpartanHooks Hooks
         {
-            get { return hooks; }
+            get { return service.Hooks; }
         }
 
         public string Directory

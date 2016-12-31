@@ -11,6 +11,11 @@
             this.hooks = hooks;
         }
 
+        public MetadataHooks Hooks
+        {
+            get { return hooks; }
+        }
+
         public void Install(MoreMapping mapping)
         {
             mapping.Add(Name, new MetadataHandler(hooks));

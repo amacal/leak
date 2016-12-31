@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Events;
+using Leak.Metafile;
 using Leak.Metaget;
 using Leak.Repository;
 using Leak.Retriever;
@@ -20,14 +21,9 @@ namespace Leak.Spartan
         {
             if (context.Facts.CanStart(Goal.Discover))
             {
-                MetagetHooks hooks = CreateMetagetHooks();
-                MetagetConfiguration configuration = CreateMetagetConfiguration();
-
-                context.Facts.MetaGet = new MetagetService(context.Pipeline, context.Glue, context.Destination, hooks, configuration);
                 context.Facts.Start(Goal.Discover);
-
-                context.Hooks.CallTaskStarted(context.Glue.Hash, Goal.Discover);
-                context.Facts.MetaGet.Start();
+                context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Discover);
+                context.Dependencies.Metaget.Start();
 
                 return;
             }
@@ -37,10 +33,10 @@ namespace Leak.Spartan
                 RepositoryHooks hooks = CreateRepositoryHooks();
                 RepositoryConfiguration configuration = CreateRepositoryConfiguration();
 
-                context.Facts.Repository = new RepositoryService(context.Facts.Metainfo, context.Destination, context.Files, hooks, configuration);
+                context.Facts.Repository = new RepositoryService(context.Facts.Metainfo, context.Parameters.Destination, context.Dependencies.Files, hooks, configuration);
                 context.Facts.Start(Goal.Verify);
 
-                context.Hooks.CallTaskStarted(context.Glue.Hash, Goal.Verify);
+                context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Verify);
                 context.Facts.Repository.Start();
 
                 context.Facts.Repository.Verify(new Bitfield(context.Facts.Metainfo.Pieces.Length));
@@ -51,28 +47,12 @@ namespace Leak.Spartan
                 RetrieverHooks hooks = CreateRetrieverHooks();
                 RetrieverConfiguration configuration = CreateRetrieverConfiguration();
 
-                context.Facts.Retriever = new RetrieverService(context.Facts.Metainfo, context.Destination, context.Facts.Bitfield, context.Glue, context.Files, context.Pipeline, hooks, configuration);
+                context.Facts.Retriever = new RetrieverService(context.Facts.Metainfo, context.Parameters.Destination, context.Facts.Bitfield, context.Dependencies.Glue, context.Dependencies.Files, context.Dependencies.Pipeline, hooks, configuration);
                 context.Facts.Start(Goal.Download);
 
-                context.Hooks.CallTaskStarted(context.Glue.Hash, Goal.Download);
+                context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Download);
                 context.Facts.Retriever.Start();
             }
-        }
-
-        private MetagetHooks CreateMetagetHooks()
-        {
-            return new MetagetHooks
-            {
-                OnMetadataDiscovered = data => context.Queue.Add(new SpartanCompleteDiscover(data)),
-                OnMetafileMeasured = context.Hooks.OnMetafileMeasured,
-            };
-        }
-
-        private MetagetConfiguration CreateMetagetConfiguration()
-        {
-            return new MetagetConfiguration
-            {
-            };
         }
 
         private RepositoryHooks CreateRepositoryHooks()

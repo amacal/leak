@@ -23,11 +23,6 @@ namespace Leak.Spartan
             });
         }
 
-        public static void CallMetadataDiscovered(this SpartanHooks hooks, MetadataDiscovered data)
-        {
-            hooks.OnMetadataDiscovered?.Invoke(data);
-        }
-
         public static void CallDataVerified(this SpartanHooks hooks, DataVerified data)
         {
             hooks.OnDataVerified?.Invoke(data);

@@ -11,21 +11,19 @@ namespace Leak.Metafile.Tests
         private readonly string path;
         private readonly byte[] data;
         private readonly MetafileService service;
-        private readonly MetafileHooks hooks;
 
-        public MetafileSession(IFileSandbox sandbox, Metainfo metainfo, string path, byte[] data, MetafileService service, MetafileHooks hooks)
+        public MetafileSession(IFileSandbox sandbox, Metainfo metainfo, string path, byte[] data, MetafileService service)
         {
             this.sandbox = sandbox;
             this.metainfo = metainfo;
             this.path = path;
             this.data = data;
             this.service = service;
-            this.hooks = hooks;
         }
 
         public MetafileHooks Hooks
         {
-            get { return hooks; }
+            get { return service.Hooks; }
         }
 
         public MetafileService Service

@@ -1,19 +1,15 @@
-﻿using Leak.Files;
-using Leak.Glue;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Spartan
 {
     public class SpartanContext
     {
-        public string Destination;
-
-        public LeakPipeline Pipeline;
-        public GlueService Glue;
-        public FileFactory Files;
-        public LeakQueue<SpartanContext> Queue;
-
+        public SpartanParameters Parameters;
+        public SpartanDependencies Dependencies;
+        public SpartanConfiguration Configuration;
         public SpartanHooks Hooks;
+
+        public LeakQueue<SpartanContext> Queue;
         public SpartanFacts Facts;
     }
 }

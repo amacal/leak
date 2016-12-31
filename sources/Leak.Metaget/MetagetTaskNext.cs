@@ -7,9 +7,9 @@ namespace Leak.Metaget
     {
         public void Execute(MetagetContext context)
         {
-            if (context.Metamine != null && context.Metafile.IsCompleted() == false)
+            if (context.Metamine != null && context.Dependencies.Metafile.IsCompleted() == false)
             {
-                context.Glue.ForEachPeer(peer =>
+                context.Dependencies.Glue.ForEachPeer(peer =>
                 {
                     MetamineStrategy strategy = MetamineStrategy.Sequential;
                     MetamineBlock[] blocks = context.Metamine.Next(strategy, peer);
@@ -17,7 +17,7 @@ namespace Leak.Metaget
                     foreach (MetamineBlock block in blocks)
                     {
                         context.Metamine.Reserve(peer, block);
-                        context.Glue.SendMetadataRequest(peer, block.Index);
+                        context.Dependencies.Glue.SendMetadataRequest(peer, block.Index);
                     }
                 });
             }

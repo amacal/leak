@@ -36,10 +36,13 @@ namespace Leak.Connector.Tests
 
         public ConnectorSession Start()
         {
-            PeerConnectorConfiguration configuration = new PeerConnectorConfiguration();
+            connector = 
+                new PeerConnectorBuilder()
+                    .WithPipeline(pipeline)
+                    .WithNetwork(pool)
+                    .Build(hooks);
 
-            connector = new PeerConnector(pool, hooks, configuration);
-            connector.Start(pipeline);
+            connector.Start();
 
             return new ConnectorSession(pool, connector);
         }

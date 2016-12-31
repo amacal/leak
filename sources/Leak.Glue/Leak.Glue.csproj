@@ -33,14 +33,16 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlueBuilder.cs" />
     <Compile Include="GlueCollection.cs" />
     <Compile Include="GlueConfiguration.cs" />
+    <Compile Include="GlueDependencies.cs" />
     <Compile Include="GlueEntry.cs" />
     <Compile Include="GlueExtensions.cs" />
-    <Compile Include="GlueFactory.cs" />
     <Compile Include="GlueFacts.cs" />
     <Compile Include="GlueHooks.cs" />
     <Compile Include="GlueImplementation.cs" />
+    <Compile Include="GlueParameters.cs" />
     <Compile Include="GlueService.cs" />
     <Compile Include="GlueState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

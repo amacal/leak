@@ -40,18 +40,17 @@ namespace Leak.Listener.Tests
             Action<ListenerStarted> onStarted = hooks.OnListenerStarted;
             TaskCompletionSource<ListenerSession> completion = new TaskCompletionSource<ListenerSession>();
 
-            PeerListenerConfiguration configuration = new PeerListenerConfiguration
-            {
-                Port = new PeerListenerPortRandom()
-            };
+            listener =
+                new PeerListenerBuilder()
+                    .WithNetwork(pool)
+                    .Build(hooks);
 
-            hooks.OnListenerStarted = data =>
+            listener.Hooks.OnListenerStarted = data =>
             {
                 onStarted?.Invoke(data);
                 completion.SetResult(new ListenerSession(data.Port, pool));
             };
 
-            listener = new PeerListener(pool, hooks, configuration);
             listener.Start();
 
             return completion.Task;

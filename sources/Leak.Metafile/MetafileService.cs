@@ -6,9 +6,24 @@ namespace Leak.Metafile
     {
         private readonly MetafileContext context;
 
-        public MetafileService(FileHash hash, string destination, MetafileHooks hooks)
+        public MetafileService(MetafileParameters parameters, MetafileHooks hooks)
         {
-            context = new MetafileContext(hash, destination, hooks);
+            context = new MetafileContext(parameters, hooks);
+        }
+
+        public FileHash Hash
+        {
+            get { return context.Parameters.Hash; }
+        }
+
+        public MetafileParameters Parameters
+        {
+            get { return context.Parameters; }
+        }
+
+        public MetafileHooks Hooks
+        {
+            get { return context.Hooks; }
         }
 
         public void Write(int piece, byte[] data)

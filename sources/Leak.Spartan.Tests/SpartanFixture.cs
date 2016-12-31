@@ -7,6 +7,8 @@ using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
+using Leak.Metafile;
+using Leak.Metaget;
 using Leak.Tasks;
 using File = System.IO.File;
 
@@ -29,7 +31,7 @@ namespace Leak.Spartan.Tests
             files = new FileFactory(completion);
         }
 
-        public SpartanSession Start(Goal tasks)
+        public SpartanSession Start(Goal goal)
         {
             byte[] bytes;
             Metainfo metainfo = null;
@@ -49,17 +51,41 @@ namespace Leak.Spartan.Tests
             FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
 
-            DataBlockFactory blocks = new BufferedBlockFactory();
-            GlueService glue = new GlueFactory(blocks).Create(metainfo.Hash, new GlueHooks(), new GlueConfiguration());
+            GlueService glue =
+                new GlueBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .Build();
 
-            SpartanHooks hooks = new SpartanHooks();
-            SpartanConfiguration configuration = new SpartanConfiguration { Tasks = tasks };
+            MetafileService metafile =
+                new MetafileBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination + ".metainfo")
+                    .Build();
 
-            SpartanService service = new SpartanService(pipeline, destination, glue, files, hooks, configuration);
+            MetagetService metaget =
+                new MetagetBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(glue)
+                    .WithMetafile(metafile)
+                    .Build();
+
+            SpartanService spartan = 
+                new SpartanBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination)
+                    .WithPipeline(pipeline)
+                    .WithFiles(files)
+                    .WithGlue(glue)
+                    .WithMetaget(metaget)
+                    .WithGoal(goal)
+                    .Build();
+
             SpartanMeta meta = new SpartanMeta(metainfo.Hash, bytes);
-            SpartanStage stage = new SpartanStage(hooks);
+            SpartanStage stage = new SpartanStage(spartan.Hooks);
 
-            return new SpartanSession(sandbox, meta, data, service, hooks, stage);
+            return new SpartanSession(sandbox, meta, data, spartan, stage);
         }
 
         public void Dispose()

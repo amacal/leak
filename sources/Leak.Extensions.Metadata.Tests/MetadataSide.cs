@@ -33,13 +33,12 @@ namespace Leak.Extensions.Metadata.Tests
 
         public MetadataInstance Build()
         {
-            FileHash hash = handshake.Hash;
-            GlueConfiguration configuration = new GlueConfiguration();
-
-            configuration.Plugins.Add(new MetadataPlugin(metadata));
-
-            GlueFactory factory = new GlueFactory(new BufferedBlockFactory());
-            GlueService service = factory.Create(hash, hooks, configuration);
+            GlueService service =
+                new GlueBuilder()
+                    .WithHash(handshake.Hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .WithPlugin(new MetadataPlugin(metadata))
+                    .Build(hooks);
 
             return new MetadataInstance(service);
         }

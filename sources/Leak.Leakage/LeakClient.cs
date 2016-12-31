@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using Leak.Common;
 using Leak.Completion;
 using Leak.Connector;
 using Leak.Events;
-using Leak.Extensions;
 using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Listener;
 using Leak.Memory;
+using Leak.Metafile;
+using Leak.Metaget;
 using Leak.Negotiator;
 using Leak.Networking;
 using Leak.Spartan;
@@ -25,7 +25,6 @@ namespace Leak.Leakage
 
         private readonly NetworkPool network;
         private readonly PeerListener listener;
-        private readonly GlueFactory glue;
 
         private readonly CompletionThread worker;
         private readonly LeakCollection collections;
@@ -52,10 +51,10 @@ namespace Leak.Leakage
             network.Start();
 
             listener = CreateListener();
-            glue = new GlueFactory(new BufferedBlockFactory());
 
             negotiatorContext = new HandshakeNegotiatorPassiveInstance(configuration.Peer);
-            negotiator = CreateNegotiator();
+            negotiator = new HandshakeNegotiatorBuilder().WithNetwork(network).Build();
+            negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
         }
 
         public PeerHash Peer
@@ -66,27 +65,31 @@ namespace Leak.Leakage
         private PeerListener CreateListener()
         {
             PeerListener instance = null;
+            PeerListenerBuilder builder = null;
 
-            if (this.configuration.Port != LeakPort.Nothing)
+            if (configuration.Port != LeakPort.Nothing)
             {
-                PeerListenerHooks listenerHooks = CreateListenerHooks();
-                PeerListenerConfiguration listenerConfiguration = CreateListenerConfiguration();
+                builder = 
+                    new PeerListenerBuilder()
+                        .WithPeer(configuration.Peer)
+                        .WithExtensions()
+                        .WithNetwork(network);
+            }
 
-                instance = new PeerListener(network, listenerHooks, listenerConfiguration);
+            if (configuration.Port != LeakPort.Random)
+            {
+                builder?.WithPort(configuration.Port.Value);
+            }
+
+            instance = builder?.Build();
+
+            if (instance != null)
+            {
+                instance.Hooks.OnListenerStarted = hooks.CallListenerStarted;
+                instance.Hooks.OnConnectionArrived = OnConnectionArrived;
             }
 
             return instance;
-        }
-
-        private HandshakeNegotiator CreateNegotiator()
-        {
-            HandshakeNegotiatorFactory factory = new HandshakeNegotiatorFactory(network);
-            HandshakeNegotiatorHooks handshakeHooks = new HandshakeNegotiatorHooks
-            {
-                OnHandshakeCompleted = OnHandshakeCompleted
-            };
-
-            return factory.Create(handshakeHooks);
         }
 
         public void Start()
@@ -99,30 +102,63 @@ namespace Leak.Leakage
             LeakEntry entry = collections.Register(registrant);
 
             entry.Destination = registrant.Destination;
-            entry.PeersHooks = new PeersHooks();
 
-            entry.MetadataHooks = new MetadataHooks();
-            entry.MetadataPlugin = new MetadataPlugin(entry.MetadataHooks);
+            entry.MetadataPlugin =
+                new MetadataBuilder()
+                    .Build();
 
-            entry.PeersHooks = new PeersHooks();
-            entry.PeersPlugin = new PeersPlugin(entry.PeersHooks);
+            entry.PeersPlugin =
+                new PeersBuilder()
+                    .Build();
 
-            entry.NegotiatorHooks = CreateNegotiatorHooks(entry);
-            entry.Negotiator = new HandshakeNegotiatorFactory(network).Create(entry.NegotiatorHooks);
+            entry.Negotiator =
+                new HandshakeNegotiatorBuilder()
+                    .WithNetwork(network)
+                    .Build();
 
-            entry.GlueHooks = new GlueHooks();
-            entry.Glue = glue.Create(entry.Hash, entry.GlueHooks, CreateGlueConfiguration(entry));
+            entry.Glue =
+                new GlueBuilder()
+                    .WithHash(entry.Hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .WithPlugin(entry.MetadataPlugin)
+                    .WithPlugin(entry.PeersPlugin)
+                    .Build();
 
-            entry.SpartaHooks = new SpartanHooks();
-            entry.Spartan = new SpartanService(pipeline, entry.Destination, entry.Glue, files, CreateSpartanHooks(), CreateSpartanConfiguration());
+            entry.Metafile =
+                new MetafileBuilder()
+                    .WithHash(entry.Hash)
+                    .WithDestination(entry.Destination + ".metainfo")
+                    .Build();
 
-            entry.ConnectorHooks = CreateConnectorHooks(entry);
-            entry.Connector = new PeerConnector(network, entry.ConnectorHooks, new PeerConnectorConfiguration());
+            entry.Metaget =
+                new MetagetBuilder()
+                    .WithHash(entry.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(entry.Glue)
+                    .WithMetafile(entry.Metafile)
+                    .Build();
+
+            entry.Spartan =
+                new SpartanBuilder()
+                    .WithHash(entry.Hash)
+                    .WithDestination(entry.Destination)
+                    .WithPipeline(pipeline)
+                    .WithFiles(files)
+                    .WithGlue(entry.Glue)
+                    .WithMetaget(entry.Metaget)
+                    .WithGoal(Goal.All)
+                    .Build();
+
+            entry.Connector = 
+                new PeerConnectorBuilder()
+                    .WithPipeline(pipeline)
+                    .WithNetwork(network)
+                    .Build();
 
             AttachHooks(entry);
 
             entry.Spartan.Start();
-            entry.Connector.Start(pipeline);
+            entry.Connector.Start();
 
             negotiatorContext.Hashes.Add(entry.Hash);
 
@@ -134,20 +170,20 @@ namespace Leak.Leakage
 
         private void AttachHooks(LeakEntry entry)
         {
-            entry.GlueHooks.OnPeerChanged = entry.Spartan.HandlePeerChanged;
-            entry.GlueHooks.OnBlockReceived = entry.Spartan.HandleBlockReceived;
+            entry.Glue.Hooks.OnPeerChanged += entry.Spartan.HandlePeerChanged;
+            entry.Glue.Hooks.OnBlockReceived += entry.Spartan.HandleBlockReceived;
 
-            entry.GlueHooks.OnPeerConnected = data =>
+            entry.Glue.Hooks.OnPeerConnected += data =>
             {
                 hooks.OnPeerConnected?.Invoke(data);
             };
 
-            entry.GlueHooks.OnExtensionListReceived = data =>
+            entry.Glue.Hooks.OnExtensionListReceived += data =>
             {
                 entry.PeersPlugin.HandlePeerConnected(entry.Glue, data);
             };
 
-            entry.PeersHooks.OnPeersDataReceived = data =>
+            entry.PeersPlugin.Hooks.OnPeersDataReceived += data =>
             {
                 hooks.OnPeerListReceived?.Invoke(data);
 
@@ -157,84 +193,17 @@ namespace Leak.Leakage
                 }
             };
 
-            entry.MetadataHooks.OnMetadataMeasured = entry.Spartan.HandleMetadataMeasured;
-            entry.MetadataHooks.OnMetadataPieceSent = entry.Spartan.HandleMetadataReceived;
+            entry.MetadataPlugin.Hooks.OnMetadataMeasured += entry.Spartan.HandleMetadataMeasured;
+            entry.MetadataPlugin.Hooks.OnMetadataPieceSent += entry.Spartan.HandleMetadataReceived;
+
+            entry.Connector.Hooks.OnConnectionEstablished += data => OnConnectionEstablished(data, entry);
+            entry.Negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()
         {
             return new NetworkPoolHooks
             {
-            };
-        }
-
-        private PeerListenerHooks CreateListenerHooks()
-        {
-            return new PeerListenerHooks
-            {
-                OnListenerStarted = hooks.CallListenerStarted,
-                OnConnectionArrived = OnConnectionArrived
-            };
-        }
-
-        private PeerListenerConfiguration CreateListenerConfiguration()
-        {
-            PeerListenerPort port = new PeerListenerPortRandom();
-
-            if (configuration.Port != LeakPort.Random)
-            {
-                port = new PeerListenerPortValue(configuration.Port.Value);
-            }
-
-            return new PeerListenerConfiguration
-            {
-                Port = port,
-                Peer = configuration.Peer,
-                Extensions = true
-            };
-        }
-
-        private GlueConfiguration CreateGlueConfiguration(LeakEntry entry)
-        {
-            List<MorePlugin> plugins = new List<MorePlugin>
-            {
-                entry.MetadataPlugin,
-                entry.PeersPlugin
-            };
-
-            return new GlueConfiguration
-            {
-                Plugins = plugins
-            };
-        }
-
-        private SpartanHooks CreateSpartanHooks()
-        {
-            return new SpartanHooks
-            {
-            };
-        }
-
-        private SpartanConfiguration CreateSpartanConfiguration()
-        {
-            return new SpartanConfiguration
-            {
-            };
-        }
-
-        private HandshakeNegotiatorHooks CreateNegotiatorHooks(LeakEntry entry)
-        {
-            return new HandshakeNegotiatorHooks
-            {
-                OnHandshakeCompleted = OnHandshakeCompleted
-            };
-        }
-
-        private PeerConnectorHooks CreateConnectorHooks(LeakEntry entry)
-        {
-            return new PeerConnectorHooks
-            {
-                OnConnectionEstablished = data => OnConnectionEstablished(data, entry)
             };
         }
 

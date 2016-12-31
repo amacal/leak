@@ -18,7 +18,7 @@ namespace Leak.Connector
 
         public void Execute(PeerConnectorContext context)
         {
-            TcpSocket socket = context.Pool.New();
+            TcpSocket socket = context.Dependencies.Network.New();
             IPAddress[] addresses = Dns.GetHostAddresses(remote.Host);
 
             IPAddress address = addresses[0].MapToIPv4();

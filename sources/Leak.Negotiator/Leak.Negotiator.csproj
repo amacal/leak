@@ -59,12 +59,13 @@
     <Compile Include="HandshakeMessage.cs" />
     <Compile Include="HandshakeNegotiator.cs" />
     <Compile Include="HandshakeNegotiatorActiveInstance.cs" />
+    <Compile Include="HandshakeNegotiatorBuilder.cs" />
+    <Compile Include="HandshakeNegotiatorDependencies.cs" />
     <Compile Include="HandshakeNegotiatorExtensions.cs" />
     <Compile Include="HandshakeNegotiatorInstance.cs" />
     <Compile Include="HandshakeNegotiatorActive.cs" />
     <Compile Include="HandshakeNegotiatorActiveContext.cs" />
     <Compile Include="HandshakeNegotiatorContext.cs" />
-    <Compile Include="HandshakeNegotiatorFactory.cs" />
     <Compile Include="HandshakeNegotiatorHooks.cs" />
     <Compile Include="HandshakeNegotiatorPassive.cs" />
     <Compile Include="HandshakeNegotiatorPassiveContext.cs" />

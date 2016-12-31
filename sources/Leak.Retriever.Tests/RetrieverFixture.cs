@@ -48,8 +48,11 @@ namespace Leak.Retriever.Tests
             FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
 
-            DataBlockFactory blocks = new BufferedBlockFactory();
-            GlueService glue = new GlueFactory(blocks).Create(metainfo.Hash, new GlueHooks(), new GlueConfiguration());
+            GlueService glue =
+                new GlueBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithBlocks(new BufferedBlockFactory())
+                    .Build();
 
             RetrieverHooks hooks = new RetrieverHooks();
             RetrieverConfiguration configuration = new RetrieverConfiguration();

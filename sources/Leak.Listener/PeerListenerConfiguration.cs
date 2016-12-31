@@ -6,7 +6,7 @@ namespace Leak.Listener
     {
         public PeerListenerConfiguration()
         {
-            Port = new PeerListenerPortValue(8080);
+            Port = new PeerListenerPortRandom();
             Peer = PeerHash.Random();
             Extensions = true;
         }
