@@ -29,12 +29,6 @@ namespace Leak.Spartan
             return this;
         }
 
-        public SpartanBuilder WithDestination(string destination)
-        {
-            parameters.Destination = destination;
-            return this;
-        }
-
         public SpartanBuilder WithPipeline(LeakPipeline pipeline)
         {
             dependencies.Pipeline = pipeline;

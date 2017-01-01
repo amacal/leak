@@ -41,12 +41,13 @@ namespace Leak.Repository
         public void Start()
         {
             context.Queue.Start(context);
-            context.Queue.Add(new RepositoryTaskAllocate());
         }
 
         public void Handle(MetadataDiscovered data)
         {
             context.Metainfo = data.Metainfo;
+            context.Queue.Add(new RepositoryTaskAllocate());
+            context.Queue.Add(new RepositoryTaskVerifyRange(new Bitfield(data.Metainfo.Pieces.Length)));
         }
 
         public void Verify(Bitfield scope)

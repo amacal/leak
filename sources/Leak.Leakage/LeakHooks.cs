@@ -14,6 +14,8 @@ namespace Leak.Leakage
 
         public Action<MetadataDiscovered> OnMetadataDiscovered;
 
+        public Action<DataVerified> OnDataVerified;
+
         public Action<DataCompleted> OnDataCompleted;
     }
 }

@@ -109,6 +109,10 @@
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
+      <Name>Leak.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Spartan\Leak.Spartan.csproj">
       <Project>{4a2f6660-bec0-42b3-bc79-704a4a06082d}</Project>
       <Name>Leak.Spartan</Name>

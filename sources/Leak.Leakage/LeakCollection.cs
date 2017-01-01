@@ -37,6 +37,7 @@ namespace Leak.Leakage
             foreach (LeakEntry entry in byHash.Values)
             {
                 entry.Metafile.Dispose();
+                entry.Repository.Dispose();
                 entry.Spartan.Dispose();
             }
 

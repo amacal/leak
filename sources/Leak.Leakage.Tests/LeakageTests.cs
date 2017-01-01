@@ -12,14 +12,14 @@ namespace Leak.Leakage.Tests
             using (LeakageFixture fixture = new LeakageFixture())
             using (LeakageSwarm swarm = fixture.Start())
             {
-                Trigger trigger = Trigger.Bind(ref swarm.Sue.Hooks.OnListenerStarted, data =>
+                Trigger handler = Trigger.Bind(ref swarm.Sue.Hooks.OnListenerStarted, data =>
                 {
                     data.Peer.Should().NotBeNull();
                     data.Port.Should().BeGreaterThan(0);
                 });
 
                 swarm.Sue.Client.Start();
-                trigger.Wait().Should().BeTrue();
+                handler.Wait().Should().BeTrue();
             }
         }
 
@@ -29,7 +29,7 @@ namespace Leak.Leakage.Tests
             using (LeakageFixture fixture = new LeakageFixture())
             using (LeakageSwarm swarm = fixture.Start())
             {
-                Trigger trigger = Trigger.Bind(ref swarm.Sue.Hooks.OnPeerConnected, data =>
+                Trigger handler = Trigger.Bind(ref swarm.Sue.Hooks.OnPeerConnected, data =>
                 {
                     data.Peer.Should().Be(swarm.Bob.Client.Peer);
                 });
@@ -41,7 +41,7 @@ namespace Leak.Leakage.Tests
                 swarm.Sue.Client.Start();
                 swarm.Sue.Client.Register(swarm.Sue.Registrant.With(swarm.Bob.Address));
 
-                trigger.Wait().Should().BeTrue();
+                handler.Wait().Should().BeTrue();
             }
         }
 
@@ -51,7 +51,7 @@ namespace Leak.Leakage.Tests
             using (LeakageFixture fixture = new LeakageFixture())
             using (LeakageSwarm swarm = fixture.Start())
             {
-                Trigger trigger = Trigger.Bind(ref swarm.Joe.Hooks.OnPeerListReceived, data =>
+                Trigger handler = Trigger.Bind(ref swarm.Joe.Hooks.OnPeerListReceived, data =>
                 {
                     data.Peer.Should().Be(swarm.Sue.Client.Peer);
                     data.Hash.Should().NotBeNull();
@@ -70,7 +70,7 @@ namespace Leak.Leakage.Tests
                 swarm.Joe.Client.Register(swarm.Joe.Registrant.With(swarm.Sue.Address));
                 swarm.Joe.Events.Connected.Wait(5000).Should().BeTrue();
 
-                trigger.Wait().Should().BeTrue();
+                handler.Wait().Should().BeTrue();
             }
         }
 
@@ -80,7 +80,7 @@ namespace Leak.Leakage.Tests
             using (LeakageFixture fixture = new LeakageFixture())
             using (LeakageSwarm swarm = fixture.Start())
             {
-                Trigger trigger = Trigger.Bind(ref swarm.Joe.Hooks.OnPeerConnected, data =>
+                Trigger handler = Trigger.Bind(ref swarm.Joe.Hooks.OnPeerConnected, data =>
                 {
                     return data.Peer.Equals(swarm.Bob.Client.Peer);
                 });
@@ -97,7 +97,7 @@ namespace Leak.Leakage.Tests
                 swarm.Joe.Client.Register(swarm.Joe.Registrant.With(swarm.Sue.Address));
                 swarm.Joe.Events.Connected.Wait(5000).Should().BeTrue();
 
-                trigger.Wait().Should().BeTrue();
+                handler.Wait().Should().BeTrue();
             }
         }
 
@@ -107,7 +107,7 @@ namespace Leak.Leakage.Tests
             using (LeakageFixture fixture = new LeakageFixture())
             using (LeakageSwarm swarm = fixture.Start())
             {
-                Trigger trigger = Trigger.Bind(ref swarm.Joe.Hooks.OnMetadataDiscovered, data =>
+                Trigger handler = Trigger.Bind(ref swarm.Joe.Hooks.OnMetadataDiscovered, data =>
                 {
                     data.Hash.Should().Be(swarm.Hash);
                     data.Metainfo.Should().NotBeNull();
@@ -121,7 +121,47 @@ namespace Leak.Leakage.Tests
                 swarm.Joe.Client.Start();
                 swarm.Joe.Client.Register(swarm.Joe.Registrant.With(swarm.Bob.Address));
 
-                trigger.Wait().Should().BeTrue();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataVerifiedWhenCompleted()
+        {
+            using (LeakageFixture fixture = new LeakageFixture())
+            using (LeakageSwarm swarm = fixture.Start())
+            {
+                Trigger handler = Trigger.Bind(ref swarm.Sue.Hooks.OnDataVerified, data =>
+                {
+                    data.Hash.Should().Be(swarm.Hash);
+                    data.Bitfield.Should().NotBeNull();
+                    data.Bitfield.Completed.Should().Be(2);
+                });  
+
+                swarm.Sue.Client.Start();
+                swarm.Sue.Client.Register(swarm.Sue.Registrant);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerDataVerifiedWhenEmpty()
+        {
+            using (LeakageFixture fixture = new LeakageFixture())
+            using (LeakageSwarm swarm = fixture.Start())
+            {
+                Trigger handler = Trigger.Bind(ref swarm.Bob.Hooks.OnDataVerified, data =>
+                {
+                    data.Hash.Should().Be(swarm.Hash);
+                    data.Bitfield.Should().NotBeNull();
+                    data.Bitfield.Completed.Should().Be(0);
+                });
+
+                swarm.Bob.Client.Start();
+                swarm.Bob.Client.Register(swarm.Bob.Registrant);
+
+                handler.Wait().Should().BeTrue();
             }
         }
     }

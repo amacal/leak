@@ -15,6 +15,7 @@ using Leak.Metaget;
 using Leak.Metashare;
 using Leak.Negotiator;
 using Leak.Networking;
+using Leak.Repository;
 using Leak.Spartan;
 using Leak.Tasks;
 
@@ -148,10 +149,16 @@ namespace Leak.Leakage
                     .WithMetafile(entry.Metafile)
                     .Build();
 
+            entry.Repository =
+                new RepositoryBuilder()
+                    .WithHash(entry.Hash)
+                    .WithDestination(entry.Destination)
+                    .WithFiles(files)
+                    .Build();
+
             entry.Spartan =
                 new SpartanBuilder()
                     .WithHash(entry.Hash)
-                    .WithDestination(entry.Destination)
                     .WithPipeline(pipeline)
                     .WithFiles(files)
                     .WithGlue(entry.Glue)
@@ -171,6 +178,7 @@ namespace Leak.Leakage
             entry.Spartan.Start();
             entry.Connector.Start();
             entry.Metafile.Start();
+            entry.Repository.Start();
 
             negotiatorContext.Hashes.Add(entry.Hash);
 
@@ -205,13 +213,17 @@ namespace Leak.Leakage
             entry.Connector.Hooks.OnConnectionEstablished += data => OnConnectionEstablished(data, entry);
             entry.Negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
 
+            entry.Metaget.Hooks.OnMetadataDiscovered += entry.Repository.Handle;
             entry.Metaget.Hooks.OnMetadataDiscovered += entry.Spartan.Handle;
             entry.Metaget.Hooks.OnMetadataDiscovered += hooks.OnMetadataDiscovered;
+
             entry.Metafile.Hooks.OnMetafileVerified += entry.Glue.Handle;
 
             entry.MetadataPlugin.Hooks.OnMetadataMeasured += entry.Metaget.Handle;
             entry.MetadataPlugin.Hooks.OnMetadataPieceReceived += entry.Metaget.Handle;
             entry.MetadataPlugin.Hooks.OnMetadataRequestReceived += entry.Metashare.Handle;
+
+            entry.Repository.Hooks.OnDataVerified += hooks.OnDataVerified;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()

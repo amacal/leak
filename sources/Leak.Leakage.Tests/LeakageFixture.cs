@@ -17,27 +17,28 @@ namespace Leak.Leakage.Tests
             Metainfo metainfo;
             byte[] data = Bytes.Random(20000);
 
-            using (FileSandbox temp = new FileSandbox(new EmptyFileLocator()))
-            {
-                MetainfoBuilder builder = new MetainfoBuilder(temp.Directory);
-                string path = temp.CreateFile("debian-8.5.0-amd64-CD-1.iso");
+            FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
+            MetainfoBuilder builder = new MetainfoBuilder(sandbox.Directory);
+            string path = sandbox.CreateFile("debian-8.5.0-amd64-CD-1.iso");
 
-                File.WriteAllBytes(path, data);
-                builder.AddFile(path);
+            File.WriteAllBytes(path, data);
+            builder.AddFile(path);
+            metainfo = builder.ToMetainfo(out meta);
 
-                metainfo = builder.ToMetainfo(out meta);
-            }
-
-            LeakageNode sue = CreateNode(metainfo.Hash, meta);
+            LeakageNode sue = CreateNode(metainfo.Hash, meta, sandbox);
             LeakageNode bob = CreateNode(metainfo.Hash, meta);
             LeakageNode joe = CreateNode(metainfo.Hash);
 
             return new LeakageSwarm(metainfo.Hash, sue, bob, joe);
         }
 
-        private LeakageNode CreateNode(FileHash hash, byte[] metadata = null)
+        private LeakageNode CreateNode(FileHash hash, byte[] metadata = null, IFileSandbox sandbox = null)
         {
-            FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
+            if (sandbox == null)
+            {
+                sandbox = new FileSandbox(new EmptyFileLocator());
+            }
+
             LeakRegistrant registrant = new LeakRegistrant
             {
                 Destination = sandbox.Directory,

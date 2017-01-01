@@ -85,7 +85,6 @@ namespace Leak.Spartan.Tests
             SpartanService spartan = 
                 new SpartanBuilder()
                     .WithHash(metainfo.Hash)
-                    .WithDestination(destination)
                     .WithPipeline(pipeline)
                     .WithFiles(files)
                     .WithGlue(glue)
