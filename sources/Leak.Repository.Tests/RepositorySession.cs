@@ -6,24 +6,27 @@ namespace Leak.Repository.Tests
 {
     public class RepositorySession : IDisposable
     {
+        private readonly Metainfo metainfo;
         private readonly RepositoryService service;
-        private readonly RepositoryHooks hooks;
         private readonly IFileSandbox sandbox;
-        private readonly FileHash hash;
         private readonly RepositoryData data;
 
-        public RepositorySession(RepositoryService service, RepositoryHooks hooks, IFileSandbox sandbox, FileHash hash, RepositoryData data)
+        public RepositorySession(Metainfo metainfo, RepositoryService service, IFileSandbox sandbox, RepositoryData data)
         {
+            this.metainfo = metainfo;
             this.service = service;
-            this.hooks = hooks;
             this.sandbox = sandbox;
-            this.hash = hash;
             this.data = data;
+        }
+
+        public Metainfo Metainfo
+        {
+            get { return metainfo; }
         }
 
         public RepositoryHooks Hooks
         {
-            get { return hooks; }
+            get { return service.Hooks; }
         }
 
         public IFileSandbox Sandbox
@@ -33,7 +36,7 @@ namespace Leak.Repository.Tests
 
         public FileHash Hash
         {
-            get { return hash; }
+            get { return service.Hash; }
         }
 
         public RepositoryData Data

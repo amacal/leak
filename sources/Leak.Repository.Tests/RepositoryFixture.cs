@@ -24,7 +24,7 @@ namespace Leak.Repository.Tests
 
         public RepositorySession Start()
         {
-            Metainfo metainfo = null;
+            Metainfo metainfo;
             RepositoryData data = new RepositoryData(20000);
 
             using (FileSandbox temp = new FileSandbox(new EmptyFileLocator()))
@@ -41,13 +41,14 @@ namespace Leak.Repository.Tests
             FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
 
-            RepositoryHooks hooks = new RepositoryHooks();
-            RepositoryConfiguration configuration = new RepositoryConfiguration();
+            RepositoryService service =
+                new RepositoryBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination)
+                    .WithFiles(files)
+                    .Build();
 
-            RepositoryService service = new RepositoryService(metainfo, destination, files, hooks, configuration);
-            RepositorySession session = new RepositorySession(service, hooks, sandbox, metainfo.Hash, data);
-
-            return session;
+            return new RepositorySession(metainfo, service, sandbox, data);
         }
 
         public void Dispose()

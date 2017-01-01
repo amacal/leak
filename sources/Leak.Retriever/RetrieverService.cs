@@ -1,11 +1,9 @@
 ﻿using System;
 using Leak.Common;
 using Leak.Events;
-using Leak.Files;
-using Leak.Glue;
+using Leak.Omnibus;
 using Leak.Retriever.Components;
 using Leak.Retriever.Tasks;
-using Leak.Tasks;
 
 namespace Leak.Retriever
 {
@@ -13,31 +11,83 @@ namespace Leak.Retriever
     {
         private readonly RetrieverContext context;
 
-        public RetrieverService(Metainfo metainfo, string destination, Bitfield bitfield, GlueService glue, FileFactory files, LeakPipeline pipeline, RetrieverHooks hooks, RetrieverConfiguration configuration)
+        public RetrieverService(RetrieverParameters parameters, RetrieverDependencies dependencies, RetrieverConfiguration configuration, RetrieverHooks hooks)
         {
-            context = new RetrieverContext(metainfo, destination, bitfield, glue, files, pipeline, hooks, configuration);
+            context = new RetrieverContext(parameters, dependencies, configuration, hooks);
+        }
+
+        public FileHash Hash
+        {
+            get { return context.Parameters.Hash; }
+        }
+
+        public RetrieverHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
+        public RetrieverParameters Parameters
+        {
+            get { return context.Parameters; }
+        }
+
+        public RetrieverDependencies Dependencies
+        {
+            get { return context.Dependencies; }
+        }
+
+        public RetrieverConfiguration Configuration
+        {
+            get { return context.Configuration; }
         }
 
         public void Start()
         {
-            context.Repository.Start();
-            context.Omnibus.Start();
-
-            context.Pipeline.Register(context.Queue);
-            context.Pipeline.Register(TimeSpan.FromMilliseconds(250), OnTick);
+            context.Dependencies.Pipeline.Register(context.Queue);
+            context.Dependencies.Pipeline.Register(TimeSpan.FromMilliseconds(250), OnTick);
 
             context.Queue.Add(new VerifyPieceTask());
             context.Queue.Add(new FindBitfieldsTask());
         }
 
-        public void HandlePeerChanged(PeerChanged data)
+        public void Stop()
+        {
+            context.Dependencies.Pipeline.Remove(OnTick);
+        }
+
+        public void Handle(PeerChanged data)
         {
             context.Queue.Add(new HandleBitfieldTask(data));
         }
 
-        public void HandleBlockReceived(BlockReceived data)
+        public void Handle(BlockReceived data)
         {
             context.Queue.Add(new HandleBlockReceived(data));
+        }
+
+        public void Handle(BlockWritten data)
+        {
+            context.Dependencies.Omnibus.Complete(new OmnibusBlock(data.Piece, data.Block * 16384, data.Size));
+        }
+
+        public void Handle(BlockReserved data)
+        {
+            context.Queue.Add(new RequestBlockTask(data));
+        }
+
+        public void Handle(PieceAccepted data)
+        {
+            context.Dependencies.Omnibus.Complete(data.Piece);
+        }
+
+        public void Handle(PieceRejected data)
+        {
+            context.Dependencies.Omnibus.Invalidate(data.Piece);
+        }
+
+        public void Handle(PieceReady data)
+        {
+            context.Dependencies.Repository.Verify(new PieceInfo(data.Piece));
         }
 
         private void OnTick()
@@ -47,8 +97,7 @@ namespace Leak.Retriever
 
         public void Dispose()
         {
-            context.Repository.Dispose();
-            context.Pipeline.Remove(OnTick);
+            context.Dependencies.Pipeline.Remove(OnTick);
         }
     }
 }

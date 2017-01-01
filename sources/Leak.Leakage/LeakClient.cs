@@ -182,9 +182,6 @@ namespace Leak.Leakage
 
         private void AttachHooks(LeakEntry entry)
         {
-            entry.Glue.Hooks.OnPeerChanged += entry.Spartan.Handle;
-            entry.Glue.Hooks.OnBlockReceived += entry.Spartan.Handle;
-
             entry.Glue.Hooks.OnPeerConnected += data =>
             {
                 hooks.OnPeerConnected?.Invoke(data);
@@ -205,15 +202,16 @@ namespace Leak.Leakage
                 }
             };
 
-            entry.MetadataPlugin.Hooks.OnMetadataMeasured += entry.Spartan.Handle;
-            entry.MetadataPlugin.Hooks.OnMetadataPieceReceived += entry.Spartan.Handle;
-            entry.MetadataPlugin.Hooks.OnMetadataRequestReceived += entry.Spartan.Handle;
-
             entry.Connector.Hooks.OnConnectionEstablished += data => OnConnectionEstablished(data, entry);
             entry.Negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
 
+            entry.Metaget.Hooks.OnMetadataDiscovered += entry.Spartan.Handle;
             entry.Metaget.Hooks.OnMetadataDiscovered += hooks.OnMetadataDiscovered;
             entry.Metafile.Hooks.OnMetafileVerified += entry.Glue.Handle;
+
+            entry.MetadataPlugin.Hooks.OnMetadataMeasured += entry.Metaget.Handle;
+            entry.MetadataPlugin.Hooks.OnMetadataPieceReceived += entry.Metaget.Handle;
+            entry.MetadataPlugin.Hooks.OnMetadataRequestReceived += entry.Metashare.Handle;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()

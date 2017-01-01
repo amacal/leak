@@ -41,10 +41,13 @@
     <Compile Include="RepositoryAllocation.cs" />
     <Compile Include="RepositoryAllocationRange.cs" />
     <Compile Include="RepositoryBlockData.cs" />
+    <Compile Include="RepositoryBuilder.cs" />
     <Compile Include="RepositoryConfiguration.cs" />
     <Compile Include="RepositoryContext.cs" />
+    <Compile Include="RepositoryDependencies.cs" />
     <Compile Include="RepositoryExtensions.cs" />
     <Compile Include="RepositoryHooks.cs" />
+    <Compile Include="RepositoryParameters.cs" />
     <Compile Include="RepositoryService.cs" />
     <Compile Include="RepositoryTask.cs" />
     <Compile Include="RepositoryTaskAllocate.cs" />

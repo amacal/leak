@@ -33,15 +33,13 @@ namespace Leak.Omnibus.Tests
                 metainfo = builder.ToMetainfo();
             }
 
-            OmnibusHooks hooks = new OmnibusHooks();
-            OmnibusConfiguration configuration = new OmnibusConfiguration();
+            OmnibusService service =
+                new OmnibusBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithPipeline(pipeline)
+                    .Build();
 
-            Bitfield bitfield = new Bitfield(metainfo.Pieces.Length);
-            OmnibusService service = new OmnibusService(metainfo, bitfield, pipeline, hooks, configuration);
-
-            service.Start();
-
-            return new OmnibusSession(metainfo.Hash, service, hooks);
+            return new OmnibusSession(metainfo, service);
         }
 
         public void Dispose()

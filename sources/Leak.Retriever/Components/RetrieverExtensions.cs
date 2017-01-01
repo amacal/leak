@@ -49,25 +49,5 @@ namespace Leak.Retriever.Components
                 Block = block
             });
         }
-
-        public static void CallPieceAccepted(this RetrieverHooks hooks, PieceAccepted data)
-        {
-            hooks.OnPieceAccepted?.Invoke(data);
-        }
-
-        public static void CallPieceRejected(this RetrieverHooks hooks, PieceRejected data)
-        {
-            hooks.OnPieceRejected?.Invoke(data);
-        }
-
-        public static void CallDataChanged(this RetrieverHooks hooks, DataChanged data)
-        {
-            hooks.OnDataChanged?.Invoke(data);
-        }
-
-        public static void CallDataCompleted(this RetrieverHooks hooks, DataCompleted data)
-        {
-            hooks.OnDataCompleted?.Invoke(data);
-        }
     }
 }

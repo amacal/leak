@@ -19,11 +19,11 @@ namespace Leak.Repository
             int blockSize = context.Metainfo.Properties.BlockSize;
 
             RepositoryAllocation allocation = new RepositoryAllocation(pieces);
-            RepositoryViewAllocator allocator = new RepositoryViewAllocator(context.Files);
+            RepositoryViewAllocator allocator = new RepositoryViewAllocator(context.Dependencies.Files);
 
             foreach (MetainfoEntry entry in context.Metainfo.Entries)
             {
-                string path = entry.GetPath(context.Destination);
+                string path = entry.GetPath(context.Parameters.Destination);
                 FileInfo info = new FileInfo(path);
 
                 if (info.Exists == false)
@@ -36,10 +36,10 @@ namespace Leak.Repository
             }
 
             MetainfoEntry[] entries = context.Metainfo.Entries;
-            RepositoryViewCache cache = allocator.Allocate(context.Destination, entries, pieceSize, blockSize);
+            RepositoryViewCache cache = allocator.Allocate(context.Parameters.Destination, entries, pieceSize, blockSize);
 
             context.View = new RepositoryView(cache);
-            context.Hooks.CallDataAllocated(context.Metainfo.Hash, context.Destination);
+            context.Hooks.CallDataAllocated(context.Metainfo.Hash, context.Parameters.Destination);
         }
 
         public void Block(RepositoryTaskQueue queue)

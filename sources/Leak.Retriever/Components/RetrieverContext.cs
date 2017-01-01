@@ -1,101 +1,39 @@
-﻿using Leak.Common;
-using Leak.Events;
-using Leak.Files;
-using Leak.Glue;
-using Leak.Omnibus;
-using Leak.Repository;
-using Leak.Retriever.Tasks;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Retriever.Components
 {
     public class RetrieverContext
     {
-        private readonly Metainfo metainfo;
-        private readonly GlueService glue;
-        private readonly LeakPipeline pipeline;
-        private readonly RetrieverHooks hooks;
+        private readonly RetrieverParameters parameters;
+        private readonly RetrieverDependencies dependencies;
         private readonly RetrieverConfiguration configuration;
-        private readonly RepositoryService repository;
-        private readonly OmnibusService omnibus;
+        private readonly RetrieverHooks hooks;
+
         private readonly LeakQueue<RetrieverContext> queue;
 
-        public RetrieverContext(Metainfo metainfo, string destination, Bitfield bitfield, GlueService glue, FileFactory files, LeakPipeline pipeline, RetrieverHooks hooks, RetrieverConfiguration configuration)
+        public RetrieverContext(RetrieverParameters parameters, RetrieverDependencies dependencies, RetrieverConfiguration configuration, RetrieverHooks hooks)
         {
-            this.metainfo = metainfo;
-            this.glue = glue;
-            this.pipeline = pipeline;
-            this.hooks = hooks;
+            this.parameters = parameters;
+            this.dependencies = dependencies;
             this.configuration = configuration;
-
-            repository = CreateRepositoryService(destination, files);
-            omnibus = CreateOmnibusService(bitfield);
+            this.hooks = hooks;
 
             queue = new LeakQueue<RetrieverContext>(this);
         }
 
-        private RepositoryService CreateRepositoryService(string destination, FileFactory files)
+        public RetrieverHooks Hooks
         {
-            RepositoryHooks hooks = CreateRepositoryHooks();
-            RepositoryConfiguration configuration = new RepositoryConfiguration();
-
-            return new RepositoryService(metainfo, destination, files, hooks, configuration);
+            get { return hooks; }
         }
 
-        private RepositoryHooks CreateRepositoryHooks()
+        public RetrieverParameters Parameters
         {
-            return new RepositoryHooks
-            {
-                OnBlockWritten = OnBlockWritten,
-                OnPieceAccepted = OnPieceAccepted,
-                OnPieceRejected = OnPieceRejected
-            };
+            get { return parameters; }
         }
 
-        private void OnBlockWritten(BlockWritten data)
+        public RetrieverDependencies Dependencies
         {
-            omnibus.Complete(new OmnibusBlock(data.Piece, data.Block * 16384, data.Size));
-        }
-
-        private void OnPieceAccepted(PieceAccepted data)
-        {
-            omnibus.Complete(data.Piece);
-            hooks.CallPieceAccepted(data);
-        }
-
-        private void OnPieceRejected(PieceRejected data)
-        {
-            omnibus.Invalidate(data.Piece);
-            hooks.CallPieceRejected(data);
-        }
-
-        private OmnibusService CreateOmnibusService(Bitfield bitfield)
-        {
-            OmnibusHooks hooks = CreateOmnibusHooks();
-            OmnibusConfiguration configuration = new OmnibusConfiguration();
-
-            return new OmnibusService(metainfo, bitfield, pipeline, hooks, configuration);
-        }
-
-        private OmnibusHooks CreateOmnibusHooks()
-        {
-            return new OmnibusHooks
-            {
-                OnDataChanged = hooks.CallDataChanged,
-                OnDataCompleted = hooks.CallDataCompleted,
-                OnPieceReady = OnPieceReady,
-                OnBlockReserved = OnBlockReserved
-            };
-        }
-
-        private void OnPieceReady(PieceReady data)
-        {
-            repository.Verify(new PieceInfo(data.Piece));
-        }
-
-        private void OnBlockReserved(BlockReserved data)
-        {
-            queue.Add(new RequestBlockTask(data));
+            get { return dependencies; }
         }
 
         public RetrieverConfiguration Configuration
@@ -103,39 +41,9 @@ namespace Leak.Retriever.Components
             get { return configuration; }
         }
 
-        public GlueService Glue
-        {
-            get { return glue; }
-        }
-
-        public Metainfo Metainfo
-        {
-            get { return metainfo; }
-        }
-
-        public RepositoryService Repository
-        {
-            get { return repository; }
-        }
-
         public LeakQueue<RetrieverContext> Queue
         {
             get { return queue; }
-        }
-
-        public OmnibusService Omnibus
-        {
-            get { return omnibus; }
-        }
-
-        public LeakPipeline Pipeline
-        {
-            get { return pipeline; }
-        }
-
-        public RetrieverHooks Hooks
-        {
-            get { return hooks; }
         }
     }
 }

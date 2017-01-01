@@ -19,9 +19,9 @@ namespace Leak.Retriever.Tasks
         {
             OmnibusStrategy strategy = context.Configuration.Strategy.ToOmnibus();
 
-            foreach (PeerHash peer in context.Omnibus.Find(ranking, count))
+            foreach (PeerHash peer in context.Dependencies.Omnibus.Find(ranking, count))
             {
-                context.Omnibus.Schedule(strategy, peer, pieces);
+                context.Dependencies.Omnibus.Schedule(strategy, peer, pieces);
             }
         }
     }

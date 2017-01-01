@@ -9,25 +9,6 @@ namespace Leak.Retriever.Tests
     public class RetrieverTests
     {
         [Test]
-        public void ShouldTriggerDataChanged()
-        {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnDataChanged, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Completed.Should().Be(1);
-                });
-
-                session.Service.Start();
-                session.Service.HandleBlockReceived(session.Hash, 0, session.Data[0]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
         public void ShouldTriggerDataHandled()
         {
             using (RetrieverFixture fixture = new RetrieverFixture())
@@ -43,64 +24,7 @@ namespace Leak.Retriever.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleBlockReceived(session.Hash, 1, session.Data[1]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerPieceAccepted()
-        {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceAccepted, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
-                });
-
-                session.Service.Start();
-                session.Service.HandleBlockReceived(session.Hash, 1, session.Data[1]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerPieceRejected()
-        {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceRejected, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
-                });
-
-                session.Service.Start();
-                session.Service.HandleBlockReceived(session.Hash, 1, session.Data[0]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerDataCompleted()
-        {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnDataCompleted, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                });
-
-                session.Service.Start();
-                session.Service.HandleBlockReceived(session.Hash, 0, session.Data[0]);
-                session.Service.HandleBlockReceived(session.Hash, 1, session.Data[1]);
+                session.Service.HandleBlockReceived(1, session.Data[1]);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -119,6 +43,15 @@ namespace Leak.Retriever.Tests
                     IsLocalInterestedInRemote = true
                 };
 
+                BlockReserved reserved = new BlockReserved
+                {
+                    Hash = session.Hash,
+                    Peer = changed.Peer,
+                    Piece = 1,
+                    Block = 0,
+                    Size = 3616
+                };
+
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnBlockRequested, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
@@ -128,7 +61,8 @@ namespace Leak.Retriever.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandlePeerChanged(changed);
+                session.Service.Handle(changed);
+                session.Service.Handle(reserved);
 
                 handler.Wait().Should().BeTrue();
             }

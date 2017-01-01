@@ -3,6 +3,7 @@ using Leak.Files;
 using Leak.Glue;
 using Leak.Metaget;
 using Leak.Metashare;
+using Leak.Retriever;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -61,6 +62,12 @@ namespace Leak.Spartan
         public SpartanBuilder WithMetashare(MetashareService metashare)
         {
             dependencies.Metashare = metashare;
+            return this;
+        }
+
+        public SpartanBuilder WithRetriever(RetrieverService retriever)
+        {
+            dependencies.Retriever = retriever;
             return this;
         }
 

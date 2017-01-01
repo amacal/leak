@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Leak.Common;
 using Leak.Events;
+using Leak.Omnibus.Components;
 using Leak.Omnibus.Tasks;
-using Leak.Tasks;
 
 namespace Leak.Omnibus
 {
@@ -14,18 +14,41 @@ namespace Leak.Omnibus
     /// </summary>
     public class OmnibusService : IDisposable
     {
-        private readonly LeakPipeline pipeline;
         private readonly OmnibusContext context;
 
-        public OmnibusService(Metainfo metainfo, Bitfield bitfield, LeakPipeline pipeline, OmnibusHooks hooks, OmnibusConfiguration configuration)
+        public OmnibusService(OmnibusParameters parameters, OmnibusDependencies dependencies, OmnibusConfiguration configuration, OmnibusHooks hooks)
         {
-            this.pipeline = pipeline;
-            context = new OmnibusContext(metainfo, bitfield, hooks, configuration);
+            context = new OmnibusContext(parameters, dependencies, configuration, hooks);
+        }
+
+        public FileHash Hash
+        {
+            get { return context.Parameters.Hash; }
+        }
+
+        public OmnibusHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
+        public OmnibusParameters Parameters
+        {
+            get { return context.Parameters; }
+        }
+
+        public OmnibusDependencies Dependencies
+        {
+            get { return context.Dependencies; }
+        }
+
+        public OmnibusConfiguration Configuration
+        {
+            get { return context.Configuration; }
         }
 
         public void Start()
         {
-            pipeline.Register(context.Queue);
+            context.Dependencies.Pipeline.Register(context.Queue);
         }
 
         public bool IsComplete()
@@ -47,6 +70,19 @@ namespace Leak.Omnibus
         {
             context.States.Handle(data);
             context.Bitfields.Add(data.Peer, data.Bitfield);
+        }
+
+        public void Handle(DataVerified data)
+        {
+            context.Bitfield = data.Bitfield;
+            context.Cache = new OmnibusCache(data.Bitfield.Length);
+            context.Pieces = new OmnibusPieceCollection(context);
+            context.Bitfields = new OmnibusBitfieldCollection(context.Cache);
+        }
+
+        public void Handle(MetadataDiscovered data)
+        {
+            context.Metainfo = data.Metainfo;
         }
 
         public void Complete(OmnibusBlock block)

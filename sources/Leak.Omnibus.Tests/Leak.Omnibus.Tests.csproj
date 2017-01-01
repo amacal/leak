@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OmnibusExtensions.cs" />
     <Compile Include="OmnibusFixture.cs" />
     <Compile Include="OmnibusSession.cs" />
     <Compile Include="OmnibusTests.cs" />

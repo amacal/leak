@@ -7,7 +7,7 @@ namespace Leak.Metaget.Tests
     {
         public static void HandleMetadataMeasured(this MetagetService service, FileHash hash, int size)
         {
-            service.HandleMetadataMeasured(new MetadataMeasured
+            service.Handle(new MetadataMeasured
             {
                 Hash = hash,
                 Size = size,
@@ -17,7 +17,7 @@ namespace Leak.Metaget.Tests
 
         public static void HandleMetadataReceived(this MetagetService service, FileHash hash, int piece, byte[] data)
         {
-            service.HandleMetadataReceived(new MetadataReceived
+            service.Handle(new MetadataReceived
             {
                 Hash = hash,
                 Piece = piece,

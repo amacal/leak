@@ -5,9 +5,8 @@ namespace Leak.Repository
 {
     public class RepositoryContext
     {
-        private readonly Metainfo metainfo;
-        private readonly string destination;
-        private readonly FileFactory files;
+        private readonly RepositoryParameters parameters;
+        private readonly RepositoryDependencies dependencies;
         private readonly RepositoryHooks hooks;
         private readonly RepositoryConfiguration configuration;
         private readonly BitfileService bitfile;
@@ -15,39 +14,41 @@ namespace Leak.Repository
 
         private readonly byte[] buffer;
         private RepositoryView view;
+        private Metainfo metainfo;
 
-        public RepositoryContext(Metainfo metainfo, string destination, FileFactory files, RepositoryHooks hooks, RepositoryConfiguration configuration)
+        public RepositoryContext(RepositoryParameters parameters, RepositoryDependencies dependencies, RepositoryHooks hooks, RepositoryConfiguration configuration)
         {
-            this.metainfo = metainfo;
-            this.destination = destination;
-            this.files = files;
+            this.parameters = parameters;
+            this.dependencies = dependencies;
             this.hooks = hooks;
             this.configuration = configuration;
 
-            bitfile = new BitfileService(metainfo.Hash, destination + ".bitfield");
+            bitfile = new BitfileService(parameters.Hash, parameters.Destination + ".bitfield");
 
             queue = new RepositoryTaskQueue();
             buffer = new byte[16384];
         }
+
+        public RepositoryParameters Parameters
+        {
+            get { return parameters; }
+        }
+
+        public RepositoryDependencies Dependencies
+        {
+            get { return dependencies; }
+        }
+
 
         public RepositoryConfiguration Configuration
         {
             get { return configuration; }
         }
 
-        public FileFactory Files
-        {
-            get { return files; }
-        }
-
         public Metainfo Metainfo
         {
             get { return metainfo; }
-        }
-
-        public string Destination
-        {
-            get { return destination; }
+            set { metainfo = value; }
         }
 
         public RepositoryTaskQueue Queue

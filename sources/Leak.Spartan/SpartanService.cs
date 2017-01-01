@@ -1,7 +1,6 @@
 ﻿using System;
 using Leak.Common;
 using Leak.Events;
-using Leak.Extensions.Metadata;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -18,12 +17,10 @@ namespace Leak.Spartan
                 Dependencies = dependencies,
                 Configuration = configuration,
                 Hooks = hooks,
-                Facts = new SpartanFacts(configuration),
+                State = new SpartanState(configuration),
             };
 
             context.Queue = new LeakQueue<SpartanContext>(context);
-
-            context.Dependencies.Metaget.Hooks.OnMetadataDiscovered += data => context.Queue.Add(new SpartanCompleteDiscover(data));
         }
 
         public FileHash Hash
@@ -57,60 +54,31 @@ namespace Leak.Spartan
             context.Queue.Add(new SpartanScheduleNext(context));
         }
 
-        public void Handle(MetadataMeasured data)
+        public void Handle(MetadataDiscovered data)
         {
-            if (context.Facts.IsOngoing(Goal.Discover))
-            {
-                context.Dependencies.Metaget.HandleMetadataMeasured(data);
-            }
+            context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Discover);
+            context.State.Complete(Goal.Discover);
+
+            context.Dependencies.Metaget.Stop();
+            context.Queue.Add(new SpartanScheduleNext(context));
         }
 
-        public void Handle(MetadataReceived data)
+        public void Handle(DataVerified data)
         {
-            if (context.Facts.IsOngoing(Goal.Discover))
-            {
-                context.Dependencies.Metaget.HandleMetadataReceived(data);
-            }
+            context.Queue.Add(new SpartanScheduleNext(context));
         }
 
-        public void Handle(PeerChanged data)
+        public void Handle(DataCompleted data)
         {
-            if (context.Facts.IsOngoing(Goal.Download))
-            {
-                context.Facts.Retriever.HandlePeerChanged(data);
-            }
-        }
-
-        public void Handle(BlockReceived data)
-        {
-            if (context.Facts.IsOngoing(Goal.Download))
-            {
-                context.Facts.Retriever.HandleBlockReceived(data);
-            }
-        }
-
-        public void Handle(MetadataRequested data)
-        {
-            context.Dependencies.Metashare.Handle(data);
+            context.Dependencies.Retriever.Start();
         }
 
         public void Dispose()
         {
-            if (context.Facts.IsOngoing(Goal.Discover))
+            if (context.State.IsOngoing(Goal.Discover))
             {
                 context.Dependencies.Metaget.Stop();
-            }
-
-            if (context.Facts.IsOngoing(Goal.Verify))
-            {
-                context.Facts.Repository.Dispose();
-                context.Facts.Repository = null;
-            }
-
-            if (context.Facts.IsOngoing(Goal.Download))
-            {
-                context.Facts.Retriever.Dispose();
-                context.Facts.Repository = null;
+                context.Dependencies.Metashare.Stop();
             }
         }
     }

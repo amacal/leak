@@ -46,12 +46,12 @@ namespace Leak.Metaget
             context.Dependencies.Pipeline.Remove(OnTick);
         }
 
-        public void HandleMetadataMeasured(MetadataMeasured data)
+        public void Handle(MetadataMeasured data)
         {
             context.Queue.Add(new MetagetTaskSize(data.Peer, data.Size));
         }
 
-        public void HandleMetadataReceived(MetadataReceived data)
+        public void Handle(MetadataReceived data)
         {
             context.Queue.Add(new MetagetTaskData(data.Peer, data.Piece, data.Data));
         }

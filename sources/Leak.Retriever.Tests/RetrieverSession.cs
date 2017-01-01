@@ -7,25 +7,21 @@ namespace Leak.Retriever.Tests
     {
         private readonly RetrieverService service;
         private readonly RetrieverData data;
-        private readonly FileHash hash;
-        private readonly RetrieverHooks hooks;
 
-        public RetrieverSession(RetrieverService service, RetrieverData data, FileHash hash, RetrieverHooks hooks)
+        public RetrieverSession(RetrieverService service, RetrieverData data)
         {
             this.service = service;
             this.data = data;
-            this.hash = hash;
-            this.hooks = hooks;
         }
 
         public RetrieverHooks Hooks
         {
-            get { return hooks; }
+            get { return service.Hooks; }
         }
 
         public FileHash Hash
         {
-            get { return hash; }
+            get { return service.Hash; }
         }
 
         public RetrieverService Service

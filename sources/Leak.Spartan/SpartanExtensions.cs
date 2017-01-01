@@ -22,15 +22,5 @@ namespace Leak.Spartan
                 Task = task
             });
         }
-
-        public static void CallDataVerified(this SpartanHooks hooks, DataVerified data)
-        {
-            hooks.OnDataVerified?.Invoke(data);
-        }
-
-        public static void CallDataCompleted(this SpartanHooks hooks, DataCompleted data)
-        {
-            hooks.OnDataCompleted?.Invoke(data);
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using Leak.Common;
-using Leak.Files;
+using Leak.Events;
 
 namespace Leak.Repository
 {
@@ -8,15 +8,45 @@ namespace Leak.Repository
     {
         private readonly RepositoryContext context;
 
-        public RepositoryService(Metainfo metainfo, string destination, FileFactory files, RepositoryHooks hooks, RepositoryConfiguration configuration)
+        public RepositoryService(RepositoryParameters parameters, RepositoryDependencies dependencies, RepositoryHooks hooks, RepositoryConfiguration configuration)
         {
-            context = new RepositoryContext(metainfo, destination, files, hooks, configuration);
+            context = new RepositoryContext(parameters, dependencies, hooks, configuration);
+        }
+
+        public FileHash Hash
+        {
+            get { return context.Parameters.Hash; }
+        }
+
+        public RepositoryHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
+        public RepositoryParameters Parameters
+        {
+            get { return context.Parameters; }
+        }
+
+        public RepositoryDependencies Dependencies
+        {
+            get { return context.Dependencies; }
+        }
+
+        public RepositoryConfiguration Configuration
+        {
+            get { return context.Configuration; }
         }
 
         public void Start()
         {
             context.Queue.Start(context);
             context.Queue.Add(new RepositoryTaskAllocate());
+        }
+
+        public void Handle(MetadataDiscovered data)
+        {
+            context.Metainfo = data.Metainfo;
         }
 
         public void Verify(Bitfield scope)

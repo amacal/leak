@@ -20,6 +20,10 @@ namespace Leak.Omnibus.Tests
                     data.Completed.Should().Be(1);
                 });
 
+                session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
+
                 session.Service.Complete(1);
                 trigger.Wait().Should().BeTrue();
             }
@@ -35,6 +39,10 @@ namespace Leak.Omnibus.Tests
                 {
                     data.Hash.Should().Be(session.Hash);
                 });
+
+                session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(0);
                 session.Service.Complete(1);
@@ -55,6 +63,10 @@ namespace Leak.Omnibus.Tests
                     data.Piece.Should().Be(1);
                 });
 
+                session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
+
                 session.Service.Complete(new OmnibusBlock(1, 0, 16384));
                 trigger.Wait().Should().BeTrue();
             }
@@ -71,6 +83,10 @@ namespace Leak.Omnibus.Tests
                     data.Hash.Should().Be(session.Hash);
                     data.Piece.Should().Be(1);
                 });
+
+                session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(new OmnibusBlock(1, 0, 16384));
                 session.Service.Complete(1);
@@ -100,6 +116,10 @@ namespace Leak.Omnibus.Tests
                     data.Piece.Should().Be(1);
                     data.Block.Should().Be(0);
                 });
+
+                session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Handle(changed);
                 session.Service.Schedule(OmnibusStrategy.RarestFirst, changed.Peer, 1);

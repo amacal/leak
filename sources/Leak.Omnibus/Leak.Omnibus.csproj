@@ -50,9 +50,12 @@
     <Compile Include="Components\OmnibusStateCollection.cs" />
     <Compile Include="Events\OmnibusReservationEvent.cs" />
     <Compile Include="OmnibusBlock.cs" />
+    <Compile Include="OmnibusBuilder.cs" />
     <Compile Include="OmnibusConfiguration.cs" />
     <Compile Include="OmnibusContext.cs" />
+    <Compile Include="OmnibusDependencies.cs" />
     <Compile Include="OmnibusHooks.cs" />
+    <Compile Include="OmnibusParameters.cs" />
     <Compile Include="OmnibusService.cs" />
     <Compile Include="OmnibusStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

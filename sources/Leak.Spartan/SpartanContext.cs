@@ -10,6 +10,6 @@ namespace Leak.Spartan
         public SpartanHooks Hooks;
 
         public LeakQueue<SpartanContext> Queue;
-        public SpartanFacts Facts;
+        public SpartanState State;
     }
 }

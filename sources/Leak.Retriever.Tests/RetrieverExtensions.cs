@@ -5,13 +5,13 @@ namespace Leak.Retriever.Tests
 {
     public static class RetrieverExtensions
     {
-        public static void HandleBlockReceived(this RetrieverService service, FileHash hash, int index, byte[] data)
+        public static void HandleBlockReceived(this RetrieverService service, int index, byte[] data)
         {
-            service.HandleBlockReceived(new BlockReceived
+            service.Handle(new BlockReceived
             {
                 Payload = new FixedDataBlock(data),
                 Peer = PeerHash.Random(),
-                Hash = hash,
+                Hash = service.Hash,
                 Piece = index,
                 Block = 0,
             });

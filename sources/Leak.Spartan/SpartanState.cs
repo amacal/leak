@@ -1,17 +1,14 @@
 ﻿using Leak.Common;
-using Leak.Metaget;
-using Leak.Repository;
-using Leak.Retriever;
 
 namespace Leak.Spartan
 {
-    public class SpartanFacts
+    public class SpartanState
     {
         private Goal completed;
         private Goal ongoing;
         private Goal pending;
 
-        public SpartanFacts(SpartanConfiguration configuration)
+        public SpartanState(SpartanConfiguration configuration)
         {
             completed = Goal.None;
             ongoing = Goal.None;
@@ -39,13 +36,5 @@ namespace Leak.Spartan
             ongoing &= ~tasks;
             completed |= tasks;
         }
-
-        public Metainfo Metainfo;
-
-        public Bitfield Bitfield;
-
-        public RepositoryService Repository;
-
-        public RetrieverService Retriever;
     }
 }

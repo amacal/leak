@@ -1,5 +1,4 @@
-﻿using System.IO;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Leak.Common;
 using Leak.Events;
 using Leak.Testing;
@@ -17,8 +16,7 @@ namespace Leak.Spartan.Tests
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskStarted, data =>
                 {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Task.Should().Be(Goal.Discover);
+                    return data.Task == Goal.Discover;
                 });
 
                 session.Service.Start();
@@ -27,72 +25,24 @@ namespace Leak.Spartan.Tests
         }
 
         [Test]
-        public void ShouldTriggerTaskCompletedWhenReceivedAllMetadata()
+        public void ShouldTriggerTaskCompletedWhenReceivedMetadataDiscovered()
         {
             using (SpartanFixture fixture = new SpartanFixture())
             using (SpartanSession session = fixture.Start(Goal.Discover))
             {
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskCompleted, data =>
                 {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Task.Should().Be(Goal.Discover);
+                    return data.Task == Goal.Discover;
                 });
 
                 session.Service.Start();
                 session.Stage.Discovering.Wait(5000).Should().BeTrue();
 
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerDataAllocated()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
-            {
-                string directory = Path.Combine(session.Sandbox.Directory, session.Hash.ToString());
-                string path = Path.Combine(directory, "debian-8.5.0-amd64-CD-1.iso");
-
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnDataAllocated, data =>
+                session.Service.Handle(new MetadataDiscovered
                 {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Directory.Should().EndWith(session.Directory);
+                    Hash = session.Hash,
+                    Metainfo = null
                 });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                handler.Wait().Should().BeTrue();
-                session.Sandbox.ExistsFile(path).Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerDataVerified()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnDataVerified, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Bitfield.Should().NotBeNull();
-                    data.Bitfield.Completed.Should().Be(0);
-                    data.Bitfield.Length.Should().Be(session.Data.Count);
-                });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
 
                 handler.Wait().Should().BeTrue();
             }
@@ -104,129 +54,19 @@ namespace Leak.Spartan.Tests
             using (SpartanFixture fixture = new SpartanFixture())
             using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
             {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskCompleted, data =>
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskStarted, data =>
                 {
-                    if (data.Task == Goal.Verify)
-                    {
-                        data.Hash.Should().Be(session.Hash);
-                    }
+                    return data.Task == Goal.Verify;
                 });
 
                 session.Service.Start();
                 session.Stage.Discovering.Wait(5000).Should().BeTrue();
 
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerDataCompleted()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnDataCompleted, data =>
+                session.Service.Handle(new MetadataDiscovered
                 {
-                    data.Hash.Should().Be(session.Hash);
-                });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                session.Stage.Downloading.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleBlockReceived(session.Hash, 0, session.Data[0]);
-                session.Service.HandleBlockReceived(session.Hash, 1, session.Data[1]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerDataChanged()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnDataChanged, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Completed.Should().Be(1);
-                });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                session.Stage.Downloading.Wait(5000).Should().BeTrue();
-                session.Service.HandleBlockReceived(session.Hash, 0, session.Data[0]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerPieceAccepted()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceAccepted, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
-                });
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                session.Stage.Downloading.Wait(5000).Should().BeTrue();
-                session.Service.HandleBlockReceived(session.Hash, 1, session.Data[1]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldTriggerPieceRejected()
-        {
-            using (SpartanFixture fixture = new SpartanFixture())
-            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
-            {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceRejected, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
-                });
-
-                BlockReceived received = new BlockReceived
-                {
-                    Peer = PeerHash.Random(),
                     Hash = session.Hash,
-                    Piece = 1,
-                    Block = 0,
-                    Payload = new FixedDataBlock(session.Data[0])
-                };
-
-                session.Service.Start();
-                session.Stage.Discovering.Wait(5000).Should().BeTrue();
-
-                session.Service.HandleMetadataMeasured(session.Hash, session.Meta.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Meta[0]);
-
-                session.Stage.Downloading.Wait(5000).Should().BeTrue();
-                session.Service.Handle(received);
+                    Metainfo = null
+                });
 
                 handler.Wait().Should().BeTrue();
             }

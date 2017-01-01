@@ -5,20 +5,13 @@ namespace Leak.Omnibus.Tests
 {
     public class OmnibusSession : IDisposable
     {
-        private readonly FileHash hash;
+        private readonly Metainfo metainfo;
         private readonly OmnibusService service;
-        private readonly OmnibusHooks hooks;
 
-        public OmnibusSession(FileHash hash, OmnibusService service, OmnibusHooks hooks)
+        public OmnibusSession(Metainfo metainfo, OmnibusService service)
         {
-            this.hash = hash;
+            this.metainfo = metainfo;
             this.service = service;
-            this.hooks = hooks;
-        }
-
-        public OmnibusHooks Hooks
-        {
-            get { return hooks; }
         }
 
         public OmnibusService Service
@@ -28,7 +21,17 @@ namespace Leak.Omnibus.Tests
 
         public FileHash Hash
         {
-            get { return hash; }
+            get { return service.Hash; }
+        }
+
+        public OmnibusHooks Hooks
+        {
+            get { return service.Hooks; }
+        }
+
+        public Metainfo Metainfo
+        {
+            get { return metainfo; }
         }
 
         public void Dispose()

@@ -24,6 +24,7 @@ namespace Leak.Repository.Tests
                 });
 
                 session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
                 session.Service.Verify(new Bitfield(session.Data.Pieces));
 
                 handler.Wait().Should().BeTrue();
@@ -46,6 +47,7 @@ namespace Leak.Repository.Tests
                 });
 
                 session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
                 session.Service.Verify(new Bitfield(session.Data.Pieces));
 
                 handler.Wait().Should().BeTrue();
@@ -67,6 +69,8 @@ namespace Leak.Repository.Tests
                 });
 
                 session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+
                 session.Service.Write(0, session.Data[0]);
                 session.Service.Write(1, session.Data[1]);
 
@@ -90,6 +94,7 @@ namespace Leak.Repository.Tests
                 });
 
                 session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
                 session.Service.Write(1, session.Data[1]);
 
                 handler.Wait().Should().BeTrue();
@@ -109,6 +114,8 @@ namespace Leak.Repository.Tests
                 });
 
                 session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+
                 session.Service.Write(1, session.Data[1]);
                 session.Service.Verify(new PieceInfo(1));
 
@@ -129,6 +136,7 @@ namespace Leak.Repository.Tests
                 });
 
                 session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
                 session.Service.Verify(new PieceInfo(1));
 
                 handler.Wait().Should().BeTrue();

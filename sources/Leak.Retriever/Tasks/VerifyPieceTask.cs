@@ -7,9 +7,9 @@ namespace Leak.Retriever.Tasks
     {
         public void Execute(RetrieverContext context)
         {
-            if (context.Omnibus.IsComplete())
+            if (context.Dependencies.Omnibus.IsComplete())
             {
-                context.Repository.Flush();
+                context.Dependencies.Repository.Flush();
                 //context.Callback.OnFileCompleted(context.Metainfo.Hash);
             }
         }

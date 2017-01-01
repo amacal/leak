@@ -3,10 +3,13 @@ using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
+using Leak.Events;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
+using Leak.Omnibus;
+using Leak.Repository;
 using Leak.Tasks;
 using File = System.IO.File;
 
@@ -31,7 +34,7 @@ namespace Leak.Retriever.Tests
 
         public RetrieverSession Start()
         {
-            Metainfo metainfo = null;
+            Metainfo metainfo;
             RetrieverData data = new RetrieverData(20000);
 
             using (FileSandbox temp = new FileSandbox(new EmptyFileLocator()))
@@ -54,13 +57,50 @@ namespace Leak.Retriever.Tests
                     .WithBlocks(new BufferedBlockFactory())
                     .Build();
 
-            RetrieverHooks hooks = new RetrieverHooks();
-            RetrieverConfiguration configuration = new RetrieverConfiguration();
+            RepositoryService repository =
+                new RepositoryBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination)
+                    .WithFiles(files)
+                    .Build();
 
-            Bitfield bitfield = new Bitfield(2);
-            RetrieverService service = new RetrieverService(metainfo, destination, bitfield, glue, files, pipeline, hooks, configuration);
+            OmnibusService omnibus =
+                new OmnibusBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithPipeline(pipeline)
+                    .Build();
 
-            return new RetrieverSession(service, data, metainfo.Hash, hooks);
+            RetrieverService service =
+                new RetrieverBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(glue)
+                    .WithRepository(repository)
+                    .WithOmnibus(omnibus)
+                    .Build();
+
+            repository.Start();
+            omnibus.Start();
+
+            omnibus.Handle(new MetadataDiscovered
+            {
+                Hash = metainfo.Hash,
+                Metainfo = metainfo
+            });
+
+            repository.Handle(new MetadataDiscovered
+            {
+                Hash = metainfo.Hash,
+                Metainfo = metainfo
+            });
+
+            omnibus.Handle(new DataVerified
+            {
+                Hash = metainfo.Hash,
+                Bitfield = new Bitfield(metainfo.Pieces.Length)
+            });
+
+            return new RetrieverSession(service, data);
         }
 
         public void Dispose()
