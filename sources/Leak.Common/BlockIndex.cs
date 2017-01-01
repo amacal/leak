@@ -1,12 +1,12 @@
-﻿namespace Leak.Omnibus
+﻿namespace Leak.Common
 {
-    public struct OmnibusBlock
+    public struct BlockIndex
     {
         private readonly int piece;
         private readonly int offset;
         private readonly int size;
 
-        public OmnibusBlock(int piece, int offset, int size)
+        public BlockIndex(int piece, int offset, int size)
         {
             this.piece = piece;
             this.offset = offset;
@@ -35,15 +35,15 @@
 
         public override bool Equals(object obj)
         {
-            return Equals(this, (OmnibusBlock)obj);
+            return Equals(this, (BlockIndex)obj);
         }
 
-        public static int GetHashCode(OmnibusBlock block)
+        public static int GetHashCode(BlockIndex block)
         {
             return block.piece + block.offset;
         }
 
-        public static bool Equals(OmnibusBlock left, OmnibusBlock right)
+        public static bool Equals(BlockIndex left, BlockIndex right)
         {
             return left.piece == right.piece &&
                    left.offset == right.offset;

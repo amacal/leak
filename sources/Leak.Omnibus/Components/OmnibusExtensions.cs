@@ -50,15 +50,13 @@ namespace Leak.Omnibus.Components
             });
         }
 
-        public static void CallBlockReserved(this OmnibusHooks hooks, FileHash hash, PeerHash peer, OmnibusBlock block)
+        public static void CallBlockReserved(this OmnibusHooks hooks, FileHash hash, PeerHash peer, BlockIndex block)
         {
             hooks.OnBlockReserved?.Invoke(new BlockReserved
             {
                 Hash = hash,
                 Peer = peer,
-                Piece = block.Piece,
-                Block = block.Offset / 16384,
-                Size = block.Size
+                Block = block
             });
         }
     }

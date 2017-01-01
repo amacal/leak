@@ -8,8 +8,6 @@ namespace Leak.Events
 
         public PeerHash Peer;
 
-        public int Piece;
-
-        public int Block;
+        public BlockIndex Block;
     }
 }

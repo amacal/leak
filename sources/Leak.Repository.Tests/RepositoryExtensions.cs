@@ -7,7 +7,7 @@ namespace Leak.Repository.Tests
     {
         public static void Write(this RepositoryService service, int piece, byte[] data)
         {
-            service.Write(new RepositoryBlockData(piece, 0, new FixedDataBlock(data)));
+            service.Write(new RepositoryBlockData(new BlockIndex(piece, 0, data.Length), new FixedDataBlock(data)));
         }
 
         public static void HandleMetadataDiscovered(this RepositoryService service, Metainfo metainfo)

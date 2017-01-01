@@ -15,8 +15,8 @@ namespace Leak.Retriever.Tasks
 
         public void Execute(RetrieverContext context)
         {
-            context.Dependencies.Glue.SendRequest(data.Peer, data.Piece, data.Block * 16384, data.Size);
-            context.Hooks.CallBlockRequested(data.Hash, data.Peer, data.Piece, data.Block);
+            context.Dependencies.Glue.SendRequest(data.Peer, data.Block.Piece, data.Block.Offset, data.Block.Size);
+            context.Hooks.CallBlockRequested(data.Hash, data.Peer, data.Block);
         }
     }
 }

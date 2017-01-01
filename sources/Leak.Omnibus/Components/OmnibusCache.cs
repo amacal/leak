@@ -7,7 +7,7 @@ namespace Leak.Omnibus.Components
     {
         private readonly int size;
         private readonly Bitfield bitfield;
-        private readonly List<OmnibusBlock> blocks;
+        private readonly List<BlockIndex> blocks;
 
         private readonly int[] ranking;
         private readonly int[] included;
@@ -17,7 +17,7 @@ namespace Leak.Omnibus.Components
         {
             this.size = size;
             this.bitfield = new Bitfield(size);
-            this.blocks = new List<OmnibusBlock>(size);
+            this.blocks = new List<BlockIndex>(size);
 
             this.ranking = new int[size];
             this.included = new int[size];
@@ -49,7 +49,7 @@ namespace Leak.Omnibus.Components
             get { return excluded; }
         }
 
-        public List<OmnibusBlock> Blocks
+        public List<BlockIndex> Blocks
         {
             get { return blocks; }
         }

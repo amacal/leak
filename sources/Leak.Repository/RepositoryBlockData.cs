@@ -5,30 +5,18 @@ namespace Leak.Repository
 {
     public class RepositoryBlockData : IDisposable
     {
-        private readonly int piece;
-        private readonly int offset;
+        private readonly BlockIndex index;
         private readonly DataBlock data;
 
-        public RepositoryBlockData(int piece, int offset, DataBlock data)
+        public RepositoryBlockData(BlockIndex index, DataBlock data)
         {
-            this.piece = piece;
-            this.offset = offset;
+            this.index = index;
             this.data = data;
         }
 
-        public int Piece
+        public BlockIndex Index
         {
-            get { return piece; }
-        }
-
-        public int Offset
-        {
-            get { return offset; }
-        }
-
-        public int Length
-        {
-            get { return data.Size; }
+            get { return index; }
         }
 
         public void Write(DataBlockCallback callback)

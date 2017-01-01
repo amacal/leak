@@ -85,7 +85,7 @@ namespace Leak.Omnibus
             context.Metainfo = data.Metainfo;
         }
 
-        public void Complete(OmnibusBlock block)
+        public void Complete(BlockIndex block)
         {
             context.Queue.Add(new CompleteBlockTask(block));
         }

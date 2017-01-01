@@ -49,7 +49,6 @@
     <Compile Include="Components\OmnibusState.cs" />
     <Compile Include="Components\OmnibusStateCollection.cs" />
     <Compile Include="Events\OmnibusReservationEvent.cs" />
-    <Compile Include="OmnibusBlock.cs" />
     <Compile Include="OmnibusBuilder.cs" />
     <Compile Include="OmnibusConfiguration.cs" />
     <Compile Include="OmnibusContext.cs" />

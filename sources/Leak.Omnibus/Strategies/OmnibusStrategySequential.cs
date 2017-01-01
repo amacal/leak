@@ -7,7 +7,7 @@ namespace Leak.Omnibus.Strategies
 {
     public class OmnibusStrategySequential : OmnibusStrategy
     {
-        public override void Next(ICollection<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count)
+        public override void Next(ICollection<BlockIndex> blocks, OmnibusContext context, PeerHash peer, int count)
         {
             DateTime now = DateTime.Now;
 
@@ -36,7 +36,7 @@ namespace Leak.Omnibus.Strategies
                                 nextSize = (int)totalSize;
                             }
 
-                            OmnibusBlock block = new OmnibusBlock(i, offset, nextSize);
+                            BlockIndex block = new BlockIndex(i, offset, nextSize);
                             bool contains = context.Reservations.Contains(block, now) ||
                                             context.Reservations.Contains(block, peer);
 

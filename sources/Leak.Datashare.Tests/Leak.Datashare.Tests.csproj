@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</ProjectGuid>
+    <ProjectGuid>{E00EF5D4-3077-454A-A06D-7743AA9647F9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Common</RootNamespace>
-    <AssemblyName>Leak.Common</AssemblyName>
+    <RootNamespace>Leak.Datashare.Tests</RootNamespace>
+    <AssemblyName>Leak.Datashare.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,30 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitfield.cs" />
-    <Compile Include="Bytes.cs" />
-    <Compile Include="DataBlock.cs" />
-    <Compile Include="DataBlockCallback.cs" />
-    <Compile Include="DataBlockFactory.cs" />
-    <Compile Include="FileHash.cs" />
-    <Compile Include="FileHashCollection.cs" />
-    <Compile Include="Handshake.cs" />
-    <Compile Include="HandshakeOptions.cs" />
-    <Compile Include="Metainfo.cs" />
-    <Compile Include="MetainfoEntry.cs" />
-    <Compile Include="MetainfoHash.cs" />
-    <Compile Include="MetainfoProperties.cs" />
-    <Compile Include="NetworkConnection.cs" />
-    <Compile Include="NetworkDirection.cs" />
-    <Compile Include="NetworkIncomingMessage.cs" />
-    <Compile Include="NetworkIncomingMessageHandler.cs" />
-    <Compile Include="NetworkOutgoingMessage.cs" />
-    <Compile Include="BlockIndex.cs" />
-    <Compile Include="PeerAddress.cs" />
-    <Compile Include="PeerHash.cs" />
-    <Compile Include="PieceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Goal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

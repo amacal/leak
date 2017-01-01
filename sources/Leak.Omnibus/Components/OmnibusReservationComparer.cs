@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using Leak.Common;
 
 namespace Leak.Omnibus.Components
 {
-    public class OmnibusReservationComparer : IEqualityComparer<OmnibusBlock>
+    public class OmnibusReservationComparer : IEqualityComparer<BlockIndex>
     {
-        public int GetHashCode(OmnibusBlock obj)
+        public int GetHashCode(BlockIndex obj)
         {
-            return OmnibusBlock.GetHashCode(obj);
+            return BlockIndex.GetHashCode(obj);
         }
 
-        public bool Equals(OmnibusBlock x, OmnibusBlock y)
+        public bool Equals(BlockIndex x, BlockIndex y)
         {
-            return OmnibusBlock.Equals(x, y);
+            return BlockIndex.Equals(x, y);
         }
     }
 }

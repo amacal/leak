@@ -8,9 +8,9 @@ namespace Leak.Retriever.Components
 {
     public static class RetrieverExtensions
     {
-        public static void Write(this RepositoryService repository, int piece, int offset, DataBlock data)
+        public static void Write(this RepositoryService repository, BlockIndex index, DataBlock data)
         {
-            repository.Write(new RepositoryBlockData(piece, offset, data));
+            repository.Write(new RepositoryBlockData(index, data));
         }
 
         public static OmnibusStrategy ToOmnibus(this RetrieverStrategy strategy)
@@ -27,25 +27,22 @@ namespace Leak.Retriever.Components
             throw new NotSupportedException();
         }
 
-        public static void CallBlockHandled(this RetrieverHooks hooks, FileHash hash, PeerHash peer, int piece, int block, int size)
+        public static void CallBlockHandled(this RetrieverHooks hooks, FileHash hash, PeerHash peer, BlockIndex block)
         {
             hooks.OnBlockHandled?.Invoke(new BlockHandled
             {
                 Hash = hash,
                 Peer = peer,
-                Piece = piece,
-                Block = block,
-                Size = size
+                Block = block
             });
         }
 
-        public static void CallBlockRequested(this RetrieverHooks hooks, FileHash hash, PeerHash peer, int piece, int block)
+        public static void CallBlockRequested(this RetrieverHooks hooks, FileHash hash, PeerHash peer, BlockIndex block)
         {
             hooks.OnBlockRequested?.Invoke(new BlockRequested
             {
                 Hash = hash,
                 Peer = peer,
-                Piece = piece,
                 Block = block
             });
         }

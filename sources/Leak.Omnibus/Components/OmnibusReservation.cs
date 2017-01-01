@@ -9,6 +9,6 @@ namespace Leak.Omnibus.Components
 
         public DateTime Expires { get; set; }
 
-        public OmnibusBlock Request { get; set; }
+        public BlockIndex Request { get; set; }
     }
 }

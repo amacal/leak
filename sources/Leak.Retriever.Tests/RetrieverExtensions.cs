@@ -12,8 +12,7 @@ namespace Leak.Retriever.Tests
                 Payload = new FixedDataBlock(data),
                 Peer = PeerHash.Random(),
                 Hash = service.Hash,
-                Piece = index,
-                Block = 0,
+                Block = new BlockIndex(index, 0, data.Length)
             });
         }
     }

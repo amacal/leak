@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</ProjectGuid>
+    <ProjectGuid>{545E697B-FF18-401C-A1DB-141035F57E2A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Common</RootNamespace>
-    <AssemblyName>Leak.Common</AssemblyName>
+    <RootNamespace>Leak.Datashare</RootNamespace>
+    <AssemblyName>Leak.Datashare</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,30 +33,30 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitfield.cs" />
-    <Compile Include="Bytes.cs" />
-    <Compile Include="DataBlock.cs" />
-    <Compile Include="DataBlockCallback.cs" />
-    <Compile Include="DataBlockFactory.cs" />
-    <Compile Include="FileHash.cs" />
-    <Compile Include="FileHashCollection.cs" />
-    <Compile Include="Handshake.cs" />
-    <Compile Include="HandshakeOptions.cs" />
-    <Compile Include="Metainfo.cs" />
-    <Compile Include="MetainfoEntry.cs" />
-    <Compile Include="MetainfoHash.cs" />
-    <Compile Include="MetainfoProperties.cs" />
-    <Compile Include="NetworkConnection.cs" />
-    <Compile Include="NetworkDirection.cs" />
-    <Compile Include="NetworkIncomingMessage.cs" />
-    <Compile Include="NetworkIncomingMessageHandler.cs" />
-    <Compile Include="NetworkOutgoingMessage.cs" />
-    <Compile Include="BlockIndex.cs" />
-    <Compile Include="PeerAddress.cs" />
-    <Compile Include="PeerHash.cs" />
-    <Compile Include="PieceInfo.cs" />
+    <Compile Include="DatashareBuilder.cs" />
+    <Compile Include="DatashareCollection.cs" />
+    <Compile Include="DatashareConfiguration.cs" />
+    <Compile Include="DatashareContext.cs" />
+    <Compile Include="DatashareDependencies.cs" />
+    <Compile Include="DatashareEntry.cs" />
+    <Compile Include="DatashareHooks.cs" />
+    <Compile Include="DatashareParameters.cs" />
+    <Compile Include="DatashareService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Goal.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
+      <Name>Leak.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

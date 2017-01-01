@@ -9,7 +9,7 @@ namespace Leak.Omnibus.Components
         private readonly TimeSpan lease;
         private readonly OmnibusReservationComparer comparer;
 
-        private readonly Dictionary<OmnibusBlock, OmnibusReservation> byBlock;
+        private readonly Dictionary<BlockIndex, OmnibusReservation> byBlock;
         private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
 
         public OmnibusReservationCollection(TimeSpan lease)
@@ -17,11 +17,11 @@ namespace Leak.Omnibus.Components
             this.lease = lease;
 
             comparer = new OmnibusReservationComparer();
-            byBlock = new Dictionary<OmnibusBlock, OmnibusReservation>(comparer);
+            byBlock = new Dictionary<BlockIndex, OmnibusReservation>(comparer);
             byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
         }
 
-        public bool Contains(OmnibusBlock request, DateTime now)
+        public bool Contains(BlockIndex request, DateTime now)
         {
             OmnibusReservation book;
 
@@ -31,7 +31,7 @@ namespace Leak.Omnibus.Components
             return book.Expires > now;
         }
 
-        public bool Contains(OmnibusBlock request, PeerHash peer)
+        public bool Contains(BlockIndex request, PeerHash peer)
         {
             OmnibusReservation book;
 
@@ -41,7 +41,7 @@ namespace Leak.Omnibus.Components
             return book.Peer.Equals(peer);
         }
 
-        public PeerHash Add(PeerHash peer, OmnibusBlock request, DateTime now)
+        public PeerHash Add(PeerHash peer, BlockIndex request, DateTime now)
         {
             PeerHash previous = null;
             OmnibusReservation book;
@@ -71,7 +71,7 @@ namespace Leak.Omnibus.Components
             return previous;
         }
 
-        public int Complete(OmnibusBlock request, out PeerHash peer)
+        public int Complete(BlockIndex request, out PeerHash peer)
         {
             OmnibusReservation block;
             byBlock.TryGetValue(request, out block);

@@ -67,7 +67,7 @@ namespace Leak.Retriever
 
         public void Handle(BlockWritten data)
         {
-            context.Dependencies.Omnibus.Complete(new OmnibusBlock(data.Piece, data.Block * 16384, data.Size));
+            context.Dependencies.Omnibus.Complete(data.Block);
         }
 
         public void Handle(BlockReserved data)

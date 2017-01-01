@@ -31,9 +31,7 @@ namespace Leak.Repository
             hooks.OnBlockWritten?.Invoke(new BlockWritten
             {
                 Hash = hash,
-                Piece = data.Piece,
-                Block = data.Offset % 16384,
-                Size = data.Length
+                Block = data.Index
             });
         }
 

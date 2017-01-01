@@ -6,10 +6,6 @@ namespace Leak.Events
     {
         public FileHash Hash;
 
-        public int Piece;
-
-        public int Block;
-
-        public int Size;
+        public BlockIndex Block;
     }
 }

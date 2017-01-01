@@ -6,9 +6,9 @@ namespace Leak.Omnibus.Events
     public class OmnibusReservationEvent
     {
         private readonly PeerHash peer;
-        private readonly IReadOnlyCollection<OmnibusBlock> blocks;
+        private readonly IReadOnlyCollection<BlockIndex> blocks;
 
-        public OmnibusReservationEvent(PeerHash peer, IReadOnlyCollection<OmnibusBlock> blocks)
+        public OmnibusReservationEvent(PeerHash peer, IReadOnlyCollection<BlockIndex> blocks)
         {
             this.peer = peer;
             this.blocks = blocks;
@@ -24,7 +24,7 @@ namespace Leak.Omnibus.Events
             get { return blocks.Count; }
         }
 
-        public IEnumerable<OmnibusBlock> Blocks
+        public IEnumerable<BlockIndex> Blocks
         {
             get { return blocks; }
         }

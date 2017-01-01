@@ -7,7 +7,7 @@ namespace Leak.Omnibus.Strategies
 {
     public class OmnibusStrategyRarestFirst : OmnibusStrategy
     {
-        public override void Next(ICollection<OmnibusBlock> blocks, OmnibusContext context, PeerHash peer, int count)
+        public override void Next(ICollection<BlockIndex> blocks, OmnibusContext context, PeerHash peer, int count)
         {
             int current = context.Reservations.Count(peer);
             int left = Math.Min(count, count - current);
@@ -48,7 +48,7 @@ namespace Leak.Omnibus.Strategies
                                         nextSize = (int)totalSize;
                                     }
 
-                                    OmnibusBlock block = new OmnibusBlock(i, offset, nextSize);
+                                    BlockIndex block = new BlockIndex(i, offset, nextSize);
                                     bool contains = reservations.Contains(block, now) ||
                                                     reservations.Contains(block, peer);
 

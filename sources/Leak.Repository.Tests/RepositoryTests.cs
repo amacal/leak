@@ -88,9 +88,9 @@ namespace Leak.Repository.Tests
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnBlockWritten, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
-                    data.Block.Should().Be(0);
-                    data.Size.Should().Be(session.Data[1].Length);
+                    data.Block.Piece.Should().Be(1);
+                    data.Block.Offset.Should().Be(0);
+                    data.Block.Size.Should().Be(session.Data[1].Length);
                 });
 
                 session.Service.Start();

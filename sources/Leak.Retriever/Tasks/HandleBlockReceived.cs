@@ -15,10 +15,10 @@ namespace Leak.Retriever.Tasks
 
         public void Execute(RetrieverContext context)
         {
-            if (context.Dependencies.Omnibus.IsComplete(data.Piece) == false)
+            if (context.Dependencies.Omnibus.IsComplete(data.Block.Piece) == false)
             {
-                context.Dependencies.Repository.Write(data.Piece, data.Block * 16384, data.Payload);
-                context.Hooks.CallBlockHandled(data.Hash, data.Peer, data.Piece, data.Block, data.Payload.Size);
+                context.Dependencies.Repository.Write(data.Block, data.Payload);
+                context.Hooks.CallBlockHandled(data.Hash, data.Peer, data.Block);
                 //context.Collector.Increase(peer, 2);
             }
         }

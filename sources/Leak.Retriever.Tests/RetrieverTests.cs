@@ -18,9 +18,9 @@ namespace Leak.Retriever.Tests
                 {
                     data.Hash.Should().Be(session.Hash);
                     data.Peer.Should().NotBeNull();
-                    data.Piece.Should().Be(1);
-                    data.Block.Should().Be(0);
-                    data.Size.Should().Be(3616);
+                    data.Block.Piece.Should().Be(1);
+                    data.Block.Offset.Should().Be(0);
+                    data.Block.Size.Should().Be(3616);
                 });
 
                 session.Service.Start();
@@ -47,17 +47,16 @@ namespace Leak.Retriever.Tests
                 {
                     Hash = session.Hash,
                     Peer = changed.Peer,
-                    Piece = 1,
-                    Block = 0,
-                    Size = 3616
+                    Block = new BlockIndex(1, 0, 3616)
                 };
 
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnBlockRequested, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
                     data.Peer.Should().Be(changed.Peer);
-                    data.Piece.Should().Be(1);
-                    data.Block.Should().Be(0);
+                    data.Block.Piece.Should().Be(1);
+                    data.Block.Offset.Should().Be(0);
+                    data.Block.Size.Should().Be(3616);
                 });
 
                 session.Service.Start();

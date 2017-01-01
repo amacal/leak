@@ -13,7 +13,7 @@ namespace Leak.Repository
 
         public int Piece
         {
-            get { return data.Piece; }
+            get { return data.Index.Piece; }
         }
 
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
@@ -23,7 +23,7 @@ namespace Leak.Repository
                 int blockSize = context.Metainfo.Properties.BlockSize;
                 FileBuffer file = new FileBuffer(buffer, offset, count);
 
-                context.View.Write(file, data.Piece, data.Offset / blockSize, args =>
+                context.View.Write(file, data.Index.Piece, data.Index.Offset / blockSize, args =>
                 {
                     context.Queue.Add(new Complete(data));
                 });
@@ -32,12 +32,12 @@ namespace Leak.Repository
 
         public bool CanExecute(RepositoryTaskQueue queue)
         {
-            return queue.IsBlocked(data.Piece) == false;
+            return queue.IsBlocked(data.Index.Piece) == false;
         }
 
         public void Block(RepositoryTaskQueue queue)
         {
-            queue.Block(data.Piece);
+            queue.Block(data.Index.Piece);
         }
 
         public void Release(RepositoryTaskQueue queue)
@@ -71,7 +71,7 @@ namespace Leak.Repository
 
             public void Release(RepositoryTaskQueue queue)
             {
-                queue.Release(data.Piece);
+                queue.Release(data.Index.Piece);
             }
         }
     }

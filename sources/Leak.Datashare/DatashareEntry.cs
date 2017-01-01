@@ -1,11 +1,9 @@
 ﻿using Leak.Common;
 
-namespace Leak.Events
+namespace Leak.Datashare
 {
-    public class BlockExpired
+    public class DatashareEntry
     {
-        public FileHash Hash;
-
         public PeerHash Peer;
 
         public BlockIndex Block;

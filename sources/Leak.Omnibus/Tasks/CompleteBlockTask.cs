@@ -5,9 +5,9 @@ namespace Leak.Omnibus.Tasks
 {
     public class CompleteBlockTask : LeakTask<OmnibusContext>
     {
-        private readonly OmnibusBlock block;
+        private readonly BlockIndex block;
 
-        public CompleteBlockTask(OmnibusBlock block)
+        public CompleteBlockTask(BlockIndex block)
         {
             this.block = block;
         }

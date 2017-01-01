@@ -33,7 +33,7 @@ namespace Leak.Omnibus.Tasks
                 {
                     now = DateTime.Now;
 
-                    foreach (OmnibusBlock block in context.Cache.Blocks)
+                    foreach (BlockIndex block in context.Cache.Blocks)
                     {
                         PeerHash previous = context.Reservations.Add(peer, block, now);
 
