@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Files;
+using Leak.Tasks;
 
 namespace Leak.Repository
 {
@@ -31,6 +32,12 @@ namespace Leak.Repository
         public RepositoryBuilder WithFiles(FileFactory files)
         {
             dependencies.Files = files;
+            return this;
+        }
+
+        public RepositoryBuilder WithPipeline(LeakPipeline pipeline)
+        {
+            dependencies.Pipeline = pipeline;
             return this;
         }
 

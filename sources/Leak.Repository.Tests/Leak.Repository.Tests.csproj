@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FixedDataBlock.cs" />
+    <Compile Include="RepositoryBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryData.cs" />
     <Compile Include="RepositoryExtensions.cs" />
@@ -83,6 +83,10 @@
     <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
       <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
       <Name>Leak.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
+      <Name>Leak.Tasks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Testing\Leak.Testing.csproj">
       <Project>{56e41a71-1ac5-49d0-a8ec-b0e4767c7bf7}</Project>

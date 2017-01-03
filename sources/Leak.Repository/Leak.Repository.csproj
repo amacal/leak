@@ -40,7 +40,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryAllocation.cs" />
     <Compile Include="RepositoryAllocationRange.cs" />
-    <Compile Include="RepositoryBlockData.cs" />
     <Compile Include="RepositoryBuilder.cs" />
     <Compile Include="RepositoryConfiguration.cs" />
     <Compile Include="RepositoryContext.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="RepositoryTaskCallback.cs" />
     <Compile Include="RepositoryTaskFlush.cs" />
     <Compile Include="RepositoryTaskQueue.cs" />
+    <Compile Include="RepositoryTaskReadBlock.cs" />
     <Compile Include="RepositoryTaskVerifyPiece.cs" />
     <Compile Include="RepositoryTaskVerifyRange.cs" />
     <Compile Include="RepositoryTaskWriteBlock.cs" />

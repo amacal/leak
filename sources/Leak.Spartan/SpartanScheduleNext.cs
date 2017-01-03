@@ -29,14 +29,18 @@ namespace Leak.Spartan
             {
                 context.State.Start(Goal.Verify);
                 context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Verify);
-                //context.Dependencies.Repository.Verify();
+
+                context.Dependencies.Repository.Start();
+                context.Dependencies.Repository.Verify(new Bitfield(context.State.Metainfo.Pieces.Length));
             }
 
             if (context.State.CanStart(Goal.Download))
             {
                 context.State.Start(Goal.Download);
                 context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Download);
-                //context.State.Retriever.Start();
+
+                context.Dependencies.Retriever.Start();
+                context.Dependencies.Datashare.Start();
             }
         }
     }

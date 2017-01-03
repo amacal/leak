@@ -29,7 +29,7 @@ namespace Leak.Datashare
             });
         }
 
-        public IEnumerable<DatashareEntry> RemoveAll(BlockIndex block)
+        public IList<DatashareEntry> RemoveAll(BlockIndex block)
         {
             List<DatashareEntry> entries;
 

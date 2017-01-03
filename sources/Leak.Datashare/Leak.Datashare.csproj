@@ -39,6 +39,7 @@
     <Compile Include="DatashareContext.cs" />
     <Compile Include="DatashareDependencies.cs" />
     <Compile Include="DatashareEntry.cs" />
+    <Compile Include="DatashareExtensions.cs" />
     <Compile Include="DatashareHooks.cs" />
     <Compile Include="DatashareParameters.cs" />
     <Compile Include="DatashareService.cs" />
@@ -52,6 +53,10 @@
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
       <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+      <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
+      <Name>Leak.Glue</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
       <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>

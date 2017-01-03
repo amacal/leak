@@ -26,12 +26,22 @@ namespace Leak.Repository
             });
         }
 
-        public static void CallBlockWritten(this RepositoryHooks hooks, FileHash hash, RepositoryBlockData data)
+        public static void CallBlockRead(this RepositoryHooks hooks, FileHash hash, BlockIndex block, DataBlock payload)
+        {
+            hooks.OnBlockRead?.Invoke(new BlockRead
+            {
+                Hash = hash,
+                Block = block,
+                Payload = payload
+            });
+        }
+
+        public static void CallBlockWritten(this RepositoryHooks hooks, FileHash hash, BlockIndex block)
         {
             hooks.OnBlockWritten?.Invoke(new BlockWritten
             {
                 Hash = hash,
-                Block = data.Index
+                Block = block
             });
         }
 

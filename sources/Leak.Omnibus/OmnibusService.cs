@@ -69,7 +69,9 @@ namespace Leak.Omnibus
         public void Handle(PeerChanged data)
         {
             context.States.Handle(data);
-            context.Bitfields.Add(data.Peer, data.Bitfield);
+
+            if (data.Bitfield != null)
+                context.Bitfields.Add(data.Peer, data.Bitfield);
         }
 
         public void Handle(DataVerified data)

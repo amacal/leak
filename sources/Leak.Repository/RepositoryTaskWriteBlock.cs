@@ -1,19 +1,22 @@
-﻿using Leak.Files;
+﻿using Leak.Common;
+using Leak.Files;
 
 namespace Leak.Repository
 {
     public class RepositoryTaskWriteBlock : RepositoryTask
     {
-        private readonly RepositoryBlockData data;
+        private readonly BlockIndex index;
+        private readonly DataBlock data;
 
-        public RepositoryTaskWriteBlock(RepositoryBlockData data)
+        public RepositoryTaskWriteBlock(BlockIndex index, DataBlock data)
         {
+            this.index = index;
             this.data = data;
         }
 
         public int Piece
         {
-            get { return data.Index.Piece; }
+            get { return index.Piece; }
         }
 
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
@@ -23,21 +26,21 @@ namespace Leak.Repository
                 int blockSize = context.Metainfo.Properties.BlockSize;
                 FileBuffer file = new FileBuffer(buffer, offset, count);
 
-                context.View.Write(file, data.Index.Piece, data.Index.Offset / blockSize, args =>
+                context.View.Write(file, index.Piece, index.Offset / blockSize, args =>
                 {
-                    context.Queue.Add(new Complete(data));
+                    context.Queue.Add(new Complete(index, data));
                 });
             });
         }
 
         public bool CanExecute(RepositoryTaskQueue queue)
         {
-            return queue.IsBlocked(data.Index.Piece) == false;
+            return queue.IsBlocked(index.Piece) == false;
         }
 
         public void Block(RepositoryTaskQueue queue)
         {
-            queue.Block(data.Index.Piece);
+            queue.Block(index.Piece);
         }
 
         public void Release(RepositoryTaskQueue queue)
@@ -46,10 +49,12 @@ namespace Leak.Repository
 
         private class Complete : RepositoryTask
         {
-            private readonly RepositoryBlockData data;
+            private readonly BlockIndex index;
+            private readonly DataBlock data;
 
-            public Complete(RepositoryBlockData data)
+            public Complete(BlockIndex index, DataBlock data)
             {
+                this.index = index;
                 this.data = data;
             }
 
@@ -61,7 +66,7 @@ namespace Leak.Repository
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
                 onCompleted.Invoke(this);
-                context.Hooks.CallBlockWritten(context.Metainfo.Hash, data);
+                context.Hooks.CallBlockWritten(context.Metainfo.Hash, index);
                 data.Dispose();
             }
 
@@ -71,7 +76,7 @@ namespace Leak.Repository
 
             public void Release(RepositoryTaskQueue queue)
             {
-                queue.Release(data.Index.Piece);
+                queue.Release(index.Piece);
             }
         }
     }

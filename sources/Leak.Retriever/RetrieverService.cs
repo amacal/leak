@@ -1,9 +1,9 @@
 ﻿using System;
 using Leak.Common;
 using Leak.Events;
-using Leak.Omnibus;
 using Leak.Retriever.Components;
 using Leak.Retriever.Tasks;
+using Leak.Tasks;
 
 namespace Leak.Retriever
 {
@@ -46,7 +46,6 @@ namespace Leak.Retriever
             context.Dependencies.Pipeline.Register(context.Queue);
             context.Dependencies.Pipeline.Register(TimeSpan.FromMilliseconds(250), OnTick);
 
-            context.Queue.Add(new VerifyPieceTask());
             context.Queue.Add(new FindBitfieldsTask());
         }
 
@@ -55,39 +54,65 @@ namespace Leak.Retriever
             context.Dependencies.Pipeline.Remove(OnTick);
         }
 
-        public void Handle(PeerChanged data)
+        public void Handle(PeerConnected data)
         {
-            context.Queue.Add(new HandleBitfieldTask(data));
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Glue.SendInterested(data.Peer);
+            });
         }
 
         public void Handle(BlockReceived data)
         {
-            context.Queue.Add(new HandleBlockReceived(data));
+            context.Queue.Add(() =>
+            {
+                if (context.Dependencies.Omnibus.IsComplete(data.Block.Piece) == false)
+                {
+                    context.Dependencies.Repository.Write(data.Block, data.Payload);
+                    context.Hooks.CallBlockHandled(data.Hash, data.Peer, data.Block);
+                }
+            });
         }
 
         public void Handle(BlockWritten data)
         {
-            context.Dependencies.Omnibus.Complete(data.Block);
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Omnibus.Complete(data.Block);
+            });
         }
 
         public void Handle(BlockReserved data)
         {
-            context.Queue.Add(new RequestBlockTask(data));
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Glue.SendRequest(data.Peer, data.Block);
+                context.Hooks.CallBlockRequested(data.Hash, data.Peer, data.Block);
+            });
         }
 
         public void Handle(PieceAccepted data)
         {
-            context.Dependencies.Omnibus.Complete(data.Piece);
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Omnibus.Complete(data.Piece);
+            });
         }
 
         public void Handle(PieceRejected data)
         {
-            context.Dependencies.Omnibus.Invalidate(data.Piece);
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Omnibus.Invalidate(data.Piece);
+            });
         }
 
         public void Handle(PieceReady data)
         {
-            context.Dependencies.Repository.Verify(new PieceInfo(data.Piece));
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Repository.Verify(new PieceInfo(data.Piece));
+            });
         }
 
         private void OnTick()

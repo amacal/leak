@@ -1,18 +1,18 @@
 ﻿using Leak.Common;
 
-namespace Leak.Retriever.Tests
+namespace Leak.Datashare.Tests
 {
-    public class FixedDataBlock : DataBlock
+    public class DatashareBlock : DataBlock
     {
         private readonly byte[] data;
         private readonly int offset;
 
-        public FixedDataBlock(byte[] data)
+        public DatashareBlock(byte[] data)
         {
             this.data = data;
         }
 
-        private FixedDataBlock(byte[] data, int offset)
+        private DatashareBlock(byte[] data, int offset)
         {
             this.data = data;
             this.offset = offset;
@@ -35,7 +35,7 @@ namespace Leak.Retriever.Tests
 
         public DataBlock Scope(int shift)
         {
-            return new FixedDataBlock(data, shift + offset);
+            return new DatashareBlock(data, shift + offset);
         }
 
         public void Dispose()

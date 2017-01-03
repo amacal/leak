@@ -130,7 +130,7 @@ namespace Leak.Communicator.Tests
                     data.Payload.Should().NotBeNull();
                 });
 
-                session.Communicator.SendPiece(new Piece(1, 2, new FixedDataBlock(new byte[2])));
+                session.Communicator.SendPiece(new Piece(new BlockIndex(1, 2, 2), new FixedDataBlock(new byte[2])));
                 handler.Wait().Should().BeTrue();
             }
         }

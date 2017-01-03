@@ -1,4 +1,5 @@
-﻿using Leak.Files;
+﻿using Leak.Datashare;
+using Leak.Files;
 using Leak.Glue;
 using Leak.Metaget;
 using Leak.Metashare;
@@ -20,5 +21,6 @@ namespace Leak.Spartan
 
         public RepositoryService Repository;
         public RetrieverService Retriever;
+        public DatashareService Datashare;
     }
 }

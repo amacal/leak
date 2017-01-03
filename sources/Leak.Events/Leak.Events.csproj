@@ -38,6 +38,7 @@
     <Compile Include="BlockReceived.cs" />
     <Compile Include="BlockRequested.cs" />
     <Compile Include="BlockReserved.cs" />
+    <Compile Include="BlockSent.cs" />
     <Compile Include="BlockWritten.cs" />
     <Compile Include="ConnectionArrived.cs" />
     <Compile Include="ConnectionAttached.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="DataAllocated.cs" />
     <Compile Include="DataChanged.cs" />
     <Compile Include="DataCompleted.cs" />
+    <Compile Include="BlockRead.cs" />
     <Compile Include="DataVerified.cs" />
     <Compile Include="ExtensionDataReceived.cs" />
     <Compile Include="ExtensionDataSent.cs" />

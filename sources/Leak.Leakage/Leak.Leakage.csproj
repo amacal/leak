@@ -42,6 +42,7 @@
     <Compile Include="LeakHooks.cs" />
     <Compile Include="LeakPort.cs" />
     <Compile Include="LeakRegistrant.cs" />
+    <Compile Include="LeakRepositoryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +57,10 @@
     <ProjectReference Include="..\Leak.Connector\Leak.Connector.csproj">
       <Project>{f060eb59-ff12-4d2f-8e88-01d09ac24bb6}</Project>
       <Name>Leak.Connector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Datashare\Leak.Datashare.csproj">
+      <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
+      <Name>Leak.Datashare</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
@@ -109,9 +114,17 @@
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Omnibus.csproj">
+      <Project>{A69138D4-EAEB-4690-A040-5F612FEDDEB2}</Project>
+      <Name>Leak.Omnibus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
       <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
       <Name>Leak.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Retriever\Leak.Retriever.csproj">
+      <Project>{61B61289-D4E4-45F2-916B-D60114A4BD66}</Project>
+      <Name>Leak.Retriever</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Spartan\Leak.Spartan.csproj">
       <Project>{4a2f6660-bec0-42b3-bc79-704a4a06082d}</Project>

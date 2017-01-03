@@ -1,7 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Glue;
 using Leak.Omnibus;
-using Leak.Repository;
 using Leak.Tasks;
 
 namespace Leak.Retriever
@@ -43,7 +42,7 @@ namespace Leak.Retriever
             return this;
         }
 
-        public RetrieverBuilder WithRepository(RepositoryService repository)
+        public RetrieverBuilder WithRepository(RetrieverRepository repository)
         {
             dependencies.Repository = repository;
             return this;

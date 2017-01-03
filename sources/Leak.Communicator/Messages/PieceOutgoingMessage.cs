@@ -13,7 +13,7 @@ namespace Leak.Communicator.Messages
 
         public int Length
         {
-            get { return 13 + piece.Size; }
+            get { return 13 + piece.Index.Size; }
         }
 
         public byte[] ToBytes()
@@ -25,9 +25,9 @@ namespace Leak.Communicator.Messages
                 0x00, 0x00, 0x00, 0x00
             };
 
-            Bytes.Write(piece.Size + 9, result, 0);
-            Bytes.Write(piece.Index, result, 5);
-            Bytes.Write(piece.Offset, result, 9);
+            Bytes.Write(piece.Index.Size + 9, result, 0);
+            Bytes.Write(piece.Index.Piece, result, 5);
+            Bytes.Write(piece.Index.Offset, result, 9);
             Bytes.Append(ref result, result);
 
             return result;

@@ -3,6 +3,7 @@ using System.IO;
 using Leak.Common;
 using Leak.Completion;
 using Leak.Connector;
+using Leak.Datashare;
 using Leak.Events;
 using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
@@ -15,7 +16,9 @@ using Leak.Metaget;
 using Leak.Metashare;
 using Leak.Negotiator;
 using Leak.Networking;
+using Leak.Omnibus;
 using Leak.Repository;
+using Leak.Retriever;
 using Leak.Spartan;
 using Leak.Tasks;
 
@@ -154,6 +157,29 @@ namespace Leak.Leakage
                     .WithHash(entry.Hash)
                     .WithDestination(entry.Destination)
                     .WithFiles(files)
+                    .WithPipeline(pipeline)
+                    .Build();
+
+            entry.Omnibus =
+                new OmnibusBuilder()
+                    .WithHash(entry.Hash)
+                    .WithPipeline(pipeline)
+                    .Build();
+
+            entry.Retriever =
+                new RetrieverBuilder()
+                    .WithHash(entry.Hash)
+                    .WithPipeline(pipeline)
+                    .WithGlue(entry.Glue)
+                    .WithRepository(entry.Repository.ToRetriever())
+                    .WithOmnibus(entry.Omnibus)
+                    .Build();
+
+            entry.Datashare =
+                new DatashareBuilder()
+                    .WithHash(entry.Hash)
+                    .WithGlue(entry.Glue)
+                    .WithRepository(entry.Repository)
                     .Build();
 
             entry.Spartan =
@@ -164,6 +190,9 @@ namespace Leak.Leakage
                     .WithGlue(entry.Glue)
                     .WithMetaget(entry.Metaget)
                     .WithMetashare(entry.Metashare)
+                    .WithRepository(entry.Repository)
+                    .WithRetriever(entry.Retriever)
+                    .WithDatashare(entry.Datashare)
                     .WithGoal(Goal.All)
                     .Build();
 
@@ -210,9 +239,14 @@ namespace Leak.Leakage
                 }
             };
 
+            entry.Glue.Hooks.OnPeerConnected += entry.Retriever.Handle;
+            entry.Glue.Hooks.OnPeerChanged += entry.Omnibus.Handle;
+            entry.Glue.Hooks.OnBlockReceived += entry.Retriever.Handle;
+
             entry.Connector.Hooks.OnConnectionEstablished += data => OnConnectionEstablished(data, entry);
             entry.Negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
 
+            entry.Metaget.Hooks.OnMetadataDiscovered += entry.Omnibus.Handle;
             entry.Metaget.Hooks.OnMetadataDiscovered += entry.Repository.Handle;
             entry.Metaget.Hooks.OnMetadataDiscovered += entry.Spartan.Handle;
             entry.Metaget.Hooks.OnMetadataDiscovered += hooks.OnMetadataDiscovered;
@@ -223,7 +257,9 @@ namespace Leak.Leakage
             entry.MetadataPlugin.Hooks.OnMetadataPieceReceived += entry.Metaget.Handle;
             entry.MetadataPlugin.Hooks.OnMetadataRequestReceived += entry.Metashare.Handle;
 
+            entry.Repository.Hooks.OnDataVerified += entry.Spartan.Handle;
             entry.Repository.Hooks.OnDataVerified += hooks.OnDataVerified;
+            entry.Repository.Hooks.OnDataVerified += entry.Omnibus.Handle;
         }
 
         private NetworkPoolHooks CreateNetworkHooks()

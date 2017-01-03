@@ -2,17 +2,11 @@
 using Leak.Common;
 using Leak.Events;
 using Leak.Omnibus;
-using Leak.Repository;
 
 namespace Leak.Retriever.Components
 {
     public static class RetrieverExtensions
     {
-        public static void Write(this RepositoryService repository, BlockIndex index, DataBlock data)
-        {
-            repository.Write(new RepositoryBlockData(index, data));
-        }
-
         public static OmnibusStrategy ToOmnibus(this RetrieverStrategy strategy)
         {
             switch (strategy)

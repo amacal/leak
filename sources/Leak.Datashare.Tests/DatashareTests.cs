@@ -1,0 +1,92 @@
+﻿using FluentAssertions;
+using Leak.Common;
+using Leak.Events;
+using Leak.Testing;
+using NUnit.Framework;
+
+namespace Leak.Datashare.Tests
+{
+    public class DatashareTests
+    {
+        [Test]
+        public void ShouldTriggerBlockReadOnRepository()
+        {
+            using (DatashareFixture fixture = new DatashareFixture())
+            using (DatashareSession session = fixture.Start())
+            {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Repository.Hash,
+                    Metainfo = session.Metainfo
+                };
+
+                BlockRequested requested = new BlockRequested
+                {
+                    Hash = session.Datashare.Hash,
+                    Peer = PeerHash.Random(),
+                    Block = new BlockIndex(1, 0, 3616)
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Repository.Hooks.OnBlockRead, data =>
+                {
+                    data.Hash.Should().Be(session.Datashare.Hash);
+                    data.Block.Should().Be(requested.Block);
+                    data.Payload.Size.Should().Be(3616);
+                });
+
+                session.Repository.Start();
+                session.Repository.Handle(discovered);
+
+                session.Datashare.Start();
+                session.Datashare.Handle(requested);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerBlockSentOnDatashare()
+        {
+            using (DatashareFixture fixture = new DatashareFixture())
+            using (DatashareSession session = fixture.Start())
+            {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Repository.Hash,
+                    Metainfo = session.Metainfo
+                };
+
+                BlockRequested requested = new BlockRequested
+                {
+                    Hash = session.Datashare.Hash,
+                    Peer = PeerHash.Random(),
+                    Block = new BlockIndex(1, 0, 3616)
+                };
+
+                BlockRead read = new BlockRead
+                {
+                    Hash = session.Repository.Hash,
+                    Block = requested.Block,
+                    Payload = new DatashareBlock(session.Data[1])
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Datashare.Hooks.OnBlockSent, data =>
+                {
+                    data.Hash.Should().Be(session.Datashare.Hash);
+                    data.Peer.Should().Be(requested.Peer);
+                    data.Block.Should().Be(requested.Block);
+                    data.Block.Size.Should().Be(3616);
+                });
+
+                session.Repository.Start();
+                session.Repository.Handle(discovered);
+
+                session.Datashare.Start();
+                session.Datashare.Handle(requested);
+                session.Datashare.Handle(read);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+    }
+}

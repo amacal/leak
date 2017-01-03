@@ -114,7 +114,7 @@ namespace Leak.Glue
             {
                 entry.Commy.SendChoke();
                 entry.State |= GlueState.IsLocalChockingRemote;
-                hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Leak.Glue
             {
                 entry.Commy.SendUnchoke();
                 entry.State &= ~GlueState.IsLocalChockingRemote;
-                hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Leak.Glue
             {
                 entry.Commy.SendInterested();
                 entry.State |= GlueState.IsLocalInterestedInRemote;
-                hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
             }
         }
 
@@ -152,15 +152,23 @@ namespace Leak.Glue
             }
         }
 
-        public void SendRequest(PeerHash peer, int piece, int offset, int size)
+        public void SendRequest(PeerHash peer, BlockIndex block)
         {
             GlueEntry entry = collection.Find(peer);
-            Request request = new Request(piece, offset, size);
+            Request request = new Request(block);
 
             if (entry != null)
             {
                 entry.Commy.SendRequest(request);
             }
+        }
+
+        public void SendPiece(PeerHash peer, BlockIndex block, DataBlock payload)
+        {
+            GlueEntry entry = collection.Find(peer);
+            Piece piece = new Piece(block, payload);
+
+            entry?.Commy.SendPiece(piece);
         }
 
         public void SendHave(PeerHash peer, int piece)
@@ -252,27 +260,33 @@ namespace Leak.Glue
                 {
                     case "choke":
                         entry.State |= GlueState.IsRemoteChockingLocal;
-                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 
                     case "unchoke":
                         entry.State &= ~GlueState.IsRemoteChockingLocal;
-                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 
                     case "interested":
                         entry.State |= GlueState.IsRemoteInterestedInLocal;
-                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 
                     case "have":
                         entry.Bitfield = facts.ApplyHave(entry.Bitfield, data.Payload.GetInt32(0));
-                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 
                     case "bitfield":
                         entry.Bitfield = facts.ApplyBitfield(entry.Bitfield, data.Payload.GetBitfield());
-                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                        break;
+
+                    case "request":
+                        break;
+
+                    case "piece":
                         break;
 
                     case "extended":

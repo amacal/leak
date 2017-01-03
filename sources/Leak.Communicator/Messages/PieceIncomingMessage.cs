@@ -33,7 +33,7 @@ namespace Leak.Communicator.Messages
 
         public Piece ToPiece()
         {
-            return new Piece(piece, offset, data);
+            return new Piece(new BlockIndex(piece, offset, data.Size), data);
         }
     }
 }

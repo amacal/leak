@@ -1,37 +1,34 @@
 ﻿using System;
-using Leak.Common;
+using Moq;
 
 namespace Leak.Retriever.Tests
 {
     public class RetrieverSession : IDisposable
     {
-        private readonly RetrieverService service;
+        private readonly RetrieverService retriever;
         private readonly RetrieverData data;
+        private readonly Mock<RetrieverRepository> repository;
 
-        public RetrieverSession(RetrieverService service, RetrieverData data)
+        public RetrieverSession(RetrieverService retriever, RetrieverData data, Mock<RetrieverRepository> repository)
         {
-            this.service = service;
+            this.retriever = retriever;
             this.data = data;
+            this.repository = repository;
         }
 
-        public RetrieverHooks Hooks
+        public RetrieverService Retriever
         {
-            get { return service.Hooks; }
-        }
-
-        public FileHash Hash
-        {
-            get { return service.Hash; }
-        }
-
-        public RetrieverService Service
-        {
-            get { return service; }
+            get { return retriever; }
         }
 
         public RetrieverData Data
         {
             get { return data; }
+        }
+
+        public Mock<RetrieverRepository> Repository
+        {
+            get { return repository; }
         }
 
         public void Dispose()

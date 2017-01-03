@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Connector;
+using Leak.Datashare;
 using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
 using Leak.Glue;
@@ -7,7 +8,9 @@ using Leak.Metafile;
 using Leak.Metaget;
 using Leak.Metashare;
 using Leak.Negotiator;
+using Leak.Omnibus;
 using Leak.Repository;
+using Leak.Retriever;
 using Leak.Spartan;
 
 namespace Leak.Leakage
@@ -25,7 +28,10 @@ namespace Leak.Leakage
         public MetagetService Metaget;
         public MetashareService Metashare;
 
+        public OmnibusService Omnibus;
         public RepositoryService Repository;
+        public RetrieverService Retriever;
+        public DatashareService Datashare;
 
         public SpartanService Spartan;
 

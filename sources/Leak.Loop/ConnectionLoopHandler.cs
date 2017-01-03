@@ -58,6 +58,10 @@ namespace Leak.Loop
                         hooks.CallMessageReceived(peer, "bitfield", message);
                         break;
 
+                    case 6:
+                        hooks.CallMessageReceived(peer, "request", message);
+                        break;
+
                     case 7:
                         hooks.CallMessageReceived(peer, "piece", message);
                         break;

@@ -15,6 +15,8 @@ namespace Leak.Spartan
             pending = configuration.Goal;
         }
 
+        public Metainfo Metainfo;
+
         public bool CanStart(Goal tasks)
         {
             return pending.HasFlag(tasks) && ongoing == Goal.None;

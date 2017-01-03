@@ -1,4 +1,5 @@
 ﻿using Leak.Common;
+using Leak.Glue;
 using Leak.Repository;
 
 namespace Leak.Datashare
@@ -25,6 +26,12 @@ namespace Leak.Datashare
         public DatashareBuilder WithRepository(RepositoryService repository)
         {
             dependencies.Repository = repository;
+            return this;
+        }
+
+        public DatashareBuilder WithGlue(GlueService glue)
+        {
+            dependencies.Glue = glue;
             return this;
         }
 

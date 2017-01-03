@@ -19,7 +19,7 @@ namespace Leak.Spartan.Tests
                     return data.Task == Goal.Discover;
                 });
 
-                session.Service.Start();
+                session.Spartan.Start();
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -35,10 +35,10 @@ namespace Leak.Spartan.Tests
                     return data.Task == Goal.Discover;
                 });
 
-                session.Service.Start();
+                session.Spartan.Start();
                 session.Stage.Discovering.Wait(5000).Should().BeTrue();
 
-                session.Service.Handle(new MetadataDiscovered
+                session.Spartan.Handle(new MetadataDiscovered
                 {
                     Hash = session.Hash,
                     Metainfo = null
@@ -54,19 +54,22 @@ namespace Leak.Spartan.Tests
             using (SpartanFixture fixture = new SpartanFixture())
             using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
             {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Hash,
+                    Metainfo = session.Metainfo
+                };
+
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskStarted, data =>
                 {
                     return data.Task == Goal.Verify;
                 });
 
-                session.Service.Start();
+                session.Spartan.Start();
                 session.Stage.Discovering.Wait(5000).Should().BeTrue();
 
-                session.Service.Handle(new MetadataDiscovered
-                {
-                    Hash = session.Hash,
-                    Metainfo = null
-                });
+                session.Spartan.Handle(discovered);
+                session.Repository.Handle(discovered);
 
                 handler.Wait().Should().BeTrue();
             }

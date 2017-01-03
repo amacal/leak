@@ -9,8 +9,8 @@ using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
 using Leak.Omnibus;
-using Leak.Repository;
 using Leak.Tasks;
+using Moq;
 using File = System.IO.File;
 
 namespace Leak.Retriever.Tests
@@ -48,20 +48,10 @@ namespace Leak.Retriever.Tests
                 metainfo = builder.ToMetainfo();
             }
 
-            FileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
-            string destination = Path.Combine(sandbox.Directory, metainfo.Hash.ToString());
-
             GlueService glue =
                 new GlueBuilder()
                     .WithHash(metainfo.Hash)
                     .WithBlocks(new BufferedBlockFactory())
-                    .Build();
-
-            RepositoryService repository =
-                new RepositoryBuilder()
-                    .WithHash(metainfo.Hash)
-                    .WithDestination(destination)
-                    .WithFiles(files)
                     .Build();
 
             OmnibusService omnibus =
@@ -70,25 +60,21 @@ namespace Leak.Retriever.Tests
                     .WithPipeline(pipeline)
                     .Build();
 
+            Mock<RetrieverRepository> repository =
+                new Mock<RetrieverRepository>();
+
             RetrieverService service =
                 new RetrieverBuilder()
                     .WithHash(metainfo.Hash)
                     .WithPipeline(pipeline)
                     .WithGlue(glue)
-                    .WithRepository(repository)
+                    .WithRepository(repository.Object)
                     .WithOmnibus(omnibus)
                     .Build();
 
-            repository.Start();
             omnibus.Start();
 
             omnibus.Handle(new MetadataDiscovered
-            {
-                Hash = metainfo.Hash,
-                Metainfo = metainfo
-            });
-
-            repository.Handle(new MetadataDiscovered
             {
                 Hash = metainfo.Hash,
                 Metainfo = metainfo
@@ -100,7 +86,7 @@ namespace Leak.Retriever.Tests
                 Bitfield = new Bitfield(metainfo.Pieces.Length)
             });
 
-            return new RetrieverSession(service, data);
+            return new RetrieverSession(service, data, repository);
         }
 
         public void Dispose()

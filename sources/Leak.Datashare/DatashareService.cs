@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Leak.Common;
 using Leak.Events;
 
@@ -48,6 +49,24 @@ namespace Leak.Datashare
 
         public void Handle(BlockRequested data)
         {
+            context.Collection.Register(data.Peer, data.Block);
+            context.Dependencies.Repository.Read(data.Block);
+        }
+
+        public void Handle(BlockRead data)
+        {
+            IList<DatashareEntry> entries = context.Collection.RemoveAll(data.Block);
+
+            for (int i = 1; i < entries.Count; i++)
+            {
+                context.Dependencies.Glue.SendPiece(entries[i].Peer, data.Block, data.Payload);
+            }
+
+            if (entries.Count > 0)
+            {
+                context.Dependencies.Glue.SendPiece(entries[0].Peer, data.Block, data.Payload);
+                context.Hooks.CallBlockSent(context.Parameters.Hash, entries[0].Peer, data.Block);
+            }
         }
 
         public void Dispose()

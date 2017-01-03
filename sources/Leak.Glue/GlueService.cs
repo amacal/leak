@@ -30,7 +30,9 @@ namespace Leak.Glue
 
         void SendBitfield(PeerHash peer, Bitfield bitfield);
 
-        void SendRequest(PeerHash peer, int piece, int offset, int size);
+        void SendRequest(PeerHash peer, BlockIndex block);
+
+        void SendPiece(PeerHash peer, BlockIndex block, DataBlock payload);
 
         void SendHave(PeerHash peer, int piece);
 

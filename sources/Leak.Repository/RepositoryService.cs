@@ -40,14 +40,13 @@ namespace Leak.Repository
 
         public void Start()
         {
-            context.Queue.Start(context);
+            context.Dependencies.Pipeline.Register(context.Queue);
         }
 
         public void Handle(MetadataDiscovered data)
         {
             context.Metainfo = data.Metainfo;
             context.Queue.Add(new RepositoryTaskAllocate());
-            context.Queue.Add(new RepositoryTaskVerifyRange(new Bitfield(data.Metainfo.Pieces.Length)));
         }
 
         public void Verify(Bitfield scope)
@@ -60,9 +59,14 @@ namespace Leak.Repository
             context.Queue.Add(new RepositoryTaskVerifyPiece(piece));
         }
 
-        public void Write(RepositoryBlockData block)
+        public void Read(BlockIndex index)
         {
-            context.Queue.Add(new RepositoryTaskWriteBlock(block));
+            context.Queue.Add(new RepositoryTaskReadBlock(index));
+        }
+
+        public void Write(BlockIndex index, DataBlock data)
+        {
+            context.Queue.Add(new RepositoryTaskWriteBlock(index, data));
         }
 
         public void Flush()
@@ -72,7 +76,6 @@ namespace Leak.Repository
 
         public void Dispose()
         {
-            context.Queue.Stop();
             context.View?.Dispose();
         }
     }

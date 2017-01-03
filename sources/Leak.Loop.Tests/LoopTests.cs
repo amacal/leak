@@ -116,6 +116,24 @@ namespace Leak.Loop.Tests
         }
 
         [Test]
+        public async Task ShouldTriggerMessageReceivedWhenRequest()
+        {
+            using (LoopFixture fixture = new LoopFixture())
+            using (LoopSession session = await fixture.Start())
+            {
+                Trigger handler = Trigger.Bind(ref fixture.Hooks.OnMessageReceived, data =>
+                {
+                    data.Peer.Should().NotBeNull();
+                    data.Type.Should().Be("request");
+                    data.Payload.Should().NotBeNull();
+                });
+
+                session.Client.Send(fixture.Samples.Request, null);
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
         public async Task ShouldTriggerMessageReceivedWhenPiece()
         {
             using (LoopFixture fixture = new LoopFixture())

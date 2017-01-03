@@ -19,6 +19,12 @@ namespace Leak.Repository
         public Action<DataVerified> OnDataVerified;
 
         /// <summary>
+        /// Called when some block was successfully read from the
+        /// persisted form in the file system.
+        /// </summary>
+        public Action<BlockRead> OnBlockRead;
+
+        /// <summary>
         /// Called when some block of some piece was successfully
         /// persisted in the file system.
         /// </summary>

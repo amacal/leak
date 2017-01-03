@@ -10,7 +10,9 @@ using Leak.Metadata;
 using Leak.Metafile;
 using Leak.Metaget;
 using Leak.Metashare;
+using Leak.Repository;
 using Leak.Tasks;
+
 using File = System.IO.File;
 
 namespace Leak.Spartan.Tests
@@ -82,6 +84,14 @@ namespace Leak.Spartan.Tests
                     .WithMetafile(metafile)
                     .Build();
 
+            RepositoryService repository =
+                new RepositoryBuilder()
+                    .WithHash(metainfo.Hash)
+                    .WithDestination(destination)
+                    .WithFiles(files)
+                    .WithPipeline(pipeline)
+                    .Build();
+
             SpartanService spartan = 
                 new SpartanBuilder()
                     .WithHash(metainfo.Hash)
@@ -90,6 +100,7 @@ namespace Leak.Spartan.Tests
                     .WithGlue(glue)
                     .WithMetaget(metaget)
                     .WithMetashare(metashare)
+                    .WithRepository(repository)
                     .WithGoal(goal)
                     .Build();
 
@@ -98,7 +109,7 @@ namespace Leak.Spartan.Tests
 
             metafile.Start();
 
-            return new SpartanSession(sandbox, meta, data, spartan, stage, metafile);
+            return new SpartanSession(metainfo, sandbox, meta, data, spartan, stage, metafile, repository);
         }
 
         public void Dispose()

@@ -56,6 +56,8 @@ namespace Leak.Spartan
 
         public void Handle(MetadataDiscovered data)
         {
+            context.State.Metainfo = data.Metainfo;
+
             context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Discover);
             context.State.Complete(Goal.Discover);
 
@@ -65,6 +67,9 @@ namespace Leak.Spartan
 
         public void Handle(DataVerified data)
         {
+            context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Verify);
+            context.State.Complete(Goal.Verify);
+
             context.Queue.Add(new SpartanScheduleNext(context));
         }
 

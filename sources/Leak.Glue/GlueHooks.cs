@@ -10,6 +10,7 @@ namespace Leak.Glue
 
         public Action<PeerChanged> OnPeerChanged;
         public Action<BlockReceived> OnBlockReceived;
+        public Action<BlockRequested> OnBlockRequested;
 
         public Action<ExtensionListReceived> OnExtensionListReceived;
         public Action<ExtensionListSent> OnExtensionListSent;

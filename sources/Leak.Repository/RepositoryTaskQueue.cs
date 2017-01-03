@@ -1,17 +1,23 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using Leak.Tasks;
 
 namespace Leak.Repository
 {
-    public class RepositoryTaskQueue : LeakQueueBase<RepositoryContext>
+    public class RepositoryTaskQueue : LeakPipelineTrigger
     {
+        private readonly RepositoryContext context;
         private readonly ConcurrentQueue<RepositoryTask> ready;
         private readonly ConcurrentQueue<RepositoryTask> items;
         private readonly HashSet<object> keys;
 
-        public RepositoryTaskQueue()
+        private ManualResetEvent onReady;
+
+        public RepositoryTaskQueue(RepositoryContext context)
         {
+            this.context = context;
+
             ready = new ConcurrentQueue<RepositoryTask>();
             items = new ConcurrentQueue<RepositoryTask>();
             keys = new HashSet<object>();
@@ -20,7 +26,7 @@ namespace Leak.Repository
         public void Add(RepositoryTask task)
         {
             items.Enqueue(task);
-            onReady.Set();
+            onReady?.Set();
         }
 
         public bool IsBlocked(object key)
@@ -38,7 +44,15 @@ namespace Leak.Repository
             keys.Remove(key);
         }
 
-        protected override void OnProcess(RepositoryContext context)
+        void LeakPipelineTrigger.Register(ManualResetEvent watch)
+        {
+            onReady = watch;
+
+            if (items.Count > 0)
+                onReady.Set();
+        }
+
+        void LeakPipelineTrigger.Execute()
         {
             RepositoryTask task;
 

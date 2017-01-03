@@ -9,7 +9,7 @@ namespace Leak.Retriever.Tests
         {
             service.Handle(new BlockReceived
             {
-                Payload = new FixedDataBlock(data),
+                Payload = new RetrieverBlock(data),
                 Peer = PeerHash.Random(),
                 Hash = service.Hash,
                 Block = new BlockIndex(index, 0, data.Length)

@@ -5,17 +5,22 @@ using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
 using Leak.Metadata;
+using Leak.Tasks;
 using File = System.IO.File;
 
 namespace Leak.Repository.Tests
 {
     public class RepositoryFixture : IDisposable
     {
+        private readonly LeakPipeline pipeline;
         private readonly CompletionThread completion;
         private readonly FileFactory files;
 
         public RepositoryFixture()
         {
+            pipeline = new LeakPipeline();
+            pipeline.Start();
+
             completion = new CompletionThread();
             completion.Start();
 
@@ -46,6 +51,7 @@ namespace Leak.Repository.Tests
                     .WithHash(metainfo.Hash)
                     .WithDestination(destination)
                     .WithFiles(files)
+                    .WithPipeline(pipeline)
                     .Build();
 
             return new RepositorySession(metainfo, service, sandbox, data);
@@ -54,6 +60,7 @@ namespace Leak.Repository.Tests
         public void Dispose()
         {
             completion.Dispose();
+            pipeline.Stop();
         }
     }
 }

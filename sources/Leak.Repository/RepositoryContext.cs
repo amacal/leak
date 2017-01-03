@@ -25,7 +25,7 @@ namespace Leak.Repository
 
             bitfile = new BitfileService(parameters.Hash, parameters.Destination + ".bitfield");
 
-            queue = new RepositoryTaskQueue();
+            queue = new RepositoryTaskQueue(this);
             buffer = new byte[16384];
         }
 

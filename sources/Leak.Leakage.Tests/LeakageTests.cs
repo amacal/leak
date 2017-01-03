@@ -164,5 +164,27 @@ namespace Leak.Leakage.Tests
                 handler.Wait().Should().BeTrue();
             }
         }
+
+        [Test]
+        public void ShouldExchangeData()
+        {
+            using (LeakageFixture fixture = new LeakageFixture())
+            using (LeakageSwarm swarm = fixture.Start())
+            {
+                Trigger handler = Trigger.Bind(ref swarm.Joe.Hooks.OnDataCompleted, data =>
+                {
+                    data.Hash.Should().Be(swarm.Hash);
+                });
+
+                swarm.Bob.Client.Start();
+                swarm.Bob.Client.Register(swarm.Bob.Registrant);
+                swarm.Bob.Events.Listening.Wait(5000).Should().BeTrue();
+
+                swarm.Joe.Client.Start();
+                swarm.Joe.Client.Register(swarm.Joe.Registrant.With(swarm.Bob.Address));
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
     }
 }

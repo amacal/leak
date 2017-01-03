@@ -41,15 +41,12 @@
     <Compile Include="RetrieverDependencies.cs" />
     <Compile Include="RetrieverHooks.cs" />
     <Compile Include="RetrieverParameters.cs" />
+    <Compile Include="RetrieverRepository.cs" />
     <Compile Include="RetrieverService.cs" />
     <Compile Include="RetrieverStrategy.cs" />
     <Compile Include="Tasks\FindBitfieldsTask.cs" />
-    <Compile Include="Tasks\HandleBitfieldTask.cs" />
-    <Compile Include="Tasks\HandleBlockReceived.cs" />
-    <Compile Include="Tasks\RequestBlockTask.cs" />
     <Compile Include="Tasks\ScheduleAllTask.cs" />
     <Compile Include="Tasks\ScheduleItTask.cs" />
-    <Compile Include="Tasks\VerifyPieceTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
@@ -67,10 +64,6 @@
     <ProjectReference Include="..\Leak.Omnibus\Leak.Omnibus.csproj">
       <Project>{a69138d4-eaeb-4690-a040-5f612feddeb2}</Project>
       <Name>Leak.Omnibus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
-      <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
-      <Name>Leak.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>

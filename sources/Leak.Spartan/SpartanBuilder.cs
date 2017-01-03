@@ -1,8 +1,10 @@
 ﻿using Leak.Common;
+using Leak.Datashare;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Metaget;
 using Leak.Metashare;
+using Leak.Repository;
 using Leak.Retriever;
 using Leak.Tasks;
 
@@ -59,9 +61,21 @@ namespace Leak.Spartan
             return this;
         }
 
+        public SpartanBuilder WithRepository(RepositoryService repository)
+        {
+            dependencies.Repository = repository;
+            return this;
+        }
+
         public SpartanBuilder WithRetriever(RetrieverService retriever)
         {
             dependencies.Retriever = retriever;
+            return this;
+        }
+
+        public SpartanBuilder WithDatashare(DatashareService datashare)
+        {
+            dependencies.Datashare = datashare;
             return this;
         }
 

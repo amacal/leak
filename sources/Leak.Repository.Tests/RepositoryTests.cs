@@ -80,7 +80,7 @@ namespace Leak.Repository.Tests
         }
 
         [Test]
-        public void ShouldTriggerDataWritten()
+        public void ShouldTriggerBlockWritten()
         {
             using (RepositoryFixture fixture = new RepositoryFixture())
             using (RepositorySession session = fixture.Start())
@@ -96,6 +96,29 @@ namespace Leak.Repository.Tests
                 session.Service.Start();
                 session.Service.HandleMetadataDiscovered(session.Metainfo);
                 session.Service.Write(1, session.Data[1]);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerBlockRead()
+        {
+            using (RepositoryFixture fixture = new RepositoryFixture())
+            using (RepositorySession session = fixture.Start())
+            {
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnBlockRead, data =>
+                {
+                    data.Hash.Should().Be(session.Hash);
+                    data.Block.Piece.Should().Be(1);
+                    data.Block.Offset.Should().Be(0);
+                    data.Block.Size.Should().Be(session.Data[1].Length);
+                });
+
+                session.Service.Start();
+                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.Write(1, session.Data[1]);
+                session.Service.Read(1, session.Data[1].Length);
 
                 handler.Wait().Should().BeTrue();
             }

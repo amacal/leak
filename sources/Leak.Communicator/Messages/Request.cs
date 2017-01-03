@@ -1,31 +1,19 @@
-﻿namespace Leak.Communicator.Messages
+﻿using Leak.Common;
+
+namespace Leak.Communicator.Messages
 {
     public class Request
     {
-        private readonly int piece;
-        private readonly int offset;
-        private readonly int size;
+        private readonly BlockIndex block;
 
-        public Request(int piece, int offset, int size)
+        public Request(BlockIndex block)
         {
-            this.piece = piece;
-            this.offset = offset;
-            this.size = size;
+            this.block = block;
         }
 
-        public int Piece
+        public BlockIndex Block
         {
-            get { return piece; }
-        }
-
-        public int Offset
-        {
-            get { return offset; }
-        }
-
-        public int Size
-        {
-            get { return size; }
+            get { return block; }
         }
     }
 }

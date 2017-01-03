@@ -42,7 +42,9 @@
     <Compile Include="LeakPipelineTrigger.cs" />
     <Compile Include="LeakQueue.cs" />
     <Compile Include="LeakQueueBase.cs" />
+    <Compile Include="LeakQueueExtensions.cs" />
     <Compile Include="LeakTask.cs" />
+    <Compile Include="LeakTaskInline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

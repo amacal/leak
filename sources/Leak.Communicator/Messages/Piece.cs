@@ -4,30 +4,18 @@ namespace Leak.Communicator.Messages
 {
     public class Piece
     {
-        private readonly int index;
-        private readonly int offset;
+        private readonly BlockIndex index;
         private readonly DataBlock data;
 
-        public Piece(int index, int offset, DataBlock data)
+        public Piece(BlockIndex index, DataBlock data)
         {
             this.index = index;
-            this.offset = offset;
             this.data = data;
         }
 
-        public int Index
+        public BlockIndex Index
         {
             get { return index; }
-        }
-
-        public int Offset
-        {
-            get { return offset; }
-        }
-
-        public int Size
-        {
-            get { return data.Size; }
         }
 
         public DataBlock Data

@@ -2,17 +2,17 @@
 
 namespace Leak.Repository.Tests
 {
-    public class FixedDataBlock : DataBlock
+    public class RepositoryBlock : DataBlock
     {
         private readonly byte[] data;
         private readonly int offset;
 
-        public FixedDataBlock(byte[] data)
+        public RepositoryBlock(byte[] data)
         {
             this.data = data;
         }
 
-        private FixedDataBlock(byte[] data, int offset)
+        private RepositoryBlock(byte[] data, int offset)
         {
             this.data = data;
             this.offset = offset;
@@ -35,7 +35,7 @@ namespace Leak.Repository.Tests
 
         public DataBlock Scope(int shift)
         {
-            return new FixedDataBlock(data, shift + offset);
+            return new RepositoryBlock(data, shift + offset);
         }
 
         public void Dispose()
