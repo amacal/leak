@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Omnibus;
 using Leak.Retriever.Components;
 using Leak.Tasks;
 
@@ -17,11 +16,12 @@ namespace Leak.Retriever.Tasks
 
         private void Schedule(RetrieverContext context, int ranking, int count, int pieces)
         {
-            OmnibusStrategy strategy = context.Configuration.Strategy.ToOmnibus();
+            string strategy = context.Configuration.Strategy;
+            RetrieverOmnibus omnibus = context.Dependencies.Omnibus;
 
-            foreach (PeerHash peer in context.Dependencies.Omnibus.Find(ranking, count))
+            foreach (PeerHash peer in omnibus.Find(ranking, count))
             {
-                context.Dependencies.Omnibus.Schedule(strategy, peer, pieces);
+                omnibus.Schedule(strategy, peer, pieces);
             }
         }
     }

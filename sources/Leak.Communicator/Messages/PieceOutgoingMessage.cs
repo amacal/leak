@@ -26,7 +26,7 @@ namespace Leak.Communicator.Messages
             };
 
             Bytes.Write(piece.Index.Size + 9, result, 0);
-            Bytes.Write(piece.Index.Piece, result, 5);
+            Bytes.Write(piece.Index.Piece.Index, result, 5);
             Bytes.Write(piece.Index.Offset, result, 9);
             Bytes.Append(ref result, result);
 

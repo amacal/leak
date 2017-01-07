@@ -22,10 +22,10 @@ namespace Leak.Communicator.Messages
 
             data[3] = 13;
             data[4] = 6;
-            data[5] = (byte)((request.Block.Piece >> 24) & 255);
-            data[6] = (byte)((request.Block.Piece >> 16) & 255);
-            data[7] = (byte)((request.Block.Piece >> 8) & 255);
-            data[8] = (byte)(request.Block.Piece & 255);
+            data[5] = (byte)((request.Block.Piece.Index >> 24) & 255);
+            data[6] = (byte)((request.Block.Piece.Index >> 16) & 255);
+            data[7] = (byte)((request.Block.Piece.Index >> 8) & 255);
+            data[8] = (byte)(request.Block.Piece.Index & 255);
             data[9] = (byte)((request.Block.Offset >> 24) & 255);
             data[10] = (byte)((request.Block.Offset >> 16) & 255);
             data[11] = (byte)((request.Block.Offset >> 8) & 255);

@@ -39,7 +39,9 @@
     <Compile Include="LeakEntry.cs" />
     <Compile Include="LeakExtensions.cs" />
     <Compile Include="LeakFactory.cs" />
+    <Compile Include="LeakGlueExtensions.cs" />
     <Compile Include="LeakHooks.cs" />
+    <Compile Include="LeakOmnibusExtensions.cs" />
     <Compile Include="LeakPort.cs" />
     <Compile Include="LeakRegistrant.cs" />
     <Compile Include="LeakRepositoryExtensions.cs" />

@@ -32,7 +32,7 @@ namespace Leak.Omnibus.Components
             });
         }
 
-        public static void CallPieceReady(this OmnibusHooks hooks, FileHash hash, int piece)
+        public static void CallPieceReady(this OmnibusHooks hooks, FileHash hash, PieceInfo piece)
         {
             hooks.OnPieceReady?.Invoke(new PieceReady
             {

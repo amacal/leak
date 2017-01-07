@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Leak.Tasks
 {
-    public class LeakPipeline
+    public class LeakPipeline : PipelineService
     {
         private readonly Thread worker;
         private readonly List<LeakPipelineTimer> ticks;

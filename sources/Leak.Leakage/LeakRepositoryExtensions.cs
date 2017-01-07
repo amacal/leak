@@ -6,28 +6,28 @@ namespace Leak.Leakage
 {
     public static class LeakRepositoryExtensions
     {
-        public static RetrieverRepository ToRetriever(this RepositoryService repository)
+        public static RetrieverRepository ToRetriever(this RepositoryService service)
         {
-            return new RepositoryToRetriever(repository);
+            return new RepositoryToRetriever(service);
         }
 
         private class RepositoryToRetriever : RetrieverRepository
         {
-            private readonly RepositoryService repository;
+            private readonly RepositoryService service;
 
-            public RepositoryToRetriever(RepositoryService repository)
+            public RepositoryToRetriever(RepositoryService service)
             {
-                this.repository = repository;
+                this.service = service;
             }
 
             public void Verify(PieceInfo piece)
             {
-                repository.Verify(piece);
+                service.Verify(piece);
             }
 
             public void Write(BlockIndex block, DataBlock data)
             {
-                repository.Write(block, data);
+                service.Write(block, data);
             }
         }
     }

@@ -9,81 +9,184 @@ namespace Leak.Retriever.Tests
     public class RetrieverTests
     {
         [Test]
-        public void ShouldTriggerDataHandledOnRetriever()
-        {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
-            {
-                Trigger handler = Trigger.Bind(ref session.Retriever.Hooks.OnBlockHandled, data =>
-                {
-                    data.Hash.Should().Be(session.Retriever.Hash);
-                    data.Peer.Should().NotBeNull();
-                    data.Block.Piece.Should().Be(1);
-                    data.Block.Offset.Should().Be(0);
-                    data.Block.Size.Should().Be(3616);
-                });
-
-                session.Retriever.Start();
-                session.Retriever.HandleBlockReceived(1, session.Data[1]);
-
-                handler.Wait().Should().BeTrue();
-            }
-        }
-
-        [Test]
-        public void ShouldCallWriteOnRepository()
+        public void ShouldTriggerBlockHandled()
         {
             using (RetrieverFixture fixture = new RetrieverFixture())
             using (RetrieverSession session = fixture.Start())
             {
                 BlockReceived received = new BlockReceived
                 {
-                    Payload = new RetrieverBlock(session.Data[1]),
+                    Payload = new RetrieverBlock(),
                     Peer = PeerHash.Random(),
                     Hash = session.Retriever.Hash,
-                    Block = new BlockIndex(1, 0, session.Data[1].Length)
+                    Block = new BlockIndex(1, 0, 3616)
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Retriever.Hooks.OnBlockHandled, data =>
+                {
+                    data.Hash.Should().Be(session.Retriever.Hash);
+                    data.Peer.Should().NotBeNull();
+                    data.Block.Should().Be(received.Block);
+                    data.Block.Size.Should().Be(3616);
+                });
+
+                session.Retriever.Start();
+                session.Retriever.Handle(received);
+
+                session.Pipeline.Process();
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldWriteToRepositoryWhenBlockReceived()
+        {
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                BlockReceived received = new BlockReceived
+                {
+                    Payload = new RetrieverBlock(),
+                    Peer = PeerHash.Random(),
+                    Hash = session.Retriever.Hash,
+                    Block = new BlockIndex(1, 0, 3616)
                 };
 
                 session.Retriever.Start();
                 session.Retriever.Handle(received);
 
+                session.Pipeline.Process();
                 session.Repository.Verify(x => x.Write(received.Block, received.Payload));
             }
         }
 
         [Test]
-        public void ShouldTriggerDataRequestedOnRetriever()
+        public void ShouldTriggerBlockRequested()
         {
             using (RetrieverFixture fixture = new RetrieverFixture())
             using (RetrieverSession session = fixture.Start())
             {
-                PeerChanged changed = new PeerChanged
-                {
-                    Peer = PeerHash.Random(),
-                    Bitfield = Bitfield.Sequence(false, true, false),
-                    IsLocalInterestedInRemote = true
-                };
-
                 BlockReserved reserved = new BlockReserved
                 {
                     Hash = session.Retriever.Hash,
-                    Peer = changed.Peer,
+                    Peer = PeerHash.Random(),
                     Block = new BlockIndex(1, 0, 3616)
                 };
 
                 Trigger handler = Trigger.Bind(ref session.Retriever.Hooks.OnBlockRequested, data =>
                 {
                     data.Hash.Should().Be(session.Retriever.Hash);
-                    data.Peer.Should().Be(changed.Peer);
-                    data.Block.Piece.Should().Be(1);
-                    data.Block.Offset.Should().Be(0);
+                    data.Peer.Should().Be(reserved.Peer);
+                    data.Block.Should().Be(reserved.Block);
                     data.Block.Size.Should().Be(3616);
                 });
 
                 session.Retriever.Start();
                 session.Retriever.Handle(reserved);
 
+                session.Pipeline.Process();
                 handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldSendRequestedWhenBlockReserved()
+        {
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                BlockReserved received = new BlockReserved
+                {
+                    Peer = PeerHash.Random(),
+                    Hash = session.Retriever.Hash,
+                    Block = new BlockIndex(1, 0, 3616)
+                };
+
+                session.Retriever.Start();
+                session.Retriever.Handle(received);
+
+                session.Pipeline.Process();
+                session.Glue.Verify(x => x.SendRequest(received.Peer, received.Block));
+            }
+        }
+
+        [Test]
+        public void ShouldVerifyPieceWhenPieceIsReady()
+        {
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                PieceReady ready = new PieceReady
+                {
+                    Hash = session.Retriever.Hash,
+                    Piece = new PieceInfo(1)
+                };
+
+                session.Retriever.Start();
+                session.Retriever.Handle(ready);
+
+                session.Pipeline.Process();
+                session.Repository.Verify(x => x.Verify(ready.Piece));
+            }
+        }
+
+        [Test]
+        public void ShouldCompletePieceWhenPieceIsAccepted()
+        {
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                PieceAccepted accepted = new PieceAccepted
+                {
+                    Hash = session.Retriever.Hash,
+                    Piece = new PieceInfo(1)
+                };
+
+                session.Retriever.Start();
+                session.Retriever.Handle(accepted);
+
+                session.Pipeline.Process();
+                session.Omnibus.Verify(x => x.Complete(accepted.Piece));
+            }
+        }
+
+        [Test]
+        public void ShouldInvalidatePieceWhenPieceIsRejected()
+        {
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                PieceRejected rejected = new PieceRejected
+                {
+                    Hash = session.Retriever.Hash,
+                    Piece = new PieceInfo(1)
+                };
+
+                session.Retriever.Start();
+                session.Retriever.Handle(rejected);
+
+                session.Pipeline.Process();
+                session.Omnibus.Verify(x => x.Invalidate(rejected.Piece));
+            }
+        }
+
+        [Test]
+        public void ShouldCompleteBlockWhenBlockIsWritten()
+        {
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                BlockWritten written = new BlockWritten
+                {
+                    Hash = session.Retriever.Hash,
+                    Block = new BlockIndex(1, 0, 3616)
+                };
+
+                session.Retriever.Start();
+                session.Retriever.Handle(written);
+
+                session.Pipeline.Process();
+                session.Omnibus.Verify(x => x.Complete(written.Block));
             }
         }
     }

@@ -1,16 +1,14 @@
-﻿using Leak.Glue;
-using Leak.Omnibus;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Retriever
 {
     public class RetrieverDependencies
     {
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
 
-        public GlueService Glue;
+        public RetrieverGlue Glue;
 
-        public OmnibusService Omnibus;
+        public RetrieverOmnibus Omnibus;
 
         public RetrieverRepository Repository;
     }

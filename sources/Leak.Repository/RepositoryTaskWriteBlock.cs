@@ -16,7 +16,7 @@ namespace Leak.Repository
 
         public int Piece
         {
-            get { return index.Piece; }
+            get { return index.Piece.Index; }
         }
 
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
@@ -26,7 +26,7 @@ namespace Leak.Repository
                 int blockSize = context.Metainfo.Properties.BlockSize;
                 FileBuffer file = new FileBuffer(buffer, offset, count);
 
-                context.View.Write(file, index.Piece, index.Offset / blockSize, args =>
+                context.View.Write(file, index.Piece.Index, index.Offset / blockSize, args =>
                 {
                     context.Queue.Add(new Complete(index, data));
                 });

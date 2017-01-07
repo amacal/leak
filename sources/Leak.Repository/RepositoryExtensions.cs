@@ -45,7 +45,7 @@ namespace Leak.Repository
             });
         }
 
-        public static void CallPieceAccepted(this RepositoryHooks hooks, FileHash hash, int piece)
+        public static void CallPieceAccepted(this RepositoryHooks hooks, FileHash hash, PieceInfo piece)
         {
             hooks.OnPieceAccepted?.Invoke(new PieceAccepted
             {
@@ -54,7 +54,7 @@ namespace Leak.Repository
             });
         }
 
-        public static void CallPieceRejected(this RepositoryHooks hooks, FileHash hash, int piece)
+        public static void CallPieceRejected(this RepositoryHooks hooks, FileHash hash, PieceInfo piece)
         {
             hooks.OnPieceRejected?.Invoke(new PieceRejected
             {

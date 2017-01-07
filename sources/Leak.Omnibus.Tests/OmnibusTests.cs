@@ -60,7 +60,7 @@ namespace Leak.Omnibus.Tests
                 Trigger trigger = Trigger.Bind(ref session.Hooks.OnPieceReady, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
+                    data.Piece.Index.Should().Be(1);
                 });
 
                 session.Service.Start();
@@ -114,7 +114,7 @@ namespace Leak.Omnibus.Tests
                     data.Hash.Should().Be(session.Hash);
                     data.Peer.Should().Be(changed.Peer);
                     data.Block.Should().NotBeNull();
-                    data.Block.Piece.Should().Be(1);
+                    data.Block.Piece.Index.Should().Be(1);
                     data.Block.Offset.Should().Be(0);
                     data.Block.Size.Should().Be(3616);
                 });

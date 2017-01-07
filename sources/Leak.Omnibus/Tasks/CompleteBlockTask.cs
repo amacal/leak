@@ -21,7 +21,7 @@ namespace Leak.Omnibus.Tasks
             PeerHash peer;
 
             left = context.Reservations.Complete(block, out peer);
-            context.Pieces.Complete(block.Piece, blockIndex);
+            context.Pieces.Complete(block.Piece.Index, blockIndex);
 
             if (peer != null && left == context.Configuration.SchedulerThreshold)
             {

@@ -2,18 +2,18 @@
 {
     public struct BlockIndex
     {
-        private readonly int piece;
+        private readonly PieceInfo piece;
         private readonly int offset;
         private readonly int size;
 
         public BlockIndex(int piece, int offset, int size)
         {
-            this.piece = piece;
+            this.piece = new PieceInfo(piece);
             this.offset = offset;
             this.size = size;
         }
 
-        public int Piece
+        public PieceInfo Piece
         {
             get { return piece; }
         }
@@ -40,7 +40,7 @@
 
         public static int GetHashCode(BlockIndex block)
         {
-            return block.piece + block.offset;
+            return block.piece.GetHashCode() + block.offset;
         }
 
         public static bool Equals(BlockIndex left, BlockIndex right)

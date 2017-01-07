@@ -111,7 +111,7 @@ namespace Leak.Retriever
         {
             context.Queue.Add(() =>
             {
-                context.Dependencies.Repository.Verify(new PieceInfo(data.Piece));
+                context.Dependencies.Repository.Verify(data.Piece);
             });
         }
 

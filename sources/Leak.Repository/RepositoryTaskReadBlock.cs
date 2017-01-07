@@ -17,7 +17,7 @@ namespace Leak.Repository
             int blockSize = context.Metainfo.Properties.BlockSize;
             byte[] buffer = new byte[blockSize];
 
-            context.View.Read(buffer, index.Piece, index.Offset / blockSize, result =>
+            context.View.Read(buffer, index.Piece.Index, index.Offset / blockSize, result =>
             {
                 context.Queue.Add(new Complete(index, result));
             });

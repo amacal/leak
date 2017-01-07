@@ -1,4 +1,5 @@
 ﻿using System;
+using Leak.Common;
 
 namespace Leak.Omnibus.Components
 {
@@ -104,9 +105,9 @@ namespace Leak.Omnibus.Components
             context.Hooks.CallDataChanged(context.Metainfo.Hash, completed);
         }
 
-        private void CallPieceReady(int piece)
+        private void CallPieceReady(int index)
         {
-            context.Hooks.CallPieceReady(context.Metainfo.Hash, piece);
+            context.Hooks.CallPieceReady(context.Metainfo.Hash, new PieceInfo(index));
         }
 
         private void CallPieceCompleted(int piece)

@@ -7,9 +7,9 @@ namespace Leak.Retriever.Tests
         private readonly byte[] data;
         private readonly int offset;
 
-        public RetrieverBlock(byte[] data)
+        public RetrieverBlock()
         {
-            this.data = data;
+            this.data = Bytes.Random(20000);
         }
 
         private RetrieverBlock(byte[] data, int offset)

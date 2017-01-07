@@ -1,6 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Glue;
-using Leak.Omnibus;
 using Leak.Tasks;
 
 namespace Leak.Retriever
@@ -24,19 +22,19 @@ namespace Leak.Retriever
             return this;
         }
 
-        public RetrieverBuilder WithPipeline(LeakPipeline pipeline)
+        public RetrieverBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;
         }
 
-        public RetrieverBuilder WithGlue(GlueService glue)
+        public RetrieverBuilder WithGlue(RetrieverGlue glue)
         {
             dependencies.Glue = glue;
             return this;
         }
 
-        public RetrieverBuilder WithOmnibus(OmnibusService omnibus)
+        public RetrieverBuilder WithOmnibus(RetrieverOmnibus omnibus)
         {
             dependencies.Omnibus = omnibus;
             return this;

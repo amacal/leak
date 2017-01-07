@@ -4,9 +4,9 @@
     {
         public RetrieverConfiguration()
         {
-            Strategy = RetrieverStrategy.RarestFirst;
+            Strategy = "rarest-first";
         }
 
-        public RetrieverStrategy Strategy { get; set; }
+        public string Strategy { get; set; }
     }
 }

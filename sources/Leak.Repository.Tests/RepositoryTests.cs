@@ -88,7 +88,7 @@ namespace Leak.Repository.Tests
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnBlockWritten, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Block.Piece.Should().Be(1);
+                    data.Block.Piece.Index.Should().Be(1);
                     data.Block.Offset.Should().Be(0);
                     data.Block.Size.Should().Be(session.Data[1].Length);
                 });
@@ -110,7 +110,7 @@ namespace Leak.Repository.Tests
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnBlockRead, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Block.Piece.Should().Be(1);
+                    data.Block.Piece.Index.Should().Be(1);
                     data.Block.Offset.Should().Be(0);
                     data.Block.Size.Should().Be(session.Data[1].Length);
                 });
@@ -133,7 +133,7 @@ namespace Leak.Repository.Tests
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceAccepted, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
+                    data.Piece.Index.Should().Be(1);
                 });
 
                 session.Service.Start();
@@ -155,7 +155,7 @@ namespace Leak.Repository.Tests
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnPieceRejected, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(1);
+                    data.Piece.Index.Should().Be(1);
                 });
 
                 session.Service.Start();

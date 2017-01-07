@@ -170,9 +170,9 @@ namespace Leak.Leakage
                 new RetrieverBuilder()
                     .WithHash(entry.Hash)
                     .WithPipeline(pipeline)
-                    .WithGlue(entry.Glue)
+                    .WithGlue(entry.Glue.ToRetriever())
                     .WithRepository(entry.Repository.ToRetriever())
-                    .WithOmnibus(entry.Omnibus)
+                    .WithOmnibus(entry.Omnibus.ToRetriver())
                     .Build();
 
             entry.Datashare =
