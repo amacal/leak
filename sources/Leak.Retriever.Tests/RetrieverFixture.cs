@@ -1,7 +1,7 @@
 ﻿using System;
+using FakeItEasy;
 using Leak.Common;
 using Leak.Testing;
-using Moq;
 
 namespace Leak.Retriever.Tests
 {
@@ -9,23 +9,16 @@ namespace Leak.Retriever.Tests
     {
         public RetrieverSession Start()
         {
-            FileHash hash = FileHash.Random();
-            PipelineSimulator pipeline = new PipelineSimulator();
-
-            Mock<RetrieverGlue> glue = new Mock<RetrieverGlue>();
-            Mock<RetrieverRepository> repository = new Mock<RetrieverRepository>();
-            Mock<RetrieverOmnibus> omnibus = new Mock<RetrieverOmnibus>();
-
             RetrieverService service =
                 new RetrieverBuilder()
-                    .WithHash(hash)
-                    .WithPipeline(pipeline)
-                    .WithGlue(glue.Object)
-                    .WithRepository(repository.Object)
-                    .WithOmnibus(omnibus.Object)
+                    .WithHash(FileHash.Random())
+                    .WithPipeline(new PipelineSimulator())
+                    .WithGlue(A.Fake<RetrieverGlue>())
+                    .WithRepository(A.Fake<RetrieverRepository>())
+                    .WithOmnibus(A.Fake<RetrieverOmnibus>())
                     .Build();
 
-            return new RetrieverSession(pipeline, service, repository, glue, omnibus);
+            return new RetrieverSession(service);
         }
 
         public void Dispose()

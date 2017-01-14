@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Leak.Common;
 
 namespace Leak.Retriever
@@ -14,6 +15,8 @@ namespace Leak.Retriever
         void Invalidate(PieceInfo piece);
 
         void Schedule(string strategy, PeerHash peer, int count);
+
+        void Query(Action<PeerHash, Bitfield, PeerState> callback);
 
         IEnumerable<PeerHash> Find(int ranking, int count);
     }

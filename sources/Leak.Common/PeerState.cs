@@ -1,11 +1,12 @@
-﻿using Leak.Common;
-
-namespace Leak.Omnibus.Components
+﻿namespace Leak.Common
 {
-    public class OmnibusState
+    public class PeerState
     {
-        public PeerHash Peer { get; set; }
-        public int Ranking { get; set; }
+        public PeerState()
+        {
+            IsLocalChokingRemote = true;
+            IsRemoteChokingLocal = true;
+        }
 
         public bool IsLocalInterestedInRemote;
         public bool IsLocalChokingRemote;

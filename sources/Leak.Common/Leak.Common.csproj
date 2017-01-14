@@ -54,6 +54,7 @@
     <Compile Include="BlockIndex.cs" />
     <Compile Include="PeerAddress.cs" />
     <Compile Include="PeerHash.cs" />
+    <Compile Include="PeerState.cs" />
     <Compile Include="PieceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Goal.cs" />

@@ -46,7 +46,7 @@
     <Compile Include="Components\OmnibusReservation.cs" />
     <Compile Include="Components\OmnibusReservationCollection.cs" />
     <Compile Include="Components\OmnibusReservationComparer.cs" />
-    <Compile Include="Components\OmnibusState.cs" />
+    <Compile Include="Components\OmnibusStateEntry.cs" />
     <Compile Include="Components\OmnibusStateCollection.cs" />
     <Compile Include="Events\OmnibusReservationEvent.cs" />
     <Compile Include="OmnibusBuilder.cs" />

@@ -1,24 +1,15 @@
 ﻿using System;
 using Leak.Testing;
-using Moq;
 
 namespace Leak.Retriever.Tests
 {
     public class RetrieverSession : IDisposable
     {
-        private readonly PipelineSimulator pipeline;
         private readonly RetrieverService retriever;
-        private readonly Mock<RetrieverRepository> repository;
-        private readonly Mock<RetrieverGlue> glue;
-        private readonly Mock<RetrieverOmnibus> omnibus;
 
-        public RetrieverSession(PipelineSimulator pipeline, RetrieverService retriever, Mock<RetrieverRepository> repository, Mock<RetrieverGlue> glue, Mock<RetrieverOmnibus> omnibus)
+        public RetrieverSession(RetrieverService retriever)
         {
-            this.pipeline = pipeline;
             this.retriever = retriever;
-            this.repository = repository;
-            this.glue = glue;
-            this.omnibus = omnibus;
         }
 
         public RetrieverService Retriever
@@ -26,24 +17,24 @@ namespace Leak.Retriever.Tests
             get { return retriever; }
         }
 
-        public Mock<RetrieverRepository> Repository
-        {
-            get { return repository; }
-        }
-
-        public Mock<RetrieverGlue> Glue
-        {
-            get { return glue; }
-        }
-
-        public Mock<RetrieverOmnibus> Omnibus
-        {
-            get { return omnibus; }
-        }
-
         public PipelineSimulator Pipeline
         {
-            get { return pipeline; }
+            get { return (PipelineSimulator)retriever.Dependencies.Pipeline; }
+        }
+
+        public RetrieverRepository Repository
+        {
+            get { return retriever.Dependencies.Repository; }
+        }
+
+        public RetrieverGlue Glue
+        {
+            get { return retriever.Dependencies.Glue; }
+        }
+
+        public RetrieverOmnibus Omnibus
+        {
+            get { return retriever.Dependencies.Omnibus; }
         }
 
         public void Dispose()

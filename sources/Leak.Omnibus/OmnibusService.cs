@@ -107,6 +107,10 @@ namespace Leak.Omnibus
             context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
         }
 
+        public void Query(Action<PeerHash, Bitfield, PeerState> callback)
+        {
+        }
+
         public void Dispose()
         {
         }

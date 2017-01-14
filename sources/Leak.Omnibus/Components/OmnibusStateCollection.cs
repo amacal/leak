@@ -6,32 +6,32 @@ namespace Leak.Omnibus.Components
 {
     public class OmnibusStateCollection
     {
-        private readonly Dictionary<PeerHash, OmnibusState> byPeer;
+        private readonly Dictionary<PeerHash, OmnibusStateEntry> byPeer;
 
         public OmnibusStateCollection()
         {
-            byPeer = new Dictionary<PeerHash, OmnibusState>();
+            byPeer = new Dictionary<PeerHash, OmnibusStateEntry>();
         }
 
         public void Handle(PeerChanged data)
         {
-            OmnibusState state;
+            OmnibusStateEntry entry;
 
-            if (byPeer.TryGetValue(data.Peer, out state) == false)
+            if (byPeer.TryGetValue(data.Peer, out entry) == false)
             {
-                state = new OmnibusState { Peer = data.Peer };
-                byPeer.Add(data.Peer, state);
+                entry = new OmnibusStateEntry(data.Peer);
+                byPeer.Add(data.Peer, entry);
             }
 
-            state.IsLocalChokingRemote = data.IsLocalChokingRemote;
-            state.IsLocalInterestedInRemote = data.IsLocalInterestedInRemote;
-            state.IsRemoteChokingLocal = data.IsRemoteChokingLocal;
-            state.IsRemoteInterestedInLocal = data.IsRemoteInterestedInLocal;
+            entry.State.IsLocalChokingRemote = data.IsLocalChokingRemote;
+            entry.State.IsLocalInterestedInRemote = data.IsLocalInterestedInRemote;
+            entry.State.IsRemoteChokingLocal = data.IsRemoteChokingLocal;
+            entry.State.IsRemoteInterestedInLocal = data.IsRemoteInterestedInLocal;
         }
 
         public IEnumerable<PeerHash> Find(int ranking, int count)
         {
-            foreach (OmnibusState state in byPeer.Values)
+            foreach (OmnibusStateEntry state in byPeer.Values)
             {
                 if (count == 0)
                     break;
@@ -39,10 +39,10 @@ namespace Leak.Omnibus.Components
                 if (state.Ranking < ranking)
                     continue;
 
-                if (state.IsRemoteChokingLocal)
+                if (state.State.IsRemoteChokingLocal)
                     continue;
 
-                if (state.IsLocalInterestedInRemote == false)
+                if (state.State.IsLocalInterestedInRemote == false)
                     continue;
 
                 count--;

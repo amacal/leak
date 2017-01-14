@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+using FakeItEasy;
+using FluentAssertions;
 using Leak.Common;
 using Leak.Events;
 using Leak.Testing;
@@ -54,9 +56,9 @@ namespace Leak.Retriever.Tests
 
                 session.Retriever.Start();
                 session.Retriever.Handle(received);
-
                 session.Pipeline.Process();
-                session.Repository.Verify(x => x.Write(received.Block, received.Payload));
+
+                A.CallTo(() => session.Repository.Write(received.Block, received.Payload)).MustHaveHappened();
             }
         }
 
@@ -90,7 +92,7 @@ namespace Leak.Retriever.Tests
         }
 
         [Test]
-        public void ShouldSendRequestedWhenBlockReserved()
+        public void ShouldSendRequestWhenBlockReserved()
         {
             using (RetrieverFixture fixture = new RetrieverFixture())
             using (RetrieverSession session = fixture.Start())
@@ -104,9 +106,9 @@ namespace Leak.Retriever.Tests
 
                 session.Retriever.Start();
                 session.Retriever.Handle(received);
-
                 session.Pipeline.Process();
-                session.Glue.Verify(x => x.SendRequest(received.Peer, received.Block));
+
+                A.CallTo(() => session.Glue.SendRequest(received.Peer, received.Block)).MustHaveHappened();
             }
         }
 
@@ -124,9 +126,9 @@ namespace Leak.Retriever.Tests
 
                 session.Retriever.Start();
                 session.Retriever.Handle(ready);
-
                 session.Pipeline.Process();
-                session.Repository.Verify(x => x.Verify(ready.Piece));
+
+                A.CallTo(() => session.Repository.Verify(ready.Piece)).MustHaveHappened();
             }
         }
 
@@ -144,9 +146,9 @@ namespace Leak.Retriever.Tests
 
                 session.Retriever.Start();
                 session.Retriever.Handle(accepted);
-
                 session.Pipeline.Process();
-                session.Omnibus.Verify(x => x.Complete(accepted.Piece));
+
+                A.CallTo(() => session.Omnibus.Complete(accepted.Piece)).MustHaveHappened();
             }
         }
 
@@ -164,9 +166,9 @@ namespace Leak.Retriever.Tests
 
                 session.Retriever.Start();
                 session.Retriever.Handle(rejected);
-
                 session.Pipeline.Process();
-                session.Omnibus.Verify(x => x.Invalidate(rejected.Piece));
+
+                A.CallTo(() => session.Omnibus.Invalidate(rejected.Piece)).MustHaveHappened();
             }
         }
 
@@ -184,9 +186,32 @@ namespace Leak.Retriever.Tests
 
                 session.Retriever.Start();
                 session.Retriever.Handle(written);
-
                 session.Pipeline.Process();
-                session.Omnibus.Verify(x => x.Complete(written.Block));
+
+                A.CallTo(() => session.Omnibus.Complete(written.Block)).MustHaveHappened();
+            }
+        }
+
+        [Test]
+        public void ShouldSentInterestedWhenPeerHasSomethingToOffer()
+        {
+            PeerHash other = PeerHash.Random();
+
+            Action<Action<PeerHash, Bitfield, PeerState>> handle = callback =>
+            {
+                callback.Invoke(other, Bitfield.Complete(1), new PeerState());
+            };
+
+            using (RetrieverFixture fixture = new RetrieverFixture())
+            using (RetrieverSession session = fixture.Start())
+            {
+                A.CallTo(() => session.Omnibus.Query(A<Action<PeerHash, Bitfield, PeerState>>._)).Invokes(handle);
+
+                session.Retriever.Start();
+                session.Pipeline.Tick();
+                session.Pipeline.Process();
+
+                A.CallTo(() => session.Glue.SendInterested(other)).MustHaveHappened();
             }
         }
     }

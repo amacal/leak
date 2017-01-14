@@ -117,6 +117,17 @@ namespace Leak.Retriever
 
         private void OnTick()
         {
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Omnibus.Query((peer, bitfield, state) =>
+                {
+                    if (state.IsLocalInterestedInRemote == false && bitfield.Completed > 0)
+                    {
+                        context.Dependencies.Glue.SendInterested(peer);
+                    }
+                });
+            });
+
             context.Queue.Add(new ScheduleAllTask());
         }
 

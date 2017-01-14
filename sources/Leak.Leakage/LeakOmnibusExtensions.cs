@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Leak.Common;
 using Leak.Omnibus;
@@ -54,6 +55,11 @@ namespace Leak.Leakage
                         service.Schedule(OmnibusStrategy.Sequential, peer, count);
                         break;
                 }
+            }
+
+            public void Query(Action<PeerHash, Bitfield, PeerState> callback)
+            {
+                service.Query(callback);
             }
 
             public IEnumerable<PeerHash> Find(int ranking, int count)
