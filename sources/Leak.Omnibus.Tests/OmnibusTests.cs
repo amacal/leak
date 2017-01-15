@@ -25,6 +25,8 @@ namespace Leak.Omnibus.Tests
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(1);
+                session.Pipeline.Process();
+
                 trigger.Wait().Should().BeTrue();
             }
         }
@@ -46,6 +48,7 @@ namespace Leak.Omnibus.Tests
 
                 session.Service.Complete(0);
                 session.Service.Complete(1);
+                session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();
             }
@@ -68,6 +71,8 @@ namespace Leak.Omnibus.Tests
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(new BlockIndex(1, 0, 16384));
+                session.Pipeline.Process();
+
                 trigger.Wait().Should().BeTrue();
             }
         }
@@ -90,6 +95,7 @@ namespace Leak.Omnibus.Tests
 
                 session.Service.Complete(new BlockIndex(1, 0, 16384));
                 session.Service.Complete(1);
+                session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();
             }
@@ -128,6 +134,7 @@ namespace Leak.Omnibus.Tests
 
                 session.Service.Handle(changed);
                 session.Service.Schedule(OmnibusStrategy.RarestFirst, changed.Peer, 1);
+                session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();
             }

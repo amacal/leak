@@ -20,20 +20,20 @@ namespace Leak.Retriever.Tests
                 {
                     Payload = new RetrieverBlock(),
                     Peer = PeerHash.Random(),
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Block = new BlockIndex(1, 0, 3616)
                 };
 
-                Trigger handler = Trigger.Bind(ref session.Retriever.Hooks.OnBlockHandled, data =>
+                Trigger handler = Trigger.Bind(ref session.Service.Hooks.OnBlockHandled, data =>
                 {
-                    data.Hash.Should().Be(session.Retriever.Hash);
+                    data.Hash.Should().Be(session.Service.Hash);
                     data.Peer.Should().NotBeNull();
                     data.Block.Should().Be(received.Block);
                     data.Block.Size.Should().Be(3616);
                 });
 
-                session.Retriever.Start();
-                session.Retriever.Handle(received);
+                session.Service.Start();
+                session.Service.Handle(received);
 
                 session.Pipeline.Process();
                 handler.Wait().Should().BeTrue();
@@ -50,12 +50,12 @@ namespace Leak.Retriever.Tests
                 {
                     Payload = new RetrieverBlock(),
                     Peer = PeerHash.Random(),
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Block = new BlockIndex(1, 0, 3616)
                 };
 
-                session.Retriever.Start();
-                session.Retriever.Handle(received);
+                session.Service.Start();
+                session.Service.Handle(received);
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Repository.Write(received.Block, received.Payload)).MustHaveHappened();
@@ -70,21 +70,21 @@ namespace Leak.Retriever.Tests
             {
                 BlockReserved reserved = new BlockReserved
                 {
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Peer = PeerHash.Random(),
                     Block = new BlockIndex(1, 0, 3616)
                 };
 
-                Trigger handler = Trigger.Bind(ref session.Retriever.Hooks.OnBlockRequested, data =>
+                Trigger handler = Trigger.Bind(ref session.Service.Hooks.OnBlockRequested, data =>
                 {
-                    data.Hash.Should().Be(session.Retriever.Hash);
+                    data.Hash.Should().Be(session.Service.Hash);
                     data.Peer.Should().Be(reserved.Peer);
                     data.Block.Should().Be(reserved.Block);
                     data.Block.Size.Should().Be(3616);
                 });
 
-                session.Retriever.Start();
-                session.Retriever.Handle(reserved);
+                session.Service.Start();
+                session.Service.Handle(reserved);
 
                 session.Pipeline.Process();
                 handler.Wait().Should().BeTrue();
@@ -100,12 +100,12 @@ namespace Leak.Retriever.Tests
                 BlockReserved received = new BlockReserved
                 {
                     Peer = PeerHash.Random(),
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Block = new BlockIndex(1, 0, 3616)
                 };
 
-                session.Retriever.Start();
-                session.Retriever.Handle(received);
+                session.Service.Start();
+                session.Service.Handle(received);
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Glue.SendRequest(received.Peer, received.Block)).MustHaveHappened();
@@ -120,12 +120,12 @@ namespace Leak.Retriever.Tests
             {
                 PieceReady ready = new PieceReady
                 {
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Piece = new PieceInfo(1)
                 };
 
-                session.Retriever.Start();
-                session.Retriever.Handle(ready);
+                session.Service.Start();
+                session.Service.Handle(ready);
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Repository.Verify(ready.Piece)).MustHaveHappened();
@@ -140,12 +140,12 @@ namespace Leak.Retriever.Tests
             {
                 PieceAccepted accepted = new PieceAccepted
                 {
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Piece = new PieceInfo(1)
                 };
 
-                session.Retriever.Start();
-                session.Retriever.Handle(accepted);
+                session.Service.Start();
+                session.Service.Handle(accepted);
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Omnibus.Complete(accepted.Piece)).MustHaveHappened();
@@ -160,12 +160,12 @@ namespace Leak.Retriever.Tests
             {
                 PieceRejected rejected = new PieceRejected
                 {
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Piece = new PieceInfo(1)
                 };
 
-                session.Retriever.Start();
-                session.Retriever.Handle(rejected);
+                session.Service.Start();
+                session.Service.Handle(rejected);
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Omnibus.Invalidate(rejected.Piece)).MustHaveHappened();
@@ -180,12 +180,12 @@ namespace Leak.Retriever.Tests
             {
                 BlockWritten written = new BlockWritten
                 {
-                    Hash = session.Retriever.Hash,
+                    Hash = session.Service.Hash,
                     Block = new BlockIndex(1, 0, 3616)
                 };
 
-                session.Retriever.Start();
-                session.Retriever.Handle(written);
+                session.Service.Start();
+                session.Service.Handle(written);
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Omnibus.Complete(written.Block)).MustHaveHappened();
@@ -207,7 +207,7 @@ namespace Leak.Retriever.Tests
             {
                 A.CallTo(() => session.Omnibus.Query(A<Action<PeerHash, Bitfield, PeerState>>._)).Invokes(handle);
 
-                session.Retriever.Start();
+                session.Service.Start();
                 session.Pipeline.Tick();
                 session.Pipeline.Process();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Leak.Common;
+using Leak.Testing;
 
 namespace Leak.Omnibus.Tests
 {
@@ -17,6 +18,11 @@ namespace Leak.Omnibus.Tests
         public OmnibusService Service
         {
             get { return service; }
+        }
+
+        public PipelineSimulator Pipeline
+        {
+            get { return (PipelineSimulator)service.Dependencies.Pipeline; }
         }
 
         public FileHash Hash

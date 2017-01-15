@@ -4,6 +4,6 @@ namespace Leak.Omnibus
 {
     public class OmnibusDependencies
     {
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
     }
 }

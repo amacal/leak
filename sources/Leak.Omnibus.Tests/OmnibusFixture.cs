@@ -4,19 +4,12 @@ using F2F.Sandbox;
 using Leak.Common;
 using Leak.Metadata;
 using Leak.Tasks;
+using Leak.Testing;
 
 namespace Leak.Omnibus.Tests
 {
     public class OmnibusFixture : IDisposable
     {
-        private readonly LeakPipeline pipeline;
-
-        public OmnibusFixture()
-        {
-            pipeline = new LeakPipeline();
-            pipeline.Start();
-        }
-
         public OmnibusSession Start()
         {
             Metainfo metainfo;
@@ -36,7 +29,7 @@ namespace Leak.Omnibus.Tests
             OmnibusService service =
                 new OmnibusBuilder()
                     .WithHash(metainfo.Hash)
-                    .WithPipeline(pipeline)
+                    .WithPipeline(new PipelineSimulator())
                     .Build();
 
             return new OmnibusSession(metainfo, service);
@@ -44,7 +37,6 @@ namespace Leak.Omnibus.Tests
 
         public void Dispose()
         {
-            pipeline.Stop();
         }
     }
 }

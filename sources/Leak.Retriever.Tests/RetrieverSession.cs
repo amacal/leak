@@ -5,36 +5,36 @@ namespace Leak.Retriever.Tests
 {
     public class RetrieverSession : IDisposable
     {
-        private readonly RetrieverService retriever;
+        private readonly RetrieverService service;
 
-        public RetrieverSession(RetrieverService retriever)
+        public RetrieverSession(RetrieverService service)
         {
-            this.retriever = retriever;
+            this.service = service;
         }
 
-        public RetrieverService Retriever
+        public RetrieverService Service
         {
-            get { return retriever; }
+            get { return service; }
         }
 
         public PipelineSimulator Pipeline
         {
-            get { return (PipelineSimulator)retriever.Dependencies.Pipeline; }
+            get { return (PipelineSimulator)service.Dependencies.Pipeline; }
         }
 
         public RetrieverRepository Repository
         {
-            get { return retriever.Dependencies.Repository; }
+            get { return service.Dependencies.Repository; }
         }
 
         public RetrieverGlue Glue
         {
-            get { return retriever.Dependencies.Glue; }
+            get { return service.Dependencies.Glue; }
         }
 
         public RetrieverOmnibus Omnibus
         {
-            get { return retriever.Dependencies.Omnibus; }
+            get { return service.Dependencies.Omnibus; }
         }
 
         public void Dispose()

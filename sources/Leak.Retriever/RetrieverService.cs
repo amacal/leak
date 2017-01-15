@@ -118,7 +118,7 @@ namespace Leak.Retriever
         public void Dispose()
         {
             context.Dependencies.Pipeline.Remove(OnTick250);
-            context.Dependencies.Pipeline.Register(5000, OnTick5000);
+            context.Dependencies.Pipeline.Remove(OnTick5000);
         }
     }
 }

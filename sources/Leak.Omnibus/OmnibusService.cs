@@ -4,6 +4,7 @@ using Leak.Common;
 using Leak.Events;
 using Leak.Omnibus.Components;
 using Leak.Omnibus.Tasks;
+using Leak.Tasks;
 
 namespace Leak.Omnibus
 {
@@ -68,23 +69,33 @@ namespace Leak.Omnibus
 
         public void Handle(PeerChanged data)
         {
-            context.States.Handle(data);
+            context.Queue.Add(() =>
+            {
+                if (data.State != null)
+                    context.States?.Handle(data);
 
-            if (data.Bitfield != null)
-                context.Bitfields.Add(data.Peer, data.Bitfield);
+                if (data.Bitfield != null)
+                    context.Bitfields?.Add(data.Peer, data.Bitfield);
+            });
         }
 
         public void Handle(DataVerified data)
         {
-            context.Bitfield = data.Bitfield;
-            context.Cache = new OmnibusCache(data.Bitfield.Length);
-            context.Pieces = new OmnibusPieceCollection(context);
-            context.Bitfields = new OmnibusBitfieldCollection(context.Cache);
+            context.Queue.Add(() =>
+            {
+                context.Bitfield = data.Bitfield;
+                context.Cache = new OmnibusCache(data.Bitfield.Length);
+                context.Pieces = new OmnibusPieceCollection(context);
+                context.Bitfields = new OmnibusBitfieldCollection(context.Cache);
+            });
         }
 
         public void Handle(MetadataDiscovered data)
         {
-            context.Metainfo = data.Metainfo;
+            context.Queue.Add(() =>
+            {
+                context.Metainfo = data.Metainfo;
+            });
         }
 
         public void Complete(BlockIndex block)

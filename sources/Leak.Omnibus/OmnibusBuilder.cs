@@ -22,7 +22,7 @@ namespace Leak.Omnibus
             return this;
         }
 
-        public OmnibusBuilder WithPipeline(LeakPipeline pipeline)
+        public OmnibusBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;
