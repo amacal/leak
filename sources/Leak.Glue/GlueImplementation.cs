@@ -113,7 +113,7 @@ namespace Leak.Glue
             if (entry != null)
             {
                 entry.Commy.SendChoke();
-                entry.State |= GlueState.IsLocalChockingRemote;
+                entry.State.IsLocalChokingRemote = true;
                 hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
             }
         }
@@ -125,7 +125,7 @@ namespace Leak.Glue
             if (entry != null)
             {
                 entry.Commy.SendUnchoke();
-                entry.State &= ~GlueState.IsLocalChockingRemote;
+                entry.State.IsLocalChokingRemote = false;
                 hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
             }
         }
@@ -137,7 +137,7 @@ namespace Leak.Glue
             if (entry != null)
             {
                 entry.Commy.SendInterested();
-                entry.State |= GlueState.IsLocalInterestedInRemote;
+                entry.State.IsLocalInterestedInRemote = true;
                 hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
             }
         }
@@ -259,17 +259,17 @@ namespace Leak.Glue
                 switch (data.Type)
                 {
                     case "choke":
-                        entry.State |= GlueState.IsRemoteChockingLocal;
+                        entry.State.IsRemoteChokingLocal = true;
                         hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 
                     case "unchoke":
-                        entry.State &= ~GlueState.IsRemoteChockingLocal;
+                        entry.State.IsRemoteChokingLocal = false;
                         hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 
                     case "interested":
-                        entry.State |= GlueState.IsRemoteInterestedInLocal;
+                        entry.State.IsRemoteInterestedInLocal = true;
                         hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
                         break;
 

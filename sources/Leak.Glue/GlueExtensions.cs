@@ -68,16 +68,13 @@ namespace Leak.Glue
             });
         }
 
-        public static void CallPeerChanged(this GlueHooks hooks, PeerHash peer, Bitfield bitfield, GlueState state)
+        public static void CallPeerChanged(this GlueHooks hooks, PeerHash peer, Bitfield bitfield, PeerState state)
         {
             hooks.OnPeerChanged?.Invoke(new PeerChanged
             {
                 Peer = peer,
                 Bitfield = bitfield,
-                IsLocalChokingRemote = state.HasFlag(GlueState.IsLocalChockingRemote),
-                IsLocalInterestedInRemote = state.HasFlag(GlueState.IsLocalInterestedInRemote),
-                IsRemoteChokingLocal = state.HasFlag(GlueState.IsRemoteChockingLocal),
-                IsRemoteInterestedInLocal = state.HasFlag(GlueState.IsRemoteInterestedInLocal)
+                State = state
             });
         }
 

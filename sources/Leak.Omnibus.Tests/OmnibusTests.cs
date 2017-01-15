@@ -102,8 +102,11 @@ namespace Leak.Omnibus.Tests
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(false, true, false),
-                IsLocalInterestedInRemote = true,
-                IsRemoteChokingLocal = false
+                State = new PeerState
+                {
+                    IsLocalInterestedInRemote = true,
+                    IsRemoteChokingLocal = false
+                }
             };
 
             using (OmnibusFixture fixture = new OmnibusFixture())

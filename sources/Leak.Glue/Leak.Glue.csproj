@@ -44,7 +44,6 @@
     <Compile Include="GlueImplementation.cs" />
     <Compile Include="GlueParameters.cs" />
     <Compile Include="GlueService.cs" />
-    <Compile Include="GlueState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

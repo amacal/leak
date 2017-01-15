@@ -20,7 +20,7 @@ namespace Leak.Glue
 
         public Bitfield Bitfield;
 
-        public GlueState State;
+        public PeerState State;
 
         public DateTime Timestamp;
 

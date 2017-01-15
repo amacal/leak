@@ -6,11 +6,6 @@ namespace Leak.Events
     {
         public PeerHash Peer;
         public Bitfield Bitfield;
-
-        public bool IsLocalInterestedInRemote;
-        public bool IsLocalChokingRemote;
-
-        public bool IsRemoteInterestedInLocal;
-        public bool IsRemoteChokingLocal;
+        public PeerState State;
     }
 }

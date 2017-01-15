@@ -23,7 +23,7 @@ namespace Leak.Glue
                 Peer = handshake.Remote,
                 Remote = connection.Remote,
                 Direction = connection.Direction,
-                State = GlueState.Default,
+                State = new PeerState(),
                 Timestamp = DateTime.Now
             };
 

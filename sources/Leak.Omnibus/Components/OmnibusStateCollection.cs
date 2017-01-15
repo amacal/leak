@@ -23,10 +23,7 @@ namespace Leak.Omnibus.Components
                 byPeer.Add(data.Peer, entry);
             }
 
-            entry.State.IsLocalChokingRemote = data.IsLocalChokingRemote;
-            entry.State.IsLocalInterestedInRemote = data.IsLocalInterestedInRemote;
-            entry.State.IsRemoteChokingLocal = data.IsRemoteChokingLocal;
-            entry.State.IsRemoteInterestedInLocal = data.IsRemoteInterestedInLocal;
+            entry.State = new PeerState(data.State);
         }
 
         public IEnumerable<PeerHash> Find(int ranking, int count)

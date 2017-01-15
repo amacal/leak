@@ -38,19 +38,19 @@ namespace Leak.Glue.Tests
                 Trigger left = Trigger.Bind(ref session.Left.Hooks.OnPeerChanged, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
-                    data.IsLocalChokingRemote.Should().BeTrue();
-                    data.IsLocalInterestedInRemote.Should().BeFalse();
-                    data.IsRemoteChokingLocal.Should().BeFalse();
-                    data.IsRemoteInterestedInLocal.Should().BeFalse();
+                    data.State.IsLocalChokingRemote.Should().BeTrue();
+                    data.State.IsLocalInterestedInRemote.Should().BeFalse();
+                    data.State.IsRemoteChokingLocal.Should().BeFalse();
+                    data.State.IsRemoteInterestedInLocal.Should().BeFalse();
                 });
 
                 Trigger right = Trigger.Bind(ref session.Right.Hooks.OnPeerChanged, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
-                    data.IsLocalChokingRemote.Should().BeFalse();
-                    data.IsLocalInterestedInRemote.Should().BeFalse();
-                    data.IsRemoteChokingLocal.Should().BeTrue();
-                    data.IsRemoteInterestedInLocal.Should().BeFalse();
+                    data.State.IsLocalChokingRemote.Should().BeFalse();
+                    data.State.IsLocalInterestedInRemote.Should().BeFalse();
+                    data.State.IsRemoteChokingLocal.Should().BeTrue();
+                    data.State.IsRemoteInterestedInLocal.Should().BeFalse();
                 });
 
                 using (GlueInstance iLeft = session.Left.Build())
@@ -75,19 +75,19 @@ namespace Leak.Glue.Tests
                 Trigger left = Trigger.Bind(ref session.Left.Hooks.OnPeerChanged, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
-                    data.IsLocalChokingRemote.Should().BeTrue();
-                    data.IsLocalInterestedInRemote.Should().BeFalse();
-                    data.IsRemoteChokingLocal.Should().BeTrue();
-                    data.IsRemoteInterestedInLocal.Should().BeTrue();
+                    data.State.IsLocalChokingRemote.Should().BeTrue();
+                    data.State.IsLocalInterestedInRemote.Should().BeFalse();
+                    data.State.IsRemoteChokingLocal.Should().BeTrue();
+                    data.State.IsRemoteInterestedInLocal.Should().BeTrue();
                 });
 
                 Trigger right = Trigger.Bind(ref session.Right.Hooks.OnPeerChanged, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
-                    data.IsLocalChokingRemote.Should().BeTrue();
-                    data.IsLocalInterestedInRemote.Should().BeTrue();
-                    data.IsRemoteChokingLocal.Should().BeTrue();
-                    data.IsRemoteInterestedInLocal.Should().BeFalse();
+                    data.State.IsLocalChokingRemote.Should().BeTrue();
+                    data.State.IsLocalInterestedInRemote.Should().BeTrue();
+                    data.State.IsRemoteChokingLocal.Should().BeTrue();
+                    data.State.IsRemoteInterestedInLocal.Should().BeFalse();
                 });
 
                 using (GlueInstance iLeft = session.Left.Build())
