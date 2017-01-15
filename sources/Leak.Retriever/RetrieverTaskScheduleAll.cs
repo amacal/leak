@@ -1,10 +1,9 @@
 ﻿using Leak.Common;
-using Leak.Retriever.Components;
 using Leak.Tasks;
 
-namespace Leak.Retriever.Tasks
+namespace Leak.Retriever
 {
-    public class ScheduleAllTask : LeakTask<RetrieverContext>
+    public class RetrieverTaskScheduleAll : LeakTask<RetrieverContext>
     {
         public void Execute(RetrieverContext context)
         {

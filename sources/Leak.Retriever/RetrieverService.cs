@@ -1,8 +1,6 @@
 ﻿using System;
 using Leak.Common;
 using Leak.Events;
-using Leak.Retriever.Components;
-using Leak.Retriever.Tasks;
 using Leak.Tasks;
 
 namespace Leak.Retriever
@@ -44,22 +42,14 @@ namespace Leak.Retriever
         public void Start()
         {
             context.Dependencies.Pipeline.Register(context.Queue);
-            context.Dependencies.Pipeline.Register(TimeSpan.FromMilliseconds(250), OnTick);
-
-            context.Queue.Add(new FindBitfieldsTask());
+            context.Dependencies.Pipeline.Register(250, OnTick250);
+            context.Dependencies.Pipeline.Register(5000, OnTick5000);
         }
 
         public void Stop()
         {
-            context.Dependencies.Pipeline.Remove(OnTick);
-        }
-
-        public void Handle(PeerConnected data)
-        {
-            context.Queue.Add(() =>
-            {
-                context.Dependencies.Glue.SendInterested(data.Peer);
-            });
+            context.Dependencies.Pipeline.Remove(OnTick250);
+            context.Dependencies.Pipeline.Remove(OnTick5000);
         }
 
         public void Handle(BlockReceived data)
@@ -115,25 +105,20 @@ namespace Leak.Retriever
             });
         }
 
-        private void OnTick()
+        private void OnTick250()
         {
-            context.Queue.Add(() =>
-            {
-                context.Dependencies.Omnibus.Query((peer, bitfield, state) =>
-                {
-                    if (state.IsLocalInterestedInRemote == false && bitfield.Completed > 0)
-                    {
-                        context.Dependencies.Glue.SendInterested(peer);
-                    }
-                });
-            });
+            context.Queue.Add(new RetrieverTaskScheduleAll());
+        }
 
-            context.Queue.Add(new ScheduleAllTask());
+        private void OnTick5000()
+        {
+            context.Queue.Add(new RetrieverTaskInterested());
         }
 
         public void Dispose()
         {
-            context.Dependencies.Pipeline.Remove(OnTick);
+            context.Dependencies.Pipeline.Remove(OnTick250);
+            context.Dependencies.Pipeline.Register(5000, OnTick5000);
         }
     }
 }

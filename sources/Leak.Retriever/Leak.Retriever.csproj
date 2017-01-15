@@ -33,8 +33,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\RetrieverContext.cs" />
-    <Compile Include="Components\RetrieverExtensions.cs" />
+    <Compile Include="RetrieverContext.cs" />
+    <Compile Include="RetrieverExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetrieverBuilder.cs" />
     <Compile Include="RetrieverConfiguration.cs" />
@@ -45,10 +45,8 @@
     <Compile Include="RetrieverParameters.cs" />
     <Compile Include="RetrieverRepository.cs" />
     <Compile Include="RetrieverService.cs" />
-    <Compile Include="RetrieverStrategy.cs" />
-    <Compile Include="Tasks\FindBitfieldsTask.cs" />
-    <Compile Include="Tasks\ScheduleAllTask.cs" />
-    <Compile Include="Tasks\ScheduleItTask.cs" />
+    <Compile Include="RetrieverTaskInterested.cs" />
+    <Compile Include="RetrieverTaskScheduleAll.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

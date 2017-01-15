@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Retriever.Components
+namespace Leak.Retriever
 {
     public class RetrieverContext
     {

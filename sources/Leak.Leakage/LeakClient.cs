@@ -75,7 +75,7 @@ namespace Leak.Leakage
 
             if (configuration.Port != LeakPort.Nothing)
             {
-                builder = 
+                builder =
                     new PeerListenerBuilder()
                         .WithPeer(configuration.Peer)
                         .WithExtensions()
@@ -196,7 +196,7 @@ namespace Leak.Leakage
                     .WithGoal(Goal.All)
                     .Build();
 
-            entry.Connector = 
+            entry.Connector =
                 new PeerConnectorBuilder()
                     .WithPipeline(pipeline)
                     .WithNetwork(network)
@@ -239,7 +239,6 @@ namespace Leak.Leakage
                 }
             };
 
-            entry.Glue.Hooks.OnPeerConnected += entry.Retriever.Handle;
             entry.Glue.Hooks.OnPeerChanged += entry.Omnibus.Handle;
             entry.Glue.Hooks.OnBlockReceived += entry.Retriever.Handle;
 
