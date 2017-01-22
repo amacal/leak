@@ -30,7 +30,6 @@ namespace Leak.Spartan
                 context.State.Start(Goal.Verify);
                 context.Hooks.CallTaskStarted(context.Parameters.Hash, Goal.Verify);
 
-                context.Dependencies.Repository.Start();
                 context.Dependencies.Repository.Verify(new Bitfield(context.State.Metainfo.Pieces.Length));
             }
 

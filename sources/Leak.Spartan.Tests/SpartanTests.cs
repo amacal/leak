@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FakeItEasy;
+using FluentAssertions;
 using Leak.Common;
 using Leak.Events;
 using Leak.Testing;
@@ -20,7 +21,35 @@ namespace Leak.Spartan.Tests
                 });
 
                 session.Spartan.Start();
+                session.Pipeline.Process();
+
                 handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldStartMetagetServiceWhenDiscovering()
+        {
+            using (SpartanFixture fixture = new SpartanFixture())
+            using (SpartanSession session = fixture.Start(Goal.Discover))
+            {
+                session.Spartan.Start();
+                session.Pipeline.Process();
+
+                A.CallTo(() => session.Metaget.Start()).MustHaveHappened();
+            }
+        }
+
+        [Test]
+        public void ShouldStartMetashareServiceWhenDiscovering()
+        {
+            using (SpartanFixture fixture = new SpartanFixture())
+            using (SpartanSession session = fixture.Start(Goal.Discover))
+            {
+                session.Spartan.Start();
+                session.Pipeline.Process();
+
+                A.CallTo(() => session.Metashare.Start()).MustHaveHappened();
             }
         }
 
@@ -30,21 +59,51 @@ namespace Leak.Spartan.Tests
             using (SpartanFixture fixture = new SpartanFixture())
             using (SpartanSession session = fixture.Start(Goal.Discover))
             {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Hash,
+                    Metainfo = session.Metainfo
+                };
+
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnTaskCompleted, data =>
                 {
                     return data.Task == Goal.Discover;
                 });
 
                 session.Spartan.Start();
+                session.Pipeline.Process();
+
                 session.Stage.Discovering.Wait(5000).Should().BeTrue();
 
-                session.Spartan.Handle(new MetadataDiscovered
-                {
-                    Hash = session.Hash,
-                    Metainfo = null
-                });
+                session.Spartan.Handle(discovered);
+                session.Pipeline.Process();
 
                 handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldStopMetagetWhenCompleted()
+        {
+            using (SpartanFixture fixture = new SpartanFixture())
+            using (SpartanSession session = fixture.Start(Goal.Discover))
+            {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Hash,
+                    Metainfo = session.Metainfo
+                };
+
+                session.Spartan.Start();
+                session.Pipeline.Process();
+
+                session.Stage.Discovering.Wait(5000).Should().BeTrue();
+
+                session.Spartan.Handle(discovered);
+                session.Pipeline.Process();
+
+                session.Stage.Discovered.Wait(5000).Should().BeTrue();
+                A.CallTo(() => session.Metaget.Stop()).MustHaveHappened();
             }
         }
 
@@ -66,12 +125,38 @@ namespace Leak.Spartan.Tests
                 });
 
                 session.Spartan.Start();
+                session.Pipeline.Process();
+
                 session.Stage.Discovering.Wait(5000).Should().BeTrue();
 
                 session.Spartan.Handle(discovered);
-                session.Repository.Handle(discovered);
+                session.Pipeline.Process();
 
                 handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldVerifyUsingRepository()
+        {
+            using (SpartanFixture fixture = new SpartanFixture())
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify))
+            {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Hash,
+                    Metainfo = session.Metainfo
+                };
+
+                session.Spartan.Start();
+                session.Pipeline.Process();
+
+                session.Stage.Discovering.Wait(5000).Should().BeTrue();
+
+                session.Spartan.Handle(discovered);
+                session.Pipeline.Process();
+
+                A.CallTo(() => session.Repository.Verify(A<Bitfield>.Ignored)).MustHaveHappened();
             }
         }
     }

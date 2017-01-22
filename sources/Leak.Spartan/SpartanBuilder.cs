@@ -1,11 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Datashare;
-using Leak.Files;
-using Leak.Glue;
-using Leak.Metaget;
-using Leak.Metashare;
-using Leak.Repository;
-using Leak.Retriever;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -31,43 +25,31 @@ namespace Leak.Spartan
             return this;
         }
 
-        public SpartanBuilder WithPipeline(LeakPipeline pipeline)
+        public SpartanBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;
         }
 
-        public SpartanBuilder WithFiles(FileFactory files)
-        {
-            dependencies.Files = files;
-            return this;
-        }
-
-        public SpartanBuilder WithGlue(GlueService glue)
-        {
-            dependencies.Glue = glue;
-            return this;
-        }
-
-        public SpartanBuilder WithMetaget(MetagetService metaget)
+        public SpartanBuilder WithMetaget(SpartanMetaget metaget)
         {
             dependencies.Metaget = metaget;
             return this;
         }
 
-        public SpartanBuilder WithMetashare(MetashareService metashare)
+        public SpartanBuilder WithMetashare(SpartanMetashare metashare)
         {
             dependencies.Metashare = metashare;
             return this;
         }
 
-        public SpartanBuilder WithRepository(RepositoryService repository)
+        public SpartanBuilder WithRepository(SpartanRepository repository)
         {
             dependencies.Repository = repository;
             return this;
         }
 
-        public SpartanBuilder WithRetriever(RetrieverService retriever)
+        public SpartanBuilder WithRetriever(SpartanRetriever retriever)
         {
             dependencies.Retriever = retriever;
             return this;

@@ -1,26 +1,18 @@
 ﻿using Leak.Datashare;
-using Leak.Files;
-using Leak.Glue;
-using Leak.Metaget;
-using Leak.Metashare;
-using Leak.Repository;
-using Leak.Retriever;
 using Leak.Tasks;
 
 namespace Leak.Spartan
 {
     public class SpartanDependencies
     {
-        public LeakPipeline Pipeline;
-        public FileFactory Files;
+        public PipelineService Pipeline;
 
-        public GlueService Glue;
+        public SpartanMetaget Metaget;
+        public SpartanMetashare Metashare;
 
-        public MetagetService Metaget;
-        public MetashareService Metashare;
+        public SpartanRepository Repository;
 
-        public RepositoryService Repository;
-        public RetrieverService Retriever;
+        public SpartanRetriever Retriever;
         public DatashareService Datashare;
     }
 }

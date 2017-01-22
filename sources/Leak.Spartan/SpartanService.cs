@@ -56,13 +56,16 @@ namespace Leak.Spartan
 
         public void Handle(MetadataDiscovered data)
         {
-            context.State.Metainfo = data.Metainfo;
+            context.Queue.Add(() =>
+            {
+                context.State.Metainfo = data.Metainfo;
 
-            context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Discover);
-            context.State.Complete(Goal.Discover);
+                context.Hooks.CallTaskCompleted(context.Parameters.Hash, Goal.Discover);
+                context.State.Complete(Goal.Discover);
 
-            context.Dependencies.Metaget.Stop();
-            context.Queue.Add(new SpartanScheduleNext(context));
+                context.Dependencies.Metaget.Stop();
+                context.Queue.Add(new SpartanScheduleNext(context));
+            });
         }
 
         public void Handle(DataVerified data)
