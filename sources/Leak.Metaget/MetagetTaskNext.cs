@@ -1,4 +1,4 @@
-﻿using Leak.Extensions.Metadata;
+﻿using Leak.Common;
 using Leak.Tasks;
 
 namespace Leak.Metaget
@@ -9,7 +9,7 @@ namespace Leak.Metaget
         {
             if (context.Metamine != null && context.Dependencies.Metafile.IsCompleted() == false)
             {
-                context.Dependencies.Glue.ForEachPeer(peer =>
+                foreach (PeerHash peer in context.Dependencies.Glue.Peers)
                 {
                     MetamineStrategy strategy = MetamineStrategy.Sequential;
                     MetamineBlock[] blocks = context.Metamine.Next(strategy, peer);
@@ -19,7 +19,7 @@ namespace Leak.Metaget
                         context.Metamine.Reserve(peer, block);
                         context.Dependencies.Glue.SendMetadataRequest(peer, block.Index);
                     }
-                });
+                }
             }
         }
     }

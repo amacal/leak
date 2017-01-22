@@ -59,5 +59,15 @@ namespace Leak.Omnibus.Components
                 Block = block
             });
         }
+
+        public static void CallBlockExpired(this OmnibusHooks hooks, FileHash hash, PeerHash peer, BlockIndex block)
+        {
+            hooks.OnBlockExpired?.Invoke(new BlockExpired
+            {
+                Hash = hash,
+                Peer = peer,
+                Block = block
+            });
+        }
     }
 }

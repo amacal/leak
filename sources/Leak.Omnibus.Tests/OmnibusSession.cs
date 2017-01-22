@@ -1,6 +1,6 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Testing;
+using System;
 
 namespace Leak.Omnibus.Tests
 {

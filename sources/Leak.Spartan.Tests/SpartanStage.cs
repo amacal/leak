@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Leak.Common;
+﻿using Leak.Common;
+using System.Threading.Tasks;
 
 namespace Leak.Spartan.Tests
 {

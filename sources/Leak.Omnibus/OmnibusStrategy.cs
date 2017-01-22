@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Omnibus.Strategies;
+using System.Collections.Generic;
 
 namespace Leak.Omnibus
 {

@@ -1,7 +1,7 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Events;
 using Leak.Extensions.Metadata;
+using System;
 
 namespace Leak.Metashare
 {
@@ -42,12 +42,10 @@ namespace Leak.Metashare
         public void Start()
         {
             context.Dependencies.Pipeline.Register(context.Queue);
-            context.Dependencies.Metafile.Hooks.OnMetafileRead += OnMetafileRead;
         }
 
         public void Stop()
         {
-            context.Dependencies.Metafile.Hooks.OnMetafileRead -= OnMetafileRead;
         }
 
         public void Handle(MetadataRequested data)
@@ -56,7 +54,7 @@ namespace Leak.Metashare
             context.Dependencies.Metafile.Read(data.Piece);
         }
 
-        private void OnMetafileRead(MetafileRead data)
+        public void Handle(MetafileRead data)
         {
             foreach (MetashareEntry entry in context.Collection.Remove(data.Piece))
             {
@@ -67,7 +65,6 @@ namespace Leak.Metashare
 
         public void Dispose()
         {
-            context.Dependencies.Metafile.Hooks.OnMetafileRead -= OnMetafileRead;
         }
     }
 }

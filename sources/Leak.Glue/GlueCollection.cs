@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Leak.Common;
+using System;
 using System.Collections.Generic;
-using Leak.Common;
 
 namespace Leak.Glue
 {

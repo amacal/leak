@@ -1,7 +1,7 @@
-using System;
 using Leak.Common;
 using Leak.Glue;
 using Leak.Memory;
+using System;
 
 namespace Leak.Extensions.Peers.Tests
 {

@@ -1,14 +1,13 @@
-﻿using System;
-using F2F.Sandbox;
+﻿using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Events;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
 using Leak.Repository;
 using Leak.Tasks;
+using System;
 using File = System.IO.File;
 
 namespace Leak.Datashare.Tests

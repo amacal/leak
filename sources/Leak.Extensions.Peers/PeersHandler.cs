@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Leak.Bencoding;
+using Leak.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Leak.Bencoding;
-using Leak.Common;
 
 namespace Leak.Extensions.Peers
 {

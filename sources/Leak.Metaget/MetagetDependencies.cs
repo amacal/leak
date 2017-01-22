@@ -1,15 +1,13 @@
-﻿using Leak.Glue;
-using Leak.Metafile;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Metaget
 {
     public class MetagetDependencies
     {
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
 
-        public GlueService Glue;
+        public MetagetGlue Glue;
 
-        public MetafileService Metafile;
+        public MetagetMetafile Metafile;
     }
 }

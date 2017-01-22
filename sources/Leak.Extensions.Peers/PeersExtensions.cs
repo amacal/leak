@@ -1,7 +1,7 @@
-﻿using System;
-using Leak.Bencoding;
+﻿using Leak.Bencoding;
 using Leak.Common;
 using Leak.Glue;
+using System;
 
 namespace Leak.Extensions.Peers
 {

@@ -41,7 +41,7 @@ namespace Leak.Metafile
             if (context.IsCompleted)
             {
                 context.Destination.Read(piece);
-            }  
+            }
         }
 
         public void Write(int piece, byte[] data)

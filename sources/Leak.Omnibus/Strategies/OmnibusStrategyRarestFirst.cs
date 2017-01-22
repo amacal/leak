@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Omnibus.Components;
+using System;
+using System.Collections.Generic;
 
 namespace Leak.Omnibus.Strategies
 {

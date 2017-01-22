@@ -1,5 +1,5 @@
-﻿using System;
-using Leak.Sockets;
+﻿using Leak.Sockets;
+using System;
 
 namespace Leak.Loop.Tests
 {

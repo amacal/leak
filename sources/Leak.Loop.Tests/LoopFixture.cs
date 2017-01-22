@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Completion;
 using Leak.Memory;
 using Leak.Networking;
 using Leak.Sockets;
 using Leak.Tasks;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Leak.Loop.Tests
 {
@@ -58,7 +58,7 @@ namespace Leak.Loop.Tests
             client.Bind();
             server.Bind(out port);
             server.Listen(1);
-            
+
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port);
             Task<TcpSocketAccept> accept = server.Accept();
 

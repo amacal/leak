@@ -1,6 +1,5 @@
-﻿using System;
-using Leak.Common;
-using Leak.Networking;
+﻿using Leak.Common;
+using System;
 
 namespace Leak.Negotiator.Tests
 {

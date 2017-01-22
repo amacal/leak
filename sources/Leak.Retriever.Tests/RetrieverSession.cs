@@ -1,5 +1,5 @@
-﻿using System;
-using Leak.Testing;
+﻿using Leak.Testing;
+using System;
 
 namespace Leak.Retriever.Tests
 {

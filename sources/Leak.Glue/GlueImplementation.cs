@@ -1,10 +1,10 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Communicator;
 using Leak.Communicator.Messages;
 using Leak.Events;
 using Leak.Extensions;
 using Leak.Loop;
+using System;
 
 namespace Leak.Glue
 {

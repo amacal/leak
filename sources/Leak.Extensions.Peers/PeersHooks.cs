@@ -1,5 +1,4 @@
 ﻿using System;
-using Leak.Glue;
 
 namespace Leak.Extensions.Peers
 {

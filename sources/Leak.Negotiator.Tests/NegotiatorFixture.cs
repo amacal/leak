@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Completion;
 using Leak.Networking;
 using Leak.Sockets;
 using Leak.Tasks;
+using System;
+using System.Threading.Tasks;
 
 namespace Leak.Negotiator.Tests
 {

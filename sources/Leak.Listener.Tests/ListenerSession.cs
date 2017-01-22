@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net;
-using Leak.Networking;
+﻿using Leak.Networking;
 using Leak.Sockets;
+using System;
+using System.Net;
 
 namespace Leak.Listener.Tests
 {

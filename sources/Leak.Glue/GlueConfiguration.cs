@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Leak.Extensions;
+﻿using Leak.Extensions;
+using System.Collections.Generic;
 
 namespace Leak.Glue
 {

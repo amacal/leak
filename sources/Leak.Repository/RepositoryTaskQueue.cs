@@ -1,7 +1,7 @@
-﻿using System.Collections.Concurrent;
+﻿using Leak.Tasks;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Leak.Tasks;
 
 namespace Leak.Repository
 {

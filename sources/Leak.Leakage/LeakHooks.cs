@@ -1,6 +1,6 @@
-﻿using System;
-using Leak.Events;
+﻿using Leak.Events;
 using Leak.Extensions.Peers;
+using System;
 
 namespace Leak.Leakage
 {

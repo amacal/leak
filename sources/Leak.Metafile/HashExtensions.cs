@@ -17,6 +17,7 @@ namespace Leak.Metafile
             hashCore = target.GetMethod("HashCore", flags);
             hashFinal = target.GetMethod("HashFinal", flags);
         }
+
         public static void Push(this HashAlgorithm algorithm, byte[] data, int offset, int count)
         {
             hashCore.Invoke(algorithm, new object[] { data, offset, count });

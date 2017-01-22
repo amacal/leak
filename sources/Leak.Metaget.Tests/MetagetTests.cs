@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using FakeItEasy;
 using FluentAssertions;
+using Leak.Common;
+using Leak.Extensions.Metadata;
 using Leak.Testing;
 using NUnit.Framework;
 
@@ -13,6 +15,13 @@ namespace Leak.Metaget.Tests
             using (MetagetFixture fixture = new MetagetFixture())
             using (MetagetSession session = fixture.Start())
             {
+                MetadataMeasured measured = new MetadataMeasured
+                {
+                    Hash = session.Hash,
+                    Size = session.Size,
+                    Peer = PeerHash.Random()
+                };
+
                 Trigger handler = Trigger.Bind(ref session.Hooks.OnMetafileMeasured, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
@@ -20,49 +29,55 @@ namespace Leak.Metaget.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleMetadataMeasured(session.Hash, session.Size);
+                session.Service.Handle(measured);
 
+                session.Pipeline.Process();
                 handler.Wait().Should().BeTrue();
             }
         }
 
         [Test]
-        public void ShouldTriggerMetafileDiscoveredWhenInitiallyDone()
+        public void ShouldVerifyMetafileWhenStarted()
         {
             using (MetagetFixture fixture = new MetagetFixture())
             using (MetagetSession session = fixture.Start(true))
             {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnMetadataDiscovered, data =>
-                {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Metainfo.Should().NotBeNull();
-                    data.Metainfo.Hash.Should().Be(session.Hash);
-                });
+                A.CallTo(() => session.Metafile.IsCompleted()).Returns(false);
 
                 session.Service.Start();
-                handler.Wait().Should().BeTrue();
+                session.Pipeline.Process();
+
+                A.CallTo(() => session.Metafile.Verify()).MustHaveHappened();
             }
         }
 
         [Test]
-        public void ShouldTriggerMetafileDiscoveredWhenPopulated()
+        public void ShouldSendMetadataRequested()
         {
+            PeerHash other = PeerHash.Random();
+            PeerHash[] peers = { other };
+
             using (MetagetFixture fixture = new MetagetFixture())
             using (MetagetSession session = fixture.Start())
             {
-                Trigger handler = Trigger.Bind(ref session.Hooks.OnMetadataDiscovered, data =>
+                MetadataMeasured measured = new MetadataMeasured
                 {
-                    data.Hash.Should().Be(session.Hash);
-                    data.Metainfo.Should().NotBeNull();
-                    data.Metainfo.Hash.Should().Be(session.Hash);
-                });
+                    Hash = session.Hash,
+                    Size = session.Size,
+                    Peer = PeerHash.Random()
+                };
+
+                A.CallTo(() => session.Glue.Peers).Returns(peers);
 
                 session.Service.Start();
 
-                session.Service.HandleMetadataMeasured(session.Hash, session.Size);
-                session.Service.HandleMetadataReceived(session.Hash, 0, session.Data[0]);
+                session.Service.Handle(measured);
+                session.Pipeline.Process();
 
-                handler.Wait().Should().BeTrue();
+                session.Pipeline.Tick();
+                session.Pipeline.Process();
+
+                A.CallTo(() => session.Glue.SendMetadataRequest(other, 0)).MustHaveHappened();
             }
         }
     }

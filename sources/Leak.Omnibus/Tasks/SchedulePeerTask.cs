@@ -1,7 +1,7 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Omnibus.Components;
 using Leak.Tasks;
+using System;
 
 namespace Leak.Omnibus.Tasks
 {
@@ -39,7 +39,7 @@ namespace Leak.Omnibus.Tasks
 
                         if (previous != null)
                         {
-                            //context.Callback.OnBlockExpired(hash, previous, block);
+                            context.Hooks.CallBlockExpired(hash, previous, block);
                         }
 
                         context.Hooks.CallBlockReserved(hash, peer, block);

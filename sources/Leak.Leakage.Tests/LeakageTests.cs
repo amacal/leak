@@ -136,7 +136,7 @@ namespace Leak.Leakage.Tests
                     data.Hash.Should().Be(swarm.Hash);
                     data.Bitfield.Should().NotBeNull();
                     data.Bitfield.Completed.Should().Be(2);
-                });  
+                });
 
                 swarm.Sue.Client.Start();
                 swarm.Sue.Client.Register(swarm.Sue.Registrant);

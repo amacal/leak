@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Leak.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using Leak.Tasks;
 
 namespace Leak.Testing
 {

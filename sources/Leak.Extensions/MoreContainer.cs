@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Leak.Bencoding;
+using System.Collections.Generic;
 using System.Linq;
-using Leak.Bencoding;
 
 namespace Leak.Extensions
 {

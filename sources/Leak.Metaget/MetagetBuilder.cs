@@ -1,6 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Glue;
-using Leak.Metafile;
 using Leak.Tasks;
 
 namespace Leak.Metaget
@@ -26,19 +24,19 @@ namespace Leak.Metaget
             return this;
         }
 
-        public MetagetBuilder WithPipeline(LeakPipeline pipeline)
+        public MetagetBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;
         }
 
-        public MetagetBuilder WithGlue(GlueService glue)
+        public MetagetBuilder WithGlue(MetagetGlue glue)
         {
             dependencies.Glue = glue;
             return this;
         }
 
-        public MetagetBuilder WithMetafile(MetafileService metafile)
+        public MetagetBuilder WithMetafile(MetagetMetafile metafile)
         {
             dependencies.Metafile = metafile;
             return this;

@@ -1,7 +1,7 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Events;
 using Leak.Tasks;
+using System;
 
 namespace Leak.Spartan
 {

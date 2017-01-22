@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Leak.Testing;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Leak.Extensions.Metadata.Tests
 {

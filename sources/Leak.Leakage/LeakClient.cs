@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Completion;
 using Leak.Connector;
 using Leak.Datashare;
@@ -21,6 +19,8 @@ using Leak.Repository;
 using Leak.Retriever;
 using Leak.Spartan;
 using Leak.Tasks;
+using System;
+using System.IO;
 
 namespace Leak.Leakage
 {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Concurrent;
-using Leak.Common;
+﻿using Leak.Common;
+using System.Collections.Concurrent;
 
 namespace Leak.Memory
 {

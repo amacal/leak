@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Leak.Common;
+﻿using Leak.Common;
+using System.Linq;
 
 namespace Leak.Datashare.Tests
 {

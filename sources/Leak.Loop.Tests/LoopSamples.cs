@@ -44,7 +44,7 @@
 
         public byte[] Extended
         {
-            get { return new byte[] {0x00, 0x00, 0x00, 0x02, 0x14, 0x0f}; }
+            get { return new byte[] { 0x00, 0x00, 0x00, 0x02, 0x14, 0x0f }; }
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Leak.Common;
 using Leak.Events;
 using Leak.Testing;
 using NUnit.Framework;
+using System;
 
 namespace Leak.Retriever.Tests
 {

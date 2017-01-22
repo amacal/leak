@@ -1,5 +1,5 @@
-﻿using System;
-using Leak.Glue;
+﻿using Leak.Glue;
+using System;
 
 namespace Leak.Extensions.Metadata.Tests
 {

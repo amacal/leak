@@ -1,5 +1,5 @@
-﻿using System;
-using Leak.Events;
+﻿using Leak.Events;
+using System;
 
 namespace Leak.Metaget
 {
@@ -10,11 +10,5 @@ namespace Leak.Metaget
         /// that before the exact size of the metafile was not known.
         /// </summary>
         public Action<MetafileMeasured> OnMetafileMeasured;
-
-        /// <summary>
-        /// Called when the all pieces were received and the metadata was
-        /// verified against the file-hash.
-        /// </summary>
-        public Action<MetadataDiscovered> OnMetadataDiscovered;
     }
 }

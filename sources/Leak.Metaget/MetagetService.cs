@@ -1,6 +1,6 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Extensions.Metadata;
+using System;
 
 namespace Leak.Metaget
 {
@@ -18,14 +18,19 @@ namespace Leak.Metaget
             get { return context.Parameters.Hash; }
         }
 
+        public MetagetHooks Hooks
+        {
+            get { return context.Hooks; }
+        }
+
         public MetagetParameters Parameters
         {
             get { return context.Parameters; }
         }
 
-        public MetagetHooks Hooks
+        public MetagetDependencies Dependencies
         {
-            get { return context.Hooks; }
+            get { return context.Dependencies; }
         }
 
         public MetagetConfiguration Configuration
@@ -63,6 +68,7 @@ namespace Leak.Metaget
 
         public void Dispose()
         {
+            context.Dependencies.Pipeline.Remove(OnTick);
         }
     }
 }

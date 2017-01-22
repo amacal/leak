@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Leak.Common;
+﻿using Leak.Common;
+using System.Collections.Generic;
 
 namespace Leak.Repository
 {

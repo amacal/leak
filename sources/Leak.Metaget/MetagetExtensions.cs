@@ -14,15 +14,6 @@ namespace Leak.Metaget
             });
         }
 
-        public static void CallMetadataDiscovered(this MetagetHooks hooks, FileHash hash, Metainfo metainfo)
-        {
-            hooks.OnMetadataDiscovered?.Invoke(new MetadataDiscovered
-            {
-                Hash = hash,
-                Metainfo = metainfo
-            });
-        }
-
         public static void Complete(this MetamineBitfield bitfield, int block, int size)
         {
             bitfield.Complete(new MetamineBlock(block, size));

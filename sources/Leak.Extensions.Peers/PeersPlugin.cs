@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Events;
 using Leak.Glue;
+using System.Linq;
 
 namespace Leak.Extensions.Peers
 {

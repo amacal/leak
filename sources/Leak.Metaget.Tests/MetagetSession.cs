@@ -1,27 +1,23 @@
-﻿using System;
-using F2F.Sandbox;
+﻿using F2F.Sandbox;
 using Leak.Common;
-using Leak.Metafile;
+using Leak.Testing;
+using System;
 
 namespace Leak.Metaget.Tests
 {
     public class MetagetSession : IDisposable
     {
         private readonly IFileSandbox sandbox;
-        private readonly string destination;
         private readonly FileHash hash;
         private readonly MetagetData data;
         private readonly MetagetService service;
-        private readonly MetafileService metafile;
 
-        public MetagetSession(IFileSandbox sandbox, string destination, FileHash hash, MetagetData data, MetagetService service, MetafileService metafile)
+        public MetagetSession(IFileSandbox sandbox, FileHash hash, MetagetData data, MetagetService service)
         {
             this.sandbox = sandbox;
-            this.destination = destination;
             this.hash = hash;
             this.data = data;
             this.service = service;
-            this.metafile = metafile;
         }
 
         public FileHash Hash
@@ -32,6 +28,21 @@ namespace Leak.Metaget.Tests
         public MetagetService Service
         {
             get { return service; }
+        }
+
+        public PipelineSimulator Pipeline
+        {
+            get { return (PipelineSimulator)service.Dependencies.Pipeline; }
+        }
+
+        public MetagetGlue Glue
+        {
+            get { return service.Dependencies.Glue; }
+        }
+
+        public MetagetMetafile Metafile
+        {
+            get { return service.Dependencies.Metafile; }
         }
 
         public MetagetHooks Hooks
@@ -49,14 +60,8 @@ namespace Leak.Metaget.Tests
             get { return data; }
         }
 
-        public string Destination
-        {
-            get { return destination; }
-        }
-
         public void Dispose()
         {
-            metafile.Dispose();
             sandbox.Dispose();
             service.Stop();
         }

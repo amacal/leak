@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Leak.Completion;
+﻿using Leak.Completion;
 using Leak.Networking;
 using Leak.Tasks;
+using System;
 
 namespace Leak.Connector.Tests
 {
@@ -36,7 +35,7 @@ namespace Leak.Connector.Tests
 
         public ConnectorSession Start()
         {
-            connector = 
+            connector =
                 new PeerConnectorBuilder()
                     .WithPipeline(pipeline)
                     .WithNetwork(pool)

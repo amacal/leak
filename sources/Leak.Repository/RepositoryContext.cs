@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Files;
 
 namespace Leak.Repository
 {
@@ -38,7 +37,6 @@ namespace Leak.Repository
         {
             get { return dependencies; }
         }
-
 
         public RepositoryConfiguration Configuration
         {

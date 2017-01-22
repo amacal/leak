@@ -1,7 +1,4 @@
-﻿using Leak.Events;
-using Leak.Glue;
-using Leak.Metafile;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Metaget
 {
@@ -23,13 +20,6 @@ namespace Leak.Metaget
             this.configuration = configuration;
 
             queue = new LeakQueue<MetagetContext>(this);
-
-            dependencies.Metafile.Hooks.OnMetafileVerified += OnMetafileVerified;
-        }
-
-        private void OnMetafileVerified(MetafileVerified data)
-        {
-            this.hooks.CallMetadataDiscovered(data.Hash, data.Metainfo);
         }
 
         public MetamineBitfield Metamine
@@ -45,7 +35,7 @@ namespace Leak.Metaget
 
         public MetagetDependencies Dependencies
         {
-            get {  return dependencies; }
+            get { return dependencies; }
         }
 
         public MetagetHooks Hooks

@@ -1,35 +1,16 @@
-﻿using System;
-using System.IO;
-using F2F.Sandbox;
+﻿using F2F.Sandbox;
+using FakeItEasy;
 using Leak.Common;
-using Leak.Completion;
-using Leak.Files;
-using Leak.Glue;
-using Leak.Memory;
 using Leak.Metadata;
-using Leak.Metafile;
-using Leak.Tasks;
+using Leak.Testing;
+using System;
+using System.IO;
 using File = System.IO.File;
 
 namespace Leak.Metaget.Tests
 {
     public class MetagetFixture : IDisposable
     {
-        private readonly LeakPipeline pipeline;
-        private readonly CompletionThread completion;
-        private readonly FileFactory files;
-
-        public MetagetFixture()
-        {
-            pipeline = new LeakPipeline();
-            pipeline.Start();
-
-            completion = new CompletionThread();
-            completion.Start();
-
-            files = new FileFactory(completion);
-        }
-
         public MetagetSession Start(bool completed = false)
         {
             Metainfo metainfo;
@@ -56,37 +37,19 @@ namespace Leak.Metaget.Tests
                 File.WriteAllBytes(destination + ".metainfo", data.ToBytes());
             }
 
-            GlueService glue =
-                new GlueBuilder()
-                    .WithHash(metainfo.Hash)
-                    .WithBlocks(new BufferedBlockFactory())
-                    .Build();
-
-            MetafileService metafile =
-                new MetafileBuilder()
-                    .WithHash(metainfo.Hash)
-                    .WithDestination(destination + ".metainfo")
-                    .WithFiles(files)
-                    .WithPipeline(pipeline)
-                    .Build();
-
             MetagetService metaget =
                 new MetagetBuilder()
                     .WithHash(metainfo.Hash)
-                    .WithPipeline(pipeline)
-                    .WithGlue(glue)
-                    .WithMetafile(metafile)
+                    .WithPipeline(new PipelineSimulator())
+                    .WithGlue(A.Fake<MetagetGlue>())
+                    .WithMetafile(A.Fake<MetagetMetafile>())
                     .Build();
 
-            metafile.Start();
-
-            return new MetagetSession(sandbox, destination + ".metainfo", metainfo.Hash, data, metaget, metafile);
+            return new MetagetSession(sandbox, metainfo.Hash, data, metaget);
         }
 
         public void Dispose()
         {
-            completion.Dispose();
-            pipeline.Stop();
         }
     }
 }

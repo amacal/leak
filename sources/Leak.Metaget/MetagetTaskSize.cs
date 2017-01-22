@@ -18,7 +18,7 @@ namespace Leak.Metaget
         {
             if (context.Metamine == null && context.Dependencies.Metafile.IsCompleted() == false)
             {
-                context.Hooks.CallMetafileMeasured(context.Dependencies.Glue.Hash, size);
+                context.Hooks.CallMetafileMeasured(context.Parameters.Hash, size);
                 context.Metamine = new MetamineBitfield(with => { with.Size = size; });
             }
         }

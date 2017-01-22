@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using F2F.Sandbox;
+﻿using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
@@ -12,7 +10,8 @@ using Leak.Metaget;
 using Leak.Metashare;
 using Leak.Repository;
 using Leak.Tasks;
-
+using System;
+using System.IO;
 using File = System.IO.File;
 
 namespace Leak.Spartan.Tests
@@ -92,7 +91,7 @@ namespace Leak.Spartan.Tests
                     .WithPipeline(pipeline)
                     .Build();
 
-            SpartanService spartan = 
+            SpartanService spartan =
                 new SpartanBuilder()
                     .WithHash(metainfo.Hash)
                     .WithPipeline(pipeline)

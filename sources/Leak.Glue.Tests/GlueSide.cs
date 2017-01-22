@@ -1,6 +1,6 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Memory;
+using System;
 
 namespace Leak.Glue.Tests
 {

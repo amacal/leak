@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Leak.Bencoding;
+﻿using Leak.Bencoding;
 using Leak.Common;
 using Leak.Communicator.Messages;
 using Leak.Events;
 using Leak.Extensions;
+using System.Collections.Generic;
 
 namespace Leak.Glue
 {

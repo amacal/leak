@@ -1,8 +1,8 @@
-﻿using System.IO;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Leak.Common;
 using Leak.Testing;
 using NUnit.Framework;
+using System.IO;
 
 namespace Leak.Repository.Tests
 {

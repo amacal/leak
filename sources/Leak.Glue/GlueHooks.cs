@@ -1,5 +1,5 @@
-﻿using System;
-using Leak.Events;
+﻿using Leak.Events;
+using System;
 
 namespace Leak.Glue
 {

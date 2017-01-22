@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Leak.Completion;
+﻿using Leak.Completion;
 using Leak.Events;
 using Leak.Networking;
 using Leak.Tasks;
+using System;
+using System.Threading.Tasks;
 
 namespace Leak.Listener.Tests
 {

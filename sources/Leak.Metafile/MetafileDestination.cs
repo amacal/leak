@@ -1,8 +1,7 @@
-﻿using System;
-using System.Security.Cryptography;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Files;
-using Leak.Metadata;
+using System;
+using System.Security.Cryptography;
 
 namespace Leak.Metafile
 {

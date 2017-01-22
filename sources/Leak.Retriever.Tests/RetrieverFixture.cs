@@ -1,7 +1,7 @@
-﻿using System;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Leak.Common;
 using Leak.Testing;
+using System;
 
 namespace Leak.Retriever.Tests
 {
