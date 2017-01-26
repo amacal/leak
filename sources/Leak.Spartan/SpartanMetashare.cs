@@ -1,9 +1,8 @@
-﻿namespace Leak.Spartan
-{
-    public interface SpartanMetashare
-    {
-        void Start();
+﻿using Leak.Common;
 
-        void Stop();
+namespace Leak.Spartan
+{
+    public interface SpartanMetashare : Component
+    {
     }
 }

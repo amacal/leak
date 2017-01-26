@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Datashare;
 using Leak.Tasks;
 
 namespace Leak.Spartan
@@ -55,7 +54,7 @@ namespace Leak.Spartan
             return this;
         }
 
-        public SpartanBuilder WithDatashare(DatashareService datashare)
+        public SpartanBuilder WithDatashare(SpartanDatashare datashare)
         {
             dependencies.Datashare = datashare;
             return this;

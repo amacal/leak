@@ -8,6 +8,9 @@ namespace Leak.Spartan.Tests
         public Task Discovering;
         public Task Discovered;
 
+        public Task Verifying;
+        public Task Verified;
+
         public Task Downloading;
         public Task Downloaded;
 
@@ -15,6 +18,8 @@ namespace Leak.Spartan.Tests
         {
             TaskCompletionSource<bool> onDiscovering = new TaskCompletionSource<bool>();
             TaskCompletionSource<bool> onDiscovered = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> onVerifying = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> onVerified = new TaskCompletionSource<bool>();
             TaskCompletionSource<bool> onDownlading = new TaskCompletionSource<bool>();
             TaskCompletionSource<bool> onDownloaded = new TaskCompletionSource<bool>();
 
@@ -24,6 +29,10 @@ namespace Leak.Spartan.Tests
                 {
                     case Goal.Discover:
                         onDiscovering.SetResult(true);
+                        break;
+
+                    case Goal.Verify:
+                        onVerifying.SetResult(true);
                         break;
 
                     case Goal.Download:
@@ -40,6 +49,10 @@ namespace Leak.Spartan.Tests
                         onDiscovered.SetResult(true);
                         break;
 
+                    case Goal.Verify:
+                        onVerified.SetResult(true);
+                        break;
+
                     case Goal.Download:
                         onDownloaded.SetResult(true);
                         break;
@@ -48,6 +61,8 @@ namespace Leak.Spartan.Tests
 
             Downloading = onDownlading.Task;
             Downloaded = onDownloaded.Task;
+            Verifying = onVerifying.Task;
+            Verified = onVerified.Task;
             Discovering = onDiscovering.Task;
             Discovered = onDiscovering.Task;
         }

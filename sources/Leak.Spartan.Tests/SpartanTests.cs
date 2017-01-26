@@ -83,7 +83,7 @@ namespace Leak.Spartan.Tests
         }
 
         [Test]
-        public void ShouldStopMetagetWhenCompleted()
+        public void ShouldStopMetagetWhenDiscoveringCompleted()
         {
             using (SpartanFixture fixture = new SpartanFixture())
             using (SpartanSession session = fixture.Start(Goal.Discover))
@@ -157,6 +157,42 @@ namespace Leak.Spartan.Tests
                 session.Pipeline.Process();
 
                 A.CallTo(() => session.Repository.Verify(A<Bitfield>.Ignored)).MustHaveHappened();
+            }
+        }
+
+        [Test]
+        public void ShouldStartRetrieverWhen()
+        {
+            using (SpartanFixture fixture = new SpartanFixture())
+            using (SpartanSession session = fixture.Start(Goal.Discover | Goal.Verify | Goal.Download))
+            {
+                MetadataDiscovered discovered = new MetadataDiscovered
+                {
+                    Hash = session.Hash,
+                    Metainfo = session.Metainfo
+                };
+
+                DataVerified verified = new DataVerified
+                {
+                    Hash = session.Hash,
+                    Bitfield = new Bitfield(session.Metainfo.Pieces.Length)
+                };
+
+                session.Spartan.Start();
+                session.Pipeline.Process();
+
+                session.Stage.Discovering.Wait(5000).Should().BeTrue();
+
+                session.Spartan.Handle(discovered);
+                session.Pipeline.Process();
+
+                session.Stage.Verifying.Wait(5000).Should().BeTrue();
+
+                session.Spartan.Handle(verified);
+                session.Pipeline.Process();
+
+                session.Stage.Downloading.Wait(5000).Should().BeTrue();
+                A.CallTo(() => session.Retriever.Start()).MustHaveHappened();
             }
         }
     }

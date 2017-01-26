@@ -37,6 +37,7 @@
     <Compile Include="SpartanBuilder.cs" />
     <Compile Include="SpartanConfiguration.cs" />
     <Compile Include="SpartanContext.cs" />
+    <Compile Include="SpartanDatashare.cs" />
     <Compile Include="SpartanDependencies.cs" />
     <Compile Include="SpartanExtensions.cs" />
     <Compile Include="SpartanMetaget.cs" />
@@ -46,17 +47,12 @@
     <Compile Include="SpartanState.cs" />
     <Compile Include="SpartanHooks.cs" />
     <Compile Include="SpartanParameters.cs" />
-    <Compile Include="SpartanScheduleNext.cs" />
     <Compile Include="SpartanService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Datashare\Leak.Datashare.csproj">
-      <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
-      <Name>Leak.Datashare</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>

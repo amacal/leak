@@ -35,6 +35,7 @@ namespace Leak.Spartan.Tests
                     .WithMetashare(A.Fake<SpartanMetashare>())
                     .WithRepository(A.Fake<SpartanRepository>())
                     .WithRetriever(A.Fake<SpartanRetriever>())
+                    .WithDatashare(A.Fake<SpartanDatashare>())
                     .WithGoal(goal)
                     .Build();
 

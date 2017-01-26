@@ -84,6 +84,7 @@ namespace Leak.Spartan.Tests
         public void Dispose()
         {
             spartan.Dispose();
+            Pipeline.Process();
         }
     }
 }

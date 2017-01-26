@@ -1,5 +1,4 @@
-﻿using Leak.Datashare;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Spartan
 {
@@ -13,6 +12,6 @@ namespace Leak.Spartan
         public SpartanRepository Repository;
 
         public SpartanRetriever Retriever;
-        public DatashareService Datashare;
+        public SpartanDatashare Datashare;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Leak.Spartan
 {
-    public interface SpartanMetaget : Component
+    public interface SpartanDatashare : Component
     {
     }
 }

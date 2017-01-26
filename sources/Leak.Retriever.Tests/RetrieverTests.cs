@@ -205,7 +205,7 @@ namespace Leak.Retriever.Tests
             using (RetrieverFixture fixture = new RetrieverFixture())
             using (RetrieverSession session = fixture.Start())
             {
-                A.CallTo(() => session.Omnibus.Query(A<Action<PeerHash, Bitfield, PeerState>>._)).Invokes(handle);
+                A.CallTo(() => session.Omnibus.Query(A<Action<PeerHash, Bitfield, PeerState>>.Ignored)).Invokes(handle);
 
                 session.Service.Start();
                 session.Pipeline.Tick();

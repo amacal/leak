@@ -35,6 +35,8 @@
   <ItemGroup>
     <Compile Include="Bitfield.cs" />
     <Compile Include="Bytes.cs" />
+    <Compile Include="Component.cs" />
+    <Compile Include="ComponentStatus.cs" />
     <Compile Include="DataBlock.cs" />
     <Compile Include="DataBlockCallback.cs" />
     <Compile Include="DataBlockFactory.cs" />
