@@ -1,8 +1,8 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Testing;
-using System;
 
-namespace Leak.Omnibus.Tests
+namespace Leak.Datamap.Tests
 {
     public class OmnibusSession : IDisposable
     {

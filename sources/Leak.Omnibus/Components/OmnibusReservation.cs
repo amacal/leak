@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Common;
 
-namespace Leak.Omnibus.Components
+namespace Leak.Datamap.Components
 {
     public class OmnibusReservation
     {

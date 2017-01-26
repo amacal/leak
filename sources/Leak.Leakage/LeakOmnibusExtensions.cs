@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
-using Leak.Omnibus;
-using Leak.Retriever;
 using System;
 using System.Collections.Generic;
+using Leak.Dataget;
+using Leak.Datamap;
 
 namespace Leak.Leakage
 {

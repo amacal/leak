@@ -1,8 +1,8 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using System.Security.Cryptography;
+using Leak.Common;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class RepositoryTaskVerifyPiece : RepositoryTask
     {

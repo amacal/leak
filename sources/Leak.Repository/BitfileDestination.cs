@@ -1,9 +1,9 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using Leak.Common;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class BitfileDestination
     {

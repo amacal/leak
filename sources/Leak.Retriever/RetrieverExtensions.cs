@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Retriever
+namespace Leak.Dataget
 {
     public static class RetrieverExtensions
     {

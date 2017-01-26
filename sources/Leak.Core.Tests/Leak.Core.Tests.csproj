@@ -69,9 +69,9 @@
       <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+    <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
       <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
-      <Name>Leak.Repository</Name>
+      <Name>Leak.Datastore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

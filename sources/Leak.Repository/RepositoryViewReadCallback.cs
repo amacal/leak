@@ -1,4 +1,4 @@
-﻿namespace Leak.Repository
+﻿namespace Leak.Datastore
 {
     public delegate void RepositoryViewReadCallback(RepositoryViewRead data);
 }

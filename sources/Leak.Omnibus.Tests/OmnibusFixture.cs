@@ -1,11 +1,11 @@
-﻿using F2F.Sandbox;
+﻿using System;
+using System.IO;
+using F2F.Sandbox;
 using Leak.Common;
 using Leak.Metadata;
 using Leak.Testing;
-using System;
-using System.IO;
 
-namespace Leak.Omnibus.Tests
+namespace Leak.Datamap.Tests
 {
     public class OmnibusFixture : IDisposable
     {

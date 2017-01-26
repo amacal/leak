@@ -7,8 +7,8 @@
     <ProjectGuid>{A69138D4-EAEB-4690-A040-5F612FEDDEB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Omnibus</RootNamespace>
-    <AssemblyName>Leak.Omnibus</AssemblyName>
+    <RootNamespace>Leak.Datamap</RootNamespace>
+    <AssemblyName>Leak.Datamap</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

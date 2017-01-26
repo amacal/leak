@@ -1,8 +1,8 @@
 ﻿using F2F.Sandbox;
 using Leak.Common;
 using Leak.Glue;
-using Leak.Repository;
 using System;
+using Leak.Datastore;
 
 namespace Leak.Datashare.Tests
 {

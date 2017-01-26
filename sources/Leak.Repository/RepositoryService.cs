@@ -1,8 +1,8 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
-using System;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class RepositoryService : IDisposable
     {

@@ -1,4 +1,4 @@
-﻿namespace Leak.Omnibus.Components
+﻿namespace Leak.Datamap.Components
 {
     public class OmnibusPieceReady : OmnibusPiece
     {

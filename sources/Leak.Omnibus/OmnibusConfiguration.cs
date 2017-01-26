@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Leak.Omnibus
+namespace Leak.Datamap
 {
     public class OmnibusConfiguration
     {

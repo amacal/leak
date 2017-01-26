@@ -2,7 +2,7 @@
 using Leak.Files;
 using Leak.Tasks;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class RepositoryDependencies
     {

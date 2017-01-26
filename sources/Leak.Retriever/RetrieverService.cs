@@ -1,9 +1,9 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
 using Leak.Tasks;
-using System;
 
-namespace Leak.Retriever
+namespace Leak.Dataget
 {
     public class RetrieverService : IDisposable
     {

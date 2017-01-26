@@ -1,6 +1,9 @@
 ﻿using Leak.Common;
 using Leak.Connector;
+using Leak.Dataget;
+using Leak.Datamap;
 using Leak.Datashare;
+using Leak.Datastore;
 using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
 using Leak.Glue;
@@ -8,9 +11,6 @@ using Leak.Metafile;
 using Leak.Metaget;
 using Leak.Metashare;
 using Leak.Negotiator;
-using Leak.Omnibus;
-using Leak.Repository;
-using Leak.Retriever;
 using Leak.Spartan;
 
 namespace Leak.Leakage

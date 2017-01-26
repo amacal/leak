@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
+using Leak.Dataget;
 using Leak.Glue;
-using Leak.Retriever;
 
 namespace Leak.Leakage
 {

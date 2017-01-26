@@ -14,13 +14,13 @@ using Leak.Metaget;
 using Leak.Metashare;
 using Leak.Negotiator;
 using Leak.Networking;
-using Leak.Omnibus;
-using Leak.Repository;
-using Leak.Retriever;
 using Leak.Spartan;
 using Leak.Tasks;
 using System;
 using System.IO;
+using Leak.Dataget;
+using Leak.Datamap;
+using Leak.Datastore;
 
 namespace Leak.Leakage
 {

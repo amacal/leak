@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Repository.Tests
+namespace Leak.Datastore.Tests
 {
     public class RepositoryBlock : DataBlock
     {

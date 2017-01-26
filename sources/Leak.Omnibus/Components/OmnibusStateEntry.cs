@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Omnibus.Components
+namespace Leak.Datamap.Components
 {
     public class OmnibusStateEntry
     {

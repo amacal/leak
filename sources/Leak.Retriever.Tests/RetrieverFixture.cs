@@ -1,9 +1,9 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using Leak.Common;
 using Leak.Testing;
-using System;
 
-namespace Leak.Retriever.Tests
+namespace Leak.Dataget.Tests
 {
     public class RetrieverFixture : IDisposable
     {

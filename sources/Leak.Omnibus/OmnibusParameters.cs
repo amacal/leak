@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Omnibus
+namespace Leak.Datamap
 {
     public class OmnibusParameters
     {

@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Files;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class RepositoryTaskReadBlock : RepositoryTask
     {

@@ -1,14 +1,14 @@
-﻿using F2F.Sandbox;
+﻿using System;
+using System.IO;
+using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
 using Leak.Metadata;
 using Leak.Tasks;
-using System;
-using System.IO;
 using File = System.IO.File;
 
-namespace Leak.Repository.Tests
+namespace Leak.Datastore.Tests
 {
     public class RepositoryFixture : IDisposable
     {

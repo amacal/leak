@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Retriever
+namespace Leak.Dataget
 {
     public class RetrieverDependencies
     {

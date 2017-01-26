@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
-using Leak.Repository;
-using Leak.Retriever;
+using Leak.Dataget;
+using Leak.Datastore;
 
 namespace Leak.Leakage
 {

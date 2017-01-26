@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Leak.Omnibus")]
-[assembly: AssemblyProduct("Leak.Omnibus")]
+[assembly: AssemblyTitle("Leak.Datamap")]
+[assembly: AssemblyProduct("Leak.Datamap")]
 [assembly: AssemblyCopyright("Copyright © Adrian Macal 2016")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

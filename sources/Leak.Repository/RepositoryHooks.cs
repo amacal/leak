@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class RepositoryHooks
     {

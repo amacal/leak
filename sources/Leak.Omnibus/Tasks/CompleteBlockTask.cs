@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Omnibus.Tasks
+namespace Leak.Datamap.Tasks
 {
     public class CompleteBlockTask : LeakTask<OmnibusContext>
     {

@@ -2,11 +2,11 @@
 using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
-using Leak.Repository;
 using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Threading;
+using Leak.Datastore;
 
 namespace Leak.Core.Tests.Repository
 {

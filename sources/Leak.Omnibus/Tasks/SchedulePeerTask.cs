@@ -1,9 +1,9 @@
-﻿using Leak.Common;
-using Leak.Omnibus.Components;
+﻿using System;
+using Leak.Common;
+using Leak.Datamap.Components;
 using Leak.Tasks;
-using System;
 
-namespace Leak.Omnibus.Tasks
+namespace Leak.Datamap.Tasks
 {
     public class SchedulePeerTask : LeakTask<OmnibusContext>
     {

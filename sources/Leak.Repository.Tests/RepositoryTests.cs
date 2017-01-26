@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+﻿using System.IO;
+using FluentAssertions;
 using Leak.Common;
 using Leak.Testing;
 using NUnit.Framework;
-using System.IO;
 
-namespace Leak.Repository.Tests
+namespace Leak.Datastore.Tests
 {
     public class RepositoryTests
     {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Security.Cryptography;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public static class HashExtensions
     {

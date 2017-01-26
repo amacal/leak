@@ -2,9 +2,9 @@
 using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
-using Leak.Repository;
 using NUnit.Framework;
 using System.IO;
+using Leak.Datastore;
 using File = System.IO.File;
 
 namespace Leak.Core.Tests.Repository

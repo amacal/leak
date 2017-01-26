@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Omnibus.Tests
+namespace Leak.Datamap.Tests
 {
     public static class OmnibusExtensions
     {

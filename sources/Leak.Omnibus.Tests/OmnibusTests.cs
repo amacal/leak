@@ -4,7 +4,7 @@ using Leak.Events;
 using Leak.Testing;
 using NUnit.Framework;
 
-namespace Leak.Omnibus.Tests
+namespace Leak.Datamap.Tests
 {
     public class OmnibusTests
     {

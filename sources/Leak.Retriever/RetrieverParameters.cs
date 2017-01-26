@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Retriever
+namespace Leak.Dataget
 {
     public class RetrieverParameters
     {

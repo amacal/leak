@@ -1,8 +1,8 @@
-﻿using Leak.Common;
-using Leak.Omnibus.Strategies;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Leak.Common;
+using Leak.Datamap.Strategies;
 
-namespace Leak.Omnibus
+namespace Leak.Datamap
 {
     public abstract class OmnibusStrategy
     {

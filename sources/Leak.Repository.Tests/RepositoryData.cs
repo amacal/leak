@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System.Linq;
+﻿using System.Linq;
+using Leak.Common;
 
-namespace Leak.Repository.Tests
+namespace Leak.Datastore.Tests
 {
     public class RepositoryData
     {

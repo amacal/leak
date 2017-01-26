@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Retriever
+namespace Leak.Dataget
 {
     public class RetrieverBuilder
     {

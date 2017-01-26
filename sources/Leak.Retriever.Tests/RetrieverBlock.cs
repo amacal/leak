@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Retriever.Tests
+namespace Leak.Dataget.Tests
 {
     public class RetrieverBlock : DataBlock
     {

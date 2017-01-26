@@ -58,9 +58,9 @@
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Glue</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Repository.csproj">
+    <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
       <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
-      <Name>Leak.Repository</Name>
+      <Name>Leak.Datastore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

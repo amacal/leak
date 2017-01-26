@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
-using Leak.Omnibus.Components;
+using Leak.Datamap.Components;
 using Leak.Tasks;
 
-namespace Leak.Omnibus
+namespace Leak.Datamap
 {
     public class OmnibusContext
     {

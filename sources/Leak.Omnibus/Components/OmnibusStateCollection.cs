@@ -1,8 +1,8 @@
-﻿using Leak.Common;
+﻿using System.Collections.Generic;
+using Leak.Common;
 using Leak.Events;
-using System.Collections.Generic;
 
-namespace Leak.Omnibus.Components
+namespace Leak.Datamap.Components
 {
     public class OmnibusStateCollection
     {

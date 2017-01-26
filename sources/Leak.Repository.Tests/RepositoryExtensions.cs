@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Repository.Tests
+namespace Leak.Datastore.Tests
 {
     public static class RepositoryExtensions
     {

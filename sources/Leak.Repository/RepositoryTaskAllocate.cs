@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System.IO;
+﻿using System.IO;
+using Leak.Common;
 
-namespace Leak.Repository
+namespace Leak.Datastore
 {
     public class RepositoryTaskAllocate : RepositoryTask
     {

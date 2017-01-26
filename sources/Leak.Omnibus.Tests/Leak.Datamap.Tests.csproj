@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7545567D-C0F9-4614-B16A-12DEEE138009}</ProjectGuid>
+    <ProjectGuid>{4DB681D0-3C3C-43C9-8950-B73344427ADC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Retriever.Tests</RootNamespace>
-    <AssemblyName>Leak.Retriever.Tests</AssemblyName>
+    <RootNamespace>Leak.Datamap.Tests</RootNamespace>
+    <AssemblyName>Leak.Datamap.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FakeItEasy, Version=2.3.3.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FakeItEasy.2.3.3\lib\net40\FakeItEasy.dll</HintPath>
+    <Reference Include="F2F.Sandbox, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -51,11 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RetrieverBlock.cs" />
+    <Compile Include="OmnibusExtensions.cs" />
+    <Compile Include="OmnibusFixture.cs" />
+    <Compile Include="OmnibusSession.cs" />
+    <Compile Include="OmnibusTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RetrieverFixture.cs" />
-    <Compile Include="RetrieverSession.cs" />
-    <Compile Include="RetrieverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
@@ -66,9 +66,13 @@
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Retriever\Leak.Retriever.csproj">
-      <Project>{61b61289-d4e4-45f2-916b-d60114a4bd66}</Project>
-      <Name>Leak.Retriever</Name>
+    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+      <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
+      <Name>Leak.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Datamap.csproj">
+      <Project>{a69138d4-eaeb-4690-a040-5f612feddeb2}</Project>
+      <Name>Leak.Datamap</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
