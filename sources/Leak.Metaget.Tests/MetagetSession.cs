@@ -62,8 +62,11 @@ namespace Leak.Metaget.Tests
 
         public void Dispose()
         {
-            sandbox.Dispose();
             service.Stop();
+            service.Dispose();
+
+            sandbox.Dispose();
+            Pipeline.Process();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Extensions.Metadata;
+using Leak.Tasks;
 using System;
 
 namespace Leak.Metaget
@@ -48,7 +49,10 @@ namespace Leak.Metaget
 
         public void Stop()
         {
-            context.Dependencies.Pipeline.Remove(OnTick);
+            context.Queue.Add(() =>
+            {
+                context.Dependencies.Pipeline.Remove(OnTick);
+            });
         }
 
         public void Handle(MetadataMeasured data)
@@ -68,7 +72,7 @@ namespace Leak.Metaget
 
         public void Dispose()
         {
-            context.Dependencies.Pipeline.Remove(OnTick);
+            Stop();
         }
     }
 }

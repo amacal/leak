@@ -61,7 +61,7 @@
       <Name>Leak.Connector</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Datashare\Leak.Datashare.csproj">
-      <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
+      <Project>{545e697b-ff18-401c-a1db-141035f57e2a}</Project>
       <Name>Leak.Datashare</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
@@ -117,15 +117,15 @@
       <Name>Leak.Networking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Omnibus\Leak.Datamap.csproj">
-      <Project>{A69138D4-EAEB-4690-A040-5F612FEDDEB2}</Project>
+      <Project>{a69138d4-eaeb-4690-a040-5f612feddeb2}</Project>
       <Name>Leak.Datamap</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
-      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
+      <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
       <Name>Leak.Datastore</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Retriever\Leak.Dataget.csproj">
-      <Project>{61B61289-D4E4-45F2-916B-D60114A4BD66}</Project>
+      <Project>{61b61289-d4e4-45f2-916b-d60114a4bd66}</Project>
       <Name>Leak.Dataget</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Spartan\Leak.Spartan.csproj">

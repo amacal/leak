@@ -42,13 +42,13 @@ namespace Leak.Spartan
             return this;
         }
 
-        public SpartanBuilder WithRepository(SpartanRepository repository)
+        public SpartanBuilder WithDatastore(SpartanRepository repository)
         {
             dependencies.Repository = repository;
             return this;
         }
 
-        public SpartanBuilder WithRetriever(SpartanRetriever retriever)
+        public SpartanBuilder WithDataget(SpartanRetriever retriever)
         {
             dependencies.Retriever = retriever;
             return this;

@@ -33,8 +33,8 @@ namespace Leak.Spartan.Tests
                     .WithPipeline(new PipelineSimulator())
                     .WithMetaget(A.Fake<SpartanMetaget>())
                     .WithMetashare(A.Fake<SpartanMetashare>())
-                    .WithRepository(A.Fake<SpartanRepository>())
-                    .WithRetriever(A.Fake<SpartanRetriever>())
+                    .WithDatastore(A.Fake<SpartanRepository>())
+                    .WithDataget(A.Fake<SpartanRetriever>())
                     .WithDatashare(A.Fake<SpartanDatashare>())
                     .WithGoal(goal)
                     .Build();

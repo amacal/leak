@@ -186,12 +186,10 @@ namespace Leak.Leakage
                 new SpartanBuilder()
                     .WithHash(entry.Hash)
                     .WithPipeline(pipeline)
-                    .WithFiles(files)
-                    .WithGlue(entry.Glue)
                     .WithMetaget(entry.Metaget)
                     .WithMetashare(entry.Metashare)
-                    .WithRepository(entry.Repository)
-                    .WithRetriever(entry.Retriever)
+                    .WithDatastore(entry.Repository)
+                    .WithDataget(entry.Retriever)
                     .WithDatashare(entry.Datashare)
                     .WithGoal(Goal.All)
                     .Build();
@@ -244,11 +242,6 @@ namespace Leak.Leakage
 
             entry.Connector.Hooks.OnConnectionEstablished += data => OnConnectionEstablished(data, entry);
             entry.Negotiator.Hooks.OnHandshakeCompleted += OnHandshakeCompleted;
-
-            entry.Metaget.Hooks.OnMetadataDiscovered += entry.Omnibus.Handle;
-            entry.Metaget.Hooks.OnMetadataDiscovered += entry.Repository.Handle;
-            entry.Metaget.Hooks.OnMetadataDiscovered += entry.Spartan.Handle;
-            entry.Metaget.Hooks.OnMetadataDiscovered += hooks.OnMetadataDiscovered;
 
             entry.Metafile.Hooks.OnMetafileVerified += entry.Glue.Handle;
 
