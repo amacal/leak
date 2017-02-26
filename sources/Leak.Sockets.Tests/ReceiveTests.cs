@@ -24,8 +24,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
@@ -49,6 +49,7 @@ namespace Leak.Sockets.Tests
                 bool completed = check.WaitOne(timeout);
 
                 Assert.That(completed, Is.True);
+                socket.Dispose();
             }
         }
 
@@ -63,8 +64,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
@@ -84,8 +85,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 using (EchoServer server = new EchoServer(factory))
                 {
@@ -114,8 +115,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 using (EchoServer server = new EchoServer(factory))
                 {
@@ -145,10 +146,10 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket server = factory.Create())
-                using (TcpSocket socket = factory.Create())
+                using (TcpSocket server = factory.Tcp())
+                using (TcpSocket socket = factory.Tcp())
                 {
                     socket.Bind();
                     worker.Start();
@@ -165,7 +166,7 @@ namespace Leak.Sockets.Tests
                     byte[] buffer = new byte[10];
                     TcpSocketReceive received = await socket.Receive(buffer);
 
-                    Assert.That(received.Status, Is.EqualTo(TcpSocketStatus.OK));
+                    Assert.That(received.Status, Is.EqualTo(SocketStatus.OK));
                     Assert.That(received.Count, Is.Zero);
                 }
             }
@@ -176,14 +177,14 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket socket = factory.Create())
+                using (TcpSocket socket = factory.Tcp())
                 {
                     byte[] buffer = new byte[10];
                     TcpSocketReceive received = await socket.Receive(buffer);
 
-                    Assert.That(received.Status, Is.Not.EqualTo(TcpSocketStatus.OK));
+                    Assert.That(received.Status, Is.Not.EqualTo(SocketStatus.OK));
                 }
             }
         }

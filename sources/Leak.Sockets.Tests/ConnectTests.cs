@@ -20,8 +20,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
@@ -46,14 +46,14 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
 
                 TcpSocketConnect connect = await socket.Connect(endpoint);
-                TcpSocketStatus expected = TcpSocketStatus.OK;
+                SocketStatus expected = SocketStatus.OK;
 
                 Assert.That(connect.Status, Is.EqualTo(expected));
             }
@@ -67,14 +67,14 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
 
                 TcpSocketConnect connect = await socket.Connect(endpoint);
-                TcpSocketStatus expected = TcpSocketStatus.TimedOut;
+                SocketStatus expected = SocketStatus.TimedOut;
 
                 Assert.That(connect.Status, Is.EqualTo(expected));
             }
@@ -85,14 +85,14 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket socket = factory.Create())
+                using (TcpSocket socket = factory.Tcp())
                 {
                     IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 80);
                     TcpSocketConnect connected = await socket.Connect(endpoint);
 
-                    Assert.That(connected.Status, Is.Not.EqualTo(TcpSocketStatus.OK));
+                    Assert.That(connected.Status, Is.Not.EqualTo(SocketStatus.OK));
                 }
             }
         }

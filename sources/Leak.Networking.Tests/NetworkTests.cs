@@ -127,8 +127,8 @@ namespace Leak.Networking.Tests
                     TcpSocketConnect connect = await socket.Connect(endpoint);
                     TcpSocketAccept accept = await task;
 
-                    connect.Status.Should().Be(TcpSocketStatus.OK);
-                    accept.Status.Should().Be(TcpSocketStatus.OK);
+                    connect.Status.Should().Be(SocketStatus.OK);
+                    accept.Status.Should().Be(SocketStatus.OK);
                     accept.Connection.Dispose();
 
                     NetworkConnection connection = fixture.Pool.Create(socket, direction, endpoint);
@@ -164,8 +164,8 @@ namespace Leak.Networking.Tests
                 TcpSocketConnect connect = await socket.Connect(endpoint);
                 TcpSocketAccept accept = await task;
 
-                connect.Status.Should().Be(TcpSocketStatus.OK);
-                accept.Status.Should().Be(TcpSocketStatus.OK);
+                connect.Status.Should().Be(SocketStatus.OK);
+                accept.Status.Should().Be(SocketStatus.OK);
                 accept.Connection.Dispose();
 
                 NetworkConnection connection = fixture.Pool.Create(socket, direction, endpoint);
@@ -248,7 +248,7 @@ namespace Leak.Networking.Tests
                 });
 
                 connection.Receive(new NullReceiver());
-                accept.Connection.Send(new TcpSocketBuffer(message.ToBytes()), null);
+                accept.Connection.Send(new SocketBuffer(message.ToBytes()), null);
 
                 handler.Wait().Should().BeTrue();
             }

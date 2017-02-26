@@ -86,6 +86,18 @@ namespace Leak.Common
             Array.Copy(input, 0, data, data.Length - input.Length, input.Length);
         }
 
+        public static ushort ReadUInt16(byte[] data, int offset)
+        {
+            ushort value = 0;
+
+            for (int i = 0; i < 2; i++)
+            {
+                value = (ushort)((value << 8) + data[offset + i]);
+            }
+
+            return value;
+        }
+
         public static uint ReadUInt32(byte[] data, int offset)
         {
             uint value = 0;

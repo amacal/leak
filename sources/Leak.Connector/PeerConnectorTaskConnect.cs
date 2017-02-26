@@ -30,7 +30,7 @@ namespace Leak.Connector
 
         private void OnConnected(PeerConnectorContext context, TcpSocketConnect data)
         {
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
                 context.Queue.Add(new PeerConnectorTaskAccept(hash, data.Socket, data.Endpoint));
             }

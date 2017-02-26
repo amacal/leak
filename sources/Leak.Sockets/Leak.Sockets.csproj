@@ -35,14 +35,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SocketOptionRoutine.cs" />
     <Compile Include="TcpSocketAcceptCallback.cs" />
     <Compile Include="TcpSocketAccept.cs" />
     <Compile Include="TcpSocketAcceptParse.cs" />
     <Compile Include="TcpSocketAcceptResult.cs" />
     <Compile Include="TcpSocketAcceptRoutine.cs" />
     <Compile Include="TcpSocketBind.cs" />
-    <Compile Include="TcpSocketBindRoutine.cs" />
-    <Compile Include="TcpSocketBuffer.cs" />
+    <Compile Include="SocketBindRoutine.cs" />
+    <Compile Include="SocketBuffer.cs" />
     <Compile Include="TcpSocketConnect.cs" />
     <Compile Include="TcpSocketConnectResult.cs" />
     <Compile Include="TcpSocketConnectRoutine.cs" />
@@ -58,9 +59,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TcpSocket.cs" />
     <Compile Include="TcpSocketConnectCallback.cs" />
-    <Compile Include="TcpSocketFactory.cs" />
+    <Compile Include="SocketFactory.cs" />
     <Compile Include="TcpSocketReceiveRoutine.cs" />
-    <Compile Include="TcpSocketResult.cs" />
+    <Compile Include="SocketResult.cs" />
     <Compile Include="TcpSocketReceiveCallback.cs" />
     <Compile Include="TcpSocketReceive.cs" />
     <Compile Include="TcpSocketReceiveResult.cs" />
@@ -68,7 +69,18 @@
     <Compile Include="TcpSocketSend.cs" />
     <Compile Include="TcpSocketSendResult.cs" />
     <Compile Include="TcpSocketSendRoutine.cs" />
-    <Compile Include="TcpSocketStatus.cs" />
+    <Compile Include="SocketStatus.cs" />
+    <Compile Include="UdpSocket.cs" />
+    <Compile Include="UdpSocketInstance.cs" />
+    <Compile Include="UdpSocketInterop.cs" />
+    <Compile Include="UdpSocketReceive.cs" />
+    <Compile Include="UdpSocketReceiveCallback.cs" />
+    <Compile Include="UdpSocketReceiveResult.cs" />
+    <Compile Include="UdpSocketReceiveRoutine.cs" />
+    <Compile Include="UdpSocketSend.cs" />
+    <Compile Include="UdpSocketSendCallback.cs" />
+    <Compile Include="UdpSocketSendResult.cs" />
+    <Compile Include="UdpSocketSendRoutine.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">

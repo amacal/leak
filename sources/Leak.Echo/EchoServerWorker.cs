@@ -20,10 +20,10 @@ namespace Leak.Echo
 
         private void OnReceived(TcpSocketReceive received)
         {
-            if (received.Count > 0 && received.Status == TcpSocketStatus.OK)
+            if (received.Count > 0 && received.Status == SocketStatus.OK)
             {
                 int count = received.Count;
-                TcpSocketBuffer buffer = new TcpSocketBuffer(data, 0, count);
+                SocketBuffer buffer = new SocketBuffer(data, 0, count);
 
                 received.Socket.Send(buffer, OnSent);
             }
@@ -36,7 +36,7 @@ namespace Leak.Echo
 
         private void OnSent(TcpSocketSend sent)
         {
-            if (sent.Count > 0 && sent.Status == TcpSocketStatus.OK)
+            if (sent.Count > 0 && sent.Status == SocketStatus.OK)
             {
                 sent.Socket.Receive(data, OnReceived);
             }

@@ -30,7 +30,7 @@ namespace Leak.Networking
         {
             if (listener.IsAvailable(identifier))
             {
-                if (sent.Status != TcpSocketStatus.OK || sent.Count == 0)
+                if (sent.Status != SocketStatus.OK || sent.Count == 0)
                 {
                     listener.Disconnect(identifier);
                 }

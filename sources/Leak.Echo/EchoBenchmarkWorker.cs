@@ -8,18 +8,18 @@ namespace Leak.Echo
     public class EchoBenchmarkWorker
     {
         private readonly Stopwatch watch;
-        private readonly TcpSocketFactory factory;
+        private readonly SocketFactory factory;
         private readonly IPEndPoint endpoint;
 
         private Stopwatch session;
         private TcpSocket socket;
-        private TcpSocketBuffer outgoing;
-        private TcpSocketBuffer incoming;
+        private SocketBuffer outgoing;
+        private SocketBuffer incoming;
 
         private static long counter;
         private static long previous;
 
-        public EchoBenchmarkWorker(Stopwatch watch, TcpSocketFactory factory, IPEndPoint endpoint, byte[] outgoing)
+        public EchoBenchmarkWorker(Stopwatch watch, SocketFactory factory, IPEndPoint endpoint, byte[] outgoing)
         {
             this.watch = watch;
             this.endpoint = endpoint;
@@ -29,7 +29,7 @@ namespace Leak.Echo
             this.session = Stopwatch.StartNew();
 
             this.factory = factory;
-            this.socket = factory.Create();
+            this.socket = factory.Tcp();
         }
 
         public void Start()
@@ -40,7 +40,7 @@ namespace Leak.Echo
 
         private void OnConnected(TcpSocketConnect data)
         {
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
                 socket.Send(outgoing, OnSent);
             }
@@ -53,9 +53,9 @@ namespace Leak.Echo
 
         private void OnSent(TcpSocketSend data)
         {
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
-                outgoing = new TcpSocketBuffer(data.Buffer.Data, data.Buffer.Offset + data.Count, data.Buffer.Count - data.Count);
+                outgoing = new SocketBuffer(data.Buffer.Data, data.Buffer.Offset + data.Count, data.Buffer.Count - data.Count);
 
                 if (incoming.Count > 0)
                 {
@@ -67,12 +67,12 @@ namespace Leak.Echo
                 }
                 else
                 {
-                    incoming = new TcpSocketBuffer(incoming.Data);
-                    outgoing = new TcpSocketBuffer(outgoing.Data);
+                    incoming = new SocketBuffer(incoming.Data);
+                    outgoing = new SocketBuffer(outgoing.Data);
 
                     if (session.Elapsed > TimeSpan.FromMinutes(1))
                     {
-                        socket = factory.Create();
+                        socket = factory.Tcp();
                         session = Stopwatch.StartNew();
 
                         socket.Bind();
@@ -103,9 +103,9 @@ namespace Leak.Echo
 
         private void OnReceived(TcpSocketReceive data)
         {
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
-                incoming = new TcpSocketBuffer(data.Buffer.Data, data.Buffer.Offset + data.Count, data.Buffer.Count - data.Count);
+                incoming = new SocketBuffer(data.Buffer.Data, data.Buffer.Offset + data.Count, data.Buffer.Count - data.Count);
 
                 if (outgoing.Count > 0)
                 {
@@ -117,12 +117,12 @@ namespace Leak.Echo
                 }
                 else
                 {
-                    incoming = new TcpSocketBuffer(incoming.Data);
-                    outgoing = new TcpSocketBuffer(outgoing.Data);
+                    incoming = new SocketBuffer(incoming.Data);
+                    outgoing = new SocketBuffer(outgoing.Data);
 
                     if (session.Elapsed > TimeSpan.FromMinutes(1))
                     {
-                        socket = factory.Create();
+                        socket = factory.Tcp();
                         session = Stopwatch.StartNew();
 
                         socket.Bind();

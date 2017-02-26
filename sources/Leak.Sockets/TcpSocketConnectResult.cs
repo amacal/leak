@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Leak.Sockets
 {
-    internal class TcpSocketConnectResult : TcpSocketResult
+    internal class TcpSocketConnectResult : SocketResult
     {
         public TcpSocket Socket { get; set; }
 
@@ -21,7 +21,7 @@ namespace Leak.Sockets
             OnConnected?.Invoke(new TcpSocketConnect(Status, Socket, Endpoint));
         }
 
-        protected override void OnFailed(TcpSocketStatus status)
+        protected override void OnFailed(SocketStatus status)
         {
             OnConnected?.Invoke(new TcpSocketConnect(Status, Socket, Endpoint));
         }

@@ -21,7 +21,7 @@ namespace Leak.Sockets
         public void Bind()
         {
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
-            TcpSocketBindRoutine routine = new TcpSocketBindRoutine(endpoint);
+            SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
             routine.Execute(handle);
         }
@@ -29,7 +29,7 @@ namespace Leak.Sockets
         public void Bind(int port)
         {
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
-            TcpSocketBindRoutine routine = new TcpSocketBindRoutine(endpoint);
+            SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
             routine.Execute(handle);
         }
@@ -37,7 +37,7 @@ namespace Leak.Sockets
         public void Bind(IPAddress address)
         {
             IPEndPoint endpoint = new IPEndPoint(address, 0);
-            TcpSocketBindRoutine routine = new TcpSocketBindRoutine(endpoint);
+            SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
             routine.Execute(handle);
         }
@@ -61,7 +61,7 @@ namespace Leak.Sockets
             int port = data[2] * 256 + data[3];
             IPEndPoint endpoint = new IPEndPoint(new IPAddress(address), port);
 
-            return new TcpSocketInfo(TcpSocketStatus.OK, this, endpoint);
+            return new TcpSocketInfo(SocketStatus.OK, this, endpoint);
         }
 
         public void Listen(int backlog)
@@ -163,7 +163,7 @@ namespace Leak.Sockets
             return task;
         }
 
-        public void Send(TcpSocketBuffer buffer, TcpSocketSendCallback callback)
+        public void Send(SocketBuffer buffer, TcpSocketSendCallback callback)
         {
             TcpSocketSendRoutine routine = new TcpSocketSendRoutine(handle, buffer);
             TcpSocketSendResult result = new TcpSocketSendResult
@@ -176,7 +176,7 @@ namespace Leak.Sockets
             routine.Execute(result);
         }
 
-        public Task<TcpSocketSend> Send(TcpSocketBuffer buffer)
+        public Task<TcpSocketSend> Send(SocketBuffer buffer)
         {
             TcpSocketSendResult result = new TcpSocketSendResult
             {
@@ -192,7 +192,7 @@ namespace Leak.Sockets
             return task;
         }
 
-        public void Receive(TcpSocketBuffer buffer, TcpSocketReceiveCallback callback)
+        public void Receive(SocketBuffer buffer, TcpSocketReceiveCallback callback)
         {
             TcpSocketReceiveRoutine routine = new TcpSocketReceiveRoutine(handle, buffer);
             TcpSocketReceiveResult result = new TcpSocketReceiveResult
@@ -205,7 +205,7 @@ namespace Leak.Sockets
             routine.Execute(result);
         }
 
-        public Task<TcpSocketReceive> Receive(TcpSocketBuffer buffer)
+        public Task<TcpSocketReceive> Receive(SocketBuffer buffer)
         {
             TcpSocketReceiveResult result = new TcpSocketReceiveResult
             {

@@ -6,9 +6,9 @@ namespace Leak.Tasks
 {
     public class LeakPipeline : PipelineService
     {
-        private readonly Thread worker;
         private readonly List<LeakPipelineTimer> ticks;
 
+        private Thread worker;
         private WaitHandle[] handles;
         private LeakPipelineTrigger[] triggers;
         private ManualResetEvent terminator;
@@ -31,7 +31,7 @@ namespace Leak.Tasks
         public void Stop()
         {
             terminator.Set();
-            worker.Join();
+            worker = null;
         }
 
         public void Register(TimeSpan period, Action callback)
@@ -65,7 +65,7 @@ namespace Leak.Tasks
             TimeSpan period = TimeSpan.FromMilliseconds(50);
             DateTime next = DateTime.Now.Add(period);
 
-            while (true)
+            while (worker != null)
             {
                 int found = WaitHandle.WaitAny(handles, period);
                 DateTime now = DateTime.Now;

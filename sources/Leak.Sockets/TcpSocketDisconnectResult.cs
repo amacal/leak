@@ -2,7 +2,7 @@
 
 namespace Leak.Sockets
 {
-    internal class TcpSocketDisconnectResult : TcpSocketResult
+    internal class TcpSocketDisconnectResult : SocketResult
     {
         public TcpSocket Socket { get; set; }
 
@@ -23,7 +23,7 @@ namespace Leak.Sockets
             OnDisconnected?.Invoke(new TcpSocketDisconnect(Status, Socket));
         }
 
-        protected override void OnFailed(TcpSocketStatus status)
+        protected override void OnFailed(SocketStatus status)
         {
             OnDisconnected?.Invoke(new TcpSocketDisconnect(Status, Socket));
         }

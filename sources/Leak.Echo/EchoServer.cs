@@ -8,10 +8,10 @@ namespace Leak.Echo
         private readonly TcpSocket socket;
         private readonly EchoServerWorkerFactory serverWorkers;
 
-        public EchoServer(TcpSocketFactory factory, int port)
+        public EchoServer(SocketFactory factory, int port)
         {
             serverWorkers = new EchoServerWorkerFactory();
-            socket = factory.Create();
+            socket = factory.Tcp();
 
             socket.Bind(port);
         }
@@ -26,7 +26,7 @@ namespace Leak.Echo
         {
             socket.Accept(OnAccepted);
 
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
                 serverWorkers.Next().Handle(data.Connection);
             }

@@ -4,12 +4,12 @@ namespace Leak.Sockets
 {
     public class TcpSocketAccept
     {
-        private readonly TcpSocketStatus status;
+        private readonly SocketStatus status;
         private readonly TcpSocket socket;
         private readonly TcpSocket connection;
         private readonly TcpSocketAcceptParse parse;
 
-        public TcpSocketAccept(TcpSocketStatus status, TcpSocket socket, TcpSocket connection, TcpSocketAcceptParse parse)
+        public TcpSocketAccept(SocketStatus status, TcpSocket socket, TcpSocket connection, TcpSocketAcceptParse parse)
         {
             this.status = status;
             this.socket = socket;
@@ -17,7 +17,7 @@ namespace Leak.Sockets
             this.parse = parse;
         }
 
-        public TcpSocketStatus Status
+        public SocketStatus Status
         {
             get { return status; }
         }

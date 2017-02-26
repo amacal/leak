@@ -13,10 +13,10 @@ namespace Leak.Sockets.Tests
             using (CompletionThread worker = new CompletionThread())
             {
                 IPEndPoint endpoint;
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket server = factory.Create())
-                using (TcpSocket client = factory.Create())
+                using (TcpSocket server = factory.Tcp())
+                using (TcpSocket client = factory.Tcp())
                 {
                     worker.Start();
                     client.Bind();
@@ -43,10 +43,10 @@ namespace Leak.Sockets.Tests
             using (CompletionThread worker = new CompletionThread())
             {
                 IPEndPoint endpoint;
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket server = factory.Create())
-                using (TcpSocket client = factory.Create())
+                using (TcpSocket server = factory.Tcp())
+                using (TcpSocket client = factory.Tcp())
                 {
                     worker.Start();
                     client.Bind();
@@ -74,13 +74,13 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket socket = factory.Create())
+                using (TcpSocket socket = factory.Tcp())
                 {
                     TcpSocketAccept accepted = await socket.Accept();
 
-                    Assert.That(accepted.Status, Is.Not.EqualTo(TcpSocketStatus.OK));
+                    Assert.That(accepted.Status, Is.Not.EqualTo(SocketStatus.OK));
                 }
             }
         }

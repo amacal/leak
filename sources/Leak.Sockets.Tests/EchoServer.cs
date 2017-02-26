@@ -7,9 +7,9 @@ namespace Leak.Sockets.Tests
     {
         private readonly TcpSocket socket;
 
-        public EchoServer(TcpSocketFactory factory)
+        public EchoServer(SocketFactory factory)
         {
-            socket = factory.Create();
+            socket = factory.Tcp();
             socket.Bind(IPAddress.Loopback);
         }
 
@@ -26,12 +26,12 @@ namespace Leak.Sockets.Tests
 
         private async void OnAccepted(TcpSocketAccept data)
         {
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
                 socket.Accept(OnAccepted);
             }
 
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
                 TcpSocket other = data.Connection;
                 byte[] bytes = new byte[1024];
@@ -39,17 +39,17 @@ namespace Leak.Sockets.Tests
                 while (true)
                 {
                     TcpSocketReceive received = await other.Receive(bytes);
-                    TcpSocketBuffer buffer = new TcpSocketBuffer(bytes, 0, received.Count);
+                    SocketBuffer buffer = new SocketBuffer(bytes, 0, received.Count);
 
                     if (received.Count == 0)
                         break;
 
-                    if (received.Status != TcpSocketStatus.OK)
+                    if (received.Status != SocketStatus.OK)
                         break;
 
                     TcpSocketSend sent = await other.Send(buffer);
 
-                    if (sent.Status != TcpSocketStatus.OK)
+                    if (sent.Status != SocketStatus.OK)
                         break;
                 }
 

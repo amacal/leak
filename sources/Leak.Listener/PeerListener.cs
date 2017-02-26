@@ -56,15 +56,15 @@ namespace Leak.Listener
         private void OnAccept(TcpSocketAccept data)
         {
             bool canAcceptMore =
-                data.Status != TcpSocketStatus.NotSocket &&
-                data.Status != TcpSocketStatus.OperationAborted;
+                data.Status != SocketStatus.NotSocket &&
+                data.Status != SocketStatus.OperationAborted;
 
             if (canAcceptMore)
             {
                 data.Socket.Accept(OnAccept);
             }
 
-            if (data.Status == TcpSocketStatus.OK)
+            if (data.Status == SocketStatus.OK)
             {
                 IPEndPoint endpoint = data.GetRemote();
                 PeerAddress remote = PeerAddress.Parse(endpoint);

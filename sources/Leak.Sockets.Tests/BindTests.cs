@@ -10,8 +10,8 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
             }

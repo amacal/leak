@@ -1,10 +1,10 @@
 ﻿namespace Leak.Sockets
 {
-    internal class TcpSocketReceiveResult : TcpSocketResult
+    internal class TcpSocketReceiveResult : SocketResult
     {
         public TcpSocket Socket { get; set; }
 
-        public TcpSocketBuffer Buffer { get; set; }
+        public SocketBuffer Buffer { get; set; }
 
         public TcpSocketReceiveCallback OnReceived { get; set; }
 
@@ -18,7 +18,7 @@
             OnReceived?.Invoke(new TcpSocketReceive(Status, Affected, Socket, Buffer));
         }
 
-        protected override void OnFailed(TcpSocketStatus status)
+        protected override void OnFailed(SocketStatus status)
         {
             OnReceived?.Invoke(new TcpSocketReceive(Status, Affected, Socket, Buffer));
         }

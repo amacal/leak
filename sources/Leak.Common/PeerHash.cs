@@ -14,6 +14,11 @@
             return value;
         }
 
+        public byte this[int index]
+        {
+            get { return value[index]; }
+        }
+
         public override int GetHashCode()
         {
             return value[19] * 256 + value[18];

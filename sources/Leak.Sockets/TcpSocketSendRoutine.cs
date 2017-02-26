@@ -7,9 +7,9 @@ namespace Leak.Sockets
     internal class TcpSocketSendRoutine
     {
         private readonly IntPtr handle;
-        private readonly TcpSocketBuffer buffer;
+        private readonly SocketBuffer buffer;
 
-        public TcpSocketSendRoutine(IntPtr handle, TcpSocketBuffer buffer)
+        public TcpSocketSendRoutine(IntPtr handle, SocketBuffer buffer)
         {
             this.handle = handle;
             this.buffer = buffer;

@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 
 namespace Leak.Sockets
 {
-    internal class TcpSocketBindRoutine
+    internal class SocketBindRoutine
     {
         private readonly IPEndPoint endpoint;
 
-        public TcpSocketBindRoutine(IPEndPoint endpoint)
+        public SocketBindRoutine(IPEndPoint endpoint)
         {
             this.endpoint = endpoint;
         }

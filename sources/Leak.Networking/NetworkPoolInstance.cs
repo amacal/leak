@@ -15,7 +15,7 @@ namespace Leak.Networking
         private readonly Dictionary<long, NetworkPoolEntry> items;
 
         private readonly LeakQueue<NetworkPoolInstance> queue;
-        private readonly TcpSocketFactory factory;
+        private readonly SocketFactory factory;
 
         private long sequence;
 
@@ -24,7 +24,7 @@ namespace Leak.Networking
             this.hooks = hooks;
 
             pipeline = dependency.Pipeline;
-            factory = new TcpSocketFactory(dependency.Completion);
+            factory = new SocketFactory(dependency.Completion);
 
             items = new Dictionary<long, NetworkPoolEntry>();
             queue = new LeakQueue<NetworkPoolInstance>(this);
@@ -37,7 +37,7 @@ namespace Leak.Networking
 
         public TcpSocket New()
         {
-            return factory.Create();
+            return factory.Tcp();
         }
 
         public NetworkConnection Create(TcpSocket socket, NetworkDirection direction, IPEndPoint remote)

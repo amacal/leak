@@ -6,7 +6,7 @@ namespace Leak.Echo
 {
     public static class EchoBenchmarkStarter
     {
-        public static void Start(EchoBenchmarkOptions options, TcpSocketFactory factory)
+        public static void Start(EchoBenchmarkOptions options, SocketFactory factory)
         {
             int port = options.Port ?? 7;
             string host = options.Host ?? "127.0.0.1";

@@ -11,7 +11,7 @@ namespace Leak.Echo
             using (CompletionThread worker = new CompletionThread())
             {
                 EchoOptions options = Argument.Parse<EchoOptions>(args);
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
                 worker.Start();
 

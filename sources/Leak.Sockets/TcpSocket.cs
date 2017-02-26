@@ -28,12 +28,12 @@ namespace Leak.Sockets
 
         Task<TcpSocketDisconnect> Disconnect();
 
-        void Send(TcpSocketBuffer buffer, TcpSocketSendCallback callback);
+        void Send(SocketBuffer buffer, TcpSocketSendCallback callback);
 
-        Task<TcpSocketSend> Send(TcpSocketBuffer buffer);
+        Task<TcpSocketSend> Send(SocketBuffer buffer);
 
-        void Receive(TcpSocketBuffer buffer, TcpSocketReceiveCallback callback);
+        void Receive(SocketBuffer buffer, TcpSocketReceiveCallback callback);
 
-        Task<TcpSocketReceive> Receive(TcpSocketBuffer buffer);
+        Task<TcpSocketReceive> Receive(SocketBuffer buffer);
     }
 }

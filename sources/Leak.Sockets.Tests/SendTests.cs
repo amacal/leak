@@ -21,8 +21,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
@@ -58,8 +58,8 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
-                TcpSocket socket = factory.Create();
+                SocketFactory factory = new SocketFactory(worker);
+                TcpSocket socket = factory.Tcp();
 
                 socket.Bind();
                 worker.Start();
@@ -77,10 +77,10 @@ namespace Leak.Sockets.Tests
 
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket server = factory.Create())
-                using (TcpSocket socket = factory.Create())
+                using (TcpSocket server = factory.Tcp())
+                using (TcpSocket socket = factory.Tcp())
                 {
                     socket.Bind();
                     worker.Start();
@@ -97,7 +97,7 @@ namespace Leak.Sockets.Tests
                     byte[] buffer = new byte[10];
                     TcpSocketSend sent = await socket.Send(buffer);
 
-                    Assert.That(sent.Status, Is.EqualTo(TcpSocketStatus.OK));
+                    Assert.That(sent.Status, Is.EqualTo(SocketStatus.OK));
                 }
             }
         }
@@ -107,14 +107,14 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
 
-                using (TcpSocket socket = factory.Create())
+                using (TcpSocket socket = factory.Tcp())
                 {
                     byte[] buffer = new byte[10];
                     TcpSocketSend sent = await socket.Send(buffer);
 
-                    Assert.That(sent.Status, Is.Not.EqualTo(TcpSocketStatus.OK));
+                    Assert.That(sent.Status, Is.Not.EqualTo(SocketStatus.OK));
                 }
             }
         }

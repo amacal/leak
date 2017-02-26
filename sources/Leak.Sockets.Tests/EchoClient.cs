@@ -6,9 +6,9 @@ namespace Leak.Sockets.Tests
 {
     public class EchoClient
     {
-        private readonly TcpSocketFactory factory;
+        private readonly SocketFactory factory;
 
-        public EchoClient(TcpSocketFactory factory)
+        public EchoClient(SocketFactory factory)
         {
             this.factory = factory;
         }
@@ -19,7 +19,7 @@ namespace Leak.Sockets.Tests
             byte[] output = new byte[message.Length];
             byte[] bytes = Encoding.ASCII.GetBytes(message);
 
-            using (TcpSocket socket = factory.Create())
+            using (TcpSocket socket = factory.Tcp())
             {
                 socket.Bind();
 
@@ -28,7 +28,7 @@ namespace Leak.Sockets.Tests
 
                 while (progress < output.Length)
                 {
-                    TcpSocketBuffer buffer = new TcpSocketBuffer(output, progress);
+                    SocketBuffer buffer = new SocketBuffer(output, progress);
                     TcpSocketReceive received = await socket.Receive(buffer);
 
                     if (received.Count == 0)

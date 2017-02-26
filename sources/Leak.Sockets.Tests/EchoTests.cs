@@ -11,7 +11,7 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
                 EchoClient client = new EchoClient(factory);
 
                 using (EchoServer server = new EchoServer(factory))
@@ -32,7 +32,7 @@ namespace Leak.Sockets.Tests
         {
             using (CompletionThread worker = new CompletionThread())
             {
-                TcpSocketFactory factory = new TcpSocketFactory(worker);
+                SocketFactory factory = new SocketFactory(worker);
                 EchoClient client = new EchoClient(factory);
 
                 using (EchoServer server = new EchoServer(factory))

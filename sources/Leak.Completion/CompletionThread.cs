@@ -52,7 +52,7 @@ namespace Leak.Completion
 
         public void Add(IntPtr handle)
         {
-            IntPtr result = CompletionInterop.CreateIoCompletionPort(handle, port, (uint)handle.ToInt32(), 0);
+            CompletionInterop.CreateIoCompletionPort(handle, port, (uint)handle.ToInt32(), 0);
         }
 
         public void Remove(IntPtr handle)

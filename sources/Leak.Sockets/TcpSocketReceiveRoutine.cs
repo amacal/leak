@@ -7,15 +7,15 @@ namespace Leak.Sockets
     internal class TcpSocketReceiveRoutine
     {
         private readonly IntPtr handle;
-        private readonly TcpSocketBuffer buffer;
+        private readonly SocketBuffer buffer;
 
-        public TcpSocketReceiveRoutine(IntPtr handle, TcpSocketBuffer buffer)
+        public TcpSocketReceiveRoutine(IntPtr handle, SocketBuffer buffer)
         {
             this.handle = handle;
             this.buffer = buffer;
         }
 
-        public unsafe void Execute(TcpSocketResult target)
+        public unsafe void Execute(SocketResult target)
         {
             target.Pin(buffer.Data);
 

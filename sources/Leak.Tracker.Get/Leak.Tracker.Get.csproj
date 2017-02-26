@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E5CA7D39-6415-44F4-A600-E773727CB8CB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Leak.Tracker.Get</RootNamespace>
+    <AssemblyName>Leak.Tracker.Get</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackerGetExtensions.cs" />
+    <Compile Include="TrackerGetFactory.cs" />
+    <Compile Include="TrackerGetBuilder.cs" />
+    <Compile Include="TrackerGetCollection.cs" />
+    <Compile Include="TrackerGetConfiguration.cs" />
+    <Compile Include="TrackerGetContext.cs" />
+    <Compile Include="TrackerGetDependencies.cs" />
+    <Compile Include="TrackerGetHooks.cs" />
+    <Compile Include="TrackerGetNextTask.cs" />
+    <Compile Include="TrackerGetParameters.cs" />
+    <Compile Include="TrackerGetEntry.cs" />
+    <Compile Include="TrackerGetService.cs" />
+    <Compile Include="TrackerGetProxy.cs" />
+    <Compile Include="TrackerGetUdpCollection.cs" />
+    <Compile Include="TrackerGetUdpEntry.cs" />
+    <Compile Include="TrackerGetUdpRegistrant.cs" />
+    <Compile Include="TrackerGetUdpService.cs" />
+    <Compile Include="TrackerGetUdpStatus.cs" />
+    <Compile Include="TrackerGetUdpTask.cs" />
+    <Compile Include="TrackerGetUdpTracker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
+      <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
+      <Name>Leak.Completion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
+      <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
+      <Name>Leak.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
+      <Project>{6E385E2D-365A-46AA-AE93-01B375C4E48F}</Project>
+      <Name>Leak.Sockets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
+      <Name>Leak.Tasks</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

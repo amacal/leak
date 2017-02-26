@@ -4,18 +4,18 @@ namespace Leak.Sockets
 {
     public class TcpSocketInfo
     {
-        private readonly TcpSocketStatus status;
+        private readonly SocketStatus status;
         private readonly TcpSocket socket;
         private readonly IPEndPoint endpoint;
 
-        public TcpSocketInfo(TcpSocketStatus status, TcpSocket socket, IPEndPoint endpoint)
+        public TcpSocketInfo(SocketStatus status, TcpSocket socket, IPEndPoint endpoint)
         {
             this.status = status;
             this.socket = socket;
             this.endpoint = endpoint;
         }
 
-        public TcpSocketStatus Status
+        public SocketStatus Status
         {
             get { return status; }
         }

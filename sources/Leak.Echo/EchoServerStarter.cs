@@ -5,7 +5,7 @@ namespace Leak.Echo
 {
     public static class EchoServerStarter
     {
-        public static void Start(EchoServerOptions options, TcpSocketFactory factory)
+        public static void Start(EchoServerOptions options, SocketFactory factory)
         {
             int port = options.Port ?? 7;
             EchoServer server = new EchoServer(factory, port);

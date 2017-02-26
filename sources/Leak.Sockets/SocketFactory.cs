@@ -4,11 +4,11 @@ using System.Net.Sockets;
 
 namespace Leak.Sockets
 {
-    public class TcpSocketFactory
+    public class SocketFactory
     {
         private readonly CompletionWorker worker;
 
-        public TcpSocketFactory(CompletionWorker worker)
+        public SocketFactory(CompletionWorker worker)
         {
             using (new Socket(SocketType.Stream, ProtocolType.Tcp))
             {
@@ -16,7 +16,7 @@ namespace Leak.Sockets
             }
         }
 
-        public TcpSocket Create()
+        public TcpSocket Tcp()
         {
             IntPtr handle = TcpSocketInterop.WSASocket(2, 1, 6, IntPtr.Zero, 0, 1);
 
@@ -24,6 +24,16 @@ namespace Leak.Sockets
                 throw new Exception();
 
             return new TcpSocketInstance(handle, worker);
+        }
+
+        public UdpSocket Udp()
+        {
+            IntPtr handle = UdpSocketInterop.WSASocket(2, 2, 17, IntPtr.Zero, 0, 1);
+
+            if (handle == new IntPtr(-1))
+                throw new Exception();
+
+            return new UdpSocketInstance(handle, worker);
         }
     }
 }

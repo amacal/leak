@@ -1,6 +1,6 @@
 ﻿namespace Leak.Sockets
 {
-    public enum TcpSocketStatus
+    public enum SocketStatus
     {
         OK = 0,
         OperationAborted = 995,

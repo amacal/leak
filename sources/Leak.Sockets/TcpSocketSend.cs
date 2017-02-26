@@ -2,12 +2,12 @@
 {
     public class TcpSocketSend
     {
-        private readonly TcpSocketStatus status;
+        private readonly SocketStatus status;
         private readonly int count;
         private readonly TcpSocket socket;
-        private readonly TcpSocketBuffer buffer;
+        private readonly SocketBuffer buffer;
 
-        public TcpSocketSend(TcpSocketStatus status, int count, TcpSocket socket, TcpSocketBuffer buffer)
+        public TcpSocketSend(SocketStatus status, int count, TcpSocket socket, SocketBuffer buffer)
         {
             this.status = status;
             this.count = count;
@@ -15,7 +15,7 @@
             this.buffer = buffer;
         }
 
-        public TcpSocketStatus Status
+        public SocketStatus Status
         {
             get { return status; }
         }
@@ -25,7 +25,7 @@
             get { return socket; }
         }
 
-        public TcpSocketBuffer Buffer
+        public SocketBuffer Buffer
         {
             get { return buffer; }
         }

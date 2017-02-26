@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Leak.Sockets
 {
-    internal class TcpSocketAcceptResult : TcpSocketResult
+    internal class TcpSocketAcceptResult : SocketResult
     {
         public TcpSocket Socket { get; set; }
 
@@ -18,20 +18,20 @@ namespace Leak.Sockets
 
         public TcpSocketAccept Unpack(IAsyncResult result)
         {
-            return new TcpSocketAccept(Status, Socket, Connection, GetEndPoint);
+            return new TcpSocketAccept(Status, Socket, Connection, GetEndpoint);
         }
 
         protected override void OnCompleted(int affected)
         {
-            OnAccepted?.Invoke(new TcpSocketAccept(Status, Socket, Connection, GetEndPoint));
+            OnAccepted?.Invoke(new TcpSocketAccept(Status, Socket, Connection, GetEndpoint));
         }
 
-        protected override void OnFailed(TcpSocketStatus status)
+        protected override void OnFailed(SocketStatus status)
         {
             OnAccepted?.Invoke(new TcpSocketAccept(Status, Socket, Connection, null));
         }
 
-        private void GetEndPoint(out IPEndPoint local, out IPEndPoint remote)
+        private void GetEndpoint(out IPEndPoint local, out IPEndPoint remote)
         {
             IntPtr localAddr;
             int localAddrLength;

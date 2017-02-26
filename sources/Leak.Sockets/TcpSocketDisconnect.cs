@@ -2,16 +2,16 @@
 {
     public class TcpSocketDisconnect
     {
-        private readonly TcpSocketStatus status;
+        private readonly SocketStatus status;
         private readonly TcpSocket socket;
 
-        public TcpSocketDisconnect(TcpSocketStatus status, TcpSocket socket)
+        public TcpSocketDisconnect(SocketStatus status, TcpSocket socket)
         {
             this.status = status;
             this.socket = socket;
         }
 
-        public TcpSocketStatus Status
+        public SocketStatus Status
         {
             get { return status; }
         }

@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Leak.Sockets
 {
-    internal abstract class TcpSocketResult : IAsyncResult, CompletionCallback
+    internal abstract class SocketResult : IAsyncResult, CompletionCallback
     {
         public GCHandle? Pinned { get; set; }
 
@@ -15,7 +15,7 @@ namespace Leak.Sockets
 
         public bool IsCompleted { get; set; }
 
-        public TcpSocketStatus Status { get; set; }
+        public SocketStatus Status { get; set; }
 
         public int Affected { get; set; }
 
@@ -68,7 +68,7 @@ namespace Leak.Sockets
 
         public void Fail(uint code)
         {
-            Status = (TcpSocketStatus)code;
+            Status = (SocketStatus)code;
             IsCompleted = true;
 
             Event?.Set();
@@ -80,6 +80,6 @@ namespace Leak.Sockets
 
         protected abstract void OnCompleted(int affected);
 
-        protected abstract void OnFailed(TcpSocketStatus status);
+        protected abstract void OnFailed(SocketStatus status);
     }
 }

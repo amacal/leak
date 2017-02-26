@@ -83,7 +83,7 @@ namespace Leak.Networking
                     receiveSize = data.Length - offset - length;
                 }
 
-                socket.Receive(new TcpSocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
+                socket.Receive(new SocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
             }
         }
 
