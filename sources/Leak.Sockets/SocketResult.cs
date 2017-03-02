@@ -7,7 +7,8 @@ namespace Leak.Sockets
 {
     internal abstract class SocketResult : IAsyncResult, CompletionCallback
     {
-        public GCHandle? Pinned { get; set; }
+        public GCHandle? Pinned1 { get; set; }
+        public GCHandle? Pinned2 { get; set; }
 
         public IntPtr Handle { get; set; }
 
@@ -36,7 +37,14 @@ namespace Leak.Sockets
 
         public void Pin(object instance)
         {
-            Pinned = GCHandle.Alloc(instance, GCHandleType.Pinned);
+            if (Pinned1.HasValue == false)
+            {
+                Pinned1 = GCHandle.Alloc(instance, GCHandleType.Pinned);
+            }
+            else
+            {
+                Pinned2 = GCHandle.Alloc(instance, GCHandleType.Pinned);
+            }
         }
 
         public unsafe void Complete(NativeOverlapped* overlapped, int affected)
@@ -46,7 +54,9 @@ namespace Leak.Sockets
 
             Event?.Set();
             Event?.Dispose();
-            Pinned?.Free();
+
+            Pinned1?.Free();
+            Pinned2?.Free();
 
             OnCompleted(affected);
         }
@@ -73,7 +83,9 @@ namespace Leak.Sockets
 
             Event?.Set();
             Event?.Dispose();
-            Pinned?.Free();
+
+            Pinned1?.Free();
+            Pinned2?.Free();
 
             OnFailed(Status);
         }

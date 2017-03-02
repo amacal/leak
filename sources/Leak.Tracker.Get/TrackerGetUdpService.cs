@@ -28,11 +28,14 @@ namespace Leak.Tracker.Get
 
         public void Start()
         {
-            buffer = new SocketBuffer(4096);
+            buffer = new SocketBuffer(1556);
             socket = factory.Udp();
 
-            socket.Bind();
-            socket.Receive(buffer, OnReceived);
+            context.Queue.Add(() =>
+            {
+                socket.Bind();
+                socket.Receive(buffer, OnReceived);
+            });
         }
 
         public void Stop()
@@ -85,7 +88,7 @@ namespace Leak.Tracker.Get
         private void HandleDeadline(TrackerGetUdpEntry entry)
         {
             collection.Remove(entry.Transaction);
-            context.CallTrackerFailed(entry.Address, entry.Hash, "timeout");
+            context.CallTimeout(entry.Address, entry.Hash);
         }
 
         private void ResolveHost(TrackerGetUdpEntry entry)
@@ -101,132 +104,170 @@ namespace Leak.Tracker.Get
         {
             SocketBuffer outgoing = new SocketBuffer(16);
 
-            outgoing[02] = 0x04;
-            outgoing[03] = 0x17;
-            outgoing[04] = 0x27;
-            outgoing[05] = 0x10;
-            outgoing[06] = 0x19;
-            outgoing[07] = 0x80;
-
-            for (int i = 0; i < 4; i++)
-            {
-                outgoing[12 + i] = entry.Transaction[i];
-            }
+            Array.Copy(TrackerGetUdpProtocol.Id, 0, outgoing.Data, 0, 8);
+            Array.Copy(TrackerGetUdpProtocol.Connect, 0, outgoing.Data, 8, 4);
+            Array.Copy(entry.Transaction, 0, outgoing.Data, 12, 4);
 
             entry.Status = TrackerGetUdpStatus.Connecting;
-            socket.Send(entry.Endpoint, outgoing, OnSent);
+            socket.Send(entry.Endpoint, outgoing, OnSent(entry));
         }
 
-        private void HandleConnectionResponse(TrackerGetUdpEntry entry, byte[] data)
+        private void HandleConnectionResponse(IPEndPoint endpoint, TrackerGetUdpEntry entry, byte[] data)
         {
-            if (data.Length >= 16)
+            if (data.Length < 16)
             {
-                entry.Connection = Bytes.Copy(data, 8, 8);
-                entry.Status = TrackerGetUdpStatus.Connected;
+                context.CallPacketIgnored(endpoint, data.Length);
+                return;
             }
+
+            if (Bytes.Equals(TrackerGetUdpProtocol.Connect, data, 0, 4) == false)
+            {
+                context.CallPacketIgnored(endpoint, data.Length);
+                return;
+            }
+
+            entry.Connection = Bytes.Copy(data, 8, 8);
+            entry.Status = TrackerGetUdpStatus.Connected;
+
+            context.CallConnected(entry.Address, entry.Hash, entry.Transaction, entry.Connection);
         }
 
         private void SendAnnounceRequest(TrackerGetUdpEntry entry)
         {
             SocketBuffer outgoing = new SocketBuffer(98);
+            PeerHash peer = context.Configuration.Peer;
 
-            outgoing[11] = 0x01;
             outgoing[67] = 0x01;
             outgoing[83] = 0x02;
             outgoing[95] = 0xff;
             outgoing[96] = 0x1f;
             outgoing[97] = 0x90;
 
-            for (int i = 0; i < 8; i++)
-            {
-                outgoing[i] = entry.Connection[i];
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                outgoing[12 + i] = entry.Transaction[i];
-            }
-
-            for (int i = 0; i < 20; i++)
-            {
-                outgoing[16 + i] = entry.Hash[i];
-            }
-
-            for (int i = 0; i < 20; i++)
-            {
-                outgoing[36 + 1] = context.Configuration.Peer[i];
-            }
+            Array.Copy(entry.Connection, 0, outgoing.Data, 0, 8);
+            Array.Copy(TrackerGetUdpProtocol.Announce, 0, outgoing.Data, 8, 4);
+            Array.Copy(entry.Transaction, 0, outgoing.Data, 12, 4);
+            Array.Copy(entry.Hash.ToBytes(), 0, outgoing.Data, 16, 20);
+            Array.Copy(peer.ToBytes(), 0, outgoing.Data, 36, 20);
 
             entry.Status = TrackerGetUdpStatus.Announcing;
-            socket.Send(entry.Endpoint, outgoing, OnSent);
+            socket.Send(entry.Endpoint, outgoing, OnSent(entry));
         }
 
-        private void HandleAnnounceResponse(TrackerGetUdpEntry entry, byte[] data)
+        private void HandleAnnounceResponse(IPEndPoint endpoint, TrackerGetUdpEntry entry, byte[] data)
         {
-            if (data.Length >= 20)
+            if (data.Length < 20)
             {
-                List<PeerAddress> peers = new List<PeerAddress>();
-
-                int intervalInSeconds = Bytes.ReadInt32(data, 8);
-                TimeSpan interval = TimeSpan.FromSeconds(intervalInSeconds);
-
-                int leechers = Bytes.ReadInt32(data, 12);
-                int seeders = Bytes.ReadInt32(data, 16);
-
-                for (int i = 20; i + 6 <= data.Length; i += 6)
-                {
-                    int port = Bytes.ReadUInt16(data, i + 4);
-                    StringBuilder address = new StringBuilder();
-
-                    address.Append(data[i].ToString());
-                    address.Append('.');
-                    address.Append(data[i + 1].ToString());
-                    address.Append('.');
-                    address.Append(data[i + 2].ToString());
-                    address.Append('.');
-                    address.Append(data[i + 3].ToString());
-
-                    if (port > 0)
-                    {
-                        peers.Add(new PeerAddress(address.ToString(), port));
-                    }
-                }
-
-                context.CallTrackerAnnounced(entry.Address, entry.Hash, interval, seeders, leechers, peers.ToArray());
+                context.CallPacketIgnored(endpoint, data.Length);
+                return;
             }
+
+            if (Bytes.Equals(TrackerGetUdpProtocol.Announce, data, 0, 4) == false)
+            {
+                context.CallPacketIgnored(endpoint, data.Length);
+                return;
+            }
+
+            List<PeerAddress> peers = new List<PeerAddress>();
+
+            int intervalInSeconds = Bytes.ReadInt32(data, 8);
+            TimeSpan interval = TimeSpan.FromSeconds(intervalInSeconds);
+
+            int leechers = Bytes.ReadInt32(data, 12);
+            int seeders = Bytes.ReadInt32(data, 16);
+
+            for (int i = 20; i + 6 <= data.Length; i += 6)
+            {
+                int port = Bytes.ReadUInt16(data, i + 4);
+                StringBuilder address = new StringBuilder();
+
+                address.Append(data[i].ToString());
+                address.Append('.');
+                address.Append(data[i + 1].ToString());
+                address.Append('.');
+                address.Append(data[i + 2].ToString());
+                address.Append('.');
+                address.Append(data[i + 3].ToString());
+
+                if (port > 0)
+                {
+                    peers.Add(new PeerAddress(address.ToString(), port));
+                }
+            }
+
+            context.CallAnnounced(entry.Address, entry.Hash, interval, seeders, leechers, peers.ToArray());
+            collection.Remove(entry.Transaction);
         }
 
-        private void OnSent(UdpSocketSend sent)
+        private void HandleErrorResponse(IPEndPoint endpoint, TrackerGetUdpEntry entry, byte[] data)
         {
+            if (data.Length < 8)
+            {
+                context.CallPacketIgnored(endpoint, data.Length);
+                return;
+            }
+
+            byte[] message = Bytes.Copy(data, 8);
+            string reason = Encoding.ASCII.GetString(message);
+
+            context.CallFailed(entry.Address, entry.Hash, reason);
+        }
+
+        private UdpSocketSendCallback OnSent(TrackerGetUdpEntry entry)
+        {
+            return sent =>
+            {
+                int size = sent.Count;
+                IPEndPoint endpoint = sent.Endpoint;
+
+                context.Queue.Add(() => { context.CallPacketSent(entry.Address, entry.Hash, endpoint, size); });
+            };
         }
 
         private void OnReceived(UdpSocketReceive received)
         {
-            SocketStatus status = received.Status;
-            byte[] data = Bytes.Copy(received.Buffer.Data, received.Buffer.Offset, received.Count);
-
-            if (status == SocketStatus.OK)
+            if (received.Status == SocketStatus.OK)
             {
+                IPEndPoint endpoint = received.GetEndpoint();
+                byte[] data = Bytes.Copy(buffer.Data, buffer.Offset, received.Count);
+
                 socket.Receive(buffer, OnReceived);
-                context.Queue.Add(OnReceived(data));
+                context.Queue.Add(OnReceived(endpoint, data));
             }
         }
 
-        private Action OnReceived(byte[] data)
+        private Action OnReceived(IPEndPoint endpoint, byte[] data)
         {
             return () =>
             {
+                context.CallPacketReceived(endpoint, data.Length);
+
+                if (data.Length < 8)
+                {
+                    context.CallPacketIgnored(endpoint, data.Length);
+                    return;
+                }
+
                 byte[] transaction = Bytes.Copy(data, 4, 4);
                 TrackerGetUdpEntry entry = collection.Find(transaction);
+
+                if (entry != null && Bytes.Equals(TrackerGetUdpProtocol.Error, data, 0, 4))
+                {
+                    HandleErrorResponse(endpoint, entry, data);
+                    return;
+                }
 
                 switch (entry?.Status)
                 {
                     case TrackerGetUdpStatus.Connecting:
-                        HandleConnectionResponse(entry, data);
+                        HandleConnectionResponse(endpoint, entry, data);
                         break;
 
                     case TrackerGetUdpStatus.Announcing:
-                        HandleAnnounceResponse(entry, data);
+                        HandleAnnounceResponse(endpoint, entry, data);
+                        break;
+
+                    default:
+                        context.CallPacketIgnored(endpoint, data.Length);
                         break;
                 }
             };

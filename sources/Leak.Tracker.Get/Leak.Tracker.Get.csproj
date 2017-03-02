@@ -49,6 +49,7 @@
     <Compile Include="TrackerGetProxy.cs" />
     <Compile Include="TrackerGetUdpCollection.cs" />
     <Compile Include="TrackerGetUdpEntry.cs" />
+    <Compile Include="TrackerGetUdpProtocol.cs" />
     <Compile Include="TrackerGetUdpRegistrant.cs" />
     <Compile Include="TrackerGetUdpService.cs" />
     <Compile Include="TrackerGetUdpStatus.cs" />
@@ -64,10 +65,6 @@
       <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
       <Name>Leak.Completion</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
-      <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
-      <Name>Leak.Events</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6E385E2D-365A-46AA-AE93-01B375C4E48F}</Project>
       <Name>Leak.Sockets</Name>
@@ -75,6 +72,10 @@
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
       <Name>Leak.Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tracker.Get.Events\Leak.Tracker.Get.Events.csproj">
+      <Project>{0416DEEF-DF18-4438-9A25-D4EE468CF292}</Project>
+      <Name>Leak.Tracker.Get.Events</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

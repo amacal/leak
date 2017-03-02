@@ -35,9 +35,9 @@ namespace Leak.Tracker.Get
 
         public void Start()
         {
-            context.UdpService.Start();
             context.Dependencies.Pipeline.Register(context.Queue);
             context.Dependencies.Pipeline.Register(1000, OnTick);
+            context.UdpService.Start();
         }
 
         public void Stop()

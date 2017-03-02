@@ -55,11 +55,6 @@ namespace Leak.Completion
             CompletionInterop.CreateIoCompletionPort(handle, port, (uint)handle.ToInt32(), 0);
         }
 
-        public void Remove(IntPtr handle)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Dispose()
         {
             completed = true;

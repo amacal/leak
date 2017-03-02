@@ -36,6 +36,8 @@ namespace Leak.Sockets
             byte[] addressData = { 0x02, 0x00, (byte)(endpoint.Port / 256), (byte)(endpoint.Port % 256), address[0], address[1], address[2], address[3], 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             IntPtr addressBuffer = Marshal.UnsafeAddrOfPinnedArrayElement(addressData, 0);
 
+            target.Pin(addressData);
+
             int written;
             uint result = UdpSocketInterop.WSASendTo(handle, &data, 1, out written, 0, addressBuffer, addressData.Length, native, IntPtr.Zero);
             uint error = TcpSocketInterop.WSAGetLastError();

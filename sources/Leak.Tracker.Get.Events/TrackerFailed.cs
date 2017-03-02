@@ -1,7 +1,7 @@
 ﻿using System;
 using Leak.Common;
 
-namespace Leak.Events
+namespace Leak.Tracker.Get.Events
 {
     public class TrackerFailed
     {

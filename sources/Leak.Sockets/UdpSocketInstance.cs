@@ -49,7 +49,8 @@ namespace Leak.Sockets
             {
                 Socket = this,
                 Buffer = buffer,
-                OnSent = callback
+                OnSent = callback,
+                Endpoint = endpoint
             };
 
             routine.Execute(result);

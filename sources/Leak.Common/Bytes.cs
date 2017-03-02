@@ -161,6 +161,21 @@ namespace Leak.Common
             return true;
         }
 
+        public static bool Equals(byte[] left, byte[] right, int offset, int count)
+        {
+            if (left.Length != count)
+                return false;
+
+            if (right.Length < offset + count)
+                return false;
+
+            for (int i = left.Length - 1; i >= 0; i--)
+                if (left[i] != right[i + offset])
+                    return false;
+
+            return true;
+        }
+
         public static string ToString(byte[] data)
         {
             StringBuilder builder = new StringBuilder();

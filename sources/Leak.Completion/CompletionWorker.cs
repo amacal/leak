@@ -5,7 +5,5 @@ namespace Leak.Completion
     public interface CompletionWorker
     {
         void Add(IntPtr handle);
-
-        void Remove(IntPtr handle);
     }
 }

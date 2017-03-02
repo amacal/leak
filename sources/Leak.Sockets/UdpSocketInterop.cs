@@ -28,7 +28,7 @@ namespace Leak.Sockets
             [In] IntPtr lpCompletionRoutine);
 
         [DllImport("ws2_32.dll", SetLastError = true)]
-        public static extern unsafe uint WSARecvFrom(
+        public static extern unsafe int WSARecvFrom(
             [In] IntPtr socket,
             [In] TcpSocketInterop.WSABuffer* buffers,
             [In] int buffersCount,

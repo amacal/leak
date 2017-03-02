@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Leak.Client.Tracker;
 using Leak.Common;
 using Pargos;
@@ -14,40 +15,29 @@ namespace Leak.Announce
             if (options.IsValid())
             {
                 Uri tracker = new Uri(options.Tracker);
-                TrackerClient client = new TrackerClient(tracker);
+                TrackerLogger logger = new Logger();
 
-                Console.WriteLine("leak-announce 1.0.0");
-                Console.WriteLine("by Adrian Macal");
-                Console.WriteLine("at https://github.com/amacal/leak");
-
-                foreach (string data in options.Hash)
+                using (TrackerClient client = new TrackerClient(tracker, logger))
                 {
-                    try
+                    foreach (string data in options.Hash)
                     {
                         FileHash hash = FileHash.Parse(data);
 
-                        Console.WriteLine("");
-                        Console.WriteLine($"announcing {hash} at {tracker}");
-
-                        TrackerAnnounce announce = client.AnnounceAsync(hash).Result;
-
-                        Console.WriteLine("");
-                        Console.WriteLine($"interval: {announce.Interval}");
-                        Console.WriteLine($"peers: {announce.Seeders} seeders and {announce.Leechers} leechers");
-
-                        foreach (PeerAddress peer in announce.Peers)
+                        try
                         {
-                            Console.WriteLine($"  {peer.Host}:{peer.Port}");
+                            client.AnnounceAsync(hash);
+                        }
+                        catch (AggregateException ex)
+                        {
+                            Console.Error.WriteLine($"{hash}:{ex.InnerExceptions[0].Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Error.WriteLine($"{hash}:{ex.Message}");
                         }
                     }
-                    catch (AggregateException ex)
-                    {
-                        Console.WriteLine($"announcing failed; {ex.InnerExceptions[0].Message}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"announcing failed; {ex.Message}");
-                    }
+
+                    Thread.Sleep(50000);
                 }
             }
         }

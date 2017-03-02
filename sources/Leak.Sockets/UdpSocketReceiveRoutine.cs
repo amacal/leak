@@ -30,16 +30,16 @@ namespace Leak.Sockets
             };
 
             byte[] addressData = new byte[16];
-            GCHandle addressPin = GCHandle.Alloc(addressData, GCHandleType.Pinned);
             IntPtr addressPointer = Marshal.UnsafeAddrOfPinnedArrayElement(addressData, 0);
 
             target.Address = addressData;
+            target.Pin(addressData);
 
             int read, flags = 0, size = addressData.Length;
-            uint result = UdpSocketInterop.WSARecvFrom(handle, &data, 1, out read, ref flags, addressPointer, ref size, native, IntPtr.Zero);
+            int result = UdpSocketInterop.WSARecvFrom(handle, &data, 1, out read, ref flags, addressPointer, ref size, native, IntPtr.Zero);
             uint error = TcpSocketInterop.GetLastError();
 
-            if (result == 0 && error != 997)
+            if (result == -1 && error != 997)
             {
                 target.Fail(error);
             }

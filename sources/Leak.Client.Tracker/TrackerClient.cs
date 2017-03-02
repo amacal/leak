@@ -1,72 +1,137 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Leak.Common;
-using Leak.Completion;
-using Leak.Tasks;
 using Leak.Tracker.Get;
+using Leak.Tracker.Get.Events;
 
 namespace Leak.Client.Tracker
 {
-    public class TrackerClient
+    public class TrackerClient : IDisposable
     {
         private readonly Uri address;
+        private readonly TrackerRuntime runtime;
+        private readonly TrackerCollection collection;
+        private readonly TrackerLogger logger;
 
         public TrackerClient(Uri address)
         {
             this.address = address;
+            this.runtime = new TrackerFactory(logger);
+            this.collection = new TrackerCollection(logger);
+        }
+
+        public TrackerClient(Uri address, TrackerLogger logger)
+        {
+            this.address = address;
+            this.logger = logger;
+
+            this.runtime = new TrackerFactory(logger);
+            this.collection = new TrackerCollection(logger);
+        }
+
+        public TrackerClient(Uri address, TrackerRuntime runtime)
+        {
+            this.address = address;
+            this.runtime = runtime;
+
+            this.collection = new TrackerCollection(logger);
         }
 
         public Task<TrackerAnnounce> AnnounceAsync(FileHash hash)
         {
-            LeakPipeline pipeline = new LeakPipeline();
-            CompletionThread worker = new CompletionThread();
-
-            Action complete = () => { };
-            TaskCompletionSource<TrackerAnnounce> completion = new TaskCompletionSource<TrackerAnnounce>();
-
-            TrackerGetHooks hooks = new TrackerGetHooks
+            runtime.Start(new TrackerGetHooks
             {
-                OnAnnounced = data =>
-                {
-                    TrackerAnnounce announce = new TrackerAnnounce
-                    {
-                        Hash = data.Hash,
-                        Interval = data.Interval,
-                        Peers = data.Peers,
-                        Leechers = data.Leechers,
-                        Seeders = data.Seeders
-                    };
+                OnAnnounced = OnAnnounced,
+                OnConnected = OnConnected,
+                OnPacketSent = OnPacketSent,
+                OnPacketReceived = OnPacketReceived,
+                OnPacketIgnored = OnPacketIgnored,
+                OnTimeout = OnTimeout,
+                OnFailed = OnFailed
+            });
 
-                    complete.Invoke();
-                    completion.SetResult(announce);
-                },
-                OnFailed = data =>
-                {
-                    complete.Invoke();
-                    completion.SetException(new TrackerException(data.Reason));
-                }
-            };
+            TaskCompletionSource<TrackerAnnounce> completion
+                = new TaskCompletionSource<TrackerAnnounce>();
 
-            TrackerGetService service =
-                new TrackerGetBuilder()
-                    .WithPipeline(pipeline)
-                    .WithWorker(worker)
-                    .Build(hooks);
+            TrackerEntry entry = collection.Add(hash);
+            entry.Completion = completion;
 
-            complete = () =>
-            {
-                service.Stop();
-                pipeline.Stop();
-                worker.Dispose();
-            };
-
-            worker.Start();
-            pipeline.Start();
-
-            service.Start();
-            service.Register(address, hash);
+            logger?.Info($"registering query for '{hash}'");
+            runtime.Service.Register(address, hash);
 
             return completion.Task;
+        }
+
+        private void OnAnnounced(TrackerAnnounced data)
+        {
+            TrackerEntry entry = collection.Find(data.Hash);
+            TrackerAnnounce announce = new TrackerAnnounce
+            {
+                Hash = data.Hash,
+                Interval = data.Interval,
+                Peers = data.Peers,
+                Leechers = data.Leechers,
+                Seeders = data.Seeders
+            };
+
+            logger?.Info($"announcing '{data.Hash}' completed; peers={data.Peers.Length}; leechers={data.Leechers}; seeds={data.Seeders}");
+            entry?.Completion.TrySetResult(announce);
+
+            collection.Remove(data.Hash);
+        }
+
+        private void OnConnected(TrackerConnected data)
+        {
+            string transaction = Bytes.ToString(data.Transaction);
+            string connection = Bytes.ToString(data.Connection);
+
+            logger?.Info($"announcing '{data.Hash}' in progress; status=connected; transaction={transaction}; connection={connection}");
+        }
+
+        private void OnPacketSent(TrackerPacketSent data)
+        {
+            string endpoint = data.Endpoint.ToString();
+            string size = data.Size.ToString();
+
+            logger?.Info($"packet sent; endpoint={endpoint}; size={size}");
+        }
+
+        private void OnPacketReceived(TrackerPacketReceived data)
+        {
+            string endpoint = data.Endpoint.ToString();
+            string size = data.Size.ToString();
+
+            logger?.Info($"packet received; endpoint={endpoint}; size={size}");
+        }
+
+        private void OnPacketIgnored(TrackerPacketIgnored data)
+        {
+            string endpoint = data.Endpoint.ToString();
+            string size = data.Size.ToString();
+
+            logger?.Info($"packet ignored; endpoint={endpoint}; size={size}");
+        }
+
+        private void OnTimeout(TrackerTimeout data)
+        {
+            logger?.Info($"announcing '{data.Hash}' reached a timeout");
+
+            collection
+                .Find(data.Hash)?.Completion
+                .TrySetException(new TrackerException("timeout"));
+
+            collection.Remove(data.Hash);
+        }
+
+        private void OnFailed(TrackerFailed data)
+        {
+            logger?.Info($"announcing '{data.Hash}' failed; reason='{data.Reason}'");
+        }
+
+        public void Dispose()
+        {
+            logger?.Info("disposing tracker client");
+            runtime.Stop();
         }
     }
 }
