@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Leak.Client.Tracker;
 using Leak.Common;
 using Pargos;
@@ -11,34 +12,53 @@ namespace Leak.Announce
         public static void Main(string[] args)
         {
             Options options = Argument.Parse<Options>(args);
+            List<Task<TrackerAnnounce>> tasks = new List<Task<TrackerAnnounce>>();
 
             if (options.IsValid())
             {
                 Uri tracker = new Uri(options.Tracker);
-                TrackerLogger logger = new Logger();
+                TrackerLogger logger = GetLogger(options);
 
                 using (TrackerClient client = new TrackerClient(tracker, logger))
                 {
                     foreach (string data in options.Hash)
                     {
                         FileHash hash = FileHash.Parse(data);
-
-                        try
-                        {
-                            client.AnnounceAsync(hash);
-                        }
-                        catch (AggregateException ex)
-                        {
-                            Console.Error.WriteLine($"{hash}:{ex.InnerExceptions[0].Message}");
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Error.WriteLine($"{hash}:{ex.Message}");
-                        }
+                        tasks.Add(client.AnnounceAsync(hash));
                     }
 
-                    Thread.Sleep(50000);
+                    foreach (Task<TrackerAnnounce> task in tasks)
+                    {
+                        task.Wait();
+                        Handle(options, task);
+                    }
                 }
+            }
+        }
+
+        private static TrackerLogger GetLogger(Options options)
+        {
+            if (options.Analyze == "true")
+            {
+                return new Logger();
+            }
+
+            return null;
+        }
+
+        private static void Handle(Options options, Task<TrackerAnnounce> task)
+        {
+            if (options.Analyze != "true")
+            {
+                Console.WriteLine(task.Result.Hash);
+                Console.WriteLine();
+
+                foreach (PeerAddress peer in task.Result.Peers)
+                {
+                    Console.WriteLine($"  {peer}");
+                }
+
+                Console.WriteLine();
             }
         }
     }
