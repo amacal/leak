@@ -7,6 +7,8 @@ namespace Leak.Tracker.Get.Events
     {
         public FileHash Hash;
         public PeerHash Peer;
+
         public Uri Address;
+        public int Seconds;
     }
 }

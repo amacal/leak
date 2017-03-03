@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Leak.Client.Tracker.Exceptions;
 using Leak.Common;
 using Leak.Tracker.Get;
 using Leak.Tracker.Get.Events;
@@ -114,11 +115,11 @@ namespace Leak.Client.Tracker
 
         private void OnTimeout(TrackerTimeout data)
         {
-            logger?.Info($"announcing '{data.Hash}' reached a timeout");
+            logger?.Info($"announcing '{data.Hash}' reached a timeout; seconds={data.Seconds}");
 
             collection
                 .Find(data.Hash)?.Completion
-                .TrySetException(new TrackerException("timeout"));
+                .TrySetException(new TrackerTimeoutException(data.Hash, data.Seconds));
 
             collection.Remove(data.Hash);
         }
@@ -126,6 +127,12 @@ namespace Leak.Client.Tracker
         private void OnFailed(TrackerFailed data)
         {
             logger?.Info($"announcing '{data.Hash}' failed; reason='{data.Reason}'");
+
+            collection
+                .Find(data.Hash)?.Completion
+                .TrySetException(new TrackerFailedException(data.Hash, data.Reason));
+
+            collection.Remove(data.Hash);
         }
 
         public void Dispose()

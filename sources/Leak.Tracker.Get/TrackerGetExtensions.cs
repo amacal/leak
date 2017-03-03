@@ -40,6 +40,7 @@ namespace Leak.Tracker.Get
                 Hash = hash,
                 Peer = context.Configuration.Peer,
                 Address = address,
+                Seconds = context.Configuration.Timeout
             });
         }
 

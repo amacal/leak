@@ -29,7 +29,6 @@ namespace Leak.Announce
 
                     foreach (Task<TrackerAnnounce> task in tasks)
                     {
-                        task.Wait();
                         Handle(options, task);
                     }
                 }
@@ -38,7 +37,7 @@ namespace Leak.Announce
 
         private static TrackerLogger GetLogger(Options options)
         {
-            if (options.Analyze == "true")
+            if (options.Analyze)
             {
                 return new Logger();
             }
@@ -48,17 +47,24 @@ namespace Leak.Announce
 
         private static void Handle(Options options, Task<TrackerAnnounce> task)
         {
-            if (options.Analyze != "true")
+            try
             {
-                Console.WriteLine(task.Result.Hash);
-                Console.WriteLine();
-
-                foreach (PeerAddress peer in task.Result.Peers)
+                if (options.Analyze == false)
                 {
-                    Console.WriteLine($"  {peer}");
-                }
+                    Console.WriteLine(task.Result.Hash);
+                    Console.WriteLine();
 
-                Console.WriteLine();
+                    foreach (PeerAddress peer in task.Result.Peers)
+                    {
+                        Console.WriteLine($"  {peer}");
+                    }
+
+                    Console.WriteLine();
+                }
+            }
+            catch (AggregateException ex)
+            {
+                Console.WriteLine(ex.InnerExceptions[0].Message);
             }
         }
     }

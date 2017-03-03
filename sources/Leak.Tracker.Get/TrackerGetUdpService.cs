@@ -53,7 +53,7 @@ namespace Leak.Tracker.Get
             entry.Port = registrant.Port;
 
             entry.Address = new Uri($"udp://{entry.Host}:{entry.Port}");
-            entry.Deadline = DateTime.Now + context.Configuration.Timeout;
+            entry.Deadline = DateTime.Now + TimeSpan.FromSeconds(context.Configuration.Timeout);
         }
 
         public void Schedule()

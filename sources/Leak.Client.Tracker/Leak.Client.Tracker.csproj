@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\TrackerFailedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackerAnnounce.cs" />
     <Compile Include="TrackerClient.cs" />
@@ -42,6 +43,7 @@
     <Compile Include="TrackerFactory.cs" />
     <Compile Include="TrackerLogger.cs" />
     <Compile Include="TrackerRuntime.cs" />
+    <Compile Include="Exceptions\TrackerTimeoutException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

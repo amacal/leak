@@ -8,10 +8,10 @@ namespace Leak.Tracker.Get
         public TrackerGetConfiguration()
         {
             Peer = PeerHash.Random();
-            Timeout = TimeSpan.FromSeconds(30);
+            Timeout = 30;
         }
 
         public PeerHash Peer;
-        public TimeSpan Timeout;
+        public int Timeout;
     }
 }

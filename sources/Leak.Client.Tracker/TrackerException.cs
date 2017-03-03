@@ -1,12 +1,21 @@
 ﻿using System;
+using Leak.Common;
 
 namespace Leak.Client.Tracker
 {
-    public class TrackerException : Exception
+    public abstract class TrackerException : Exception
     {
-        public TrackerException(string message)
+        private readonly FileHash hash;
+
+        public TrackerException(FileHash hash, string message)
             : base(message)
         {
+            this.hash = hash;
+        }
+
+        public FileHash Hash
+        {
+            get { return hash; }
         }
     }
 }
