@@ -5,8 +5,7 @@ namespace Leak.Tracker.Get
 {
     public class TrackerGetEntry
     {
-        public Uri Address;
-        public FileHash Hash;
-        public DateTime Next;
+        public TrackerGetRegistrant Request { get; set; }
+        public DateTime Next { get; set; }
     }
 }

@@ -13,11 +13,11 @@ namespace Leak.Tracker.Get
 
             foreach (TrackerGetEntry entry in context.Collection.Find(now))
             {
-                TrackerGetProxy proxy = factory.Create(entry.Address);
+                TrackerGetProxy proxy = factory.Create(entry.Request.Address);
                 Action<TimeSpan> callback = OnAnnounced(entry);
 
                 entry.Next = now + TimeSpan.FromMinutes(15);
-                proxy.Announce(entry.Hash, callback);
+                proxy.Announce(entry.Request, callback);
             }
         }
 

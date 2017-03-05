@@ -42,6 +42,7 @@
     <Compile Include="TrackerException.cs" />
     <Compile Include="TrackerFactory.cs" />
     <Compile Include="TrackerLogger.cs" />
+    <Compile Include="TrackerRequest.cs" />
     <Compile Include="TrackerRuntime.cs" />
     <Compile Include="Exceptions\TrackerTimeoutException.cs" />
   </ItemGroup>

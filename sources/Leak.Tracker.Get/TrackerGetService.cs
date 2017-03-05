@@ -1,6 +1,5 @@
 ﻿using Leak.Tasks;
 using System;
-using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
@@ -51,11 +50,11 @@ namespace Leak.Tracker.Get
             context.Udp.Stop();
         }
 
-        public void Register(Uri address, FileHash hash)
+        public void Register(TrackerGetRegistrant registrant)
         {
             context.Queue.Add(() =>
             {
-                context.Collection.Add(address, hash);
+                context.Collection.Add(registrant);
             });
         }
 

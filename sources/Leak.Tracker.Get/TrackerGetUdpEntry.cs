@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Net;
-using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
     public class TrackerGetUdpEntry
     {
-        public FileHash Hash { get; set; }
+        public TrackerGetRegistrant Request { get; set; }
         public IPEndPoint Endpoint { get; set; }
         public Uri Address { get; set; }
         public string Host { get; set; }

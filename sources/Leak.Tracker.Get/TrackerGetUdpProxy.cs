@@ -1,5 +1,4 @@
 ﻿using System;
-using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
@@ -16,13 +15,13 @@ namespace Leak.Tracker.Get
             this.port = port;
         }
 
-        public void Announce(FileHash hash, Action<TimeSpan> callback)
+        public void Announce(TrackerGetRegistrant request, Action<TimeSpan> callback)
         {
             context.Udp.Register(new TrackerGetUdpRegistrant
             {
-                Hash = hash,
                 Host = host,
                 Port = port,
+                Request = request,
                 Callback = callback
             });
         }

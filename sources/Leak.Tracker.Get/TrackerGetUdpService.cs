@@ -50,11 +50,12 @@ namespace Leak.Tracker.Get
             byte[] transaction = Bytes.Random(4);
             TrackerGetUdpEntry entry = collection.Add(transaction);
 
-            entry.Hash = registrant.Hash;
             entry.Host = registrant.Host;
             entry.Port = registrant.Port;
 
+            entry.Request = registrant.Request;
             entry.Callback = registrant.Callback;
+
             entry.Address = new Uri($"udp://{entry.Host}:{entry.Port}");
             entry.Deadline = DateTime.Now + TimeSpan.FromSeconds(context.Configuration.Timeout);
         }
@@ -91,7 +92,7 @@ namespace Leak.Tracker.Get
         private void HandleDeadline(TrackerGetUdpEntry entry)
         {
             collection.Remove(entry.Transaction);
-            context.CallTimeout(entry.Address, entry.Hash);
+            context.CallTimeout(entry.Address, entry.Request.Hash);
         }
 
         private void ResolveHost(TrackerGetUdpEntry entry)
@@ -134,7 +135,7 @@ namespace Leak.Tracker.Get
             entry.Connection = Bytes.Copy(data, 8, 8);
             entry.Status = TrackerGetUdpStatus.Connected;
 
-            context.CallConnected(entry.Address, entry.Hash, entry.Transaction, entry.Connection);
+            context.CallConnected(entry.Address, entry.Request.Hash, entry.Transaction, entry.Connection);
         }
 
         private void SendAnnounceRequest(TrackerGetUdpEntry entry)
@@ -151,7 +152,7 @@ namespace Leak.Tracker.Get
             Array.Copy(entry.Connection, 0, outgoing.Data, 0, 8);
             Array.Copy(TrackerGetUdpProtocol.Announce, 0, outgoing.Data, 8, 4);
             Array.Copy(entry.Transaction, 0, outgoing.Data, 12, 4);
-            Array.Copy(entry.Hash.ToBytes(), 0, outgoing.Data, 16, 20);
+            Array.Copy(entry.Request.Hash.ToBytes(), 0, outgoing.Data, 16, 20);
             Array.Copy(peer.ToBytes(), 0, outgoing.Data, 36, 20);
 
             entry.Status = TrackerGetUdpStatus.Announcing;
@@ -201,7 +202,7 @@ namespace Leak.Tracker.Get
 
             collection.Remove(entry.Transaction);
             entry.Callback.Invoke(interval);
-            context.CallAnnounced(entry.Address, entry.Hash, interval, seeders, leechers, peers.ToArray());
+            context.CallAnnounced(entry.Address, entry.Request.Hash, interval, seeders, leechers, peers.ToArray());
         }
 
         private void HandleErrorResponse(IPEndPoint endpoint, TrackerGetUdpEntry entry, byte[] data)
@@ -215,7 +216,7 @@ namespace Leak.Tracker.Get
             byte[] message = Bytes.Copy(data, 8);
             string reason = Encoding.ASCII.GetString(message);
 
-            context.CallFailed(entry.Address, entry.Hash, reason);
+            context.CallFailed(entry.Address, entry.Request.Hash, reason);
         }
 
         private UdpSocketSendCallback OnSent(TrackerGetUdpEntry entry)
@@ -229,7 +230,7 @@ namespace Leak.Tracker.Get
 
                     context.Queue.Add(() =>
                     {
-                        context.CallPacketSent(entry.Address, entry.Hash, endpoint, size);
+                        context.CallPacketSent(entry.Address, entry.Request.Hash, endpoint, size);
                     });
                 }
             };

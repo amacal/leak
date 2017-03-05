@@ -38,7 +38,7 @@ namespace Leak.Client.Tracker
             this.collection = new TrackerCollection(logger);
         }
 
-        public Task<TrackerAnnounce> AnnounceAsync(FileHash hash)
+        public Task<TrackerAnnounce> AnnounceAsync(TrackerRequest request)
         {
             runtime.Start(new TrackerGetHooks
             {
@@ -54,11 +54,19 @@ namespace Leak.Client.Tracker
             TaskCompletionSource<TrackerAnnounce> completion
                 = new TaskCompletionSource<TrackerAnnounce>();
 
-            TrackerEntry entry = collection.Add(hash);
-            entry.Completion = completion;
+            TrackerEntry entry = collection.Add(request.Hash);
+            TrackerGetRegistrant registrant = new TrackerGetRegistrant
+            {
+                Address = address,
+                Hash = request.Hash,
+                Port = request.Port,
+                Peer = request.Peer
+            };
 
-            logger?.Info($"registering query for '{hash}'");
-            runtime.Service.Register(address, hash);
+            logger?.Info($"registering query for '{request.Hash}'");
+
+            entry.Completion = completion;
+            runtime.Service.Register(registrant);
 
             return completion.Task;
         }

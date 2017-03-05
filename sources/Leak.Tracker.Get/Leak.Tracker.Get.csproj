@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackerGetEvent.cs" />
     <Compile Include="TrackerGetExtensions.cs" />
     <Compile Include="TrackerGetFactory.cs" />
     <Compile Include="TrackerGetBuilder.cs" />
@@ -54,10 +55,13 @@
     <Compile Include="TrackerGetNextTask.cs" />
     <Compile Include="TrackerGetParameters.cs" />
     <Compile Include="TrackerGetEntry.cs" />
+    <Compile Include="TrackerGetProgress.cs" />
+    <Compile Include="TrackerGetRegistrant.cs" />
     <Compile Include="TrackerGetService.cs" />
     <Compile Include="TrackerGetProxy.cs" />
     <Compile Include="TrackerGetUdpCollection.cs" />
     <Compile Include="TrackerGetUdpEntry.cs" />
+    <Compile Include="TrackerGetUdpExtensions.cs" />
     <Compile Include="TrackerGetUdpProtocol.cs" />
     <Compile Include="TrackerGetUdpRegistrant.cs" />
     <Compile Include="TrackerGetUdpService.cs" />

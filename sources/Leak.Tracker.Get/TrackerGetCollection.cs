@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
@@ -13,12 +12,11 @@ namespace Leak.Tracker.Get
             entries = new List<TrackerGetEntry>();
         }
 
-        public void Add(Uri address, FileHash hash)
+        public void Add(TrackerGetRegistrant registrant)
         {
             entries.Add(new TrackerGetEntry
             {
-                Hash = hash,
-                Address = address,
+                Request = registrant,
                 Next = DateTime.Now
             });
         }

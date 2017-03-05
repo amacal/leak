@@ -24,7 +24,13 @@ namespace Leak.Announce
                     foreach (string data in options.Hash)
                     {
                         FileHash hash = FileHash.Parse(data);
-                        tasks.Add(client.AnnounceAsync(hash));
+                        TrackerRequest request = new TrackerRequest
+                        {
+                            Hash = hash,
+                            Port = 8080
+                        };
+
+                        tasks.Add(client.AnnounceAsync(request));
                     }
 
                     foreach (Task<TrackerAnnounce> task in tasks)

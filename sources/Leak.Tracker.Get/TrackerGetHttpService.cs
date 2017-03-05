@@ -44,7 +44,7 @@ namespace Leak.Tracker.Get
             TcpSocket socket = factory.Tcp();
             TrackerGetHttpEntry entry = collection.Add(socket);
 
-            entry.Hash = registrant.Hash;
+            entry.Request = registrant.Request;
             entry.Address = registrant.Address;
 
             entry.Callback = registrant.Callback;
@@ -83,7 +83,7 @@ namespace Leak.Tracker.Get
         private void HandleDeadline(TrackerGetHttpEntry entry)
         {
             collection.Remove(entry.Socket);
-            context.CallTimeout(entry.Address, entry.Hash);
+            context.CallTimeout(entry.Address, entry.Request.Hash);
         }
 
         private void ResolveHost(TrackerGetHttpEntry entry)
@@ -115,11 +115,14 @@ namespace Leak.Tracker.Get
             builder.Append("GET /");
             builder.Append(resource);
 
-            builder.Append("?info_hash=");
-            builder.Append(entry.Hash.Encode());
-            builder.Append("&peer_id=");
-            builder.Append(context.Configuration.Peer.Encode());
-            builder.Append("&port=6881&downloaded=0&left=660602880&event=started&compact=1&no_peer_id=1");
+            builder.AppendHash(entry.Request.Hash);
+            builder.AppendPeer(entry.Request.Peer ?? context.Configuration.Peer);
+
+            builder.AppendPort(entry.Request);
+            builder.AppendEvent(entry.Request);
+            builder.AppendProgress(entry.Request);
+
+            builder.Append("&compact=1&no_peer_id=1");
 
             builder.AppendLine(" HTTP/1.1");
             builder.Append("Host: ");
@@ -142,7 +145,7 @@ namespace Leak.Tracker.Get
                 {
                     Action callback = () =>
                     {
-                        context.CallConnected(entry.Address, entry.Hash);
+                        context.CallConnected(entry.Address, entry.Request.Hash);
                     };
 
                     entry.Status = TrackerGetHttpStatus.Connected;
@@ -159,7 +162,7 @@ namespace Leak.Tracker.Get
                 {
                     context.Queue.Add(() =>
                     {
-                        context.CallPacketSent(entry.Address, entry.Hash, entry.Endpoint, sent.Count);
+                        context.CallPacketSent(entry.Address, entry.Request.Hash, entry.Endpoint, sent.Count);
                     });
                 }
             };
@@ -234,7 +237,7 @@ namespace Leak.Tracker.Get
                         string failure = decoded.Find("failure reason", x => x?.Text?.GetString());
                         if (failure != null)
                         {
-                            context.CallFailed(entry.Address, entry.Hash, failure);
+                            context.CallFailed(entry.Address, entry.Request.Hash, failure);
                             return;
                         }
 
@@ -266,7 +269,7 @@ namespace Leak.Tracker.Get
 
                             collection.Remove(entry.Socket);
                             entry.Callback.Invoke(TimeSpan.FromSeconds(interval.Value));
-                            context.CallAnnounced(entry.Address, entry.Hash, TimeSpan.FromSeconds(interval.Value), result.ToArray());
+                            context.CallAnnounced(entry.Address, entry.Request.Hash, TimeSpan.FromSeconds(interval.Value), result.ToArray());
                         }
                     });
                 }
