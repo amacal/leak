@@ -37,13 +37,18 @@ namespace Leak.Tracker.Get
         {
             context.Dependencies.Pipeline.Register(context.Queue);
             context.Dependencies.Pipeline.Register(1000, OnTick);
-            context.UdpService.Start();
+
+            context.Udp.Start();
+            context.Http.Start();
         }
 
         public void Stop()
         {
-            context.UdpService.Stop();
+            context.Queue.Stop();
             context.Dependencies.Pipeline.Remove(OnTick);
+
+            context.Udp.Stop();
+            context.Udp.Stop();
         }
 
         public void Register(Uri address, FileHash hash)
@@ -57,13 +62,13 @@ namespace Leak.Tracker.Get
         private void OnTick()
         {
             context.Queue.Add(new TrackerGetNextTask());
+            context.Queue.Add(new TrackerGetHttpTask());
             context.Queue.Add(new TrackerGetUdpTask());
         }
 
         public void Dispose()
         {
-            context.UdpService.Stop();
-            context.Dependencies.Pipeline.Remove(OnTick);
+            Stop();
         }
     }
 }

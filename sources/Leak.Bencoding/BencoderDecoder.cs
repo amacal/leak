@@ -79,10 +79,16 @@ namespace Leak.Bencoding
         public BencodedValue Decode(byte[] data)
         {
             int position = 0;
-            return this.Decode(data, ref position);
+            return this.DecodeCore(data, ref position);
         }
 
-        private BencodedValue Decode(byte[] data, ref int position)
+        public BencodedValue Decode(byte[] data, int offset)
+        {
+            int position = offset;
+            return this.DecodeCore(data, ref position);
+        }
+
+        private BencodedValue DecodeCore(byte[] data, ref int position)
         {
             switch (data[position])
             {
@@ -166,7 +172,7 @@ namespace Leak.Bencoding
 
             while (data[position] != 0x65)
             {
-                array.Add(this.Decode(data, ref position));
+                array.Add(this.DecodeCore(data, ref position));
             }
 
             position++;
@@ -184,8 +190,8 @@ namespace Leak.Bencoding
 
             while (data[position] != 0x65)
             {
-                BencodedValue key = Decode(data, ref position);
-                BencodedValue value = Decode(data, ref position);
+                BencodedValue key = DecodeCore(data, ref position);
+                BencodedValue value = DecodeCore(data, ref position);
 
                 entries.Add(new BencodedEntry { Key = key, Value = value });
             }

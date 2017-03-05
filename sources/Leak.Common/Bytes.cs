@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -180,7 +181,7 @@ namespace Leak.Common
         {
             StringBuilder builder = new StringBuilder();
 
-            foreach (byte item in data)
+            foreach (byte item in data ?? Enumerable.Empty<byte>())
             {
                 builder.Append(item.ToString("x2"));
             }

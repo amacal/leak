@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Leak.Common;
 
@@ -42,6 +41,11 @@ namespace Leak.Tracker.Get
         public void Remove(byte[] transaction)
         {
             items.Remove(transaction);
+        }
+
+        public void Clear()
+        {
+            items.Clear();
         }
 
         bool IEqualityComparer<byte[]>.Equals(byte[] x, byte[] y)

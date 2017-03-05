@@ -76,9 +76,9 @@ namespace Leak.Client.Tracker
             };
 
             logger?.Info($"announcing '{data.Hash}' completed; peers={data.Peers.Length}; leechers={data.Leechers}; seeds={data.Seeders}");
-            entry?.Completion.TrySetResult(announce);
 
             collection.Remove(data.Hash);
+            entry?.Completion.TrySetResult(announce);
         }
 
         private void OnConnected(TrackerConnected data)
@@ -116,23 +116,21 @@ namespace Leak.Client.Tracker
         private void OnTimeout(TrackerTimeout data)
         {
             logger?.Info($"announcing '{data.Hash}' reached a timeout; seconds={data.Seconds}");
+            collection.Remove(data.Hash);
 
             collection
                 .Find(data.Hash)?.Completion
                 .TrySetException(new TrackerTimeoutException(data.Hash, data.Seconds));
-
-            collection.Remove(data.Hash);
         }
 
         private void OnFailed(TrackerFailed data)
         {
             logger?.Info($"announcing '{data.Hash}' failed; reason='{data.Reason}'");
+            collection.Remove(data.Hash);
 
             collection
                 .Find(data.Hash)?.Completion
                 .TrySetException(new TrackerFailedException(data.Hash, data.Reason));
-
-            collection.Remove(data.Hash);
         }
 
         public void Dispose()

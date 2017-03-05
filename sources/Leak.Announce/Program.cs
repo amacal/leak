@@ -49,6 +49,8 @@ namespace Leak.Announce
         {
             try
             {
+                task.Wait();
+
                 if (options.Analyze == false)
                 {
                     Console.WriteLine(task.Result.Hash);

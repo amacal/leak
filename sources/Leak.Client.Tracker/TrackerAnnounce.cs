@@ -7,8 +7,8 @@ namespace Leak.Client.Tracker
     {
         public FileHash Hash { get; set; }
 
-        public int Leechers { get; set; }
-        public int Seeders { get; set; }
+        public int? Leechers { get; set; }
+        public int? Seeders { get; set; }
 
         public TimeSpan Interval { get; set; }
         public PeerAddress[] Peers { get; set; }

@@ -9,6 +9,7 @@ namespace Leak.Tasks
         private readonly ConcurrentQueue<LeakTask<TContext>> items;
 
         private ManualResetEvent onReady;
+        private bool completed;
 
         public LeakQueue(TContext context)
         {
@@ -20,13 +21,17 @@ namespace Leak.Tasks
 
         public void Add(LeakTask<TContext> task)
         {
-            items.Enqueue(task);
-            onReady.Set();
+            if (completed == false)
+            {
+                items.Enqueue(task);
+                onReady.Set();
+            }
         }
 
-        public void Clear()
+        public void Stop()
         {
             LeakTask<TContext> task;
+            completed = true;
 
             while (items.TryDequeue(out task))
             {
@@ -42,10 +47,13 @@ namespace Leak.Tasks
         {
             LeakTask<TContext> task;
 
-            while (items.TryDequeue(out task))
+            if (completed == false)
             {
-                onReady.Reset();
-                task.Execute(context);
+                while (items.TryDequeue(out task))
+                {
+                    onReady.Reset();
+                    task.Execute(context);
+                }
             }
         }
     }

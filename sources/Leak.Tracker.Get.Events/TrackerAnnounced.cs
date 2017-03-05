@@ -12,7 +12,7 @@ namespace Leak.Tracker.Get.Events
         public PeerAddress[] Peers;
         public TimeSpan Interval;
 
-        public int Seeders;
-        public int Leechers;
+        public int? Seeders;
+        public int? Leechers;
     }
 }

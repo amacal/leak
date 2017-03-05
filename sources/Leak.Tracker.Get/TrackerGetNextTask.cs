@@ -1,4 +1,5 @@
 ﻿using System;
+using Leak.Common;
 using Leak.Tasks;
 
 namespace Leak.Tracker.Get
@@ -12,9 +13,21 @@ namespace Leak.Tracker.Get
 
             foreach (TrackerGetEntry entry in context.Collection.Find(now))
             {
+                TrackerGetProxy proxy = factory.Create(entry.Address);
+                Action<TimeSpan> callback = OnAnnounced(entry);
+
                 entry.Next = now + TimeSpan.FromMinutes(15);
-                factory.Create(entry.Address).Announce(entry.Hash);
+                proxy.Announce(entry.Hash, callback);
             }
+        }
+
+        private Action<TimeSpan> OnAnnounced(TrackerGetEntry entry)
+        {
+            return interval =>
+            {
+                DateTime now = DateTime.Now;
+                entry.Next = now + interval;
+            };
         }
     }
 }

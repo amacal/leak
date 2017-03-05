@@ -9,7 +9,9 @@ namespace Leak.Tracker.Get
         private readonly TrackerGetConfiguration configuration;
         private readonly TrackerGetHooks hooks;
 
-        private readonly TrackerGetUdpService udpService;
+        private readonly TrackerGetUdpService udp;
+        private readonly TrackerGetHttpService http;
+
         private readonly TrackerGetCollection collection;
         private readonly LeakQueue<TrackerGetContext> queue;
 
@@ -20,7 +22,9 @@ namespace Leak.Tracker.Get
             this.configuration = configuration;
             this.hooks = hooks;
 
-            this.udpService = new TrackerGetUdpService(this);
+            this.udp = new TrackerGetUdpService(this);
+            this.http = new TrackerGetHttpService(this);
+
             this.collection = new TrackerGetCollection();
             this.queue = new LeakQueue<TrackerGetContext>(this);
         }
@@ -55,9 +59,14 @@ namespace Leak.Tracker.Get
             get { return collection; }
         }
 
-        public TrackerGetUdpService UdpService
+        public TrackerGetUdpService Udp
         {
-            get { return udpService; }
+            get { return udp; }
+        }
+
+        public TrackerGetHttpService Http
+        {
+            get { return http; }
         }
     }
 }

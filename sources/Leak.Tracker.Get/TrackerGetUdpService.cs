@@ -40,18 +40,21 @@ namespace Leak.Tracker.Get
 
         public void Stop()
         {
-            socket.Dispose();
+            collection.Clear();
+            socket?.Dispose();
             socket = null;
         }
 
-        public void Register(byte[] transaction, TrackerGetUdpRegistrant registrant)
+        public void Register(TrackerGetUdpRegistrant registrant)
         {
+            byte[] transaction = Bytes.Random(4);
             TrackerGetUdpEntry entry = collection.Add(transaction);
 
             entry.Hash = registrant.Hash;
             entry.Host = registrant.Host;
             entry.Port = registrant.Port;
 
+            entry.Callback = registrant.Callback;
             entry.Address = new Uri($"udp://{entry.Host}:{entry.Port}");
             entry.Deadline = DateTime.Now + TimeSpan.FromSeconds(context.Configuration.Timeout);
         }
@@ -93,6 +96,8 @@ namespace Leak.Tracker.Get
 
         private void ResolveHost(TrackerGetUdpEntry entry)
         {
+            entry.Status = TrackerGetUdpStatus.Resolving;
+
             IPHostEntry found = Dns.GetHostEntry(entry.Host);
             IPAddress address = found.AddressList.FirstOrDefault();
 
@@ -194,8 +199,9 @@ namespace Leak.Tracker.Get
                 }
             }
 
-            context.CallAnnounced(entry.Address, entry.Hash, interval, seeders, leechers, peers.ToArray());
             collection.Remove(entry.Transaction);
+            entry.Callback.Invoke(interval);
+            context.CallAnnounced(entry.Address, entry.Hash, interval, seeders, leechers, peers.ToArray());
         }
 
         private void HandleErrorResponse(IPEndPoint endpoint, TrackerGetUdpEntry entry, byte[] data)
@@ -216,10 +222,16 @@ namespace Leak.Tracker.Get
         {
             return sent =>
             {
-                int size = sent.Count;
-                IPEndPoint endpoint = sent.Endpoint;
+                if (sent.Status == SocketStatus.OK)
+                {
+                    int size = sent.Count;
+                    IPEndPoint endpoint = sent.Endpoint;
 
-                context.Queue.Add(() => { context.CallPacketSent(entry.Address, entry.Hash, endpoint, size); });
+                    context.Queue.Add(() =>
+                    {
+                        context.CallPacketSent(entry.Address, entry.Hash, endpoint, size);
+                    });
+                }
             };
         }
 

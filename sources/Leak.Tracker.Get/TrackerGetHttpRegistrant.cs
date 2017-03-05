@@ -3,11 +3,10 @@ using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
-    public class TrackerGetUdpRegistrant
+    public class TrackerGetHttpRegistrant
     {
         public FileHash Hash { get; set; }
-        public string Host { get; set; }
-        public int Port { get; set; }
+        public Uri Address { get; set; }
         public Action<TimeSpan> Callback { get; set; }
     }
 }

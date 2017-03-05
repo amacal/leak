@@ -2,11 +2,11 @@
 
 namespace Leak.Tracker.Get
 {
-    public class TrackerGetUdpTask : LeakTask<TrackerGetContext>
+    public class TrackerGetHttpTask : LeakTask<TrackerGetContext>
     {
         public void Execute(TrackerGetContext context)
         {
-            context.Udp.Schedule();
+            context.Http.Schedule();
         }
     }
 }

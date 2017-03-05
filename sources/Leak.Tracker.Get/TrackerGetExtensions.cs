@@ -21,6 +21,18 @@ namespace Leak.Tracker.Get
             });
         }
 
+        public static void CallAnnounced(this TrackerGetContext context, Uri address, FileHash hash, TimeSpan interval, PeerAddress[] peers)
+        {
+            context.Hooks.OnAnnounced?.Invoke(new TrackerAnnounced
+            {
+                Hash = hash,
+                Peer = context.Configuration.Peer,
+                Address = address,
+                Interval = interval,
+                Peers = peers
+            });
+        }
+
         public static void CallConnected(this TrackerGetContext context, Uri address, FileHash hash, byte[] transaction, byte[] connection)
         {
             context.Hooks.OnConnected?.Invoke(new TrackerConnected
@@ -30,6 +42,16 @@ namespace Leak.Tracker.Get
                 Address = address,
                 Transaction = transaction,
                 Connection = connection
+            });
+        }
+
+        public static void CallConnected(this TrackerGetContext context, Uri address, FileHash hash)
+        {
+            context.Hooks.OnConnected?.Invoke(new TrackerConnected
+            {
+                Hash = hash,
+                Peer = context.Configuration.Peer,
+                Address = address
             });
         }
 
