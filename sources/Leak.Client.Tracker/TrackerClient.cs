@@ -123,22 +123,20 @@ namespace Leak.Client.Tracker
 
         private void OnTimeout(TrackerTimeout data)
         {
+            TrackerEntry entry = collection.Find(data.Hash);
             logger?.Info($"announcing '{data.Hash}' reached a timeout; seconds={data.Seconds}");
-            collection.Remove(data.Hash);
 
-            collection
-                .Find(data.Hash)?.Completion
-                .TrySetException(new TrackerTimeoutException(data.Hash, data.Seconds));
+            collection.Remove(data.Hash);
+            entry?.Completion.TrySetException(new TrackerTimeoutException(data.Hash, data.Seconds));
         }
 
         private void OnFailed(TrackerFailed data)
         {
+            TrackerEntry entry = collection.Find(data.Hash);
             logger?.Info($"announcing '{data.Hash}' failed; reason='{data.Reason}'");
-            collection.Remove(data.Hash);
 
-            collection
-                .Find(data.Hash)?.Completion
-                .TrySetException(new TrackerFailedException(data.Hash, data.Reason));
+            collection.Remove(data.Hash);
+            entry?.Completion.TrySetException(new TrackerFailedException(data.Hash, data.Reason));
         }
 
         public void Dispose()

@@ -60,20 +60,27 @@ namespace Leak.Announce
                 if (options.Analyze == false)
                 {
                     Console.WriteLine(task.Result.Hash);
-                    Console.WriteLine();
 
                     foreach (PeerAddress peer in task.Result.Peers)
                     {
-                        Console.WriteLine($"  {peer}");
+                        Console.WriteLine(peer);
                     }
 
                     Console.WriteLine();
                 }
             }
             catch (AggregateException ex)
+            when (ex.InnerExceptions[0] is TrackerException)
             {
-                Console.WriteLine(ex.InnerExceptions[0].Message);
+                Handle(ex.InnerExceptions[0] as TrackerException);
             }
+        }
+
+        private static void Handle(TrackerException ex)
+        {
+            Console.WriteLine(ex.Hash);
+            Console.WriteLine(ex.Message);
+            Console.WriteLine();
         }
     }
 }
