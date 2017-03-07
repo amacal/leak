@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Leak.Client.Peer;
 using Leak.Common;
+using Pargos;
 
 namespace Leak.Connect
 {
@@ -14,26 +15,31 @@ namespace Leak.Connect
 
         public static async Task MainAsync(string[] args)
         {
-            FileHash hash = FileHash.Parse("11D7CF23BA7AD66845C69FFF32B33FE395ABEBD2");
-            PeerAddress address = new PeerAddress("127.0.0.1", 8081);
+            Options options = Argument.Parse<Options>(args);
 
-            using (PeerClient client = new PeerClient(address, hash))
+            if (options.IsValid())
             {
-                PeerConnect connect = await client.Connect();
+                FileHash hash = FileHash.Parse(options.Hash);
+                PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
 
-                while (true)
+                using (PeerClient client = new PeerClient(address, hash))
                 {
-                    PeerNotification notification = await client.Next();
+                    PeerConnect connect = await client.Connect();
 
-                    switch (notification.Type)
+                    while (true)
                     {
-                        case PeerNotificationType.Disconnected:
-                            Console.WriteLine("disconneced");
-                            return;
+                        PeerNotification notification = await client.Next();
 
-                        case PeerNotificationType.BitfieldChanged:
-                            Console.WriteLine("bitfield changed");
-                            break;
+                        switch (notification.Type)
+                        {
+                            case PeerNotificationType.Disconnected:
+                                Console.WriteLine("disconneced");
+                                return;
+
+                            case PeerNotificationType.BitfieldChanged:
+                                Console.WriteLine("bitfield changed");
+                                break;
+                        }
                     }
                 }
             }
