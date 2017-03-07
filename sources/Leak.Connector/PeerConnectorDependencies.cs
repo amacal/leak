@@ -5,7 +5,7 @@ namespace Leak.Connector
 {
     public class PeerConnectorDependencies
     {
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
 
         public NetworkPool Network;
     }

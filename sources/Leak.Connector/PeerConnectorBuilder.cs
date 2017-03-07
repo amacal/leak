@@ -14,7 +14,7 @@ namespace Leak.Connector
             configuration = new PeerConnectorConfiguration();
         }
 
-        public PeerConnectorBuilder WithPipeline(LeakPipeline pipeline)
+        public PeerConnectorBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;
