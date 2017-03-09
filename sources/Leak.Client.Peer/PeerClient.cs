@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Leak.Common;
 using Leak.Connector;
 using Leak.Events;
+using Leak.Extensions.Metadata;
 using Leak.Glue;
+using Leak.Metadata;
 using Leak.Negotiator;
 using Leak.Networking;
 
@@ -13,6 +15,7 @@ namespace Leak.Client.Peer
     {
         private readonly PeerAddress address;
         private readonly FileHash hash;
+        private readonly PeerEntry entry;
 
         private readonly PeerRuntime runtime;
         private readonly TaskCompletionSource<PeerConnect> completion;
@@ -26,6 +29,7 @@ namespace Leak.Client.Peer
             completion = new TaskCompletionSource<PeerConnect>();
             collection = new PeerCollection();
             runtime = new PeerFactory(null);
+            entry = new PeerEntry();
         }
 
         public Task<PeerConnect> Connect()
@@ -35,7 +39,7 @@ namespace Leak.Client.Peer
                 OnConnectionTerminated = OnConnectionTerminated
             });
 
-            PeerConnector connector =
+            entry.Connector =
                 new PeerConnectorBuilder()
                     .WithNetwork(runtime.Network)
                     .WithPipeline(runtime.Pipeline)
@@ -45,8 +49,8 @@ namespace Leak.Client.Peer
                         OnConnectionRejected = OnConnectionRejected
                     });
 
-            connector.Start();
-            connector.ConnectTo(hash, address);
+            entry.Connector.Start();
+            entry.Connector.ConnectTo(hash, address);
 
             return completion.Task;
         }
@@ -58,7 +62,7 @@ namespace Leak.Client.Peer
 
         private void OnConnectionEstablished(ConnectionEstablished data)
         {
-            HandshakeNegotiator negotiator =
+            entry.Negotiator =
                 new HandshakeNegotiatorBuilder()
                     .WithNetwork(runtime.Network)
                     .Build(new HandshakeNegotiatorHooks
@@ -67,7 +71,7 @@ namespace Leak.Client.Peer
                         OnHandshakeRejected = OnHandshakeRejected
                     });
 
-            negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(hash, PeerHash.Random(), HandshakeOptions.Extended));
+            entry.Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(hash, PeerHash.Random(), HandshakeOptions.Extended));
         }
 
         private void OnConnectionRejected(ConnectionRejected data)
@@ -86,10 +90,17 @@ namespace Leak.Client.Peer
 
         private void OnHandshakeCompleted(HandshakeCompleted data)
         {
-            GlueService glue =
+            MetadataHooks metadata = new MetadataHooks
+            {
+                OnMetadataMeasured = OnMetadataMeasured,
+                OnMetadataPieceReceived = OnMetadataPieceReceived
+            };
+
+            entry.Glue =
                 new GlueBuilder()
                     .WithBlocks(null)
                     .WithHash(hash)
+                    .WithPlugin(new MetadataPlugin(metadata))
                     .Build(new GlueHooks
                     {
                         OnPeerConnected = OnPeerConnected,
@@ -98,7 +109,7 @@ namespace Leak.Client.Peer
                         OnBlockRequested = OnBlockRequested
                     });
 
-            glue.Connect(data.Connection, data.Handshake);
+            entry.Glue.Connect(data.Connection, data.Handshake);
         }
 
         private void OnHandshakeRejected(HandshakeRejected data)
@@ -112,6 +123,7 @@ namespace Leak.Client.Peer
                 Peer = data.Peer
             };
 
+            entry.Peer = data.Peer;
             completion.SetResult(connect);
         }
 
@@ -147,6 +159,42 @@ namespace Leak.Client.Peer
             };
 
             collection.Enqueue(notification);
+        }
+
+        private void OnMetadataMeasured(MetadataMeasured data)
+        {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.MetadataMeasured,
+                Size = data.Size
+            };
+
+            if (entry.Metadata == null)
+            {
+                collection.Enqueue(notification);
+                entry.Glue.SendMetadataRequest(entry.Peer, 0);
+                entry.Metadata = new byte[data.Size];
+            }
+        }
+
+        private void OnMetadataPieceReceived(MetadataReceived data)
+        {
+            Array.Copy(data.Data, 0, entry.Metadata, data.Piece * 16384, data.Data.Length);
+
+            if (data.Piece * 16384 + data.Data.Length == entry.Metadata.Length)
+            {
+                PeerNotification notification = new PeerNotification
+                {
+                    Type = PeerNotificationType.MetadataReceived,
+                    Metainfo = MetainfoFactory.FromBytes(entry.Metadata)
+                };
+
+                collection.Enqueue(notification);
+            }
+            else
+            {
+                entry.Glue.SendMetadataRequest(entry.Peer, data.Piece + 1);
+            }
         }
 
         public void Dispose()

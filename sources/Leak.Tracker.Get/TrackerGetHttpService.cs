@@ -247,19 +247,20 @@ namespace Leak.Tracker.Get
                         if (interval != null && peers.Text != null && peers.Text.Length % 6 == 0)
                         {
                             List<PeerAddress> result = new List<PeerAddress>(peers.Text.Length / 6);
+                            byte[] bytes = peers.Data.GetBytes();
 
-                            for (int i = 0; i < peers.Text.Length; i += 6)
+                            for (int i = 0; i < bytes.Length; i += 6)
                             {
-                                int port = Bytes.ReadUInt16(data, i + 4);
+                                int port = Bytes.ReadUInt16(bytes, i + 4);
                                 StringBuilder address = new StringBuilder();
 
-                                address.Append(data[i].ToString());
+                                address.Append(bytes[i].ToString());
                                 address.Append('.');
-                                address.Append(data[i + 1].ToString());
+                                address.Append(bytes[i + 1].ToString());
                                 address.Append('.');
-                                address.Append(data[i + 2].ToString());
+                                address.Append(bytes[i + 2].ToString());
                                 address.Append('.');
-                                address.Append(data[i + 3].ToString());
+                                address.Append(bytes[i + 3].ToString());
 
                                 if (port > 0)
                                 {

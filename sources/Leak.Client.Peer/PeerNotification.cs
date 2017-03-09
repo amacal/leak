@@ -11,5 +11,9 @@ namespace Leak.Client.Peer
         public PeerState State { get; set; }
 
         public BlockIndex Index { get; set; }
+
+        public Metainfo Metainfo { get; set; }
+
+        public int? Size { get; set; }
     }
 }

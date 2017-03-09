@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Leak.Client.Peer;
 using Leak.Common;
@@ -26,6 +27,10 @@ namespace Leak.Connect
                 {
                     PeerConnect connect = await client.Connect();
 
+                    Console.WriteLine($"Hash: {hash} ");
+                    Console.WriteLine($"Peer: {connect.Peer}");
+                    Console.WriteLine();
+
                     while (true)
                     {
                         PeerNotification notification = await client.Next();
@@ -37,7 +42,20 @@ namespace Leak.Connect
                                 return;
 
                             case PeerNotificationType.BitfieldChanged:
-                                Console.WriteLine("bitfield changed");
+                                Console.WriteLine($"Bitfield: {notification.Bitfield.Completed}/{notification.Bitfield.Length} pieces completed");
+                                break;
+
+                            case PeerNotificationType.MetadataMeasured:
+                                Console.WriteLine($"Metadata: {notification.Size} bytes");
+                                break;
+
+                            case PeerNotificationType.MetadataReceived:
+
+                                foreach (MetainfoEntry entry in notification.Metainfo.Entries)
+                                {
+                                    Console.WriteLine($"Metadata: {String.Join(Path.DirectorySeparatorChar.ToString(), entry.Name)} [{entry.Size} bytes]");
+                                }
+
                                 break;
                         }
                     }
