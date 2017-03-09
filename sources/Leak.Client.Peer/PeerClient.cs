@@ -18,8 +18,9 @@ namespace Leak.Client.Peer
         private readonly PeerEntry entry;
 
         private readonly PeerRuntime runtime;
-        private readonly TaskCompletionSource<PeerConnect> completion;
         private readonly PeerCollection collection;
+
+        private readonly TaskCompletionSource<PeerConnect> completion;
 
         public PeerClient(PeerAddress address, FileHash hash)
         {

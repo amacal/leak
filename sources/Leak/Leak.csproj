@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CACD0BC5-0483-400D-8A0E-24648693C26F}</ProjectGuid>
+    <ProjectGuid>{B1FC7D83-C38A-4C15-8693-3300CF3EF54F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Leak</RootNamespace>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,29 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\pargos.2.1.0\lib\net45\Pargos.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\DeamonOptions.cs" />
-    <Compile Include="Commands\DownloadCommand.cs" />
-    <Compile Include="Commands\DownloadOptions.cs" />
-    <Compile Include="Commands\ReadyCallback.cs" />
-    <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
-      <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
-      <Name>Leak.Tasks</Name>
+    <ProjectReference Include="..\Leak.Client.Swarm\Leak.Client.Swarm.csproj">
+      <Project>{b0aaf646-b3c7-4b8a-933d-ba782b21092c}</Project>
+      <Name>Leak.Client.Swarm</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
