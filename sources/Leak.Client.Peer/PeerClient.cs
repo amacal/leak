@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Leak.Common;
 using Leak.Connector;
 using Leak.Events;
-using Leak.Extensions.Metadata;
-using Leak.Glue;
-using Leak.Metadata;
 using Leak.Negotiator;
 using Leak.Networking;
 
@@ -13,188 +11,68 @@ namespace Leak.Client.Peer
 {
     public class PeerClient : IDisposable
     {
-        private readonly PeerAddress address;
         private readonly FileHash hash;
-        private readonly PeerEntry entry;
-
         private readonly PeerRuntime runtime;
-        private readonly PeerCollection collection;
+        private readonly ConcurrentBag<PeerSession> all;
 
-        private readonly TaskCompletionSource<PeerConnect> completion;
-
-        public PeerClient(PeerAddress address, FileHash hash)
+        public PeerClient(FileHash hash)
         {
-            this.address = address;
             this.hash = hash;
 
-            completion = new TaskCompletionSource<PeerConnect>();
-            collection = new PeerCollection();
             runtime = new PeerFactory(null);
-            entry = new PeerEntry();
+            all = new ConcurrentBag<PeerSession>();
         }
 
-        public Task<PeerConnect> Connect()
+        public Task<PeerConnect> Connect(PeerAddress address)
         {
             runtime.Start(new NetworkPoolHooks
             {
                 OnConnectionTerminated = OnConnectionTerminated
             });
 
-            entry.Connector =
+            PeerSession session = new PeerSession
+            {
+                Hash = hash,
+                Address = address,
+                Localhost = PeerHash.Random(),
+                Notifications = new PeerCollection(),
+                Completion = new TaskCompletionSource<PeerConnect>()
+            };
+
+            session.Negotiator =
+                new HandshakeNegotiatorBuilder()
+                    .WithNetwork(runtime.Network)
+                    .Build(new HandshakeNegotiatorHooks
+                    {
+                        OnHandshakeCompleted = session.OnHandshakeCompleted,
+                        OnHandshakeRejected = session.OnHandshakeRejected
+                    });
+
+            session.Connector =
                 new PeerConnectorBuilder()
                     .WithNetwork(runtime.Network)
                     .WithPipeline(runtime.Pipeline)
                     .Build(new PeerConnectorHooks
                     {
-                        OnConnectionEstablished = OnConnectionEstablished,
-                        OnConnectionRejected = OnConnectionRejected
+                        OnConnectionEstablished = session.OnConnectionEstablished,
+                        OnConnectionRejected = session.OnConnectionRejected
                     });
 
-            entry.Connector.Start();
-            entry.Connector.ConnectTo(hash, address);
+            session.Connector.Start();
+            session.Connector.ConnectTo(hash, address);
 
-            return completion.Task;
-        }
-
-        public Task<PeerNotification> Next()
-        {
-            return collection.Next();
-        }
-
-        private void OnConnectionEstablished(ConnectionEstablished data)
-        {
-            entry.Negotiator =
-                new HandshakeNegotiatorBuilder()
-                    .WithNetwork(runtime.Network)
-                    .Build(new HandshakeNegotiatorHooks
-                    {
-                        OnHandshakeCompleted = OnHandshakeCompleted,
-                        OnHandshakeRejected = OnHandshakeRejected
-                    });
-
-            entry.Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(hash, PeerHash.Random(), HandshakeOptions.Extended));
-        }
-
-        private void OnConnectionRejected(ConnectionRejected data)
-        {
+            all.Add(session);
+            return session.Completion.Task;
         }
 
         private void OnConnectionTerminated(ConnectionTerminated data)
         {
-            PeerNotification notification = new PeerNotification
+            foreach (PeerSession session in all.ToArray())
             {
-                Type = PeerNotificationType.Disconnected
-            };
-
-            collection.Enqueue(notification);
-        }
-
-        private void OnHandshakeCompleted(HandshakeCompleted data)
-        {
-            MetadataHooks metadata = new MetadataHooks
-            {
-                OnMetadataMeasured = OnMetadataMeasured,
-                OnMetadataPieceReceived = OnMetadataPieceReceived
-            };
-
-            entry.Glue =
-                new GlueBuilder()
-                    .WithBlocks(null)
-                    .WithHash(hash)
-                    .WithPlugin(new MetadataPlugin(metadata))
-                    .Build(new GlueHooks
-                    {
-                        OnPeerConnected = OnPeerConnected,
-                        OnPeerChanged = OnPeerChanged,
-                        OnBlockReceived = OnBlockReceived,
-                        OnBlockRequested = OnBlockRequested
-                    });
-
-            entry.Glue.Connect(data.Connection, data.Handshake);
-        }
-
-        private void OnHandshakeRejected(HandshakeRejected data)
-        {
-        }
-
-        private void OnPeerConnected(PeerConnected data)
-        {
-            PeerConnect connect = new PeerConnect
-            {
-                Peer = data.Peer
-            };
-
-            entry.Peer = data.Peer;
-            completion.SetResult(connect);
-        }
-
-        private void OnPeerChanged(PeerChanged data)
-        {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.BitfieldChanged,
-                Bitfield = data.Bitfield,
-                State = data.State
-            };
-
-            collection.Enqueue(notification);
-        }
-
-        private void OnBlockReceived(BlockReceived data)
-        {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.BlockReceived,
-                Index = data.Block
-            };
-
-            collection.Enqueue(notification);
-        }
-
-        private void OnBlockRequested(BlockRequested data)
-        {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.BlockRequested,
-                Index = data.Block
-            };
-
-            collection.Enqueue(notification);
-        }
-
-        private void OnMetadataMeasured(MetadataMeasured data)
-        {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.MetadataMeasured,
-                Size = data.Size
-            };
-
-            if (entry.Metadata == null)
-            {
-                collection.Enqueue(notification);
-                entry.Glue.SendMetadataRequest(entry.Peer, 0);
-                entry.Metadata = new byte[data.Size];
-            }
-        }
-
-        private void OnMetadataPieceReceived(MetadataReceived data)
-        {
-            Array.Copy(data.Data, 0, entry.Metadata, data.Piece * 16384, data.Data.Length);
-
-            if (data.Piece * 16384 + data.Data.Length == entry.Metadata.Length)
-            {
-                PeerNotification notification = new PeerNotification
+                if (session.Glue?.Disconnect(data.Connection) == true)
                 {
-                    Type = PeerNotificationType.MetadataReceived,
-                    Metainfo = MetainfoFactory.FromBytes(entry.Metadata)
-                };
-
-                collection.Enqueue(notification);
-            }
-            else
-            {
-                entry.Glue.SendMetadataRequest(entry.Peer, data.Piece + 1);
+                    break;
+                }
             }
         }
 

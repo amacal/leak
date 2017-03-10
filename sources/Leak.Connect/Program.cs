@@ -21,11 +21,11 @@ namespace Leak.Connect
             if (options.IsValid())
             {
                 FileHash hash = FileHash.Parse(options.Hash);
-                PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
 
-                using (PeerClient client = new PeerClient(address, hash))
+                using (PeerClient client = new PeerClient(hash))
                 {
-                    PeerConnect connect = await client.Connect();
+                    PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
+                    PeerConnect connect = await client.Connect(address);
 
                     Console.WriteLine($"Hash: {hash} ");
                     Console.WriteLine($"Peer: {connect.Peer}");
@@ -33,7 +33,7 @@ namespace Leak.Connect
 
                     while (true)
                     {
-                        PeerNotification notification = await client.Next();
+                        PeerNotification notification = await connect.Next();
 
                         switch (notification.Type)
                         {

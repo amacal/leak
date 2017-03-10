@@ -39,35 +39,35 @@ namespace Leak.Loop
                 switch (message[4])
                 {
                     case 0:
-                        hooks.CallMessageReceived(peer, "choke", message);
+                        hooks.CallMessageReceived(peer, "choke", message.Restrict());
                         break;
 
                     case 1:
-                        hooks.CallMessageReceived(peer, "unchoke", message);
+                        hooks.CallMessageReceived(peer, "unchoke", message.Restrict());
                         break;
 
                     case 2:
-                        hooks.CallMessageReceived(peer, "interested", message);
+                        hooks.CallMessageReceived(peer, "interested", message.Restrict());
                         break;
 
                     case 4:
-                        hooks.CallMessageReceived(peer, "have", message);
+                        hooks.CallMessageReceived(peer, "have", message.Restrict());
                         break;
 
                     case 5:
-                        hooks.CallMessageReceived(peer, "bitfield", message);
+                        hooks.CallMessageReceived(peer, "bitfield", message.Restrict());
                         break;
 
                     case 6:
-                        hooks.CallMessageReceived(peer, "request", message);
+                        hooks.CallMessageReceived(peer, "request", message.Restrict());
                         break;
 
                     case 7:
-                        hooks.CallMessageReceived(peer, "piece", message);
+                        hooks.CallMessageReceived(peer, "piece", message.Restrict());
                         break;
 
                     case 20:
-                        hooks.CallMessageReceived(peer, "extended", message);
+                        hooks.CallMessageReceived(peer, "extended", message.Restrict());
                         break;
                 }
 

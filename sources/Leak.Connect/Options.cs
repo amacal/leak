@@ -5,6 +5,9 @@ namespace Leak.Connect
 {
     public class Options
     {
+        [Parameter, At(0)]
+        public string Command { get; set; }
+
         [Option("--host")]
         public string Host { get; set; }
 

@@ -36,7 +36,7 @@ namespace Leak.Glue
 
         public GlueService Build()
         {
-            return new GlueImplementation(parameters, dependencies, new GlueHooks(), configuration);
+            return Build(new GlueHooks());
         }
 
         public GlueService Build(GlueHooks hooks)

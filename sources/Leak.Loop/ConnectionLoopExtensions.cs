@@ -20,6 +20,11 @@ namespace Leak.Loop
             return incoming.ToBlock(factory, 5, incoming.GetSize() - 1);
         }
 
+        public static NetworkIncomingMessage Restrict(this NetworkIncomingMessage incoming)
+        {
+            return new ConnectionLoopMessage(incoming);
+        }
+
         public static void CallMessageReceived(this ConnectionLoopHooks hooks, PeerHash peer, string type, NetworkIncomingMessage payload)
         {
             hooks.OnMessageReceived?.Invoke(new MessageReceived
