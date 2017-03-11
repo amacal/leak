@@ -104,10 +104,15 @@ namespace Leak.Datamap.Tests
         [Test]
         public void ShouldTriggerBlockReserved()
         {
-            PeerChanged changed = new PeerChanged
+            PeerBitfieldChanged bitfieldChanged = new PeerBitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(false, true, false),
+            };
+
+            PeerStatusChanged statusChanged = new PeerStatusChanged()
+            {
+                Peer = bitfieldChanged.Peer,
                 State = new PeerState
                 {
                     IsLocalInterestedInRemote = true,
@@ -121,7 +126,7 @@ namespace Leak.Datamap.Tests
                 Trigger trigger = Trigger.Bind(ref session.Hooks.OnBlockReserved, data =>
                 {
                     data.Hash.Should().Be(session.Hash);
-                    data.Peer.Should().Be(changed.Peer);
+                    data.Peer.Should().Be(bitfieldChanged.Peer);
                     data.Block.Should().NotBeNull();
                     data.Block.Piece.Index.Should().Be(1);
                     data.Block.Offset.Should().Be(0);
@@ -132,8 +137,10 @@ namespace Leak.Datamap.Tests
                 session.Service.HandleMetadataDiscovered(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
-                session.Service.Handle(changed);
-                session.Service.Schedule(OmnibusStrategy.RarestFirst, changed.Peer, 1);
+                session.Service.Handle(bitfieldChanged);
+                session.Service.Handle(statusChanged);
+
+                session.Service.Schedule(OmnibusStrategy.RarestFirst, bitfieldChanged.Peer, 1);
                 session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();

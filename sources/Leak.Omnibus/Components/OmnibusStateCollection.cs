@@ -13,7 +13,7 @@ namespace Leak.Datamap.Components
             byPeer = new Dictionary<PeerHash, OmnibusStateEntry>();
         }
 
-        public void Handle(PeerChanged data)
+        public void Handle(PeerStatusChanged data)
         {
             OmnibusStateEntry entry;
 

@@ -13,61 +13,61 @@ namespace Leak.Client.Peer
     {
         private readonly FileHash hash;
         private readonly PeerRuntime runtime;
-        private readonly ConcurrentBag<PeerSession> all;
+        private readonly ConcurrentBag<PeerConnect> online;
 
         public PeerClient(FileHash hash)
         {
             this.hash = hash;
 
             runtime = new PeerFactory(null);
-            all = new ConcurrentBag<PeerSession>();
+            online = new ConcurrentBag<PeerConnect>();
         }
 
-        public Task<PeerConnect> Connect(PeerAddress address)
+        public Task<PeerSession> Connect(PeerAddress address)
         {
             runtime.Start(new NetworkPoolHooks
             {
                 OnConnectionTerminated = OnConnectionTerminated
             });
 
-            PeerSession session = new PeerSession
+            PeerConnect connect = new PeerConnect
             {
                 Hash = hash,
                 Address = address,
                 Localhost = PeerHash.Random(),
                 Notifications = new PeerCollection(),
-                Completion = new TaskCompletionSource<PeerConnect>()
+                Completion = new TaskCompletionSource<PeerSession>()
             };
 
-            session.Negotiator =
+            connect.Negotiator =
                 new HandshakeNegotiatorBuilder()
                     .WithNetwork(runtime.Network)
                     .Build(new HandshakeNegotiatorHooks
                     {
-                        OnHandshakeCompleted = session.OnHandshakeCompleted,
-                        OnHandshakeRejected = session.OnHandshakeRejected
+                        OnHandshakeCompleted = connect.OnHandshakeCompleted,
+                        OnHandshakeRejected = connect.OnHandshakeRejected
                     });
 
-            session.Connector =
+            connect.Connector =
                 new PeerConnectorBuilder()
                     .WithNetwork(runtime.Network)
                     .WithPipeline(runtime.Pipeline)
                     .Build(new PeerConnectorHooks
                     {
-                        OnConnectionEstablished = session.OnConnectionEstablished,
-                        OnConnectionRejected = session.OnConnectionRejected
+                        OnConnectionEstablished = connect.OnConnectionEstablished,
+                        OnConnectionRejected = connect.OnConnectionRejected
                     });
 
-            session.Connector.Start();
-            session.Connector.ConnectTo(hash, address);
+            online.Add(connect);
+            connect.Connector.Start();
+            connect.Connector.ConnectTo(hash, address);
 
-            all.Add(session);
-            return session.Completion.Task;
+            return connect.Completion.Task;
         }
 
         private void OnConnectionTerminated(ConnectionTerminated data)
         {
-            foreach (PeerSession session in all.ToArray())
+            foreach (PeerConnect session in online.ToArray())
             {
                 if (session.Glue?.Disconnect(data.Connection) == true)
                 {

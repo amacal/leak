@@ -25,15 +25,22 @@ namespace Leak.Connect
                 using (PeerClient client = new PeerClient(hash))
                 {
                     PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
-                    PeerConnect connect = await client.Connect(address);
+                    PeerSession session = await client.Connect(address);
 
                     Console.WriteLine($"Hash: {hash} ");
-                    Console.WriteLine($"Peer: {connect.Peer}");
+                    Console.WriteLine($"Peer: {session.Peer}");
                     Console.WriteLine();
+
+                    switch (options.Command)
+                    {
+                        case "download":
+                            session.Download(options.Destination);
+                            break;
+                    }
 
                     while (true)
                     {
-                        PeerNotification notification = await connect.Next();
+                        PeerNotification notification = await session.Next();
 
                         switch (notification.Type)
                         {
@@ -45,11 +52,17 @@ namespace Leak.Connect
                                 Console.WriteLine($"Bitfield: {notification.Bitfield.Completed}/{notification.Bitfield.Length} pieces completed");
                                 break;
 
+                            case PeerNotificationType.StatusChanged:
+                                Console.WriteLine($"Status: {notification.State}");
+                                break;
+
                             case PeerNotificationType.MetadataMeasured:
                                 Console.WriteLine($"Metadata: {notification.Size} bytes");
                                 break;
 
                             case PeerNotificationType.MetadataReceived:
+
+                                Console.WriteLine($"Metadata: {notification.Metainfo.Pieces.Length} pieces [{notification.Metainfo.Properties.PieceSize} bytes]");
 
                                 foreach (MetainfoEntry entry in notification.Metainfo.Entries)
                                 {

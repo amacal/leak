@@ -114,7 +114,7 @@ namespace Leak.Glue
             {
                 entry.Commy.SendChoke();
                 entry.State.IsLocalChokingRemote = true;
-                hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                hooks.CallPeerStatusChanged(entry.Peer, entry.State);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Leak.Glue
             {
                 entry.Commy.SendUnchoke();
                 entry.State.IsLocalChokingRemote = false;
-                hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                hooks.CallPeerStatusChanged(entry.Peer, entry.State);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Leak.Glue
             {
                 entry.Commy.SendInterested();
                 entry.State.IsLocalInterestedInRemote = true;
-                hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                hooks.CallPeerStatusChanged(entry.Peer, entry.State);
             }
         }
 
@@ -260,27 +260,27 @@ namespace Leak.Glue
                 {
                     case "choke":
                         entry.State.IsRemoteChokingLocal = true;
-                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerStatusChanged(entry.Peer, entry.State);
                         break;
 
                     case "unchoke":
                         entry.State.IsRemoteChokingLocal = false;
-                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerStatusChanged(entry.Peer, entry.State);
                         break;
 
                     case "interested":
                         entry.State.IsRemoteInterestedInLocal = true;
-                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerStatusChanged(entry.Peer, entry.State);
                         break;
 
                     case "have":
                         entry.Bitfield = facts.ApplyHave(entry.Bitfield, data.Payload.GetInt32(0));
-                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
                         break;
 
                     case "bitfield":
                         entry.Bitfield = facts.ApplyBitfield(entry.Bitfield, data.Payload.GetBitfield());
-                        hooks.CallPeerChanged(entry.Peer, entry.Bitfield, entry.State);
+                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
                         break;
 
                     case "request":

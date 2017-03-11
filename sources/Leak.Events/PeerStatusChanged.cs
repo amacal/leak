@@ -2,10 +2,9 @@
 
 namespace Leak.Events
 {
-    public class PeerChanged
+    public class PeerStatusChanged
     {
         public PeerHash Peer;
-        public Bitfield Bitfield;
         public PeerState State;
     }
 }

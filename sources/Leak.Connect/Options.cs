@@ -20,6 +20,9 @@ namespace Leak.Connect
         [Option("--analyze"), Presence]
         public bool Analyze { get; set; }
 
+        [Option("--destination")]
+        public string Destination { get; set; }
+
         public bool IsValid()
         {
             int port;

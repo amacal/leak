@@ -68,13 +68,21 @@ namespace Leak.Glue
             });
         }
 
-        public static void CallPeerChanged(this GlueHooks hooks, PeerHash peer, Bitfield bitfield, PeerState state)
+        public static void CallPeerBitfieldChanged(this GlueHooks hooks, PeerHash peer, Bitfield bitfield)
         {
-            hooks.OnPeerChanged?.Invoke(new PeerChanged
+            hooks.OnPeerBitfieldChanged?.Invoke(new PeerBitfieldChanged
             {
                 Peer = peer,
                 Bitfield = bitfield,
-                State = state
+            });
+        }
+
+        public static void CallPeerStatusChanged(this GlueHooks hooks, PeerHash peer, PeerState state)
+        {
+            hooks.OnPeerStatusChanged?.Invoke(new PeerStatusChanged
+            {
+                Peer = peer,
+                State = state,
             });
         }
 

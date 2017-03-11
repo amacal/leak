@@ -69,9 +69,10 @@
     <Compile Include="MetafileRejected.cs" />
     <Compile Include="MetafileVerified.cs" />
     <Compile Include="MetafileWritten.cs" />
-    <Compile Include="PeerChanged.cs" />
+    <Compile Include="PeerBitfieldChanged.cs" />
     <Compile Include="PeerConnected.cs" />
     <Compile Include="PeerDisconnected.cs" />
+    <Compile Include="PeerStatusChanged.cs" />
     <Compile Include="PieceAccepted.cs" />
     <Compile Include="PieceCompleted.cs" />
     <Compile Include="PieceReady.cs" />

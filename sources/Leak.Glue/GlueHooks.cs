@@ -8,7 +8,9 @@ namespace Leak.Glue
         public Action<PeerConnected> OnPeerConnected;
         public Action<PeerDisconnected> OnPeerDisconnected;
 
-        public Action<PeerChanged> OnPeerChanged;
+        public Action<PeerBitfieldChanged> OnPeerBitfieldChanged;
+        public Action<PeerStatusChanged> OnPeerStatusChanged;
+
         public Action<BlockReceived> OnBlockReceived;
         public Action<BlockRequested> OnBlockRequested;
 

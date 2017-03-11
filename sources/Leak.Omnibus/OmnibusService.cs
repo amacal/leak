@@ -67,15 +67,19 @@ namespace Leak.Datamap
             return context.States.Find(ranking, count);
         }
 
-        public void Handle(PeerChanged data)
+        public void Handle(PeerBitfieldChanged data)
         {
             context.Queue.Add(() =>
             {
-                if (data.State != null)
-                    context.States?.Handle(data);
+                context.Bitfields?.Add(data.Peer, data.Bitfield);
+            });
+        }
 
-                if (data.Bitfield != null)
-                    context.Bitfields?.Add(data.Peer, data.Bitfield);
+        public void Handle(PeerStatusChanged data)
+        {
+            context.Queue.Add(() =>
+            {
+                context.States?.Handle(data);
             });
         }
 

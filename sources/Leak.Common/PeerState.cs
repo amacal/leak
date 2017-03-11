@@ -1,4 +1,6 @@
-﻿namespace Leak.Common
+﻿using System.Text;
+
+namespace Leak.Common
 {
     public class PeerState
     {
@@ -22,5 +24,24 @@
 
         public bool IsRemoteInterestedInLocal;
         public bool IsRemoteChokingLocal;
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            if (IsLocalInterestedInRemote)
+                builder.Append(" local-interested");
+
+            if (IsLocalChokingRemote)
+                builder.Append(" local-choking");
+
+            if (IsRemoteInterestedInLocal)
+                builder.Append(" remote-interested");
+
+            if (IsRemoteChokingLocal)
+                builder.Append(" remoted-choking");
+
+            return builder.ToString().TrimStart();
+        }
     }
 }

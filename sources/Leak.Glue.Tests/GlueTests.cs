@@ -30,12 +30,12 @@ namespace Leak.Glue.Tests
         }
 
         [Test]
-        public async Task ShouldTriggerPeerChangedWhenUnchoke()
+        public async Task ShouldTriggerPeerStatusChangedWhenUnchoke()
         {
             using (GlueFixture fixture = new GlueFixture())
             using (GlueSession session = await fixture.Start())
             {
-                Trigger left = Trigger.Bind(ref session.Left.Hooks.OnPeerChanged, data =>
+                Trigger left = Trigger.Bind(ref session.Left.Hooks.OnPeerStatusChanged, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.State.IsLocalChokingRemote.Should().BeTrue();
@@ -44,7 +44,7 @@ namespace Leak.Glue.Tests
                     data.State.IsRemoteInterestedInLocal.Should().BeFalse();
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Hooks.OnPeerChanged, data =>
+                Trigger right = Trigger.Bind(ref session.Right.Hooks.OnPeerStatusChanged, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
                     data.State.IsLocalChokingRemote.Should().BeFalse();
@@ -67,12 +67,12 @@ namespace Leak.Glue.Tests
         }
 
         [Test]
-        public async Task ShouldTriggerPeerChangedWhenInterested()
+        public async Task ShouldTriggerPeerStatusChangedWhenInterested()
         {
             using (GlueFixture fixture = new GlueFixture())
             using (GlueSession session = await fixture.Start())
             {
-                Trigger left = Trigger.Bind(ref session.Left.Hooks.OnPeerChanged, data =>
+                Trigger left = Trigger.Bind(ref session.Left.Hooks.OnPeerStatusChanged, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.State.IsLocalChokingRemote.Should().BeTrue();
@@ -81,7 +81,7 @@ namespace Leak.Glue.Tests
                     data.State.IsRemoteInterestedInLocal.Should().BeTrue();
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Hooks.OnPeerChanged, data =>
+                Trigger right = Trigger.Bind(ref session.Right.Hooks.OnPeerStatusChanged, data =>
                 {
                     data.Peer.Should().Be(session.Left.Peer);
                     data.State.IsLocalChokingRemote.Should().BeTrue();
@@ -111,7 +111,7 @@ namespace Leak.Glue.Tests
             using (GlueFixture fixture = new GlueFixture())
             using (GlueSession session = await fixture.Start())
             {
-                Trigger handler = Trigger.Bind(ref session.Left.Hooks.OnPeerChanged, data =>
+                Trigger handler = Trigger.Bind(ref session.Left.Hooks.OnPeerBitfieldChanged, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.Bitfield.Should().Be(bitfield);
@@ -135,7 +135,7 @@ namespace Leak.Glue.Tests
             using (GlueFixture fixture = new GlueFixture())
             using (GlueSession session = await fixture.Start())
             {
-                Trigger handler = Trigger.Bind(ref session.Left.Hooks.OnPeerChanged, data =>
+                Trigger handler = Trigger.Bind(ref session.Left.Hooks.OnPeerBitfieldChanged, data =>
                 {
                     data.Peer.Should().Be(session.Right.Peer);
                     data.Bitfield.Should().NotBeNull();
