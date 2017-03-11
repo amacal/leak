@@ -7,6 +7,6 @@ namespace Leak.Metafile
     {
         public FileFactory Files;
 
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
     }
 }

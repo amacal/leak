@@ -36,7 +36,9 @@ namespace Leak.Client.Peer
                 Address = address,
                 Localhost = PeerHash.Random(),
                 Notifications = new PeerCollection(),
-                Completion = new TaskCompletionSource<PeerSession>()
+                Completion = new TaskCompletionSource<PeerSession>(),
+                Pipeline = runtime.Pipeline,
+                Files = runtime.Files
             };
 
             connect.Negotiator =

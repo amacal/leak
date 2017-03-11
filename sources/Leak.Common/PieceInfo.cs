@@ -25,5 +25,10 @@
 
             return other != null && other.index == index;
         }
+
+        public override string ToString()
+        {
+            return index.ToString();
+        }
     }
 }

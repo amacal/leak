@@ -33,7 +33,7 @@ namespace Leak.Metafile
             return this;
         }
 
-        public MetafileBuilder WithPipeline(LeakPipeline pipeline)
+        public MetafileBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;

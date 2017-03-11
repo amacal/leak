@@ -7,14 +7,12 @@ namespace Leak.Metaget
     {
         private readonly MetagetParameters parameters;
         private readonly MetagetDependencies dependencies;
-        private readonly MetagetHooks hooks;
         private readonly MetagetConfiguration configuration;
 
         public MetagetBuilder()
         {
             parameters = new MetagetParameters();
             dependencies = new MetagetDependencies();
-            hooks = new MetagetHooks();
             configuration = new MetagetConfiguration();
         }
 
@@ -43,6 +41,11 @@ namespace Leak.Metaget
         }
 
         public MetagetService Build()
+        {
+            return Build(new MetagetHooks());
+        }
+
+        public MetagetService Build(MetagetHooks hooks)
         {
             return new MetagetService(parameters, dependencies, hooks, configuration);
         }

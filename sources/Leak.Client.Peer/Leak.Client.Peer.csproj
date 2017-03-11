@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="PeerClient.cs" />
     <Compile Include="PeerCollection.cs" />
+    <Compile Include="PeerExtensions.cs" />
     <Compile Include="PeerSession.cs" />
     <Compile Include="PeerNotification.cs" />
     <Compile Include="PeerNotificationType.cs" />
@@ -69,6 +70,10 @@
       <Project>{3348C6C0-81B0-4FB3-BA1D-6826968F028E}</Project>
       <Name>Leak.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
+      <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
+      <Name>Leak.Files</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Glue</Name>
@@ -76,6 +81,14 @@
     <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
       <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
       <Name>Leak.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
+      <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>
+      <Name>Leak.Metafile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metaget\Leak.Metaget.csproj">
+      <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
+      <Name>Leak.Metaget</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</Project>

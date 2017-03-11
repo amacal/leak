@@ -7,7 +7,8 @@
         StatusChanged,
         BlockRequested,
         BlockReceived,
-        MetadataMeasured,
-        MetadataReceived
+        MetafileMeasured,
+        MetafileReceived,
+        MetafileCompleted
     }
 }

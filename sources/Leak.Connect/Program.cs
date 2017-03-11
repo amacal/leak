@@ -27,7 +27,7 @@ namespace Leak.Connect
                     PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
                     PeerSession session = await client.Connect(address);
 
-                    Console.WriteLine($"Hash: {hash} ");
+                    Console.WriteLine($"Hash: {hash}");
                     Console.WriteLine($"Peer: {session.Peer}");
                     Console.WriteLine();
 
@@ -56,11 +56,15 @@ namespace Leak.Connect
                                 Console.WriteLine($"Status: {notification.State}");
                                 break;
 
-                            case PeerNotificationType.MetadataMeasured:
+                            case PeerNotificationType.MetafileMeasured:
                                 Console.WriteLine($"Metadata: {notification.Size} bytes");
                                 break;
 
-                            case PeerNotificationType.MetadataReceived:
+                            case PeerNotificationType.MetafileReceived:
+                                Console.WriteLine($"Metadata: piece {notification.Piece} received");
+                                break;
+
+                            case PeerNotificationType.MetafileCompleted:
 
                                 Console.WriteLine($"Metadata: {notification.Metainfo.Pieces.Length} pieces [{notification.Metainfo.Properties.PieceSize} bytes]");
 

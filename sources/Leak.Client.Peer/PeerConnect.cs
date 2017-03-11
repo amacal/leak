@@ -1,17 +1,23 @@
-﻿using System;
-using System.Threading.Tasks;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Connector;
 using Leak.Events;
 using Leak.Extensions.Metadata;
+using Leak.Files;
 using Leak.Glue;
-using Leak.Metadata;
+using Leak.Metafile;
+using Leak.Metaget;
 using Leak.Negotiator;
+using Leak.Tasks;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Leak.Client.Peer
 {
     public class PeerConnect
     {
+        public PipelineService Pipeline { get; set; }
+        public FileFactory Files { get; set; }
+
         public FileHash Hash { get; set; }
         public PeerHash Peer { get; set; }
         public PeerHash Localhost { get; set; }
@@ -24,7 +30,50 @@ namespace Leak.Client.Peer
         public HandshakeNegotiator Negotiator { get; set; }
         public GlueService Glue { get; set; }
 
-        public byte[] Metadata { get; set; }
+        public MetafileService MetaStore { get; set; }
+        public MetagetService MetaGet { get; set; }
+
+        public void Download(string destination)
+        {
+            StartMetaStore(destination);
+            StartMetaGet();
+        }
+
+        private void StartMetaStore(string destination)
+        {
+            MetafileHooks hooks = new MetafileHooks
+            {
+                OnMetafileVerified = OnMetafileVerified
+            };
+
+            MetaStore =
+                new MetafileBuilder()
+                    .WithHash(Hash)
+                    .WithPipeline(Pipeline)
+                    .WithFiles(Files)
+                    .WithDestination(Path.Combine(destination, $"{Hash}.metainfo"))
+                    .Build(hooks);
+
+            MetaStore.Start();
+        }
+
+        private void StartMetaGet()
+        {
+            MetagetHooks hooks = new MetagetHooks
+            {
+                OnMetafileMeasured = OnMetafileMeasured
+            };
+
+            MetaGet =
+                new MetagetBuilder()
+                    .WithHash(Hash)
+                    .WithGlue(Glue.AsMetaGet())
+                    .WithPipeline(Pipeline)
+                    .WithMetafile(MetaStore.AsMetaGet())
+                    .Build(hooks);
+
+            MetaGet.Start();
+        }
 
         public void OnConnectionEstablished(ConnectionEstablished data)
         {
@@ -108,7 +157,7 @@ namespace Leak.Client.Peer
             PeerNotification notification = new PeerNotification
             {
                 Type = PeerNotificationType.BlockReceived,
-                Index = data.Block
+                Block = data.Block
             };
 
             Notifications.Enqueue(notification);
@@ -119,7 +168,7 @@ namespace Leak.Client.Peer
             PeerNotification notification = new PeerNotification
             {
                 Type = PeerNotificationType.BlockRequested,
-                Index = data.Block
+                Block = data.Block
             };
 
             Notifications.Enqueue(notification);
@@ -127,38 +176,41 @@ namespace Leak.Client.Peer
 
         private void OnMetadataMeasured(MetadataMeasured data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.MetadataMeasured,
-                Size = data.Size
-            };
-
-            if (Metadata == null)
-            {
-                Notifications.Enqueue(notification);
-                Glue.SendMetadataRequest(Peer, 0);
-                Metadata = new byte[data.Size];
-            }
+            MetaGet?.Handle(data);
         }
 
         private void OnMetadataPieceReceived(MetadataReceived data)
         {
-            Array.Copy(data.Data, 0, Metadata, data.Piece * 16384, data.Data.Length);
-
-            if (data.Piece * 16384 + data.Data.Length == Metadata.Length)
+            PeerNotification notification = new PeerNotification
             {
-                PeerNotification notification = new PeerNotification
-                {
-                    Type = PeerNotificationType.MetadataReceived,
-                    Metainfo = MetainfoFactory.FromBytes(Metadata)
-                };
+                Type = PeerNotificationType.MetafileReceived,
+                Piece = new PieceInfo(data.Piece)
+            };
 
-                Notifications.Enqueue(notification);
-            }
-            else
+            Notifications.Enqueue(notification);
+            MetaGet?.Handle(data);
+        }
+
+        private void OnMetafileVerified(MetafileVerified data)
+        {
+            PeerNotification notification = new PeerNotification
             {
-                Glue.SendMetadataRequest(Peer, data.Piece + 1);
-            }
+                Type = PeerNotificationType.MetafileCompleted,
+                Metainfo = data.Metainfo
+            };
+
+            Notifications.Enqueue(notification);
+        }
+
+        private void OnMetafileMeasured(MetafileMeasured data)
+        {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.MetafileMeasured,
+                Size = data.Size
+            };
+
+            Notifications.Enqueue(notification);
         }
     }
 }

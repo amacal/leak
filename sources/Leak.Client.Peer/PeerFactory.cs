@@ -1,4 +1,5 @@
 ﻿using Leak.Completion;
+using Leak.Files;
 using Leak.Networking;
 using Leak.Tasks;
 
@@ -11,6 +12,7 @@ namespace Leak.Client.Peer
         private LeakPipeline pipeline;
         private NetworkPool network;
         private CompletionThread worker;
+        private FileFactory files;
 
         public PeerFactory(PeerLogger logger)
         {
@@ -25,6 +27,11 @@ namespace Leak.Client.Peer
         public NetworkPool Network
         {
             get { return network; }
+        }
+
+        public FileFactory Files
+        {
+            get { return files; }
         }
 
         public void Start(NetworkPoolHooks hooks)
@@ -62,6 +69,12 @@ namespace Leak.Client.Peer
 
                     logger?.Info("starting network pool");
                     network.Start();
+                }
+
+                if (files == null)
+                {
+                    logger?.Info("creating file factory");
+                    files = new FileFactory(worker);
                 }
             }
         }

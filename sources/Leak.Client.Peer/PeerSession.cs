@@ -5,25 +5,26 @@ namespace Leak.Client.Peer
 {
     public class PeerSession
     {
-        private readonly PeerConnect session;
+        private readonly PeerConnect inner;
 
-        public PeerSession(PeerConnect session)
+        public PeerSession(PeerConnect inner)
         {
-            this.session = session;
+            this.inner = inner;
         }
 
         public PeerHash Peer
         {
-            get { return session.Peer; }
+            get { return inner.Peer; }
         }
 
         public void Download(string destination)
         {
+            inner.Download(destination);
         }
 
         public Task<PeerNotification> Next()
         {
-            return session.Notifications.Next();
+            return inner.Notifications.Next();
         }
     }
 }

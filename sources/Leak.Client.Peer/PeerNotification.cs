@@ -7,13 +7,12 @@ namespace Leak.Client.Peer
         public PeerNotificationType Type { get; set; }
 
         public Bitfield Bitfield { get; set; }
-
         public PeerState State { get; set; }
 
-        public BlockIndex Index { get; set; }
+        public PieceInfo Piece { get; set; }
+        public BlockIndex Block { get; set; }
 
         public Metainfo Metainfo { get; set; }
-
         public int? Size { get; set; }
     }
 }

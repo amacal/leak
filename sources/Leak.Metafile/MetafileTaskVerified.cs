@@ -33,6 +33,12 @@ namespace Leak.Metafile
 
         public void Execute(MetafileContext context)
         {
+            if (context.IsCompleted)
+            {
+                algorithm.Dispose();
+                return;
+            }
+
             if (read.Count > 0)
             {
                 data.Add(read.Buffer.ToBytes(read.Count));
@@ -66,11 +72,13 @@ namespace Leak.Metafile
                     context.TotalSize = size;
 
                     context.Hooks.CallMetafileVerified(context.Parameters.Hash, MetainfoFactory.FromBytes(bytes), size);
+                    algorithm.Dispose();
                 }
                 else
                 {
                     context.IsCompleted = false;
                     context.Hooks.CallMetafileRejected(context.Parameters.Hash);
+                    algorithm.Dispose();
                 }
             }
         }

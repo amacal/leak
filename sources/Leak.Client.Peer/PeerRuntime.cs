@@ -1,4 +1,5 @@
-﻿using Leak.Networking;
+﻿using Leak.Files;
+using Leak.Networking;
 using Leak.Tasks;
 
 namespace Leak.Client.Peer
@@ -8,6 +9,8 @@ namespace Leak.Client.Peer
         PipelineService Pipeline { get; }
 
         NetworkPool Network { get; }
+
+        FileFactory Files { get; }
 
         void Start(NetworkPoolHooks hooks);
 
