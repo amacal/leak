@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Extensions;
+using Leak.Tasks;
 
 namespace Leak.Glue
 {
@@ -25,6 +26,12 @@ namespace Leak.Glue
         public GlueBuilder WithBlocks(DataBlockFactory blocks)
         {
             dependencies.Blocks = blocks;
+            return this;
+        }
+
+        public GlueBuilder WithPipeline(PipelineService pipeline)
+        {
+            dependencies.Pipeline = pipeline;
             return this;
         }
 

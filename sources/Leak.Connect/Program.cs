@@ -60,8 +60,12 @@ namespace Leak.Connect
                                 Console.WriteLine($"Metadata: {notification.Size} bytes");
                                 break;
 
+                            case PeerNotificationType.MetafileRequested:
+                                Console.WriteLine($"Metadata: requested piece {notification.Piece}");
+                                break;
+
                             case PeerNotificationType.MetafileReceived:
-                                Console.WriteLine($"Metadata: piece {notification.Piece} received");
+                                Console.WriteLine($"Metadata: received piece {notification.Piece}");
                                 break;
 
                             case PeerNotificationType.MetafileCompleted:

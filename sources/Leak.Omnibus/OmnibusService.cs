@@ -67,6 +67,15 @@ namespace Leak.Data.Map
             return context.States.Find(ranking, count);
         }
 
+        public void Handle(PeerConnected data)
+        {
+            context.Queue.Add(() =>
+            {
+                context.States.Handle(data);
+                context.Ranking = null;
+            });
+        }
+
         public void Handle(PeerBitfieldChanged data)
         {
             context.Queue.Add(() =>

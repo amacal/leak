@@ -34,7 +34,7 @@ namespace Leak.Networking
             this.socket = socket;
             this.identifier = identifier;
 
-            data = new byte[40000];
+            data = new byte[262144];
             decryptor = NetworkDecryptor.Nothing;
         }
 

@@ -8,13 +8,15 @@ namespace Leak.Glue
     {
         FileHash Hash { get; }
 
+        GlueHooks Hooks { get; }
+
         GlueParameters Parameters { get; }
 
         GlueDependencies Dependencies { get; }
 
-        GlueHooks Hooks { get; }
-
         GlueConfiguration Configuration { get; }
+
+        void Start();
 
         bool Connect(NetworkConnection connection, Handshake handshake);
 

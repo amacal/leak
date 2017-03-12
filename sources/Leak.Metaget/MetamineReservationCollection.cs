@@ -35,6 +35,16 @@ namespace Leak.Meta.Get
             return book.Peer.Equals(peer);
         }
 
+        public bool Contains(PeerHash peer)
+        {
+            HashSet<MetamineReservation> items;
+
+            if (byPeer.TryGetValue(peer, out items) == false)
+                return false;
+
+            return items.Count > 0;
+        }
+
         public PeerHash Add(PeerHash peer, MetamineBlock request)
         {
             PeerHash previous = null;

@@ -18,6 +18,7 @@ namespace Leak.Meta.Get
                 if (IsReservable(context, block, now))
                 {
                     yield return block;
+                    yield break;
                 }
             }
         }
@@ -25,7 +26,8 @@ namespace Leak.Meta.Get
         private bool IsReservable(MetamineStrategyContext context, MetamineBlock block, DateTime now)
         {
             return IsCompleted(context, block) == false &&
-                   IsReserved(context, block, now) == false;
+                   IsReserved(context, block, now) == false &&
+                   HasReservation(context) == false;
         }
 
         private bool IsCompleted(MetamineStrategyContext context, MetamineBlock block)
@@ -37,6 +39,11 @@ namespace Leak.Meta.Get
         {
             return context.Reservations.Contains(block, now) ||
                    context.Reservations.Contains(block, context.Peer);
+        }
+
+        private bool HasReservation(MetamineStrategyContext context)
+        {
+            return context.Reservations.Contains(context.Peer);
         }
     }
 }

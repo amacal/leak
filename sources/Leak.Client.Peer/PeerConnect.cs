@@ -1,18 +1,18 @@
 ﻿using Leak.Common;
 using Leak.Connector;
+using Leak.Data.Get;
+using Leak.Data.Map;
+using Leak.Data.Store;
 using Leak.Events;
 using Leak.Extensions.Metadata;
 using Leak.Files;
 using Leak.Glue;
+using Leak.Meta.Get;
+using Leak.Meta.Store;
 using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
-using Leak.Data.Get;
-using Leak.Data.Map;
-using Leak.Data.Store;
-using Leak.Meta.Get;
-using Leak.Meta.Store;
 
 namespace Leak.Client.Peer
 {
@@ -42,12 +42,16 @@ namespace Leak.Client.Peer
         public RetrieverService DataGet { get; set; }
         public OmnibusService DataMap { get; set; }
 
+        public void Start()
+        {
+            StartDataMap();
+        }
+
         public void Download(string destination)
         {
             StartMetaStore(destination);
             StartMetaGet();
             StartDataStore(destination);
-            StartDataMap();
             StartDataGet();
         }
 
@@ -140,6 +144,7 @@ namespace Leak.Client.Peer
             DataGet =
                 new RetrieverBuilder()
                     .WithHash(Hash)
+                    .WithStrategy("sequential")
                     .WithGlue(Glue.AsDataGet())
                     .WithPipeline(Pipeline)
                     .WithRepository(DataStore.AsDataGet())
@@ -163,13 +168,15 @@ namespace Leak.Client.Peer
             MetadataHooks metadata = new MetadataHooks
             {
                 OnMetadataMeasured = OnMetadataMeasured,
-                OnMetadataPieceReceived = OnMetadataPieceReceived
+                OnMetadataPieceReceived = OnMetadataPieceReceived,
+                OnMetadataRequestSent = OnMetadataRequestSent
             };
 
             Glue =
                 new GlueBuilder()
                     .WithHash(Hash)
                     .WithBlocks(Blocks)
+                    .WithPipeline(Pipeline)
                     .WithPlugin(new MetadataPlugin(metadata))
                     .Build(new GlueHooks
                     {
@@ -181,6 +188,7 @@ namespace Leak.Client.Peer
                         OnBlockRequested = OnBlockRequestReceived
                     });
 
+            Glue.Start();
             Glue.Connect(data.Connection, data.Handshake);
         }
 
@@ -192,6 +200,8 @@ namespace Leak.Client.Peer
         {
             Peer = data.Peer;
             Completion.SetResult(new PeerSession(this));
+
+            DataMap?.Handle(data);
         }
 
         private void OnPeerDisconnected(PeerDisconnected data)
@@ -258,6 +268,17 @@ namespace Leak.Client.Peer
             MetaGet?.Handle(data);
         }
 
+        private void OnMetadataRequestSent(MetadataRequested data)
+        {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.MetafileRequested,
+                Piece = new PieceInfo(data.Piece)
+            };
+
+            Notifications.Enqueue(notification);
+        }
+
         private void OnMetafileVerified(MetafileVerified data)
         {
             PeerNotification notification = new PeerNotification
@@ -269,6 +290,7 @@ namespace Leak.Client.Peer
             Metainfo = data.Metainfo;
             Notifications.Enqueue(notification);
 
+            Glue?.Handle(data);
             DataStore?.Handle(data);
             DataMap?.Handle(data);
         }
@@ -297,6 +319,13 @@ namespace Leak.Client.Peer
 
         private void OnDataVerified(DataVerified data)
         {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.DataVerified,
+                Bitfield = data.Bitfield
+            };
+
+            Notifications.Enqueue(notification);
             DataMap?.Handle(data);
         }
 

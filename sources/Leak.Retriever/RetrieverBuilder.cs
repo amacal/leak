@@ -46,6 +46,12 @@ namespace Leak.Data.Get
             return this;
         }
 
+        public RetrieverBuilder WithStrategy(string strategy)
+        {
+            configuration.Strategy = strategy;
+            return this;
+        }
+
         public RetrieverService Build()
         {
             return Build(new RetrieverHooks());

@@ -61,7 +61,9 @@ namespace Leak.Client.Peer
                         OnConnectionRejected = connect.OnConnectionRejected
                     });
 
+            connect.Start();
             online.Add(connect);
+
             connect.Connector.Start();
             connect.Connector.ConnectTo(hash, address);
 

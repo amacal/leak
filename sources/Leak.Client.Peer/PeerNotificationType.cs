@@ -7,6 +7,7 @@
         PeerStatusChanged,
         MetafileMeasured,
         MetafileReceived,
+        MetafileRequested,
         MetafileCompleted,
         DataAllocated,
         DataVerified,

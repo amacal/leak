@@ -56,6 +56,19 @@ namespace Leak.Glue
             get { return configuration; }
         }
 
+        public void Start()
+        {
+            dependencies.Pipeline.Register(TimeSpan.FromSeconds(15), OnTick);
+        }
+
+        private void OnTick()
+        {
+            foreach (GlueEntry entry in collection.All())
+            {
+                entry.Commy.SendKeepAlive();
+            }
+        }
+
         public bool Connect(NetworkConnection connection, Handshake handshake)
         {
             GlueEntry entry = collection.Add(connection, handshake);
