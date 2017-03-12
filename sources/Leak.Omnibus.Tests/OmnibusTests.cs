@@ -21,7 +21,7 @@ namespace Leak.Datamap.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(1);
@@ -43,7 +43,7 @@ namespace Leak.Datamap.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(0);
@@ -67,7 +67,7 @@ namespace Leak.Datamap.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(new BlockIndex(1, 0, 16384));
@@ -90,7 +90,7 @@ namespace Leak.Datamap.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(new BlockIndex(1, 0, 16384));
@@ -134,7 +134,7 @@ namespace Leak.Datamap.Tests
                 });
 
                 session.Service.Start();
-                session.Service.HandleMetadataDiscovered(session.Metainfo);
+                session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Handle(bitfieldChanged);

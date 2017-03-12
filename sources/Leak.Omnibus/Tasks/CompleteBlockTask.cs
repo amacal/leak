@@ -1,4 +1,5 @@
 ﻿using Leak.Common;
+using Leak.Datamap.Components;
 using Leak.Tasks;
 
 namespace Leak.Datamap.Tasks
@@ -26,6 +27,21 @@ namespace Leak.Datamap.Tasks
             if (peer != null && left == context.Configuration.SchedulerThreshold)
             {
                 //context.Callback.OnScheduleRequested(context.Metainfo.Hash, peer);
+            }
+
+            if (peer != null)
+            {
+                UpdateRanking(context, peer, 2);
+            }
+        }
+
+        private void UpdateRanking(OmnibusContext context, PeerHash peer, int count)
+        {
+            OmnibusStateEntry entry = context.States.ByPeer(peer);
+
+            if (entry != null)
+            {
+                entry.Ranking += count;
             }
         }
     }

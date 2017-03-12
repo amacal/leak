@@ -29,7 +29,7 @@ namespace Leak.Datastore
             else
             {
                 onCompleted.Invoke(this);
-                //context.Callback.OnVerified(context.Metainfo.Hash, bitfield);
+                context.Hooks.CallDataVerified(context.Metainfo.Hash, bitfield);
             }
         }
 

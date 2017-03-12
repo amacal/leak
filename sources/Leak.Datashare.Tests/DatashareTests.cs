@@ -14,7 +14,7 @@ namespace Leak.Datashare.Tests
             using (DatashareFixture fixture = new DatashareFixture())
             using (DatashareSession session = fixture.Start())
             {
-                MetadataDiscovered discovered = new MetadataDiscovered
+                MetafileVerified verified = new MetafileVerified
                 {
                     Hash = session.Repository.Hash,
                     Metainfo = session.Metainfo
@@ -35,7 +35,7 @@ namespace Leak.Datashare.Tests
                 });
 
                 session.Repository.Start();
-                session.Repository.Handle(discovered);
+                session.Repository.Handle(verified);
 
                 session.Datashare.Start();
                 session.Datashare.Handle(requested);
@@ -50,7 +50,7 @@ namespace Leak.Datashare.Tests
             using (DatashareFixture fixture = new DatashareFixture())
             using (DatashareSession session = fixture.Start())
             {
-                MetadataDiscovered discovered = new MetadataDiscovered
+                MetafileVerified verified = new MetafileVerified
                 {
                     Hash = session.Repository.Hash,
                     Metainfo = session.Metainfo
@@ -79,7 +79,7 @@ namespace Leak.Datashare.Tests
                 });
 
                 session.Repository.Start();
-                session.Repository.Handle(discovered);
+                session.Repository.Handle(verified);
 
                 session.Datashare.Start();
                 session.Datashare.Handle(requested);

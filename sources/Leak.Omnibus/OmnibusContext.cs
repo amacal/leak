@@ -11,13 +11,15 @@ namespace Leak.Datamap
         private readonly OmnibusHooks hooks;
         private readonly OmnibusConfiguration configuration;
         private readonly OmnibusReservationCollection reservations;
+
         private readonly OmnibusStateCollection states;
+        private readonly OmnibusBitfieldCollection bitfields;
 
         private readonly LeakQueue<OmnibusContext> queue;
 
         private OmnibusCache cache;
         private OmnibusPieceCollection pieces;
-        private OmnibusBitfieldCollection bitfields;
+        private OmnibusBitfieldRanking ranking;
 
         private Metainfo metainfo;
         private Bitfield bitfield;
@@ -32,6 +34,7 @@ namespace Leak.Datamap
             reservations = new OmnibusReservationCollection(configuration.LeaseDuration);
             queue = new LeakQueue<OmnibusContext>(this);
             states = new OmnibusStateCollection();
+            bitfields = new OmnibusBitfieldCollection();
         }
 
         public OmnibusHooks Hooks
@@ -57,7 +60,6 @@ namespace Leak.Datamap
         public OmnibusBitfieldCollection Bitfields
         {
             get { return bitfields; }
-            set { bitfields = value; }
         }
 
         public OmnibusPieceCollection Pieces
@@ -97,6 +99,15 @@ namespace Leak.Datamap
         public OmnibusStateCollection States
         {
             get { return states; }
+        }
+
+        public OmnibusBitfieldRanking Ranking
+        {
+            get
+            {
+                return ranking ?? (ranking = new OmnibusBitfieldRanking(cache, bitfields.ToArray()));
+            }
+            set { ranking = value; }
         }
     }
 }

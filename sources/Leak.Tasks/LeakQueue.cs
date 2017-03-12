@@ -49,9 +49,10 @@ namespace Leak.Tasks
 
             if (completed == false)
             {
+                onReady.Reset();
+
                 while (items.TryDequeue(out task))
                 {
-                    onReady.Reset();
                     task.Execute(context);
                 }
             }

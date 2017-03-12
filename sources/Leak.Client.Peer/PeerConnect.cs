@@ -10,6 +10,9 @@ using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
+using Leak.Dataget;
+using Leak.Datamap;
+using Leak.Datastore;
 
 namespace Leak.Client.Peer
 {
@@ -17,11 +20,13 @@ namespace Leak.Client.Peer
     {
         public PipelineService Pipeline { get; set; }
         public FileFactory Files { get; set; }
+        public DataBlockFactory Blocks { get; set; }
 
         public FileHash Hash { get; set; }
         public PeerHash Peer { get; set; }
         public PeerHash Localhost { get; set; }
         public PeerAddress Address { get; set; }
+        public Metainfo Metainfo { get; set; }
 
         public PeerCollection Notifications { get; set; }
         public TaskCompletionSource<PeerSession> Completion { get; set; }
@@ -33,10 +38,17 @@ namespace Leak.Client.Peer
         public MetafileService MetaStore { get; set; }
         public MetagetService MetaGet { get; set; }
 
+        public RepositoryService DataStore { get; set; }
+        public RetrieverService DataGet { get; set; }
+        public OmnibusService DataMap { get; set; }
+
         public void Download(string destination)
         {
             StartMetaStore(destination);
             StartMetaGet();
+            StartDataStore(destination);
+            StartDataMap();
+            StartDataGet();
         }
 
         private void StartMetaStore(string destination)
@@ -75,6 +87,66 @@ namespace Leak.Client.Peer
             MetaGet.Start();
         }
 
+        private void StartDataStore(string destination)
+        {
+            RepositoryHooks hooks = new RepositoryHooks
+            {
+                OnDataAllocated = OnDataAllocated,
+                OnDataVerified = OnDataVerified,
+                OnBlockWritten = OnBlockWritten,
+                OnPieceAccepted = OnPieceAccepted,
+                OnPieceRejected = OnPieceRejected
+            };
+
+            DataStore =
+                new RepositoryBuilder()
+                    .WithHash(Hash)
+                    .WithDestination(Path.Combine(destination, Hash.ToString()))
+                    .WithPipeline(Pipeline)
+                    .WithFiles(Files)
+                    .Build(hooks);
+
+            DataStore.Start();
+        }
+
+        private void StartDataMap()
+        {
+            OmnibusHooks hooks = new OmnibusHooks
+            {
+                OnBlockReserved = OnBlockReserved,
+                OnPieceReady = OnPieceReady,
+                OnPieceCompleted = OnPieceCompleted,
+                OnDataCompleted = OnDataCompleted
+            };
+
+            DataMap =
+                new OmnibusBuilder()
+                    .WithHash(Hash)
+                    .WithPipeline(Pipeline)
+                    .Build(hooks);
+
+            DataMap.Start();
+        }
+
+        private void StartDataGet()
+        {
+            RetrieverHooks hooks = new RetrieverHooks
+            {
+                OnBlockRequested = OnBlockRequestSent
+            };
+
+            DataGet =
+                new RetrieverBuilder()
+                    .WithHash(Hash)
+                    .WithGlue(Glue.AsDataGet())
+                    .WithPipeline(Pipeline)
+                    .WithRepository(DataStore.AsDataGet())
+                    .WithOmnibus(DataMap.AsDataGet())
+                    .Build(hooks);
+
+            DataGet.Start();
+        }
+
         public void OnConnectionEstablished(ConnectionEstablished data)
         {
             Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Hash, Localhost, HandshakeOptions.Extended));
@@ -94,8 +166,8 @@ namespace Leak.Client.Peer
 
             Glue =
                 new GlueBuilder()
-                    .WithBlocks(null)
                     .WithHash(Hash)
+                    .WithBlocks(Blocks)
                     .WithPlugin(new MetadataPlugin(metadata))
                     .Build(new GlueHooks
                     {
@@ -103,8 +175,8 @@ namespace Leak.Client.Peer
                         OnPeerDisconnected = OnPeerDisconnected,
                         OnPeerBitfieldChanged = OnPeerBitfieldChanged,
                         OnPeerStatusChanged = OnPeerStatusChanged,
-                        OnBlockReceived = OnBlockReceived,
-                        OnBlockRequested = OnBlockRequested
+                        OnBlockReceived = OnBlockDataReceived,
+                        OnBlockRequested = OnBlockRequestReceived
                     });
 
             Glue.Connect(data.Connection, data.Handshake);
@@ -124,7 +196,7 @@ namespace Leak.Client.Peer
         {
             PeerNotification notification = new PeerNotification
             {
-                Type = PeerNotificationType.Disconnected
+                Type = PeerNotificationType.PeerDisconnected
             };
 
             Notifications.Enqueue(notification);
@@ -134,44 +206,37 @@ namespace Leak.Client.Peer
         {
             PeerNotification notification = new PeerNotification
             {
-                Type = PeerNotificationType.BitfieldChanged,
+                Type = PeerNotificationType.PeerBitfieldChanged,
                 Bitfield = data.Bitfield
             };
 
             Notifications.Enqueue(notification);
+            DataMap?.Handle(data);
         }
 
         private void OnPeerStatusChanged(PeerStatusChanged data)
         {
             PeerNotification notification = new PeerNotification
             {
-                Type = PeerNotificationType.StatusChanged,
+                Type = PeerNotificationType.PeerStatusChanged,
                 State = data.State
             };
 
             Notifications.Enqueue(notification);
+            DataMap?.Handle(data);
         }
 
-        private void OnBlockReceived(BlockReceived data)
+        private void OnBlockDataReceived(BlockReceived data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.BlockReceived,
-                Block = data.Block
-            };
-
-            Notifications.Enqueue(notification);
+            DataGet?.Handle(data);
         }
 
-        private void OnBlockRequested(BlockRequested data)
+        private void OnBlockRequestReceived(BlockRequested data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.BlockRequested,
-                Block = data.Block
-            };
+        }
 
-            Notifications.Enqueue(notification);
+        private void OnBlockRequestSent(BlockRequested data)
+        {
         }
 
         private void OnMetadataMeasured(MetadataMeasured data)
@@ -199,7 +264,11 @@ namespace Leak.Client.Peer
                 Metainfo = data.Metainfo
             };
 
+            Metainfo = data.Metainfo;
             Notifications.Enqueue(notification);
+
+            DataStore?.Handle(data);
+            DataMap?.Handle(data);
         }
 
         private void OnMetafileMeasured(MetafileMeasured data)
@@ -208,6 +277,68 @@ namespace Leak.Client.Peer
             {
                 Type = PeerNotificationType.MetafileMeasured,
                 Size = data.Size
+            };
+
+            Notifications.Enqueue(notification);
+        }
+
+        private void OnDataAllocated(DataAllocated data)
+        {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.DataAllocated
+            };
+
+            Notifications.Enqueue(notification);
+            DataStore?.Verify(new Bitfield(Metainfo.Pieces.Length));
+        }
+
+        private void OnDataVerified(DataVerified data)
+        {
+            DataMap?.Handle(data);
+        }
+
+        private void OnDataCompleted(DataCompleted data)
+        {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.DataCompleted
+            };
+
+            Notifications.Enqueue(notification);
+        }
+
+        private void OnBlockReserved(BlockReserved data)
+        {
+            DataGet?.Handle(data);
+        }
+
+        private void OnBlockWritten(BlockWritten data)
+        {
+            DataGet?.Handle(data);
+        }
+
+        private void OnPieceAccepted(PieceAccepted data)
+        {
+            DataGet?.Handle(data);
+        }
+
+        private void OnPieceRejected(PieceRejected data)
+        {
+            DataGet?.Handle(data);
+        }
+
+        private void OnPieceReady(PieceReady data)
+        {
+            DataGet?.Handle(data);
+        }
+
+        private void OnPieceCompleted(PieceCompleted data)
+        {
+            PeerNotification notification = new PeerNotification
+            {
+                Type = PeerNotificationType.PieceCompleted,
+                Piece = new PieceInfo(data.Piece)
             };
 
             Notifications.Enqueue(notification);

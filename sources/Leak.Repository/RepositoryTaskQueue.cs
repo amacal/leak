@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Leak.Tasks;
@@ -55,6 +56,7 @@ namespace Leak.Datastore
         void LeakPipelineTrigger.Execute()
         {
             RepositoryTask task;
+            onReady.Reset();
 
             while (items.TryDequeue(out task))
             {

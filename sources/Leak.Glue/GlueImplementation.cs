@@ -231,7 +231,7 @@ namespace Leak.Glue
             ConnectionLoopHooks other = CreateLoopyHooks();
             ConnectionLoopConfiguration config = new ConnectionLoopConfiguration();
 
-            return new ConnectionLoop(dependencies.Blocks, other, config);
+            return new ConnectionLoop(other, config);
         }
 
         private ConnectionLoopHooks CreateLoopyHooks()
@@ -287,6 +287,7 @@ namespace Leak.Glue
                         break;
 
                     case "piece":
+                        hooks.CallBlockReceived(parameters.Hash, entry.Peer, data.Payload.GetPiece(dependencies.Blocks));
                         break;
 
                     case "extended":

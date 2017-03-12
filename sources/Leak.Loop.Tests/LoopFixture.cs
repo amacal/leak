@@ -1,6 +1,5 @@
 ﻿using Leak.Common;
 using Leak.Completion;
-using Leak.Memory;
 using Leak.Networking;
 using Leak.Sockets;
 using Leak.Tasks;
@@ -47,10 +46,9 @@ namespace Leak.Loop.Tests
         public async Task<LoopSession> Start()
         {
             int port;
-            DataBlockFactory factory = new BufferedBlockFactory();
 
             ConnectionLoopConfiguration configuration = new ConnectionLoopConfiguration();
-            ConnectionLoop loop = new ConnectionLoop(factory, hooks, configuration);
+            ConnectionLoop loop = new ConnectionLoop(hooks, configuration);
 
             TcpSocket client = pool.New();
             TcpSocket server = pool.New();

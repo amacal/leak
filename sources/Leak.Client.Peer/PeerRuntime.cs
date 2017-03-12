@@ -1,4 +1,5 @@
-﻿using Leak.Files;
+﻿using Leak.Common;
+using Leak.Files;
 using Leak.Networking;
 using Leak.Tasks;
 
@@ -11,6 +12,8 @@ namespace Leak.Client.Peer
         NetworkPool Network { get; }
 
         FileFactory Files { get; }
+
+        DataBlockFactory Blocks { get; }
 
         void Start(NetworkPoolHooks hooks);
 

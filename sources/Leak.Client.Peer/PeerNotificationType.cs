@@ -2,13 +2,15 @@
 {
     public enum PeerNotificationType
     {
-        Disconnected,
-        BitfieldChanged,
-        StatusChanged,
-        BlockRequested,
-        BlockReceived,
+        PeerDisconnected,
+        PeerBitfieldChanged,
+        PeerStatusChanged,
         MetafileMeasured,
         MetafileReceived,
-        MetafileCompleted
+        MetafileCompleted,
+        DataAllocated,
+        DataVerified,
+        DataCompleted,
+        PieceCompleted
     }
 }

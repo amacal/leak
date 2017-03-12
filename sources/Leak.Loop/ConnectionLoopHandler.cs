@@ -5,14 +5,12 @@ namespace Leak.Loop
     public class ConnectionLoopHandler
     {
         private readonly PeerHash peer;
-        private readonly DataBlockFactory factory;
         private readonly ConnectionLoopConnection connection;
         private readonly ConnectionLoopHooks hooks;
 
-        public ConnectionLoopHandler(PeerHash peer, DataBlockFactory factory, ConnectionLoopConnection connection, ConnectionLoopHooks hooks)
+        public ConnectionLoopHandler(PeerHash peer, ConnectionLoopConnection connection, ConnectionLoopHooks hooks)
         {
             this.peer = peer;
-            this.factory = factory;
             this.hooks = hooks;
             this.connection = connection;
         }

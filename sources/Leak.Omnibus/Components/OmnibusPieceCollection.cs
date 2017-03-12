@@ -38,6 +38,8 @@ namespace Leak.Datamap.Components
                     items[i] = new OmnibusPieceNothing(blocks);
                 }
             }
+
+            CallFileCompleted();
         }
 
         public void Complete(int piece, int block)

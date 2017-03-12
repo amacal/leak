@@ -15,9 +15,9 @@ namespace Leak.Datastore.Tests
             service.Write(new BlockIndex(piece, 0, data.Length), new RepositoryBlock(data));
         }
 
-        public static void HandleMetadataDiscovered(this RepositoryService service, Metainfo metainfo)
+        public static void HandleMetafileVerified(this RepositoryService service, Metainfo metainfo)
         {
-            service.Handle(new MetadataDiscovered
+            service.Handle(new MetafileVerified
             {
                 Hash = service.Hash,
                 Metainfo = metainfo

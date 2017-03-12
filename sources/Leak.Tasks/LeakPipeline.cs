@@ -7,11 +7,11 @@ namespace Leak.Tasks
     public class LeakPipeline : PipelineService
     {
         private readonly List<LeakPipelineTimer> ticks;
+        private readonly ManualResetEvent terminator;
 
         private Thread worker;
         private WaitHandle[] handles;
         private LeakPipelineTrigger[] triggers;
-        private ManualResetEvent terminator;
 
         public LeakPipeline()
         {
@@ -62,7 +62,7 @@ namespace Leak.Tasks
 
         private void Execute()
         {
-            TimeSpan period = TimeSpan.FromMilliseconds(50);
+            TimeSpan period = TimeSpan.FromMilliseconds(250);
             DateTime next = DateTime.Now.Add(period);
 
             while (worker != null)
@@ -83,12 +83,12 @@ namespace Leak.Tasks
                 if (found == 0)
                     break;
 
-                if (WaitHandle.WaitTimeout != found)
+                if (found == WaitHandle.WaitTimeout)
+                    continue;
+
+                foreach (LeakPipelineTrigger trigger in triggers)
                 {
-                    foreach (LeakPipelineTrigger trigger in triggers)
-                    {
-                        trigger.Execute();
-                    }
+                    trigger.Execute();
                 }
             }
         }

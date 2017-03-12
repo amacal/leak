@@ -62,7 +62,6 @@
     <Compile Include="ListenerStarted.cs" />
     <Compile Include="MessageReceived.cs" />
     <Compile Include="MessageSent.cs" />
-    <Compile Include="MetadataDiscovered.cs" />
     <Compile Include="MetadataShared.cs" />
     <Compile Include="MetafileMeasured.cs" />
     <Compile Include="MetafileRead.cs" />

@@ -78,6 +78,10 @@
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Glue</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
+      <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
+      <Name>Leak.Memory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
       <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
       <Name>Leak.Metadata</Name>
@@ -97,6 +101,18 @@
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}</Project>
       <Name>Leak.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Datamap.csproj">
+      <Project>{A69138D4-EAEB-4690-A040-5F612FEDDEB2}</Project>
+      <Name>Leak.Datamap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
+      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
+      <Name>Leak.Datastore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Retriever\Leak.Dataget.csproj">
+      <Project>{61B61289-D4E4-45F2-916B-D60114A4BD66}</Project>
+      <Name>Leak.Dataget</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

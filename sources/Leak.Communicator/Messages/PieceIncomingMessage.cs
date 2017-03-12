@@ -4,35 +4,19 @@ namespace Leak.Communicator.Messages
 {
     public class PieceIncomingMessage
     {
-        private readonly DataBlock data;
+        private readonly NetworkIncomingMessage inner;
 
-        private readonly int piece;
-        private readonly int offset;
-
-        public PieceIncomingMessage(DataBlock block)
+        public PieceIncomingMessage(NetworkIncomingMessage inner)
         {
-            data = block.Scope(8);
-            piece = block[3] + block[2] * 256 + block[1] * 256 * 256;
-            offset = block[7] + block[6] * 256 + block[5] * 256 * 256;
+            this.inner = inner;
         }
 
-        public int Piece
+        public Piece ToPiece(DataBlockFactory factory)
         {
-            get { return piece; }
-        }
+            DataBlock data = inner.ToBlock(factory, 13, inner.Length - 13);
+            int piece = inner[8] + inner[7] * 256 + inner[6] * 256 * 256;
+            int offset = inner[12] + inner[11] * 256 + inner[10] * 256 * 256;
 
-        public int Offset
-        {
-            get { return offset; }
-        }
-
-        public int Size
-        {
-            get { return data.Size; }
-        }
-
-        public Piece ToPiece()
-        {
             return new Piece(new BlockIndex(piece, offset, data.Size), data);
         }
     }

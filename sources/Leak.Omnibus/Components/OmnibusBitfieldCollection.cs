@@ -7,25 +7,15 @@ namespace Leak.Datamap.Components
     public class OmnibusBitfieldCollection
     {
         private readonly Dictionary<PeerHash, Bitfield> byPeer;
-        private readonly OmnibusCache cache;
 
-        private OmnibusBitfieldRanking ranking;
-
-        public OmnibusBitfieldCollection(OmnibusCache cache)
+        public OmnibusBitfieldCollection()
         {
-            this.cache = cache;
             this.byPeer = new Dictionary<PeerHash, Bitfield>();
-        }
-
-        public OmnibusBitfieldRanking Ranking
-        {
-            get { return ranking ?? (ranking = new OmnibusBitfieldRanking(cache, byPeer.Values.ToArray())); }
         }
 
         public void Add(PeerHash peer, Bitfield bitfield)
         {
             byPeer[peer] = bitfield;
-            ranking = null;
         }
 
         public bool Contains(PeerHash peer)
@@ -38,6 +28,11 @@ namespace Leak.Datamap.Components
             Bitfield bitfield;
             byPeer.TryGetValue(peer, out bitfield);
             return bitfield;
+        }
+
+        public Bitfield[] ToArray()
+        {
+            return byPeer.Values.ToArray();
         }
     }
 }

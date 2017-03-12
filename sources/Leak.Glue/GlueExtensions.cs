@@ -12,6 +12,11 @@ namespace Leak.Glue
             return new BitfieldIncomingMessage(incoming).ToBitfield();
         }
 
+        public static Piece GetPiece(this NetworkIncomingMessage incoming, DataBlockFactory factory)
+        {
+            return new PieceIncomingMessage(incoming).ToPiece(factory);
+        }
+
         public static bool IsExtensionHandshake(this NetworkIncomingMessage incoming)
         {
             return incoming[5] == 0;
@@ -74,6 +79,17 @@ namespace Leak.Glue
             {
                 Peer = peer,
                 Bitfield = bitfield,
+            });
+        }
+
+        public static void CallBlockReceived(this GlueHooks hooks, FileHash hash, PeerHash peer, Piece piece)
+        {
+            hooks.OnBlockReceived?.Invoke(new BlockReceived
+            {
+                Hash = hash,
+                Peer = peer,
+                Block = piece.Index,
+                Payload = piece.Data
             });
         }
 

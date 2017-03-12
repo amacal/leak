@@ -44,15 +44,15 @@ namespace Leak.Connect
 
                         switch (notification.Type)
                         {
-                            case PeerNotificationType.Disconnected:
+                            case PeerNotificationType.PeerDisconnected:
                                 Console.WriteLine("disconneced");
                                 return;
 
-                            case PeerNotificationType.BitfieldChanged:
+                            case PeerNotificationType.PeerBitfieldChanged:
                                 Console.WriteLine($"Bitfield: {notification.Bitfield.Completed}/{notification.Bitfield.Length} pieces completed");
                                 break;
 
-                            case PeerNotificationType.StatusChanged:
+                            case PeerNotificationType.PeerStatusChanged:
                                 Console.WriteLine($"Status: {notification.State}");
                                 break;
 
@@ -73,6 +73,22 @@ namespace Leak.Connect
                                     Console.WriteLine($"Metadata: {String.Join(Path.DirectorySeparatorChar.ToString(), entry.Name)} [{entry.Size} bytes]");
                                 }
 
+                                break;
+
+                            case PeerNotificationType.DataAllocated:
+                                Console.WriteLine($"Data: allocated");
+                                break;
+
+                            case PeerNotificationType.DataVerified:
+                                Console.WriteLine($"Data: verified {notification.Bitfield.Length} pieces");
+                                break;
+
+                            case PeerNotificationType.DataCompleted:
+                                Console.WriteLine($"Data: completed");
+                                break;
+
+                            case PeerNotificationType.PieceCompleted:
+                                Console.WriteLine($"Data; completed piece {notification.Piece}");
                                 break;
                         }
                     }

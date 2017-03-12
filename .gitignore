@@ -2,6 +2,7 @@
 *.suo
 *.log
 *.xml
+*.tmp
 
 [Dd]ebug*/
 [Rr]elease*/

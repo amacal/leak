@@ -35,7 +35,7 @@ namespace Leak.Datastore
             return this;
         }
 
-        public RepositoryBuilder WithPipeline(LeakPipeline pipeline)
+        public RepositoryBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;

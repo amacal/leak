@@ -5,9 +5,9 @@ namespace Leak.Datamap.Tests
 {
     public static class OmnibusExtensions
     {
-        public static void HandleMetadataDiscovered(this OmnibusService service, Metainfo metainfo)
+        public static void HandleMetafileVerified(this OmnibusService service, Metainfo metainfo)
         {
-            service.Handle(new MetadataDiscovered
+            service.Handle(new MetafileVerified
             {
                 Hash = service.Hash,
                 Metainfo = metainfo

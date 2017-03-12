@@ -39,12 +39,24 @@ namespace Leak.Datamap.Tasks
 
                         if (previous != null)
                         {
+                            UpdateRanking(context, previous, -4);
                             context.Hooks.CallBlockExpired(hash, previous, block);
                         }
 
+                        UpdateRanking(context, peer, -1);
                         context.Hooks.CallBlockReserved(hash, peer, block);
                     }
                 }
+            }
+        }
+
+        private void UpdateRanking(OmnibusContext context, PeerHash target, int value)
+        {
+            OmnibusStateEntry entry = context.States.ByPeer(target);
+
+            if (entry != null)
+            {
+                entry.Ranking += value;
             }
         }
     }

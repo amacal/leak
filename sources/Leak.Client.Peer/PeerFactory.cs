@@ -1,5 +1,7 @@
-﻿using Leak.Completion;
+﻿using Leak.Common;
+using Leak.Completion;
 using Leak.Files;
+using Leak.Memory;
 using Leak.Networking;
 using Leak.Tasks;
 
@@ -13,6 +15,7 @@ namespace Leak.Client.Peer
         private NetworkPool network;
         private CompletionThread worker;
         private FileFactory files;
+        private DataBlockFactory blocks;
 
         public PeerFactory(PeerLogger logger)
         {
@@ -32,6 +35,11 @@ namespace Leak.Client.Peer
         public FileFactory Files
         {
             get { return files; }
+        }
+
+        public DataBlockFactory Blocks
+        {
+            get { return blocks; }
         }
 
         public void Start(NetworkPoolHooks hooks)
@@ -76,6 +84,12 @@ namespace Leak.Client.Peer
                     logger?.Info("creating file factory");
                     files = new FileFactory(worker);
                 }
+
+                if (blocks == null)
+                {
+                    logger?.Info("creating blocks factory");
+                    blocks = new BufferedBlockFactory();
+                }
             }
         }
 
@@ -101,6 +115,12 @@ namespace Leak.Client.Peer
                     logger?.Info("disposing pipeline service");
                     pipeline?.Stop();
                     pipeline = null;
+                }
+
+                if (blocks != null)
+                {
+                    logger?.Info("disposing blocks factory");
+                    blocks = null;
                 }
             }
         }

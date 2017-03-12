@@ -39,7 +39,7 @@ namespace Leak.Common
                 builder.Append(" remote-interested");
 
             if (IsRemoteChokingLocal)
-                builder.Append(" remoted-choking");
+                builder.Append(" remote-choking");
 
             return builder.ToString().TrimStart();
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Leak.Common;
 using Leak.Events;
 
@@ -24,6 +25,18 @@ namespace Leak.Datamap.Components
             }
 
             entry.State = new PeerState(data.State);
+        }
+
+        public IEnumerable<PeerHash> All()
+        {
+            return byPeer.Keys;
+        }
+
+        public OmnibusStateEntry ByPeer(PeerHash peer)
+        {
+            OmnibusStateEntry entry;
+            byPeer.TryGetValue(peer, out entry);
+            return entry;
         }
 
         public IEnumerable<PeerHash> Find(int ranking, int count)

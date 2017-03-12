@@ -43,7 +43,7 @@ namespace Leak.Datastore
             context.Dependencies.Pipeline.Register(context.Queue);
         }
 
-        public void Handle(MetadataDiscovered data)
+        public void Handle(MetafileVerified data)
         {
             context.Metainfo = data.Metainfo;
             context.Queue.Add(new RepositoryTaskAllocate());

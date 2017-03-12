@@ -4,21 +4,21 @@ namespace Leak.Communicator.Messages
 {
     public class BitfieldIncomingMessage
     {
-        private readonly NetworkIncomingMessage message;
+        private readonly NetworkIncomingMessage inner;
 
-        public BitfieldIncomingMessage(NetworkIncomingMessage message)
+        public BitfieldIncomingMessage(NetworkIncomingMessage inner)
         {
-            this.message = message;
+            this.inner = inner;
         }
 
         public bool this[int index]
         {
-            get { return (message[5 + index / 8] & (1 << (byte)(7 - index % 8))) > 0; }
+            get { return (inner[5 + index / 8] & (1 << (byte)(7 - index % 8))) > 0; }
         }
 
         public int Size
         {
-            get { return message.Length * 8 - 40; }
+            get { return inner.Length * 8 - 40; }
         }
 
         public Bitfield ToBitfield()

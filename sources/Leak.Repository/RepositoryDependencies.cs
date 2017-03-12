@@ -10,6 +10,6 @@ namespace Leak.Datastore
 
         public DataBlockFactory Blocks;
 
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
     }
 }

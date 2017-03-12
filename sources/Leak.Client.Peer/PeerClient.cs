@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
-using Leak.Common;
+﻿using Leak.Common;
 using Leak.Connector;
 using Leak.Events;
 using Leak.Negotiator;
 using Leak.Networking;
+using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace Leak.Client.Peer
 {
@@ -38,7 +38,8 @@ namespace Leak.Client.Peer
                 Notifications = new PeerCollection(),
                 Completion = new TaskCompletionSource<PeerSession>(),
                 Pipeline = runtime.Pipeline,
-                Files = runtime.Files
+                Files = runtime.Files,
+                Blocks = runtime.Blocks
             };
 
             connect.Negotiator =

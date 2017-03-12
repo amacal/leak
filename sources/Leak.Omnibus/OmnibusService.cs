@@ -71,7 +71,8 @@ namespace Leak.Datamap
         {
             context.Queue.Add(() =>
             {
-                context.Bitfields?.Add(data.Peer, data.Bitfield);
+                context.Bitfields.Add(data.Peer, data.Bitfield);
+                context.Ranking = null;
             });
         }
 
@@ -79,7 +80,8 @@ namespace Leak.Datamap
         {
             context.Queue.Add(() =>
             {
-                context.States?.Handle(data);
+                context.States.Handle(data);
+                context.Ranking = null;
             });
         }
 
@@ -90,11 +92,10 @@ namespace Leak.Datamap
                 context.Bitfield = data.Bitfield;
                 context.Cache = new OmnibusCache(data.Bitfield.Length);
                 context.Pieces = new OmnibusPieceCollection(context);
-                context.Bitfields = new OmnibusBitfieldCollection(context.Cache);
             });
         }
 
-        public void Handle(MetadataDiscovered data)
+        public void Handle(MetafileVerified data)
         {
             context.Queue.Add(() =>
             {
@@ -119,11 +120,21 @@ namespace Leak.Datamap
 
         public void Schedule(OmnibusStrategy strategy, PeerHash peer, int count)
         {
-            context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
+            if (context.Cache != null)
+            {
+                context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
+            }
         }
 
         public void Query(Action<PeerHash, Bitfield, PeerState> callback)
         {
+            foreach (PeerHash peer in context.States.All())
+            {
+                Bitfield bitfield = context.Bitfields?.ByPeer(peer);
+                OmnibusStateEntry entry = context.States.ByPeer(peer);
+
+                callback.Invoke(peer, bitfield, entry?.State);
+            }
         }
 
         public void Dispose()
