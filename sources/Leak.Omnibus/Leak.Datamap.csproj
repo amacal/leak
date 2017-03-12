@@ -64,6 +64,7 @@
     <Compile Include="Tasks\CompletePieceTask.cs" />
     <Compile Include="Tasks\InvalidatePieceTask.cs" />
     <Compile Include="Tasks\SchedulePeerTask.cs" />
+    <Compile Include="ThresholdReached.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

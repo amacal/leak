@@ -1,5 +1,8 @@
 ﻿using Leak.Common;
 using Leak.Connector;
+using Leak.Dataget;
+using Leak.Datamap;
+using Leak.Datastore;
 using Leak.Events;
 using Leak.Extensions.Metadata;
 using Leak.Files;
@@ -10,9 +13,6 @@ using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
-using Leak.Dataget;
-using Leak.Datamap;
-using Leak.Datastore;
 
 namespace Leak.Client.Peer
 {
@@ -116,13 +116,15 @@ namespace Leak.Client.Peer
                 OnBlockReserved = OnBlockReserved,
                 OnPieceReady = OnPieceReady,
                 OnPieceCompleted = OnPieceCompleted,
-                OnDataCompleted = OnDataCompleted
+                OnDataCompleted = OnDataCompleted,
+                OnThresholdReached = OnThresholdReached
             };
 
             DataMap =
                 new OmnibusBuilder()
                     .WithHash(Hash)
                     .WithPipeline(Pipeline)
+                    .WithSchedulerThreshold(160)
                     .Build(hooks);
 
             DataMap.Start();
@@ -342,6 +344,11 @@ namespace Leak.Client.Peer
             };
 
             Notifications.Enqueue(notification);
+        }
+
+        private void OnThresholdReached(ThresholdReached data)
+        {
+            DataGet?.Handle(data);
         }
     }
 }

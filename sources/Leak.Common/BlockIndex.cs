@@ -45,8 +45,8 @@
 
         public static bool Equals(BlockIndex left, BlockIndex right)
         {
-            return left.piece.Equals(right.piece) &&
-                   left.offset.Equals(right.offset);
+            return left.piece.Index == right.piece.Index &&
+                   left.offset == right.offset;
         }
 
         public override string ToString()

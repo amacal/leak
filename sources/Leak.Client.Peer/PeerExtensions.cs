@@ -150,7 +150,7 @@ namespace Leak.Client.Peer
 
             public void Complete(PieceInfo piece)
             {
-                service.Complete(piece.Index);
+                service.Complete(piece);
             }
 
             public void Invalidate(PieceInfo piece)

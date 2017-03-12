@@ -16,14 +16,22 @@
 
         public override int GetHashCode()
         {
-            return index;
+            return GetHashCode(this);
         }
 
         public override bool Equals(object obj)
         {
-            PieceInfo other = obj as PieceInfo;
+            return Equals(this, (PieceInfo)obj);
+        }
 
-            return other != null && other.index == index;
+        public static int GetHashCode(PieceInfo piece)
+        {
+            return piece.index;
+        }
+
+        public static bool Equals(PieceInfo left, PieceInfo right)
+        {
+            return left.index == right.index;
         }
 
         public override string ToString()

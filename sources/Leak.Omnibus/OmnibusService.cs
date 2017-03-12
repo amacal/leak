@@ -108,7 +108,7 @@ namespace Leak.Datamap
             context.Queue.Add(new CompleteBlockTask(block));
         }
 
-        public void Complete(int piece)
+        public void Complete(PieceInfo piece)
         {
             context.Queue.Add(new CompletePieceTask(piece));
         }

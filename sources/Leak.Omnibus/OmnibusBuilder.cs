@@ -28,6 +28,12 @@ namespace Leak.Datamap
             return this;
         }
 
+        public OmnibusBuilder WithSchedulerThreshold(int threshold)
+        {
+            configuration.SchedulerThreshold = threshold;
+            return this;
+        }
+
         public OmnibusService Build()
         {
             return Build(new OmnibusHooks());

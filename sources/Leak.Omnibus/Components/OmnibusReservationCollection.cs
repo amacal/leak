@@ -11,14 +11,17 @@ namespace Leak.Datamap.Components
 
         private readonly Dictionary<BlockIndex, OmnibusReservation> byBlock;
         private readonly Dictionary<PeerHash, HashSet<OmnibusReservation>> byPeer;
+        private readonly Dictionary<PieceInfo, HashSet<OmnibusReservation>> byPiece;
 
         public OmnibusReservationCollection(TimeSpan lease)
         {
             this.lease = lease;
 
-            comparer = new OmnibusReservationComparer();
-            byBlock = new Dictionary<BlockIndex, OmnibusReservation>(comparer);
             byPeer = new Dictionary<PeerHash, HashSet<OmnibusReservation>>();
+            comparer = new OmnibusReservationComparer();
+
+            byBlock = new Dictionary<BlockIndex, OmnibusReservation>(comparer);
+            byPiece = new Dictionary<PieceInfo, HashSet<OmnibusReservation>>(comparer);
         }
 
         public bool Contains(BlockIndex request, DateTime now)
@@ -44,52 +47,81 @@ namespace Leak.Datamap.Components
         public PeerHash Add(PeerHash peer, BlockIndex request, DateTime now)
         {
             PeerHash previous = null;
-            OmnibusReservation book;
-            HashSet<OmnibusReservation> books;
+            OmnibusReservation reservation;
 
-            if (byBlock.TryGetValue(request, out book))
+            HashSet<OmnibusReservation> forPeer;
+            HashSet<OmnibusReservation> forPiece;
+
+            if (byBlock.TryGetValue(request, out reservation))
             {
-                previous = book.Peer;
+                previous = reservation.Peer;
             }
 
-            book = new OmnibusReservation
+            reservation = new OmnibusReservation
             {
                 Peer = peer,
                 Expires = now + lease,
                 Request = request
             };
 
-            if (byPeer.TryGetValue(peer, out books) == false)
+            if (byPeer.TryGetValue(peer, out forPeer) == false)
             {
-                books = new HashSet<OmnibusReservation>();
-                byPeer.Add(peer, books);
+                forPeer = new HashSet<OmnibusReservation>();
+                byPeer.Add(peer, forPeer);
             }
 
-            byBlock[request] = book;
-            books.Add(book);
+            if (byPiece.TryGetValue(request.Piece, out forPiece) == false)
+            {
+                forPiece = new HashSet<OmnibusReservation>();
+                byPiece.Add(request.Piece, forPiece);
+            }
+
+            byBlock[request] = reservation;
+            forPeer.Add(reservation);
+            forPiece.Add(reservation);
 
             return previous;
         }
 
         public int Complete(BlockIndex request, out PeerHash peer)
         {
-            OmnibusReservation block;
-            byBlock.TryGetValue(request, out block);
+            OmnibusReservation reservation;
+            byBlock.TryGetValue(request, out reservation);
 
-            if (block != null)
+            if (reservation != null)
             {
                 HashSet<OmnibusReservation> blocks;
-                byPeer.TryGetValue(block.Peer, out blocks);
+                byPeer.TryGetValue(reservation.Peer, out blocks);
 
-                blocks.Remove(block);
+                blocks.Remove(reservation);
                 byBlock.Remove(request);
 
-                peer = block.Peer;
+                peer = reservation.Peer;
                 return blocks.Count;
             }
 
             peer = null;
             return 0;
+        }
+
+        public void Complete(PieceInfo piece, out ICollection<PeerHash> involved)
+        {
+            HashSet<OmnibusReservation> reservations;
+            byPiece.TryGetValue(piece, out reservations);
+
+            if (reservations != null)
+            {
+                involved = new HashSet<PeerHash>();
+
+                foreach (OmnibusReservation reservation in reservations)
+                {
+                    involved.Add(reservation.Peer);
+                }
+            }
+            else
+            {
+                involved = new PeerHash[0];
+            }
         }
 
         public int Count(PeerHash peer)

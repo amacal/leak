@@ -59,17 +59,17 @@ namespace Leak.Datamap.Components
             }
         }
 
-        public void Complete(int piece)
+        public void Complete(PieceInfo piece)
         {
-            bool wasCompleted = items[piece].IsComplete();
-            items[piece] = items[piece].Complete();
-            bool isCompleted = items[piece].IsComplete();
+            bool wasCompleted = items[piece.Index].IsComplete();
+            items[piece.Index] = items[piece.Index].Complete();
+            bool isCompleted = items[piece.Index].IsComplete();
 
             if (wasCompleted == false && isCompleted == true)
             {
                 completed++;
                 CallChanged();
-                CallPieceCompleted(piece);
+                CallPieceCompleted(piece.Index);
                 CallFileCompleted();
             }
         }

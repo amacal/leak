@@ -41,5 +41,7 @@ namespace Leak.Datamap
         /// by some peer and the peer did not complete it in required time.
         /// </summary>
         public Action<BlockExpired> OnBlockExpired;
+
+        public Action<ThresholdReached> OnThresholdReached;
     }
 }

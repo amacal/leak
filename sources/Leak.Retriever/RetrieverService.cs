@@ -1,5 +1,6 @@
 ﻿using System;
 using Leak.Common;
+using Leak.Datamap;
 using Leak.Events;
 using Leak.Tasks;
 
@@ -103,6 +104,11 @@ namespace Leak.Dataget
             {
                 context.Dependencies.Repository.Verify(data.Piece);
             });
+        }
+
+        public void Handle(ThresholdReached data)
+        {
+            context.Queue.Add(new RetrieverTaskSchedule(data.Peer));
         }
 
         private void OnTick250()

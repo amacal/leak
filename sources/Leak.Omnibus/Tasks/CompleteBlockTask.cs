@@ -15,18 +15,19 @@ namespace Leak.Datamap.Tasks
 
         public void Execute(OmnibusContext context)
         {
+            PeerHash peer;
+
             int blockSize = context.Metainfo.Properties.BlockSize;
             int blockIndex = block.Offset / blockSize;
 
-            int left;
-            PeerHash peer;
+            int threshold = context.Configuration.SchedulerThreshold;
+            int left = context.Reservations.Complete(block, out peer);
 
-            left = context.Reservations.Complete(block, out peer);
             context.Pieces.Complete(block.Piece.Index, blockIndex);
 
             if (peer != null && left == context.Configuration.SchedulerThreshold)
             {
-                //context.Callback.OnScheduleRequested(context.Metainfo.Hash, peer);
+                context.Hooks.CallThresholdReached(context.Metainfo.Hash, peer, threshold, left);
             }
 
             if (peer != null)

@@ -3,16 +3,26 @@ using Leak.Common;
 
 namespace Leak.Datamap.Components
 {
-    public class OmnibusReservationComparer : IEqualityComparer<BlockIndex>
+    public class OmnibusReservationComparer : IEqualityComparer<BlockIndex>, IEqualityComparer<PieceInfo>
     {
-        public int GetHashCode(BlockIndex obj)
+        int IEqualityComparer<BlockIndex>.GetHashCode(BlockIndex obj)
         {
             return BlockIndex.GetHashCode(obj);
         }
 
-        public bool Equals(BlockIndex x, BlockIndex y)
+        bool IEqualityComparer<BlockIndex>.Equals(BlockIndex x, BlockIndex y)
         {
             return BlockIndex.Equals(x, y);
+        }
+
+        int IEqualityComparer<PieceInfo>.GetHashCode(PieceInfo obj)
+        {
+            return PieceInfo.GetHashCode(obj);
+        }
+
+        bool IEqualityComparer<PieceInfo>.Equals(PieceInfo x, PieceInfo y)
+        {
+            return PieceInfo.Equals(x, y);
         }
     }
 }

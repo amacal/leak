@@ -24,7 +24,7 @@ namespace Leak.Datamap.Tests
                 session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
-                session.Service.Complete(1);
+                session.Service.Complete(new PieceInfo(1));
                 session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();
@@ -46,8 +46,8 @@ namespace Leak.Datamap.Tests
                 session.Service.HandleMetafileVerified(session.Metainfo);
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
-                session.Service.Complete(0);
-                session.Service.Complete(1);
+                session.Service.Complete(new PieceInfo(0));
+                session.Service.Complete(new PieceInfo(1));
                 session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();
@@ -94,7 +94,7 @@ namespace Leak.Datamap.Tests
                 session.Service.HandleDataVerified(session.Metainfo.Pieces.Length);
 
                 session.Service.Complete(new BlockIndex(1, 0, 16384));
-                session.Service.Complete(1);
+                session.Service.Complete(new PieceInfo(1));
                 session.Pipeline.Process();
 
                 trigger.Wait().Should().BeTrue();

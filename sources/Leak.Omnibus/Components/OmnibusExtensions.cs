@@ -69,5 +69,16 @@ namespace Leak.Datamap.Components
                 Block = block
             });
         }
+
+        public static void CallThresholdReached(this OmnibusHooks hooks, FileHash hash, PeerHash peer, int threshold, int value)
+        {
+            hooks.OnThresholdReached?.Invoke(new ThresholdReached
+            {
+                Hash = hash,
+                Peer = peer,
+                Threshold = threshold,
+                Value = value
+            });
+        }
     }
 }
