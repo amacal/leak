@@ -4,7 +4,7 @@ using Leak.Common;
 using Leak.Testing;
 using NUnit.Framework;
 
-namespace Leak.Datastore.Tests
+namespace Leak.Data.Store.Tests
 {
     public class RepositoryTests
     {

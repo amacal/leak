@@ -1,9 +1,9 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
 using Leak.Extensions.Metadata;
-using System;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public class MetashareService : IDisposable
     {

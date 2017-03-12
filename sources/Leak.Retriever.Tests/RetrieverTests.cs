@@ -6,7 +6,7 @@ using Leak.Events;
 using Leak.Testing;
 using NUnit.Framework;
 
-namespace Leak.Dataget.Tests
+namespace Leak.Data.Get.Tests
 {
     public class RetrieverTests
     {

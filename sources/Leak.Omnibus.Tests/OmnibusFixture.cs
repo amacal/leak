@@ -5,7 +5,7 @@ using Leak.Common;
 using Leak.Metadata;
 using Leak.Testing;
 
-namespace Leak.Datamap.Tests
+namespace Leak.Data.Map.Tests
 {
     public class OmnibusFixture : IDisposable
     {

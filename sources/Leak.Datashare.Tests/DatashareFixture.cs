@@ -1,16 +1,16 @@
-﻿using F2F.Sandbox;
+﻿using System;
+using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
+using Leak.Data.Store;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
 using Leak.Metadata;
 using Leak.Tasks;
-using System;
-using Leak.Datastore;
 using File = System.IO.File;
 
-namespace Leak.Datashare.Tests
+namespace Leak.Data.Share.Tests
 {
     public class DatashareFixture : IDisposable
     {

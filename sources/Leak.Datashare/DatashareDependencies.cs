@@ -1,7 +1,7 @@
-﻿using Leak.Datastore;
+﻿using Leak.Data.Store;
 using Leak.Glue;
 
-namespace Leak.Datashare
+namespace Leak.Data.Share
 {
     public class DatashareDependencies
     {

@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Datamap.Tasks
+namespace Leak.Data.Map.Tasks
 {
     public class InvalidatePieceTask : LeakTask<OmnibusContext>
     {

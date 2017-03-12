@@ -1,6 +1,6 @@
 ﻿using Leak.Files;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class RepositoryViewWrite
     {

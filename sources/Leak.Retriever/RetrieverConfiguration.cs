@@ -1,4 +1,4 @@
-﻿namespace Leak.Dataget
+﻿namespace Leak.Data.Get
 {
     public class RetrieverConfiguration
     {

@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Datashare
+namespace Leak.Data.Share
 {
     public class DatashareHooks
     {

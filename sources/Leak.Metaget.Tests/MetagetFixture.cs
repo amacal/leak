@@ -1,13 +1,13 @@
-﻿using F2F.Sandbox;
+﻿using System;
+using System.IO;
+using F2F.Sandbox;
 using FakeItEasy;
 using Leak.Common;
 using Leak.Metadata;
 using Leak.Testing;
-using System;
-using System.IO;
 using File = System.IO.File;
 
-namespace Leak.Metaget.Tests
+namespace Leak.Meta.Get.Tests
 {
     public class MetagetFixture : IDisposable
     {

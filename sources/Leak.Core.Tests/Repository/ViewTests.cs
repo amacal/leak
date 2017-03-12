@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Threading;
-using Leak.Datastore;
+using Leak.Data.Store;
 
 namespace Leak.Core.Tests.Repository
 {

@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Datamap
+namespace Leak.Data.Map
 {
     public class OmnibusDependencies
     {

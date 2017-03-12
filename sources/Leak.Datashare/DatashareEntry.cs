@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Datashare
+namespace Leak.Data.Share
 {
     public class DatashareEntry
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Leak.Metaget.Tests
+namespace Leak.Meta.Get.Tests
 {
     public class MetagetData
     {

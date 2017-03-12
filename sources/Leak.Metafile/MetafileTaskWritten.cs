@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public class MetafileTaskWritten : LeakTask<MetafileContext>
     {

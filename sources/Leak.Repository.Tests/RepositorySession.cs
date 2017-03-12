@@ -2,7 +2,7 @@
 using F2F.Sandbox;
 using Leak.Common;
 
-namespace Leak.Datastore.Tests
+namespace Leak.Data.Store.Tests
 {
     public class RepositorySession : IDisposable
     {

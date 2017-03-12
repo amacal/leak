@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public class MetashareContext
     {

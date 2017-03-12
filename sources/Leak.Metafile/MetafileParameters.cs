@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public class MetafileParameters
     {

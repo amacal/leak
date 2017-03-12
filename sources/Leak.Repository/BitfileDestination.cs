@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using Leak.Common;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class BitfileDestination
     {

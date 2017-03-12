@@ -1,7 +1,7 @@
 ﻿using F2F.Sandbox;
 using Leak.Common;
 using Leak.Completion;
-using Leak.Datastore;
+using Leak.Data.Store;
 using Leak.Files;
 using NUnit.Framework;
 

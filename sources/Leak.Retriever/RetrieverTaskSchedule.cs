@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Dataget
+namespace Leak.Data.Get
 {
     public class RetrieverTaskSchedule : LeakTask<RetrieverContext>
     {

@@ -1,9 +1,9 @@
-﻿using Leak.Common;
-using Leak.Files;
-using System;
+﻿using System;
 using System.Security.Cryptography;
+using Leak.Common;
+using Leak.Files;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public class MetafileDestination : IDisposable
     {

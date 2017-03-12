@@ -4,7 +4,7 @@ using System.IO;
 using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public static class RepositoryExtensions
     {

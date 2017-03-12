@@ -1,9 +1,9 @@
-﻿using F2F.Sandbox;
-using Leak.Common;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using F2F.Sandbox;
+using Leak.Common;
 
-namespace Leak.Metafile.Tests
+namespace Leak.Meta.Store.Tests
 {
     public class MetafileSession : IDisposable
     {

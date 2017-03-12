@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Datamap
+namespace Leak.Data.Map
 {
     public class OmnibusBuilder
     {

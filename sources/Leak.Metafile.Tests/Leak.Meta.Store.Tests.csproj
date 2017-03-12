@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9A32CD88-2CF1-4C6E-A821-C356F409BDC0}</ProjectGuid>
+    <ProjectGuid>{28E72068-BA9D-470D-83C3-B968ACCD1A91}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Datastore.Tests</RootNamespace>
-    <AssemblyName>Leak.Datastore.Tests</AssemblyName>
+    <RootNamespace>Leak.Meta.Store.Tests</RootNamespace>
+    <AssemblyName>Leak.Meta.Store.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -51,13 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RepositoryBlock.cs" />
+    <Compile Include="MetafileFixture.cs" />
+    <Compile Include="MetafileSession.cs" />
+    <Compile Include="MetafileTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryData.cs" />
-    <Compile Include="RepositoryExtensions.cs" />
-    <Compile Include="RepositoryFixture.cs" />
-    <Compile Include="RepositorySession.cs" />
-    <Compile Include="RepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
@@ -65,7 +62,7 @@
       <Name>Leak.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
-      <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
+      <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
       <Name>Leak.Completion</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
@@ -73,16 +70,16 @@
       <Name>Leak.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
-      <Project>{c64c553c-1260-4097-8334-8979a3493eab}</Project>
+      <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
       <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
       <Name>Leak.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
-      <Project>{f0889175-1fd9-40d1-bb9e-cfdd3db8b59f}</Project>
-      <Name>Leak.Datastore</Name>
+    <ProjectReference Include="..\Leak.Metafile\Leak.Meta.Store.csproj">
+      <Project>{10b9b344-a0db-4ffb-b661-7a8d0d4d4f81}</Project>
+      <Name>Leak.Meta.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

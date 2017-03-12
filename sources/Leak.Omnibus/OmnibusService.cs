@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Leak.Common;
-using Leak.Datamap.Components;
-using Leak.Datamap.Tasks;
+using Leak.Data.Map.Components;
+using Leak.Data.Map.Tasks;
 using Leak.Events;
 using Leak.Tasks;
 
-namespace Leak.Datamap
+namespace Leak.Data.Map
 {
     /// <summary>
     /// Manages the global bitfield for a given FileHash. It manages all peers

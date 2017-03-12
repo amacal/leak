@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Tasks;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     public class MetagetTaskSize : LeakTask<MetagetContext>
     {

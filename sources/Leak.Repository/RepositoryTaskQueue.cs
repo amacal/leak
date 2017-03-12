@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Leak.Tasks;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class RepositoryTaskQueue : LeakPipelineTrigger
     {

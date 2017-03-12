@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public static class MetafileExtensions
     {

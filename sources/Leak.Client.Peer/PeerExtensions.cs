@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Leak.Common;
-using Leak.Dataget;
-using Leak.Datamap;
-using Leak.Datastore;
+using Leak.Data.Get;
+using Leak.Data.Map;
+using Leak.Data.Store;
 using Leak.Extensions.Metadata;
 using Leak.Glue;
-using Leak.Metafile;
-using Leak.Metaget;
+using Leak.Meta.Get;
+using Leak.Meta.Store;
 
 namespace Leak.Client.Peer
 {

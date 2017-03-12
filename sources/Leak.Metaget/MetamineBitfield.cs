@@ -1,9 +1,9 @@
-﻿using Leak.Common;
-using Leak.Tasks;
-using System;
+﻿using System;
 using System.Linq;
+using Leak.Common;
+using Leak.Tasks;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     /// <summary>
     /// Manages the bitfield for a metadata of a given FileHash. It manages

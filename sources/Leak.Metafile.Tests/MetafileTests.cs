@@ -2,7 +2,7 @@
 using Leak.Testing;
 using NUnit.Framework;
 
-namespace Leak.Metafile.Tests
+namespace Leak.Meta.Store.Tests
 {
     public class MetafileTests
     {

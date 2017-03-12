@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Datashare
+namespace Leak.Data.Share
 {
     public static class DatashareExtensions
     {

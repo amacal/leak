@@ -1,8 +1,8 @@
 ﻿using Leak.Glue;
-using Leak.Metafile;
+using Leak.Meta.Store;
 using Leak.Tasks;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public class MetashareDependencies
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Leak.Testing;
 
-namespace Leak.Dataget.Tests
+namespace Leak.Data.Get.Tests
 {
     public class RetrieverSession : IDisposable
     {

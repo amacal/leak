@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{69F691CF-7D66-42B3-B941-6A8579533AC7}</ProjectGuid>
+    <ProjectGuid>{7545567D-C0F9-4614-B16A-12DEEE138009}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Metashare.Tests</RootNamespace>
-    <AssemblyName>Leak.Metashare.Tests</AssemblyName>
+    <RootNamespace>Leak.Data.Get.Tests</RootNamespace>
+    <AssemblyName>Leak.Data.Get.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="F2F.Sandbox, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
+    <Reference Include="FakeItEasy, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FakeItEasy.3.1.0\lib\net40\FakeItEasy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -47,71 +47,44 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MetashareFixture.cs" />
-    <Compile Include="MetashareSession.cs" />
-    <Compile Include="MetashareTests.cs" />
+    <Compile Include="RetrieverBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="RetrieverFixture.cs" />
+    <Compile Include="RetrieverSession.cs" />
+    <Compile Include="RetrieverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
-      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
-      <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
-      <Name>Leak.Completion</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Extensions.Metadata\Leak.Extensions.Metadata.csproj">
-      <Project>{49AC3ED3-5705-40A3-B38F-CBB0D1672FFB}</Project>
-      <Name>Leak.Extensions.Metadata</Name>
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Data.Map.csproj">
+      <Project>{a69138d4-eaeb-4690-a040-5f612feddeb2}</Project>
+      <Name>Leak.Data.Map</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Extensions\Leak.Extensions.csproj">
-      <Project>{3348c6c0-81b0-4fb3-ba1d-6826968f028e}</Project>
-      <Name>Leak.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
-      <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
-      <Name>Leak.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
-      <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
-      <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
-      <Name>Leak.Memory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
-      <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
-      <Name>Leak.Metadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
-      <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>
-      <Name>Leak.Metafile</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Metashare\Leak.Metashare.csproj">
-      <Project>{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}</Project>
-      <Name>Leak.Metashare</Name>
+    <ProjectReference Include="..\Leak.Retriever\Leak.Data.Get.csproj">
+      <Project>{61b61289-d4e4-45f2-916b-d60114a4bd66}</Project>
+      <Name>Leak.Data.Get</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
-      <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
+      <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
       <Name>Leak.Tasks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Testing\Leak.Testing.csproj">
-      <Project>{56E41A71-1AC5-49D0-A8EC-B0E4767C7BF7}</Project>
+      <Project>{56e41a71-1ac5-49d0-a8ec-b0e4767c7bf7}</Project>
       <Name>Leak.Testing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

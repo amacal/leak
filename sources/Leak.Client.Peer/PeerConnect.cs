@@ -1,18 +1,18 @@
 ﻿using Leak.Common;
 using Leak.Connector;
-using Leak.Dataget;
-using Leak.Datamap;
-using Leak.Datastore;
 using Leak.Events;
 using Leak.Extensions.Metadata;
 using Leak.Files;
 using Leak.Glue;
-using Leak.Metafile;
-using Leak.Metaget;
 using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
+using Leak.Data.Get;
+using Leak.Data.Map;
+using Leak.Data.Store;
+using Leak.Meta.Get;
+using Leak.Meta.Store;
 
 namespace Leak.Client.Peer
 {

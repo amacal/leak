@@ -1,9 +1,9 @@
-﻿using F2F.Sandbox;
+﻿using System;
+using F2F.Sandbox;
 using Leak.Common;
 using Leak.Testing;
-using System;
 
-namespace Leak.Metaget.Tests
+namespace Leak.Meta.Get.Tests
 {
     public class MetagetSession : IDisposable
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Leak.Files;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class RepositoryView : IDisposable
     {

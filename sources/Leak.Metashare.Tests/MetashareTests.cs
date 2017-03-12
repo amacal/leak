@@ -4,7 +4,7 @@ using Leak.Extensions.Metadata;
 using Leak.Testing;
 using NUnit.Framework;
 
-namespace Leak.Metashare.Tests
+namespace Leak.Meta.Share.Tests
 {
     public class MetashareTests
     {

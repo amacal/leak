@@ -4,7 +4,7 @@ using Leak.Events;
 using Leak.Testing;
 using NUnit.Framework;
 
-namespace Leak.Datashare.Tests
+namespace Leak.Data.Share.Tests
 {
     public class DatashareTests
     {

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{545E697B-FF18-401C-A1DB-141035F57E2A}</ProjectGuid>
+    <ProjectGuid>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Datashare</RootNamespace>
-    <AssemblyName>Leak.Datashare</AssemblyName>
+    <RootNamespace>Leak.Meta.Store</RootNamespace>
+    <AssemblyName>Leak.Meta.Store</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,34 +33,41 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatashareBuilder.cs" />
-    <Compile Include="DatashareCollection.cs" />
-    <Compile Include="DatashareConfiguration.cs" />
-    <Compile Include="DatashareContext.cs" />
-    <Compile Include="DatashareDependencies.cs" />
-    <Compile Include="DatashareEntry.cs" />
-    <Compile Include="DatashareExtensions.cs" />
-    <Compile Include="DatashareHooks.cs" />
-    <Compile Include="DatashareParameters.cs" />
-    <Compile Include="DatashareService.cs" />
+    <Compile Include="HashExtensions.cs" />
+    <Compile Include="MetafileBuilder.cs" />
+    <Compile Include="MetafileContext.cs" />
+    <Compile Include="MetafileDependencies.cs" />
+    <Compile Include="MetafileDestination.cs" />
+    <Compile Include="MetafileExtensions.cs" />
+    <Compile Include="MetafileHooks.cs" />
+    <Compile Include="MetafileParameters.cs" />
+    <Compile Include="MetafileImplementation.cs" />
+    <Compile Include="MetafileService.cs" />
+    <Compile Include="MetafileTaskRead.cs" />
+    <Compile Include="MetafileTaskVerified.cs" />
+    <Compile Include="MetafileTaskWritten.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
-      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
-      <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
+      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
-      <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
+    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
+      <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
+      <Name>Leak.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
-      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
-      <Name>Leak.Datastore</Name>
+    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+      <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
+      <Name>Leak.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
+      <Name>Leak.Tasks</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

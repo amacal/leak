@@ -1,4 +1,4 @@
-﻿namespace Leak.Metashare
+﻿namespace Leak.Meta.Share
 {
     public class MetashareConfiguration
     {

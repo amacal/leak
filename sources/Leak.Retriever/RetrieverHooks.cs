@@ -1,7 +1,7 @@
 ﻿using System;
 using Leak.Events;
 
-namespace Leak.Dataget
+namespace Leak.Data.Get
 {
     public class RetrieverHooks
     {

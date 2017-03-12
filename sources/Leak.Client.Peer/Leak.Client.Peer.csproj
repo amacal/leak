@@ -86,13 +86,13 @@
       <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
       <Name>Leak.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Metafile\Leak.Metafile.csproj">
+    <ProjectReference Include="..\Leak.Metafile\Leak.Meta.Store.csproj">
       <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>
-      <Name>Leak.Metafile</Name>
+      <Name>Leak.Meta.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Metaget\Leak.Metaget.csproj">
+    <ProjectReference Include="..\Leak.Metaget\Leak.Meta.Get.csproj">
       <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
-      <Name>Leak.Metaget</Name>
+      <Name>Leak.Meta.Get</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</Project>
@@ -102,17 +102,17 @@
       <Project>{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}</Project>
       <Name>Leak.Networking</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Omnibus\Leak.Datamap.csproj">
+    <ProjectReference Include="..\Leak.Omnibus\Leak.Data.Map.csproj">
       <Project>{A69138D4-EAEB-4690-A040-5F612FEDDEB2}</Project>
-      <Name>Leak.Datamap</Name>
+      <Name>Leak.Data.Map</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Datastore.csproj">
+    <ProjectReference Include="..\Leak.Repository\Leak.Data.Store.csproj">
       <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
-      <Name>Leak.Datastore</Name>
+      <Name>Leak.Data.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Retriever\Leak.Dataget.csproj">
+    <ProjectReference Include="..\Leak.Retriever\Leak.Data.Get.csproj">
       <Project>{61B61289-D4E4-45F2-916B-D60114A4BD66}</Project>
-      <Name>Leak.Dataget</Name>
+      <Name>Leak.Data.Get</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Security.Cryptography;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public static class HashExtensions
     {

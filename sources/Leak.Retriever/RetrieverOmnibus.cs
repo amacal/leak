@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Leak.Common;
 
-namespace Leak.Dataget
+namespace Leak.Data.Get
 {
     public interface RetrieverOmnibus
     {

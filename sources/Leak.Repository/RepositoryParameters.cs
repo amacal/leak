@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class RepositoryParameters
     {

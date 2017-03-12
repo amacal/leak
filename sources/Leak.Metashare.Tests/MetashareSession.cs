@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Leak.Metashare.Tests
+namespace Leak.Meta.Share.Tests
 {
     public class MetashareSession : IDisposable
     {

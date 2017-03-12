@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     public static class MetagetExtensions
     {

@@ -1,9 +1,9 @@
-﻿using Leak.Common;
-using Leak.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Leak.Common;
+using Leak.Events;
 
-namespace Leak.Datashare
+namespace Leak.Data.Share
 {
     public class DatashareService : IDisposable
     {

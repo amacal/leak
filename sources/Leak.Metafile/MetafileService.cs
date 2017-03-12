@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Common;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public interface MetafileService : IDisposable
     {

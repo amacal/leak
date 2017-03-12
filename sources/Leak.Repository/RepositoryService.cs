@@ -2,7 +2,7 @@
 using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class RepositoryService : IDisposable
     {

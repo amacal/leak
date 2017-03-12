@@ -4,7 +4,7 @@ using Leak.Completion;
 using Leak.Files;
 using NUnit.Framework;
 using System.IO;
-using Leak.Datastore;
+using Leak.Data.Store;
 using File = System.IO.File;
 
 namespace Leak.Core.Tests.Repository

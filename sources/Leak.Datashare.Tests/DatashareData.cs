@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System.Linq;
+﻿using System.Linq;
+using Leak.Common;
 
-namespace Leak.Datashare.Tests
+namespace Leak.Data.Share.Tests
 {
     public class DatashareData
     {

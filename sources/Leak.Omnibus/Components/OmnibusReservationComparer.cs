@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Leak.Common;
 
-namespace Leak.Datamap.Components
+namespace Leak.Data.Map.Components
 {
     public class OmnibusReservationComparer : IEqualityComparer<BlockIndex>, IEqualityComparer<PieceInfo>
     {

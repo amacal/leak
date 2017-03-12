@@ -1,9 +1,9 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Extensions.Metadata;
 using Leak.Tasks;
-using System;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     public class MetagetService : IDisposable
     {

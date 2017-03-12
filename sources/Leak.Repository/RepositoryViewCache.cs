@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Leak.Datastore
+namespace Leak.Data.Store
 {
     public class RepositoryViewCache : IDisposable
     {

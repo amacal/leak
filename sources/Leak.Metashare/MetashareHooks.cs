@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public class MetashareHooks
     {

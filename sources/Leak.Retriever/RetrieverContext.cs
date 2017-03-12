@@ -1,6 +1,6 @@
 ﻿using Leak.Tasks;
 
-namespace Leak.Dataget
+namespace Leak.Data.Get
 {
     public class RetrieverContext
     {

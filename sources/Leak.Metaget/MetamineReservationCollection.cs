@@ -1,8 +1,8 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Leak.Common;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     public class MetamineReservationCollection
     {

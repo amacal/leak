@@ -3,7 +3,7 @@ using FakeItEasy;
 using Leak.Common;
 using Leak.Testing;
 
-namespace Leak.Dataget.Tests
+namespace Leak.Data.Get.Tests
 {
     public class RetrieverFixture : IDisposable
     {

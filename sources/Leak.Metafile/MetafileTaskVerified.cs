@@ -1,13 +1,13 @@
-﻿using Leak.Common;
-using Leak.Files;
-using Leak.Metadata;
-using Leak.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using Leak.Common;
+using Leak.Files;
+using Leak.Metadata;
+using Leak.Tasks;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public class MetafileTaskVerified : LeakTask<MetafileContext>
     {

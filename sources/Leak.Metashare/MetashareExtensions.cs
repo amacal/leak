@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public static class MetashareExtensions
     {

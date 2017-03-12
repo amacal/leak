@@ -1,10 +1,10 @@
-﻿using F2F.Sandbox;
+﻿using System;
+using F2F.Sandbox;
 using Leak.Common;
+using Leak.Data.Store;
 using Leak.Glue;
-using System;
-using Leak.Datastore;
 
-namespace Leak.Datashare.Tests
+namespace Leak.Data.Share.Tests
 {
     public class DatashareSession : IDisposable
     {

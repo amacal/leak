@@ -2,7 +2,7 @@
 using Leak.Common;
 using Leak.Testing;
 
-namespace Leak.Datamap.Tests
+namespace Leak.Data.Map.Tests
 {
     public class OmnibusSession : IDisposable
     {

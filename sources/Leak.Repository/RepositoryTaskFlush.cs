@@ -1,4 +1,4 @@
-﻿namespace Leak.Datastore
+﻿namespace Leak.Data.Store
 {
     public class RepositoryTaskFlush : RepositoryTask
     {

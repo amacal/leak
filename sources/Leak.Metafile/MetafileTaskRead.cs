@@ -2,7 +2,7 @@
 using Leak.Files;
 using Leak.Tasks;
 
-namespace Leak.Metafile
+namespace Leak.Meta.Store
 {
     public class MetafileTaskRead : LeakTask<MetafileContext>
     {

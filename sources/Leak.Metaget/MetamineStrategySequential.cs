@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     public class MetamineStrategySequential : MetamineStrategy
     {

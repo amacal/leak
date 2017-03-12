@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Leak.Common;
 
-namespace Leak.Datamap.Events
+namespace Leak.Data.Map.Events
 {
     public class OmnibusReservationEvent
     {

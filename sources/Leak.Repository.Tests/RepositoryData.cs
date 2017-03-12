@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Leak.Common;
 
-namespace Leak.Datastore.Tests
+namespace Leak.Data.Store.Tests
 {
     public class RepositoryData
     {

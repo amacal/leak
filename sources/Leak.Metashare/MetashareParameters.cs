@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public class MetashareParameters
     {

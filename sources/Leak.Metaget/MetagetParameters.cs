@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Metaget
+namespace Leak.Meta.Get
 {
     public class MetagetParameters
     {

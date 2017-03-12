@@ -2,7 +2,7 @@
 using System.Linq;
 using Leak.Common;
 
-namespace Leak.Datamap.Components
+namespace Leak.Data.Map.Components
 {
     public class OmnibusBitfieldCollection
     {

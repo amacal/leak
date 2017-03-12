@@ -1,10 +1,10 @@
 ﻿using System;
 using Leak.Common;
-using Leak.Datamap;
+using Leak.Data.Map;
 using Leak.Events;
 using Leak.Tasks;
 
-namespace Leak.Dataget
+namespace Leak.Data.Get
 {
     public class RetrieverService : IDisposable
     {

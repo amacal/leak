@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Leak.Common;
-using Leak.Datamap.Components;
+using Leak.Data.Map.Components;
 
-namespace Leak.Datamap.Strategies
+namespace Leak.Data.Map.Strategies
 {
     public class OmnibusStrategyRarestFirst : OmnibusStrategy
     {

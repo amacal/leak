@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Leak.Common;
 
-namespace Leak.Metashare
+namespace Leak.Meta.Share
 {
     public class MetashareCollection
     {

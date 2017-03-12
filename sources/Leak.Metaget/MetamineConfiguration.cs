@@ -1,4 +1,4 @@
-﻿namespace Leak.Metaget
+﻿namespace Leak.Meta.Get
 {
     public class MetamineConfiguration
     {

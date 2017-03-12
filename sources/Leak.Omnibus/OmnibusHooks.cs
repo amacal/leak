@@ -1,7 +1,7 @@
 ﻿using System;
 using Leak.Events;
 
-namespace Leak.Datamap
+namespace Leak.Data.Map
 {
     public class OmnibusHooks
     {

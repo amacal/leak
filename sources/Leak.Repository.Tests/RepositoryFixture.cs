@@ -8,7 +8,7 @@ using Leak.Metadata;
 using Leak.Tasks;
 using File = System.IO.File;
 
-namespace Leak.Datastore.Tests
+namespace Leak.Data.Store.Tests
 {
     public class RepositoryFixture : IDisposable
     {
