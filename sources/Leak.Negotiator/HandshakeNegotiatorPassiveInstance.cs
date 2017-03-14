@@ -8,14 +8,14 @@ namespace Leak.Negotiator
         private readonly PeerHash peer;
         private readonly HandshakeOptions options;
 
-        public HandshakeNegotiatorPassiveInstance(PeerHash peer)
+        public HandshakeNegotiatorPassiveInstance(PeerHash peer, FileHash hash, HandshakeOptions options)
         {
             this.peer = peer;
-            this.options = HandshakeOptions.Extended;
-            this.hashes = new FileHashCollection();
+            this.options = options;
+            this.hashes = new FileHashCollection(hash);
         }
 
-        public HandshakeNegotiatorPassiveInstance(FileHashCollection hashes, PeerHash peer, HandshakeOptions options)
+        public HandshakeNegotiatorPassiveInstance(PeerHash peer, FileHashCollection hashes, HandshakeOptions options)
         {
             this.hashes = hashes;
             this.peer = peer;

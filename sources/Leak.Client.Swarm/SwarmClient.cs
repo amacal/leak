@@ -12,9 +12,19 @@ namespace Leak.Client.Swarm
     {
         private readonly SwarmRuntime runtime;
         private readonly ConcurrentBag<SwarmConnect> online;
+        private readonly SwarmSettings settings;
 
         public SwarmClient()
         {
+            runtime = new SwarmFactory(null);
+            online = new ConcurrentBag<SwarmConnect>();
+            settings = new SwarmSettings();
+        }
+
+        public SwarmClient(SwarmSettings settings)
+        {
+            this.settings = settings;
+
             runtime = new SwarmFactory(null);
             online = new ConcurrentBag<SwarmConnect>();
         }
@@ -29,6 +39,7 @@ namespace Leak.Client.Swarm
             SwarmConnect connect = new SwarmConnect
             {
                 Hash = hash,
+                Settings = settings,
                 Localhost = PeerHash.Random(),
                 Notifications = new SwarmCollection(),
                 Completion = new TaskCompletionSource<SwarmSession>(),

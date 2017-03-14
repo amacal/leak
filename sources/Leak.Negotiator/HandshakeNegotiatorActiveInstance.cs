@@ -8,7 +8,7 @@ namespace Leak.Negotiator
         private readonly PeerHash peer;
         private readonly HandshakeOptions options;
 
-        public HandshakeNegotiatorActiveInstance(FileHash hash, PeerHash peer, HandshakeOptions options)
+        public HandshakeNegotiatorActiveInstance(PeerHash peer, FileHash hash, HandshakeOptions options)
         {
             this.hash = hash;
             this.peer = peer;

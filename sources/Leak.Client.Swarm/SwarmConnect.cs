@@ -13,6 +13,7 @@ using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
 using Leak.Files;
 using Leak.Glue;
+using Leak.Listener;
 using Leak.Meta.Get;
 using Leak.Meta.Store;
 using Leak.Negotiator;
@@ -25,6 +26,8 @@ namespace Leak.Client.Swarm
 {
     public class SwarmConnect
     {
+        public SwarmSettings Settings { get; set; }
+
         public CompletionWorker Worker { get; set; }
         public NetworkPool Network { get; set; }
         public PipelineService Pipeline { get; set; }
@@ -43,6 +46,7 @@ namespace Leak.Client.Swarm
 
         public TrackerGetService TrackerGet { get; set; }
         public PeerConnector Connector { get; set; }
+        public PeerListener Listener { get; set; }
         public HandshakeNegotiator Negotiator { get; set; }
         public GlueService Glue { get; set; }
 
@@ -57,6 +61,7 @@ namespace Leak.Client.Swarm
         {
             StartNegotiator();
             StartConnector();
+            StartListener();
             StartGlue();
             StartDataMap();
             StartTrackerGet();
@@ -72,7 +77,8 @@ namespace Leak.Client.Swarm
                 TrackerGet.Register(new TrackerGetRegistrant
                 {
                     Hash = Hash,
-                    Address = new Uri(tracker, UriKind.Absolute)
+                    Address = new Uri(tracker, UriKind.Absolute),
+                    Port = Settings.ListenerPort
                 });
             }
         }
@@ -100,18 +106,21 @@ namespace Leak.Client.Swarm
 
         private void StartConnector()
         {
-            PeerConnectorHooks hooks = new PeerConnectorHooks
+            if (Settings.Connector)
             {
-                OnConnectionEstablished = OnConnectionEstablished
-            };
+                PeerConnectorHooks hooks = new PeerConnectorHooks
+                {
+                    OnConnectionEstablished = OnConnectionEstablished
+                };
 
-            Connector =
-                new PeerConnectorBuilder()
-                    .WithNetwork(Network)
-                    .WithPipeline(Pipeline)
-                    .Build(hooks);
+                Connector =
+                    new PeerConnectorBuilder()
+                        .WithNetwork(Network)
+                        .WithPipeline(Pipeline)
+                        .Build(hooks);
 
-            Connector.Start();
+                Connector.Start();
+            }
         }
 
         private void StartGlue()
@@ -185,6 +194,27 @@ namespace Leak.Client.Swarm
                     .Build(hooks);
 
             TrackerGet.Start();
+        }
+
+        private void StartListener()
+        {
+            if (Settings.Listener)
+            {
+                PeerListenerHooks hooks = new PeerListenerHooks
+                {
+                    OnConnectionArrived = OnConnectionArrived
+                };
+
+                Listener =
+                    new PeerListenerBuilder()
+                        .WithPeer(Localhost)
+                        .WithNetwork(Network)
+                        .WithPort(Settings)
+                        .WithExtensions()
+                        .Build(hooks);
+
+                Listener.Start();
+            }
         }
 
         private void StartMetaStore(string destination)
@@ -271,7 +301,12 @@ namespace Leak.Client.Swarm
 
         public void OnConnectionEstablished(ConnectionEstablished data)
         {
-            Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Hash, Localhost, HandshakeOptions.Extended));
+            Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Localhost, Hash, HandshakeOptions.Extended));
+        }
+
+        private void OnConnectionArrived(ConnectionArrived data)
+        {
+            Negotiator.Handle(data.Connection, new HandshakeNegotiatorPassiveInstance(Localhost, Hash, HandshakeOptions.Extended));
         }
 
         private void OnMetadataPieceReceived(MetadataReceived data)
@@ -303,7 +338,7 @@ namespace Leak.Client.Swarm
             {
                 if (Remotes.Add(peer))
                 {
-                    Connector.ConnectTo(Hash, peer);
+                    Connector?.ConnectTo(Hash, peer);
                 }
             }
         }
@@ -385,7 +420,7 @@ namespace Leak.Client.Swarm
             {
                 if (Remotes.Add(peer))
                 {
-                    Connector.ConnectTo(Hash, peer);
+                    Connector?.ConnectTo(Hash, peer);
                 }
             }
         }

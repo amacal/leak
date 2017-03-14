@@ -156,7 +156,7 @@ namespace Leak.Client.Peer
 
         public void OnConnectionEstablished(ConnectionEstablished data)
         {
-            Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Hash, Localhost, HandshakeOptions.Extended));
+            Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Localhost, Hash, HandshakeOptions.Extended));
         }
 
         public void OnConnectionRejected(ConnectionRejected data)

@@ -6,6 +6,7 @@ using Leak.Data.Map;
 using Leak.Data.Store;
 using Leak.Extensions.Metadata;
 using Leak.Glue;
+using Leak.Listener;
 using Leak.Meta.Get;
 using Leak.Meta.Store;
 
@@ -13,6 +14,16 @@ namespace Leak.Client.Swarm
 {
     public static class PeerExtensions
     {
+        public static PeerListenerBuilder WithPort(this PeerListenerBuilder builder, SwarmSettings settings)
+        {
+            if (settings.ListenerPort != null)
+            {
+                builder.WithPort(settings.ListenerPort.Value);
+            }
+
+            return builder;
+        }
+
         public static MetagetGlue AsMetaGet(this GlueService service)
         {
             return new MetaGetToGlueForwarder(service);

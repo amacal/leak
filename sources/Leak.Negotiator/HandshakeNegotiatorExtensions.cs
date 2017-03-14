@@ -25,12 +25,12 @@ namespace Leak.Negotiator
 
         public static void Start(this HandshakeNegotiator negotiator, NetworkConnection connecton, FileHash hash)
         {
-            negotiator.Start(connecton, new HandshakeNegotiatorActiveInstance(hash, PeerHash.Random(), HandshakeOptions.Extended));
+            negotiator.Start(connecton, new HandshakeNegotiatorActiveInstance(PeerHash.Random(), hash, HandshakeOptions.Extended));
         }
 
         public static void Handle(this HandshakeNegotiator negotiator, NetworkConnection connection, FileHash hash)
         {
-            negotiator.Handle(connection, new HandshakeNegotiatorPassiveInstance(new FileHashCollection(hash), PeerHash.Random(), HandshakeOptions.Extended));
+            negotiator.Handle(connection, new HandshakeNegotiatorPassiveInstance(PeerHash.Random(), hash, HandshakeOptions.Extended));
         }
     }
 }

@@ -23,7 +23,14 @@ namespace Leak
                 string[] trackers = options.Trackers;
                 FileHash hash = FileHash.Parse(options.Hash);
 
-                using (SwarmClient client = new SwarmClient())
+                SwarmSettings settings = new SwarmSettings
+                {
+                    Connector = false,
+                    Listener = true,
+                    ListenerPort = Int32.Parse(options.Port)
+                };
+
+                using (SwarmClient client = new SwarmClient(settings))
                 {
                     SwarmSession session = await client.Connect(hash, trackers);
 

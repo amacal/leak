@@ -1,4 +1,5 @@
-﻿using Pargos;
+﻿using System;
+using Pargos;
 
 namespace Leak
 {
@@ -19,9 +20,15 @@ namespace Leak
         [Option("--destination")]
         public string Destination { get; set; }
 
+        [Option("--port")]
+        public string Port { get; set; }
+
         public bool IsValid()
         {
-            return Hash?.Length == 40 && Trackers?.Length > 0;
+            int port;
+
+            return Hash?.Length == 40 && Trackers?.Length > 0 &&
+                   Int32.TryParse(Port, out port) && port > 0 && port < 65535;
         }
     }
 }
