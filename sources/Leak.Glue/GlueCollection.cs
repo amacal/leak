@@ -35,7 +35,11 @@ namespace Leak.Glue
 
         public GlueEntry Remove(NetworkConnection connection)
         {
-            GlueEntry entry = byConnection[connection.Identifier];
+            GlueEntry entry;
+            long identifier = connection.Identifier;
+
+            if (byConnection.TryGetValue(identifier, out entry) == false)
+                return null;
 
             byPeer.Remove(entry.Peer);
             byConnection.Remove(entry.Identifier);
