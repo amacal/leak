@@ -10,6 +10,7 @@ using Leak.Data.Map;
 using Leak.Data.Store;
 using Leak.Events;
 using Leak.Extensions.Metadata;
+using Leak.Extensions.Peers;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Meta.Get;
@@ -58,9 +59,22 @@ namespace Leak.Client.Swarm
             StartConnector();
             StartGlue();
             StartDataMap();
-            StartTrackerGet(trackers);
+            StartTrackerGet();
 
+            Announce(trackers);
             Completion.SetResult(new SwarmSession(this));
+        }
+
+        private void Announce(string[] trackers)
+        {
+            foreach (string tracker in trackers)
+            {
+                TrackerGet.Register(new TrackerGetRegistrant
+                {
+                    Hash = Hash,
+                    Address = new Uri(tracker, UriKind.Absolute)
+                });
+            }
         }
 
         public void Download(string destination)
@@ -109,6 +123,11 @@ namespace Leak.Client.Swarm
                 OnMetadataRequestSent = OnMetadataRequestSent
             };
 
+            PeersHooks exchange = new PeersHooks
+            {
+                OnPeersDataReceived = OnPeerDataReceived
+            };
+
             GlueHooks hooks = new GlueHooks
             {
                 OnPeerConnected = OnPeerConnected,
@@ -124,6 +143,7 @@ namespace Leak.Client.Swarm
                     .WithBlocks(Blocks)
                     .WithPipeline(Pipeline)
                     .WithPlugin(new MetadataPlugin(metadata))
+                    .WithPlugin(new PeersPlugin(exchange))
                     .Build(hooks);
 
             Glue.Start();
@@ -150,7 +170,7 @@ namespace Leak.Client.Swarm
             DataMap.Start();
         }
 
-        private void StartTrackerGet(string[] trackers)
+        private void StartTrackerGet()
         {
             TrackerGetHooks hooks = new TrackerGetHooks
             {
@@ -165,15 +185,6 @@ namespace Leak.Client.Swarm
                     .Build(hooks);
 
             TrackerGet.Start();
-
-            foreach (string tracker in trackers)
-            {
-                TrackerGet.Register(new TrackerGetRegistrant
-                {
-                    Hash = Hash,
-                    Address = new Uri(tracker, UriKind.Absolute)
-                });
-            }
         }
 
         private void StartMetaStore(string destination)
@@ -284,6 +295,17 @@ namespace Leak.Client.Swarm
             };
 
             Notifications.Enqueue(notification);
+        }
+
+        private void OnPeerDataReceived(PeersReceived data)
+        {
+            foreach (PeerAddress peer in data.Remotes)
+            {
+                if (Remotes.Add(peer))
+                {
+                    Connector.ConnectTo(Hash, peer);
+                }
+            }
         }
 
         private void OnPeerConnected(PeerConnected data)
