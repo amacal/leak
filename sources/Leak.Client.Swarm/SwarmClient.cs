@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Leak.Common;
 using Leak.Events;
@@ -31,6 +32,8 @@ namespace Leak.Client.Swarm
                 Localhost = PeerHash.Random(),
                 Notifications = new SwarmCollection(),
                 Completion = new TaskCompletionSource<SwarmSession>(),
+                Peers = new HashSet<PeerHash>(),
+                Remotes = new HashSet<PeerAddress>(),
                 Network = runtime.Network,
                 Pipeline = runtime.Pipeline,
                 Files = runtime.Files,

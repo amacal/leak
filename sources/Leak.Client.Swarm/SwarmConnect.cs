@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Leak.Common;
@@ -32,6 +33,9 @@ namespace Leak.Client.Swarm
         public FileHash Hash { get; set; }
         public PeerHash Localhost { get; set; }
         public Metainfo Metainfo { get; set; }
+
+        public HashSet<PeerHash> Peers { get; set; }
+        public HashSet<PeerAddress> Remotes { get; set; }
 
         public SwarmCollection Notifications { get; set; }
         public TaskCompletionSource<SwarmSession> Completion { get; set; }
@@ -105,20 +109,22 @@ namespace Leak.Client.Swarm
                 OnMetadataRequestSent = OnMetadataRequestSent
             };
 
+            GlueHooks hooks = new GlueHooks
+            {
+                OnPeerConnected = OnPeerConnected,
+                OnPeerDisconnected = OnPeerDisconnected,
+                OnPeerBitfieldChanged = OnPeerBitfieldChanged,
+                OnPeerStatusChanged = OnPeerStatusChanged,
+                OnBlockReceived = data => DataGet?.Handle(data)
+            };
+
             Glue =
                 new GlueBuilder()
                     .WithHash(Hash)
                     .WithBlocks(Blocks)
                     .WithPipeline(Pipeline)
                     .WithPlugin(new MetadataPlugin(metadata))
-                    .Build(new GlueHooks
-                    {
-                        OnPeerConnected = OnPeerConnected,
-                        OnPeerDisconnected = OnPeerDisconnected,
-                        OnPeerBitfieldChanged = OnPeerBitfieldChanged,
-                        OnPeerStatusChanged = OnPeerStatusChanged,
-                        OnBlockReceived = data => DataGet?.Handle(data)
-                    });
+                    .Build(hooks);
 
             Glue.Start();
         }
@@ -289,6 +295,8 @@ namespace Leak.Client.Swarm
             };
 
             Notifications.Enqueue(notification);
+
+            Peers.Add(data.Peer);
             DataMap?.Handle(data);
         }
 
@@ -301,6 +309,7 @@ namespace Leak.Client.Swarm
             };
 
             Notifications.Enqueue(notification);
+            Peers.Remove(data.Peer);
         }
 
         private void OnPeerBitfieldChanged(PeerBitfieldChanged data)
@@ -352,7 +361,10 @@ namespace Leak.Client.Swarm
         {
             foreach (PeerAddress peer in data.Peers)
             {
-                Connector.ConnectTo(Hash, peer);
+                if (Remotes.Add(peer))
+                {
+                    Connector.ConnectTo(Hash, peer);
+                }
             }
         }
 
