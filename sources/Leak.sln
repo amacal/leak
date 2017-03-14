@@ -73,9 +73,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Data.Store", "Leak.Rep
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Data.Store.Tests", "Leak.Repository.Tests\Leak.Data.Store.Tests.csproj", "{9A32CD88-2CF1-4C6E-A821-C356F409BDC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metadata", "Leak.Metadata\Leak.Metadata.csproj", "{73395DE7-5003-490C-8804-541DE647153D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Meta.Info", "Leak.Metadata\Leak.Meta.Info.csproj", "{73395DE7-5003-490C-8804-541DE647153D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Metadata.Tests", "Leak.Metadata.Tests\Leak.Metadata.Tests.csproj", "{3DE34B32-8848-46F8-A803-DE62193FA7BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Meta.Info.Tests", "Leak.Metadata.Tests\Leak.Meta.Info.Tests.csproj", "{3DE34B32-8848-46F8-A803-DE62193FA7BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Meta.Store", "Leak.Metafile\Leak.Meta.Store.csproj", "{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}"
 EndProject

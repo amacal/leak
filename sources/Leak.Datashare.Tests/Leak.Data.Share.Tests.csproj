@@ -87,9 +87,9 @@
       <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
       <Name>Leak.Memory</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+    <ProjectReference Include="..\Leak.Metadata\Leak.Meta.Info.csproj">
       <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
-      <Name>Leak.Metadata</Name>
+      <Name>Leak.Meta.Info</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Repository\Leak.Data.Store.csproj">
       <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>

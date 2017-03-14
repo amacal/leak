@@ -8,8 +8,8 @@ using Leak.Extensions.Metadata;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
+using Leak.Meta.Info;
 using Leak.Meta.Store;
-using Leak.Metadata;
 using Leak.Tasks;
 using File = System.IO.File;
 

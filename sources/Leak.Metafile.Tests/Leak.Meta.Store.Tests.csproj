@@ -73,9 +73,9 @@
       <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+    <ProjectReference Include="..\Leak.Metadata\Leak.Meta.Info.csproj">
       <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
-      <Name>Leak.Metadata</Name>
+      <Name>Leak.Meta.Info</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Metafile\Leak.Meta.Store.csproj">
       <Project>{10b9b344-a0db-4ffb-b661-7a8d0d4d4f81}</Project>

@@ -11,19 +11,16 @@ namespace Leak.Client.Peer
 {
     public class PeerClient : IDisposable
     {
-        private readonly FileHash hash;
         private readonly PeerRuntime runtime;
         private readonly ConcurrentBag<PeerConnect> online;
 
-        public PeerClient(FileHash hash)
+        public PeerClient()
         {
-            this.hash = hash;
-
             runtime = new PeerFactory(null);
             online = new ConcurrentBag<PeerConnect>();
         }
 
-        public Task<PeerSession> Connect(PeerAddress address)
+        public Task<PeerSession> Connect(FileHash hash, PeerAddress address)
         {
             runtime.Start(new NetworkPoolHooks
             {
@@ -72,9 +69,9 @@ namespace Leak.Client.Peer
 
         private void OnConnectionTerminated(ConnectionTerminated data)
         {
-            foreach (PeerConnect session in online.ToArray())
+            foreach (PeerConnect connect in online.ToArray())
             {
-                if (session.Glue?.Disconnect(data.Connection) == true)
+                if (connect.Glue?.Disconnect(data.Connection) == true)
                 {
                     break;
                 }

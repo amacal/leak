@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace Leak.Client.Swarm
 {
-    public class PeerCollection
+    public class SwarmCollection
     {
         private readonly ConcurrentQueue<TaskCompletionSource<SwarmNotification>> completions;
         private readonly ConcurrentQueue<SwarmNotification> notifications;
 
-        public PeerCollection()
+        public SwarmCollection()
         {
             completions = new ConcurrentQueue<TaskCompletionSource<SwarmNotification>>();
             notifications = new ConcurrentQueue<SwarmNotification>();

@@ -2,7 +2,7 @@
 using System.IO;
 using F2F.Sandbox;
 using Leak.Common;
-using Leak.Metadata;
+using Leak.Meta.Info;
 using Leak.Testing;
 
 namespace Leak.Data.Map.Tests

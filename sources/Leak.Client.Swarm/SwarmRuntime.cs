@@ -1,4 +1,7 @@
-﻿using Leak.Networking;
+﻿using Leak.Common;
+using Leak.Completion;
+using Leak.Files;
+using Leak.Networking;
 using Leak.Tasks;
 
 namespace Leak.Client.Swarm
@@ -8,6 +11,12 @@ namespace Leak.Client.Swarm
         PipelineService Pipeline { get; }
 
         NetworkPool Network { get; }
+
+        FileFactory Files { get; }
+
+        DataBlockFactory Blocks { get; }
+
+        CompletionWorker Worker { get; }
 
         void Start(NetworkPoolHooks hooks);
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Leak.Common;
 using Leak.Files;
-using Leak.Metadata;
+using Leak.Meta.Info;
 using Leak.Tasks;
 
 namespace Leak.Meta.Store

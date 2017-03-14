@@ -1,18 +1,23 @@
-﻿using Leak.Completion;
+﻿using Leak.Common;
+using Leak.Completion;
+using Leak.Files;
+using Leak.Memory;
 using Leak.Networking;
 using Leak.Tasks;
 
 namespace Leak.Client.Swarm
 {
-    public class PeerFactory : SwarmRuntime
+    public class SwarmFactory : SwarmRuntime
     {
         private readonly SwarmLogger logger;
 
         private LeakPipeline pipeline;
         private NetworkPool network;
         private CompletionThread worker;
+        private FileFactory files;
+        private DataBlockFactory blocks;
 
-        public PeerFactory(SwarmLogger logger)
+        public SwarmFactory(SwarmLogger logger)
         {
             this.logger = logger;
         }
@@ -25,6 +30,21 @@ namespace Leak.Client.Swarm
         public NetworkPool Network
         {
             get { return network; }
+        }
+
+        public FileFactory Files
+        {
+            get { return files; }
+        }
+
+        public DataBlockFactory Blocks
+        {
+            get { return blocks; }
+        }
+
+        public CompletionWorker Worker
+        {
+            get { return worker; }
         }
 
         public void Start(NetworkPoolHooks hooks)
@@ -63,6 +83,18 @@ namespace Leak.Client.Swarm
                     logger?.Info("starting network pool");
                     network.Start();
                 }
+
+                if (files == null)
+                {
+                    logger?.Info("creating file factory");
+                    files = new FileFactory(worker);
+                }
+
+                if (blocks == null)
+                {
+                    logger?.Info("creating blocks factory");
+                    blocks = new BufferedBlockFactory();
+                }
             }
         }
 
@@ -88,6 +120,12 @@ namespace Leak.Client.Swarm
                     logger?.Info("disposing pipeline service");
                     pipeline?.Stop();
                     pipeline = null;
+                }
+
+                if (blocks != null)
+                {
+                    logger?.Info("disposing blocks factory");
+                    blocks = null;
                 }
             }
         }

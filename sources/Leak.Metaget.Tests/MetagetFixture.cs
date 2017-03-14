@@ -3,7 +3,7 @@ using System.IO;
 using F2F.Sandbox;
 using FakeItEasy;
 using Leak.Common;
-using Leak.Metadata;
+using Leak.Meta.Info;
 using Leak.Testing;
 using File = System.IO.File;
 

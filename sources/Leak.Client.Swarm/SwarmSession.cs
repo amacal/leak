@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Leak.Common;
 
-namespace Leak.Client.Peer
+namespace Leak.Client.Swarm
 {
-    public class PeerSession
+    public class SwarmSession
     {
-        private readonly PeerConnect inner;
+        private readonly SwarmConnect inner;
 
-        public PeerSession(PeerConnect inner)
+        public SwarmSession(SwarmConnect inner)
         {
             this.inner = inner;
         }
@@ -17,17 +17,12 @@ namespace Leak.Client.Peer
             get { return inner.Hash; }
         }
 
-        public PeerHash Peer
-        {
-            get { return inner.Peer; }
-        }
-
         public void Download(string destination)
         {
             inner.Download(destination);
         }
 
-        public Task<PeerNotification> Next()
+        public Task<SwarmNotification> Next()
         {
             return inner.Notifications.Next();
         }

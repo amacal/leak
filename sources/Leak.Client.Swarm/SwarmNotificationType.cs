@@ -1,6 +1,18 @@
 ﻿namespace Leak.Client.Swarm
 {
-    public class SwarmNotificationType
+    public enum SwarmNotificationType
     {
+        PeerConnected,
+        PeerDisconnected,
+        PeerBitfieldChanged,
+        PeerStatusChanged,
+        MetafileMeasured,
+        MetafileReceived,
+        MetafileRequested,
+        MetafileCompleted,
+        DataAllocated,
+        DataVerified,
+        DataCompleted,
+        PieceCompleted
     }
 }

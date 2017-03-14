@@ -1,12 +1,12 @@
-﻿using Leak.Bencoding;
-using Leak.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Leak.Bencoding;
+using Leak.Common;
 
-namespace Leak.Metadata
+namespace Leak.Meta.Info
 {
     public class MetainfoBuilder
     {

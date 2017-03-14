@@ -21,11 +21,11 @@ namespace Leak.Connect
             if (options.IsValid())
             {
                 FileHash hash = FileHash.Parse(options.Hash);
+                PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
 
-                using (PeerClient client = new PeerClient(hash))
+                using (PeerClient client = new PeerClient())
                 {
-                    PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
-                    PeerSession session = await client.Connect(address);
+                    PeerSession session = await client.Connect(hash, address);
 
                     Console.WriteLine($"Hash: {hash}");
                     Console.WriteLine($"Peer: {session.Peer}");

@@ -6,7 +6,7 @@ using Leak.Data.Store;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Memory;
-using Leak.Metadata;
+using Leak.Meta.Info;
 using Leak.Tasks;
 using File = System.IO.File;
 

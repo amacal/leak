@@ -74,9 +74,9 @@
       <Project>{49ac3ed3-5705-40a3-b38f-cbb0d1672ffb}</Project>
       <Name>Leak.Extensions.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Metadata\Leak.Metadata.csproj">
+    <ProjectReference Include="..\Leak.Metadata\Leak.Meta.Info.csproj">
       <Project>{73395de7-5003-490c-8804-541de647153d}</Project>
-      <Name>Leak.Metadata</Name>
+      <Name>Leak.Meta.Info</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Metaget\Leak.Meta.Get.csproj">
       <Project>{da5ef2f2-7938-44cf-8869-4530dfc95b89}</Project>
