@@ -64,7 +64,14 @@ namespace Leak.Client.Swarm
                 {
                     List<PeerHash> peers = new List<PeerHash>();
 
-                    service.ForEachPeer(peers.Add);
+                    service.ForEachPeer(peer =>
+                    {
+                        if (service.IsSupported(peer, MetadataPlugin.Name))
+                        {
+                            peers.Add(peer);
+                        }
+                    });
+
                     return peers;
                 }
             }

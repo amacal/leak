@@ -202,7 +202,8 @@ namespace Leak.Client.Swarm
             {
                 PeerListenerHooks hooks = new PeerListenerHooks
                 {
-                    OnConnectionArrived = OnConnectionArrived
+                    OnConnectionArrived = OnConnectionArrived,
+                    OnListenerStarted = OnListenerStarted
                 };
 
                 Listener =
@@ -261,7 +262,7 @@ namespace Leak.Client.Swarm
                 OnDataVerified = OnDataVerified,
                 OnBlockWritten = data => DataGet?.Handle(data),
                 OnPieceAccepted = data => DataGet?.Handle(data),
-                OnPieceRejected = data => DataGet?.Handle(data)
+                OnPieceRejected = OnPieceRejected
             };
 
             DataStore =
@@ -312,8 +313,20 @@ namespace Leak.Client.Swarm
             }
             else
             {
+                SwarmNotification notification = new SwarmNotification
+                {
+                    Type = SwarmNotificationType.PeerRejected,
+                    Remote = data.Remote
+                };
+
+                Notifications.Enqueue(notification);
                 data.Connection.Terminate();
             }
+        }
+
+        private void OnListenerStarted(ListenerStarted data)
+        {
+            Settings.ListenerPort = data.Port;
         }
 
         private void OnMetadataPieceReceived(MetadataReceived data)
@@ -343,9 +356,22 @@ namespace Leak.Client.Swarm
         {
             foreach (PeerAddress peer in data.Remotes)
             {
-                if (Remotes.Add(peer) && Settings.Filter?.Accept(peer) != false)
+                if (Remotes.Add(peer))
                 {
-                    Connector?.ConnectTo(Hash, peer);
+                    if (Settings.Filter?.Accept(peer) != false)
+                    {
+                        Connector?.ConnectTo(Hash, peer);
+                    }
+                    else
+                    {
+                        SwarmNotification notification = new SwarmNotification
+                        {
+                            Type = SwarmNotificationType.PeerRejected,
+                            Remote = peer
+                        };
+
+                        Notifications.Enqueue(notification);
+                    }
                 }
             }
         }
@@ -425,9 +451,22 @@ namespace Leak.Client.Swarm
         {
             foreach (PeerAddress peer in data.Peers)
             {
-                if (Remotes.Add(peer) && Settings.Filter?.Accept(peer) != false)
+                if (Remotes.Add(peer))
                 {
-                    Connector?.ConnectTo(Hash, peer);
+                    if (Settings.Filter?.Accept(peer) != false)
+                    {
+                        Connector?.ConnectTo(Hash, peer);
+                    }
+                    else
+                    {
+                        SwarmNotification notification = new SwarmNotification
+                        {
+                            Type = SwarmNotificationType.PeerRejected,
+                            Remote = peer
+                        };
+
+                        Notifications.Enqueue(notification);
+                    }
                 }
             }
         }
@@ -480,6 +519,18 @@ namespace Leak.Client.Swarm
 
             Notifications.Enqueue(notification);
             DataMap?.Handle(data);
+        }
+
+        private void OnPieceRejected(PieceRejected data)
+        {
+            SwarmNotification notification = new SwarmNotification
+            {
+                Type = SwarmNotificationType.PieceRejected,
+                Piece = data.Piece
+            };
+
+            Notifications.Enqueue(notification);
+            DataGet?.Handle(data);
         }
     }
 }

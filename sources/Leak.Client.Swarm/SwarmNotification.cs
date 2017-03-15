@@ -7,7 +7,7 @@ namespace Leak.Client.Swarm
         public SwarmNotificationType Type { get; set; }
 
         public PeerHash Peer { get; set; }
-        public PeerAddress Address { get; set; }
+        public PeerAddress Remote { get; set; }
 
         public Bitfield Bitfield { get; set; }
         public PeerState State { get; set; }

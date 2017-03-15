@@ -4,6 +4,7 @@
     {
         PeerConnected,
         PeerDisconnected,
+        PeerRejected,
         PeerBitfieldChanged,
         PeerStatusChanged,
         MetafileMeasured,
@@ -13,6 +14,7 @@
         DataAllocated,
         DataVerified,
         DataCompleted,
-        PieceCompleted
+        PieceCompleted,
+        PieceRejected
     }
 }

@@ -44,8 +44,16 @@ namespace Leak
 
                         switch (notification.Type)
                         {
+                            case SwarmNotificationType.PeerConnected:
+                                Console.WriteLine($"Peer: connected {notification.Peer}");
+                                break;
+
                             case SwarmNotificationType.PeerDisconnected:
-                                Console.WriteLine("disconneced");
+                                Console.WriteLine($"Peer: disconnected {notification.Peer}");
+                                break;
+
+                            case SwarmNotificationType.PeerRejected:
+                                Console.WriteLine($"Peer: rejected {notification.Remote}");
                                 break;
 
                             case SwarmNotificationType.PeerBitfieldChanged:
@@ -93,6 +101,10 @@ namespace Leak
 
                             case SwarmNotificationType.PieceCompleted:
                                 Console.WriteLine($"Data; completed piece {notification.Piece}");
+                                break;
+
+                            case SwarmNotificationType.PieceRejected:
+                                Console.WriteLine($"Data; rejected piece {notification.Piece}");
                                 break;
                         }
                     }
