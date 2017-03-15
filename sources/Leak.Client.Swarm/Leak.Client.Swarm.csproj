@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SwarmFilter.cs" />
     <Compile Include="SwarmSettings.cs" />
     <Compile Include="SwarmExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

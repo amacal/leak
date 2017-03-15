@@ -22,13 +22,7 @@ namespace Leak
             {
                 string[] trackers = options.Trackers;
                 FileHash hash = FileHash.Parse(options.Hash);
-
-                SwarmSettings settings = new SwarmSettings
-                {
-                    Connector = false,
-                    Listener = true,
-                    ListenerPort = Int32.Parse(options.Port)
-                };
+                SwarmSettings settings = options.ToSettings();
 
                 using (SwarmClient client = new SwarmClient(settings))
                 {

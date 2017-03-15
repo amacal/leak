@@ -306,7 +306,14 @@ namespace Leak.Client.Swarm
 
         private void OnConnectionArrived(ConnectionArrived data)
         {
-            Negotiator.Handle(data.Connection, new HandshakeNegotiatorPassiveInstance(Localhost, Hash, HandshakeOptions.Extended));
+            if (Settings.Filter?.Accept(data.Remote) != false)
+            {
+                Negotiator.Handle(data.Connection, new HandshakeNegotiatorPassiveInstance(Localhost, Hash, HandshakeOptions.Extended));
+            }
+            else
+            {
+                data.Connection.Terminate();
+            }
         }
 
         private void OnMetadataPieceReceived(MetadataReceived data)
@@ -336,7 +343,7 @@ namespace Leak.Client.Swarm
         {
             foreach (PeerAddress peer in data.Remotes)
             {
-                if (Remotes.Add(peer))
+                if (Remotes.Add(peer) && Settings.Filter?.Accept(peer) != false)
                 {
                     Connector?.ConnectTo(Hash, peer);
                 }
@@ -418,7 +425,7 @@ namespace Leak.Client.Swarm
         {
             foreach (PeerAddress peer in data.Peers)
             {
-                if (Remotes.Add(peer))
+                if (Remotes.Add(peer) && Settings.Filter?.Accept(peer) != false)
                 {
                     Connector?.ConnectTo(Hash, peer);
                 }
