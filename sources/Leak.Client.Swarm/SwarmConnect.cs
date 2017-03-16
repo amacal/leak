@@ -285,7 +285,7 @@ namespace Leak.Client.Swarm
             DataGet =
                 new RetrieverBuilder()
                     .WithHash(Hash)
-                    .WithStrategy("rarest-first")
+                    .WithStrategy(Settings.Strategy)
                     .WithGlue(Glue.AsDataGet())
                     .WithPipeline(Pipeline)
                     .WithRepository(DataStore.AsDataGet())

@@ -32,6 +32,9 @@ namespace Leak
         [Option("--accept")]
         public string[] Accept { get; set; }
 
+        [Option("--strategy")]
+        public string Strategy { get; set; }
+
         public bool IsValid()
         {
             Uri uri;
@@ -91,6 +94,17 @@ namespace Leak
                     return false;
             }
 
+            switch (Strategy)
+            {
+                case "sequential":
+                case "rarest-first":
+                case null:
+                    break;
+
+                default:
+                    return false;
+            }
+
             return true;
         }
 
@@ -116,6 +130,11 @@ namespace Leak
             if (Accept != null)
             {
                 settings.Filter = new GeonFilter(Accept);
+            }
+
+            if (Strategy != null)
+            {
+                settings.Strategy = Strategy;
             }
 
             return settings;
