@@ -17,6 +17,9 @@ namespace Leak.Glue
 
         public GlueEntry Add(NetworkConnection connection, Handshake handshake)
         {
+            if (byPeer.ContainsKey(handshake.Remote))
+                return null;
+
             GlueEntry entry = new GlueEntry
             {
                 Identifier = connection.Identifier,

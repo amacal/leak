@@ -297,7 +297,8 @@ namespace Leak.Client.Swarm
 
         private void OnHandshakeCompleted(HandshakeCompleted data)
         {
-            Glue.Connect(data.Connection, data.Handshake);
+            if (Glue.Connect(data.Connection, data.Handshake) == false)
+                data.Connection.Terminate();
         }
 
         public void OnConnectionEstablished(ConnectionEstablished data)
