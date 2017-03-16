@@ -55,7 +55,7 @@ namespace Leak.Sockets
             }
         }
 
-        private unsafe bool GetDelegate<T>(TcpSocketAcceptResult async, out T accept, string id)
+        private unsafe bool GetDelegate<T>(TcpSocketAcceptResult target, out T accept, string id)
         {
             int sent;
             IntPtr ptr = IntPtr.Zero;
@@ -64,7 +64,7 @@ namespace Leak.Sockets
 
             if (result != 0)
             {
-                async.Fail();
+                target.Fail();
                 accept = default(T);
                 return true;
             }
