@@ -2,11 +2,8 @@
 
 ## command line
 ```
-leak download --torrent d:\debian-8.5.0-amd64-CD-1.iso.torrent
-              --destination d:\leak
-
-leak download --hash 883c6f02fc46188ac17ea49c13c3e9d97413a5a2
-              --tracker http://bttracker.debian.org:6969/announce
+leak download --hash 73b38c5f82a28d47efef94c04d0a839b180f9ca0
+              --trackers http://bttracker.debian.org:6969/announce
               --destination d:\leak
 
 options:
@@ -19,7 +16,7 @@ options:
 
         Listen to incomming connections and accept them.
 
-    --port #value (default: 8080)
+    --port #value (default: random)
 
         Listen on specified port.
 
@@ -31,31 +28,31 @@ options:
 
         Use ut_metadata extension.
 
-    --peer-exchange (on|off) (default: on)
+    --exchange (on|off) (default: on)
 
         Use ut_pex extension.
 
-    --download (sequential|rarest-first) (default: rarest-first)
+    --strategy (sequential|rarest-first) (default: rarest-first)
 
         Schedule pieces using algorithm.
-
-    --logging (off|normal|verbose) (default: normal)
-
-        Show only logs with requested severity.
 ````
 
 ## csharp code
 ````csharp
-PeerClient client = new PeerClient(with =>
-{
-    with.Destination = "d:\\leak";
-    with.Metadata.Enable();
-    with.PeerExchange.Enable();
-});
+string tracker = "http://bttracker.debian.org:6969/announce";
+FileHash hash = FileHash.Parse("883c6f02fc46188ac17ea49c13c3e9d97413a5a2");
 
-client.Start(with =>
+using (SwarmClient client = new SwarmClient())
 {
-    with.Hash = FileHash.Parse("883c6f02fc46188ac17ea49c13c3e9d97413a5a2");
-    with.Trackers.Add("http://bttracker.debian.org:6969/announce");
-});
+    SwarmNotification notification = null;
+    SwarmSession session = await client.Connect(hash, tracker);
+
+    session.Download("d:\\leak");
+
+    do
+    {
+        notification = await session.Next();
+    }
+    while (notification.Type != SwarmNotificationType.DataCompleted)
+}
 ````
