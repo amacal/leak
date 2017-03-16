@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Leak.Common;
 
 namespace Leak.Data.Map.Components
@@ -22,6 +23,11 @@ namespace Leak.Data.Map.Components
 
             byBlock = new Dictionary<BlockIndex, OmnibusReservation>(comparer);
             byPiece = new Dictionary<PieceInfo, HashSet<OmnibusReservation>>(comparer);
+        }
+
+        public int Count(DateTime now)
+        {
+            return byBlock.Values.Count(x => x.Expires > now);
         }
 
         public bool Contains(BlockIndex request, DateTime now)

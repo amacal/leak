@@ -35,6 +35,12 @@ namespace Leak
         [Option("--strategy")]
         public string Strategy { get; set; }
 
+        [Option("--metadata")]
+        public string Metadata { get; set; }
+
+        [Option("--exchange")]
+        public string Exchange { get; set; }
+
         public bool IsValid()
         {
             Uri uri;
@@ -82,6 +88,18 @@ namespace Leak
             if (Connector != null)
             {
                 if (Connector != "on" && Connector != "off")
+                    return false;
+            }
+
+            if (Metadata != null)
+            {
+                if (Metadata != "on" && Metadata != "off")
+                    return false;
+            }
+
+            if (Exchange != null)
+            {
+                if (Exchange != "on" && Exchange != "off")
                     return false;
             }
 
@@ -135,6 +153,16 @@ namespace Leak
             if (Strategy != null)
             {
                 settings.Strategy = Strategy;
+            }
+
+            if (Metadata != null)
+            {
+                settings.Metadata = Metadata == "on";
+            }
+
+            if (Exchange != null)
+            {
+                settings.Exchange = Exchange == "on";
             }
 
             return settings;

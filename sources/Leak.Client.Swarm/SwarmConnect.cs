@@ -151,8 +151,8 @@ namespace Leak.Client.Swarm
                     .WithHash(Hash)
                     .WithBlocks(Blocks)
                     .WithPipeline(Pipeline)
-                    .WithPlugin(new MetadataPlugin(metadata))
-                    .WithPlugin(new PeersPlugin(exchange))
+                    .WithMetadata(Settings, metadata)
+                    .WithExchange(Settings, exchange)
                     .Build(hooks);
 
             Glue.Start();

@@ -20,19 +20,21 @@ namespace Leak.Data.Map.Tasks
 
         public void Execute(OmnibusContext context)
         {
-            DateTime now = default(DateTime);
-            FileHash hash = context.Metainfo.Hash;
-
             context.Cache.Blocks.Clear();
 
             if (context.Bitfields.Contains(peer))
             {
-                strategy.Next(context.Cache.Blocks, context, peer, count);
+                DateTime now = DateTime.Now;
+                FileHash hash = context.Metainfo.Hash;
+
+                int requested = count;
+                int taken = context.Reservations.Count(now);
+                int available = Math.Max(0, Math.Min(requested, context.Configuration.PoolSize - taken));
+
+                strategy.Next(context.Cache.Blocks, context, peer, available);
 
                 if (context.Cache.Blocks.Count > 0)
                 {
-                    now = DateTime.Now;
-
                     foreach (BlockIndex block in context.Cache.Blocks)
                     {
                         PeerHash previous = context.Reservations.Add(peer, block, now);
