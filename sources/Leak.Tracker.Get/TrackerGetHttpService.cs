@@ -88,13 +88,20 @@ namespace Leak.Tracker.Get
 
         private void ResolveHost(TrackerGetHttpEntry entry)
         {
-            entry.Status = TrackerGetHttpStatus.Resolving;
+            try
+            {
+                entry.Status = TrackerGetHttpStatus.Resolving;
 
-            IPHostEntry found = Dns.GetHostEntry(entry.Address.Host);
-            IPAddress address = found.AddressList.FirstOrDefault();
+                IPHostEntry found = Dns.GetHostEntry(entry.Address.Host);
+                IPAddress address = found.AddressList.FirstOrDefault();
 
-            entry.Endpoint = new IPEndPoint(address, entry.Address.Port);
-            entry.Status = TrackerGetHttpStatus.Resolved;
+                entry.Endpoint = new IPEndPoint(address, entry.Address.Port);
+                entry.Status = TrackerGetHttpStatus.Resolved;
+            }
+            catch (Exception ex)
+            {
+                context.CallFailed(entry.Address, entry.Request.Hash, ex.Message);
+            }
         }
 
         private void ConnectToHost(TrackerGetHttpEntry entry)

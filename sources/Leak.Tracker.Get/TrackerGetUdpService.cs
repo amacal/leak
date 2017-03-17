@@ -97,13 +97,20 @@ namespace Leak.Tracker.Get
 
         private void ResolveHost(TrackerGetUdpEntry entry)
         {
-            entry.Status = TrackerGetUdpStatus.Resolving;
+            try
+            {
+                entry.Status = TrackerGetUdpStatus.Resolving;
 
-            IPHostEntry found = Dns.GetHostEntry(entry.Host);
-            IPAddress address = found.AddressList.FirstOrDefault();
+                IPHostEntry found = Dns.GetHostEntry(entry.Host);
+                IPAddress address = found.AddressList.FirstOrDefault();
 
-            entry.Endpoint = new IPEndPoint(address, entry.Port);
-            entry.Status = TrackerGetUdpStatus.Resolved;
+                entry.Endpoint = new IPEndPoint(address, entry.Port);
+                entry.Status = TrackerGetUdpStatus.Resolved;
+            }
+            catch (Exception ex)
+            {
+                context.CallFailed(entry.Address, entry.Request.Hash, ex.Message);
+            }
         }
 
         private void SendConnectionRequest(TrackerGetUdpEntry entry)
