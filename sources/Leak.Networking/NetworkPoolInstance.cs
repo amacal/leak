@@ -19,12 +19,12 @@ namespace Leak.Networking
 
         private long sequence;
 
-        public NetworkPoolInstance(NetworkPoolDependency dependency, NetworkPoolHooks hooks)
+        public NetworkPoolInstance(NetworkPoolDependencies dependencies, NetworkPoolHooks hooks)
         {
             this.hooks = hooks;
 
-            pipeline = dependency.Pipeline;
-            factory = new SocketFactory(dependency.Completion);
+            pipeline = dependencies.Pipeline;
+            factory = new SocketFactory(dependencies.Completion);
 
             items = new Dictionary<long, NetworkPoolEntry>();
             queue = new LeakQueue<NetworkPoolInstance>(this);

@@ -56,7 +56,7 @@ namespace Leak.Meta.Share.Tests
             GlueService glue =
                 new GlueBuilder()
                     .WithHash(metainfo.Hash)
-                    .WithBlocks(new BufferedBlockFactory())
+                    .WithBlocks(new MemoryBuilder().Build())
                     .WithPlugin(new MetadataPlugin(new MetadataHooks()))
                     .Build();
 

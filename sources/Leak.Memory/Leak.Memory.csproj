@@ -33,13 +33,25 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BufferedDataBlockFactory.cs" />
+    <Compile Include="MemoryBlock.cs" />
+    <Compile Include="MemoryBuilder.cs" />
+    <Compile Include="MemoryConfiguration.cs" />
+    <Compile Include="MemoryContext.cs" />
+    <Compile Include="MemoryDependencies.cs" />
+    <Compile Include="MemoryExtensions.cs" />
+    <Compile Include="MemoryHooks.cs" />
+    <Compile Include="MemoryParameters.cs" />
+    <Compile Include="MemoryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Memory.Events\Leak.Memory.Events.csproj">
+      <Project>{02D65FC6-E326-47EE-B7CB-B355AE421F73}</Project>
+      <Name>Leak.Memory.Events</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

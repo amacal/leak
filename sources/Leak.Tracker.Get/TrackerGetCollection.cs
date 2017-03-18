@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
@@ -26,6 +27,17 @@ namespace Leak.Tracker.Get
             foreach (TrackerGetEntry entry in entries)
             {
                 if (entry.Next < now)
+                {
+                    yield return entry;
+                }
+            }
+        }
+
+        public IEnumerable<TrackerGetEntry> Find(FileHash hash)
+        {
+            foreach (TrackerGetEntry entry in entries)
+            {
+                if (entry.Request.Hash.Equals(hash))
                 {
                     yield return entry;
                 }

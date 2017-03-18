@@ -48,7 +48,6 @@ namespace Leak.Client.Swarm
                 Network = runtime.Network,
                 Pipeline = runtime.Pipeline,
                 Files = runtime.Files,
-                Blocks = runtime.Blocks,
                 Worker = runtime.Worker
             };
 

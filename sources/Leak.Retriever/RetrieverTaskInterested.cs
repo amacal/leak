@@ -6,13 +6,16 @@ namespace Leak.Data.Get
     {
         public void Execute(RetrieverContext context)
         {
-            context.Dependencies.Omnibus.Query((peer, bitfield, state) =>
+            if (context.Verified)
             {
-                if (state.IsLocalInterestedInRemote == false && bitfield?.Completed > 0)
+                context.Dependencies.Omnibus.Query((peer, bitfield, state) =>
                 {
-                    context.Dependencies.Glue.SendInterested(peer);
-                }
-            });
+                    if (state.IsLocalInterestedInRemote == false && bitfield?.Completed > 0)
+                    {
+                        context.Dependencies.Glue.SendInterested(peer);
+                    }
+                });
+            }
         }
     }
 }

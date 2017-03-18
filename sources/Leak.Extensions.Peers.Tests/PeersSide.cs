@@ -36,7 +36,7 @@ namespace Leak.Extensions.Peers.Tests
             GlueService service =
                 new GlueBuilder()
                     .WithHash(handshake.Hash)
-                    .WithBlocks(new BufferedBlockFactory())
+                    .WithBlocks(new MemoryBuilder().Build())
                     .WithPlugin(new PeersPlugin(peers))
                     .Build(hooks);
 

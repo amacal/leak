@@ -137,6 +137,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak", "Leak\Leak.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Client.Swarm", "Leak.Client.Swarm\Leak.Client.Swarm.csproj", "{B0AAF646-B3C7-4B8A-933D-BA782B21092C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Memory.Events", "Leak.Memory.Events\Leak.Memory.Events.csproj", "{02D65FC6-E326-47EE-B7CB-B355AE421F73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -383,6 +385,10 @@ Global
 		{B0AAF646-B3C7-4B8A-933D-BA782B21092C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0AAF646-B3C7-4B8A-933D-BA782B21092C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0AAF646-B3C7-4B8A-933D-BA782B21092C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02D65FC6-E326-47EE-B7CB-B355AE421F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02D65FC6-E326-47EE-B7CB-B355AE421F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02D65FC6-E326-47EE-B7CB-B355AE421F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02D65FC6-E326-47EE-B7CB-B355AE421F73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -447,5 +453,6 @@ Global
 		{BD9B8564-4B2B-4D53-84F1-95E7BC04EC8C} = {B79FF7E1-8967-48D1-8B73-8512C2AED1EF}
 		{B1FC7D83-C38A-4C15-8693-3300CF3EF54F} = {2FCE124B-221D-4694-B7D0-7478BBD48429}
 		{B0AAF646-B3C7-4B8A-933D-BA782B21092C} = {B79FF7E1-8967-48D1-8B73-8512C2AED1EF}
+		{02D65FC6-E326-47EE-B7CB-B355AE421F73} = {8E9CBDAA-AD39-4B48-8F6A-2FFB53D53628}
 	EndGlobalSection
 EndGlobal

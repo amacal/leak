@@ -15,6 +15,7 @@
         DataVerified,
         DataCompleted,
         PieceCompleted,
-        PieceRejected
+        PieceRejected,
+        MemorySnapshot
     }
 }

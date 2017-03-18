@@ -3,7 +3,7 @@ using Leak.Tasks;
 
 namespace Leak.Networking
 {
-    public class NetworkPoolDependency
+    public class NetworkPoolDependencies
     {
         public LeakPipeline Pipeline;
 

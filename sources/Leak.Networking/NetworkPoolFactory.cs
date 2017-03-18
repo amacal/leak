@@ -5,11 +5,11 @@ namespace Leak.Networking
 {
     public class NetworkPoolFactory
     {
-        private readonly NetworkPoolDependency dependency;
+        private readonly NetworkPoolDependencies dependencies;
 
         public NetworkPoolFactory(LeakPipeline pipeline, CompletionWorker completion)
         {
-            dependency = new NetworkPoolDependency
+            dependencies = new NetworkPoolDependencies
             {
                 Pipeline = pipeline,
                 Completion = completion
@@ -18,7 +18,7 @@ namespace Leak.Networking
 
         public NetworkPool CreateInstance(NetworkPoolHooks hooks)
         {
-            return new NetworkPoolInstance(dependency, hooks);
+            return new NetworkPoolInstance(dependencies, hooks);
         }
     }
 }

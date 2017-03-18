@@ -1,5 +1,6 @@
 ﻿using Leak.Tasks;
 using System;
+using Leak.Common;
 
 namespace Leak.Tracker.Get
 {
@@ -56,6 +57,11 @@ namespace Leak.Tracker.Get
             {
                 context.Collection.Add(registrant);
             });
+        }
+
+        public void Announce(FileHash hash)
+        {
+            context.Queue.Add(new TrackerGetAnnounceTask(hash));
         }
 
         private void OnTick()

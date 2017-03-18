@@ -14,8 +14,6 @@ namespace Leak.Client.Swarm
 
         FileFactory Files { get; }
 
-        DataBlockFactory Blocks { get; }
-
         CompletionWorker Worker { get; }
 
         void Start(NetworkPoolHooks hooks);

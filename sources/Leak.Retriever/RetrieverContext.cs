@@ -1,4 +1,5 @@
-﻿using Leak.Tasks;
+﻿using Leak.Common;
+using Leak.Tasks;
 
 namespace Leak.Data.Get
 {
@@ -10,6 +11,7 @@ namespace Leak.Data.Get
         private readonly RetrieverHooks hooks;
 
         private readonly LeakQueue<RetrieverContext> queue;
+        private bool verified;
 
         public RetrieverContext(RetrieverParameters parameters, RetrieverDependencies dependencies, RetrieverConfiguration configuration, RetrieverHooks hooks)
         {
@@ -44,6 +46,12 @@ namespace Leak.Data.Get
         public LeakQueue<RetrieverContext> Queue
         {
             get { return queue; }
+        }
+
+        public bool Verified
+        {
+            get { return verified; }
+            set { verified = value; }
         }
     }
 }

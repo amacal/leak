@@ -53,6 +53,16 @@ namespace Leak.Data.Get
             context.Dependencies.Pipeline.Remove(OnTick5000);
         }
 
+        public void Handle(DataVerified data)
+        {
+            context.Queue.Add(() =>
+            {
+                context.Verified = true;
+            });
+
+            context.Queue.Add(new RetrieverTaskInterested());
+        }
+
         public void Handle(BlockReceived data)
         {
             context.Queue.Add(() =>

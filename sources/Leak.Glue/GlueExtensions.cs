@@ -65,11 +65,12 @@ namespace Leak.Glue
             });
         }
 
-        public static void CallPeerDisconnected(this GlueHooks hooks, PeerHash peer)
+        public static void CallPeerDisconnected(this GlueHooks hooks, PeerHash peer, PeerAddress remote)
         {
             hooks.OnPeerDisconnected?.Invoke(new PeerDisconnected
             {
-                Peer = peer
+                Peer = peer,
+                Remote = remote
             });
         }
 

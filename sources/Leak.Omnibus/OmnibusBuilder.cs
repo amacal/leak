@@ -34,6 +34,12 @@ namespace Leak.Data.Map
             return this;
         }
 
+        public OmnibusBuilder WithPoolSize(int poolSize)
+        {
+            configuration.PoolSize = poolSize;
+            return this;
+        }
+
         public OmnibusService Build()
         {
             return Build(new OmnibusHooks());

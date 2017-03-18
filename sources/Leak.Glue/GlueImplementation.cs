@@ -108,7 +108,7 @@ namespace Leak.Glue
 
             if (entry != null)
             {
-                hooks.CallPeerDisconnected(entry.Peer);
+                hooks.CallPeerDisconnected(entry.Peer, entry.Remote);
             }
 
             return entry != null;

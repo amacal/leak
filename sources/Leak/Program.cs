@@ -65,7 +65,7 @@ namespace Leak
                                 break;
 
                             case SwarmNotificationType.MetafileMeasured:
-                                Console.WriteLine($"Metadata: {notification.Size} bytes");
+                                Console.WriteLine($"Metadata: {notification.Size}");
                                 break;
 
                             case SwarmNotificationType.MetafileRequested:
@@ -105,6 +105,10 @@ namespace Leak
 
                             case SwarmNotificationType.PieceRejected:
                                 Console.WriteLine($"Data; rejected piece {notification.Piece}");
+                                break;
+
+                            case SwarmNotificationType.MemorySnapshot:
+                                Console.WriteLine($"Memory: snapshot {notification.Size}");
                                 break;
                         }
                     }

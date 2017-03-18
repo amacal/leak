@@ -16,6 +16,6 @@ namespace Leak.Client.Swarm
         public BlockIndex Block { get; set; }
 
         public Metainfo Metainfo { get; set; }
-        public int? Size { get; set; }
+        public Size Size { get; set; }
     }
 }

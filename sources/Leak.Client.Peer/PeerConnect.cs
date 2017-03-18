@@ -326,7 +326,9 @@ namespace Leak.Client.Peer
             };
 
             Notifications.Enqueue(notification);
+
             DataMap?.Handle(data);
+            DataGet?.Handle(data);
         }
 
         private void OnDataCompleted(DataCompleted data)

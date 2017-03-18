@@ -122,6 +122,7 @@ namespace Leak.Networking
         public void Dispose()
         {
             socket.Dispose();
+            buffer.Dispose();
         }
     }
 }

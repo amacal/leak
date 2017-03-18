@@ -15,7 +15,6 @@ namespace Leak.Client.Swarm
         private NetworkPool network;
         private CompletionThread worker;
         private FileFactory files;
-        private DataBlockFactory blocks;
 
         public SwarmFactory(SwarmLogger logger)
         {
@@ -35,11 +34,6 @@ namespace Leak.Client.Swarm
         public FileFactory Files
         {
             get { return files; }
-        }
-
-        public DataBlockFactory Blocks
-        {
-            get { return blocks; }
         }
 
         public CompletionWorker Worker
@@ -74,7 +68,7 @@ namespace Leak.Client.Swarm
                     logger?.Info("creating network pool");
 
                     network =
-                        new NetworkPoolInstance(new NetworkPoolDependency
+                        new NetworkPoolInstance(new NetworkPoolDependencies
                         {
                             Pipeline = pipeline,
                             Completion = worker
@@ -88,12 +82,6 @@ namespace Leak.Client.Swarm
                 {
                     logger?.Info("creating file factory");
                     files = new FileFactory(worker);
-                }
-
-                if (blocks == null)
-                {
-                    logger?.Info("creating blocks factory");
-                    blocks = new BufferedBlockFactory();
                 }
             }
         }
@@ -120,12 +108,6 @@ namespace Leak.Client.Swarm
                     logger?.Info("disposing pipeline service");
                     pipeline?.Stop();
                     pipeline = null;
-                }
-
-                if (blocks != null)
-                {
-                    logger?.Info("disposing blocks factory");
-                    blocks = null;
                 }
             }
         }

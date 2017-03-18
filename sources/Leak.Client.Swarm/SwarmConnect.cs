@@ -14,6 +14,8 @@ using Leak.Extensions.Peers;
 using Leak.Files;
 using Leak.Glue;
 using Leak.Listener;
+using Leak.Memory;
+using Leak.Memory.Events;
 using Leak.Meta.Get;
 using Leak.Meta.Store;
 using Leak.Negotiator;
@@ -32,7 +34,7 @@ namespace Leak.Client.Swarm
         public NetworkPool Network { get; set; }
         public PipelineService Pipeline { get; set; }
         public FileFactory Files { get; set; }
-        public DataBlockFactory Blocks { get; set; }
+        public DataBlockFactory Memory { get; set; }
 
         public FileHash Hash { get; set; }
         public PeerHash Localhost { get; set; }
@@ -59,6 +61,7 @@ namespace Leak.Client.Swarm
 
         public void Start(string[] trackers)
         {
+            StartMemory();
             StartNegotiator();
             StartConnector();
             StartListener();
@@ -89,6 +92,18 @@ namespace Leak.Client.Swarm
             StartMetaGet();
             StartDataStore(destination);
             StartDataGet();
+        }
+
+        private void StartMemory()
+        {
+            MemoryHooks hooks = new MemoryHooks
+            {
+                OnMemorySnapshot = OnMemorySnapshot
+            };
+
+            Memory =
+                new MemoryBuilder()
+                    .Build(hooks);
         }
 
         private void StartNegotiator()
@@ -149,7 +164,7 @@ namespace Leak.Client.Swarm
             Glue =
                 new GlueBuilder()
                     .WithHash(Hash)
-                    .WithBlocks(Blocks)
+                    .WithBlocks(Memory)
                     .WithPipeline(Pipeline)
                     .WithMetadata(Settings, metadata)
                     .WithExchange(Settings, exchange)
@@ -174,6 +189,7 @@ namespace Leak.Client.Swarm
                     .WithHash(Hash)
                     .WithPipeline(Pipeline)
                     .WithSchedulerThreshold(160)
+                    .WithPoolSize(256)
                     .Build(hooks);
 
             DataMap.Start();
@@ -295,10 +311,23 @@ namespace Leak.Client.Swarm
             DataGet.Start();
         }
 
+        private void OnMemorySnapshot(MemorySnapshot data)
+        {
+            SwarmNotification notification = new SwarmNotification
+            {
+                Type = SwarmNotificationType.MemorySnapshot,
+                Size = data.Allocation
+            };
+
+            Notifications.Enqueue(notification);
+        }
+
         private void OnHandshakeCompleted(HandshakeCompleted data)
         {
             if (Glue.Connect(data.Connection, data.Handshake) == false)
+            {
                 data.Connection.Terminate();
+            }
         }
 
         public void OnConnectionEstablished(ConnectionEstablished data)
@@ -400,7 +429,9 @@ namespace Leak.Client.Swarm
             };
 
             Notifications.Enqueue(notification);
+
             Peers.Remove(data.Peer);
+            Remotes.Remove(data.Remote);
         }
 
         private void OnPeerBitfieldChanged(PeerBitfieldChanged data)
@@ -493,7 +524,7 @@ namespace Leak.Client.Swarm
             SwarmNotification notification = new SwarmNotification
             {
                 Type = SwarmNotificationType.MetafileMeasured,
-                Size = data.Size
+                Size = new Size(data.Size)
             };
 
             Notifications.Enqueue(notification);
@@ -519,7 +550,10 @@ namespace Leak.Client.Swarm
             };
 
             Notifications.Enqueue(notification);
+
             DataMap?.Handle(data);
+            DataGet?.Handle(data);
+            TrackerGet.Announce(Hash);
         }
 
         private void OnPieceRejected(PieceRejected data)

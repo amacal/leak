@@ -41,9 +41,13 @@ namespace Leak.Networking
             if (entry != null)
             {
                 entry.IsAvailable = false;
-                entry.Connection.Dispose();
+                entry.Connection?.Dispose();
 
-                hooks.CallConnectionTerminated(entry.Connection);
+                if (entry.Connection != null)
+                {
+                    hooks.CallConnectionTerminated(entry.Connection);
+                    entry.Connection = null;
+                }
             }
         }
 
@@ -59,9 +63,13 @@ namespace Leak.Networking
             if (entry != null)
             {
                 entry.IsAvailable = false;
-                entry.Connection.Dispose();
+                entry.Connection?.Dispose();
 
-                hooks.CallConnectionTerminated(entry.Connection);
+                if (entry.Connection != null)
+                {
+                    hooks.CallConnectionTerminated(entry.Connection);
+                    entry.Connection = null;
+                }
             }
         }
 
@@ -74,7 +82,7 @@ namespace Leak.Networking
                 items.TryGetValue(identifier, out entry);
             }
 
-            if (entry != null)
+            if (entry?.Connection != null)
             {
                 hooks.CallConnectionSent(entry.Connection, bytes);
             }
@@ -89,7 +97,7 @@ namespace Leak.Networking
                 items.TryGetValue(identifier, out entry);
             }
 
-            if (entry != null)
+            if (entry?.Connection != null)
             {
                 hooks.CallConnectionReceived(entry.Connection, bytes);
             }

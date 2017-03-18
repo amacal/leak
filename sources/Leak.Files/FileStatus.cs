@@ -2,5 +2,6 @@
 {
     public enum FileStatus
     {
+        EndOfFile = 38
     }
 }

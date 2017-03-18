@@ -69,7 +69,7 @@ namespace Leak.Client.Peer
                     logger?.Info("creating network pool");
 
                     network =
-                        new NetworkPoolInstance(new NetworkPoolDependency
+                        new NetworkPoolInstance(new NetworkPoolDependencies
                         {
                             Pipeline = pipeline,
                             Completion = worker
@@ -88,7 +88,7 @@ namespace Leak.Client.Peer
                 if (blocks == null)
                 {
                     logger?.Info("creating blocks factory");
-                    blocks = new BufferedBlockFactory();
+                    blocks = new MemoryBuilder().Build();
                 }
             }
         }

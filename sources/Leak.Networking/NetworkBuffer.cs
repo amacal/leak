@@ -15,7 +15,7 @@ namespace Leak.Networking
 
         private readonly TcpSocket socket;
         private readonly long identifier;
-        private readonly byte[] data;
+        private byte[] data;
 
         private int offset;
         private int length;
@@ -161,6 +161,11 @@ namespace Leak.Networking
         public NetworkBufferView View()
         {
             return new NetworkBufferView(data, length, offset);
+        }
+
+        public void Dispose()
+        {
+            data = null;
         }
     }
 }
