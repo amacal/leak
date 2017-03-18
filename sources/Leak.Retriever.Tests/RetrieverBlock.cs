@@ -38,7 +38,7 @@ namespace Leak.Data.Get.Tests
             return new RetrieverBlock(data, shift + offset);
         }
 
-        public void Dispose()
+        public void Release()
         {
         }
     }

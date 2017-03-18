@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Leak.Common
+﻿namespace Leak.Common
 {
-    public interface DataBlock : IDisposable
+    public interface DataBlock
     {
         int Size { get; }
 
@@ -11,5 +9,7 @@ namespace Leak.Common
         void Write(DataBlockCallback callback);
 
         DataBlock Scope(int shift);
+
+        void Release();
     }
 }

@@ -38,7 +38,7 @@ namespace Leak.Data.Share.Tests
             return new DatashareBlock(data, shift + offset);
         }
 
-        public void Dispose()
+        public void Release()
         {
         }
     }

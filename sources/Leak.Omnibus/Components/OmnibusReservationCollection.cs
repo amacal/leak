@@ -96,14 +96,18 @@ namespace Leak.Data.Map.Components
 
             if (reservation != null)
             {
-                HashSet<OmnibusReservation> blocks;
-                byPeer.TryGetValue(reservation.Peer, out blocks);
+                HashSet<OmnibusReservation> forPeer;
+                HashSet<OmnibusReservation> forPiece;
 
-                blocks.Remove(reservation);
+                byPeer.TryGetValue(reservation.Peer, out forPeer);
+                byPiece.TryGetValue(reservation.Request.Piece, out forPiece);
+
+                forPeer.Remove(reservation);
+                forPiece.Remove(reservation);
                 byBlock.Remove(request);
 
                 peer = reservation.Peer;
-                return blocks.Count;
+                return forPeer.Count;
             }
 
             peer = null;

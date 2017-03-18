@@ -29,7 +29,12 @@ namespace Leak.Memory
             }
 
             callback?.Invoke(data, 0, count);
-            return new DataBlockInstance(data, 0, count, buffer);
+            return new DataBlockInstance(data, 0, count, this);
+        }
+
+        private void Release(byte[] data)
+        {
+            buffer.Enqueue(data);
         }
 
         private class DataBlockInstance : DataBlock
@@ -37,14 +42,14 @@ namespace Leak.Memory
             private readonly byte[] data;
             private readonly int start;
             private readonly int count;
-            private readonly ConcurrentQueue<byte[]> buffer;
+            private readonly BufferedBlockFactory factory;
 
-            public DataBlockInstance(byte[] data, int start, int count, ConcurrentQueue<byte[]> buffer)
+            public DataBlockInstance(byte[] data, int start, int count, BufferedBlockFactory factory)
             {
                 this.data = data;
                 this.start = start;
                 this.count = count;
-                this.buffer = buffer;
+                this.factory = factory;
             }
 
             public int Size
@@ -64,12 +69,12 @@ namespace Leak.Memory
 
             public DataBlock Scope(int shift)
             {
-                return new DataBlockInstance(data, start + shift, count - shift, buffer);
+                return new DataBlockInstance(data, start + shift, count - shift, factory);
             }
 
-            public void Dispose()
+            public void Release()
             {
-                buffer.Enqueue(data);
+                factory.Release(data);
             }
         }
     }

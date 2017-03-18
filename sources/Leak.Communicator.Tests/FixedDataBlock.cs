@@ -38,7 +38,7 @@ namespace Leak.Communicator.Tests
             return new FixedDataBlock(data, shift + offset);
         }
 
-        public void Dispose()
+        public void Release()
         {
         }
     }

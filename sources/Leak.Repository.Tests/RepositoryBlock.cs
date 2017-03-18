@@ -38,7 +38,7 @@ namespace Leak.Data.Store.Tests
             return new RepositoryBlock(data, shift + offset);
         }
 
-        public void Dispose()
+        public void Release()
         {
         }
     }

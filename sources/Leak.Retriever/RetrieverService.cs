@@ -62,6 +62,10 @@ namespace Leak.Data.Get
                     context.Dependencies.Repository.Write(data.Block, data.Payload);
                     context.Hooks.CallBlockHandled(data.Hash, data.Peer, data.Block);
                 }
+                else
+                {
+                    data.Payload.Release();
+                }
             });
         }
 

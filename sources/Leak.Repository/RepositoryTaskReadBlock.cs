@@ -107,7 +107,7 @@ namespace Leak.Data.Store
                 return new FixedDataBlock(buffer, shift + offset, count);
             }
 
-            public void Dispose()
+            public void Release()
             {
             }
         }
