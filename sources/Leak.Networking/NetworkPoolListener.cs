@@ -6,15 +6,24 @@ namespace Leak.Networking
 {
     public class NetworkPoolListener
     {
+        private readonly NetworkPoolConfiguration configuration;
+        private readonly NetworkPoolDependencies dependencies;
         private readonly NetworkPoolHooks hooks;
         private readonly LeakQueue<NetworkPoolInstance> queue;
         private readonly Dictionary<long, NetworkPoolEntry> items;
 
-        public NetworkPoolListener(Dictionary<long, NetworkPoolEntry> items, LeakQueue<NetworkPoolInstance> queue, NetworkPoolHooks hooks)
+        public NetworkPoolListener(Dictionary<long, NetworkPoolEntry> items, LeakQueue<NetworkPoolInstance> queue, NetworkPoolHooks hooks, NetworkPoolConfiguration configuration, NetworkPoolDependencies dependencies)
         {
             this.items = items;
             this.queue = queue;
             this.hooks = hooks;
+            this.configuration = configuration;
+            this.dependencies = dependencies;
+        }
+
+        public NetworkPoolMemoryBlock Allocate()
+        {
+            return dependencies.Memory.Allocate(configuration.BufferSize);
         }
 
         public bool IsAvailable(long id)

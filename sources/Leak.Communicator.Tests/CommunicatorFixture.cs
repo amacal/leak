@@ -26,7 +26,7 @@ namespace Leak.Communicator.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolFactory(pipeline, worker).CreateInstance(new NetworkPoolHooks());
+            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
             pool.Start();
 
             hooks = new CommunicatorHooks();

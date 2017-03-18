@@ -10,8 +10,10 @@ namespace Leak.Networking
 {
     public class NetworkPoolInstance : NetworkPool
     {
-        private readonly LeakPipeline pipeline;
+        private readonly NetworkPoolConfiguration configuration;
+        private readonly NetworkPoolDependencies dependencies;
         private readonly NetworkPoolHooks hooks;
+
         private readonly Dictionary<long, NetworkPoolEntry> items;
 
         private readonly LeakQueue<NetworkPoolInstance> queue;
@@ -19,11 +21,12 @@ namespace Leak.Networking
 
         private long sequence;
 
-        public NetworkPoolInstance(NetworkPoolDependencies dependencies, NetworkPoolHooks hooks)
+        public NetworkPoolInstance(NetworkPoolDependencies dependencies, NetworkPoolConfiguration configuration, NetworkPoolHooks hooks)
         {
             this.hooks = hooks;
+            this.dependencies = dependencies;
+            this.configuration = configuration;
 
-            pipeline = dependencies.Pipeline;
             factory = new SocketFactory(dependencies.Completion);
 
             items = new Dictionary<long, NetworkPoolEntry>();
@@ -32,7 +35,7 @@ namespace Leak.Networking
 
         public void Start()
         {
-            pipeline.Register(queue);
+            dependencies.Pipeline.Register(queue);
         }
 
         public TcpSocket New()
@@ -43,7 +46,7 @@ namespace Leak.Networking
         public NetworkConnection Create(TcpSocket socket, NetworkDirection direction, IPEndPoint remote)
         {
             long identifier = Interlocked.Increment(ref sequence);
-            NetworkPoolListener listener = new NetworkPoolListener(items, queue, hooks);
+            NetworkPoolListener listener = new NetworkPoolListener(items, queue, hooks, configuration, dependencies);
             NetworkPoolConnection connection = new NetworkPoolConnection(listener, socket, direction, identifier, remote);
 
             lock (items)

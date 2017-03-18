@@ -31,10 +31,7 @@ namespace Leak.Client.Swarm
 
         public Task<SwarmSession> Connect(FileHash hash, params string[] trackers)
         {
-            runtime.Start(new NetworkPoolHooks
-            {
-                OnConnectionTerminated = OnConnectionTerminated
-            });
+            runtime.Start();
 
             SwarmConnect connect = new SwarmConnect
             {
@@ -45,7 +42,6 @@ namespace Leak.Client.Swarm
                 Completion = new TaskCompletionSource<SwarmSession>(),
                 Peers = new HashSet<PeerHash>(),
                 Remotes = new HashSet<PeerAddress>(),
-                Network = runtime.Network,
                 Pipeline = runtime.Pipeline,
                 Files = runtime.Files,
                 Worker = runtime.Worker
@@ -55,17 +51,6 @@ namespace Leak.Client.Swarm
             online.Add(connect);
 
             return connect.Completion.Task;
-        }
-
-        private void OnConnectionTerminated(ConnectionTerminated data)
-        {
-            foreach (SwarmConnect connect in online.ToArray())
-            {
-                if (connect.Glue?.Disconnect(data.Connection) == true)
-                {
-                    break;
-                }
-            }
         }
 
         public void Dispose()

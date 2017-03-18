@@ -1,7 +1,5 @@
-﻿using Leak.Common;
-using Leak.Completion;
+﻿using Leak.Completion;
 using Leak.Files;
-using Leak.Memory;
 using Leak.Networking;
 using Leak.Tasks;
 
@@ -12,7 +10,6 @@ namespace Leak.Client.Swarm
         private readonly SwarmLogger logger;
 
         private LeakPipeline pipeline;
-        private NetworkPool network;
         private CompletionThread worker;
         private FileFactory files;
 
@@ -26,11 +23,6 @@ namespace Leak.Client.Swarm
             get { return pipeline; }
         }
 
-        public NetworkPool Network
-        {
-            get { return network; }
-        }
-
         public FileFactory Files
         {
             get { return files; }
@@ -41,7 +33,7 @@ namespace Leak.Client.Swarm
             get { return worker; }
         }
 
-        public void Start(NetworkPoolHooks hooks)
+        public void Start()
         {
             lock (this)
             {
@@ -63,21 +55,6 @@ namespace Leak.Client.Swarm
                     worker.Start();
                 }
 
-                if (network == null)
-                {
-                    logger?.Info("creating network pool");
-
-                    network =
-                        new NetworkPoolInstance(new NetworkPoolDependencies
-                        {
-                            Pipeline = pipeline,
-                            Completion = worker
-                        }, hooks);
-
-                    logger?.Info("starting network pool");
-                    network.Start();
-                }
-
                 if (files == null)
                 {
                     logger?.Info("creating file factory");
@@ -90,12 +67,6 @@ namespace Leak.Client.Swarm
         {
             lock (this)
             {
-                if (network != null)
-                {
-                    logger?.Info("disposing network pool");
-                    network = null;
-                }
-
                 if (worker != null)
                 {
                     logger?.Info("disposing completion service");

@@ -23,6 +23,11 @@ namespace Leak.Memory
             get { return count; }
         }
 
+        public byte[] Data
+        {
+            get { return data; }
+        }
+
         public byte this[int index]
         {
             get { return data[index + start]; }

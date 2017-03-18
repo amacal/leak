@@ -10,13 +10,11 @@ namespace Leak.Client.Swarm
     {
         PipelineService Pipeline { get; }
 
-        NetworkPool Network { get; }
-
         FileFactory Files { get; }
 
         CompletionWorker Worker { get; }
 
-        void Start(NetworkPoolHooks hooks);
+        void Start();
 
         void Stop();
     }

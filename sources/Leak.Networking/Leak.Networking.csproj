@@ -36,13 +36,16 @@
     <Compile Include="NetworkBuffer.cs" />
     <Compile Include="NetworkBufferMessage.cs" />
     <Compile Include="NetworkBufferView.cs" />
+    <Compile Include="NetworkPoolBuilder.cs" />
     <Compile Include="NetworkConfiguration.cs" />
     <Compile Include="NetworkDecryptor.cs" />
     <Compile Include="NetworkDecryptorToNothing.cs" />
     <Compile Include="NetworkEncryptor.cs" />
     <Compile Include="NetworkEncryptorToNothing.cs" />
+    <Compile Include="NetworkPoolMemory.cs" />
+    <Compile Include="NetworkPoolMemoryBlock.cs" />
     <Compile Include="NetworkPool.cs" />
-    <Compile Include="NetworkPoolFactory.cs" />
+    <Compile Include="NetworkPoolConfiguration.cs" />
     <Compile Include="NetworkPoolInstance.cs" />
     <Compile Include="NetworkPoolConnection.cs" />
     <Compile Include="NetworkPoolDecrypt.cs" />

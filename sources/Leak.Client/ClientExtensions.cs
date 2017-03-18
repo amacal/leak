@@ -6,12 +6,14 @@ using Leak.Data.Map;
 using Leak.Data.Store;
 using Leak.Extensions.Metadata;
 using Leak.Glue;
+using Leak.Memory;
 using Leak.Meta.Get;
 using Leak.Meta.Store;
+using Leak.Networking;
 
-namespace Leak.Client.Peer
+namespace Leak.Client
 {
-    public static class PeerExtensions
+    public static class ClientExtensions
     {
         public static MetagetGlue AsMetaGet(this GlueService service)
         {
@@ -38,6 +40,11 @@ namespace Leak.Client.Peer
             return new DataGetToDataMapForwarder(service);
         }
 
+        public static NetworkPoolMemory AsNetwork(this MemoryService service)
+        {
+            return new NetworkToMemory(service);
+        }
+
         private class MetaGetToGlueForwarder : MetagetGlue
         {
             private readonly GlueService service;
@@ -53,7 +60,14 @@ namespace Leak.Client.Peer
                 {
                     List<PeerHash> peers = new List<PeerHash>();
 
-                    service.ForEachPeer(peers.Add);
+                    service.ForEachPeer(peer =>
+                    {
+                        if (service.IsSupported(peer, MetadataPlugin.Name))
+                        {
+                            peers.Add(peer);
+                        }
+                    });
+
                     return peers;
                 }
             }

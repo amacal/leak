@@ -35,7 +35,6 @@
   <ItemGroup>
     <Compile Include="PeerClient.cs" />
     <Compile Include="PeerCollection.cs" />
-    <Compile Include="PeerExtensions.cs" />
     <Compile Include="PeerSession.cs" />
     <Compile Include="PeerNotification.cs" />
     <Compile Include="PeerNotificationType.cs" />
@@ -46,6 +45,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Leak.Client\Leak.Client.csproj">
+      <Project>{108441e9-5800-474d-907e-1380ae476cf3}</Project>
+      <Name>Leak.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
       <Name>Leak.Common</Name>

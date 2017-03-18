@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Memory
 {
@@ -14,6 +15,31 @@ namespace Leak.Memory
         public DataBlock Create(byte[] data, int offset, int count)
         {
             return new MemoryBlock(data, offset, count, null);
+        }
+
+        public MemoryBlock Allocate(int size)
+        {
+            byte[] data;
+
+            if (size > context.Configuration.Size)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (context.Buffer.TryDequeue(out data) == false)
+            {
+                data = new byte[context.Configuration.Size];
+
+                lock (this)
+                {
+                    context.Count = context.Count + 1;
+                    context.Allocation = context.Allocation.Increase(data.Length);
+                }
+
+                context.CallSnapshot(context.Count, context.Allocation);
+            }
+
+            return new MemoryBlock(data, 0, size, context);
         }
 
         public DataBlock New(int count, DataBlockCallback callback)

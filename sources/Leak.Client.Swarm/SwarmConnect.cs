@@ -34,7 +34,7 @@ namespace Leak.Client.Swarm
         public NetworkPool Network { get; set; }
         public PipelineService Pipeline { get; set; }
         public FileFactory Files { get; set; }
-        public DataBlockFactory Memory { get; set; }
+        public MemoryService Memory { get; set; }
 
         public FileHash Hash { get; set; }
         public PeerHash Localhost { get; set; }
@@ -62,6 +62,7 @@ namespace Leak.Client.Swarm
         public void Start(string[] trackers)
         {
             StartMemory();
+            StartNetwork();
             StartNegotiator();
             StartConnector();
             StartListener();
@@ -104,6 +105,23 @@ namespace Leak.Client.Swarm
             Memory =
                 new MemoryBuilder()
                     .Build(hooks);
+        }
+
+        private void StartNetwork()
+        {
+            NetworkPoolHooks hooks = new NetworkPoolHooks
+            {
+                OnConnectionTerminated = OnConnectionTerminated
+            };
+
+            Network =
+                new NetworkPoolBuilder()
+                    .WithPipeline(Pipeline)
+                    .WithWorker(Worker)
+                    .WithMemory(Memory.AsNetwork())
+                    .Build(hooks);
+
+            Network.Start();
         }
 
         private void StartNegotiator()
@@ -320,6 +338,11 @@ namespace Leak.Client.Swarm
             };
 
             Notifications.Enqueue(notification);
+        }
+
+        private void OnConnectionTerminated(ConnectionTerminated data)
+        {
+            Glue?.Disconnect(data.Connection);
         }
 
         private void OnHandshakeCompleted(HandshakeCompleted data)

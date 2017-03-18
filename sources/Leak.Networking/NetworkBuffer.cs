@@ -15,7 +15,7 @@ namespace Leak.Networking
 
         private readonly TcpSocket socket;
         private readonly long identifier;
-        private byte[] data;
+        private readonly NetworkPoolMemoryBlock memory;
 
         private int offset;
         private int length;
@@ -34,7 +34,7 @@ namespace Leak.Networking
             this.socket = socket;
             this.identifier = identifier;
 
-            data = new byte[262144];
+            memory = listener.Allocate();
             decryptor = NetworkDecryptor.Nothing;
         }
 
@@ -52,7 +52,7 @@ namespace Leak.Networking
             listener = buffer.listener;
             socket = buffer.socket;
             identifier = buffer.identifier;
-            data = buffer.data;
+            memory = buffer.memory;
             length = buffer.length;
             offset = buffer.offset;
 
@@ -72,18 +72,18 @@ namespace Leak.Networking
                 int receiveOffset;
                 int receiveSize;
 
-                if (offset + length >= data.Length)
+                if (offset + length >= memory.Length)
                 {
-                    receiveOffset = offset + length - data.Length;
-                    receiveSize = offset - (offset + length) % data.Length;
+                    receiveOffset = offset + length - memory.Length;
+                    receiveSize = offset - (offset + length) % memory.Length;
                 }
                 else
                 {
                     receiveOffset = offset + length;
-                    receiveSize = data.Length - offset - length;
+                    receiveSize = memory.Length - offset - length;
                 }
 
-                socket.Receive(new SocketBuffer(data, receiveOffset, receiveSize), context => OnReceived(context, handler));
+                socket.Receive(new SocketBuffer(memory.Data, receiveOffset, receiveSize), context => OnReceived(context, handler));
             }
         }
 
@@ -119,9 +119,9 @@ namespace Leak.Networking
             {
                 if (count > 0)
                 {
-                    if (offset + length >= data.Length)
+                    if (offset + length >= memory.Length)
                     {
-                        Decrypt(offset + length - data.Length, count);
+                        Decrypt(offset + length - memory.Length, count);
                     }
                     else
                     {
@@ -146,26 +146,26 @@ namespace Leak.Networking
                 throw new InvalidOperationException();
             }
 
-            offset = (offset + bytes) % data.Length;
+            offset = (offset + bytes) % memory.Length;
             length = length - bytes;
         }
 
         private void Decrypt(int start, int count)
         {
-            int min = Math.Min(count, data.Length - start);
+            int min = Math.Min(count, memory.Length - start);
 
-            decryptor.Decrypt(data, start, min);
-            decryptor.Decrypt(data, 0, count - min);
+            decryptor.Decrypt(memory.Data, start, min);
+            decryptor.Decrypt(memory.Data, 0, count - min);
         }
 
         public NetworkBufferView View()
         {
-            return new NetworkBufferView(data, length, offset);
+            return new NetworkBufferView(memory.Data, length, offset);
         }
 
         public void Dispose()
         {
-            data = null;
+            memory.Release();
         }
     }
 }

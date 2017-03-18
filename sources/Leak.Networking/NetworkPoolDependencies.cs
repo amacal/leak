@@ -5,8 +5,10 @@ namespace Leak.Networking
 {
     public class NetworkPoolDependencies
     {
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
 
         public CompletionWorker Completion;
+
+        public NetworkPoolMemory Memory;
     }
 }

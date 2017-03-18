@@ -69,11 +69,10 @@ namespace Leak.Client.Peer
                     logger?.Info("creating network pool");
 
                     network =
-                        new NetworkPoolInstance(new NetworkPoolDependencies
-                        {
-                            Pipeline = pipeline,
-                            Completion = worker
-                        }, hooks);
+                        new NetworkPoolBuilder()
+                            .WithPipeline(pipeline)
+                            .WithWorker(worker)
+                            .Build(hooks);
 
                     logger?.Info("starting network pool");
                     network.Start();
