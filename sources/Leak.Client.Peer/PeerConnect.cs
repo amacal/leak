@@ -175,7 +175,7 @@ namespace Leak.Client.Peer
             Glue =
                 new GlueBuilder()
                     .WithHash(Hash)
-                    .WithBlocks(Blocks)
+                    .WithMemory(Blocks)
                     .WithPipeline(Pipeline)
                     .WithPlugin(new MetadataPlugin(metadata))
                     .Build(new GlueHooks

@@ -46,7 +46,7 @@ namespace Leak.Data.Share.Tests
             GlueService glue =
                 new GlueBuilder()
                     .WithHash(metainfo.Hash)
-                    .WithBlocks(new MemoryBuilder().Build())
+                    .WithMemory(new MemoryBuilder().Build())
                     .Build();
 
             RepositoryService repository =

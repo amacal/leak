@@ -24,7 +24,10 @@ namespace Leak.Data.Store
 
             if (next < length)
             {
-                context.Queue.Add(new Start(bitfield, reduced, next));
+                int blockSize = context.Metainfo.Properties.BlockSize;
+                RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(blockSize);
+
+                context.Queue.Add(new Start(bitfield, reduced, next, block));
             }
             else
             {
@@ -78,14 +81,16 @@ namespace Leak.Data.Store
             private readonly Bitfield bitfield;
             private readonly Bitfield scope;
             private readonly int piece;
+            private readonly RepositoryMemoryBlock block;
 
-            public Start(Bitfield bitfield, Bitfield scope, int piece)
+            public Start(Bitfield bitfield, Bitfield scope, int piece, RepositoryMemoryBlock block)
             {
                 this.algorithm = SHA1.Create();
 
                 this.bitfield = bitfield;
                 this.scope = scope;
                 this.piece = piece;
+                this.block = block;
             }
 
             public bool CanExecute(RepositoryTaskQueue queue)
@@ -95,15 +100,15 @@ namespace Leak.Data.Store
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
-                context.View.Read(context.Buffer, piece, 0, args =>
+                context.View.Read(block.Data, piece, 0, args =>
                 {
                     if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + 1))
                     {
-                        context.Queue.Add(new Continue(bitfield, scope, algorithm, args));
+                        context.Queue.Add(new Continue(bitfield, scope, algorithm, args, block));
                     }
                     else
                     {
-                        context.Queue.Add(new Complete(bitfield, scope, algorithm, args));
+                        context.Queue.Add(new Complete(bitfield, scope, algorithm, args, block));
                     }
                 });
             }
@@ -123,13 +128,15 @@ namespace Leak.Data.Store
             private readonly Bitfield scope;
             private readonly HashAlgorithm algorithm;
             private readonly RepositoryViewRead read;
+            private readonly RepositoryMemoryBlock block;
 
-            public Continue(Bitfield bitfield, Bitfield scope, HashAlgorithm algorithm, RepositoryViewRead read)
+            public Continue(Bitfield bitfield, Bitfield scope, HashAlgorithm algorithm, RepositoryViewRead read, RepositoryMemoryBlock block)
             {
                 this.bitfield = bitfield;
                 this.scope = scope;
                 this.algorithm = algorithm;
                 this.read = read;
+                this.block = block;
             }
 
             public bool CanExecute(RepositoryTaskQueue queue)
@@ -141,15 +148,15 @@ namespace Leak.Data.Store
             {
                 algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
 
-                context.View.Read(context.Buffer, read.Piece, read.Block + 1, args =>
+                context.View.Read(block.Data, read.Piece, read.Block + 1, args =>
                 {
                     if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + 1))
                     {
-                        context.Queue.Add(new Continue(bitfield, scope, algorithm, args));
+                        context.Queue.Add(new Continue(bitfield, scope, algorithm, args, block));
                     }
                     else
                     {
-                        context.Queue.Add(new Complete(bitfield, scope, algorithm, args));
+                        context.Queue.Add(new Complete(bitfield, scope, algorithm, args, block));
                     }
                 });
             }
@@ -169,13 +176,15 @@ namespace Leak.Data.Store
             private readonly Bitfield scope;
             private readonly HashAlgorithm algorithm;
             private readonly RepositoryViewRead read;
+            private readonly RepositoryMemoryBlock block;
 
-            public Complete(Bitfield bitfield, Bitfield scope, HashAlgorithm algorithm, RepositoryViewRead read)
+            public Complete(Bitfield bitfield, Bitfield scope, HashAlgorithm algorithm, RepositoryViewRead read, RepositoryMemoryBlock block)
             {
                 this.bitfield = bitfield;
                 this.scope = scope;
                 this.algorithm = algorithm;
                 this.read = read;
+                this.block = block;
             }
 
             public bool CanExecute(RepositoryTaskQueue queue)
@@ -194,6 +203,7 @@ namespace Leak.Data.Store
                 bool result = Bytes.Equals(hash, expected);
 
                 bitfield[read.Piece] = result;
+
                 algorithm.Dispose();
 
                 int next = Next(scope, read.Piece + 1);
@@ -201,11 +211,13 @@ namespace Leak.Data.Store
 
                 if (exists)
                 {
-                    context.Queue.Add(new Start(bitfield, scope, next));
+                    context.Queue.Add(new Start(bitfield, scope, next, block));
                 }
                 else
                 {
+                    block.Release();
                     onCompleted.Invoke(this);
+
                     context.Bitfile.Write(bitfield);
                     context.Hooks.CallDataVerified(metainfo.Hash, bitfield);
                 }

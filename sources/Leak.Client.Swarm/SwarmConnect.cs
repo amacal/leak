@@ -119,6 +119,7 @@ namespace Leak.Client.Swarm
                     .WithPipeline(Pipeline)
                     .WithWorker(Worker)
                     .WithMemory(Memory.AsNetwork())
+                    .WithBufferSize(32 * 1024)
                     .Build(hooks);
 
             Network.Start();
@@ -182,7 +183,7 @@ namespace Leak.Client.Swarm
             Glue =
                 new GlueBuilder()
                     .WithHash(Hash)
-                    .WithBlocks(Memory)
+                    .WithMemory(Memory)
                     .WithPipeline(Pipeline)
                     .WithMetadata(Settings, metadata)
                     .WithExchange(Settings, exchange)
@@ -207,7 +208,7 @@ namespace Leak.Client.Swarm
                     .WithHash(Hash)
                     .WithPipeline(Pipeline)
                     .WithSchedulerThreshold(160)
-                    .WithPoolSize(256)
+                    .WithPoolSize(512)
                     .Build(hooks);
 
             DataMap.Start();
@@ -305,6 +306,7 @@ namespace Leak.Client.Swarm
                     .WithDestination(Path.Combine(destination, Hash.ToString()))
                     .WithPipeline(Pipeline)
                     .WithFiles(Files)
+                    .WithMemory(Memory.AsDataStore())
                     .Build(hooks);
 
             DataStore.Start();

@@ -37,6 +37,12 @@ namespace Leak.Networking
             return this;
         }
 
+        public NetworkPoolBuilder WithBufferSize(int bufferSize)
+        {
+            configuration.BufferSize = bufferSize;
+            return this;
+        }
+
         public NetworkPool Build(NetworkPoolHooks hooks)
         {
             return new NetworkPoolInstance(dependencies, configuration, hooks);

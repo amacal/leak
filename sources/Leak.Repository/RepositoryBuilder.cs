@@ -41,6 +41,12 @@ namespace Leak.Data.Store
             return this;
         }
 
+        public RepositoryBuilder WithMemory(RepositoryMemory memory)
+        {
+            dependencies.Memory = memory;
+            return this;
+        }
+
         public RepositoryService Build()
         {
             return Build(new RepositoryHooks());

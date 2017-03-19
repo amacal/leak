@@ -42,7 +42,12 @@ namespace Leak.Client
 
         public static NetworkPoolMemory AsNetwork(this MemoryService service)
         {
-            return new NetworkToMemory(service);
+            return new MemoryToNetwork(service);
+        }
+
+        public static RepositoryMemory AsDataStore(this MemoryService service)
+        {
+            return new MemoryToRepository(service);
         }
 
         private class MetaGetToGlueForwarder : MetagetGlue

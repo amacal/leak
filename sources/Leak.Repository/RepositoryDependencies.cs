@@ -1,5 +1,4 @@
-﻿using Leak.Common;
-using Leak.Files;
+﻿using Leak.Files;
 using Leak.Tasks;
 
 namespace Leak.Data.Store
@@ -8,7 +7,7 @@ namespace Leak.Data.Store
     {
         public FileFactory Files;
 
-        public DataBlockFactory Blocks;
+        public RepositoryMemory Memory;
 
         public PipelineService Pipeline;
     }

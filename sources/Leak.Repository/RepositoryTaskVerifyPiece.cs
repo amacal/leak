@@ -16,28 +16,29 @@ namespace Leak.Data.Store
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
             HashAlgorithm algorithm = SHA1.Create();
+            RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(16384);
 
-            context.View.Read(context.Buffer, piece.Index, 0, args =>
+            context.View.Read(block.Data, piece.Index, 0, args =>
             {
                 if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + 1))
                 {
-                    context.Queue.Add(new Continue(piece, args, algorithm));
+                    context.Queue.Add(new Continue(piece, args, algorithm, block));
                 }
                 else
                 {
-                    context.Queue.Add(new Complete(piece, args, algorithm));
+                    context.Queue.Add(new Complete(piece, args, algorithm, block));
                 }
             });
         }
 
         public bool CanExecute(RepositoryTaskQueue queue)
         {
-            return queue.IsBlocked("all") == false;
+            return queue.IsBlocked(piece) == false;
         }
 
         public void Block(RepositoryTaskQueue queue)
         {
-            queue.Block("all");
+            queue.Block(piece);
         }
 
         public void Release(RepositoryTaskQueue queue)
@@ -49,27 +50,29 @@ namespace Leak.Data.Store
             private readonly PieceInfo piece;
             private readonly RepositoryViewRead read;
             private readonly HashAlgorithm algorithm;
+            private readonly RepositoryMemoryBlock block;
 
-            public Continue(PieceInfo piece, RepositoryViewRead read, HashAlgorithm algorithm)
+            public Continue(PieceInfo piece, RepositoryViewRead read, HashAlgorithm algorithm, RepositoryMemoryBlock block)
             {
                 this.piece = piece;
                 this.read = read;
                 this.algorithm = algorithm;
+                this.block = block;
             }
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
                 algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
 
-                context.View.Read(context.Buffer, piece.Index, read.Block + 1, args =>
+                context.View.Read(block.Data, piece.Index, read.Block + 1, args =>
                 {
                     if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + 1))
                     {
-                        context.Queue.Add(new Continue(piece, args, algorithm));
+                        context.Queue.Add(new Continue(piece, args, algorithm, block));
                     }
                     else
                     {
-                        context.Queue.Add(new Complete(piece, args, algorithm));
+                        context.Queue.Add(new Complete(piece, args, algorithm, block));
                     }
                 });
             }
@@ -93,12 +96,14 @@ namespace Leak.Data.Store
             private readonly PieceInfo piece;
             private readonly RepositoryViewRead read;
             private readonly HashAlgorithm algorithm;
+            private readonly RepositoryMemoryBlock block;
 
-            public Complete(PieceInfo piece, RepositoryViewRead read, HashAlgorithm algorithm)
+            public Complete(PieceInfo piece, RepositoryViewRead read, HashAlgorithm algorithm, RepositoryMemoryBlock block)
             {
                 this.piece = piece;
                 this.read = read;
                 this.algorithm = algorithm;
+                this.block = block;
             }
 
             public bool CanExecute(RepositoryTaskQueue queue)
@@ -120,6 +125,8 @@ namespace Leak.Data.Store
                 RejectIfRequired(context, result);
 
                 algorithm.Dispose();
+                block.Release();
+
                 onCompleted.Invoke(this);
             }
 
@@ -129,7 +136,7 @@ namespace Leak.Data.Store
 
             public void Release(RepositoryTaskQueue queue)
             {
-                queue.Release("all");
+                queue.Release(piece);
             }
 
             private void AcceptIfRequired(RepositoryContext context, bool valid)

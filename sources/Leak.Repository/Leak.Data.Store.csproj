@@ -40,12 +40,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryAllocation.cs" />
     <Compile Include="RepositoryAllocationRange.cs" />
+    <Compile Include="RepositoryMemoryBlock.cs" />
     <Compile Include="RepositoryBuilder.cs" />
     <Compile Include="RepositoryConfiguration.cs" />
     <Compile Include="RepositoryContext.cs" />
     <Compile Include="RepositoryDependencies.cs" />
     <Compile Include="RepositoryExtensions.cs" />
     <Compile Include="RepositoryHooks.cs" />
+    <Compile Include="RepositoryMemory.cs" />
     <Compile Include="RepositoryParameters.cs" />
     <Compile Include="RepositoryService.cs" />
     <Compile Include="RepositoryTask.cs" />

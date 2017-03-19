@@ -23,7 +23,7 @@ namespace Leak.Glue
             return this;
         }
 
-        public GlueBuilder WithBlocks(DataBlockFactory blocks)
+        public GlueBuilder WithMemory(DataBlockFactory blocks)
         {
             dependencies.Blocks = blocks;
             return this;

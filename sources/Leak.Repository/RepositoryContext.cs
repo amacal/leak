@@ -59,11 +59,6 @@ namespace Leak.Data.Store
             get { return bitfile; }
         }
 
-        public byte[] Buffer
-        {
-            get { return buffer; }
-        }
-
         public RepositoryView View
         {
             get { return view; }

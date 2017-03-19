@@ -3,11 +3,11 @@ using Leak.Networking;
 
 namespace Leak.Client
 {
-    public class NetworkToMemory : NetworkPoolMemory
+    public class MemoryToNetwork : NetworkPoolMemory
     {
         private readonly MemoryService service;
 
-        public NetworkToMemory(MemoryService service)
+        public MemoryToNetwork(MemoryService service)
         {
             this.service = service;
         }

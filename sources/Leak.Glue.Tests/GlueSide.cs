@@ -40,7 +40,7 @@ namespace Leak.Glue.Tests
             GlueService service =
                 builder
                     .WithHash(hash)
-                    .WithBlocks(new MemoryBuilder().Build())
+                    .WithMemory(new MemoryBuilder().Build())
                     .Build(hooks);
 
             return new GlueInstance(service);

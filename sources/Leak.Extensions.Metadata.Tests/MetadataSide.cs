@@ -36,7 +36,7 @@ namespace Leak.Extensions.Metadata.Tests
             GlueService service =
                 new GlueBuilder()
                     .WithHash(handshake.Hash)
-                    .WithBlocks(new MemoryBuilder().Build())
+                    .WithMemory(new MemoryBuilder().Build())
                     .WithPlugin(new MetadataPlugin(metadata))
                     .Build(hooks);
 

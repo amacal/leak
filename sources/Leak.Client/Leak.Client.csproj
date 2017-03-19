@@ -33,7 +33,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NetworkToMemory.cs" />
+    <Compile Include="MemoryToBlocks.cs" />
+    <Compile Include="MemoryToNetwork.cs" />
+    <Compile Include="MemoryToRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClientExtensions.cs" />
   </ItemGroup>
