@@ -47,7 +47,7 @@ namespace Leak.Client
 
         public static RepositoryMemory AsDataStore(this MemoryService service)
         {
-            return new MemoryToRepository(service);
+            return new MemoryToDataStore(service);
         }
 
         private class MetaGetToGlueForwarder : MetagetGlue

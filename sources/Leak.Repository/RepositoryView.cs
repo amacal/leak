@@ -24,7 +24,7 @@ namespace Leak.Data.Store
 
         public void Read(byte[] buffer, int piece, int block, RepositoryViewReadCallback callback)
         {
-            new RepositoryViewReadRoutine(cache, piece, block, new FileBuffer(buffer, 0, cache.BlockSize), callback).Execute();
+            new RepositoryViewReadRoutine(cache, piece, block, new FileBuffer(buffer), callback).Execute();
         }
 
         public void Write(FileBuffer buffer, int piece, int block, RepositoryViewWriteCallback callback)

@@ -47,6 +47,12 @@ namespace Leak.Data.Store
             return this;
         }
 
+        public RepositoryBuilder WithBufferSize(int bufferSize)
+        {
+            configuration.BufferSize = bufferSize;
+            return this;
+        }
+
         public RepositoryService Build()
         {
             return Build(new RepositoryHooks());

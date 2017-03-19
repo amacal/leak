@@ -13,6 +13,18 @@
             configuration = new MemoryConfiguration();
         }
 
+        public MemoryBuilder WithMaxRequestSize(int maxRequestSize)
+        {
+            configuration.MaxBlockSize = maxRequestSize;
+            return this;
+        }
+
+        public MemoryBuilder WithThresholds(params int[] thresholds)
+        {
+            configuration.Thresholds = thresholds;
+            return this;
+        }
+
         public MemoryService Build()
         {
             return Build(new MemoryHooks());

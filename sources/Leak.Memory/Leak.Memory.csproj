@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="MemoryBlock.cs" />
     <Compile Include="MemoryBuilder.cs" />
+    <Compile Include="MemoryCollection.cs" />
     <Compile Include="MemoryConfiguration.cs" />
     <Compile Include="MemoryContext.cs" />
     <Compile Include="MemoryDependencies.cs" />

@@ -3,11 +3,11 @@ using Leak.Memory;
 
 namespace Leak.Client
 {
-    public class MemoryToRepository : RepositoryMemory
+    public class MemoryToDataStore : RepositoryMemory
     {
         private readonly MemoryService service;
 
-        public MemoryToRepository(MemoryService service)
+        public MemoryToDataStore(MemoryService service)
         {
             this.service = service;
         }

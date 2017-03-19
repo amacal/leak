@@ -1,7 +1,4 @@
-﻿using System.Collections.Concurrent;
-using Leak.Common;
-
-namespace Leak.Memory
+﻿namespace Leak.Memory
 {
     public class MemoryContext
     {
@@ -10,10 +7,7 @@ namespace Leak.Memory
         private readonly MemoryConfiguration configuration;
         private readonly MemoryHooks hooks;
 
-        private readonly ConcurrentQueue<byte[]> buffer;
-
-        private int count;
-        private Size allocation;
+        private readonly MemoryCollection collection;
 
         public MemoryContext(MemoryParameters parameters, MemoryDependencies dependencies, MemoryConfiguration configuration, MemoryHooks hooks)
         {
@@ -22,9 +16,7 @@ namespace Leak.Memory
             this.configuration = configuration;
             this.hooks = hooks;
 
-            count = 0;
-            allocation = new Size(0);
-            buffer = new ConcurrentQueue<byte[]>();
+            collection = new MemoryCollection(this);
         }
 
         public MemoryParameters Parameters
@@ -47,21 +39,9 @@ namespace Leak.Memory
             get { return hooks; }
         }
 
-        public ConcurrentQueue<byte[]> Buffer
+        public MemoryCollection Collection
         {
-            get { return buffer; }
-        }
-
-        public int Count
-        {
-            get { return count; }
-            set { count = value; }
-        }
-
-        public Size Allocation
-        {
-            get { return allocation; }
-            set { allocation = value; }
+            get { return collection; }
         }
     }
 }

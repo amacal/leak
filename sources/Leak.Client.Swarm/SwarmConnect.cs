@@ -104,6 +104,8 @@ namespace Leak.Client.Swarm
 
             Memory =
                 new MemoryBuilder()
+                    .WithMaxRequestSize(256 * 1024)
+                    .WithThresholds(20 * 1024)
                     .Build(hooks);
         }
 
@@ -119,7 +121,7 @@ namespace Leak.Client.Swarm
                     .WithPipeline(Pipeline)
                     .WithWorker(Worker)
                     .WithMemory(Memory.AsNetwork())
-                    .WithBufferSize(32 * 1024)
+                    .WithBufferSize(256 * 1024)
                     .Build(hooks);
 
             Network.Start();
@@ -307,6 +309,7 @@ namespace Leak.Client.Swarm
                     .WithPipeline(Pipeline)
                     .WithFiles(Files)
                     .WithMemory(Memory.AsDataStore())
+                    .WithBufferSize(256 * 1024)
                     .Build(hooks);
 
             DataStore.Start();

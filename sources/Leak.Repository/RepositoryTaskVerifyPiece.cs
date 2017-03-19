@@ -16,11 +16,14 @@ namespace Leak.Data.Store
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
             HashAlgorithm algorithm = SHA1.Create();
-            RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(16384);
+            int bufferSize = context.Configuration.BufferSize;
+
+            RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(bufferSize);
+            int step = block.Length / context.Metainfo.Properties.BlockSize;
 
             context.View.Read(block.Data, piece.Index, 0, args =>
             {
-                if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + 1))
+                if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + step))
                 {
                     context.Queue.Add(new Continue(piece, args, algorithm, block));
                 }
@@ -63,10 +66,11 @@ namespace Leak.Data.Store
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
                 algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
+                int step = block.Length / context.Metainfo.Properties.BlockSize;
 
-                context.View.Read(block.Data, piece.Index, read.Block + 1, args =>
+                context.View.Read(block.Data, piece.Index, read.Block + step, args =>
                 {
-                    if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + 1))
+                    if (args.Count > 0 && context.View.Exists(piece.Index, args.Block + step))
                     {
                         context.Queue.Add(new Continue(piece, args, algorithm, block));
                     }

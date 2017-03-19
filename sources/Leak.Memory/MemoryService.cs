@@ -19,48 +19,16 @@ namespace Leak.Memory
 
         public MemoryBlock Allocate(int size)
         {
-            byte[] data;
-
-            if (size > context.Configuration.Size)
-            {
-                throw new InvalidOperationException();
-            }
-
-            if (context.Buffer.TryDequeue(out data) == false)
-            {
-                data = new byte[context.Configuration.Size];
-
-                lock (this)
-                {
-                    context.Count = context.Count + 1;
-                    context.Allocation = context.Allocation.Increase(data.Length);
-                }
-
-                context.CallSnapshot(context.Count, context.Allocation);
-            }
-
-            return new MemoryBlock(data, 0, size, context);
+            return context.Collection.Allocate(size);
         }
 
         public DataBlock New(int count, DataBlockCallback callback)
         {
-            byte[] data;
+            MemoryBlock found = context.Collection.Allocate(count);
 
-            if (context.Buffer.TryDequeue(out data) == false)
-            {
-                data = new byte[context.Configuration.Size];
+            callback?.Invoke(found.Data, 0, count);
 
-                lock (this)
-                {
-                    context.Count = context.Count + 1;
-                    context.Allocation = context.Allocation.Increase(data.Length);
-                }
-
-                context.CallSnapshot(context.Count, context.Allocation);
-            }
-
-            callback?.Invoke(data, 0, count);
-            return new MemoryBlock(data, 0, count, context);
+            return found;
         }
     }
 }

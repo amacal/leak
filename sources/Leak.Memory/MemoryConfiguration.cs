@@ -6,11 +6,11 @@ namespace Leak.Memory
     {
         public MemoryConfiguration()
         {
-            Size = 32 * 1024;
-            Delay = TimeSpan.FromMinutes(1);
+            MaxBlockSize = 32 * 1024;
+            Thresholds = new int[0];
         }
 
-        public int Size;
-        public TimeSpan Delay;
+        public int MaxBlockSize;
+        public int[] Thresholds;
     }
 }

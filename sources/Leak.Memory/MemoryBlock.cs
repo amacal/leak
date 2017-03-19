@@ -8,14 +8,14 @@ namespace Leak.Memory
         private readonly int start;
         private readonly int count;
 
-        private readonly MemoryContext context;
+        private readonly MemoryCollection collection;
 
-        public MemoryBlock(byte[] data, int start, int count, MemoryContext context)
+        public MemoryBlock(byte[] data, int start, int count, MemoryCollection collection)
         {
             this.data = data;
             this.start = start;
             this.count = count;
-            this.context = context;
+            this.collection = collection;
         }
 
         public int Size
@@ -40,12 +40,12 @@ namespace Leak.Memory
 
         public DataBlock Scope(int shift)
         {
-            return new MemoryBlock(data, start + shift, count - shift, context);
+            return new MemoryBlock(data, start + shift, count - shift, collection);
         }
 
         public void Release()
         {
-            context?.Buffer.Enqueue(data);
+            collection.Release(data);
         }
     }
 }

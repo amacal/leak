@@ -70,7 +70,7 @@ namespace Leak.Data.Store
             return data[piece];
         }
 
-        public RepositoryViewEntry[] Find(int piece, int block)
+        public RepositoryViewEntry[] Find(int piece, int block, int count)
         {
             RepositoryViewEntry[] found = data[piece];
 
@@ -82,7 +82,7 @@ namespace Leak.Data.Store
 
             foreach (RepositoryViewEntry entry in found)
             {
-                if (entry.End > offset && entry.Start < offset + blockSize)
+                if (entry.End > offset && entry.Start < offset + blockSize * count)
                 {
                     constrainted.Add(entry);
                 }

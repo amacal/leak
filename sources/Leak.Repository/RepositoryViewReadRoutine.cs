@@ -28,7 +28,7 @@ namespace Leak.Data.Store
             this.buffer = buffer;
             this.callback = callback;
 
-            this.entries = cache.Find(piece, block);
+            this.entries = cache.Find(piece, block, buffer.Count / cache.BlockSize);
             this.offset = piece * (long)cache.PieceSize + block * cache.BlockSize;
         }
 

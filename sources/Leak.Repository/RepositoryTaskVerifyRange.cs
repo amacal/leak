@@ -24,8 +24,8 @@ namespace Leak.Data.Store
 
             if (next < length)
             {
-                int blockSize = context.Metainfo.Properties.BlockSize;
-                RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(blockSize);
+                int bufferSize = context.Configuration.BufferSize;
+                RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(bufferSize);
 
                 context.Queue.Add(new Start(bitfield, reduced, next, block));
             }
@@ -100,9 +100,11 @@ namespace Leak.Data.Store
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
+                int step = block.Length / context.Metainfo.Properties.BlockSize;
+
                 context.View.Read(block.Data, piece, 0, args =>
                 {
-                    if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + 1))
+                    if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + step))
                     {
                         context.Queue.Add(new Continue(bitfield, scope, algorithm, args, block));
                     }
@@ -147,10 +149,11 @@ namespace Leak.Data.Store
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
                 algorithm.Push(read.Buffer.Data, read.Buffer.Offset, Math.Min(read.Buffer.Count, read.Count));
+                int step = block.Length / context.Metainfo.Properties.BlockSize;
 
-                context.View.Read(block.Data, read.Piece, read.Block + 1, args =>
+                context.View.Read(block.Data, read.Piece, read.Block + step, args =>
                 {
-                    if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + 1))
+                    if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + step))
                     {
                         context.Queue.Add(new Continue(bitfield, scope, algorithm, args, block));
                     }
@@ -203,7 +206,6 @@ namespace Leak.Data.Store
                 bool result = Bytes.Equals(hash, expected);
 
                 bitfield[read.Piece] = result;
-
                 algorithm.Dispose();
 
                 int next = Next(scope, read.Piece + 1);
