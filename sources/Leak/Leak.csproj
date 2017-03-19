@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Geon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\geon.1.0\lib\net45\Geon.dll</HintPath>
+      <HintPath>..\..\packages\geon.1.1.0\lib\net45\Geon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

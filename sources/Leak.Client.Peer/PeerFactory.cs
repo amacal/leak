@@ -15,7 +15,7 @@ namespace Leak.Client.Peer
         private NetworkPool network;
         private CompletionThread worker;
         private FileFactory files;
-        private DataBlockFactory blocks;
+        private MemoryService blocks;
 
         public PeerFactory(PeerLogger logger)
         {
@@ -64,6 +64,12 @@ namespace Leak.Client.Peer
                     worker.Start();
                 }
 
+                if (blocks == null)
+                {
+                    logger?.Info("creating blocks factory");
+                    blocks = new MemoryBuilder().Build();
+                }
+
                 if (network == null)
                 {
                     logger?.Info("creating network pool");
@@ -72,6 +78,7 @@ namespace Leak.Client.Peer
                         new NetworkPoolBuilder()
                             .WithPipeline(pipeline)
                             .WithWorker(worker)
+                            .WithMemory(blocks.AsNetwork())
                             .Build(hooks);
 
                     logger?.Info("starting network pool");
@@ -82,12 +89,6 @@ namespace Leak.Client.Peer
                 {
                     logger?.Info("creating file factory");
                     files = new FileFactory(worker);
-                }
-
-                if (blocks == null)
-                {
-                    logger?.Info("creating blocks factory");
-                    blocks = new MemoryBuilder().Build();
                 }
             }
         }
