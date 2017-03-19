@@ -1,5 +1,6 @@
 #r "FakeLib.dll"
 
+open System
 open Fake
 open Fake.NuGet.Install
 open Fake.Testing.NUnit3
@@ -8,14 +9,11 @@ Target "Clean" (fun _ ->
     CleanDir "./build/release"
     CleanDir "./build/tests"
     CleanDir "./build/package"
+    CleanDir "./build/merge"
 )
 
 Target "Restore" (fun _ ->
     RestorePackages()
-    "NUnit.Runners"
-        |> NugetInstall (fun p ->
-            { p with
-                OutputDirectory = "./build/tools"})
 )
 
 Target "BuildApp" (fun _ ->
@@ -31,6 +29,12 @@ Target "BuildTests" (fun _ ->
 )
 
 Target "ExecuteTests" (fun _ ->
+    "NUnit.Runners"
+        |> NugetInstall (fun p ->
+            { p with
+                OutputDirectory = "./build/tools"
+                ExcludeVersion = true})
+
     !! ("build/tests/*.Tests.dll")
         |> NUnit3 (fun p ->
             { p with
@@ -39,9 +43,26 @@ Target "ExecuteTests" (fun _ ->
                 Workers = Some 1 })
 )
 
+Target "MergeApp" (fun _ ->
+    "ILRepack"
+        |> NugetInstall (fun p ->
+            { p with
+                OutputDirectory = "./build/tools"
+                ExcludeVersion = true})
+
+    let result =
+        ExecProcess (fun info ->
+            info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
+            info.WorkingDirectory <- "./build"
+            info.Arguments <- sprintf "-target:exe -internalize -verbose -wildcards -lib:%s -out:%s %s %s" ("./release") ("./merge" @@ "Leak.exe") ("./release" @@ "Leak.exe") ("./release" @@ "*.dll")
+            ) (TimeSpan.FromMinutes 5.)
+
+    if result <> 0 then failwithf "Error during ILRepack execution."
+)
+
 Target "CreatePackage" (fun _ ->
-     !! "build/release/*.*" -- "build/release/*.pdb" -- "build/release/*.xml"
-        |> Zip "build/release" ("build/package/leak-" + (getBuildParamOrDefault "version" "dev") + ".zip")
+     !! "build/merge/*.*" -- "build/merge/*.pdb" -- "build/merge/*.xml"
+        |> Zip "build/merge" ("build/package/leak-" + (getBuildParamOrDefault "version" "dev") + ".zip")
 )
 
 Target "Default" (fun _ ->
@@ -52,6 +73,7 @@ Target "Default" (fun _ ->
     ==> "Restore"
     ==> "BuildApp"
     ==> "BuildTests"
+    ==> "MergeApp"
     ==> "CreatePackage"
     ==> "Default"
 
