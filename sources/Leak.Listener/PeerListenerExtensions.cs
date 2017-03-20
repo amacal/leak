@@ -1,10 +1,19 @@
 ﻿using Leak.Common;
-using Leak.Events;
+using Leak.Listener.Events;
 
 namespace Leak.Listener
 {
     public static class PeerListenerExtensions
     {
+        public static void CallListenerFailed(this PeerListenerHooks hooks, PeerListenerConfiguration configuration, string reason)
+        {
+            hooks.OnListenerFailed?.Invoke(new ListenerFailed
+            {
+                Peer = configuration.Peer,
+                Reason = reason
+            });
+        }
+
         public static void CallListenerStarted(this PeerListenerHooks hooks, PeerListenerConfiguration configuration, int assignedPort)
         {
             hooks.OnListenerStarted?.Invoke(new ListenerStarted

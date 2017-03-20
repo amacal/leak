@@ -25,14 +25,14 @@ namespace Leak.Data.Map.Tasks
 
             context.Pieces.Complete(block.Piece.Index, blockIndex);
 
-            if (peer != null && left == context.Configuration.SchedulerThreshold)
-            {
-                context.Hooks.CallThresholdReached(context.Metainfo.Hash, peer, threshold, left);
-            }
-
             if (peer != null)
             {
                 UpdateRanking(context, peer, 2);
+            }
+
+            if (peer != null && left == context.Configuration.SchedulerThreshold)
+            {
+                context.Hooks.CallThresholdReached(context.Metainfo.Hash, peer, threshold, left);
             }
         }
 

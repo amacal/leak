@@ -18,20 +18,20 @@ namespace Leak.Sockets
             this.worker.Add(handle);
         }
 
-        public void Bind()
+        public bool Bind()
         {
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
             SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
-            routine.Execute(handle);
+            return routine.Execute(handle);
         }
 
-        public void Bind(int port)
+        public bool Bind(int port)
         {
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
             SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
-            routine.Execute(handle);
+            return routine.Execute(handle);
         }
 
         public void SetTimeout(int seconds)

@@ -18,28 +18,28 @@ namespace Leak.Sockets
             this.worker = worker;
         }
 
-        public void Bind()
+        public bool Bind()
         {
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
             SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
-            routine.Execute(handle);
+            return routine.Execute(handle);
         }
 
-        public void Bind(int port)
+        public bool Bind(int port)
         {
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
             SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
-            routine.Execute(handle);
+            return routine.Execute(handle);
         }
 
-        public void Bind(IPAddress address)
+        public bool Bind(IPAddress address)
         {
             IPEndPoint endpoint = new IPEndPoint(address, 0);
             SocketBindRoutine routine = new SocketBindRoutine(endpoint);
 
-            routine.Execute(handle);
+            return routine.Execute(handle);
         }
 
         public TcpSocketInfo Info()

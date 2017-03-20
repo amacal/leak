@@ -6,11 +6,9 @@ namespace Leak.Sockets
 {
     public interface UdpSocket : IDisposable
     {
-        void Bind();
+        bool Bind();
 
-        void Bind(int port);
-
-        void SetTimeout(int seconds);
+        bool Bind(int port);
 
         void Send(IPEndPoint endpoint, SocketBuffer buffer, UdpSocketSendCallback callback);
 

@@ -12,7 +12,7 @@ namespace Leak.Listener
         private readonly PeerListenerHooks hooks;
         private readonly PeerListenerConfiguration configuration;
 
-        private int assignedPort;
+        private int? assignedPort;
 
         public PeerListener(PeerListenerDependencies dependencies, PeerListenerHooks hooks, PeerListenerConfiguration configuration)
         {
@@ -42,10 +42,17 @@ namespace Leak.Listener
         {
             assignedPort = configuration.Port.Bind(socket);
 
-            socket.Listen(8);
-            socket.Accept(OnAccept);
+            if (assignedPort == null)
+            {
+                hooks.CallListenerFailed(configuration, $"Binding to the requested port failed.");
+            }
+            else
+            {
+                socket.Listen(8);
+                socket.Accept(OnAccept);
 
-            hooks.CallListenerStarted(configuration, assignedPort);
+                hooks.CallListenerStarted(configuration, assignedPort.Value);
+            }
         }
 
         public void Stop()

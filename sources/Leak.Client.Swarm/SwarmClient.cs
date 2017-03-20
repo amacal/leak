@@ -38,7 +38,7 @@ namespace Leak.Client.Swarm
                 Hash = hash,
                 Settings = settings,
                 Localhost = PeerHash.Random(),
-                Notifications = new SwarmCollection(),
+                Notifications = new NotificationCollection(),
                 Completion = new TaskCompletionSource<SwarmSession>(),
                 Peers = new HashSet<PeerHash>(),
                 Remotes = new HashSet<PeerAddress>(),

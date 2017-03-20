@@ -45,7 +45,7 @@ namespace Leak.Loop.Tests
 
         public async Task<LoopSession> Start()
         {
-            int port;
+            int? port;
 
             ConnectionLoopConfiguration configuration = new ConnectionLoopConfiguration();
             ConnectionLoop loop = new ConnectionLoop(hooks, configuration);
@@ -57,7 +57,7 @@ namespace Leak.Loop.Tests
             server.Bind(out port);
             server.Listen(1);
 
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, port.Value);
             Task<TcpSocketAccept> accept = server.Accept();
 
             client.Connect(endpoint, null);

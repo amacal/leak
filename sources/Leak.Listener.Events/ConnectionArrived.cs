@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Events
+namespace Leak.Listener.Events
 {
     public class ConnectionArrived
     {

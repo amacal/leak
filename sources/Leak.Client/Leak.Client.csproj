@@ -38,6 +38,9 @@
     <Compile Include="MemoryToDataStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClientExtensions.cs" />
+    <Compile Include="NotificationCollection.cs" />
+    <Compile Include="Notification.cs" />
+    <Compile Include="NotificationType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

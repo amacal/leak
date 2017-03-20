@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B1FC7D83-C38A-4C15-8693-3300CF3EF54F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B6CA84ED-F39B-49B2-801C-5402439F5F5B}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak</RootNamespace>
-    <AssemblyName>Leak</AssemblyName>
+    <RootNamespace>Leak.Listener.Events</RootNamespace>
+    <AssemblyName>Leak.Listener.Events</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -21,10 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,38 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Geon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\geon.1.1.0\lib\net45\Geon.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Pargos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\pargos.2.1.0\lib\net45\Pargos.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeonFilter.cs" />
-    <Compile Include="Options.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ConnectionArrived.cs" />
+    <Compile Include="ListenerFailed.cs" />
+    <Compile Include="ListenerStarted.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Leak.Client.Swarm\Leak.Client.Swarm.csproj">
-      <Project>{b0aaf646-b3c7-4b8a-933d-ba782b21092c}</Project>
-      <Name>Leak.Client.Swarm</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Client\Leak.Client.csproj">
-      <Project>{108441E9-5800-474D-907E-1380AE476CF3}</Project>
-      <Name>Leak.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

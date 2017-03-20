@@ -6,10 +6,10 @@ namespace Leak.Listener
     {
         protected abstract TcpSocketInfo Execute(TcpSocket socket);
 
-        public int Bind(TcpSocket socket)
+        public int? Bind(TcpSocket socket)
         {
             TcpSocketInfo info = Execute(socket);
-            int port = info.Endpoint.Port;
+            int? port = info?.Endpoint.Port;
 
             return port;
         }

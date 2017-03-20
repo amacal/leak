@@ -6,11 +6,11 @@ namespace Leak.Sockets
 {
     public interface TcpSocket : IDisposable
     {
-        void Bind();
+        bool Bind();
 
-        void Bind(int port);
+        bool Bind(int port);
 
-        void Bind(IPAddress address);
+        bool Bind(IPAddress address);
 
         TcpSocketInfo Info();
 

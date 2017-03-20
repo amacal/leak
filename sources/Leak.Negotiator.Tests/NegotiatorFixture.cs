@@ -46,7 +46,7 @@ namespace Leak.Negotiator.Tests
 
         public async Task<NegotiatorFixturePair> Create()
         {
-            int port;
+            int? port;
 
             TcpSocket host = pool.New();
             TcpSocket client = pool.New();
@@ -56,7 +56,7 @@ namespace Leak.Negotiator.Tests
             host.Listen(1);
 
             Task<TcpSocketAccept> accept = host.Accept();
-            Task<TcpSocketConnect> connect = client.Connect(port);
+            Task<TcpSocketConnect> connect = client.Connect(port.Value);
 
             TcpSocketAccept accepted = await accept;
             TcpSocketConnect connected = await connect;

@@ -13,7 +13,7 @@ namespace Leak.Connector.Tests
 
         public ConnectorSession(NetworkPool pool, PeerConnector connector)
         {
-            int port;
+            int? port;
 
             this.connector = connector;
             this.server = pool.New();
@@ -21,7 +21,7 @@ namespace Leak.Connector.Tests
             server.Bind(out port);
             server.Listen(1);
 
-            endpoint = new IPEndPoint(IPAddress.Loopback, port);
+            endpoint = new IPEndPoint(IPAddress.Loopback, port.Value);
         }
 
         public IPEndPoint Endpoint

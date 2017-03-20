@@ -13,7 +13,7 @@ namespace Leak.Sockets
             this.endpoint = endpoint;
         }
 
-        public void Execute(IntPtr handle)
+        public bool Execute(IntPtr handle)
         {
             byte[] data = { 0x02, 0x00, (byte)(endpoint.Port / 256), (byte)(endpoint.Port % 256), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             GCHandle pinned = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -26,8 +26,7 @@ namespace Leak.Sockets
 
             pinned.Free();
 
-            if (value != 0)
-                throw new Exception();
+            return value == 0;
         }
     }
 }

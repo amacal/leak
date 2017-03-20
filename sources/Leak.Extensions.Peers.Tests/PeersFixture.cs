@@ -29,7 +29,7 @@ namespace Leak.Extensions.Peers.Tests
 
         public async Task<PeersSession> Start()
         {
-            int port;
+            int? port;
             IPEndPoint endpoint;
 
             TcpSocket client = pool.New();
@@ -38,7 +38,7 @@ namespace Leak.Extensions.Peers.Tests
             server.Bind(out port);
             server.Listen(1);
 
-            endpoint = new IPEndPoint(IPAddress.Loopback, port);
+            endpoint = new IPEndPoint(IPAddress.Loopback, port.Value);
 
             client.Bind();
             client.Connect(endpoint, null);

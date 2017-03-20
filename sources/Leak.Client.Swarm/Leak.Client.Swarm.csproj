@@ -38,13 +38,10 @@
     <Compile Include="SwarmSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwarmClient.cs" />
-    <Compile Include="SwarmCollection.cs" />
     <Compile Include="SwarmConnect.cs" />
     <Compile Include="SwarmEntry.cs" />
     <Compile Include="SwarmFactory.cs" />
     <Compile Include="SwarmLogger.cs" />
-    <Compile Include="SwarmNotification.cs" />
-    <Compile Include="SwarmNotificationType.cs" />
     <Compile Include="SwarmRuntime.cs" />
     <Compile Include="SwarmSession.cs" />
   </ItemGroup>
@@ -88,6 +85,10 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Glue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Listener.Events\Leak.Listener.Events.csproj">
+      <Project>{B6CA84ED-F39B-49B2-801C-5402439F5F5B}</Project>
+      <Name>Leak.Listener.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Listener\Leak.Listener.csproj">
       <Project>{B11E5E10-9F8D-4506-89A5-A4FB38BDBB65}</Project>

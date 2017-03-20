@@ -1,6 +1,6 @@
-﻿namespace Leak.Client.Swarm
+﻿namespace Leak.Client
 {
-    public enum SwarmNotificationType
+    public enum NotificationType
     {
         PeerConnected,
         PeerDisconnected,
@@ -16,6 +16,8 @@
         DataCompleted,
         PieceCompleted,
         PieceRejected,
-        MemorySnapshot
+        MemorySnapshot,
+        ListenerStarted,
+        ListenerFailed
     }
 }

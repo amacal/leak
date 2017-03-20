@@ -22,7 +22,7 @@ namespace Leak.Client.Swarm
             inner.Download(destination);
         }
 
-        public Task<SwarmNotification> Next()
+        public Task<Notification> Next()
         {
             return inner.Notifications.Next();
         }

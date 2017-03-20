@@ -32,7 +32,7 @@ namespace Leak.Glue.Tests
 
         public async Task<GlueSession> Start()
         {
-            int port;
+            int? port;
             IPEndPoint endpoint;
 
             TcpSocket client = pool.New();
@@ -40,7 +40,7 @@ namespace Leak.Glue.Tests
 
             server.Bind(out port);
             server.Listen(1);
-            endpoint = new IPEndPoint(IPAddress.Loopback, port);
+            endpoint = new IPEndPoint(IPAddress.Loopback, port.Value);
 
             client.Bind();
             client.Connect(endpoint, null);

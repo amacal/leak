@@ -1,10 +1,11 @@
 ﻿using Leak.Common;
 
-namespace Leak.Client.Swarm
+namespace Leak.Client
 {
-    public class SwarmNotification
+    public class Notification
     {
-        public SwarmNotificationType Type { get; set; }
+        public NotificationType Type { get; set; }
+        public string Description { get; set; }
 
         public PeerHash Peer { get; set; }
         public PeerAddress Remote { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Leak.Client;
 using Leak.Client.Swarm;
 using Leak.Common;
 using Pargos;
@@ -40,43 +41,43 @@ namespace Leak
 
                     while (true)
                     {
-                        SwarmNotification notification = await session.Next();
+                        Notification notification = await session.Next();
 
                         switch (notification.Type)
                         {
-                            case SwarmNotificationType.PeerConnected:
+                            case NotificationType.PeerConnected:
                                 Console.WriteLine($"Peer: connected {notification.Peer}");
                                 break;
 
-                            case SwarmNotificationType.PeerDisconnected:
+                            case NotificationType.PeerDisconnected:
                                 Console.WriteLine($"Peer: disconnected {notification.Peer}");
                                 break;
 
-                            case SwarmNotificationType.PeerRejected:
+                            case NotificationType.PeerRejected:
                                 Console.WriteLine($"Peer: rejected {notification.Remote}");
                                 break;
 
-                            case SwarmNotificationType.PeerBitfieldChanged:
+                            case NotificationType.PeerBitfieldChanged:
                                 Console.WriteLine($"Bitfield: {notification.Bitfield.Completed}/{notification.Bitfield.Length} pieces completed");
                                 break;
 
-                            case SwarmNotificationType.PeerStatusChanged:
+                            case NotificationType.PeerStatusChanged:
                                 Console.WriteLine($"Status: {notification.State}");
                                 break;
 
-                            case SwarmNotificationType.MetafileMeasured:
+                            case NotificationType.MetafileMeasured:
                                 Console.WriteLine($"Metadata: {notification.Size}");
                                 break;
 
-                            case SwarmNotificationType.MetafileRequested:
+                            case NotificationType.MetafileRequested:
                                 Console.WriteLine($"Metadata: requested piece {notification.Piece}");
                                 break;
 
-                            case SwarmNotificationType.MetafileReceived:
+                            case NotificationType.MetafileReceived:
                                 Console.WriteLine($"Metadata: received piece {notification.Piece}");
                                 break;
 
-                            case SwarmNotificationType.MetafileCompleted:
+                            case NotificationType.MetafileCompleted:
 
                                 Console.WriteLine($"Metadata: {notification.Metainfo.Pieces.Length} pieces [{notification.Metainfo.Properties.PieceSize} bytes]");
 
@@ -87,28 +88,36 @@ namespace Leak
 
                                 break;
 
-                            case SwarmNotificationType.DataAllocated:
+                            case NotificationType.DataAllocated:
                                 Console.WriteLine($"Data: allocated");
                                 break;
 
-                            case SwarmNotificationType.DataVerified:
+                            case NotificationType.DataVerified:
                                 Console.WriteLine($"Data: verified {notification.Bitfield.Length} pieces");
                                 break;
 
-                            case SwarmNotificationType.DataCompleted:
+                            case NotificationType.DataCompleted:
                                 Console.WriteLine($"Data: completed");
                                 return;
 
-                            case SwarmNotificationType.PieceCompleted:
+                            case NotificationType.PieceCompleted:
                                 Console.WriteLine($"Data; completed piece {notification.Piece}");
                                 break;
 
-                            case SwarmNotificationType.PieceRejected:
+                            case NotificationType.PieceRejected:
                                 Console.WriteLine($"Data; rejected piece {notification.Piece}");
                                 break;
 
-                            case SwarmNotificationType.MemorySnapshot:
+                            case NotificationType.MemorySnapshot:
                                 Console.WriteLine($"Memory: snapshot {notification.Size}");
+                                break;
+
+                            case NotificationType.ListenerStarted:
+                                Console.WriteLine($"Listener: started on {notification.Remote}");
+                                break;
+
+                            case NotificationType.ListenerFailed:
+                                Console.WriteLine($"Listener: failed because '{notification.Description}'");
                                 break;
                         }
                     }

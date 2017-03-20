@@ -40,7 +40,6 @@
     <Compile Include="BlockReserved.cs" />
     <Compile Include="BlockSent.cs" />
     <Compile Include="BlockWritten.cs" />
-    <Compile Include="ConnectionArrived.cs" />
     <Compile Include="ConnectionAttached.cs" />
     <Compile Include="ConnectionEncrypted.cs" />
     <Compile Include="ConnectionEstablished.cs" />
@@ -59,7 +58,6 @@
     <Compile Include="ExtensionListSent.cs" />
     <Compile Include="HandshakeCompleted.cs" />
     <Compile Include="HandshakeRejected.cs" />
-    <Compile Include="ListenerStarted.cs" />
     <Compile Include="MessageReceived.cs" />
     <Compile Include="MessageSent.cs" />
     <Compile Include="MetadataShared.cs" />

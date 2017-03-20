@@ -29,7 +29,7 @@ namespace Leak.Extensions.Metadata.Tests
 
         public async Task<MetadataSession> Start()
         {
-            int port;
+            int? port;
             IPEndPoint endpoint;
 
             TcpSocket client = pool.New();
@@ -37,7 +37,7 @@ namespace Leak.Extensions.Metadata.Tests
 
             server.Bind(out port);
             server.Listen(1);
-            endpoint = new IPEndPoint(IPAddress.Loopback, port);
+            endpoint = new IPEndPoint(IPAddress.Loopback, port.Value);
 
             client.Bind();
             client.Connect(endpoint, null);

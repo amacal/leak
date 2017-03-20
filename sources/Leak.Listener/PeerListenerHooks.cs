@@ -1,5 +1,5 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Listener.Events;
 
 namespace Leak.Listener
 {
@@ -8,5 +8,7 @@ namespace Leak.Listener
         public Action<ConnectionArrived> OnConnectionArrived;
 
         public Action<ListenerStarted> OnListenerStarted;
+
+        public Action<ListenerFailed> OnListenerFailed;
     }
 }
