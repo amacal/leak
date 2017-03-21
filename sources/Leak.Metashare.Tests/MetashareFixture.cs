@@ -11,20 +11,20 @@ using Leak.Memory;
 using Leak.Meta.Info;
 using Leak.Meta.Store;
 using Leak.Tasks;
+using Leak.Testing;
 using File = System.IO.File;
 
 namespace Leak.Meta.Share.Tests
 {
     public class MetashareFixture : IDisposable
     {
-        private readonly LeakPipeline pipeline;
+        private readonly PipelineSimulator pipeline;
         private readonly CompletionThread completion;
         private readonly FileFactory files;
 
         public MetashareFixture()
         {
-            pipeline = new LeakPipeline();
-            pipeline.Start();
+            pipeline = new PipelineSimulator();
 
             completion = new CompletionThread();
             completion.Start();
@@ -89,7 +89,6 @@ namespace Leak.Meta.Share.Tests
         public void Dispose()
         {
             completion.Dispose();
-            pipeline.Stop();
         }
     }
 }

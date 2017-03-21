@@ -3,6 +3,7 @@
 *.log
 *.xml
 *.tmp
+*.ncrunchproject
 
 [Dd]ebug*/
 [Rr]elease*/

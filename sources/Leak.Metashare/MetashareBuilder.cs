@@ -24,7 +24,7 @@ namespace Leak.Meta.Share
             return this;
         }
 
-        public MetashareBuilder WithPipeline(LeakPipeline pipeline)
+        public MetashareBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;

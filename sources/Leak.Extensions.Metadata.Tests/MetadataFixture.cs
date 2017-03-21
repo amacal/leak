@@ -23,7 +23,13 @@ namespace Leak.Extensions.Metadata.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new MetadataMemory())
+                    .Build();
+
             pool.Start();
         }
 

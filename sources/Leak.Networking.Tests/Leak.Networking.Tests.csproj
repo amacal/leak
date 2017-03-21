@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NetworkFixture.cs" />
+    <Compile Include="NetworkMemory.cs" />
     <Compile Include="NetworkTests.cs" />
     <Compile Include="NullReceiver.cs" />
     <Compile Include="OneByteMessage.cs" />

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Leak.Common;
+using Leak.Events;
 using Leak.Extensions.Metadata;
 using Leak.Testing;
 using NUnit.Framework;
@@ -29,6 +30,15 @@ namespace Leak.Meta.Share.Tests
                     Piece = 0
                 });
 
+                session.Service.Handle(new MetafileRead
+                {
+                    Hash = session.Service.Hash,
+                    Payload = new byte[10],
+                    Piece = 0,
+                    Total = 10
+                });
+
+                session.Pipeline.Process();
                 handler.Wait().Should().BeTrue();
             }
         }

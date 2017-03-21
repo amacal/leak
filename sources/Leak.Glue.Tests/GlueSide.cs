@@ -1,5 +1,4 @@
 ﻿using Leak.Common;
-using Leak.Memory;
 using System;
 
 namespace Leak.Glue.Tests
@@ -40,7 +39,7 @@ namespace Leak.Glue.Tests
             GlueService service =
                 builder
                     .WithHash(hash)
-                    .WithMemory(new MemoryBuilder().Build())
+                    .WithMemory(new GlueMemory())
                     .Build(hooks);
 
             return new GlueInstance(service);

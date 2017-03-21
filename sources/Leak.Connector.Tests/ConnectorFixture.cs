@@ -10,7 +10,6 @@ namespace Leak.Connector.Tests
         private readonly LeakPipeline pipeline;
         private readonly CompletionThread worker;
         private readonly NetworkPool pool;
-        private PeerConnector connector;
 
         private readonly PeerConnectorHooks hooks;
 
@@ -22,7 +21,13 @@ namespace Leak.Connector.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new ConnectorMemory())
+                    .Build();
+
             pool.Start();
 
             hooks = new PeerConnectorHooks();
@@ -35,7 +40,7 @@ namespace Leak.Connector.Tests
 
         public ConnectorSession Start()
         {
-            connector =
+            PeerConnector connector =
                 new PeerConnectorBuilder()
                     .WithPipeline(pipeline)
                     .WithNetwork(pool)

@@ -17,14 +17,14 @@ namespace Leak.Data.Store
             return cache.Exists(piece, block);
         }
 
-        public void Read(byte[] buffer, int piece, RepositoryViewReadCallback callback)
+        public void Read(FileBuffer buffer, int piece, RepositoryViewReadCallback callback)
         {
             new RepositoryViewReadRoutine(cache, piece, buffer, callback).Execute();
         }
 
-        public void Read(byte[] buffer, int piece, int block, RepositoryViewReadCallback callback)
+        public void Read(FileBuffer buffer, int piece, int block, RepositoryViewReadCallback callback)
         {
-            new RepositoryViewReadRoutine(cache, piece, block, new FileBuffer(buffer), callback).Execute();
+            new RepositoryViewReadRoutine(cache, piece, block, buffer, callback).Execute();
         }
 
         public void Write(FileBuffer buffer, int piece, int block, RepositoryViewWriteCallback callback)

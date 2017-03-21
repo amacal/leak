@@ -24,7 +24,13 @@ namespace Leak.Negotiator.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new NegotiatorMemory())
+                    .Build();
+
             pool.Start();
 
             hooks = new HandshakeNegotiatorHooks();

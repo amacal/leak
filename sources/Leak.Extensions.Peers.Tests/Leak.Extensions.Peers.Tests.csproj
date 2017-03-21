@@ -47,6 +47,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PeersMemory.cs" />
     <Compile Include="PeersInstance.cs" />
     <Compile Include="PeersSide.cs" />
     <Compile Include="PeersFixture.cs" />

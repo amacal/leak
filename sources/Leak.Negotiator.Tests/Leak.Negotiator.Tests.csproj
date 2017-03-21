@@ -47,6 +47,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NegotiatorMemory.cs" />
     <Compile Include="NegotiatorFixture.cs" />
     <Compile Include="NegotiatorFixturePair.cs" />
     <Compile Include="NegotiatorTests.cs" />

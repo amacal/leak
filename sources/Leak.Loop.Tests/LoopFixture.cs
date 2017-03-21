@@ -26,7 +26,13 @@ namespace Leak.Loop.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new LoopMemory())
+                    .Build();
+
             pool.Start();
 
             hooks = new ConnectionLoopHooks();

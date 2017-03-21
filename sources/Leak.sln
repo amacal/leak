@@ -1,12 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Core", "Leak.Core\Leak.Core.csproj", "{C5760143-0CFC-4638-AF74-069D1A8985D6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Core.Tests", "Leak.Core.Tests\Leak.Core.Tests.csproj", "{5748E985-E51A-4CD1-86DF-092FAA19E987}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Sockets", "Leak.Sockets\Leak.Sockets.csproj", "{6E385E2D-365A-46AA-AE93-01B375C4E48F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Sockets.Tests", "Leak.Sockets.Tests\Leak.Sockets.Tests.csproj", "{742850E6-BFF3-4D98-B892-53C023DD4087}"
@@ -149,14 +145,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C5760143-0CFC-4638-AF74-069D1A8985D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5760143-0CFC-4638-AF74-069D1A8985D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5760143-0CFC-4638-AF74-069D1A8985D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5760143-0CFC-4638-AF74-069D1A8985D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5748E985-E51A-4CD1-86DF-092FAA19E987}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E385E2D-365A-46AA-AE93-01B375C4E48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E385E2D-365A-46AA-AE93-01B375C4E48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E385E2D-365A-46AA-AE93-01B375C4E48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -406,8 +394,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C5760143-0CFC-4638-AF74-069D1A8985D6} = {86BF3059-2C78-4066-A61D-43A694D2CF90}
-		{5748E985-E51A-4CD1-86DF-092FAA19E987} = {86BF3059-2C78-4066-A61D-43A694D2CF90}
 		{6E385E2D-365A-46AA-AE93-01B375C4E48F} = {D3B598F9-0178-4C17-8948-16CCF5E1134F}
 		{742850E6-BFF3-4D98-B892-53C023DD4087} = {D3B598F9-0178-4C17-8948-16CCF5E1134F}
 		{D9740E22-D95D-40C9-958B-C7F8CE164784} = {D3B598F9-0178-4C17-8948-16CCF5E1134F}

@@ -20,7 +20,14 @@ namespace Leak.Networking.Tests
             worker.Start();
 
             hooks = new NetworkPoolHooks();
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build(hooks);
+
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new NetworkMemory())
+                    .Build(hooks);
+
             pool.Start();
         }
 

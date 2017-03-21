@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="GlueFixture.cs" />
     <Compile Include="GlueInstance.cs" />
+    <Compile Include="GlueMemory.cs" />
     <Compile Include="GlueNamedPlugin.cs" />
     <Compile Include="GlueSession.cs" />
     <Compile Include="GlueSide.cs" />
@@ -79,10 +80,6 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Glue</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
-      <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
-      <Name>Leak.Memory</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Metadata\Leak.Meta.Info.csproj">
       <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>

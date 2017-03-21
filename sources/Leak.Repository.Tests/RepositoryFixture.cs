@@ -52,6 +52,7 @@ namespace Leak.Data.Store.Tests
                     .WithDestination(destination)
                     .WithFiles(files)
                     .WithPipeline(pipeline)
+                    .WithMemory(new RepositoryMemoryImplementation())
                     .Build();
 
             return new RepositorySession(metainfo, service, sandbox, data);

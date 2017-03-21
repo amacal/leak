@@ -1,4 +1,5 @@
 ﻿using System;
+using Leak.Testing;
 
 namespace Leak.Meta.Share.Tests
 {
@@ -14,6 +15,11 @@ namespace Leak.Meta.Share.Tests
         public MetashareService Service
         {
             get { return service; }
+        }
+
+        public PipelineSimulator Pipeline
+        {
+            get { return (PipelineSimulator)service.Dependencies.Pipeline; }
         }
 
         public MetashareHooks Hooks

@@ -129,10 +129,7 @@ namespace Leak.Data.Map
 
         public void Schedule(OmnibusStrategy strategy, PeerHash peer, int count)
         {
-            if (context.Cache != null)
-            {
-                context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
-            }
+            context.Queue.Add(new SchedulePeerTask(strategy, peer, count));
         }
 
         public void Query(Action<PeerHash, Bitfield, PeerState> callback)

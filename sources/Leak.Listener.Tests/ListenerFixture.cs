@@ -12,9 +12,9 @@ namespace Leak.Listener.Tests
         private readonly LeakPipeline pipeline;
         private readonly CompletionThread worker;
         private readonly NetworkPool pool;
-        private PeerListener listener;
-
         private readonly PeerListenerHooks hooks;
+
+        private PeerListener listener;
 
         public ListenerFixture()
         {
@@ -24,7 +24,13 @@ namespace Leak.Listener.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new ListenerMemory())
+                    .Build();
+
             pool.Start();
 
             hooks = new PeerListenerHooks();

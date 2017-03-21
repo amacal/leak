@@ -23,7 +23,13 @@ namespace Leak.Extensions.Peers.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new PeersMemory())
+                    .Build();
+
             pool.Start();
         }
 

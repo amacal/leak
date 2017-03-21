@@ -205,9 +205,17 @@ namespace Leak.Data.Get.Tests
             using (RetrieverFixture fixture = new RetrieverFixture())
             using (RetrieverSession session = fixture.Start())
             {
+                DataVerified verified = new DataVerified
+                {
+                    Hash = session.Service.Parameters.Hash,
+                    Bitfield = new Bitfield(1)
+                };
+
                 A.CallTo(() => session.Omnibus.Query(A<Action<PeerHash, Bitfield, PeerState>>.Ignored)).Invokes(handle);
 
                 session.Service.Start();
+                session.Service.Handle(verified);
+
                 session.Pipeline.Tick();
                 session.Pipeline.Process();
 

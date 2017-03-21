@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicatorFixture.cs" />
+    <Compile Include="CommunicatorMemory.cs" />
     <Compile Include="CommunicatorSession.cs" />
     <Compile Include="CommunicatorTests.cs" />
     <Compile Include="FixedDataBlock.cs" />

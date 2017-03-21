@@ -6,7 +6,7 @@ namespace Leak.Meta.Share
 {
     public class MetashareDependencies
     {
-        public LeakPipeline Pipeline;
+        public PipelineService Pipeline;
 
         public GlueService Glue;
 

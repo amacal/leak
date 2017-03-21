@@ -14,7 +14,6 @@ namespace Leak.Communicator.Tests
         private readonly LeakPipeline pipeline;
         private readonly CompletionThread worker;
         private readonly NetworkPool pool;
-        private CommunicatorService communicator;
 
         private readonly CommunicatorHooks hooks;
 
@@ -26,7 +25,13 @@ namespace Leak.Communicator.Tests
             worker = new CompletionThread();
             worker.Start();
 
-            pool = new NetworkPoolBuilder().WithPipeline(pipeline).WithWorker(worker).Build();
+            pool =
+                new NetworkPoolBuilder()
+                    .WithPipeline(pipeline)
+                    .WithWorker(worker)
+                    .WithMemory(new CommunicatorMemory())
+                    .Build();
+
             pool.Start();
 
             hooks = new CommunicatorHooks();
@@ -54,7 +59,7 @@ namespace Leak.Communicator.Tests
             NetworkConnection sender = pool.Create(client, NetworkDirection.Outgoing, endpoint);
             NetworkConnection receiver = pool.Create(accepted.Connection, NetworkDirection.Incoming, accepted.GetRemote());
 
-            communicator = new CommunicatorService(peer, sender, hooks, configuration);
+            CommunicatorService communicator = new CommunicatorService(peer, sender, hooks, configuration);
             return new CommunicatorSession(communicator, sender, receiver);
         }
 

@@ -48,6 +48,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ListenerMemory.cs" />
     <Compile Include="ListenerFixture.cs" />
     <Compile Include="ListenerSession.cs" />
     <Compile Include="ListenerTests.cs" />

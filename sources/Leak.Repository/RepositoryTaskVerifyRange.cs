@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Leak.Common;
+using Leak.Files;
 
 namespace Leak.Data.Store
 {
@@ -100,9 +101,13 @@ namespace Leak.Data.Store
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
-                int step = block.Length / context.Metainfo.Properties.BlockSize;
+                int blocksInBuffer = block.Length / context.Metainfo.Properties.BlockSize;
+                int blocksInPiece = context.Metainfo.Properties.PieceSize / context.Metainfo.Properties.BlockSize;
 
-                context.View.Read(block.Data, piece, 0, args =>
+                int step = Math.Min(blocksInBuffer, blocksInPiece);
+                FileBuffer buffer = new FileBuffer(block.Data, 0, step * context.Metainfo.Properties.BlockSize);
+
+                context.View.Read(buffer, piece, 0, args =>
                 {
                     if (args.Count > 0 && context.View.Exists(args.Piece, args.Block + step))
                     {
