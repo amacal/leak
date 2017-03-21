@@ -1,6 +1,20 @@
-# leak
+# leak #
 
-## command line
+Leak is a torrent library for .NET 4.5 written only in C#. It implements its own IO layer to fully benefit from use of windows completion ports. It also delivers sample end-user tools to demonstrate all its features.
+
+## downloads ##
+
+The latest release of the leak library is [available on NuGet](https://www.nuget.org/packages/Leak.Core/) or can be [downloaded from GitHub](https://github.com/amacal/leak/releases).
+
+## documentation ##
+
+Documentation is hosted on GitHub at [https://github.com/amacal/leak/wiki](https://github.com/amacal/leak/wiki).
+
+## License ##
+
+Leak is Open Source software is released under the [MIT license](https://github.com/nunit/docs/wiki/License). The license allows the use of Leak in free and commercial applications and libraries without restrictions.
+
+## end-user tools ##
 ```
 leak download --hash 73b38c5f82a28d47efef94c04d0a839b180f9ca0
               --trackers http://bttracker.debian.org:6969/announce
@@ -41,7 +55,7 @@ options:
         Control the number of logs printed out.
 ````
 
-## csharp code
+## sample C# code ##
 ````csharp
 string tracker = "http://bttracker.debian.org:6969/announce";
 FileHash hash = FileHash.Parse("883c6f02fc46188ac17ea49c13c3e9d97413a5a2");
