@@ -20,9 +20,9 @@ options:
 
         Listen on specified port.
 
-    --accept #countries (default: nothing)
+    --accept #countries (default: all)
 
-        Accepts only peers from the given countries; example: RU UA
+        Accept only peers from the given countries; example: RU UA
 
     --metadata (on|off) (default: on)
 
@@ -34,7 +34,11 @@ options:
 
     --strategy (sequential|rarest-first) (default: rarest-first)
 
-        Schedule pieces using algorithm.
+        Schedule pieces using specified algorithm.
+
+    --logging (compact|verbose) (default: compact)
+
+        Control the number of logs printed out.
 ````
 
 ## csharp code

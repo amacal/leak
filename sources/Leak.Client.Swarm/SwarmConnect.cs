@@ -205,6 +205,7 @@ namespace Leak.Client.Swarm
                 OnPieceCompleted = OnPieceCompleted,
                 OnThresholdReached = data => DataGet?.Handle(data),
                 OnDataCompleted = OnDataCompleted,
+                OnDataChanged = OnDataChanged
             };
 
             DataMap =
@@ -500,6 +501,7 @@ namespace Leak.Client.Swarm
             Notification notification = new Notification
             {
                 Type = NotificationType.PeerStatusChanged,
+                Peer = data.Peer,
                 State = data.State
             };
 
@@ -523,6 +525,17 @@ namespace Leak.Client.Swarm
             Notification notification = new Notification
             {
                 Type = NotificationType.DataCompleted
+            };
+
+            Notifications.Enqueue(notification);
+        }
+
+        private void OnDataChanged(DataChanged data)
+        {
+            Notification notification = new Notification
+            {
+                Type = NotificationType.DataChanged,
+                Completed = data.Completed
             };
 
             Notifications.Enqueue(notification);

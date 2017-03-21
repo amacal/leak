@@ -14,6 +14,7 @@
         DataAllocated,
         DataVerified,
         DataCompleted,
+        DataChanged,
         PieceCompleted,
         PieceRejected,
         MemorySnapshot,

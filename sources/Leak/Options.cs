@@ -41,6 +41,9 @@ namespace Leak
         [Option("--exchange")]
         public string Exchange { get; set; }
 
+        [Option("--logging")]
+        public string Logging { get; set; }
+
         public bool IsValid()
         {
             Uri uri;
@@ -123,7 +126,30 @@ namespace Leak
                     return false;
             }
 
+            switch (Logging)
+            {
+                case "compact":
+                case "verbose":
+                case null:
+                    break;
+
+                default:
+                    return false;
+            }
+
             return true;
+        }
+
+        public Reporter ToReporter()
+        {
+            switch (Logging)
+            {
+                case "compact":
+                    return new ReporterCompact();
+
+                default:
+                    return new ReporterNormal();
+            }
         }
 
         public SwarmSettings ToSettings()
