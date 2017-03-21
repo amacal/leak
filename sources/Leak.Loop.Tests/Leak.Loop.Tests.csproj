@@ -50,7 +50,7 @@
     <Compile Include="LoopFixture.cs" />
     <Compile Include="LoopSamples.cs" />
     <Compile Include="LoopSession.cs" />
-    <Compile Include="LoopTests.cs" />
+    <Compile Include="LoopyTests.cs" />
     <Compile Include="LoopMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

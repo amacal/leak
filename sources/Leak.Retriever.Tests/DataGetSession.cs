@@ -3,16 +3,16 @@ using Leak.Testing;
 
 namespace Leak.Data.Get.Tests
 {
-    public class RetrieverSession : IDisposable
+    public class DataGetSession : IDisposable
     {
-        private readonly RetrieverService service;
+        private readonly DataGetService service;
 
-        public RetrieverSession(RetrieverService service)
+        public DataGetSession(DataGetService service)
         {
             this.service = service;
         }
 
-        public RetrieverService Service
+        public DataGetService Service
         {
             get { return service; }
         }
@@ -22,17 +22,17 @@ namespace Leak.Data.Get.Tests
             get { return (PipelineSimulator)service.Dependencies.Pipeline; }
         }
 
-        public RetrieverRepository Repository
+        public DataGetToDataStore Repository
         {
             get { return service.Dependencies.Repository; }
         }
 
-        public RetrieverGlue Glue
+        public DataGetToGlue Glue
         {
             get { return service.Dependencies.Glue; }
         }
 
-        public RetrieverOmnibus Omnibus
+        public DataGetToDataMap Omnibus
         {
             get { return service.Dependencies.Omnibus; }
         }

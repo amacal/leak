@@ -2,7 +2,7 @@
 
 namespace Leak.Data.Get
 {
-    public interface RetrieverRepository
+    public interface DataGetToDataStore
     {
         void Verify(PieceInfo piece);
 

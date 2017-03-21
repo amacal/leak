@@ -6,13 +6,13 @@ using Leak.Tasks;
 
 namespace Leak.Data.Get
 {
-    public class RetrieverService : IDisposable
+    public class DataGetService : IDisposable
     {
-        private readonly RetrieverContext context;
+        private readonly DataGetContext context;
 
-        public RetrieverService(RetrieverParameters parameters, RetrieverDependencies dependencies, RetrieverConfiguration configuration, RetrieverHooks hooks)
+        public DataGetService(DataGetParameters parameters, DataGetDependencies dependencies, DataGetConfiguration configuration, DataGetHooks hooks)
         {
-            context = new RetrieverContext(parameters, dependencies, configuration, hooks);
+            context = new DataGetContext(parameters, dependencies, configuration, hooks);
         }
 
         public FileHash Hash
@@ -20,22 +20,22 @@ namespace Leak.Data.Get
             get { return context.Parameters.Hash; }
         }
 
-        public RetrieverHooks Hooks
+        public DataGetHooks Hooks
         {
             get { return context.Hooks; }
         }
 
-        public RetrieverParameters Parameters
+        public DataGetParameters Parameters
         {
             get { return context.Parameters; }
         }
 
-        public RetrieverDependencies Dependencies
+        public DataGetDependencies Dependencies
         {
             get { return context.Dependencies; }
         }
 
-        public RetrieverConfiguration Configuration
+        public DataGetConfiguration Configuration
         {
             get { return context.Configuration; }
         }
@@ -60,7 +60,7 @@ namespace Leak.Data.Get
                 context.Verified = true;
             });
 
-            context.Queue.Add(new RetrieverTaskInterested());
+            context.Queue.Add(new DataGetTaskInterested());
         }
 
         public void Handle(BlockReceived data)
@@ -122,17 +122,17 @@ namespace Leak.Data.Get
 
         public void Handle(ThresholdReached data)
         {
-            context.Queue.Add(new RetrieverTaskSchedule(data.Peer));
+            context.Queue.Add(new DataGetTaskSchedule(data.Peer));
         }
 
         private void OnTick250()
         {
-            context.Queue.Add(new RetrieverTaskScheduleAll());
+            context.Queue.Add(new DataGetTaskScheduleAll());
         }
 
         private void OnTick5000()
         {
-            context.Queue.Add(new RetrieverTaskInterested());
+            context.Queue.Add(new DataGetTaskInterested());
         }
 
         public void Dispose()

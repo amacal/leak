@@ -25,17 +25,17 @@ namespace Leak.Client
             return new MetaGetToMetaStoreForwarder(service);
         }
 
-        public static RetrieverGlue AsDataGet(this GlueService service)
+        public static DataGetToGlue AsDataGet(this GlueService service)
         {
             return new DataGetToGlueForwarder(service);
         }
 
-        public static RetrieverRepository AsDataGet(this RepositoryService service)
+        public static DataGetToDataStore AsDataGet(this RepositoryService service)
         {
             return new DataGetToDataStoreForwarder(service);
         }
 
-        public static RetrieverOmnibus AsDataGet(this OmnibusService service)
+        public static DataGetToDataMap AsDataGet(this OmnibusService service)
         {
             return new DataGetToDataMapForwarder(service);
         }
@@ -108,7 +108,7 @@ namespace Leak.Client
             }
         }
 
-        private class DataGetToGlueForwarder : RetrieverGlue
+        private class DataGetToGlueForwarder : DataGetToGlue
         {
             private readonly GlueService service;
 
@@ -128,7 +128,7 @@ namespace Leak.Client
             }
         }
 
-        private class DataGetToDataStoreForwarder : RetrieverRepository
+        private class DataGetToDataStoreForwarder : DataGetToDataStore
         {
             private readonly RepositoryService service;
 
@@ -148,7 +148,7 @@ namespace Leak.Client
             }
         }
 
-        private class DataGetToDataMapForwarder : RetrieverOmnibus
+        private class DataGetToDataMapForwarder : DataGetToDataMap
         {
             private readonly OmnibusService service;
 

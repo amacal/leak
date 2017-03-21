@@ -51,11 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RetrieverBlock.cs" />
+    <Compile Include="DataGetBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RetrieverFixture.cs" />
-    <Compile Include="RetrieverSession.cs" />
-    <Compile Include="RetrieverTests.cs" />
+    <Compile Include="DataGetFixture.cs" />
+    <Compile Include="DataGetSession.cs" />
+    <Compile Include="DataGetTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

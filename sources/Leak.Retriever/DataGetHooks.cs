@@ -3,7 +3,7 @@ using Leak.Events;
 
 namespace Leak.Data.Get
 {
-    public class RetrieverHooks
+    public class DataGetHooks
     {
         /// <summary>
         /// Called when some block is requested from remote peer.

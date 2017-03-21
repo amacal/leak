@@ -2,9 +2,9 @@
 
 namespace Leak.Data.Get
 {
-    public class RetrieverTaskInterested : LeakTask<RetrieverContext>
+    public class DataGetTaskInterested : LeakTask<DataGetContext>
     {
-        public void Execute(RetrieverContext context)
+        public void Execute(DataGetContext context)
         {
             if (context.Verified)
             {

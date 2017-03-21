@@ -33,21 +33,21 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RetrieverContext.cs" />
-    <Compile Include="RetrieverExtensions.cs" />
+    <Compile Include="DataGetContext.cs" />
+    <Compile Include="DataGetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RetrieverBuilder.cs" />
-    <Compile Include="RetrieverConfiguration.cs" />
-    <Compile Include="RetrieverDependencies.cs" />
-    <Compile Include="RetrieverGlue.cs" />
-    <Compile Include="RetrieverHooks.cs" />
-    <Compile Include="RetrieverOmnibus.cs" />
-    <Compile Include="RetrieverParameters.cs" />
-    <Compile Include="RetrieverRepository.cs" />
-    <Compile Include="RetrieverService.cs" />
-    <Compile Include="RetrieverTaskInterested.cs" />
-    <Compile Include="RetrieverTaskSchedule.cs" />
-    <Compile Include="RetrieverTaskScheduleAll.cs" />
+    <Compile Include="DataGetBuilder.cs" />
+    <Compile Include="DataGetConfiguration.cs" />
+    <Compile Include="DataGetDependencies.cs" />
+    <Compile Include="DataGetToGlue.cs" />
+    <Compile Include="DataGetHooks.cs" />
+    <Compile Include="DataGetToDataMap.cs" />
+    <Compile Include="DataGetParameters.cs" />
+    <Compile Include="DataGetToDataStore.cs" />
+    <Compile Include="DataGetService.cs" />
+    <Compile Include="DataGetTaskInterested.cs" />
+    <Compile Include="DataGetTaskSchedule.cs" />
+    <Compile Include="DataGetTaskScheduleAll.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">

@@ -58,7 +58,7 @@ namespace Leak.Client.Swarm
         public MetagetService MetaGet { get; set; }
 
         public RepositoryService DataStore { get; set; }
-        public RetrieverService DataGet { get; set; }
+        public DataGetService DataGet { get; set; }
         public OmnibusService DataMap { get; set; }
 
         public void Start(string[] trackers)
@@ -321,12 +321,12 @@ namespace Leak.Client.Swarm
 
         private void StartDataGet()
         {
-            RetrieverHooks hooks = new RetrieverHooks
+            DataGetHooks hooks = new DataGetHooks
             {
             };
 
             DataGet =
-                new RetrieverBuilder()
+                new DataGetBuilder()
                     .WithHash(Hash)
                     .WithStrategy(Settings.Strategy)
                     .WithGlue(Glue.AsDataGet())

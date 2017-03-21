@@ -2,7 +2,7 @@
 
 namespace Leak.Data.Get
 {
-    public interface RetrieverGlue
+    public interface DataGetToGlue
     {
         void SendInterested(PeerHash peer);
 

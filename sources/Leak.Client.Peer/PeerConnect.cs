@@ -39,7 +39,7 @@ namespace Leak.Client.Peer
         public MetagetService MetaGet { get; set; }
 
         public RepositoryService DataStore { get; set; }
-        public RetrieverService DataGet { get; set; }
+        public DataGetService DataGet { get; set; }
         public OmnibusService DataMap { get; set; }
 
         public void Start()
@@ -136,13 +136,13 @@ namespace Leak.Client.Peer
 
         private void StartDataGet()
         {
-            RetrieverHooks hooks = new RetrieverHooks
+            DataGetHooks hooks = new DataGetHooks
             {
                 OnBlockRequested = OnBlockRequestSent
             };
 
             DataGet =
-                new RetrieverBuilder()
+                new DataGetBuilder()
                     .WithHash(Hash)
                     .WithStrategy("sequential")
                     .WithGlue(Glue.AsDataGet())

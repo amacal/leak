@@ -8,17 +8,17 @@ using NUnit.Framework;
 
 namespace Leak.Data.Get.Tests
 {
-    public class RetrieverTests
+    public class DataGetTests
     {
         [Test]
         public void ShouldTriggerBlockHandled()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 BlockReceived received = new BlockReceived
                 {
-                    Payload = new RetrieverBlock(),
+                    Payload = new DataGetBlock(),
                     Peer = PeerHash.Random(),
                     Hash = session.Service.Hash,
                     Block = new BlockIndex(1, 0, 3616)
@@ -43,12 +43,12 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldWriteToRepositoryWhenBlockReceived()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 BlockReceived received = new BlockReceived
                 {
-                    Payload = new RetrieverBlock(),
+                    Payload = new DataGetBlock(),
                     Peer = PeerHash.Random(),
                     Hash = session.Service.Hash,
                     Block = new BlockIndex(1, 0, 3616)
@@ -65,8 +65,8 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldTriggerBlockRequested()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 BlockReserved reserved = new BlockReserved
                 {
@@ -94,8 +94,8 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldSendRequestWhenBlockReserved()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 BlockReserved received = new BlockReserved
                 {
@@ -115,8 +115,8 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldVerifyPieceWhenPieceIsReady()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 PieceReady ready = new PieceReady
                 {
@@ -135,8 +135,8 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldCompletePieceWhenPieceIsAccepted()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 PieceAccepted accepted = new PieceAccepted
                 {
@@ -155,8 +155,8 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldInvalidatePieceWhenPieceIsRejected()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 PieceRejected rejected = new PieceRejected
                 {
@@ -175,8 +175,8 @@ namespace Leak.Data.Get.Tests
         [Test]
         public void ShouldCompleteBlockWhenBlockIsWritten()
         {
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 BlockWritten written = new BlockWritten
                 {
@@ -202,8 +202,8 @@ namespace Leak.Data.Get.Tests
                 callback.Invoke(other, Bitfield.Complete(1), new PeerState());
             };
 
-            using (RetrieverFixture fixture = new RetrieverFixture())
-            using (RetrieverSession session = fixture.Start())
+            using (DataGetFixture fixture = new DataGetFixture())
+            using (DataGetSession session = fixture.Start())
             {
                 DataVerified verified = new DataVerified
                 {

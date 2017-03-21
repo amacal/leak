@@ -1,8 +1,8 @@
 ﻿namespace Leak.Data.Get
 {
-    public class RetrieverConfiguration
+    public class DataGetConfiguration
     {
-        public RetrieverConfiguration()
+        public DataGetConfiguration()
         {
             Strategy = "rarest-first";
         }

@@ -3,9 +3,9 @@ using Leak.Tasks;
 
 namespace Leak.Data.Get
 {
-    public class RetrieverTaskScheduleAll : LeakTask<RetrieverContext>
+    public class DataGetTaskScheduleAll : LeakTask<DataGetContext>
     {
-        public void Execute(RetrieverContext context)
+        public void Execute(DataGetContext context)
         {
             Schedule(context, 2048, 8, 256);
             Schedule(context, 1024, 8, 64);
@@ -13,10 +13,10 @@ namespace Leak.Data.Get
             Schedule(context, 0, 16, 4);
         }
 
-        private void Schedule(RetrieverContext context, int ranking, int count, int pieces)
+        private void Schedule(DataGetContext context, int ranking, int count, int pieces)
         {
             string strategy = context.Configuration.Strategy;
-            RetrieverOmnibus omnibus = context.Dependencies.Omnibus;
+            DataGetToDataMap omnibus = context.Dependencies.Omnibus;
 
             foreach (PeerHash peer in omnibus.Find(ranking, count))
             {

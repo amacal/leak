@@ -2,17 +2,17 @@
 
 namespace Leak.Data.Get.Tests
 {
-    public class RetrieverBlock : DataBlock
+    public class DataGetBlock : DataBlock
     {
         private readonly byte[] data;
         private readonly int offset;
 
-        public RetrieverBlock()
+        public DataGetBlock()
         {
             this.data = Bytes.Random(20000);
         }
 
-        private RetrieverBlock(byte[] data, int offset)
+        private DataGetBlock(byte[] data, int offset)
         {
             this.data = data;
             this.offset = offset;
@@ -35,7 +35,7 @@ namespace Leak.Data.Get.Tests
 
         public DataBlock Scope(int shift)
         {
-            return new RetrieverBlock(data, shift + offset);
+            return new DataGetBlock(data, shift + offset);
         }
 
         public void Release()

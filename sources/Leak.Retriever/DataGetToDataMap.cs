@@ -4,7 +4,7 @@ using Leak.Common;
 
 namespace Leak.Data.Get
 {
-    public interface RetrieverOmnibus
+    public interface DataGetToDataMap
     {
         bool IsComplete(PieceInfo piece);
 

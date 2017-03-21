@@ -2,7 +2,7 @@
 
 namespace Leak.Data.Get
 {
-    public class RetrieverParameters
+    public class DataGetParameters
     {
         public FileHash Hash;
     }
