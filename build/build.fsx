@@ -50,18 +50,26 @@ Target "MergeApp" (fun _ ->
                 OutputDirectory = "./build/tools"
                 ExcludeVersion = true})
 
-    let result =
+    let leak =
         ExecProcess (fun info ->
             info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
             info.WorkingDirectory <- "./build"
             info.Arguments <- sprintf "-target:exe -internalize -verbose -wildcards -lib:%s -out:%s %s %s" ("./release") ("./merge" @@ "Leak.exe") ("./release" @@ "Leak.exe") ("./release" @@ "*.dll")
             ) (TimeSpan.FromMinutes 5.)
 
-    if result <> 0 then failwithf "Error during ILRepack execution."
+    let core =
+        ExecProcess (fun info ->
+            info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
+            info.WorkingDirectory <- "./build"
+            info.Arguments <- sprintf "-target:library -verbose -wildcards -lib:%s -out:%s %s" ("./release") ("./merge" @@ "Leak.Core.dll") ("./release" @@ "Leak.*.dll")
+            ) (TimeSpan.FromMinutes 5.)
+
+    if leak <> 0 then failwithf "Error during ILRepack execution."
+    if core <> 0 then failwithf "Error during ILRepack execution."
 )
 
 Target "CreatePackage" (fun _ ->
-     !! "build/merge/*.*" -- "build/merge/*.pdb" -- "build/merge/*.xml"
+     !! "build/merge/leak.exe"
         |> Zip "build/merge" ("build/package/leak-" + (getBuildParamOrDefault "version" "dev") + ".zip")
 )
 

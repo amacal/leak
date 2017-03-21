@@ -76,6 +76,7 @@ namespace Leak.Data.Store
 
         public void Dispose()
         {
+            context.Queue.Stop();
             context.View?.Dispose();
         }
     }

@@ -144,6 +144,7 @@ namespace Leak
         {
             switch (Logging)
             {
+                case null:
                 case "compact":
                     return new ReporterCompact();
 

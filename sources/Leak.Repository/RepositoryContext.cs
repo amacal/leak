@@ -11,7 +11,6 @@ namespace Leak.Data.Store
         private readonly BitfileService bitfile;
         private readonly RepositoryTaskQueue queue;
 
-        private readonly byte[] buffer;
         private RepositoryView view;
         private Metainfo metainfo;
 
@@ -23,9 +22,7 @@ namespace Leak.Data.Store
             this.configuration = configuration;
 
             bitfile = new BitfileService(parameters.Hash, parameters.Destination + ".bitfield");
-
             queue = new RepositoryTaskQueue(this);
-            buffer = new byte[16384];
         }
 
         public RepositoryParameters Parameters

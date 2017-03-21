@@ -25,7 +25,6 @@ namespace Leak.Data.Store.Tests
 
                 session.Service.Start();
                 session.Service.HandleMetafileVerified(session.Metainfo);
-                session.Service.Verify(new Bitfield(session.Data.Pieces));
 
                 handler.Wait().Should().BeTrue();
                 session.Sandbox.ExistsFile(file).Should().BeTrue();

@@ -13,6 +13,7 @@ namespace Leak.Data.Store
         private readonly HashSet<object> keys;
 
         private ManualResetEvent onReady;
+        private bool stopped;
 
         public RepositoryTaskQueue(RepositoryContext context)
         {
@@ -23,10 +24,18 @@ namespace Leak.Data.Store
             keys = new HashSet<object>();
         }
 
+        public void Stop()
+        {
+            stopped = true;
+        }
+
         public void Add(RepositoryTask task)
         {
-            items.Enqueue(task);
-            onReady?.Set();
+            if (stopped == false)
+            {
+                items.Enqueue(task);
+                onReady?.Set();
+            }
         }
 
         public bool IsBlocked(object key)
@@ -57,25 +66,28 @@ namespace Leak.Data.Store
             RepositoryTask task;
             onReady.Reset();
 
-            while (items.TryDequeue(out task))
+            if (stopped == false)
             {
-                ready.Enqueue(task);
-            }
-
-            int count = ready.Count;
-
-            while (count-- > 0)
-            {
-                ready.TryDequeue(out task);
-
-                if (task.CanExecute(this))
-                {
-                    task.Block(this);
-                    task.Execute(context, OnCompleted);
-                }
-                else
+                while (items.TryDequeue(out task))
                 {
                     ready.Enqueue(task);
+                }
+
+                int count = ready.Count;
+
+                while (count-- > 0)
+                {
+                    ready.TryDequeue(out task);
+
+                    if (task.CanExecute(this))
+                    {
+                        task.Block(this);
+                        task.Execute(context, OnCompleted);
+                    }
+                    else
+                    {
+                        ready.Enqueue(task);
+                    }
                 }
             }
         }
