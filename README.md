@@ -12,7 +12,7 @@ Documentation is hosted on GitHub at [https://github.com/amacal/leak/wiki](https
 
 ## License ##
 
-Leak is Open Source software is released under the [MIT license](https://github.com/nunit/docs/wiki/License). The license allows the use of Leak in free and commercial applications and libraries without restrictions.
+Leak is Open Source software and is released under the [MIT license](https://github.com/amacal/leak/wiki/License). The license allows the use of Leak in free and commercial applications and libraries without restrictions.
 
 ## end-user tools ##
 ```

@@ -69,9 +69,17 @@ Target "MergeApp" (fun _ ->
 )
 
 Target "CreatePackage" (fun _ ->
-     !! "build/merge/leak.exe"
+    !! "build/merge/*.*" -- "build/merge/*.pdb" -- "build/merge/*.xml"
         |> Zip "build/merge" ("build/package/leak-" + (getBuildParamOrDefault "version" "dev") + ".zip")
-)
+
+    NuGet (fun p ->
+        { p with
+            Version = (getBuildParamOrDefault "version" "1.0.0.dev")
+            OutputPath = "./build/package"
+            WorkingDir = "./build/merge"
+            Dependencies = []
+            Files = [( "Leak.Core.dll", Some "lib\\net45", None )]
+            Publish = false }) "./build/build.nuspec")
 
 Target "Default" (fun _ ->
     trace "Build completed."
