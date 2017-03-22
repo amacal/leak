@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using Leak.Client;
+using Leak.Client.Notifications;
 using Leak.Common;
 
 namespace Leak
 {
-    public class ReporterCompact : Reporter
+    public class ReporterCompact : NotificationVisitor, Reporter
     {
         private readonly HashSet<PeerHash> peers;
         private readonly HashSet<PeerHash> seeds;
@@ -24,90 +25,70 @@ namespace Leak
 
         public bool Handle(Notification notification)
         {
-            switch (notification.Type)
-            {
-                case NotificationType.PeerConnected:
-                    peers.Add(notification.Peer);
-                    break;
-
-                case NotificationType.PeerDisconnected:
-                    peers.Remove(notification.Peer);
-                    seeds.Remove(notification.Peer);
-                    break;
-
-                case NotificationType.PeerRejected:
-                    break;
-
-                case NotificationType.PeerBitfieldChanged:
-                    break;
-
-                case NotificationType.PeerStatusChanged:
-
-                    if (notification.State.IsRemoteChokingLocal == false)
-                        seeds.Add(notification.Peer);
-
-                    break;
-
-                case NotificationType.MetafileMeasured:
-                    break;
-
-                case NotificationType.MetafileRequested:
-                    break;
-
-                case NotificationType.MetafileReceived:
-                    break;
-
-                case NotificationType.MetafileCompleted:
-
-                    Console.WriteLine();
-                    Console.WriteLine($"Metadata: {notification.Metainfo.Pieces.Length} pieces [{notification.Metainfo.Properties.PieceSize} bytes]");
-
-                    foreach (MetainfoEntry entry in notification.Metainfo.Entries)
-                    {
-                        Console.WriteLine($"Metadata: {String.Join(Path.DirectorySeparatorChar.ToString(), entry.Name)} [{entry.Size} bytes]");
-                    }
-
-                    metainfo = notification.Metainfo;
-                    break;
-
-                case NotificationType.DataAllocated:
-                    Console.WriteLine();
-                    Console.WriteLine($"Data: allocated");
-                    break;
-
-                case NotificationType.DataVerified:
-                    Console.WriteLine();
-                    Console.WriteLine($"Data: verified {notification.Bitfield.Length} pieces");
-                    break;
-
-                case NotificationType.DataCompleted:
-                    Console.WriteLine();
-                    Console.WriteLine($"Data: completed");
-                    return false;
-
-                case NotificationType.DataChanged:
-                    completed = notification.Completed;
-                    break;
-
-                case NotificationType.PieceCompleted:
-                    break;
-
-                case NotificationType.PieceRejected:
-                    break;
-
-                case NotificationType.MemorySnapshot:
-                    memory = notification.Size;
-                    break;
-
-                case NotificationType.ListenerStarted:
-                    break;
-
-                case NotificationType.ListenerFailed:
-                    break;
-            }
+            notification.Dispatch(this);
 
             Console.Write($"\rData: peers {peers.Count}, seeds {seeds.Count}, completed {completed}, memory {memory}".PadRight(80));
-            return true;
+
+            return notification.Type != NotificationType.DataCompleted;
+        }
+
+        public override void Handle(PeerConnectedNotification notification)
+        {
+            peers.Add(notification.Peer);
+        }
+
+        public override void Handle(PeerDisconnectedNotification notification)
+        {
+            peers.Remove(notification.Peer);
+            seeds.Remove(notification.Peer);
+        }
+
+        public override void Handle(StatusChangedNotification notification)
+        {
+            if (notification.State.IsRemoteChokingLocal == false)
+                seeds.Add(notification.Peer);
+        }
+
+        public override void Handle(MetafileCompletedNotification notification)
+        {
+            Console.WriteLine();
+            Console.WriteLine(notification);
+
+            metainfo = notification.Metainfo;
+        }
+
+        public override void Handle(DataAllocatedNotification notification)
+        {
+            Console.WriteLine();
+            Console.WriteLine(notification);
+        }
+
+        public override void Handle(DataVerifiedNotification notification)
+        {
+            Console.WriteLine();
+            Console.WriteLine(notification);
+        }
+
+        public override void Handle(DataCompletedNotification notification)
+        {
+            Console.WriteLine();
+            Console.WriteLine(notification);
+        }
+
+        public override void Handle(DataChangedNotification notification)
+        {
+            completed = notification.Completed;
+        }
+
+        public override void Handle(MemorySnapshotNotification notification)
+        {
+            memory = notification.Allocation;
+        }
+
+        public override void Handle(PieceRejectedNotification notification)
+        {
+            Console.WriteLine();
+            Console.WriteLine(notification);
         }
     }
 }

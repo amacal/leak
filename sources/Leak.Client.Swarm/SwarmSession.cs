@@ -3,11 +3,11 @@ using Leak.Common;
 
 namespace Leak.Client.Swarm
 {
-    public class SwarmSession
+    public class SwarmSession : Session
     {
         private readonly SwarmConnect inner;
 
-        public SwarmSession(SwarmConnect inner)
+        internal SwarmSession(SwarmConnect inner)
         {
             this.inner = inner;
         }
@@ -22,7 +22,7 @@ namespace Leak.Client.Swarm
             inner.Download(destination);
         }
 
-        public Task<Notification> Next()
+        public Task<Notification> NextAsync()
         {
             return inner.Notifications.Next();
         }

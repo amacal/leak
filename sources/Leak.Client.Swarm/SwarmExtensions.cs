@@ -5,9 +5,9 @@ using Leak.Listener;
 
 namespace Leak.Client.Swarm
 {
-    public static class PeerExtensions
+    public static class SwarmExtensions
     {
-        public static PeerListenerBuilder WithPort(this PeerListenerBuilder builder, SwarmSettings settings)
+        internal static PeerListenerBuilder WithPort(this PeerListenerBuilder builder, SwarmSettings settings)
         {
             if (settings.ListenerPort != null)
             {
@@ -17,7 +17,7 @@ namespace Leak.Client.Swarm
             return builder;
         }
 
-        public static GlueBuilder WithMetadata(this GlueBuilder builder, SwarmSettings settings, MetadataHooks hooks)
+        internal static GlueBuilder WithMetadata(this GlueBuilder builder, SwarmSettings settings, MetadataHooks hooks)
         {
             if (settings.Metadata)
             {
@@ -27,7 +27,7 @@ namespace Leak.Client.Swarm
             return builder;
         }
 
-        public static GlueBuilder WithExchange(this GlueBuilder builder, SwarmSettings settings, PeersHooks hooks)
+        internal static GlueBuilder WithExchange(this GlueBuilder builder, SwarmSettings settings, PeersHooks hooks)
         {
             if (settings.Metadata)
             {

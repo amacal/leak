@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Leak.Client.Adapters;
 using Leak.Common;
 using Leak.Data.Get;
 using Leak.Data.Map;
@@ -13,8 +15,19 @@ using Leak.Networking;
 
 namespace Leak.Client
 {
-    public static class ClientExtensions
+    public static class Extensions
     {
+        public static IEnumerable<Notification> All(this Session session)
+        {
+            while (true)
+            {
+                Task<Notification> next = session.NextAsync();
+                Notification notification = next.Result;
+
+                yield return notification;
+            }
+        }
+
         public static MetagetGlue AsMetaGet(this GlueService service)
         {
             return new MetaGetToGlueForwarder(service);

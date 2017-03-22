@@ -33,15 +33,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PeerExtensions.cs" />
+    <Compile Include="SwarmHelper.cs" />
+    <Compile Include="SwarmExtensions.cs" />
     <Compile Include="SwarmFilter.cs" />
     <Compile Include="SwarmSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwarmClient.cs" />
     <Compile Include="SwarmConnect.cs" />
-    <Compile Include="SwarmEntry.cs" />
     <Compile Include="SwarmFactory.cs" />
-    <Compile Include="SwarmLogger.cs" />
     <Compile Include="SwarmRuntime.cs" />
     <Compile Include="SwarmSession.cs" />
   </ItemGroup>

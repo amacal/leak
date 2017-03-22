@@ -1,23 +1,23 @@
-﻿using Leak.Memory;
-using Leak.Networking;
+﻿using Leak.Data.Store;
+using Leak.Memory;
 
-namespace Leak.Client
+namespace Leak.Client.Adapters
 {
-    public class MemoryToNetwork : NetworkPoolMemory
+    internal class MemoryToDataStore : RepositoryMemory
     {
         private readonly MemoryService service;
 
-        public MemoryToNetwork(MemoryService service)
+        public MemoryToDataStore(MemoryService service)
         {
             this.service = service;
         }
 
-        public NetworkPoolMemoryBlock Allocate(int size)
+        public RepositoryMemoryBlock Allocate(int size)
         {
             return new Block(service.Allocate(size));
         }
 
-        private class Block : NetworkPoolMemoryBlock
+        private class Block : RepositoryMemoryBlock
         {
             private readonly MemoryBlock inner;
 

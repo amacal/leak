@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
+using Leak.Client.Notifications;
 using Leak.Common;
 using Leak.Completion;
 using Leak.Connector;
@@ -28,7 +28,7 @@ using Leak.Tracker.Get.Events;
 
 namespace Leak.Client.Swarm
 {
-    public class SwarmConnect
+    internal class SwarmConnect
     {
         public SwarmSettings Settings { get; set; }
 
@@ -340,13 +340,7 @@ namespace Leak.Client.Swarm
 
         private void OnMemorySnapshot(MemorySnapshot data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.MemorySnapshot,
-                Size = data.Allocation
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MemorySnapshotNotification(data.Allocation));
         }
 
         private void OnConnectionTerminated(ConnectionTerminated data)
@@ -375,61 +369,31 @@ namespace Leak.Client.Swarm
             }
             else
             {
-                Notification notification = new Notification
-                {
-                    Type = NotificationType.PeerRejected,
-                    Remote = data.Remote
-                };
-
-                Notifications.Enqueue(notification);
+                Notifications.Enqueue(new PeerRejectedNotification(data.Remote));
                 data.Connection.Terminate();
             }
         }
 
         private void OnListenerStarted(ListenerStarted data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.ListenerStarted,
-                Remote = PeerAddress.Parse(new IPEndPoint(IPAddress.Any, data.Port))
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new ListenerStartedNotification(data.Peer, data.Port));
             Settings.ListenerPort = data.Port;
         }
 
         private void OnListenerFailed(ListenerFailed data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.ListenerFailed,
-                Description = data.Reason
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new ListenerFailedNotification(data.Peer, data.Reason));
         }
 
         private void OnMetadataPieceReceived(MetadataReceived data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.MetafileReceived,
-                Piece = new PieceInfo(data.Piece)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
             MetaGet?.Handle(data);
         }
 
         private void OnMetadataRequestSent(MetadataRequested data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.MetafileRequested,
-                Piece = new PieceInfo(data.Piece)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
         }
 
         private void OnPeerDataReceived(PeersReceived data)
@@ -444,13 +408,7 @@ namespace Leak.Client.Swarm
                     }
                     else
                     {
-                        Notification notification = new Notification
-                        {
-                            Type = NotificationType.PeerRejected,
-                            Remote = peer
-                        };
-
-                        Notifications.Enqueue(notification);
+                        Notifications.Enqueue(new PeerRejectedNotification(peer));
                     }
                 }
             }
@@ -458,13 +416,7 @@ namespace Leak.Client.Swarm
 
         private void OnPeerConnected(PeerConnected data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.PeerConnected,
-                Peer = data.Peer
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new PeerConnectedNotification(data.Peer));
 
             Peers.Add(data.Peer);
             DataMap?.Handle(data);
@@ -472,13 +424,7 @@ namespace Leak.Client.Swarm
 
         private void OnPeerDisconnected(PeerDisconnected data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.PeerDisconnected,
-                Peer = data.Peer
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new PeerDisconnectedNotification(data.Peer));
 
             Peers.Remove(data.Peer);
             Remotes.Remove(data.Remote);
@@ -486,59 +432,29 @@ namespace Leak.Client.Swarm
 
         private void OnPeerBitfieldChanged(PeerBitfieldChanged data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.PeerBitfieldChanged,
-                Bitfield = data.Bitfield
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new BitfieldChangedNotification(data.Peer, data.Bitfield));
             DataMap?.Handle(data);
         }
 
         private void OnPeerStatusChanged(PeerStatusChanged data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.PeerStatusChanged,
-                Peer = data.Peer,
-                State = data.State
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new StatusChangedNotification(data.Peer, data.State));
             DataMap?.Handle(data);
         }
 
         private void OnPieceCompleted(PieceCompleted data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.PieceCompleted,
-                Piece = new PieceInfo(data.Piece)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new PieceCompletedNotification(data.Hash, new PieceInfo(data.Piece)));
         }
 
         private void OnDataCompleted(DataCompleted data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.DataCompleted
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataCompletedNotification(data.Hash));
         }
 
         private void OnDataChanged(DataChanged data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.DataChanged,
-                Completed = data.Completed
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataChangedNotification(data.Hash, data.Completed));
         }
 
         private void OnAnnounced(TrackerAnnounced data)
@@ -553,13 +469,7 @@ namespace Leak.Client.Swarm
                     }
                     else
                     {
-                        Notification notification = new Notification
-                        {
-                            Type = NotificationType.PeerRejected,
-                            Remote = peer
-                        };
-
-                        Notifications.Enqueue(notification);
+                        Notifications.Enqueue(new PeerRejectedNotification(peer));
                     }
                 }
             }
@@ -567,14 +477,8 @@ namespace Leak.Client.Swarm
 
         private void OnMetafileVerified(MetafileVerified data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.MetafileCompleted,
-                Metainfo = data.Metainfo
-            };
-
             Metainfo = data.Metainfo;
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileCompletedNotification(Metainfo));
 
             Glue?.Handle(data);
             DataStore?.Handle(data);
@@ -583,35 +487,18 @@ namespace Leak.Client.Swarm
 
         private void OnMetafileMeasured(MetafileMeasured data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.MetafileMeasured,
-                Size = new Size(data.Size)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileMeasuredNotification(data.Hash, new Size(data.Size)));
         }
 
         private void OnDataAllocated(DataAllocated data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.DataAllocated
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataAllocatedNotification(data.Hash, data.Directory));
             DataStore?.Verify(new Bitfield(Metainfo.Pieces.Length));
         }
 
         private void OnDataVerified(DataVerified data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.DataVerified,
-                Bitfield = data.Bitfield
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataVerifiedNotification(data.Hash, data.Bitfield));
 
             DataMap?.Handle(data);
             DataGet?.Handle(data);
@@ -620,13 +507,7 @@ namespace Leak.Client.Swarm
 
         private void OnPieceRejected(PieceRejected data)
         {
-            Notification notification = new Notification
-            {
-                Type = NotificationType.PieceRejected,
-                Piece = data.Piece
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new PieceRejectedNotification(data.Hash, data.Piece));
             DataGet?.Handle(data);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Leak.Client;
 using Leak.Client.Swarm;
 using Leak.Common;
 using Pargos;
@@ -26,7 +27,7 @@ namespace Leak
                 using (SwarmClient client = new SwarmClient(settings))
                 {
                     Reporter reporter = options.ToReporter();
-                    SwarmSession session = await client.Connect(hash, trackers);
+                    SwarmSession session = await client.ConnectAsync(hash, trackers);
 
                     Console.WriteLine($"Hash: {hash}");
 
@@ -37,11 +38,9 @@ namespace Leak
                             break;
                     }
 
-                    while (true)
-                    {
-                        if (reporter.Handle(await session.Next()) == false)
+                    foreach (Notification notification in session.All())
+                        if (reporter.Handle(notification) == false)
                             break;
-                    }
                 }
             }
         }
