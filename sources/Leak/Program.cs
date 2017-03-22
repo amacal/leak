@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Leak.Client;
+using Leak.Client.Adapters;
 using Leak.Client.Swarm;
 using Leak.Common;
 using Pargos;

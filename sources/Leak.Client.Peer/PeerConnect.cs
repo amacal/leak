@@ -13,6 +13,7 @@ using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
+using Leak.Client.Adapters;
 
 namespace Leak.Client.Peer
 {

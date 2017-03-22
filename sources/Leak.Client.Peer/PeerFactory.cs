@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using Leak.Client.Adapters;
+using Leak.Common;
 using Leak.Completion;
 using Leak.Files;
 using Leak.Memory;

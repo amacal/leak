@@ -33,10 +33,16 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\MemoryToBlocks.cs" />
-    <Compile Include="Adapters\MemoryToNetwork.cs" />
-    <Compile Include="Adapters\MemoryToDataStore.cs" />
+    <Compile Include="Adapters\DataGetToDataMapAdapter.cs" />
+    <Compile Include="Adapters\DataGetToDataStoreAdapter.cs" />
+    <Compile Include="Adapters\DataGetToGlueAdapter.cs" />
+    <Compile Include="Adapters\MetaGetToMetaStoreAdapter.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Adapters\MemoryToNetworkAdapter.cs" />
+    <Compile Include="Adapters\MemoryToDataStoreAdapter.cs" />
+    <Compile Include="Adapters\MetaGetToGlueAdapter.cs" />
     <Compile Include="NotificationCallback.cs" />
+    <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Notifications\DataAllocatedNotification.cs" />
     <Compile Include="Notifications\DataChangedNotification.cs" />
     <Compile Include="Notifications\DataCompletedNotification.cs" />
@@ -48,17 +54,16 @@
     <Compile Include="Notifications\MetafileMeasuredNotification.cs" />
     <Compile Include="Notifications\MetafileReceivedNotification.cs" />
     <Compile Include="Notifications\MetafileRequestedNotification.cs" />
-    <Compile Include="Notifications\PeerBitfieldChangedNotification.cs" />
+    <Compile Include="Notifications\BitfieldChangedNotification.cs" />
     <Compile Include="Notifications\PeerConnectedNotification.cs" />
     <Compile Include="Notifications\PeerDisconnectedNotification.cs" />
     <Compile Include="Notifications\PeerRejectedNotification.cs" />
-    <Compile Include="Notifications\PeerStatusChangedNotification.cs" />
+    <Compile Include="Notifications\StatusChangedNotification.cs" />
     <Compile Include="Notifications\PieceCompletedNotification.cs" />
     <Compile Include="Notifications\PieceRejectedNotification.cs" />
     <Compile Include="NotificationType.cs" />
     <Compile Include="NotificationVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="NotificationCollection.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Session.cs" />
