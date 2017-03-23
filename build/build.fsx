@@ -69,7 +69,7 @@ Target "MergeApp" (fun _ ->
 )
 
 Target "CreatePackage" (fun _ ->
-    !! "build/merge/*.*" -- "build/merge/*.pdb" -- "build/merge/*.xml"
+    !! "build/merge/*.exe" -- "build/merge/*.pdb" -- "build/merge/*.xml"
         |> Zip "build/merge" ("build/package/leak-" + (getBuildParamOrDefault "version" "dev") + ".zip")
 
     NuGet (fun p ->

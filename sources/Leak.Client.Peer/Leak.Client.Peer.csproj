@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PeerClient.cs" />
+    <Compile Include="PeerHelper.cs" />
     <Compile Include="PeerSession.cs" />
     <Compile Include="PeerConnect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

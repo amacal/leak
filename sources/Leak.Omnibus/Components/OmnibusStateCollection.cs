@@ -26,6 +26,11 @@ namespace Leak.Data.Map.Components
             entry.State = new PeerState();
         }
 
+        public void Handle(PeerDisconnected data)
+        {
+            byPeer.Remove(data.Peer);
+        }
+
         public void Handle(PeerStatusChanged data)
         {
             OmnibusStateEntry entry;

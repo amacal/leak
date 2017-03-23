@@ -295,6 +295,7 @@ namespace Leak.Client.Peer
         private void OnPeerDisconnected(PeerDisconnected data)
         {
             Notifications.Enqueue(new PeerDisconnectedNotification(data.Peer));
+            DataMap?.Handle(data);
         }
 
         private void OnPeerBitfieldChanged(PeerBitfieldChanged data)

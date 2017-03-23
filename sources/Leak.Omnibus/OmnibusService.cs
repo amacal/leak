@@ -76,6 +76,15 @@ namespace Leak.Data.Map
             });
         }
 
+        public void Handle(PeerDisconnected data)
+        {
+            context.Queue.Add(() =>
+            {
+                context.States.Handle(data);
+                context.Ranking = null;
+            });
+        }
+
         public void Handle(PeerBitfieldChanged data)
         {
             context.Queue.Add(() =>

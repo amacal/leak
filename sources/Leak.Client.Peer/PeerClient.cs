@@ -13,7 +13,7 @@ namespace Leak.Client.Peer
             runtime = new RuntimeInstance();
         }
 
-        public Task<PeerSession> Connect(FileHash hash, PeerAddress remote)
+        public Task<PeerSession> ConnectAsync(FileHash hash, PeerAddress remote)
         {
             runtime.Start();
 

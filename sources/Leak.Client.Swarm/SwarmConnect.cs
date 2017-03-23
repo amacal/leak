@@ -429,6 +429,7 @@ namespace Leak.Client.Swarm
 
             Peers.Remove(data.Peer);
             Remotes.Remove(data.Remote);
+            DataMap?.Handle(data);
         }
 
         private void OnPeerBitfieldChanged(PeerBitfieldChanged data)

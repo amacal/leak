@@ -26,7 +26,7 @@ namespace Leak.Connect
                 using (PeerClient client = new PeerClient())
                 {
                     Notification notification = null;
-                    PeerSession session = await client.Connect(hash, address);
+                    PeerSession session = await client.ConnectAsync(hash, address);
 
                     Console.WriteLine($"Hash: {hash}");
                     Console.WriteLine($"Peer: {session.Peer}");
