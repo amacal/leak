@@ -3,7 +3,7 @@ using Leak.Common;
 
 namespace Leak.Client.Peer
 {
-    public class PeerSession
+    public class PeerSession : Session
     {
         private readonly PeerConnect inner;
 
@@ -27,7 +27,7 @@ namespace Leak.Client.Peer
             inner.Download(destination);
         }
 
-        public Task<PeerNotification> Next()
+        public Task<Notification> NextAsync()
         {
             return inner.Notifications.Next();
         }

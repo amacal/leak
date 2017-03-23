@@ -34,12 +34,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PeerClient.cs" />
-    <Compile Include="PeerCollection.cs" />
     <Compile Include="PeerSession.cs" />
-    <Compile Include="PeerNotification.cs" />
-    <Compile Include="PeerNotificationType.cs" />
     <Compile Include="PeerFactory.cs" />
-    <Compile Include="PeerLogger.cs" />
     <Compile Include="PeerRuntime.cs" />
     <Compile Include="PeerConnect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -49,6 +49,10 @@
       <Project>{bd9b8564-4b2b-4d53-84f1-95e7bc04ec8c}</Project>
       <Name>Leak.Client.Peer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Client\Leak.Client.csproj">
+      <Project>{108441E9-5800-474D-907E-1380AE476CF3}</Project>
+      <Name>Leak.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
       <Name>Leak.Common</Name>

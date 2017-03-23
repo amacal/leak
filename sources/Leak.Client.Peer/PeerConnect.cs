@@ -13,7 +13,7 @@ using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
-using Leak.Client.Adapters;
+using Leak.Client.Notifications;
 
 namespace Leak.Client.Peer
 {
@@ -29,7 +29,7 @@ namespace Leak.Client.Peer
         public PeerAddress Address { get; set; }
         public Metainfo Metainfo { get; set; }
 
-        public PeerCollection Notifications { get; set; }
+        public NotificationCollection Notifications { get; set; }
         public TaskCompletionSource<PeerSession> Completion { get; set; }
 
         public PeerConnector Connector { get; set; }
@@ -207,35 +207,18 @@ namespace Leak.Client.Peer
 
         private void OnPeerDisconnected(PeerDisconnected data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.PeerDisconnected
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new PeerDisconnectedNotification(data.Peer));
         }
 
         private void OnPeerBitfieldChanged(PeerBitfieldChanged data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.PeerBitfieldChanged,
-                Bitfield = data.Bitfield
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new BitfieldChangedNotification(data.Peer, data.Bitfield));
             DataMap?.Handle(data);
         }
 
         private void OnPeerStatusChanged(PeerStatusChanged data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.PeerStatusChanged,
-                State = data.State
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new StatusChangedNotification(data.Peer, data.State));
             DataMap?.Handle(data);
         }
 
@@ -259,37 +242,19 @@ namespace Leak.Client.Peer
 
         private void OnMetadataPieceReceived(MetadataReceived data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.MetafileReceived,
-                Piece = new PieceInfo(data.Piece)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
             MetaGet?.Handle(data);
         }
 
         private void OnMetadataRequestSent(MetadataRequested data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.MetafileRequested,
-                Piece = new PieceInfo(data.Piece)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
         }
 
         private void OnMetafileVerified(MetafileVerified data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.MetafileCompleted,
-                Metainfo = data.Metainfo
-            };
-
             Metainfo = data.Metainfo;
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileCompletedNotification(Metainfo));
 
             Glue?.Handle(data);
             DataStore?.Handle(data);
@@ -298,35 +263,18 @@ namespace Leak.Client.Peer
 
         private void OnMetafileMeasured(MetafileMeasured data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.MetafileMeasured,
-                Size = data.Size
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new MetafileMeasuredNotification(data.Hash, new Size(data.Size)));
         }
 
         private void OnDataAllocated(DataAllocated data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.DataAllocated
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataAllocatedNotification(data.Hash, data.Directory));
             DataStore?.Verify(new Bitfield(Metainfo.Pieces.Length));
         }
 
         private void OnDataVerified(DataVerified data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.DataVerified,
-                Bitfield = data.Bitfield
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataVerifiedNotification(data.Hash, data.Bitfield));
 
             DataMap?.Handle(data);
             DataGet?.Handle(data);
@@ -334,12 +282,7 @@ namespace Leak.Client.Peer
 
         private void OnDataCompleted(DataCompleted data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.DataCompleted
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new DataCompletedNotification(data.Hash));
         }
 
         private void OnBlockReserved(BlockReserved data)
@@ -369,13 +312,7 @@ namespace Leak.Client.Peer
 
         private void OnPieceCompleted(PieceCompleted data)
         {
-            PeerNotification notification = new PeerNotification
-            {
-                Type = PeerNotificationType.PieceCompleted,
-                Piece = new PieceInfo(data.Piece)
-            };
-
-            Notifications.Enqueue(notification);
+            Notifications.Enqueue(new PieceCompletedNotification(data.Hash, new PieceInfo(data.Piece)));
         }
 
         private void OnThresholdReached(ThresholdReached data)

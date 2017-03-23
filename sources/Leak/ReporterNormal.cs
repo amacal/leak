@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using Leak.Client;
-using Leak.Common;
 
 namespace Leak
 {
@@ -9,14 +7,9 @@ namespace Leak
     {
         public bool Handle(Notification notification)
         {
-            switch (notification.Type)
-            {
-                case NotificationType.MetafileCompleted:
+            Console.Write(notification);
 
-                    break;
-            }
-
-            return true;
+            return notification.Type != NotificationType.DataCompleted;
         }
     }
 }

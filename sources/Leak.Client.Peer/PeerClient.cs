@@ -16,7 +16,7 @@ namespace Leak.Client.Peer
 
         public PeerClient()
         {
-            runtime = new PeerFactory(null);
+            runtime = new PeerFactory();
             online = new ConcurrentBag<PeerConnect>();
         }
 
@@ -32,7 +32,7 @@ namespace Leak.Client.Peer
                 Hash = hash,
                 Address = address,
                 Localhost = PeerHash.Random(),
-                Notifications = new PeerCollection(),
+                Notifications = new NotificationCollection(),
                 Completion = new TaskCompletionSource<PeerSession>(),
                 Pipeline = runtime.Pipeline,
                 Files = runtime.Files,
