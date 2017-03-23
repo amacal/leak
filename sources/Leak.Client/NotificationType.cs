@@ -19,6 +19,7 @@
         PieceRejected,
         MemorySnapshot,
         ListenerStarted,
-        ListenerFailed
+        ListenerFailed,
+        TrackerAnnounced
     }
 }

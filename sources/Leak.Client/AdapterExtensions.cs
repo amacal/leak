@@ -10,7 +10,7 @@ using Leak.Networking;
 
 namespace Leak.Client
 {
-    public static class Extensions
+    public static class AdapterExtensions
     {
         public static MetagetGlue AsMetaGet(this GlueService service)
         {

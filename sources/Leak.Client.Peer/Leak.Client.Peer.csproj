@@ -35,8 +35,6 @@
   <ItemGroup>
     <Compile Include="PeerClient.cs" />
     <Compile Include="PeerSession.cs" />
-    <Compile Include="PeerFactory.cs" />
-    <Compile Include="PeerRuntime.cs" />
     <Compile Include="PeerConnect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -76,6 +74,10 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Glue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Memory.Events\Leak.Memory.Events.csproj">
+      <Project>{02D65FC6-E326-47EE-B7CB-B355AE421F73}</Project>
+      <Name>Leak.Memory.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
       <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>

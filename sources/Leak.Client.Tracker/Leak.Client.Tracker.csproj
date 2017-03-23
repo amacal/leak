@@ -33,20 +33,18 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\TrackerFailedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrackerAnnounce.cs" />
     <Compile Include="TrackerClient.cs" />
-    <Compile Include="TrackerCollection.cs" />
-    <Compile Include="TrackerEntry.cs" />
-    <Compile Include="TrackerException.cs" />
+    <Compile Include="TrackerConnect.cs" />
     <Compile Include="TrackerFactory.cs" />
-    <Compile Include="TrackerLogger.cs" />
-    <Compile Include="TrackerRequest.cs" />
     <Compile Include="TrackerRuntime.cs" />
-    <Compile Include="Exceptions\TrackerTimeoutException.cs" />
+    <Compile Include="TrackerSession.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Leak.Client\Leak.Client.csproj">
+      <Project>{108441E9-5800-474D-907E-1380AE476CF3}</Project>
+      <Name>Leak.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
@@ -54,6 +52,10 @@
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
       <Name>Leak.Completion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
+      <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
+      <Name>Leak.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

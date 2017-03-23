@@ -1,28 +1,18 @@
-﻿using Leak.Common;
-using Leak.Completion;
+﻿using Leak.Completion;
 using Leak.Files;
-using Leak.Memory;
-using Leak.Networking;
 using Leak.Tasks;
 
-namespace Leak.Client.Peer
+namespace Leak.Client
 {
-    public class PeerFactory : PeerRuntime
+    public class RuntimeInstance : Runtime
     {
         private LeakPipeline pipeline;
-        private NetworkPool network;
         private CompletionThread worker;
         private FileFactory files;
-        private MemoryService blocks;
 
         public PipelineService Pipeline
         {
             get { return pipeline; }
-        }
-
-        public NetworkPool Network
-        {
-            get { return network; }
         }
 
         public FileFactory Files
@@ -30,12 +20,12 @@ namespace Leak.Client.Peer
             get { return files; }
         }
 
-        public DataBlockFactory Blocks
+        public CompletionWorker Worker
         {
-            get { return blocks; }
+            get { return worker; }
         }
 
-        public void Start(NetworkPoolHooks hooks)
+        public void Start()
         {
             lock (this)
             {
@@ -51,23 +41,6 @@ namespace Leak.Client.Peer
                     worker.Start();
                 }
 
-                if (blocks == null)
-                {
-                    blocks = new MemoryBuilder().Build();
-                }
-
-                if (network == null)
-                {
-                    network =
-                        new NetworkPoolBuilder()
-                            .WithPipeline(pipeline)
-                            .WithWorker(worker)
-                            .WithMemory(blocks.AsNetwork())
-                            .Build(hooks);
-
-                    network.Start();
-                }
-
                 if (files == null)
                 {
                     files = new FileFactory(worker);
@@ -79,11 +52,6 @@ namespace Leak.Client.Peer
         {
             lock (this)
             {
-                if (network != null)
-                {
-                    network = null;
-                }
-
                 if (worker != null)
                 {
                     worker.Dispose();
@@ -94,11 +62,6 @@ namespace Leak.Client.Peer
                 {
                     pipeline?.Stop();
                     pipeline = null;
-                }
-
-                if (blocks != null)
-                {
-                    blocks = null;
                 }
             }
         }

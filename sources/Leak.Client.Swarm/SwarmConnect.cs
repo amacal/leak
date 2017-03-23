@@ -34,9 +34,10 @@ namespace Leak.Client.Swarm
         public SwarmSettings Settings { get; set; }
 
         public CompletionWorker Worker { get; set; }
-        public NetworkPool Network { get; set; }
         public PipelineService Pipeline { get; set; }
         public FileFactory Files { get; set; }
+
+        public NetworkPool Network { get; set; }
         public MemoryService Memory { get; set; }
 
         public FileHash Hash { get; set; }
@@ -62,7 +63,7 @@ namespace Leak.Client.Swarm
         public DataGetService DataGet { get; set; }
         public OmnibusService DataMap { get; set; }
 
-        public void Start(string[] trackers)
+        public void Start()
         {
             StartMemory();
             StartNetwork();
@@ -73,11 +74,10 @@ namespace Leak.Client.Swarm
             StartDataMap();
             StartTrackerGet();
 
-            Announce(trackers);
             Completion.SetResult(new SwarmSession(this));
         }
 
-        private void Announce(string[] trackers)
+        public void Announce(string[] trackers)
         {
             foreach (string tracker in trackers)
             {

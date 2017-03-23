@@ -7,7 +7,7 @@ namespace Leak.Client.Peer
     {
         private readonly PeerConnect inner;
 
-        public PeerSession(PeerConnect inner)
+        internal PeerSession(PeerConnect inner)
         {
             this.inner = inner;
         }
@@ -29,7 +29,7 @@ namespace Leak.Client.Peer
 
         public Task<Notification> NextAsync()
         {
-            return inner.Notifications.Next();
+            return inner.Notifications.NextAsync();
         }
     }
 }

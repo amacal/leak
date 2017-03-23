@@ -17,9 +17,6 @@ namespace Leak.Connect
         [Option("--hash")]
         public string Hash { get; set; }
 
-        [Option("--analyze"), Presence]
-        public bool Analyze { get; set; }
-
         [Option("--destination")]
         public string Destination { get; set; }
 

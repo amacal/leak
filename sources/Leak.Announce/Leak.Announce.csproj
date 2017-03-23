@@ -40,7 +40,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,6 +48,10 @@
     <ProjectReference Include="..\Leak.Client.Tracker\Leak.Client.Tracker.csproj">
       <Project>{f906bb3f-0fbd-451a-bc3c-17bf01270247}</Project>
       <Name>Leak.Client.Tracker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Client\Leak.Client.csproj">
+      <Project>{108441E9-5800-474D-907E-1380AE476CF3}</Project>
+      <Name>Leak.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>

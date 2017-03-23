@@ -7,19 +7,19 @@ namespace Leak.Client.Swarm
 {
     public class SwarmClient : IDisposable
     {
-        private readonly SwarmRuntime runtime;
+        private readonly Runtime runtime;
         private readonly SwarmSettings settings;
 
         public SwarmClient()
         {
-            runtime = new SwarmFactory();
             settings = new SwarmSettings();
+            runtime = new RuntimeInstance();
         }
 
         public SwarmClient(SwarmSettings settings)
         {
             this.settings = settings;
-            this.runtime = new SwarmFactory();
+            this.runtime = new RuntimeInstance();
         }
 
         public Task<SwarmSession> ConnectAsync(FileHash hash, params string[] trackers)
@@ -40,7 +40,9 @@ namespace Leak.Client.Swarm
                 Worker = runtime.Worker
             };
 
-            connect.Start(trackers);
+            connect.Start();
+            connect.Announce(trackers);
+
             return connect.Completion.Task;
         }
 

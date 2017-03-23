@@ -40,8 +40,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwarmClient.cs" />
     <Compile Include="SwarmConnect.cs" />
-    <Compile Include="SwarmFactory.cs" />
-    <Compile Include="SwarmRuntime.cs" />
     <Compile Include="SwarmSession.cs" />
   </ItemGroup>
   <ItemGroup>

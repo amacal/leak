@@ -14,14 +14,21 @@ using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
 using Leak.Client.Notifications;
+using Leak.Completion;
+using Leak.Memory;
+using Leak.Memory.Events;
+using Leak.Networking;
 
 namespace Leak.Client.Peer
 {
     public class PeerConnect
     {
+        public CompletionWorker Worker { get; set; }
         public PipelineService Pipeline { get; set; }
         public FileFactory Files { get; set; }
-        public DataBlockFactory Blocks { get; set; }
+
+        public NetworkPool Network { get; set; }
+        public MemoryService Memory { get; set; }
 
         public FileHash Hash { get; set; }
         public PeerHash Peer { get; set; }
@@ -45,7 +52,17 @@ namespace Leak.Client.Peer
 
         public void Start()
         {
+            StartMemory();
+            StartNetwork();
+            StartNegotiator();
+            StartConnector();
+            StartGlue();
             StartDataMap();
+        }
+
+        public void Connect(PeerAddress remote)
+        {
+            Connector.ConnectTo(Hash, remote);
         }
 
         public void Download(string destination)
@@ -54,6 +71,119 @@ namespace Leak.Client.Peer
             StartMetaGet();
             StartDataStore(destination);
             StartDataGet();
+        }
+
+        private void StartMemory()
+        {
+            MemoryHooks hooks = new MemoryHooks
+            {
+                OnMemorySnapshot = OnMemorySnapshot
+            };
+
+            Memory =
+                new MemoryBuilder()
+                    .WithMaxRequestSize(256 * 1024)
+                    .WithThresholds(20 * 1024)
+                    .Build(hooks);
+        }
+
+        private void StartNetwork()
+        {
+            NetworkPoolHooks hooks = new NetworkPoolHooks
+            {
+                OnConnectionTerminated = OnConnectionTerminated
+            };
+
+            Network =
+                new NetworkPoolBuilder()
+                    .WithPipeline(Pipeline)
+                    .WithWorker(Worker)
+                    .WithMemory(Memory.AsNetwork())
+                    .WithBufferSize(256 * 1024)
+                    .Build(hooks);
+
+            Network.Start();
+        }
+
+        private void StartNegotiator()
+        {
+            HandshakeNegotiatorHooks hooks = new HandshakeNegotiatorHooks
+            {
+                OnHandshakeCompleted = OnHandshakeCompleted
+            };
+
+            Negotiator =
+                new HandshakeNegotiatorBuilder()
+                    .WithNetwork(Network)
+                    .Build(hooks);
+        }
+
+        private void StartConnector()
+        {
+            PeerConnectorHooks hooks = new PeerConnectorHooks
+            {
+                OnConnectionEstablished = OnConnectionEstablished
+            };
+
+            Connector =
+                new PeerConnectorBuilder()
+                    .WithNetwork(Network)
+                    .WithPipeline(Pipeline)
+                    .Build(hooks);
+
+            Connector.Start();
+        }
+
+        private void StartGlue()
+        {
+            MetadataHooks metadata = new MetadataHooks
+            {
+                OnMetadataMeasured = data => MetaGet?.Handle(data),
+                OnMetadataPieceReceived = OnMetadataPieceReceived,
+                OnMetadataRequestSent = OnMetadataRequestSent
+            };
+
+            GlueHooks hooks = new GlueHooks
+            {
+                OnPeerConnected = OnPeerConnected,
+                OnPeerDisconnected = OnPeerDisconnected,
+                OnPeerBitfieldChanged = OnPeerBitfieldChanged,
+                OnPeerStatusChanged = OnPeerStatusChanged,
+                OnBlockReceived = data => DataGet?.Handle(data)
+            };
+
+            Glue =
+                new GlueBuilder()
+                    .WithHash(Hash)
+                    .WithMemory(Memory)
+                    .WithPipeline(Pipeline)
+                    .WithPlugin(new MetadataPlugin(metadata))
+                    .Build(hooks);
+
+            Glue.Start();
+        }
+
+        private void StartDataMap()
+        {
+            OmnibusHooks hooks = new OmnibusHooks
+            {
+                OnBlockReserved = data => DataGet?.Handle(data),
+                OnPieceReady = data => DataGet?.Handle(data),
+                OnPieceCompleted = OnPieceCompleted,
+                OnThresholdReached = data => DataGet?.Handle(data),
+                OnDataCompleted = OnDataCompleted,
+                OnDataChanged = OnDataChanged
+            };
+
+            DataMap =
+                new OmnibusBuilder()
+                    .WithHash(Hash)
+                    .WithPipeline(Pipeline)
+                    .WithSchedulerThreshold(160)
+                    .WithPoolSize(512)
+                    .Build(hooks);
+
+            DataMap.Start();
         }
 
         private void StartMetaStore(string destination)
@@ -109,30 +239,11 @@ namespace Leak.Client.Peer
                     .WithDestination(Path.Combine(destination, Hash.ToString()))
                     .WithPipeline(Pipeline)
                     .WithFiles(Files)
+                    .WithMemory(Memory.AsDataStore())
+                    .WithBufferSize(256 * 1024)
                     .Build(hooks);
 
             DataStore.Start();
-        }
-
-        private void StartDataMap()
-        {
-            OmnibusHooks hooks = new OmnibusHooks
-            {
-                OnBlockReserved = OnBlockReserved,
-                OnPieceReady = OnPieceReady,
-                OnPieceCompleted = OnPieceCompleted,
-                OnDataCompleted = OnDataCompleted,
-                OnThresholdReached = OnThresholdReached
-            };
-
-            DataMap =
-                new OmnibusBuilder()
-                    .WithHash(Hash)
-                    .WithPipeline(Pipeline)
-                    .WithSchedulerThreshold(160)
-                    .Build(hooks);
-
-            DataMap.Start();
         }
 
         private void StartDataGet()
@@ -166,31 +277,7 @@ namespace Leak.Client.Peer
 
         public void OnHandshakeCompleted(HandshakeCompleted data)
         {
-            MetadataHooks metadata = new MetadataHooks
-            {
-                OnMetadataMeasured = OnMetadataMeasured,
-                OnMetadataPieceReceived = OnMetadataPieceReceived,
-                OnMetadataRequestSent = OnMetadataRequestSent
-            };
-
-            Glue =
-                new GlueBuilder()
-                    .WithHash(Hash)
-                    .WithMemory(Blocks)
-                    .WithPipeline(Pipeline)
-                    .WithPlugin(new MetadataPlugin(metadata))
-                    .Build(new GlueHooks
-                    {
-                        OnPeerConnected = OnPeerConnected,
-                        OnPeerDisconnected = OnPeerDisconnected,
-                        OnPeerBitfieldChanged = OnPeerBitfieldChanged,
-                        OnPeerStatusChanged = OnPeerStatusChanged,
-                        OnBlockReceived = OnBlockDataReceived,
-                        OnBlockRequested = OnBlockRequestReceived
-                    });
-
-            Glue.Start();
-            Glue.Connect(data.Connection, data.Handshake);
+            Glue?.Connect(data.Connection, data.Handshake);
         }
 
         public void OnHandshakeRejected(HandshakeRejected data)
@@ -285,11 +372,6 @@ namespace Leak.Client.Peer
             Notifications.Enqueue(new DataCompletedNotification(data.Hash));
         }
 
-        private void OnBlockReserved(BlockReserved data)
-        {
-            DataGet?.Handle(data);
-        }
-
         private void OnBlockWritten(BlockWritten data)
         {
             DataGet?.Handle(data);
@@ -305,19 +387,24 @@ namespace Leak.Client.Peer
             DataGet?.Handle(data);
         }
 
-        private void OnPieceReady(PieceReady data)
-        {
-            DataGet?.Handle(data);
-        }
-
         private void OnPieceCompleted(PieceCompleted data)
         {
             Notifications.Enqueue(new PieceCompletedNotification(data.Hash, new PieceInfo(data.Piece)));
         }
 
-        private void OnThresholdReached(ThresholdReached data)
+        private void OnMemorySnapshot(MemorySnapshot data)
         {
-            DataGet?.Handle(data);
+            Notifications.Enqueue(new MemorySnapshotNotification(data.Allocation));
+        }
+
+        private void OnConnectionTerminated(ConnectionTerminated data)
+        {
+            Glue?.Disconnect(data.Connection);
+        }
+
+        private void OnDataChanged(DataChanged data)
+        {
+            Notifications.Enqueue(new DataChangedNotification(data.Hash, data.Completed));
         }
     }
 }

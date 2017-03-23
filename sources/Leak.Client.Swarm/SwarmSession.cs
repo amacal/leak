@@ -24,7 +24,7 @@ namespace Leak.Client.Swarm
 
         public Task<Notification> NextAsync()
         {
-            return inner.Notifications.Next();
+            return inner.Notifications.NextAsync();
         }
     }
 }

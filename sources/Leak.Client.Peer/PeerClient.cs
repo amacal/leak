@@ -1,81 +1,38 @@
 ﻿using Leak.Common;
-using Leak.Connector;
-using Leak.Events;
-using Leak.Negotiator;
-using Leak.Networking;
 using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Leak.Client.Peer
 {
     public class PeerClient : IDisposable
     {
-        private readonly PeerRuntime runtime;
-        private readonly ConcurrentBag<PeerConnect> online;
+        private readonly Runtime runtime;
 
         public PeerClient()
         {
-            runtime = new PeerFactory();
-            online = new ConcurrentBag<PeerConnect>();
+            runtime = new RuntimeInstance();
         }
 
-        public Task<PeerSession> Connect(FileHash hash, PeerAddress address)
+        public Task<PeerSession> Connect(FileHash hash, PeerAddress remote)
         {
-            runtime.Start(new NetworkPoolHooks
-            {
-                OnConnectionTerminated = OnConnectionTerminated
-            });
+            runtime.Start();
 
             PeerConnect connect = new PeerConnect
             {
                 Hash = hash,
-                Address = address,
+                Address = remote,
                 Localhost = PeerHash.Random(),
                 Notifications = new NotificationCollection(),
                 Completion = new TaskCompletionSource<PeerSession>(),
                 Pipeline = runtime.Pipeline,
                 Files = runtime.Files,
-                Blocks = runtime.Blocks
+                Worker = runtime.Worker
             };
 
-            connect.Negotiator =
-                new HandshakeNegotiatorBuilder()
-                    .WithNetwork(runtime.Network)
-                    .Build(new HandshakeNegotiatorHooks
-                    {
-                        OnHandshakeCompleted = connect.OnHandshakeCompleted,
-                        OnHandshakeRejected = connect.OnHandshakeRejected
-                    });
-
-            connect.Connector =
-                new PeerConnectorBuilder()
-                    .WithNetwork(runtime.Network)
-                    .WithPipeline(runtime.Pipeline)
-                    .Build(new PeerConnectorHooks
-                    {
-                        OnConnectionEstablished = connect.OnConnectionEstablished,
-                        OnConnectionRejected = connect.OnConnectionRejected
-                    });
-
             connect.Start();
-            online.Add(connect);
-
-            connect.Connector.Start();
-            connect.Connector.ConnectTo(hash, address);
+            connect.Connect(remote);
 
             return connect.Completion.Task;
-        }
-
-        private void OnConnectionTerminated(ConnectionTerminated data)
-        {
-            foreach (PeerConnect connect in online.ToArray())
-            {
-                if (connect.Glue?.Disconnect(data.Connection) == true)
-                {
-                    break;
-                }
-            }
         }
 
         public void Dispose()

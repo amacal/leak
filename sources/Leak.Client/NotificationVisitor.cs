@@ -75,5 +75,9 @@ namespace Leak.Client
         public virtual void Handle(ListenerFailedNotification notification)
         {
         }
+
+        public virtual void Handle(TrackerAnnouncedNotification notification)
+        {
+        }
     }
 }

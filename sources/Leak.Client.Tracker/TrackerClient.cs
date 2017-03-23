@@ -1,147 +1,39 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Leak.Client.Tracker.Exceptions;
 using Leak.Common;
-using Leak.Tracker.Get;
-using Leak.Tracker.Get.Events;
 
 namespace Leak.Client.Tracker
 {
     public class TrackerClient : IDisposable
     {
-        private readonly Uri address;
-        private readonly TrackerRuntime runtime;
-        private readonly TrackerCollection collection;
-        private readonly TrackerLogger logger;
+        private readonly Runtime runtime;
 
-        public TrackerClient(Uri address)
+        public TrackerClient()
         {
-            this.address = address;
-            this.runtime = new TrackerFactory(logger);
-            this.collection = new TrackerCollection(logger);
+            runtime = new RuntimeInstance();
         }
 
-        public TrackerClient(Uri address, TrackerLogger logger)
+        public Task<TrackerSession> ConnectAsync(string tracker)
         {
-            this.address = address;
-            this.logger = logger;
+            runtime.Start();
 
-            this.runtime = new TrackerFactory(logger);
-            this.collection = new TrackerCollection(logger);
-        }
-
-        public TrackerClient(Uri address, TrackerRuntime runtime)
-        {
-            this.address = address;
-            this.runtime = runtime;
-
-            this.collection = new TrackerCollection(logger);
-        }
-
-        public Task<TrackerAnnounce> AnnounceAsync(TrackerRequest request)
-        {
-            runtime.Start(new TrackerGetHooks
+            TrackerConnect connect = new TrackerConnect
             {
-                OnAnnounced = OnAnnounced,
-                OnConnected = OnConnected,
-                OnPacketSent = OnPacketSent,
-                OnPacketReceived = OnPacketReceived,
-                OnPacketIgnored = OnPacketIgnored,
-                OnTimeout = OnTimeout,
-                OnFailed = OnFailed
-            });
-
-            TaskCompletionSource<TrackerAnnounce> completion
-                = new TaskCompletionSource<TrackerAnnounce>();
-
-            TrackerEntry entry = collection.Add(request.Hash);
-            TrackerGetRegistrant registrant = new TrackerGetRegistrant
-            {
-                Address = address,
-                Hash = request.Hash,
-                Port = request.Port,
-                Peer = request.Peer
+                Tracker = tracker,
+                Localhost = PeerHash.Random(),
+                Notifications = new NotificationCollection(),
+                Completion = new TaskCompletionSource<TrackerSession>(),
+                Pipeline = runtime.Pipeline,
+                Worker = runtime.Worker
             };
 
-            logger?.Info($"registering query for '{request.Hash}'");
+            connect.Start();
 
-            entry.Completion = completion;
-            runtime.Service.Register(registrant);
-
-            return completion.Task;
-        }
-
-        private void OnAnnounced(TrackerAnnounced data)
-        {
-            TrackerEntry entry = collection.Find(data.Hash);
-            TrackerAnnounce announce = new TrackerAnnounce
-            {
-                Hash = data.Hash,
-                Interval = data.Interval,
-                Peers = data.Peers,
-                Leechers = data.Leechers,
-                Seeders = data.Seeders
-            };
-
-            logger?.Info($"announcing '{data.Hash}' completed; peers={data.Peers.Length}; leechers={data.Leechers}; seeds={data.Seeders}");
-
-            collection.Remove(data.Hash);
-            entry?.Completion.TrySetResult(announce);
-        }
-
-        private void OnConnected(TrackerConnected data)
-        {
-            string transaction = Bytes.ToString(data.Transaction);
-            string connection = Bytes.ToString(data.Connection);
-
-            logger?.Info($"announcing '{data.Hash}' in progress; status=connected; transaction={transaction}; connection={connection}");
-        }
-
-        private void OnPacketSent(TrackerPacketSent data)
-        {
-            string endpoint = data.Endpoint.ToString();
-            string size = data.Size.ToString();
-
-            logger?.Info($"packet sent; endpoint={endpoint}; size={size}");
-        }
-
-        private void OnPacketReceived(TrackerPacketReceived data)
-        {
-            string endpoint = data.Endpoint.ToString();
-            string size = data.Size.ToString();
-
-            logger?.Info($"packet received; endpoint={endpoint}; size={size}");
-        }
-
-        private void OnPacketIgnored(TrackerPacketIgnored data)
-        {
-            string endpoint = data.Endpoint.ToString();
-            string size = data.Size.ToString();
-
-            logger?.Info($"packet ignored; endpoint={endpoint}; size={size}");
-        }
-
-        private void OnTimeout(TrackerTimeout data)
-        {
-            TrackerEntry entry = collection.Find(data.Hash);
-            logger?.Info($"announcing '{data.Hash}' reached a timeout; seconds={data.Seconds}");
-
-            collection.Remove(data.Hash);
-            entry?.Completion.TrySetException(new TrackerTimeoutException(data.Hash, data.Seconds));
-        }
-
-        private void OnFailed(TrackerFailed data)
-        {
-            TrackerEntry entry = collection.Find(data.Hash);
-            logger?.Info($"announcing '{data.Hash}' failed; reason='{data.Reason}'");
-
-            collection.Remove(data.Hash);
-            entry?.Completion.TrySetException(new TrackerFailedException(data.Hash, data.Reason));
+            return connect.Completion.Task;
         }
 
         public void Dispose()
         {
-            logger?.Info("disposing tracker client");
             runtime.Stop();
         }
     }

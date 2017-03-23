@@ -14,7 +14,7 @@ namespace Leak.Client
             notifications = new ConcurrentQueue<Notification>();
         }
 
-        public Task<Notification> Next()
+        public Task<Notification> NextAsync()
         {
             lock (this)
             {

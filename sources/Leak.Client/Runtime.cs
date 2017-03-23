@@ -2,9 +2,9 @@
 using Leak.Files;
 using Leak.Tasks;
 
-namespace Leak.Client.Swarm
+namespace Leak.Client
 {
-    public interface SwarmRuntime
+    public interface Runtime
     {
         PipelineService Pipeline { get; }
 
