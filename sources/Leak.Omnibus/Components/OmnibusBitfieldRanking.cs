@@ -23,7 +23,7 @@ namespace Leak.Data.Map.Components
 
             for (int i = 0; i < bitfield.Length; i++)
             {
-                if (available[i] >= 0)
+                if (available[i] >= 0 && bitfield[i])
                 {
                     available[i]++;
                     highest = Math.Max(highest, available[i]);
