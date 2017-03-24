@@ -83,6 +83,16 @@ namespace Leak.Glue
             });
         }
 
+        public static void CallPeerBitfieldChanged(this GlueHooks hooks, PeerHash peer, Bitfield bitfield, PieceInfo affected)
+        {
+            hooks.OnPeerBitfieldChanged?.Invoke(new PeerBitfieldChanged
+            {
+                Peer = peer,
+                Bitfield = bitfield,
+                Affected = affected
+            });
+        }
+
         public static void CallBlockReceived(this GlueHooks hooks, FileHash hash, PeerHash peer, Piece piece)
         {
             hooks.OnBlockReceived?.Invoke(new BlockReceived

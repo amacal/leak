@@ -50,7 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporter.cs" />
     <Compile Include="ReporterCompact.cs" />
-    <Compile Include="ReporterNormal.cs" />
+    <Compile Include="ReporterVerbose.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Client.Swarm\Leak.Client.Swarm.csproj">

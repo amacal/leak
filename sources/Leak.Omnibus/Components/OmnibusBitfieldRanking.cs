@@ -6,101 +6,98 @@ namespace Leak.Data.Map.Components
 {
     public class OmnibusBitfieldRanking
     {
-        private readonly OmnibusCache cache;
-        private readonly int size;
-        private readonly int lowest;
-        private readonly int highest;
-        private readonly int[] availabilities;
+        private Bitfield buffer;
+        private int[] available;
+        private int highest;
 
-        public OmnibusBitfieldRanking(OmnibusBitfieldRanking source, int[] location)
+        public OmnibusBitfieldRanking()
         {
-            cache = source.cache;
-            size = source.size;
-
-            lowest = source.lowest;
-            highest = source.highest;
-            availabilities = location;
-
-            Array.Copy(source.availabilities, availabilities, size);
+            buffer = new Bitfield(0);
+            available = new int[0];
+            highest = 0;
         }
 
-        public OmnibusBitfieldRanking(OmnibusCache cache, Bitfield[] bitfields)
+        public void Add(Bitfield bitfield)
         {
-            this.cache = cache;
-            this.size = cache.Size;
+            ExpandIfNeeded(bitfield.Length);
 
-            availabilities = cache.Ranking;
-            lowest = bitfields.Length + 1;
-
-            Array.Clear(availabilities, 0, size);
-
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < bitfield.Length; i++)
             {
-                foreach (Bitfield bitfield in bitfields)
+                if (available[i] >= 0)
                 {
-                    if (bitfield[i])
-                    {
-                        availabilities[i]++;
-                    }
-                }
-
-                if (availabilities[i] > highest)
-                {
-                    highest = availabilities[i];
-                }
-
-                if (lowest > availabilities[i])
-                {
-                    lowest = availabilities[i];
+                    available[i]++;
+                    highest = Math.Max(highest, available[i]);
                 }
             }
         }
 
-        public OmnibusBitfieldRanking Exclude(OmnibusPieceCollection completed)
+        public void Remove(Bitfield bitfield)
         {
-            OmnibusBitfieldRanking result = new OmnibusBitfieldRanking(this, cache.Excluded);
+            ExpandIfNeeded(bitfield.Length);
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < bitfield.Length; i++)
             {
-                if (result.availabilities[i] >= 0 && completed.IsComplete(i))
+                if (available[i] > 0)
                 {
-                    result.availabilities[i] = -1;
+                    available[i]--;
                 }
             }
-
-            return result;
         }
 
-        public OmnibusBitfieldRanking Include(Bitfield other)
+        public void Add(PieceInfo piece)
         {
-            OmnibusBitfieldRanking result = new OmnibusBitfieldRanking(this, cache.Included);
+            ExpandIfNeeded(piece.Index);
 
-            for (int i = 0; i < size; i++)
+            if (available[piece.Index] >= 0)
             {
-                if (other[i] == false)
+                available[piece.Index]++;
+                highest = Math.Max(highest, available[piece.Index]);
+            }
+        }
+
+        public void Complete(Bitfield bitfield)
+        {
+            ExpandIfNeeded(bitfield.Length);
+
+            for (int i = 0; i < bitfield.Length; i++)
+            {
+                if (bitfield[i])
                 {
-                    result.availabilities[i] = -1;
+                    available[i] = -1;
                 }
             }
-
-            return result;
         }
 
-        public IEnumerable<Bitfield> Order()
+        public void Complete(PieceInfo piece)
         {
-            Bitfield bitfield = cache.Bitfield;
+            ExpandIfNeeded(piece.Index);
+            available[piece.Index] = -1;
+        }
 
-            for (int i = lowest; i <= highest; i++)
+        public IEnumerable<Bitfield> Order(Bitfield other)
+        {
+            int size = Math.Min(buffer.Length, other.Length);
+
+            for (int i = 0; i <= highest; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    bitfield[j] = availabilities[j] == i;
+                    buffer[j] = other[j] && available[j] == i;
                 }
 
-                if (bitfield.Completed > 0)
+                if (buffer.Completed > 0)
                 {
-                    yield return bitfield;
+                    yield return buffer;
                 }
+            }
+        }
+
+        private void ExpandIfNeeded(int size)
+        {
+            if (available.Length < size)
+            {
+                buffer = new Bitfield(size);
+                Array.Resize(ref available, size);
             }
         }
     }

@@ -149,7 +149,7 @@ namespace Leak
                     return new ReporterCompact();
 
                 default:
-                    return new ReporterNormal();
+                    return new ReporterVerbose();
             }
         }
 

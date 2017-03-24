@@ -6,5 +6,6 @@ namespace Leak.Events
     {
         public PeerHash Peer;
         public Bitfield Bitfield;
+        public PieceInfo Affected;
     }
 }

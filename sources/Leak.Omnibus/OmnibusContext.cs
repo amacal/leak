@@ -19,7 +19,6 @@ namespace Leak.Data.Map
 
         private OmnibusCache cache;
         private OmnibusPieceCollection pieces;
-        private OmnibusBitfieldRanking ranking;
 
         private Metainfo metainfo;
         private Bitfield bitfield;
@@ -99,15 +98,6 @@ namespace Leak.Data.Map
         public OmnibusStateCollection States
         {
             get { return states; }
-        }
-
-        public OmnibusBitfieldRanking Ranking
-        {
-            get
-            {
-                return ranking ?? (ranking = new OmnibusBitfieldRanking(cache, bitfields.ToArray()));
-            }
-            set { ranking = value; }
         }
     }
 }

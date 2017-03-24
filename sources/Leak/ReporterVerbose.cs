@@ -3,11 +3,11 @@ using Leak.Client;
 
 namespace Leak
 {
-    public class ReporterNormal : Reporter
+    public class ReporterVerbose : Reporter
     {
         public bool Handle(Notification notification)
         {
-            Console.Write(notification);
+            Console.WriteLine(notification);
 
             return notification.Type != NotificationType.DataCompleted;
         }

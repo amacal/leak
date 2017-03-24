@@ -20,13 +20,10 @@ namespace Leak.Data.Map.Strategies
                 int inPiece = context.Metainfo.GetBlocksInPiece();
                 int total = context.Metainfo.Properties.Pieces;
 
-                OmnibusBitfieldRanking ranking = context.Ranking;
-                OmnibusBitfieldRanking adjusted = ranking.Exclude(context.Pieces).Include(bitfield);
-
                 OmnibusPieceCollection pieces = context.Pieces;
                 OmnibusReservationCollection reservations = context.Reservations;
 
-                foreach (Bitfield best in adjusted.Order())
+                foreach (Bitfield best in context.Bitfields.Ranking.Order(bitfield))
                 {
                     int positive = best.Completed;
                     long totalSize = context.Metainfo.Properties.TotalSize;

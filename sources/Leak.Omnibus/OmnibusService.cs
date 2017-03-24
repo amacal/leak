@@ -72,7 +72,6 @@ namespace Leak.Data.Map
             context.Queue.Add(() =>
             {
                 context.States.Handle(data);
-                context.Ranking = null;
             });
         }
 
@@ -81,7 +80,7 @@ namespace Leak.Data.Map
             context.Queue.Add(() =>
             {
                 context.States.Handle(data);
-                context.Ranking = null;
+                context.Bitfields.Handle(data);
             });
         }
 
@@ -89,8 +88,7 @@ namespace Leak.Data.Map
         {
             context.Queue.Add(() =>
             {
-                context.Bitfields.Add(data.Peer, data.Bitfield);
-                context.Ranking = null;
+                context.Bitfields.Handle(data);
             });
         }
 
@@ -99,7 +97,6 @@ namespace Leak.Data.Map
             context.Queue.Add(() =>
             {
                 context.States.Handle(data);
-                context.Ranking = null;
             });
         }
 
@@ -108,6 +105,8 @@ namespace Leak.Data.Map
             context.Queue.Add(() =>
             {
                 context.Bitfield = data.Bitfield;
+                context.Bitfields.Ranking.Complete(data.Bitfield);
+
                 context.Cache = new OmnibusCache(data.Bitfield.Length);
                 context.Pieces = new OmnibusPieceCollection(context);
             });

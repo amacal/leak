@@ -288,7 +288,7 @@ namespace Leak.Glue
 
                     case "have":
                         entry.Bitfield = facts.ApplyHave(entry.Bitfield, data.Payload.GetInt32(0));
-                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield);
+                        hooks.CallPeerBitfieldChanged(entry.Peer, entry.Bitfield, new PieceInfo(data.Payload.GetInt32(0)));
                         break;
 
                     case "bitfield":

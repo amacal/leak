@@ -114,6 +114,7 @@ namespace Leak.Data.Map.Components
 
         private void CallPieceCompleted(int piece)
         {
+            context.Bitfields.Ranking.Complete(new PieceInfo(piece));
             context.Hooks.CallPieceCompleted(context.Metainfo.Hash, piece);
         }
 
