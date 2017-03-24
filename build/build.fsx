@@ -18,7 +18,15 @@ Target "Restore" (fun _ ->
 
 Target "BuildApp" (fun _ ->
     !! "sources/**/leak.csproj"
-      |> MSBuildRelease "./build/release" "Build"
+      |> MSBuildRelease "./build/release/leak" "Build"
+      |> Log "Application-Build-Output: "
+
+    !! "sources/**/leak.connect.csproj"
+      |> MSBuildRelease "./build/release/leak-direct" "Build"
+      |> Log "Application-Build-Output: "
+
+    !! "sources/**/leak.announce.csproj"
+      |> MSBuildRelease "./build/release/leak-tracker" "Build"
       |> Log "Application-Build-Output: "
 )
 
@@ -54,17 +62,33 @@ Target "MergeApp" (fun _ ->
         ExecProcess (fun info ->
             info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
             info.WorkingDirectory <- "./build"
-            info.Arguments <- sprintf "-target:exe -internalize -verbose -wildcards -lib:%s -out:%s %s %s" ("./release") ("./merge" @@ "Leak.exe") ("./release" @@ "Leak.exe") ("./release" @@ "*.dll")
+            info.Arguments <- sprintf "-target:exe -internalize -verbose -wildcards -lib:%s -out:%s %s %s" ("./release/leak") ("./merge" @@ "leak.exe") ("./release/leak/leak.exe") ("./release/leak/*.dll")
+            ) (TimeSpan.FromMinutes 5.)
+
+    let direct =
+        ExecProcess (fun info ->
+            info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
+            info.WorkingDirectory <- "./build"
+            info.Arguments <- sprintf "-target:exe -internalize -verbose -wildcards -lib:%s -out:%s %s %s" ("./release/leak-direct") ("./merge" @@ "leak-direct.exe") ("./release/leak-direct/leak-connect.exe") ("./release/leak-direct/*.dll")
+            ) (TimeSpan.FromMinutes 5.)
+
+    let tracker =
+        ExecProcess (fun info ->
+            info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
+            info.WorkingDirectory <- "./build"
+            info.Arguments <- sprintf "-target:exe -internalize -verbose -wildcards -lib:%s -out:%s %s %s" ("./release/leak-tracker") ("./merge" @@ "leak-tracker.exe") ("./release/leak-tracker/leak-announce.exe") ("./release/leak-tracker/*.dll")
             ) (TimeSpan.FromMinutes 5.)
 
     let core =
         ExecProcess (fun info ->
             info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
             info.WorkingDirectory <- "./build"
-            info.Arguments <- sprintf "-target:library -verbose -wildcards -lib:%s -out:%s %s" ("./release") ("./merge" @@ "Leak.Core.dll") ("./release" @@ "Leak.*.dll")
+            info.Arguments <- sprintf "-target:library -verbose -wildcards -lib:%s -out:%s %s" ("./release/leak") ("./merge/Leak.Core.dll") ("./release/leak/Leak.*.dll")
             ) (TimeSpan.FromMinutes 5.)
 
     if leak <> 0 then failwithf "Error during ILRepack execution."
+    if direct <> 0 then failwithf "Error during ILRepack execution."
+    if tracker <> 0 then failwithf "Error during ILRepack execution."
     if core <> 0 then failwithf "Error during ILRepack execution."
 )
 
