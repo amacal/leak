@@ -27,6 +27,11 @@ namespace Leak.Data.Map.Strategies
                     long totalSize = context.Metainfo.Properties.TotalSize;
                     int blockSize = context.Metainfo.Properties.BlockSize;
 
+                    if (best.Minimum > 0)
+                    {
+                        totalSize = totalSize - (long)best.Minimum * inPiece * blockSize;
+                    }
+
                     for (int i = best.Minimum; left > 0 && i <= best.Maximum; i++)
                     {
                         if (best[i])
