@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Leak.Common;
 using Leak.Events;
 
@@ -58,7 +59,7 @@ namespace Leak.Data.Map.Components
 
         public IEnumerable<PeerHash> Find(int ranking, int count)
         {
-            foreach (OmnibusStateEntry state in byPeer.Values)
+            foreach (OmnibusStateEntry state in byPeer.Values.OrderByDescending(x => x.Ranking))
             {
                 if (count == 0)
                     break;

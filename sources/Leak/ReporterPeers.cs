@@ -64,9 +64,7 @@ namespace Leak
 
         public override string ToString()
         {
-            int total = LocalChoking.Union(LocalInterested).Union(RemoteChoking).Union(RemoteInterested).Count();
-
-            return $"peers: {total}; LC: {LocalChoking.Count}; LI: {LocalInterested.Count}; RC: {RemoteChoking.Count}; RI: {RemoteInterested.Count}";
+            return $"peers: {Total.Count}, LC, {LocalChoking.Count}, LI: {LocalInterested.Count}, RC: {RemoteChoking.Count}, RI: {RemoteInterested.Count}";
         }
     }
 }

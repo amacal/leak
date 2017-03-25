@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Leak.Client;
 using Leak.Client.Notifications;
 using Leak.Common;
@@ -9,22 +8,22 @@ namespace Leak
     public class ReporterCompact : NotificationVisitor, Reporter
     {
         private readonly ReporterPeers peers;
+        private readonly ReporterResource resource;
 
         private Metainfo metainfo;
         private int completed;
-        private Size memory;
 
         public ReporterCompact()
         {
             peers = new ReporterPeers();
-            memory = new Size(0);
+            resource = new ReporterResource();
         }
 
         public bool Handle(Notification notification)
         {
             notification.Dispatch(this);
 
-            Console.Write($"\rData: {peers}, completed {completed}, memory {memory}".PadRight(80));
+            Console.Write($"\rData: {peers}, completed {completed}, {resource}".PadRight(Console.WindowWidth - 2));
 
             return notification.Type != NotificationType.DataCompleted;
         }
@@ -79,7 +78,7 @@ namespace Leak
 
         public override void Handle(MemorySnapshotNotification notification)
         {
-            memory = notification.Allocation;
+            resource.Handle(notification);
         }
 
         public override void Handle(PieceRejectedNotification notification)

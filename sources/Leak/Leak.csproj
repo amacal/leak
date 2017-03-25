@@ -51,6 +51,7 @@
     <Compile Include="Reporter.cs" />
     <Compile Include="ReporterCompact.cs" />
     <Compile Include="ReporterPeers.cs" />
+    <Compile Include="ReporterResource.cs" />
     <Compile Include="ReporterVerbose.cs" />
   </ItemGroup>
   <ItemGroup>
