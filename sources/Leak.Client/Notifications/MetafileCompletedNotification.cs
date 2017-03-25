@@ -35,7 +35,7 @@ namespace Leak.Client.Notifications
                 builder.AppendLine($"Meta: {String.Join(Path.DirectorySeparatorChar.ToString(), entry.Name)} [{entry.Size} bytes]");
             }
 
-            return builder.ToString();
+            return builder.ToString().TrimEnd(Environment.NewLine.ToCharArray());
         }
 
         public Metainfo Metainfo

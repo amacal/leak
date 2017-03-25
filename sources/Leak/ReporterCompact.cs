@@ -8,8 +8,7 @@ namespace Leak
 {
     public class ReporterCompact : NotificationVisitor, Reporter
     {
-        private readonly HashSet<PeerHash> peers;
-        private readonly HashSet<PeerHash> seeds;
+        private readonly ReporterPeers peers;
 
         private Metainfo metainfo;
         private int completed;
@@ -17,8 +16,7 @@ namespace Leak
 
         public ReporterCompact()
         {
-            peers = new HashSet<PeerHash>();
-            seeds = new HashSet<PeerHash>();
+            peers = new ReporterPeers();
             memory = new Size(0);
         }
 
@@ -26,26 +24,24 @@ namespace Leak
         {
             notification.Dispatch(this);
 
-            Console.Write($"\rData: peers {peers.Count}, seeds {seeds.Count}, completed {completed}, memory {memory}".PadRight(80));
+            Console.Write($"\rData: {peers}, completed {completed}, memory {memory}".PadRight(80));
 
             return notification.Type != NotificationType.DataCompleted;
         }
 
         public override void Handle(PeerConnectedNotification notification)
         {
-            peers.Add(notification.Peer);
+            peers.Handle(notification);
         }
 
         public override void Handle(PeerDisconnectedNotification notification)
         {
-            peers.Remove(notification.Peer);
-            seeds.Remove(notification.Peer);
+            peers.Handle(notification);
         }
 
         public override void Handle(StatusChangedNotification notification)
         {
-            if (notification.State.IsRemoteChokingLocal == false)
-                seeds.Add(notification.Peer);
+            peers.Handle(notification);
         }
 
         public override void Handle(MetafileCompletedNotification notification)
