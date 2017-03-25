@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Leak.Client;
 using Leak.Client.Notifications;
 using Leak.Common;
@@ -65,6 +64,8 @@ namespace Leak
 
         public override void Handle(DataVerifiedNotification notification)
         {
+            completed = notification.Bitfield.Completed;
+
             Console.WriteLine();
             Console.WriteLine(notification);
         }

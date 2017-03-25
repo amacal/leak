@@ -31,24 +31,27 @@ namespace Leak.Data.Map.Tasks
 
                     int requested = count;
                     int taken = context.Reservations.Count(now);
-                    int available = Math.Max(0, Math.Min(requested, context.Configuration.PoolSize - taken));
+                    int available = Math.Min(requested, context.Configuration.PoolSize - taken);
 
-                    strategy.Next(context.Cache.Blocks, context, peer, available);
-
-                    if (context.Cache.Blocks.Count > 0)
+                    if (available > 0)
                     {
-                        foreach (BlockIndex block in context.Cache.Blocks)
+                        strategy.Next(context.Cache.Blocks, context, peer, available);
+
+                        if (context.Cache.Blocks.Count > 0)
                         {
-                            PeerHash previous = context.Reservations.Add(peer, block, now);
-
-                            if (previous != null)
+                            foreach (BlockIndex block in context.Cache.Blocks)
                             {
-                                UpdateRanking(context, previous, -4);
-                                context.Hooks.CallBlockExpired(hash, previous, block);
-                            }
+                                PeerHash previous = context.Reservations.Add(peer, block, now);
 
-                            UpdateRanking(context, peer, -1);
-                            context.Hooks.CallBlockReserved(hash, peer, block);
+                                if (previous != null)
+                                {
+                                    UpdateRanking(context, previous, -4);
+                                    context.Hooks.CallBlockExpired(hash, previous, block);
+                                }
+
+                                UpdateRanking(context, peer, -1);
+                                context.Hooks.CallBlockReserved(hash, peer, block);
+                            }
                         }
                     }
                 }

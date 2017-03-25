@@ -12,24 +12,22 @@ namespace Leak.Data.Map.Strategies
             int current = context.Reservations.Count(peer);
             int left = Math.Min(count, count - current);
 
-            if (left > 0 && current <= context.Configuration.SchedulerThreshold)
+            if (left > 0)
             {
                 DateTime now = DateTime.Now;
                 Bitfield bitfield = context.Bitfields.ByPeer(peer);
 
                 int inPiece = context.Metainfo.GetBlocksInPiece();
-                int total = context.Metainfo.Properties.Pieces;
 
                 OmnibusPieceCollection pieces = context.Pieces;
                 OmnibusReservationCollection reservations = context.Reservations;
 
                 foreach (Bitfield best in context.Bitfields.Ranking.Order(bitfield))
                 {
-                    int positive = best.Completed;
                     long totalSize = context.Metainfo.Properties.TotalSize;
                     int blockSize = context.Metainfo.Properties.BlockSize;
 
-                    for (int i = 0; left > 0 && i < total && positive > 0; i++)
+                    for (int i = best.Minimum; left > 0 && i <= best.Maximum; i++)
                     {
                         if (best[i])
                         {
@@ -58,8 +56,6 @@ namespace Leak.Data.Map.Strategies
 
                                 totalSize = totalSize - blockSize;
                             }
-
-                            positive = positive - 1;
                         }
                         else
                         {

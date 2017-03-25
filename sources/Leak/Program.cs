@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Leak.Client;
-using Leak.Client.Adapters;
 using Leak.Client.Swarm;
 using Leak.Common;
 using Pargos;
@@ -12,6 +12,9 @@ namespace Leak
     {
         public static void Main(string[] args)
         {
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(1, 1);
+
             MainAsync(args).Wait();
         }
 

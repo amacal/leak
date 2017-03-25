@@ -7,16 +7,25 @@ namespace Leak.Common
         private readonly bool[] items;
         private int completed;
 
+        private int minimum;
+        private int maximum;
+
         public Bitfield(int length)
         {
             this.items = new bool[length];
             this.completed = 0;
+
+            this.minimum = length - 1;
+            this.maximum = 0;
         }
 
         public Bitfield(int length, Bitfield other)
         {
             this.items = new bool[length];
             this.completed = other.completed;
+
+            this.minimum = other.minimum;
+            this.maximum = other.maximum;
 
             Array.Copy(other.items, items, length);
         }
@@ -31,6 +40,16 @@ namespace Leak.Common
             get { return completed; }
         }
 
+        public int Minimum
+        {
+            get { return minimum; }
+        }
+
+        public int Maximum
+        {
+            get { return maximum; }
+        }
+
         public bool this[int index]
         {
             get { return items[index]; }
@@ -41,11 +60,34 @@ namespace Leak.Common
                     items[index] = value;
 
                     if (value)
+                    {
                         completed++;
+
+                        if (index > maximum)
+                        {
+                            maximum = index;
+                        }
+
+                        if (index < minimum)
+                        {
+                            minimum = index;
+                        }
+                    }
                     else
+                    {
                         completed--;
+                    }
                 }
             }
+        }
+
+        public void Clear()
+        {
+            completed = 0;
+            maximum = 0;
+
+            minimum = items.Length - 1;
+            Array.Clear(items, 0, items.Length);
         }
 
         public override int GetHashCode()

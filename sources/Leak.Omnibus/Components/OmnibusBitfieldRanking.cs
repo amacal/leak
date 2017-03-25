@@ -8,13 +8,11 @@ namespace Leak.Data.Map.Components
     {
         private Bitfield buffer;
         private int[] available;
-        private int highest;
 
         public OmnibusBitfieldRanking()
         {
             buffer = new Bitfield(0);
             available = new int[0];
-            highest = 0;
         }
 
         public void Add(Bitfield bitfield)
@@ -26,7 +24,6 @@ namespace Leak.Data.Map.Components
                 if (available[i] >= 0 && bitfield[i])
                 {
                     available[i]++;
-                    highest = Math.Max(highest, available[i]);
                 }
             }
         }
@@ -51,7 +48,6 @@ namespace Leak.Data.Map.Components
             if (available[piece.Index] >= 0)
             {
                 available[piece.Index]++;
-                highest = Math.Max(highest, available[piece.Index]);
             }
         }
 
@@ -76,18 +72,49 @@ namespace Leak.Data.Map.Components
 
         public IEnumerable<Bitfield> Order(Bitfield other)
         {
-            int size = Math.Min(buffer.Length, other.Length);
+            int lowest = Int32.MaxValue;
+            int highest = Int32.MinValue;
+            int maximum = buffer.Length;
 
-            for (int i = 0; i <= highest; i++)
+            if (other.Length < maximum)
             {
-                for (int j = 0; j < size; j++)
-                {
-                    buffer[j] = other[j] && available[j] == i;
-                }
+                maximum = other.Maximum;
+            }
 
-                if (buffer.Completed > 0)
+            for (int i = other.Minimum; i < maximum; i++)
+            {
+                if (other[i])
                 {
-                    yield return buffer;
+                    if (lowest > available[i])
+                    {
+                        lowest = available[i];
+                    }
+
+                    if (highest < available[i])
+                    {
+                        highest = available[i];
+                    }
+                }
+            }
+
+            if (highest > 0)
+            {
+                for (int i = lowest; i <= highest; i++)
+                {
+                    buffer.Clear();
+
+                    for (int j = other.Minimum; j <= other.Maximum; j++)
+                    {
+                        if (other[j] && available[j] == i)
+                        {
+                            buffer[j] = true;
+                        }
+                    }
+
+                    if (buffer.Completed > 0)
+                    {
+                        yield return buffer;
+                    }
                 }
             }
         }
