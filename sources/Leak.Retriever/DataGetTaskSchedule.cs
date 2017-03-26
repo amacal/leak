@@ -14,10 +14,10 @@ namespace Leak.Data.Get
 
         public void Execute(DataGetContext context)
         {
-            Schedule(context, 2048, 8, 256);
-            Schedule(context, 1024, 8, 64);
+            Schedule(context, 2048, 4, 256);
+            Schedule(context, 1024, 6, 64);
             Schedule(context, 128, 8, 16);
-            Schedule(context, 0, 16, 4);
+            Schedule(context, 0, 10, 4);
         }
 
         private void Schedule(DataGetContext context, int ranking, int count, int pieces)

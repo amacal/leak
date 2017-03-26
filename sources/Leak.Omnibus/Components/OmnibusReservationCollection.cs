@@ -127,6 +127,8 @@ namespace Leak.Data.Map.Components
                 {
                     involved.Add(reservation.Peer);
                 }
+
+                byPiece.Remove(piece);
             }
             else
             {
