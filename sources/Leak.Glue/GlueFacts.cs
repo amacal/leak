@@ -11,10 +11,16 @@ namespace Leak.Glue
     {
         private readonly MoreContainer more;
         private MetafileVerified metadata;
+        private Bitfield mine;
 
         public GlueFacts()
         {
             more = new MoreContainer();
+        }
+
+        public Bitfield Bitfield
+        {
+            get { return mine; }
         }
 
         public void Install(IReadOnlyCollection<MorePlugin> plugins)
@@ -30,22 +36,27 @@ namespace Leak.Glue
             metadata = data;
         }
 
-        public Bitfield ApplyHave(Bitfield bitfield, int piece)
+        public void Handle(DataVerified data)
         {
-            if (bitfield == null && metadata?.Metainfo != null)
-            {
-                bitfield = new Bitfield(metadata.Metainfo.Pieces.Length);
-            }
-
-            if (bitfield != null && bitfield.Length > piece)
-            {
-                bitfield[piece] = true;
-            }
-
-            return bitfield;
+            mine = data.Bitfield;
         }
 
-        public Bitfield ApplyBitfield(Bitfield bitfield, Bitfield received)
+        public Bitfield ApplyHave(Bitfield other, int piece)
+        {
+            if (other == null && metadata?.Metainfo != null)
+            {
+                other = new Bitfield(metadata.Metainfo.Pieces.Length);
+            }
+
+            if (other != null && other.Length > piece)
+            {
+                other[piece] = true;
+            }
+
+            return other;
+        }
+
+        public Bitfield ApplyBitfield(Bitfield other, Bitfield received)
         {
             if (metadata?.Metainfo != null)
             {

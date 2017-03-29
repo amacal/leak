@@ -50,6 +50,7 @@ namespace Leak.Data.Store
 
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
+                onCompleted.Invoke(this);
                 context.Hooks.CallBlockRead(context.Parameters.Hash, index, new FixedDataBlock(read.Buffer, read.Count));
             }
 

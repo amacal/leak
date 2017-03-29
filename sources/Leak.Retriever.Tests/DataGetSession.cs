@@ -22,9 +22,9 @@ namespace Leak.Data.Get.Tests
             get { return (PipelineSimulator)service.Dependencies.Pipeline; }
         }
 
-        public DataGetToDataStore Repository
+        public DataGetToDataStore DataStore
         {
-            get { return service.Dependencies.Repository; }
+            get { return service.Dependencies.DataStore; }
         }
 
         public DataGetToGlue Glue
@@ -32,9 +32,9 @@ namespace Leak.Data.Get.Tests
             get { return service.Dependencies.Glue; }
         }
 
-        public DataGetToDataMap Omnibus
+        public DataGetToDataMap DataMap
         {
-            get { return service.Dependencies.Omnibus; }
+            get { return service.Dependencies.DataMap; }
         }
 
         public void Dispose()

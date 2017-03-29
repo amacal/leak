@@ -67,9 +67,9 @@ namespace Leak.Data.Get
         {
             context.Queue.Add(() =>
             {
-                if (context.Dependencies.Omnibus.IsComplete(data.Block.Piece) == false)
+                if (context.Dependencies.DataMap.IsComplete(data.Block.Piece) == false)
                 {
-                    context.Dependencies.Repository.Write(data.Block, data.Payload);
+                    context.Dependencies.DataStore.Write(data.Block, data.Payload);
                     context.Hooks.CallBlockHandled(data.Hash, data.Peer, data.Block);
                 }
                 else
@@ -83,7 +83,7 @@ namespace Leak.Data.Get
         {
             context.Queue.Add(() =>
             {
-                context.Dependencies.Omnibus.Complete(data.Block);
+                context.Dependencies.DataMap.Complete(data.Block);
             });
         }
 
@@ -100,7 +100,7 @@ namespace Leak.Data.Get
         {
             context.Queue.Add(() =>
             {
-                context.Dependencies.Omnibus.Complete(data.Piece);
+                context.Dependencies.DataMap.Complete(data.Piece);
             });
         }
 
@@ -108,7 +108,7 @@ namespace Leak.Data.Get
         {
             context.Queue.Add(() =>
             {
-                context.Dependencies.Omnibus.Invalidate(data.Piece);
+                context.Dependencies.DataMap.Invalidate(data.Piece);
             });
         }
 
@@ -116,7 +116,7 @@ namespace Leak.Data.Get
         {
             context.Queue.Add(() =>
             {
-                context.Dependencies.Repository.Verify(data.Piece);
+                context.Dependencies.DataStore.Verify(data.Piece);
             });
         }
 

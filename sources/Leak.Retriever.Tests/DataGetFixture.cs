@@ -14,8 +14,8 @@ namespace Leak.Data.Get.Tests
                     .WithHash(FileHash.Random())
                     .WithPipeline(new PipelineSimulator())
                     .WithGlue(A.Fake<DataGetToGlue>())
-                    .WithRepository(A.Fake<DataGetToDataStore>())
-                    .WithOmnibus(A.Fake<DataGetToDataMap>())
+                    .WithDataStore(A.Fake<DataGetToDataStore>())
+                    .WithDataMap(A.Fake<DataGetToDataMap>())
                     .Build();
 
             return new DataGetSession(service);

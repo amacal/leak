@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Communicator.Messages;
 
 namespace Leak.Communicator

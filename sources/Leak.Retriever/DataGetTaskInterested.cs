@@ -8,7 +8,7 @@ namespace Leak.Data.Get
         {
             if (context.Verified)
             {
-                context.Dependencies.Omnibus.Query((peer, bitfield, state) =>
+                context.Dependencies.DataMap.Query((peer, bitfield, state) =>
                 {
                     if (state.IsLocalInterestedInRemote == false && bitfield?.Completed > 0)
                     {

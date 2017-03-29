@@ -1,6 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Data.Store;
 using Leak.Glue;
+using Leak.Tasks;
 
 namespace Leak.Data.Share
 {
@@ -23,9 +24,21 @@ namespace Leak.Data.Share
             return this;
         }
 
-        public DatashareBuilder WithRepository(RepositoryService repository)
+        public DatashareBuilder WithPipeline(PipelineService pipeline)
         {
-            dependencies.Repository = repository;
+            dependencies.Pipeline = pipeline;
+            return this;
+        }
+
+        public DatashareBuilder WithDataMap(DataShareToDataMap dataMap)
+        {
+            dependencies.DataMap = dataMap;
+            return this;
+        }
+
+        public DatashareBuilder WithDataStore(RepositoryService dataStore)
+        {
+            dependencies.DataStore = dataStore;
             return this;
         }
 

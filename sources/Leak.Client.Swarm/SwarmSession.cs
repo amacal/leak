@@ -22,6 +22,11 @@ namespace Leak.Client.Swarm
             inner.Download(destination);
         }
 
+        public void Seed(string destination)
+        {
+            inner.Seed(destination);
+        }
+
         public Task<Notification> NextAsync()
         {
             return inner.Notifications.NextAsync();

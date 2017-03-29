@@ -250,7 +250,6 @@ namespace Leak.Client.Peer
         {
             DataGetHooks hooks = new DataGetHooks
             {
-                OnBlockRequested = OnBlockRequestSent
             };
 
             DataGet =
@@ -259,8 +258,8 @@ namespace Leak.Client.Peer
                     .WithStrategy("sequential")
                     .WithGlue(Glue.AsDataGet())
                     .WithPipeline(Pipeline)
-                    .WithRepository(DataStore.AsDataGet())
-                    .WithOmnibus(DataMap.AsDataGet())
+                    .WithDataStore(DataStore.AsDataGet())
+                    .WithDataMap(DataMap.AsDataGet())
                     .Build(hooks);
 
             DataGet.Start();
@@ -310,24 +309,6 @@ namespace Leak.Client.Peer
             DataMap?.Handle(data);
         }
 
-        private void OnBlockDataReceived(BlockReceived data)
-        {
-            DataGet?.Handle(data);
-        }
-
-        private void OnBlockRequestReceived(BlockRequested data)
-        {
-        }
-
-        private void OnBlockRequestSent(BlockRequested data)
-        {
-        }
-
-        private void OnMetadataMeasured(MetadataMeasured data)
-        {
-            MetaGet?.Handle(data);
-        }
-
         private void OnMetadataPieceReceived(MetadataReceived data)
         {
             Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
@@ -336,7 +317,7 @@ namespace Leak.Client.Peer
 
         private void OnMetadataRequestSent(MetadataRequested data)
         {
-            Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
+            Notifications.Enqueue(new MetafileRequestedNotification(data.Hash, new PieceInfo(data.Piece)));
         }
 
         private void OnMetafileVerified(MetafileVerified data)

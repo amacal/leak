@@ -4,10 +4,10 @@ namespace Leak.Client.Notifications
 {
     public class MetafileRequestedNotification : Notification
     {
-        private readonly PeerHash hash;
+        private readonly FileHash hash;
         private readonly PieceInfo piece;
 
-        public MetafileRequestedNotification(PeerHash hash, PieceInfo piece)
+        public MetafileRequestedNotification(FileHash hash, PieceInfo piece)
         {
             this.hash = hash;
             this.piece = piece;
@@ -28,7 +28,7 @@ namespace Leak.Client.Notifications
             return $"Meta: requested; piece={Piece}";
         }
 
-        public PeerHash Hash
+        public FileHash Hash
         {
             get { return hash; }
         }

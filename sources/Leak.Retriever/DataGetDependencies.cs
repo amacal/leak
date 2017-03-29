@@ -8,8 +8,8 @@ namespace Leak.Data.Get
 
         public DataGetToGlue Glue;
 
-        public DataGetToDataMap Omnibus;
+        public DataGetToDataMap DataMap;
 
-        public DataGetToDataStore Repository;
+        public DataGetToDataStore DataStore;
     }
 }

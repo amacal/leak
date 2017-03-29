@@ -59,6 +59,10 @@
       <Project>{F060EB59-FF12-4D2F-8E88-01D09AC24BB6}</Project>
       <Name>Leak.Connector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Datashare\Leak.Data.Share.csproj">
+      <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
+      <Name>Leak.Data.Share</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
       <Name>Leak.Events</Name>
@@ -106,6 +110,10 @@
     <ProjectReference Include="..\Leak.Metaget\Leak.Meta.Get.csproj">
       <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
       <Name>Leak.Meta.Get</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Metashare\Leak.Meta.Share.csproj">
+      <Project>{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}</Project>
+      <Name>Leak.Meta.Share</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
       <Project>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</Project>

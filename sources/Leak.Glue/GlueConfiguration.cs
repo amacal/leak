@@ -8,10 +8,10 @@ namespace Leak.Glue
         public GlueConfiguration()
         {
             Plugins = new List<MorePlugin>();
+            AnnounceBitfield = false;
         }
 
         public List<MorePlugin> Plugins;
-
-        public int? Pieces;
+        public bool AnnounceBitfield;
     }
 }

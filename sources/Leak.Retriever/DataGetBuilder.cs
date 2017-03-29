@@ -34,15 +34,15 @@ namespace Leak.Data.Get
             return this;
         }
 
-        public DataGetBuilder WithOmnibus(DataGetToDataMap omnibus)
+        public DataGetBuilder WithDataMap(DataGetToDataMap dataMap)
         {
-            dependencies.Omnibus = omnibus;
+            dependencies.DataMap = dataMap;
             return this;
         }
 
-        public DataGetBuilder WithRepository(DataGetToDataStore repository)
+        public DataGetBuilder WithDataStore(DataGetToDataStore dataStore)
         {
-            dependencies.Repository = repository;
+            dependencies.DataStore = dataStore;
             return this;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Leak.Client.Adapters;
 using Leak.Client.Notifications;
@@ -9,6 +10,7 @@ using Leak.Completion;
 using Leak.Connector;
 using Leak.Data.Get;
 using Leak.Data.Map;
+using Leak.Data.Share;
 using Leak.Data.Store;
 using Leak.Events;
 using Leak.Extensions.Metadata;
@@ -20,6 +22,7 @@ using Leak.Listener.Events;
 using Leak.Memory;
 using Leak.Memory.Events;
 using Leak.Meta.Get;
+using Leak.Meta.Share;
 using Leak.Meta.Store;
 using Leak.Negotiator;
 using Leak.Networking;
@@ -58,10 +61,12 @@ namespace Leak.Client.Swarm
 
         public MetafileService MetaStore { get; set; }
         public MetagetService MetaGet { get; set; }
+        public MetashareService MetaShare { get; set; }
 
         public RepositoryService DataStore { get; set; }
-        public DataGetService DataGet { get; set; }
         public OmnibusService DataMap { get; set; }
+        public DataGetService DataGet { get; set; }
+        public DatashareService DataShare { get; set; }
 
         public void Start()
         {
@@ -79,7 +84,7 @@ namespace Leak.Client.Swarm
 
         public void Announce(string[] trackers)
         {
-            foreach (string tracker in trackers)
+            foreach (string tracker in trackers ?? Enumerable.Empty<string>())
             {
                 TrackerGet.Register(new TrackerGetRegistrant
                 {
@@ -94,8 +99,22 @@ namespace Leak.Client.Swarm
         {
             StartMetaStore(destination);
             StartMetaGet();
+
             StartDataStore(destination);
             StartDataGet();
+        }
+
+        public void Seed(string destination)
+        {
+            StartMetaStore(destination);
+            StartMetaGet();
+            StartMetaShare();
+
+            StartDataStore(destination);
+            StartDataGet();
+            StartDataShare();
+
+            Glue.Configuration.AnnounceBitfield = true;
         }
 
         private void StartMemory()
@@ -168,7 +187,8 @@ namespace Leak.Client.Swarm
             {
                 OnMetadataMeasured = data => MetaGet?.Handle(data),
                 OnMetadataPieceReceived = OnMetadataPieceReceived,
-                OnMetadataRequestSent = OnMetadataRequestSent
+                OnMetadataRequestSent = OnMetadataRequestSent,
+                OnMetadataRequestReceived = OnMetadataRequestReceived
             };
 
             PeersHooks exchange = new PeersHooks
@@ -182,7 +202,8 @@ namespace Leak.Client.Swarm
                 OnPeerDisconnected = OnPeerDisconnected,
                 OnPeerBitfieldChanged = OnPeerBitfieldChanged,
                 OnPeerStatusChanged = OnPeerStatusChanged,
-                OnBlockReceived = data => DataGet?.Handle(data)
+                OnBlockReceived = data => DataGet?.Handle(data),
+                OnBlockRequested = data => DataShare?.Handle(data)
             };
 
             Glue =
@@ -264,7 +285,8 @@ namespace Leak.Client.Swarm
         {
             MetafileHooks hooks = new MetafileHooks
             {
-                OnMetafileVerified = OnMetafileVerified
+                OnMetafileVerified = OnMetafileVerified,
+                OnMetafileRead = data => MetaShare?.Handle(data)
             };
 
             MetaStore =
@@ -296,6 +318,23 @@ namespace Leak.Client.Swarm
             MetaGet.Start();
         }
 
+        private void StartMetaShare()
+        {
+            MetashareHooks hooks = new MetashareHooks
+            {
+            };
+
+            MetaShare =
+                new MetashareBuilder()
+                    .WithHash(Hash)
+                    .WithGlue(Glue)
+                    .WithPipeline(Pipeline)
+                    .WithMetafile(MetaStore)
+                    .Build(hooks);
+
+            MetaShare.Start();
+        }
+
         private void StartDataStore(string destination)
         {
             RepositoryHooks hooks = new RepositoryHooks
@@ -303,6 +342,7 @@ namespace Leak.Client.Swarm
                 OnDataAllocated = OnDataAllocated,
                 OnDataVerified = OnDataVerified,
                 OnBlockWritten = data => DataGet?.Handle(data),
+                OnBlockRead = data => DataShare?.Handle(data),
                 OnPieceAccepted = data => DataGet?.Handle(data),
                 OnPieceRejected = OnPieceRejected
             };
@@ -332,11 +372,29 @@ namespace Leak.Client.Swarm
                     .WithStrategy(Settings.Strategy)
                     .WithGlue(Glue.AsDataGet())
                     .WithPipeline(Pipeline)
-                    .WithRepository(DataStore.AsDataGet())
-                    .WithOmnibus(DataMap.AsDataGet())
+                    .WithDataStore(DataStore.AsDataGet())
+                    .WithDataMap(DataMap.AsDataGet())
                     .Build(hooks);
 
             DataGet.Start();
+        }
+
+        private void StartDataShare()
+        {
+            DatashareHooks hooks = new DatashareHooks
+            {
+            };
+
+            DataShare =
+                new DatashareBuilder()
+                    .WithHash(Hash)
+                    .WithGlue(Glue)
+                    .WithPipeline(Pipeline)
+                    .WithDataStore(DataStore)
+                    .WithDataMap(DataMap.AsDataShare())
+                    .Build(hooks);
+
+            DataShare.Start();
         }
 
         private void OnMemorySnapshot(MemorySnapshot data)
@@ -394,7 +452,13 @@ namespace Leak.Client.Swarm
 
         private void OnMetadataRequestSent(MetadataRequested data)
         {
-            Notifications.Enqueue(new MetafileReceivedNotification(data.Hash, new PieceInfo(data.Piece)));
+            Notifications.Enqueue(new MetafileRequestedNotification(data.Hash, new PieceInfo(data.Piece)));
+        }
+
+        private void OnMetadataRequestReceived(MetadataRequested data)
+        {
+            Notifications.Enqueue(new MetafileRequestedNotification(data.Hash, new PieceInfo(data.Piece)));
+            MetaShare?.Handle(data);
         }
 
         private void OnPeerDataReceived(PeersReceived data)
@@ -504,6 +568,9 @@ namespace Leak.Client.Swarm
 
             DataMap?.Handle(data);
             DataGet?.Handle(data);
+            DataShare?.Handle(data);
+
+            Glue?.Handle(data);
             TrackerGet.Announce(Hash);
         }
 

@@ -51,6 +51,7 @@
     <Compile Include="Messages\PieceIncomingMessage.cs" />
     <Compile Include="Messages\PieceOutgoingMessage.cs" />
     <Compile Include="Messages\Request.cs" />
+    <Compile Include="Messages\RequestIncomingMessage.cs" />
     <Compile Include="Messages\RequestOutgoingMessage.cs" />
     <Compile Include="Messages\UnchokeMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

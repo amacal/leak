@@ -23,7 +23,7 @@ namespace Leak.Data.Get
         private void Schedule(DataGetContext context, int ranking, int count, int pieces)
         {
             string strategy = context.Configuration.Strategy;
-            DataGetToDataMap omnibus = context.Dependencies.Omnibus;
+            DataGetToDataMap omnibus = context.Dependencies.DataMap;
 
             foreach (PeerHash found in omnibus.Find(ranking, count))
             {

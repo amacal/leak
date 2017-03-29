@@ -1,6 +1,7 @@
 using Leak.Client.Adapters;
 using Leak.Data.Get;
 using Leak.Data.Map;
+using Leak.Data.Share;
 using Leak.Data.Store;
 using Leak.Glue;
 using Leak.Memory;
@@ -35,6 +36,11 @@ namespace Leak.Client
         public static DataGetToDataMap AsDataGet(this OmnibusService service)
         {
             return new DataGetToDataMapAdapter(service);
+        }
+
+        public static DataShareToDataMap AsDataShare(this OmnibusService service)
+        {
+            return new DataShareToDataMapAdapter(service);
         }
 
         public static NetworkPoolMemory AsNetwork(this MemoryService service)

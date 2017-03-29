@@ -36,6 +36,7 @@
     <Compile Include="Adapters\DataGetToDataMapAdapter.cs" />
     <Compile Include="Adapters\DataGetToDataStoreAdapter.cs" />
     <Compile Include="Adapters\DataGetToGlueAdapter.cs" />
+    <Compile Include="Adapters\DataShareToDataMapAdapter.cs" />
     <Compile Include="Adapters\MetaGetToMetaStoreAdapter.cs" />
     <Compile Include="AdapterExtensions.cs" />
     <Compile Include="Adapters\MemoryToNetworkAdapter.cs" />
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\Leak.Connector\Leak.Connector.csproj">
       <Project>{F060EB59-FF12-4D2F-8E88-01D09AC24BB6}</Project>
       <Name>Leak.Connector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Datashare\Leak.Data.Share.csproj">
+      <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
+      <Name>Leak.Data.Share</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>

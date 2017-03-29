@@ -84,10 +84,19 @@ namespace Leak.Glue
                 hooks.CallPeerConnected(entry.Peer);
                 entry.Loopy.StartProcessing(entry.Peer, connection);
 
+                SendBitfieldIfNeeded(entry);
                 SendActiveHandshakeWithExtensionsIfNeeded(entry);
             }
 
             return entry != null;
+        }
+
+        private void SendBitfieldIfNeeded(GlueEntry entry)
+        {
+            if (configuration.AnnounceBitfield && facts.Bitfield != null)
+            {
+                entry.Commy.SendBitfield(facts.Bitfield);
+            }
         }
 
         private void SendActiveHandshakeWithExtensionsIfNeeded(GlueEntry entry)
@@ -115,6 +124,11 @@ namespace Leak.Glue
         }
 
         public void Handle(MetafileVerified data)
+        {
+            facts.Handle(data);
+        }
+
+        public void Handle(DataVerified data)
         {
             facts.Handle(data);
         }
@@ -297,6 +311,7 @@ namespace Leak.Glue
                         break;
 
                     case "request":
+                        hooks.CallBlockRequested(parameters.Hash, entry.Peer, data.Payload.GetRequest());
                         break;
 
                     case "piece":

@@ -24,6 +24,8 @@ namespace Leak.Glue
 
         void Handle(MetafileVerified data);
 
+        void Handle(DataVerified data);
+
         void SendChoke(PeerHash peer);
 
         void SendUnchoke(PeerHash peer);

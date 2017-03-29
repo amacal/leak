@@ -3,18 +3,21 @@ using Leak.Client;
 using Leak.Client.Notifications;
 using Leak.Common;
 
-namespace Leak
+namespace Leak.Reporting
 {
     public class ReporterCompact : NotificationVisitor, Reporter
     {
+        private readonly string command;
         private readonly ReporterPeers peers;
         private readonly ReporterResource resource;
 
         private Metainfo metainfo;
         private int completed;
 
-        public ReporterCompact()
+        public ReporterCompact(string command)
         {
+            this.command = command;
+
             peers = new ReporterPeers();
             resource = new ReporterResource();
         }
@@ -25,7 +28,10 @@ namespace Leak
 
             Console.Write($"\rData: {peers}, completed {completed}, {resource}".PadRight(Console.WindowWidth - 2));
 
-            return notification.Type != NotificationType.DataCompleted;
+            if (command == "download")
+                return notification.Type != NotificationType.DataCompleted;
+
+            return true;
         }
 
         public override void Handle(PeerConnectedNotification notification)

@@ -2,7 +2,7 @@
 using Leak.Client.Notifications;
 using Leak.Common;
 
-namespace Leak
+namespace Leak.Reporting
 {
     public class ReporterPeers
     {

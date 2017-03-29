@@ -20,7 +20,7 @@ namespace Leak
 
         public static async Task MainAsync(string[] args)
         {
-            Options options = Argument.Parse<Options>(args);
+            CommandLine options = Argument.Parse<CommandLine>(args);
 
             if (options.IsValid())
             {
@@ -39,6 +39,10 @@ namespace Leak
                     {
                         case "download":
                             session.Download(options.Destination);
+                            break;
+
+                        case "seed":
+                            session.Seed(options.Destination);
                             break;
                     }
 

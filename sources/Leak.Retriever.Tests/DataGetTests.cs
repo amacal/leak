@@ -58,7 +58,7 @@ namespace Leak.Data.Get.Tests
                 session.Service.Handle(received);
                 session.Pipeline.Process();
 
-                A.CallTo(() => session.Repository.Write(received.Block, received.Payload)).MustHaveHappened();
+                A.CallTo(() => session.DataStore.Write(received.Block, received.Payload)).MustHaveHappened();
             }
         }
 
@@ -128,7 +128,7 @@ namespace Leak.Data.Get.Tests
                 session.Service.Handle(ready);
                 session.Pipeline.Process();
 
-                A.CallTo(() => session.Repository.Verify(ready.Piece)).MustHaveHappened();
+                A.CallTo(() => session.DataStore.Verify(ready.Piece)).MustHaveHappened();
             }
         }
 
@@ -148,7 +148,7 @@ namespace Leak.Data.Get.Tests
                 session.Service.Handle(accepted);
                 session.Pipeline.Process();
 
-                A.CallTo(() => session.Omnibus.Complete(accepted.Piece)).MustHaveHappened();
+                A.CallTo(() => session.DataMap.Complete(accepted.Piece)).MustHaveHappened();
             }
         }
 
@@ -168,7 +168,7 @@ namespace Leak.Data.Get.Tests
                 session.Service.Handle(rejected);
                 session.Pipeline.Process();
 
-                A.CallTo(() => session.Omnibus.Invalidate(rejected.Piece)).MustHaveHappened();
+                A.CallTo(() => session.DataMap.Invalidate(rejected.Piece)).MustHaveHappened();
             }
         }
 
@@ -188,7 +188,7 @@ namespace Leak.Data.Get.Tests
                 session.Service.Handle(written);
                 session.Pipeline.Process();
 
-                A.CallTo(() => session.Omnibus.Complete(written.Block)).MustHaveHappened();
+                A.CallTo(() => session.DataMap.Complete(written.Block)).MustHaveHappened();
             }
         }
 
@@ -211,7 +211,7 @@ namespace Leak.Data.Get.Tests
                     Bitfield = new Bitfield(1)
                 };
 
-                A.CallTo(() => session.Omnibus.Query(A<Action<PeerHash, Bitfield, PeerState>>.Ignored)).Invokes(handle);
+                A.CallTo(() => session.DataMap.Query(A<Action<PeerHash, Bitfield, PeerState>>.Ignored)).Invokes(handle);
 
                 session.Service.Start();
                 session.Service.Handle(verified);

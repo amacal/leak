@@ -17,6 +17,11 @@ namespace Leak.Glue
             return new PieceIncomingMessage(incoming).ToPiece(factory);
         }
 
+        public static Request GetRequest(this NetworkIncomingMessage incoming)
+        {
+            return new RequestIncomingMessage(incoming).ToRequest();
+        }
+
         public static bool IsExtensionHandshake(this NetworkIncomingMessage incoming)
         {
             return incoming[5] == 0;
@@ -101,6 +106,16 @@ namespace Leak.Glue
                 Peer = peer,
                 Block = piece.Index,
                 Payload = piece.Data
+            });
+        }
+
+        public static void CallBlockRequested(this GlueHooks hooks, FileHash hash, PeerHash peer, Request request)
+        {
+            hooks.OnBlockRequested?.Invoke(new BlockRequested
+            {
+                Hash = hash,
+                Peer = peer,
+                Block = request.Block
             });
         }
 

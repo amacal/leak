@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Communicator.Messages
 {
@@ -18,17 +19,19 @@ namespace Leak.Communicator.Messages
 
         public byte[] ToBytes()
         {
-            byte[] result =
-            {
-                0x00, 0x00, 0x00, 0x00, 0x07,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00
-            };
+            int size = piece.Index.Size;
+            byte[] result = new byte[13 + size];
+
+            result[4] = 0x07;
 
             Bytes.Write(piece.Index.Size + 9, result, 0);
             Bytes.Write(piece.Index.Piece.Index, result, 5);
             Bytes.Write(piece.Index.Offset, result, 9);
-            Bytes.Append(ref result, result);
+
+            piece.Data.Write((buffer, offset, count) =>
+            {
+                Array.Copy(buffer, offset, result, 13, size);
+            });
 
             return result;
         }

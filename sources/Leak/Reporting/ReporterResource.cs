@@ -1,9 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Leak.Client.Notifications;
 using Leak.Common;
 
-namespace Leak
+namespace Leak.Reporting
 {
     public class ReporterResource
     {

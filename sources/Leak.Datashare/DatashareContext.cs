@@ -1,4 +1,6 @@
-﻿namespace Leak.Data.Share
+﻿using Leak.Tasks;
+
+namespace Leak.Data.Share
 {
     public class DatashareContext
     {
@@ -8,6 +10,9 @@
         private readonly DatashareHooks hooks;
 
         private readonly DatashareCollection collection;
+        private readonly LeakQueue<DatashareContext> queue;
+
+        private bool verified;
 
         public DatashareContext(DatashareParameters parameters, DatashareDependencies dependencies, DatashareConfiguration configuration, DatashareHooks hooks)
         {
@@ -17,6 +22,7 @@
             this.hooks = hooks;
 
             collection = new DatashareCollection();
+            queue = new LeakQueue<DatashareContext>(this);
         }
 
         public DatashareHooks Hooks
@@ -42,6 +48,17 @@
         public DatashareCollection Collection
         {
             get { return collection; }
+        }
+
+        public LeakQueue<DatashareContext> Queue
+        {
+            get { return queue; }
+        }
+
+        public bool Verified
+        {
+            get { return verified; }
+            set { verified = value; }
         }
     }
 }

@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Leak.Client.Swarm;
+using Leak.Reporting;
 using Pargos;
 
 namespace Leak
 {
-    public class Options
+    public class CommandLine
     {
         [Parameter, At(0)]
         public string Command { get; set; }
@@ -52,26 +53,36 @@ namespace Leak
             switch (Command)
             {
                 case "download":
+                case "seed":
                     break;
 
                 default:
                     return false;
             }
 
-            if (Trackers == null || Trackers.Length == 0)
-                return false;
+            if (Trackers != null)
+            {
+                if (Trackers.Length == 0)
+                    return false;
 
-            if (Trackers.All(x => Uri.TryCreate(x, UriKind.Absolute, out uri)) == false)
-                return false;
+                if (Trackers.All(x => Uri.TryCreate(x, UriKind.Absolute, out uri)) == false)
+                    return false;
+            }
 
-            if (Hash?.Length != 40)
-                return false;
+            if (Hash != null)
+            {
+                if (Hash?.Length != 40)
+                    return false;
+            }
 
-            if (Destination == null || Path.IsPathRooted(Destination) == false)
-                return false;
+            if (Destination != null)
+            {
+                if (Destination == null || Path.IsPathRooted(Destination) == false)
+                    return false;
 
-            if (Directory.Exists(Destination) == false)
-                return false;
+                if (Directory.Exists(Destination) == false)
+                    return false;
+            }
 
             if (Port != null)
             {
@@ -115,26 +126,30 @@ namespace Leak
                     return false;
             }
 
-            switch (Strategy)
+            if (Strategy != null)
             {
-                case "sequential":
-                case "rarest-first":
-                case null:
-                    break;
+                switch (Strategy)
+                {
+                    case "sequential":
+                    case "rarest-first":
+                        break;
 
-                default:
-                    return false;
+                    default:
+                        return false;
+                }
             }
 
-            switch (Logging)
+            if (Logging != null)
             {
-                case "compact":
-                case "verbose":
-                case null:
-                    break;
+                switch (Logging)
+                {
+                    case "compact":
+                    case "verbose":
+                        break;
 
-                default:
-                    return false;
+                    default:
+                        return false;
+                }
             }
 
             return true;
@@ -146,10 +161,10 @@ namespace Leak
             {
                 case null:
                 case "compact":
-                    return new ReporterCompact();
+                    return new ReporterCompact(Command);
 
                 default:
-                    return new ReporterVerbose();
+                    return new ReporterVerbose(Command);
             }
         }
 
