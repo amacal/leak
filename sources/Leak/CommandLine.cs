@@ -1,7 +1,6 @@
 using System;
-using System.IO;
-using System.Linq;
 using Leak.Client.Swarm;
+using Leak.Options;
 using Leak.Reporting;
 using Pargos;
 
@@ -47,98 +46,6 @@ namespace Leak
 
         public bool IsValid()
         {
-            Uri uri;
-            int port;
-
-            switch (Command)
-            {
-                case "download":
-                case "seed":
-                    break;
-
-                default:
-                    return false;
-            }
-
-            if (Trackers != null)
-            {
-                if (Trackers.Length == 0)
-                    return false;
-
-                if (Trackers.All(x => Uri.TryCreate(x, UriKind.Absolute, out uri)) == false)
-                    return false;
-            }
-
-            if (Hash != null)
-            {
-                if (Hash?.Length != 40)
-                    return false;
-            }
-
-            if (Destination != null)
-            {
-                if (Destination == null || Path.IsPathRooted(Destination) == false)
-                    return false;
-
-                if (Directory.Exists(Destination) == false)
-                    return false;
-            }
-
-            if (Port != null)
-            {
-                if (Int32.TryParse(Port, out port) == false)
-                    return false;
-
-                if (port <= 0 || port > 65535)
-                    return false;
-            }
-
-            if (Listener != null)
-            {
-                if (Listener != "on" && Listener != "off")
-                    return false;
-            }
-
-            if (Connector != null)
-            {
-                if (Connector != "on" && Connector != "off")
-                    return false;
-            }
-
-            if (Metadata != null)
-            {
-                if (Metadata != "on" && Metadata != "off")
-                    return false;
-            }
-
-            if (Exchange != null)
-            {
-                if (Exchange != "on" && Exchange != "off")
-                    return false;
-            }
-
-            if (Accept != null)
-            {
-                if (Accept.Length == 0)
-                    return false;
-
-                if (Accept.Any(x => x.Length != 2))
-                    return false;
-            }
-
-            if (Strategy != null)
-            {
-                switch (Strategy)
-                {
-                    case "sequential":
-                    case "rarest-first":
-                        break;
-
-                    default:
-                        return false;
-                }
-            }
-
             if (Logging != null)
             {
                 switch (Logging)
@@ -152,7 +59,16 @@ namespace Leak
                 }
             }
 
-            return true;
+            switch (Command)
+            {
+                case "download":
+                    return DownloadOption.IsValid(this);
+
+                case "seed":
+                    return SeedOption.IsValid(this);
+            }
+
+            return false;
         }
 
         public Reporter ToReporter()
