@@ -33,6 +33,9 @@ namespace Leak.Loop
                 {
                     hooks.CallMessageReceived(peer, "keep-alive", message.Restrict());
                     message.Acknowledge(4);
+
+                    Next();
+                    return;
                 }
             }
 
@@ -74,6 +77,9 @@ namespace Leak.Loop
                 }
 
                 Acknowledge(message);
+                Next();
+
+                return;
             }
 
             Next();
