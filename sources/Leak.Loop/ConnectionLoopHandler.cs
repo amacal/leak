@@ -27,12 +27,16 @@ namespace Leak.Loop
 
         private void OnMessageData(NetworkIncomingMessage message)
         {
-            if (message.Length == 4)
+            if (message.Length >= 4)
             {
-                hooks.CallMessageReceived(peer, "keep-alive", message);
-                message.Acknowledge(4);
+                if (message[0] == 0 && message[1] == 0 && message[2] == 0 && message[3] == 0)
+                {
+                    hooks.CallMessageReceived(peer, "keep-alive", message.Restrict());
+                    message.Acknowledge(4);
+                }
             }
-            else
+
+            if (message.Length > 4)
             {
                 switch (message[4])
                 {
