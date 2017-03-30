@@ -62,6 +62,7 @@ namespace Leak.Data.Share.Tests
                     .WithHash(metainfo.Hash)
                     .WithGlue(glue)
                     .WithDataStore(repository)
+                    .WithPipeline(pipeline)
                     .Build();
 
             return new DatashareSession(metainfo, data, sandbox, datashare, repository, glue);
