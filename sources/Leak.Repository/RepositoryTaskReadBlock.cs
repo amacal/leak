@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Files;
 
 namespace Leak.Data.Store
@@ -15,7 +16,8 @@ namespace Leak.Data.Store
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
             int blockSize = context.Metainfo.Properties.BlockSize;
-            byte[] buffer = new byte[blockSize];
+            RepositoryMemoryBlock block = context.Dependencies.Memory.Allocate(blockSize);
+            FileBuffer buffer = new FileBuffer(block.Data, 0, blockSize);
 
             context.View.Read(buffer, index.Piece.Index, index.Offset / blockSize, result =>
             {
@@ -51,7 +53,11 @@ namespace Leak.Data.Store
             public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
             {
                 onCompleted.Invoke(this);
-                context.Hooks.CallBlockRead(context.Parameters.Hash, index, new FixedDataBlock(read.Buffer, read.Count));
+
+                Action<byte[]> release = context.Dependencies.Memory.Release;
+                DataBlock data = new FileBufferDataBlock(read, release);
+
+                context.Hooks.CallBlockRead(context.Parameters.Hash, index, data);
             }
 
             public bool CanExecute(RepositoryTaskQueue queue)
@@ -67,49 +73,51 @@ namespace Leak.Data.Store
             {
                 queue.Release(index.Piece);
             }
-        }
 
-        public class FixedDataBlock : DataBlock
-        {
-            private readonly FileBuffer buffer;
-            private readonly int count;
-            private readonly int offset;
-
-            public FixedDataBlock(FileBuffer buffer, int count)
+            private class FileBufferDataBlock : DataBlock
             {
-                this.buffer = buffer;
-                this.count = count;
-            }
+                private readonly RepositoryViewRead read;
+                private readonly Action<byte[]> release;
+                private readonly int offset;
 
-            private FixedDataBlock(FileBuffer buffer, int offset, int count)
-            {
-                this.buffer = buffer;
-                this.offset = offset;
-                this.count = count;
-            }
+                public FileBufferDataBlock(RepositoryViewRead read, Action<byte[]> release)
+                {
+                    this.read = read;
+                    this.release = release;
+                    this.offset = 0;
+                }
 
-            public int Size
-            {
-                get { return count - offset; }
-            }
+                private FileBufferDataBlock(RepositoryViewRead read, Action<byte[]> release, int offset)
+                {
+                    this.read = read;
+                    this.release = release;
+                    this.offset = offset;
+                }
 
-            public byte this[int index]
-            {
-                get { return buffer.Data[buffer.Offset + index + offset]; }
-            }
+                public int Size
+                {
+                    get { return read.Count; }
+                }
 
-            public void Write(DataBlockCallback callback)
-            {
-                callback.Invoke(buffer.Data, buffer.Offset + offset, count - offset);
-            }
+                public byte this[int index]
+                {
+                    get { return read.Buffer.Data[index + offset]; }
+                }
 
-            public DataBlock Scope(int shift)
-            {
-                return new FixedDataBlock(buffer, shift + offset, count);
-            }
+                public void Write(DataBlockCallback callback)
+                {
+                    callback.Invoke(read.Buffer.Data, offset, read.Count - offset);
+                }
 
-            public void Release()
-            {
+                public DataBlock Scope(int shift)
+                {
+                    return new FileBufferDataBlock(read, release, offset + shift);
+                }
+
+                public void Release()
+                {
+                    release.Invoke(read.Buffer.Data);
+                }
             }
         }
     }

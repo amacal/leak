@@ -89,6 +89,8 @@ namespace Leak.Data.Share
                     context.Dependencies.Glue.SendPiece(entries[0].Peer, data.Block, data.Payload);
                     context.Hooks.CallBlockSent(context.Parameters.Hash, entries[0].Peer, data.Block);
                 }
+
+                data.Payload.Release();
             });
         }
 

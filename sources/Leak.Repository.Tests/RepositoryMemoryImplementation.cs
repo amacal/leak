@@ -7,6 +7,10 @@
             return new Block(size);
         }
 
+        public void Release(byte[] data)
+        {
+        }
+
         private class Block : RepositoryMemoryBlock
         {
             private readonly byte[] data;

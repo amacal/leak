@@ -30,5 +30,10 @@ namespace Leak.Memory
 
             return found;
         }
+
+        public void Release(byte[] data)
+        {
+            context.Collection.Release(data);
+        }
     }
 }

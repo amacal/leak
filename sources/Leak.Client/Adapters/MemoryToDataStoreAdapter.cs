@@ -17,6 +17,11 @@ namespace Leak.Client.Adapters
             return new Block(service.Allocate(size));
         }
 
+        public void Release(byte[] data)
+        {
+            service.Release(data);
+        }
+
         private class Block : RepositoryMemoryBlock
         {
             private readonly MemoryBlock inner;
