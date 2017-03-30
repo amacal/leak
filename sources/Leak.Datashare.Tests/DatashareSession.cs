@@ -1,60 +1,46 @@
 ﻿using System;
-using F2F.Sandbox;
 using Leak.Common;
-using Leak.Data.Store;
-using Leak.Glue;
+using Leak.Testing;
 
 namespace Leak.Data.Share.Tests
 {
     public class DataShareSession : IDisposable
     {
-        private readonly Metainfo metainfo;
-        private readonly DataShareData data;
-        private readonly IFileSandbox sandbox;
-        private readonly DataShareService datashare;
-        private readonly RepositoryService repository;
-        private readonly GlueService glue;
+        private readonly DataShareService service;
 
-        public DataShareSession(Metainfo metainfo, DataShareData data, IFileSandbox sandbox, DataShareService datashare, RepositoryService repository, GlueService glue)
+        public DataShareSession(DataShareService service)
         {
-            this.metainfo = metainfo;
-            this.data = data;
-            this.sandbox = sandbox;
-            this.datashare = datashare;
-            this.repository = repository;
-            this.glue = glue;
+            this.service = service;
         }
 
-        public Metainfo Metainfo
+        public DataShareService Service
         {
-            get { return metainfo; }
+            get { return service; }
         }
 
-        public DataShareData Data
+        public PipelineSimulator Pipeline
         {
-            get { return data; }
+            get { return (PipelineSimulator)service.Dependencies.Pipeline; }
         }
 
-        public DataShareService Datashare
+        public DataShareToDataStore DataStore
         {
-            get { return datashare; }
+            get { return service.Dependencies.DataStore; }
         }
 
-        public RepositoryService Repository
+        public DataShareToDataMap DataMap
         {
-            get { return repository; }
+            get { return service.Dependencies.DataMap; }
         }
 
-        public GlueService Glue
+        public DataShareToGlue Glue
         {
-            get { return glue; }
+            get { return service.Dependencies.Glue; }
         }
 
         public void Dispose()
         {
-            repository.Dispose();
-            datashare.Dispose();
-            sandbox.Dispose();
+            service.Dispose();
         }
     }
 }

@@ -30,9 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="F2F.Sandbox, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FakeItEasy, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FakeItEasy.3.1.0\lib\net40\FakeItEasy.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.4.19.2\lib\net45\FluentAssertions.dll</HintPath>
@@ -51,21 +50,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataShareData.cs" />
+    <Compile Include="DataShareBlock.cs" />
     <Compile Include="DataShareFixture.cs" />
     <Compile Include="DataShareSession.cs" />
     <Compile Include="DataShareTests.cs" />
-    <Compile Include="DataShareBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
-      <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
-      <Name>Leak.Completion</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Datashare\Leak.Data.Share.csproj">
       <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
@@ -74,26 +68,6 @@
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
       <Name>Leak.Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
-      <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
-      <Name>Leak.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
-      <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
-      <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
-      <Name>Leak.Memory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Metadata\Leak.Meta.Info.csproj">
-      <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
-      <Name>Leak.Meta.Info</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Data.Store.csproj">
-      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
-      <Name>Leak.Data.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

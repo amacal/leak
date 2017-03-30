@@ -388,9 +388,9 @@ namespace Leak.Client.Swarm
             DataShare =
                 new DataShareBuilder()
                     .WithHash(Hash)
-                    .WithGlue(Glue)
                     .WithPipeline(Pipeline)
-                    .WithDataStore(DataStore)
+                    .WithGlue(Glue.AsDataShare())
+                    .WithDataStore(DataStore.AsDataShare())
                     .WithDataMap(DataMap.AsDataShare())
                     .Build(hooks);
 

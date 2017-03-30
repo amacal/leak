@@ -1,6 +1,4 @@
-﻿using Leak.Data.Store;
-using Leak.Glue;
-using Leak.Tasks;
+﻿using Leak.Tasks;
 
 namespace Leak.Data.Share
 {
@@ -8,9 +6,9 @@ namespace Leak.Data.Share
     {
         public PipelineService Pipeline;
 
-        public RepositoryService DataStore;
+        public DataShareToDataStore DataStore;
 
-        public GlueService Glue;
+        public DataShareToGlue Glue;
 
         public DataShareToDataMap DataMap;
     }

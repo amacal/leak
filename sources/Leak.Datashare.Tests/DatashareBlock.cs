@@ -4,38 +4,31 @@ namespace Leak.Data.Share.Tests
 {
     public class DataShareBlock : DataBlock
     {
-        private readonly byte[] data;
-        private readonly int offset;
+        private readonly int size;
 
-        public DataShareBlock(byte[] data)
+        public DataShareBlock(int size)
         {
-            this.data = data;
-        }
-
-        private DataShareBlock(byte[] data, int offset)
-        {
-            this.data = data;
-            this.offset = offset;
+            this.size = size;
         }
 
         public int Size
         {
-            get { return data.Length - offset; }
+            get { return size; }
         }
 
         public byte this[int index]
         {
-            get { return data[index + offset]; }
+            get { return 0; }
         }
 
         public void Write(DataBlockCallback callback)
         {
-            callback.Invoke(data, offset, data.Length - offset);
+            callback.Invoke(new byte[size], 0, size);
         }
 
         public DataBlock Scope(int shift)
         {
-            return new DataShareBlock(data, shift + offset);
+            throw new System.NotImplementedException();
         }
 
         public void Release()

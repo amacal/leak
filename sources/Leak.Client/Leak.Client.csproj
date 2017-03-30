@@ -37,6 +37,8 @@
     <Compile Include="Adapters\DataGetToDataStoreAdapter.cs" />
     <Compile Include="Adapters\DataGetToGlueAdapter.cs" />
     <Compile Include="Adapters\DataShareToDataMapAdapter.cs" />
+    <Compile Include="Adapters\DataShareToDataStoreAdapter.cs" />
+    <Compile Include="Adapters\DataShareToGlueAdapter.cs" />
     <Compile Include="Adapters\MetaGetToMetaStoreAdapter.cs" />
     <Compile Include="AdapterExtensions.cs" />
     <Compile Include="Adapters\MemoryToNetworkAdapter.cs" />
@@ -81,25 +83,13 @@
       <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
       <Name>Leak.Completion</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Connector\Leak.Connector.csproj">
-      <Project>{F060EB59-FF12-4D2F-8E88-01D09AC24BB6}</Project>
-      <Name>Leak.Connector</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Datashare\Leak.Data.Share.csproj">
       <Project>{545E697B-FF18-401C-A1DB-141035F57E2A}</Project>
       <Name>Leak.Data.Share</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
-      <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
-      <Name>Leak.Events</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Extensions.Metadata\Leak.Extensions.Metadata.csproj">
       <Project>{49AC3ED3-5705-40A3-B38F-CBB0D1672FFB}</Project>
       <Name>Leak.Extensions.Metadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Extensions.Peers\Leak.Extensions.Peers.csproj">
-      <Project>{DAD7BECB-B423-4384-8EDC-0D496E164EEC}</Project>
-      <Name>Leak.Extensions.Peers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Files\Leak.Files.csproj">
       <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
@@ -108,18 +98,6 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Glue</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Listener.Events\Leak.Listener.Events.csproj">
-      <Project>{B6CA84ED-F39B-49B2-801C-5402439F5F5B}</Project>
-      <Name>Leak.Listener.Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Listener\Leak.Listener.csproj">
-      <Project>{B11E5E10-9F8D-4506-89A5-A4FB38BDBB65}</Project>
-      <Name>Leak.Listener</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Memory.Events\Leak.Memory.Events.csproj">
-      <Project>{02D65FC6-E326-47EE-B7CB-B355AE421F73}</Project>
-      <Name>Leak.Memory.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
       <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>
@@ -132,10 +110,6 @@
     <ProjectReference Include="..\Leak.Metaget\Leak.Meta.Get.csproj">
       <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
       <Name>Leak.Meta.Get</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
-      <Project>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</Project>
-      <Name>Leak.Negotiator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
@@ -156,14 +130,6 @@
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
       <Name>Leak.Tasks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Tracker.Get.Events\Leak.Tracker.Get.Events.csproj">
-      <Project>{0416DEEF-DF18-4438-9A25-D4EE468CF292}</Project>
-      <Name>Leak.Tracker.Get.Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Tracker.Get\Leak.Tracker.Get.csproj">
-      <Project>{E5CA7D39-6415-44F4-A600-E773727CB8CB}</Project>
-      <Name>Leak.Tracker.Get</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

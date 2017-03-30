@@ -45,6 +45,8 @@
     <Compile Include="DataShareService.cs" />
     <Compile Include="DataShareTaskInterested.cs" />
     <Compile Include="DataShareToDataMap.cs" />
+    <Compile Include="DataShareToDataStore.cs" />
+    <Compile Include="DataShareToGlue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,14 +57,6 @@
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866F76F-64E9-4B0C-B2C5-34281B416803}</Project>
       <Name>Leak.Events</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
-      <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Repository\Leak.Data.Store.csproj">
-      <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
-      <Name>Leak.Data.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

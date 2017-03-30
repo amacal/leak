@@ -43,6 +43,16 @@ namespace Leak.Client
             return new DataShareToDataMapAdapter(service);
         }
 
+        public static DataShareToDataStore AsDataShare(this RepositoryService service)
+        {
+            return new DataShareToDataStoreAdapter(service);
+        }
+
+        public static DataShareToGlue AsDataShare(this GlueService service)
+        {
+            return new DataShareToGlueAdapter(service);
+        }
+
         public static NetworkPoolMemory AsNetwork(this MemoryService service)
         {
             return new MemoryToNetworkAdapter(service);

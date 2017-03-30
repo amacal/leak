@@ -81,6 +81,7 @@ namespace Leak.Data.Share
                 for (int i = 1; i < entries.Count; i++)
                 {
                     context.Dependencies.Glue.SendPiece(entries[i].Peer, data.Block, data.Payload);
+                    context.Hooks.CallBlockSent(context.Parameters.Hash, entries[i].Peer, data.Block);
                 }
 
                 if (entries.Count > 0)
