@@ -6,13 +6,13 @@ using NUnit.Framework;
 
 namespace Leak.Data.Share.Tests
 {
-    public class DatashareTests
+    public class DataShareTests
     {
         [Test]
         public void ShouldTriggerBlockReadOnRepository()
         {
-            using (DatashareFixture fixture = new DatashareFixture())
-            using (DatashareSession session = fixture.Start())
+            using (DataShareFixture fixture = new DataShareFixture())
+            using (DataShareSession session = fixture.Start())
             {
                 MetafileVerified verified = new MetafileVerified
                 {
@@ -47,8 +47,8 @@ namespace Leak.Data.Share.Tests
         [Test]
         public void ShouldTriggerBlockSentOnDatashare()
         {
-            using (DatashareFixture fixture = new DatashareFixture())
-            using (DatashareSession session = fixture.Start())
+            using (DataShareFixture fixture = new DataShareFixture())
+            using (DataShareSession session = fixture.Start())
             {
                 MetafileVerified verified = new MetafileVerified
                 {
@@ -67,7 +67,7 @@ namespace Leak.Data.Share.Tests
                 {
                     Hash = session.Repository.Hash,
                     Block = requested.Block,
-                    Payload = new DatashareBlock(session.Data[1])
+                    Payload = new DataShareBlock(session.Data[1])
                 };
 
                 Trigger handler = Trigger.Bind(ref session.Datashare.Hooks.OnBlockSent, data =>

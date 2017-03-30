@@ -33,17 +33,17 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatashareBuilder.cs" />
-    <Compile Include="DatashareCollection.cs" />
-    <Compile Include="DatashareConfiguration.cs" />
-    <Compile Include="DatashareContext.cs" />
-    <Compile Include="DatashareDependencies.cs" />
-    <Compile Include="DatashareEntry.cs" />
+    <Compile Include="DataShareBuilder.cs" />
+    <Compile Include="DataShareCollection.cs" />
+    <Compile Include="DataShareConfiguration.cs" />
+    <Compile Include="DataShareContext.cs" />
+    <Compile Include="DataShareDependencies.cs" />
+    <Compile Include="DataShareEntry.cs" />
     <Compile Include="DatashareExtensions.cs" />
-    <Compile Include="DatashareHooks.cs" />
-    <Compile Include="DatashareParameters.cs" />
-    <Compile Include="DatashareService.cs" />
-    <Compile Include="DatashareTaskInterested.cs" />
+    <Compile Include="DataShareHooks.cs" />
+    <Compile Include="DataShareParameters.cs" />
+    <Compile Include="DataShareService.cs" />
+    <Compile Include="DataShareTaskInterested.cs" />
     <Compile Include="DataShareToDataMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

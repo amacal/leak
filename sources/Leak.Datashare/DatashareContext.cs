@@ -2,55 +2,55 @@
 
 namespace Leak.Data.Share
 {
-    public class DatashareContext
+    public class DataShareContext
     {
-        private readonly DatashareParameters parameters;
-        private readonly DatashareDependencies dependencies;
-        private readonly DatashareConfiguration configuration;
-        private readonly DatashareHooks hooks;
+        private readonly DataShareParameters parameters;
+        private readonly DataShareDependencies dependencies;
+        private readonly DataShareConfiguration configuration;
+        private readonly DataShareHooks hooks;
 
-        private readonly DatashareCollection collection;
-        private readonly LeakQueue<DatashareContext> queue;
+        private readonly DataShareCollection collection;
+        private readonly LeakQueue<DataShareContext> queue;
 
         private bool verified;
 
-        public DatashareContext(DatashareParameters parameters, DatashareDependencies dependencies, DatashareConfiguration configuration, DatashareHooks hooks)
+        public DataShareContext(DataShareParameters parameters, DataShareDependencies dependencies, DataShareConfiguration configuration, DataShareHooks hooks)
         {
             this.parameters = parameters;
             this.dependencies = dependencies;
             this.configuration = configuration;
             this.hooks = hooks;
 
-            collection = new DatashareCollection();
-            queue = new LeakQueue<DatashareContext>(this);
+            collection = new DataShareCollection();
+            queue = new LeakQueue<DataShareContext>(this);
         }
 
-        public DatashareHooks Hooks
+        public DataShareHooks Hooks
         {
             get { return hooks; }
         }
 
-        public DatashareParameters Parameters
+        public DataShareParameters Parameters
         {
             get { return parameters; }
         }
 
-        public DatashareDependencies Dependencies
+        public DataShareDependencies Dependencies
         {
             get { return dependencies; }
         }
 
-        public DatashareConfiguration Configuration
+        public DataShareConfiguration Configuration
         {
             get { return configuration; }
         }
 
-        public DatashareCollection Collection
+        public DataShareCollection Collection
         {
             get { return collection; }
         }
 
-        public LeakQueue<DatashareContext> Queue
+        public LeakQueue<DataShareContext> Queue
         {
             get { return queue; }
         }

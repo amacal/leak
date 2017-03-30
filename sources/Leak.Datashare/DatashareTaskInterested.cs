@@ -2,9 +2,9 @@
 
 namespace Leak.Data.Share
 {
-    public class DatashareTaskInterested : LeakTask<DatashareContext>
+    public class DataShareTaskInterested : LeakTask<DataShareContext>
     {
-        public void Execute(DatashareContext context)
+        public void Execute(DataShareContext context)
         {
             if (context.Verified)
             {

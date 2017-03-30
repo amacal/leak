@@ -66,7 +66,7 @@ namespace Leak.Client.Swarm
         public RepositoryService DataStore { get; set; }
         public OmnibusService DataMap { get; set; }
         public DataGetService DataGet { get; set; }
-        public DatashareService DataShare { get; set; }
+        public DataShareService DataShare { get; set; }
 
         public void Start()
         {
@@ -381,12 +381,12 @@ namespace Leak.Client.Swarm
 
         private void StartDataShare()
         {
-            DatashareHooks hooks = new DatashareHooks
+            DataShareHooks hooks = new DataShareHooks
             {
             };
 
             DataShare =
-                new DatashareBuilder()
+                new DataShareBuilder()
                     .WithHash(Hash)
                     .WithGlue(Glue)
                     .WithPipeline(Pipeline)

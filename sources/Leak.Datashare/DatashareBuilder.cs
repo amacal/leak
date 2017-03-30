@@ -5,57 +5,57 @@ using Leak.Tasks;
 
 namespace Leak.Data.Share
 {
-    public class DatashareBuilder
+    public class DataShareBuilder
     {
-        private readonly DatashareParameters parameters;
-        private readonly DatashareDependencies dependencies;
-        private readonly DatashareConfiguration configuration;
+        private readonly DataShareParameters parameters;
+        private readonly DataShareDependencies dependencies;
+        private readonly DataShareConfiguration configuration;
 
-        public DatashareBuilder()
+        public DataShareBuilder()
         {
-            parameters = new DatashareParameters();
-            dependencies = new DatashareDependencies();
-            configuration = new DatashareConfiguration();
+            parameters = new DataShareParameters();
+            dependencies = new DataShareDependencies();
+            configuration = new DataShareConfiguration();
         }
 
-        public DatashareBuilder WithHash(FileHash hash)
+        public DataShareBuilder WithHash(FileHash hash)
         {
             parameters.Hash = hash;
             return this;
         }
 
-        public DatashareBuilder WithPipeline(PipelineService pipeline)
+        public DataShareBuilder WithPipeline(PipelineService pipeline)
         {
             dependencies.Pipeline = pipeline;
             return this;
         }
 
-        public DatashareBuilder WithDataMap(DataShareToDataMap dataMap)
+        public DataShareBuilder WithDataMap(DataShareToDataMap dataMap)
         {
             dependencies.DataMap = dataMap;
             return this;
         }
 
-        public DatashareBuilder WithDataStore(RepositoryService dataStore)
+        public DataShareBuilder WithDataStore(RepositoryService dataStore)
         {
             dependencies.DataStore = dataStore;
             return this;
         }
 
-        public DatashareBuilder WithGlue(GlueService glue)
+        public DataShareBuilder WithGlue(GlueService glue)
         {
             dependencies.Glue = glue;
             return this;
         }
 
-        public DatashareService Build()
+        public DataShareService Build()
         {
-            return Build(new DatashareHooks());
+            return Build(new DataShareHooks());
         }
 
-        public DatashareService Build(DatashareHooks hooks)
+        public DataShareService Build(DataShareHooks hooks)
         {
-            return new DatashareService(parameters, dependencies, configuration, hooks);
+            return new DataShareService(parameters, dependencies, configuration, hooks);
         }
     }
 }

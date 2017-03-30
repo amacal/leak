@@ -51,11 +51,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatashareData.cs" />
-    <Compile Include="DatashareFixture.cs" />
-    <Compile Include="DatashareSession.cs" />
-    <Compile Include="DatashareTests.cs" />
-    <Compile Include="DatashareBlock.cs" />
+    <Compile Include="DataShareData.cs" />
+    <Compile Include="DataShareFixture.cs" />
+    <Compile Include="DataShareSession.cs" />
+    <Compile Include="DataShareTests.cs" />
+    <Compile Include="DataShareBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

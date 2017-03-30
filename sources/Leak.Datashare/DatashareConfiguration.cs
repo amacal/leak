@@ -1,6 +1,6 @@
 ﻿namespace Leak.Data.Share
 {
-    public class DatashareConfiguration
+    public class DataShareConfiguration
     {
     }
 }

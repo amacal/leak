@@ -6,13 +6,13 @@ using Leak.Tasks;
 
 namespace Leak.Data.Share
 {
-    public class DatashareService : IDisposable
+    public class DataShareService : IDisposable
     {
-        private readonly DatashareContext context;
+        private readonly DataShareContext context;
 
-        public DatashareService(DatashareParameters parameters, DatashareDependencies dependencies, DatashareConfiguration configuration, DatashareHooks hooks)
+        public DataShareService(DataShareParameters parameters, DataShareDependencies dependencies, DataShareConfiguration configuration, DataShareHooks hooks)
         {
-            context = new DatashareContext(parameters, dependencies, configuration, hooks);
+            context = new DataShareContext(parameters, dependencies, configuration, hooks);
         }
 
         public FileHash Hash
@@ -20,22 +20,22 @@ namespace Leak.Data.Share
             get { return context.Parameters.Hash; }
         }
 
-        public DatashareHooks Hooks
+        public DataShareHooks Hooks
         {
             get { return context.Hooks; }
         }
 
-        public DatashareParameters Parameters
+        public DataShareParameters Parameters
         {
             get { return context.Parameters; }
         }
 
-        public DatashareDependencies Dependencies
+        public DataShareDependencies Dependencies
         {
             get { return context.Dependencies; }
         }
 
-        public DatashareConfiguration Configuration
+        public DataShareConfiguration Configuration
         {
             get { return context.Configuration; }
         }
@@ -60,7 +60,7 @@ namespace Leak.Data.Share
                 context.Verified = true;
             });
 
-            context.Queue.Add(new DatashareTaskInterested());
+            context.Queue.Add(new DataShareTaskInterested());
         }
 
         public void Handle(BlockRequested data)
@@ -76,7 +76,7 @@ namespace Leak.Data.Share
         {
             context.Queue.Add(() =>
             {
-                IList<DatashareEntry> entries = context.Collection.RemoveAll(data.Block);
+                IList<DataShareEntry> entries = context.Collection.RemoveAll(data.Block);
 
                 for (int i = 1; i < entries.Count; i++)
                 {
@@ -97,7 +97,7 @@ namespace Leak.Data.Share
 
         private void OnTick5000()
         {
-            context.Queue.Add(new DatashareTaskInterested());
+            context.Queue.Add(new DataShareTaskInterested());
         }
 
         public void Dispose()

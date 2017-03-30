@@ -3,39 +3,39 @@ using Leak.Common;
 
 namespace Leak.Data.Share
 {
-    public class DatashareCollection
+    public class DataShareCollection
     {
-        private readonly Dictionary<BlockIndex, List<DatashareEntry>> byBlocks;
+        private readonly Dictionary<BlockIndex, List<DataShareEntry>> byBlocks;
 
-        public DatashareCollection()
+        public DataShareCollection()
         {
-            byBlocks = new Dictionary<BlockIndex, List<DatashareEntry>>();
+            byBlocks = new Dictionary<BlockIndex, List<DataShareEntry>>();
         }
 
         public void Register(PeerHash peer, BlockIndex block)
         {
-            List<DatashareEntry> entries;
+            List<DataShareEntry> entries;
 
             if (byBlocks.TryGetValue(block, out entries) == false)
             {
-                entries = new List<DatashareEntry>();
+                entries = new List<DataShareEntry>();
                 byBlocks.Add(block, entries);
             }
 
-            entries.Add(new DatashareEntry
+            entries.Add(new DataShareEntry
             {
                 Peer = peer,
                 Block = block
             });
         }
 
-        public IList<DatashareEntry> RemoveAll(BlockIndex block)
+        public IList<DataShareEntry> RemoveAll(BlockIndex block)
         {
-            List<DatashareEntry> entries;
+            List<DataShareEntry> entries;
 
             if (byBlocks.TryGetValue(block, out entries) == false)
             {
-                entries = new List<DatashareEntry>();
+                entries = new List<DataShareEntry>();
             }
 
             return entries;

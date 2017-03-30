@@ -3,9 +3,9 @@ using Leak.Events;
 
 namespace Leak.Data.Share
 {
-    public static class DatashareExtensions
+    public static class DataShareExtensions
     {
-        public static void CallBlockSent(this DatashareHooks hooks, FileHash hash, PeerHash peer, BlockIndex block)
+        public static void CallBlockSent(this DataShareHooks hooks, FileHash hash, PeerHash peer, BlockIndex block)
         {
             hooks.OnBlockSent?.Invoke(new BlockSent
             {

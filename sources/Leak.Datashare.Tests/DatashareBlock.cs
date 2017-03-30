@@ -2,17 +2,17 @@
 
 namespace Leak.Data.Share.Tests
 {
-    public class DatashareBlock : DataBlock
+    public class DataShareBlock : DataBlock
     {
         private readonly byte[] data;
         private readonly int offset;
 
-        public DatashareBlock(byte[] data)
+        public DataShareBlock(byte[] data)
         {
             this.data = data;
         }
 
-        private DatashareBlock(byte[] data, int offset)
+        private DataShareBlock(byte[] data, int offset)
         {
             this.data = data;
             this.offset = offset;
@@ -35,7 +35,7 @@ namespace Leak.Data.Share.Tests
 
         public DataBlock Scope(int shift)
         {
-            return new DatashareBlock(data, shift + offset);
+            return new DataShareBlock(data, shift + offset);
         }
 
         public void Release()

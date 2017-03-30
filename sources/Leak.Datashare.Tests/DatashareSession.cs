@@ -6,16 +6,16 @@ using Leak.Glue;
 
 namespace Leak.Data.Share.Tests
 {
-    public class DatashareSession : IDisposable
+    public class DataShareSession : IDisposable
     {
         private readonly Metainfo metainfo;
-        private readonly DatashareData data;
+        private readonly DataShareData data;
         private readonly IFileSandbox sandbox;
-        private readonly DatashareService datashare;
+        private readonly DataShareService datashare;
         private readonly RepositoryService repository;
         private readonly GlueService glue;
 
-        public DatashareSession(Metainfo metainfo, DatashareData data, IFileSandbox sandbox, DatashareService datashare, RepositoryService repository, GlueService glue)
+        public DataShareSession(Metainfo metainfo, DataShareData data, IFileSandbox sandbox, DataShareService datashare, RepositoryService repository, GlueService glue)
         {
             this.metainfo = metainfo;
             this.data = data;
@@ -30,12 +30,12 @@ namespace Leak.Data.Share.Tests
             get { return metainfo; }
         }
 
-        public DatashareData Data
+        public DataShareData Data
         {
             get { return data; }
         }
 
-        public DatashareService Datashare
+        public DataShareService Datashare
         {
             get { return datashare; }
         }

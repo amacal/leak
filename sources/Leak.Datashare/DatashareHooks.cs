@@ -3,7 +3,7 @@ using Leak.Events;
 
 namespace Leak.Data.Share
 {
-    public class DatashareHooks
+    public class DataShareHooks
     {
         public Action<BlockSent> OnBlockSent;
     }

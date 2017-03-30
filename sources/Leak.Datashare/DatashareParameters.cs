@@ -2,7 +2,7 @@
 
 namespace Leak.Data.Share
 {
-    public class DatashareParameters
+    public class DataShareParameters
     {
         public FileHash Hash;
     }

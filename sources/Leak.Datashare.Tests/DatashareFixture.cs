@@ -12,13 +12,13 @@ using File = System.IO.File;
 
 namespace Leak.Data.Share.Tests
 {
-    public class DatashareFixture : IDisposable
+    public class DataShareFixture : IDisposable
     {
         private readonly CompletionThread completion;
         private readonly LeakPipeline pipeline;
         private readonly FileFactory files;
 
-        public DatashareFixture()
+        public DataShareFixture()
         {
             completion = new CompletionThread();
             completion.Start();
@@ -29,10 +29,10 @@ namespace Leak.Data.Share.Tests
             files = new FileFactory(completion);
         }
 
-        public DatashareSession Start()
+        public DataShareSession Start()
         {
             Metainfo metainfo;
-            DatashareData data = new DatashareData(20000);
+            DataShareData data = new DataShareData(20000);
 
             IFileSandbox sandbox = new FileSandbox(new EmptyFileLocator());
             MetainfoBuilder builder = new MetainfoBuilder(sandbox.Directory);
@@ -57,15 +57,15 @@ namespace Leak.Data.Share.Tests
                     .WithPipeline(pipeline)
                     .Build();
 
-            DatashareService datashare =
-                new DatashareBuilder()
+            DataShareService datashare =
+                new DataShareBuilder()
                     .WithHash(metainfo.Hash)
                     .WithGlue(glue)
                     .WithDataStore(repository)
                     .WithPipeline(pipeline)
                     .Build();
 
-            return new DatashareSession(metainfo, data, sandbox, datashare, repository, glue);
+            return new DataShareSession(metainfo, data, sandbox, datashare, repository, glue);
         }
 
         public void Dispose()

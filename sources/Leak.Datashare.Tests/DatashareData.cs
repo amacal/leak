@@ -3,11 +3,11 @@ using Leak.Common;
 
 namespace Leak.Data.Share.Tests
 {
-    public class DatashareData
+    public class DataShareData
     {
         private readonly byte[] bytes;
 
-        public DatashareData(int size)
+        public DataShareData(int size)
         {
             bytes = Bytes.Random(size);
         }

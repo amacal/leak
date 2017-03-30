@@ -4,7 +4,7 @@ using Leak.Tasks;
 
 namespace Leak.Data.Share
 {
-    public class DatashareDependencies
+    public class DataShareDependencies
     {
         public PipelineService Pipeline;
 

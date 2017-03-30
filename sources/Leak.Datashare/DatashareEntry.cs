@@ -2,7 +2,7 @@
 
 namespace Leak.Data.Share
 {
-    public class DatashareEntry
+    public class DataShareEntry
     {
         public PeerHash Peer;
 
