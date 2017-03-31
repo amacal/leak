@@ -9,9 +9,9 @@ namespace Leak.Networking.Tests
             get { return 1; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return new byte[] { 0x00 };
+            return factory.Transcient(new byte[] { 0x00 }, 0, 1);
         }
     }
 }

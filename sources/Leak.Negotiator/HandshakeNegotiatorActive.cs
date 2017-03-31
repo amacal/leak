@@ -61,7 +61,7 @@ namespace Leak.Negotiator
             HandshakeKey decryptor = keys.Remote.Clone();
             byte[] synchronize = HandshakeCryptoPayload.GetVerification();
 
-            byte[] encrypted = decryptor.Encrypt(synchronize);
+            byte[] encrypted = decryptor.Encrypt(synchronize, 0, synchronize.Length);
             int offset = Bytes.Find(message.ToBytes(), encrypted);
 
             message.Acknowledge(offset);

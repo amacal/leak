@@ -1,4 +1,5 @@
-﻿using Leak.Memory;
+﻿using Leak.Common;
+using Leak.Memory;
 using Leak.Networking;
 
 namespace Leak.Client.Adapters
@@ -15,6 +16,11 @@ namespace Leak.Client.Adapters
         public NetworkPoolMemoryBlock Allocate(int size)
         {
             return new Block(service.Allocate(size));
+        }
+
+        public DataBlockFactory AsFactory()
+        {
+            return service;
         }
 
         private class Block : NetworkPoolMemoryBlock

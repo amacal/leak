@@ -16,9 +16,9 @@ namespace Leak.Negotiator
             get { return 2; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return Bytes.Parse("0000");
+            return factory.Transcient(Bytes.Parse("0000"), 0, Length);
         }
     }
 }

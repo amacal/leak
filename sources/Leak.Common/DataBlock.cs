@@ -2,11 +2,9 @@
 {
     public interface DataBlock
     {
-        int Size { get; }
+        int Length { get; }
 
-        byte this[int index] { get; }
-
-        void Write(DataBlockCallback callback);
+        void With(DataBlockCallback callback);
 
         DataBlock Scope(int shift);
 

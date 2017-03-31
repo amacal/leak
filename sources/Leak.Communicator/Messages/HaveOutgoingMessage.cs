@@ -16,16 +16,12 @@ namespace Leak.Communicator.Messages
             get { return 9; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            byte[] data = new byte[9];
+            byte lowest = (byte)(piece % 256);
+            byte highest = (byte)(piece / 256);
 
-            data[4] = 0x04;
-
-            Bytes.Write(5, data, 0);
-            Bytes.Write(piece, data, 5);
-
-            return data;
+            return factory.Transcient(new byte[] { 0x00, 0x00, 0x00, 0x05, 0x04, 0x00, 0x00, highest, lowest }, 0, Length);
         }
     }
 }

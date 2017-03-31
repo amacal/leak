@@ -1,10 +1,11 @@
-﻿namespace Leak.Networking
+﻿using Leak.Common;
+
+namespace Leak.Networking
 {
     public class NetworkEncryptorToNothing : NetworkEncryptor
     {
-        public override byte[] Encrypt(byte[] data)
+        public override void Encrypt(DataBlock block)
         {
-            return data;
         }
     }
 }

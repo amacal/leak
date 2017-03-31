@@ -40,7 +40,7 @@ namespace Leak.Negotiator
 
         public DataBlock ToBlock(DataBlockFactory factory, int offset, int count)
         {
-            return factory.Create(decrypted, offset, count);
+            return factory.Transcient(decrypted, offset, count);
         }
 
         public void Acknowledge(int bytes)

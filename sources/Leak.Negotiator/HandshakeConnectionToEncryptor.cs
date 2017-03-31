@@ -1,4 +1,5 @@
-﻿using Leak.Networking;
+﻿using Leak.Common;
+using Leak.Networking;
 
 namespace Leak.Negotiator
 {
@@ -11,9 +12,9 @@ namespace Leak.Negotiator
             this.key = key;
         }
 
-        public override byte[] Encrypt(byte[] data)
+        public override void Encrypt(DataBlock block)
         {
-            return key.Encrypt(data, 0, data.Length);
+            key.Encrypt(block);
         }
     }
 }

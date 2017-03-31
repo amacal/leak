@@ -100,10 +100,11 @@ namespace Leak.Networking
         {
             if (listener.IsAvailable(identifier))
             {
-                byte[] decrypted = message.ToBytes();
-                byte[] encrypted = encryptor.Encrypt(decrypted);
+                DataBlock block = listener.Serialize(message);
+                encryptor.Encrypt(block);
 
-                listener.Schedule(new NetworkPoolSend(listener, identifier, socket, encrypted));
+                NetworkPoolSend task = new NetworkPoolSend(listener, identifier, socket, block);
+                listener.Schedule(task);
             }
         }
 

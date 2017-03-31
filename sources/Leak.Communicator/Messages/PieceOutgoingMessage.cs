@@ -17,23 +17,21 @@ namespace Leak.Communicator.Messages
             get { return 13 + piece.Index.Size; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            int size = piece.Index.Size;
-            byte[] result = new byte[13 + size];
-
-            result[4] = 0x07;
-
-            Bytes.Write(piece.Index.Size + 9, result, 0);
-            Bytes.Write(piece.Index.Piece.Index, result, 5);
-            Bytes.Write(piece.Index.Offset, result, 9);
-
-            piece.Data.Write((buffer, offset, count) =>
+            return factory.Pooled(piece.Index.Size + 13, (buffer, offset, count) =>
             {
-                Array.Copy(buffer, offset, result, 13, size);
-            });
+                buffer[4 + offset] = 0x07;
 
-            return result;
+                Bytes.Write(piece.Index.Size + 9, buffer, offset);
+                Bytes.Write(piece.Index.Piece.Index, buffer, offset + 5);
+                Bytes.Write(piece.Index.Offset, buffer, offset + 9);
+
+                piece.Data.With((buffer2, offset2, count2) =>
+                {
+                    Array.Copy(buffer2, offset2, buffer, offset + 13, piece.Index.Size);
+                });
+            });
         }
     }
 }

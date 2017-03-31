@@ -11,7 +11,7 @@ namespace Leak.Data.Share.Tests
             this.size = size;
         }
 
-        public int Size
+        public int Length
         {
             get { return size; }
         }
@@ -21,7 +21,7 @@ namespace Leak.Data.Share.Tests
             get { return 0; }
         }
 
-        public void Write(DataBlockCallback callback)
+        public void With(DataBlockCallback callback)
         {
             callback.Invoke(new byte[size], 0, size);
         }

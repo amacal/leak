@@ -1,4 +1,6 @@
-﻿namespace Leak.Networking
+﻿using Leak.Common;
+
+namespace Leak.Networking
 {
     /// <summary>
     /// Described the way how the bytes should be encrypted before
@@ -15,8 +17,7 @@
         /// <summary>
         /// Encrypts the given bytes array.
         /// </summary>
-        /// <param name="data">The array with bytes to encrypt.</param>
-        /// <returns>An encrypted array of bytes.</returns>
-        public abstract byte[] Encrypt(byte[] data);
+        /// <param name="block">The array with bytes to encrypt.</param>
+        public abstract void Encrypt(DataBlock block);
     }
 }

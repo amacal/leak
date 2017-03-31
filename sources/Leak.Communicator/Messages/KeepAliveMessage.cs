@@ -9,9 +9,9 @@ namespace Leak.Communicator.Messages
             get { return 4; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return new byte[] { 0x00, 0x00, 0x00, 0x00 };
+            return factory.Transcient(new byte[] { 0x00, 0x00, 0x00, 0x00 }, 0, Length);
         }
     }
 }

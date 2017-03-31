@@ -25,9 +25,12 @@ namespace Leak.Negotiator
             }
         }
 
-        public byte[] Encrypt(byte[] data)
+        public void Encrypt(DataBlock block)
         {
-            return inner.Encrypt(data);
+            block.With((buffer, offset, count) =>
+            {
+                inner.Encrypt(buffer, offset, count);
+            });
         }
 
         public byte[] Encrypt(byte[] data, int index, int count)

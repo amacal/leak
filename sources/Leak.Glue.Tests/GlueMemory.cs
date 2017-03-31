@@ -3,62 +3,43 @@ using Leak.Networking;
 
 namespace Leak.Glue.Tests
 {
-    public class GlueMemory : DataBlockFactory, NetworkPoolMemory
+    public class GlueMemory : NetworkPoolMemory, DataBlockFactory
     {
-        public DataBlock Create(byte[] data, int offset, int count)
-        {
-            return new Block(count, null);
-        }
-
-        public DataBlock New(int count, DataBlockCallback callback)
-        {
-            return new Block(count, callback);
-        }
-
         public NetworkPoolMemoryBlock Allocate(int size)
         {
-            return new Block(size, null);
+            return new Block(new byte[size], 0, size);
         }
 
-        private class Block : DataBlock, NetworkPoolMemoryBlock
+        public DataBlockFactory AsFactory()
+        {
+            return this;
+        }
+
+        public DataBlock Transcient(byte[] data, int offset, int count)
+        {
+            return new Block(data, offset, count);
+        }
+
+        public DataBlock Pooled(int size, DataBlockCallback callback)
+        {
+            byte[] data = new byte[size];
+            DataBlock block = new Block(data, 0, size);
+
+            callback?.Invoke(data, 0, size);
+            return block;
+        }
+
+        private class Block : NetworkPoolMemoryBlock, DataBlock
         {
             private readonly byte[] data;
             private readonly int offset;
+            private readonly int count;
 
-            public Block(int count, DataBlockCallback callback)
+            public Block(byte[] data, int offset, int count)
             {
-                data = new byte[count];
-                callback?.Invoke(data, 0, count);
-            }
-
-            private Block(Block block, int offset)
-            {
-                this.data = block.data;
-                this.offset = offset + block.offset;
-            }
-
-            public int Size
-            {
-                get { return data.Length - offset; }
-            }
-
-            public byte this[int index]
-            {
-                get { return data[index + offset]; }
-            }
-
-            public void Write(DataBlockCallback callback)
-            {
-                callback.Invoke(data, offset, data.Length - offset);
-            }
-
-            public DataBlock Scope(int shift)
-            {
-                return new Block(this, offset);
-            }
-
-            public void Release()
-            {
+                this.data = data;
+                this.offset = offset;
+                this.count = count;
             }
 
             public byte[] Data
@@ -69,6 +50,20 @@ namespace Leak.Glue.Tests
             public int Length
             {
                 get { return data.Length; }
+            }
+
+            public void Release()
+            {
+            }
+
+            public void With(DataBlockCallback callback)
+            {
+                callback.Invoke(data, offset, count);
+            }
+
+            public DataBlock Scope(int shift)
+            {
+                return new Block(data, offset + shift, count - shift);
             }
         }
     }

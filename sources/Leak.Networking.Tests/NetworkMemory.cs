@@ -1,19 +1,44 @@
-﻿namespace Leak.Networking.Tests
+﻿using Leak.Common;
+
+namespace Leak.Networking.Tests
 {
-    public class NetworkMemory : NetworkPoolMemory
+    public class NetworkMemory : NetworkPoolMemory, DataBlockFactory
     {
         public NetworkPoolMemoryBlock Allocate(int size)
         {
-            return new Block(size);
+            return new Block(new byte[size], 0, size);
         }
 
-        private class Block : NetworkPoolMemoryBlock
+        public DataBlockFactory AsFactory()
+        {
+            return this;
+        }
+
+        public DataBlock Transcient(byte[] data, int offset, int count)
+        {
+            return new Block(data, offset, count);
+        }
+
+        public DataBlock Pooled(int size, DataBlockCallback callback)
+        {
+            byte[] data = new byte[size];
+            DataBlock block = new Block(data, 0, size);
+
+            callback?.Invoke(data, 0, size);
+            return block;
+        }
+
+        private class Block : NetworkPoolMemoryBlock, DataBlock
         {
             private readonly byte[] data;
+            private readonly int offset;
+            private readonly int count;
 
-            public Block(int size)
+            public Block(byte[] data, int offset, int count)
             {
-                data = new byte[size];
+                this.data = data;
+                this.offset = offset;
+                this.count = count;
             }
 
             public byte[] Data
@@ -28,6 +53,16 @@
 
             public void Release()
             {
+            }
+
+            public void With(DataBlockCallback callback)
+            {
+                callback.Invoke(data, offset, count);
+            }
+
+            public DataBlock Scope(int shift)
+            {
+                return new Block(data, offset + shift, count - shift);
             }
         }
     }

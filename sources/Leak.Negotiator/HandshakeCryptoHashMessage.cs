@@ -28,9 +28,9 @@ namespace Leak.Negotiator
             get { return hash.Length + xor.Length; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return Bytes.Concatenate(hash, xor);
+            return factory.Transcient(Bytes.Concatenate(hash, xor), 0, Length);
         }
     }
 }

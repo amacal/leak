@@ -16,7 +16,7 @@ namespace Leak.Communicator.Messages
             get { return 17; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
             byte[] data = new byte[17];
 
@@ -35,7 +35,7 @@ namespace Leak.Communicator.Messages
             data[15] = (byte)((request.Block.Size >> 8) & 255);
             data[16] = (byte)(request.Block.Size & 255);
 
-            return data;
+            return factory.Transcient(data, 0, Length);
         }
     }
 }

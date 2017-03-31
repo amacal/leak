@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Communicator.Messages
 {
@@ -24,14 +25,15 @@ namespace Leak.Communicator.Messages
             get { return data.Length + 5; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            byte[] result = { 0x00, 0x00, 0x00, 0x00, 0x05 };
+            return factory.Pooled(Length, (buffer, offset, count) =>
+            {
+                buffer[offset + 4] = 0x05;
 
-            Bytes.Write(data.Length + 1, result, 0);
-            Bytes.Append(ref result, data);
-
-            return result;
+                Bytes.Write(data.Length + 1, buffer, offset);
+                Array.Copy(data, 0, buffer, offset + 5, data.Length);
+            });
         }
     }
 }

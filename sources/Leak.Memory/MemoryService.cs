@@ -1,5 +1,4 @@
-﻿using System;
-using Leak.Common;
+﻿using Leak.Common;
 
 namespace Leak.Memory
 {
@@ -12,21 +11,21 @@ namespace Leak.Memory
             context = new MemoryContext(parameters, dependencies, configuration, hooks);
         }
 
-        public DataBlock Create(byte[] data, int offset, int count)
-        {
-            return new MemoryBlock(data, offset, count, null);
-        }
-
         public MemoryBlock Allocate(int size)
         {
             return context.Collection.Allocate(size);
         }
 
-        public DataBlock New(int count, DataBlockCallback callback)
+        public DataBlock Transcient(byte[] data, int offset, int count)
         {
-            MemoryBlock found = context.Collection.Allocate(count);
+            return new MemoryBlock(data, offset, count, null);
+        }
 
-            callback?.Invoke(found.Data, 0, count);
+        public DataBlock Pooled(int size, DataBlockCallback callback)
+        {
+            MemoryBlock found = context.Collection.Allocate(size);
+
+            callback?.Invoke(found.Data, 0, size);
 
             return found;
         }

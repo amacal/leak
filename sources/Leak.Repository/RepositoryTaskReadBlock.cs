@@ -94,7 +94,7 @@ namespace Leak.Data.Store
                     this.offset = offset;
                 }
 
-                public int Size
+                public int Length
                 {
                     get { return read.Count; }
                 }
@@ -104,7 +104,7 @@ namespace Leak.Data.Store
                     get { return read.Buffer.Data[index + offset]; }
                 }
 
-                public void Write(DataBlockCallback callback)
+                public void With(DataBlockCallback callback)
                 {
                     callback.Invoke(read.Buffer.Data, offset, read.Count - offset);
                 }

@@ -17,7 +17,7 @@ namespace Leak.Communicator.Messages
             int piece = inner[8] + inner[7] * 256 + inner[6] * 256 * 256;
             int offset = inner[12] + inner[11] * 256 + inner[10] * 256 * 256;
 
-            return new Piece(new BlockIndex(piece, offset, data.Size), data);
+            return new Piece(new BlockIndex(piece, offset, data.Length), data);
         }
     }
 }

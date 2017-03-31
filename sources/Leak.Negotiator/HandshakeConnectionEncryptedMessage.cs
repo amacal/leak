@@ -18,9 +18,12 @@ namespace Leak.Negotiator
             get { return inner.Length; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return key.Encrypt(inner.ToBytes());
+            DataBlock block = inner.ToBytes(factory);
+
+            key.Encrypt(block);
+            return block;
         }
     }
 }

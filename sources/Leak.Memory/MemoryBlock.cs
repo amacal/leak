@@ -18,7 +18,7 @@ namespace Leak.Memory
             this.collection = collection;
         }
 
-        public int Size
+        public int Length
         {
             get { return count; }
         }
@@ -33,7 +33,7 @@ namespace Leak.Memory
             get { return data[index + start]; }
         }
 
-        public void Write(DataBlockCallback callback)
+        public void With(DataBlockCallback callback)
         {
             callback.Invoke(data, start, count);
         }
@@ -45,7 +45,7 @@ namespace Leak.Memory
 
         public void Release()
         {
-            collection.Release(data);
+            collection?.Release(data);
         }
     }
 }

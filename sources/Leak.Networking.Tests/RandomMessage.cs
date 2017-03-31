@@ -16,9 +16,9 @@ namespace Leak.Networking.Tests
             get { return length; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return Bytes.Random(length);
+            return factory.Transcient(Bytes.Random(length), 0, length);
         }
     }
 }

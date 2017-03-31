@@ -21,7 +21,7 @@ namespace Leak.Data.Store
 
         public void Execute(RepositoryContext context, RepositoryTaskCallback onCompleted)
         {
-            data.Write((buffer, offset, count) =>
+            data.With((buffer, offset, count) =>
             {
                 int blockSize = context.Metainfo.Properties.BlockSize;
                 FileBuffer file = new FileBuffer(buffer, offset, count);

@@ -1,4 +1,5 @@
-﻿using Leak.Sockets;
+﻿using Leak.Common;
+using Leak.Sockets;
 using Leak.Tasks;
 
 namespace Leak.Networking
@@ -8,21 +9,24 @@ namespace Leak.Networking
         private readonly NetworkPoolListener listener;
         private readonly long identifier;
         private readonly TcpSocket socket;
-        private readonly byte[] data;
+        private readonly DataBlock block;
 
-        public NetworkPoolSend(NetworkPoolListener listener, long identifier, TcpSocket socket, byte[] data)
+        public NetworkPoolSend(NetworkPoolListener listener, long identifier, TcpSocket socket, DataBlock block)
         {
             this.listener = listener;
             this.identifier = identifier;
             this.socket = socket;
-            this.data = data;
+            this.block = block;
         }
 
         public void Execute(NetworkPoolInstance context)
         {
             if (listener.IsAvailable(identifier))
             {
-                socket.Send(data, OnSent);
+                block.With((data, offset, count) =>
+                {
+                    socket.Send(new SocketBuffer(data, offset, count), OnSent);
+                });
             }
         }
 
@@ -40,6 +44,8 @@ namespace Leak.Networking
                     listener.HandleSent(identifier, sent.Count);
                 }
             }
+
+            block.Release();
         }
     }
 }

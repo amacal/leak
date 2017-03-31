@@ -82,7 +82,7 @@ namespace Leak.Networking
 
         public DataBlock ToBlock(DataBlockFactory factory, int start, int count)
         {
-            return factory.New(count, (x, y, z) => ToBytes(x, y, start, count));
+            return factory.Pooled(count, (x, y, z) => ToBytes(x, y, start, count));
         }
     }
 }

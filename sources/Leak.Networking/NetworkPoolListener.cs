@@ -1,6 +1,7 @@
 ﻿using Leak.Tasks;
 using System;
 using System.Collections.Generic;
+using Leak.Common;
 
 namespace Leak.Networking
 {
@@ -24,6 +25,11 @@ namespace Leak.Networking
         public NetworkPoolMemoryBlock Allocate()
         {
             return dependencies.Memory.Allocate(configuration.BufferSize);
+        }
+
+        public DataBlock Serialize(NetworkOutgoingMessage message)
+        {
+            return message.ToBytes(dependencies.Memory.AsFactory());
         }
 
         public bool IsAvailable(long id)

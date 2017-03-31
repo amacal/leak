@@ -16,9 +16,9 @@ namespace Leak.Negotiator
             get { return credentials.PublicKey.Length + credentials.Padding.Length; }
         }
 
-        public byte[] ToBytes()
+        public DataBlock ToBytes(DataBlockFactory factory)
         {
-            return Bytes.Concatenate(credentials.PublicKey, credentials.Padding);
+            return factory.Transcient(Bytes.Concatenate(credentials.PublicKey, credentials.Padding), 0, Length);
         }
     }
 }

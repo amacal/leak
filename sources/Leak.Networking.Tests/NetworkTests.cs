@@ -248,7 +248,12 @@ namespace Leak.Networking.Tests
                 });
 
                 connection.Receive(new NullReceiver());
-                accept.Connection.Send(new SocketBuffer(message.ToBytes()), null);
+                DataBlock block = message.ToBytes(new NetworkMemory());
+
+                block.With((buffer, offset, count) =>
+                {
+                    accept.Connection.Send(new SocketBuffer(buffer, offset, count), null);
+                });
 
                 handler.Wait().Should().BeTrue();
             }

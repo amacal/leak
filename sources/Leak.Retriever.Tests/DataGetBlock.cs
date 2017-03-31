@@ -18,7 +18,7 @@ namespace Leak.Data.Get.Tests
             this.offset = offset;
         }
 
-        public int Size
+        public int Length
         {
             get { return data.Length - offset; }
         }
@@ -28,7 +28,7 @@ namespace Leak.Data.Get.Tests
             get { return data[index + offset]; }
         }
 
-        public void Write(DataBlockCallback callback)
+        public void With(DataBlockCallback callback)
         {
             callback.Invoke(data, offset, data.Length - offset);
         }
