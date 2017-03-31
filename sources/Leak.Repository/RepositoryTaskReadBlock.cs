@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Leak.Common;
 using Leak.Files;
 
@@ -97,11 +98,6 @@ namespace Leak.Data.Store
                 public int Length
                 {
                     get { return read.Count; }
-                }
-
-                public byte this[int index]
-                {
-                    get { return read.Buffer.Data[index + offset]; }
                 }
 
                 public void With(DataBlockCallback callback)

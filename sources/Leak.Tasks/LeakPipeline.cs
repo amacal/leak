@@ -62,6 +62,8 @@ namespace Leak.Tasks
 
         private void Execute()
         {
+            int counter = 0;
+
             TimeSpan period = TimeSpan.FromMilliseconds(250);
             DateTime next = DateTime.Now.Add(period);
 
@@ -72,7 +74,7 @@ namespace Leak.Tasks
 
                 if (next < now)
                 {
-                    next = now;
+                    next = now.Add(period);
 
                     foreach (LeakPipelineTimer tick in ticks)
                     {
@@ -86,10 +88,15 @@ namespace Leak.Tasks
                 if (found == WaitHandle.WaitTimeout)
                     continue;
 
-                foreach (LeakPipelineTrigger trigger in triggers)
+                LeakPipelineTrigger[] copy = triggers;
+                int count = copy.Length;
+
+                for (int i = counter; i < count + counter; i++)
                 {
-                    trigger.Execute();
+                    copy[i % count].Execute();
                 }
+
+                counter = (counter + 1) % count;
             }
         }
 

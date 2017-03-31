@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Sockets;
 using Leak.Tasks;
 
@@ -27,6 +28,10 @@ namespace Leak.Networking
                 {
                     socket.Send(new SocketBuffer(data, offset, count), OnSent);
                 });
+            }
+            else
+            {
+                block.Release();
             }
         }
 

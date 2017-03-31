@@ -6,6 +6,15 @@ namespace Leak.Completion
 {
     internal class CompletionInterop
     {
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe struct OverlappedEntry
+        {
+            public IntPtr port;
+            public NativeOverlapped* lpOverlapped;
+            public IntPtr reserved;
+            public uint dwNumberOfBytesTransferred;
+        }
+
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr CreateIoCompletionPort(
             [In] IntPtr handle,
@@ -20,6 +29,15 @@ namespace Leak.Completion
             [Out] out uint ptrCompletionKey,
             [Out] NativeOverlapped** lpOverlapped,
             [In] uint dwMilliseconds);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GetQueuedCompletionStatusEx(
+            [In] IntPtr completionPort,
+            [Out] OverlappedEntry[] lpCompletionPortEntries,
+            [In] int ulCount,
+            [Out] out uint ulNumEntriesRemoved,
+            [In] uint dwMilliseconds,
+            [In] int alertable);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern unsafe uint GetOverlappedResult(

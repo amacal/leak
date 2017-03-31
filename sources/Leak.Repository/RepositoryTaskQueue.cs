@@ -8,7 +8,7 @@ namespace Leak.Data.Store
     public class RepositoryTaskQueue : LeakPipelineTrigger
     {
         private readonly RepositoryContext context;
-        private readonly ConcurrentQueue<RepositoryTask> ready;
+        private readonly Queue<RepositoryTask> ready;
         private readonly ConcurrentQueue<RepositoryTask> items;
         private readonly HashSet<object> keys;
 
@@ -19,7 +19,7 @@ namespace Leak.Data.Store
         {
             this.context = context;
 
-            ready = new ConcurrentQueue<RepositoryTask>();
+            ready = new Queue<RepositoryTask>();
             items = new ConcurrentQueue<RepositoryTask>();
             keys = new HashSet<object>();
         }
@@ -77,7 +77,7 @@ namespace Leak.Data.Store
 
                 while (count-- > 0)
                 {
-                    ready.TryDequeue(out task);
+                    task = ready.Dequeue();
 
                     if (task.CanExecute(this))
                     {

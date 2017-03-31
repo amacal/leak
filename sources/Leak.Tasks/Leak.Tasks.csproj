@@ -34,14 +34,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationExtensions.cs" />
-    <Compile Include="LeakBus.cs" />
-    <Compile Include="LeakBusCallback.cs" />
-    <Compile Include="LeakBusResource.cs" />
     <Compile Include="LeakPipeline.cs" />
     <Compile Include="LeakPipelineTimer.cs" />
     <Compile Include="LeakPipelineTrigger.cs" />
     <Compile Include="LeakQueue.cs" />
-    <Compile Include="LeakQueueBase.cs" />
     <Compile Include="LeakQueueExtensions.cs" />
     <Compile Include="LeakTask.cs" />
     <Compile Include="LeakTaskInline.cs" />

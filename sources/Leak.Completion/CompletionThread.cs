@@ -19,33 +19,40 @@ namespace Leak.Completion
 
         private unsafe void Execute()
         {
+            CompletionInterop.OverlappedEntry[] entries
+                = new CompletionInterop.OverlappedEntry[1024];
+
             while (completed == false)
             {
-                uint bytesProcessed;
-                uint completionKey;
-                NativeOverlapped* native;
+                uint processed;
 
-                bool result = CompletionInterop.GetQueuedCompletionStatus(
+                bool result = CompletionInterop.GetQueuedCompletionStatusEx(
                     port,
-                    out bytesProcessed,
-                    out completionKey,
-                    &native, 1000);
+                    entries,
+                    entries.Length,
+                    out processed,
+                    1000,
+                    0);
 
-                if (native != null)
+                if (result)
                 {
-                    Overlapped overlapped = Overlapped.Unpack(native);
-                    CompletionCallback callback = overlapped.AsyncResult as CompletionCallback;
-
-                    if (result)
+                    for (int i = 0; i < processed; i++)
                     {
-                        callback?.Complete(native, (int)bytesProcessed);
-                    }
-                    else
-                    {
-                        callback?.Fail(native);
-                    }
+                        CompletionInterop.OverlappedEntry entry = entries[i];
+                        Overlapped overlapped = Overlapped.Unpack(entry.lpOverlapped);
+                        CompletionCallback callback = overlapped.AsyncResult as CompletionCallback;
 
-                    Overlapped.Free(native);
+                        if (result)
+                        {
+                            callback?.Complete(entry.lpOverlapped, (int)entry.dwNumberOfBytesTransferred);
+                        }
+                        else
+                        {
+                            callback?.Fail(entry.lpOverlapped);
+                        }
+
+                        Overlapped.Free(entry.lpOverlapped);
+                    }
                 }
             }
         }

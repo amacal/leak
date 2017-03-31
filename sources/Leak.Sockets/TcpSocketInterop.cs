@@ -42,7 +42,7 @@ namespace Leak.Sockets
             int reserved);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct WSABuffer
+        public struct WSABuffer
         {
             public int length;
             public IntPtr buffer;
