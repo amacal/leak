@@ -33,15 +33,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NetworkBuffer.cs" />
-    <Compile Include="NetworkBufferMessage.cs" />
-    <Compile Include="NetworkBufferView.cs" />
+    <Compile Include="NetworkIncomingBuffer.cs" />
+    <Compile Include="NetworkIncomingBufferMessage.cs" />
+    <Compile Include="NetworkIncomingBufferView.cs" />
     <Compile Include="NetworkPoolBuilder.cs" />
     <Compile Include="NetworkConfiguration.cs" />
-    <Compile Include="NetworkDecryptor.cs" />
-    <Compile Include="NetworkDecryptorToNothing.cs" />
-    <Compile Include="NetworkEncryptor.cs" />
-    <Compile Include="NetworkEncryptorToNothing.cs" />
+    <Compile Include="NetworkIncomingDecryptor.cs" />
+    <Compile Include="NetworkOutgoingEncryptor.cs" />
     <Compile Include="NetworkPoolMemory.cs" />
     <Compile Include="NetworkPoolMemoryBlock.cs" />
     <Compile Include="NetworkPool.cs" />

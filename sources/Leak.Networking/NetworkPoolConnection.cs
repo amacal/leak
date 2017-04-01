@@ -15,10 +15,10 @@ namespace Leak.Networking
         private readonly PeerAddress remote;
         private readonly long identifier;
 
-        private readonly NetworkBuffer buffer;
+        private readonly NetworkIncomingBuffer buffer;
         private readonly NetworkDirection direction;
         private readonly NetworkPoolListener listener;
-        private readonly NetworkEncryptor encryptor;
+        private readonly NetworkOutgoingEncryptor encryptor;
 
         /// <summary>
         /// Creates a new instance of the network connection relying on the
@@ -38,8 +38,7 @@ namespace Leak.Networking
 
             this.remote = PeerAddress.Parse(remote);
 
-            buffer = new NetworkBuffer(listener, socket, identifier);
-            encryptor = NetworkEncryptor.Nothing;
+            buffer = new NetworkIncomingBuffer(listener, socket, identifier);
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace Leak.Networking
             direction = connection.direction;
             identifier = connection.identifier;
 
-            buffer = new NetworkBuffer(connection.buffer, configurer.Decryptor);
+            buffer = new NetworkIncomingBuffer(connection.buffer, configurer.Decryptor);
         }
 
         public long Identifier
@@ -101,7 +100,7 @@ namespace Leak.Networking
             if (listener.IsAvailable(identifier))
             {
                 DataBlock block = listener.Serialize(message);
-                encryptor.Encrypt(block);
+                encryptor?.Encrypt(block);
 
                 NetworkPoolSend task = new NetworkPoolSend(listener, identifier, socket, block);
                 listener.Schedule(task);

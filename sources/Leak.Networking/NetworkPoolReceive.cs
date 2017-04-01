@@ -6,9 +6,9 @@ namespace Leak.Networking
     public class NetworkPoolReceive : LeakTask<NetworkPoolInstance>
     {
         private readonly NetworkIncomingMessageHandler handler;
-        private readonly NetworkBufferMessage message;
+        private readonly NetworkIncomingBufferMessage message;
 
-        public NetworkPoolReceive(NetworkIncomingMessageHandler handler, NetworkBufferMessage message)
+        public NetworkPoolReceive(NetworkIncomingMessageHandler handler, NetworkIncomingBufferMessage message)
         {
             this.handler = handler;
             this.message = message;

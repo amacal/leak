@@ -8,10 +8,10 @@ namespace Leak.Networking
     /// Describes the network socket wrapper with built-in data buffering
     /// designed only to receive data from the remote endpoint.
     /// </summary>
-    public class NetworkBuffer
+    public class NetworkIncomingBuffer
     {
         private readonly NetworkPoolListener listener;
-        private readonly NetworkDecryptor decryptor;
+        private readonly NetworkIncomingDecryptor decryptor;
 
         private readonly TcpSocket socket;
         private readonly long identifier;
@@ -28,14 +28,13 @@ namespace Leak.Networking
         /// <param name="listener">The listener who knows the pool.</param>
         /// <param name="socket">The already connected socket.</param>
         /// <param name="identifier">The unique connection identifier.</param>
-        public NetworkBuffer(NetworkPoolListener listener, TcpSocket socket, long identifier)
+        public NetworkIncomingBuffer(NetworkPoolListener listener, TcpSocket socket, long identifier)
         {
             this.listener = listener;
             this.socket = socket;
             this.identifier = identifier;
 
             memory = listener.Allocate();
-            decryptor = NetworkDecryptor.Nothing;
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace Leak.Networking
         /// </summary>
         /// <param name="buffer">The existing instance of the newtwork buffer.</param>
         /// <param name="decryptor">The new decryptor.</param>
-        public NetworkBuffer(NetworkBuffer buffer, NetworkDecryptor decryptor)
+        public NetworkIncomingBuffer(NetworkIncomingBuffer buffer, NetworkIncomingDecryptor decryptor)
         {
             this.decryptor = decryptor;
 
@@ -99,7 +98,7 @@ namespace Leak.Networking
             {
                 if (length > 0)
                 {
-                    listener.Schedule(new NetworkPoolReceive(handler, new NetworkBufferMessage(this)));
+                    listener.Schedule(new NetworkPoolReceive(handler, new NetworkIncomingBufferMessage(this)));
                 }
                 else
                 {
@@ -129,7 +128,7 @@ namespace Leak.Networking
                     }
 
                     length += count;
-                    handler.OnMessage(new NetworkBufferMessage(this));
+                    handler.OnMessage(new NetworkIncomingBufferMessage(this));
                 }
                 else
                 {
@@ -154,13 +153,13 @@ namespace Leak.Networking
         {
             int min = Math.Min(count, memory.Length - start);
 
-            decryptor.Decrypt(memory.Data, start, min);
-            decryptor.Decrypt(memory.Data, 0, count - min);
+            decryptor?.Decrypt(memory.Data, start, min);
+            decryptor?.Decrypt(memory.Data, 0, count - min);
         }
 
-        public NetworkBufferView View()
+        public NetworkIncomingBufferView View()
         {
-            return new NetworkBufferView(memory.Data, length, offset);
+            return new NetworkIncomingBufferView(memory.Data, length, offset);
         }
 
         public void Dispose()

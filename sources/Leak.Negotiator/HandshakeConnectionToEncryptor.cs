@@ -3,7 +3,7 @@ using Leak.Networking;
 
 namespace Leak.Negotiator
 {
-    public class HandshakeConnectionToEncryptor : NetworkEncryptor
+    public class HandshakeConnectionToEncryptor : NetworkOutgoingEncryptor
     {
         private readonly HandshakeKey key;
 
@@ -12,7 +12,7 @@ namespace Leak.Negotiator
             this.key = key;
         }
 
-        public override void Encrypt(DataBlock block)
+        public void Encrypt(DataBlock block)
         {
             key.Encrypt(block);
         }

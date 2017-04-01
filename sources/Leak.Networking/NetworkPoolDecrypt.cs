@@ -7,11 +7,11 @@ namespace Leak.Networking
     {
         private readonly NetworkPoolListener listener;
         private readonly long identifier;
-        private readonly NetworkBuffer buffer;
+        private readonly NetworkIncomingBuffer buffer;
         private readonly NetworkIncomingMessageHandler handler;
         private readonly int count;
 
-        public NetworkPoolDecrypt(NetworkPoolListener listener, long identifier, NetworkBuffer buffer, NetworkIncomingMessageHandler handler, int count)
+        public NetworkPoolDecrypt(NetworkPoolListener listener, long identifier, NetworkIncomingBuffer buffer, NetworkIncomingMessageHandler handler, int count)
         {
             this.listener = listener;
             this.identifier = identifier;

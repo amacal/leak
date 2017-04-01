@@ -4,14 +4,8 @@
     /// Described the way how the bytes should be decrypted after
     /// receiving them from the remote endpoint.
     /// </summary>
-    public abstract class NetworkDecryptor
+    public interface NetworkIncomingDecryptor
     {
-        /// <summary>
-        /// Defines a default decryptor which passes bytes
-        /// directly from the remote endpoint without any decryption.
-        /// </summary>
-        public static readonly NetworkDecryptor Nothing = new NetworkDecryptorToNothing();
-
         /// <summary>
         /// Decrypts the given bytes array in place.
         /// </summary>
@@ -19,6 +13,6 @@
         /// <param name="index">The index to start from.</param>
         /// <param name="count">The number of bytes to decrypt.</param>
         /// <returns>A decrypted array of bytes.</returns>
-        public abstract void Decrypt(byte[] data, int index, int count);
+        void Decrypt(byte[] data, int index, int count);
     }
 }

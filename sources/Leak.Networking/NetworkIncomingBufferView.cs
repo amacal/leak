@@ -3,13 +3,13 @@ using System;
 
 namespace Leak.Networking
 {
-    public class NetworkBufferView
+    public class NetworkIncomingBufferView
     {
         private readonly byte[] data;
         private readonly int length;
         private readonly int offset;
 
-        public NetworkBufferView(byte[] data, int length, int offset)
+        public NetworkIncomingBufferView(byte[] data, int length, int offset)
         {
             this.data = data;
             this.length = length;
