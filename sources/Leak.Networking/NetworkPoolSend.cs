@@ -18,7 +18,8 @@ namespace Leak.Networking
 
         public bool CanExecute(NetworkPoolQueue queue)
         {
-            return queue.IsBlocked(identifier) == false && buffer.IsAvailable;
+            return queue.IsBlocked(identifier) == false &&
+                   buffer.IsAvailable(message.Length);
         }
 
         public void Execute(NetworkPoolInstance context, NetworkPoolTaskCallback callback)

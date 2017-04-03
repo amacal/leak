@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 using Leak.Common;
 using Leak.Sockets;
 
@@ -12,7 +13,9 @@ namespace Leak.Networking
 
         private readonly TcpSocket socket;
         private readonly long identifier;
+
         private readonly NetworkPoolMemoryBlock memory;
+        private readonly HashSet<int> parts;
 
         private int offset;
 
@@ -30,6 +33,7 @@ namespace Leak.Networking
             this.identifier = identifier;
 
             memory = listener.Allocate();
+            parts = new HashSet<int>();
         }
 
         /// <summary>
@@ -48,13 +52,14 @@ namespace Leak.Networking
             identifier = buffer.identifier;
             memory = buffer.memory;
             offset = buffer.offset;
+            parts = buffer.parts;
 
             encryptor?.Encrypt(memory.Data, 0, offset);
         }
 
-        public bool IsAvailable
+        public bool IsAvailable(int size)
         {
-            get { return offset == 0; }
+            return offset + size < memory.Length;
         }
 
         public void Send(NetworkOutgoingMessage message, Action callback)
@@ -68,6 +73,8 @@ namespace Leak.Networking
                 encryptor?.Encrypt(memory.Data, offset, message.Length);
 
                 offset += message.Length;
+                parts.Add(offset);
+
                 socket.Send(buffer, OnSent(callback));
             }
         }
@@ -91,7 +98,9 @@ namespace Leak.Networking
                         }
                     }
 
-                    offset = 0;
+                    parts.Remove(sent.Buffer.Offset + sent.Buffer.Count);
+                    offset = parts.Count > 0 ? parts.Max() : 0;
+
                     callback.Invoke();
                 });
             };
