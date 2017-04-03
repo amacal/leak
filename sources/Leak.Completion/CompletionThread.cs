@@ -42,15 +42,7 @@ namespace Leak.Completion
                         Overlapped overlapped = Overlapped.Unpack(entry.lpOverlapped);
                         CompletionCallback callback = overlapped.AsyncResult as CompletionCallback;
 
-                        if (result)
-                        {
-                            callback?.Complete(entry.lpOverlapped, (int)entry.dwNumberOfBytesTransferred);
-                        }
-                        else
-                        {
-                            callback?.Fail(entry.lpOverlapped);
-                        }
-
+                        callback?.Complete(entry.lpOverlapped, (int)entry.dwNumberOfBytesTransferred);
                         Overlapped.Free(entry.lpOverlapped);
                     }
                 }

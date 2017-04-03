@@ -166,8 +166,7 @@ namespace Leak.Sockets.Tests
                     byte[] buffer = new byte[10];
                     TcpSocketReceive received = await socket.Receive(buffer);
 
-                    Assert.That(received.Status, Is.EqualTo(SocketStatus.OK));
-                    Assert.That(received.Count, Is.Zero);
+                    Assert.That(received.Status, Is.Not.EqualTo(SocketStatus.OK));
                 }
             }
         }

@@ -18,12 +18,12 @@ namespace Leak.Sockets
             return new TcpSocketDisconnect(Status, Socket);
         }
 
-        protected override void OnCompleted(int affected)
+        protected override void OnCompleted()
         {
             OnDisconnected?.Invoke(new TcpSocketDisconnect(Status, Socket));
         }
 
-        protected override void OnFailed(SocketStatus status)
+        protected override void OnFailed()
         {
             OnDisconnected?.Invoke(new TcpSocketDisconnect(Status, Socket));
         }

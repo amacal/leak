@@ -17,12 +17,12 @@ namespace Leak.Sockets
             return new UdpSocketSend(Status, Affected, Socket, Buffer, Endpoint);
         }
 
-        protected override void OnCompleted(int affected)
+        protected override void OnCompleted()
         {
             OnSent?.Invoke(new UdpSocketSend(Status, Affected, Socket, Buffer, Endpoint));
         }
 
-        protected override void OnFailed(SocketStatus status)
+        protected override void OnFailed()
         {
             OnSent?.Invoke(new UdpSocketSend(Status, Affected, Socket, Buffer, Endpoint));
         }

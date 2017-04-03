@@ -21,12 +21,12 @@ namespace Leak.Sockets
             return new TcpSocketAccept(Status, Socket, Connection, GetEndpoint);
         }
 
-        protected override void OnCompleted(int affected)
+        protected override void OnCompleted()
         {
             OnAccepted?.Invoke(new TcpSocketAccept(Status, Socket, Connection, GetEndpoint));
         }
 
-        protected override void OnFailed(SocketStatus status)
+        protected override void OnFailed()
         {
             OnAccepted?.Invoke(new TcpSocketAccept(Status, Socket, Connection, null));
         }

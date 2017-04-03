@@ -13,12 +13,12 @@
             return new TcpSocketSend(Status, Affected, Socket, Buffer);
         }
 
-        protected override void OnCompleted(int affected)
+        protected override void OnCompleted()
         {
             OnSent?.Invoke(new TcpSocketSend(Status, Affected, Socket, Buffer));
         }
 
-        protected override void OnFailed(SocketStatus status)
+        protected override void OnFailed()
         {
             OnSent?.Invoke(new TcpSocketSend(Status, Affected, Socket, Buffer));
         }

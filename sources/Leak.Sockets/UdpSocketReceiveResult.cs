@@ -15,12 +15,12 @@
             return new UdpSocketReceive(Status, Affected, Socket, Buffer, Address);
         }
 
-        protected override void OnCompleted(int affected)
+        protected override void OnCompleted()
         {
             OnReceived?.Invoke(new UdpSocketReceive(Status, Affected, Socket, Buffer, Address));
         }
 
-        protected override void OnFailed(SocketStatus status)
+        protected override void OnFailed()
         {
             OnReceived?.Invoke(new UdpSocketReceive(Status, Affected, Socket, Buffer, Address));
         }

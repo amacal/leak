@@ -41,19 +41,21 @@ namespace Leak.Files
 
         public unsafe void Complete(NativeOverlapped* overlapped, int affected)
         {
+            uint ignore;
+            uint result = FileInterop.GetOverlappedResult(Handle, overlapped, out ignore, false);
+
             Affected = affected;
             IsCompleted = true;
 
-            Event?.Set();
-            Event?.Dispose();
-            Pinned?.Free();
-
-            Complete();
-        }
-
-        unsafe void CompletionCallback.Fail(NativeOverlapped* overlapped)
-        {
-            Fail();
+            if (result != 0 || affected > 0)
+            {
+                Release();
+                Complete();
+            }
+            else
+            {
+                Fail();
+            }
         }
 
         public void Fail()
@@ -66,11 +68,15 @@ namespace Leak.Files
             Status = (FileStatus)code;
             IsCompleted = true;
 
+            Release();
+            Complete();
+        }
+
+        private void Release()
+        {
             Event?.Set();
             Event?.Dispose();
             Pinned?.Free();
-
-            Complete();
         }
 
         protected abstract void Complete();

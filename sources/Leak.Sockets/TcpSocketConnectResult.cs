@@ -16,12 +16,12 @@ namespace Leak.Sockets
             return new TcpSocketConnect(Status, Socket, Endpoint);
         }
 
-        protected override void OnCompleted(int affected)
+        protected override void OnCompleted()
         {
             OnConnected?.Invoke(new TcpSocketConnect(Status, Socket, Endpoint));
         }
 
-        protected override void OnFailed(SocketStatus status)
+        protected override void OnFailed()
         {
             OnConnected?.Invoke(new TcpSocketConnect(Status, Socket, Endpoint));
         }

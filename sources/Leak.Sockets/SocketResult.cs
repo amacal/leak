@@ -49,26 +49,23 @@ namespace Leak.Sockets
 
         public unsafe void Complete(NativeOverlapped* overlapped, int affected)
         {
+            uint ignore;
+            uint flags;
+
+            uint result = TcpSocketInterop.WSAGetOverlappedResult(Handle, overlapped, out ignore, false, out flags);
+
             Affected = affected;
             IsCompleted = true;
 
-            Event?.Set();
-            Event?.Dispose();
-
-            Pinned1?.Free();
-            Pinned2?.Free();
-
-            OnCompleted(affected);
-        }
-
-        unsafe void CompletionCallback.Fail(NativeOverlapped* overlapped)
-        {
-            uint affected;
-            uint flags;
-
-            TcpSocketInterop.WSAGetOverlappedResult(Handle, overlapped, out affected, false, out flags);
-
-            Fail();
+            if (result != 0 || affected > 0)
+            {
+                Release();
+                OnCompleted();
+            }
+            else
+            {
+                Fail();
+            }
         }
 
         public void Fail()
@@ -76,22 +73,25 @@ namespace Leak.Sockets
             Fail(TcpSocketInterop.GetLastError());
         }
 
-        public void Fail(uint code)
+        public void Fail(uint reason)
         {
-            Status = (SocketStatus)code;
-            IsCompleted = true;
+            Status = (SocketStatus)reason;
 
+            Release();
+            OnFailed();
+        }
+
+        private void Release()
+        {
             Event?.Set();
             Event?.Dispose();
 
             Pinned1?.Free();
             Pinned2?.Free();
-
-            OnFailed(Status);
         }
 
-        protected abstract void OnCompleted(int affected);
+        protected abstract void OnCompleted();
 
-        protected abstract void OnFailed(SocketStatus status);
+        protected abstract void OnFailed();
     }
 }
