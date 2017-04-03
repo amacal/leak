@@ -10,10 +10,10 @@ namespace Leak.Networking
         private readonly NetworkPoolConfiguration configuration;
         private readonly NetworkPoolDependencies dependencies;
         private readonly NetworkPoolHooks hooks;
-        private readonly LeakQueue<NetworkPoolInstance> queue;
+        private readonly NetworkPoolQueue queue;
         private readonly Dictionary<long, NetworkPoolEntry> items;
 
-        public NetworkPoolListener(Dictionary<long, NetworkPoolEntry> items, LeakQueue<NetworkPoolInstance> queue, NetworkPoolHooks hooks, NetworkPoolConfiguration configuration, NetworkPoolDependencies dependencies)
+        public NetworkPoolListener(Dictionary<long, NetworkPoolEntry> items, NetworkPoolQueue queue, NetworkPoolHooks hooks, NetworkPoolConfiguration configuration, NetworkPoolDependencies dependencies)
         {
             this.items = items;
             this.queue = queue;
@@ -25,11 +25,6 @@ namespace Leak.Networking
         public NetworkPoolMemoryBlock Allocate()
         {
             return dependencies.Memory.Allocate(configuration.BufferSize);
-        }
-
-        public DataBlock Serialize(NetworkOutgoingMessage message)
-        {
-            return message.ToBytes(dependencies.Memory.AsFactory());
         }
 
         public bool IsAvailable(long id)
@@ -118,9 +113,14 @@ namespace Leak.Networking
             }
         }
 
-        public void Schedule(LeakTask<NetworkPoolInstance> task)
+        public void Schedule(NetworkPoolTask task)
         {
             queue.Add(task);
+        }
+
+        public void Schedule(Action callback)
+        {
+            queue.Add(new NetworkPoolInline(callback));
         }
     }
 }

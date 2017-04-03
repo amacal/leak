@@ -5,7 +5,7 @@ namespace Leak.Networking
     /// <summary>
     /// Describes the incoming message requested be the caller.
     /// </summary>
-    public class NetworkIncomingBufferMessage : NetworkIncomingMessage
+    internal class NetworkIncomingBufferMessage : NetworkIncomingMessage
     {
         private readonly NetworkIncomingBuffer buffer;
         private readonly NetworkIncomingBufferView view;

@@ -38,6 +38,7 @@ namespace Leak.Data.Share
                 entries = new List<DataShareEntry>();
             }
 
+            byBlocks.Remove(block);
             return entries;
         }
     }

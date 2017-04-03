@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Networking.Tests
 {
@@ -16,9 +17,16 @@ namespace Leak.Networking.Tests
             get { return length; }
         }
 
-        public DataBlock ToBytes(DataBlockFactory factory)
+        public void ToBytes(DataBlock block)
         {
-            return factory.Transcient(Bytes.Random(length), 0, length);
+            block.With((buffer, offset, count) =>
+            {
+                Array.Copy(Bytes.Random(length), 0, buffer, offset, Length);
+            });
+        }
+
+        public void Release()
+        {
         }
     }
 }

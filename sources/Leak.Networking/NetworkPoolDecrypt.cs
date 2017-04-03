@@ -3,7 +3,7 @@ using Leak.Tasks;
 
 namespace Leak.Networking
 {
-    public class NetworkPoolDecrypt : LeakTask<NetworkPoolInstance>
+    internal class NetworkPoolDecrypt : NetworkPoolTask
     {
         private readonly NetworkPoolListener listener;
         private readonly long identifier;
@@ -20,10 +20,23 @@ namespace Leak.Networking
             this.count = count;
         }
 
-        public void Execute(NetworkPoolInstance context)
+        public bool CanExecute(NetworkPoolQueue queue)
+        {
+            return true;
+        }
+
+        public void Execute(NetworkPoolInstance context, NetworkPoolTaskCallback callback)
         {
             listener.HandleReceived(identifier, count);
             buffer.Process(handler, count);
+        }
+
+        public void Block(NetworkPoolQueue queue)
+        {
+        }
+
+        public void Release(NetworkPoolQueue queue)
+        {
         }
     }
 }

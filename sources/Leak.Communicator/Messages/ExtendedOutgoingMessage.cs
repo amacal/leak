@@ -17,9 +17,9 @@ namespace Leak.Communicator.Messages
             get { return 6 + extended.Data.Length; }
         }
 
-        public DataBlock ToBytes(DataBlockFactory factory)
+        public void ToBytes(DataBlock block)
         {
-            return factory.Pooled(Length, (buffer, offset, count) =>
+            block.With((buffer, offset, count) =>
             {
                 buffer[offset + 4] = 0x14;
                 buffer[offset + 5] = extended.Id;
@@ -27,6 +27,10 @@ namespace Leak.Communicator.Messages
                 Bytes.Write(extended.Data.Length + 2, buffer, offset);
                 Array.Copy(extended.Data, 0, buffer, offset + 6, extended.Data.Length);
             });
+        }
+
+        public void Release()
+        {
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Negotiator
 {
@@ -28,9 +29,16 @@ namespace Leak.Negotiator
             get { return hash.Length + xor.Length; }
         }
 
-        public DataBlock ToBytes(DataBlockFactory factory)
+        public void ToBytes(DataBlock block)
         {
-            return factory.Transcient(Bytes.Concatenate(hash, xor), 0, Length);
+            block.With((buffer, offset, count) =>
+            {
+                Array.Copy(Bytes.Concatenate(hash, xor), 0, buffer, offset, Length);
+            });
+        }
+
+        public void Release()
+        {
         }
     }
 }

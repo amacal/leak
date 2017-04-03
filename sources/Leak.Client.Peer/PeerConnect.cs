@@ -366,6 +366,7 @@ namespace Leak.Client.Peer
 
         private void OnPieceRejected(PieceRejected data)
         {
+            Notifications.Enqueue(new PieceRejectedNotification(data.Hash, data.Piece));
             DataGet?.Handle(data);
         }
 

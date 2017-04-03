@@ -4,6 +4,8 @@
     {
         int Length { get; }
 
-        DataBlock ToBytes(DataBlockFactory factory);
+        void ToBytes(DataBlock block);
+
+        void Release();
     }
 }

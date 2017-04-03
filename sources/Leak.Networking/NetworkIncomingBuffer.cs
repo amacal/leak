@@ -8,7 +8,7 @@ namespace Leak.Networking
     /// Describes the network socket wrapper with built-in data buffering
     /// designed only to receive data from the remote endpoint.
     /// </summary>
-    public class NetworkIncomingBuffer
+    internal class NetworkIncomingBuffer
     {
         private readonly NetworkPoolListener listener;
         private readonly NetworkIncomingDecryptor decryptor;
@@ -21,9 +21,8 @@ namespace Leak.Networking
         private int length;
 
         /// <summary>
-        /// Creates a new instance of the network buffer relying on the already
-        /// connected socket instance and configuration defining the buffer size
-        /// and how the incoming data should be decrypted.
+        /// Creates a new instance of the network incoming buffer relying on the already
+        /// connected socket instance. The buffer does not decrypt anything.
         /// </summary>
         /// <param name="listener">The listener who knows the pool.</param>
         /// <param name="socket">The already connected socket.</param>
@@ -38,9 +37,9 @@ namespace Leak.Networking
         }
 
         /// <summary>
-        /// Creates a new instance of the network buffer from the existing instance.
+        /// Creates a new instance of the network incoming buffer from the existing instance.
         /// The inner socket and the already downloaded and waiting data will be
-        /// copied, but the caller can change the buffer size and decryption algorithm.
+        /// copied, but the caller can change the decryption algorithm.
         /// </summary>
         /// <param name="buffer">The existing instance of the newtwork buffer.</param>
         /// <param name="decryptor">The new decryptor.</param>
@@ -107,9 +106,9 @@ namespace Leak.Networking
             }
         }
 
-        private void OnReceived(TcpSocketReceive context, NetworkIncomingMessageHandler handler)
+        private void OnReceived(TcpSocketReceive received, NetworkIncomingMessageHandler handler)
         {
-            listener.Schedule(new NetworkPoolDecrypt(listener, identifier, this, handler, context.Count));
+            listener.Schedule(new NetworkPoolDecrypt(listener, identifier, this, handler, received.Count));
         }
 
         public void Process(NetworkIncomingMessageHandler handler, int count)

@@ -39,7 +39,7 @@
     <Compile Include="DataShareContext.cs" />
     <Compile Include="DataShareDependencies.cs" />
     <Compile Include="DataShareEntry.cs" />
-    <Compile Include="DatashareExtensions.cs" />
+    <Compile Include="DataShareExtensions.cs" />
     <Compile Include="DataShareHooks.cs" />
     <Compile Include="DataShareParameters.cs" />
     <Compile Include="DataShareService.cs" />

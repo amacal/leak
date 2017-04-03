@@ -1,56 +1,48 @@
 ﻿using System;
 using Leak.Common;
-using Leak.Sockets;
-using Leak.Tasks;
 
 namespace Leak.Networking
 {
-    public class NetworkPoolSend : LeakTask<NetworkPoolInstance>
+    internal class NetworkPoolSend : NetworkPoolTask
     {
-        private readonly NetworkPoolListener listener;
         private readonly long identifier;
-        private readonly TcpSocket socket;
-        private readonly DataBlock block;
+        private readonly NetworkOutgoingBuffer buffer;
+        private readonly NetworkOutgoingMessage message;
 
-        public NetworkPoolSend(NetworkPoolListener listener, long identifier, TcpSocket socket, DataBlock block)
+        public NetworkPoolSend(long identifier, NetworkOutgoingBuffer buffer, NetworkOutgoingMessage message)
         {
-            this.listener = listener;
             this.identifier = identifier;
-            this.socket = socket;
-            this.block = block;
+            this.buffer = buffer;
+            this.message = message;
         }
 
-        public void Execute(NetworkPoolInstance context)
+        public bool CanExecute(NetworkPoolQueue queue)
         {
-            if (listener.IsAvailable(identifier))
-            {
-                block.With((data, offset, count) =>
-                {
-                    socket.Send(new SocketBuffer(data, offset, count), OnSent);
-                });
-            }
-            else
-            {
-                block.Release();
-            }
+            return queue.IsBlocked(identifier) == false && buffer.IsAvailable;
         }
 
-        private void OnSent(TcpSocketSend sent)
+        public void Execute(NetworkPoolInstance context, NetworkPoolTaskCallback callback)
         {
-            if (listener.IsAvailable(identifier))
+            buffer.Send(message, OnExecuted(callback));
+        }
+
+        private Action OnExecuted(NetworkPoolTaskCallback onCompleted)
+        {
+            return () =>
             {
-                if (sent.Status != SocketStatus.OK || sent.Count == 0)
-                {
-                    listener.Disconnect(identifier);
-                }
+                message.Release();
+                onCompleted.Invoke(this);
+            };
+        }
 
-                if (sent.Count > 0)
-                {
-                    listener.HandleSent(identifier, sent.Count);
-                }
-            }
+        public void Block(NetworkPoolQueue queue)
+        {
+            queue.Block(identifier);
+        }
 
-            block.Release();
+        public void Release(NetworkPoolQueue queue)
+        {
+            queue.Release(identifier);
         }
     }
 }

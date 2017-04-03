@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Leak.Client.Adapters;
 using Leak.Client.Notifications;
 using Leak.Common;
 using Leak.Completion;

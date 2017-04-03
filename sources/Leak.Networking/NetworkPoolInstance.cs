@@ -16,7 +16,7 @@ namespace Leak.Networking
 
         private readonly Dictionary<long, NetworkPoolEntry> items;
 
-        private readonly LeakQueue<NetworkPoolInstance> queue;
+        private readonly NetworkPoolQueue queue;
         private readonly SocketFactory factory;
 
         private long sequence;
@@ -30,7 +30,7 @@ namespace Leak.Networking
             factory = new SocketFactory(dependencies.Completion);
 
             items = new Dictionary<long, NetworkPoolEntry>();
-            queue = new LeakQueue<NetworkPoolInstance>(this);
+            queue = new NetworkPoolQueue(this);
         }
 
         public void Start()

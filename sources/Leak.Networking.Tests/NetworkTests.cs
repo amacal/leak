@@ -239,6 +239,7 @@ namespace Leak.Networking.Tests
                 TcpSocketAccept accept = await task;
 
                 NetworkConnection connection = fixture.Pool.Create(socket, direction, endpoint);
+                NetworkBlock block = new NetworkBlock(new byte[1024], 0, message.Length);
 
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionReceived, data =>
                 {
@@ -248,7 +249,7 @@ namespace Leak.Networking.Tests
                 });
 
                 connection.Receive(new NullReceiver());
-                DataBlock block = message.ToBytes(new NetworkMemory());
+                message.ToBytes(block);
 
                 block.With((buffer, offset, count) =>
                 {

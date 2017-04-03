@@ -1,9 +1,8 @@
 ﻿using Leak.Common;
-using Leak.Tasks;
 
 namespace Leak.Networking
 {
-    public class NetworkPoolReceive : LeakTask<NetworkPoolInstance>
+    internal class NetworkPoolReceive : NetworkPoolTask
     {
         private readonly NetworkIncomingMessageHandler handler;
         private readonly NetworkIncomingBufferMessage message;
@@ -14,9 +13,22 @@ namespace Leak.Networking
             this.message = message;
         }
 
-        public void Execute(NetworkPoolInstance context)
+        public bool CanExecute(NetworkPoolQueue queue)
+        {
+            return true;
+        }
+
+        public void Execute(NetworkPoolInstance context, NetworkPoolTaskCallback callback)
         {
             handler.OnMessage(message);
+        }
+
+        public void Block(NetworkPoolQueue queue)
+        {
+        }
+
+        public void Release(NetworkPoolQueue queue)
+        {
         }
     }
 }

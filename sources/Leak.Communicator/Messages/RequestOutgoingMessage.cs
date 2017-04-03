@@ -1,4 +1,5 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 
 namespace Leak.Communicator.Messages
 {
@@ -16,7 +17,7 @@ namespace Leak.Communicator.Messages
             get { return 17; }
         }
 
-        public DataBlock ToBytes(DataBlockFactory factory)
+        public void ToBytes(DataBlock block)
         {
             byte[] data = new byte[17];
 
@@ -35,7 +36,14 @@ namespace Leak.Communicator.Messages
             data[15] = (byte)((request.Block.Size >> 8) & 255);
             data[16] = (byte)(request.Block.Size & 255);
 
-            return factory.Transcient(data, 0, Length);
+            block.With((buffer, offset, count) =>
+            {
+                Array.Copy(data, 0, buffer, offset, Length);
+            });
+        }
+
+        public void Release()
+        {
         }
     }
 }

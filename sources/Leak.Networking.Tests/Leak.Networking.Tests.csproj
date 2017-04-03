@@ -47,6 +47,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetworkBlock.cs" />
     <Compile Include="NetworkFixture.cs" />
     <Compile Include="NetworkMemory.cs" />
     <Compile Include="NetworkTests.cs" />

@@ -36,10 +36,13 @@
     <Compile Include="NetworkIncomingBuffer.cs" />
     <Compile Include="NetworkIncomingBufferMessage.cs" />
     <Compile Include="NetworkIncomingBufferView.cs" />
+    <Compile Include="NetworkOutgoingBlock.cs" />
+    <Compile Include="NetworkOutgoingBuffer.cs" />
     <Compile Include="NetworkPoolBuilder.cs" />
     <Compile Include="NetworkConfiguration.cs" />
     <Compile Include="NetworkIncomingDecryptor.cs" />
     <Compile Include="NetworkOutgoingEncryptor.cs" />
+    <Compile Include="NetworkPoolInline.cs" />
     <Compile Include="NetworkPoolMemory.cs" />
     <Compile Include="NetworkPoolMemoryBlock.cs" />
     <Compile Include="NetworkPool.cs" />
@@ -52,8 +55,11 @@
     <Compile Include="NetworkPoolExtensions.cs" />
     <Compile Include="NetworkPoolHooks.cs" />
     <Compile Include="NetworkPoolListener.cs" />
+    <Compile Include="NetworkPoolQueue.cs" />
     <Compile Include="NetworkPoolReceive.cs" />
     <Compile Include="NetworkPoolSend.cs" />
+    <Compile Include="NetworkPoolTask.cs" />
+    <Compile Include="NetworkPoolTaskCallback.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

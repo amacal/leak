@@ -11,14 +11,15 @@ namespace Leak.Networking
     /// </summary>
     public class NetworkPoolConnection : NetworkConnection, IDisposable
     {
+        private readonly long identifier;
         private readonly TcpSocket socket;
         private readonly PeerAddress remote;
-        private readonly long identifier;
 
-        private readonly NetworkIncomingBuffer buffer;
+        private readonly NetworkIncomingBuffer incoming;
+        private readonly NetworkOutgoingBuffer outgoing;
+
         private readonly NetworkDirection direction;
         private readonly NetworkPoolListener listener;
-        private readonly NetworkOutgoingEncryptor encryptor;
 
         /// <summary>
         /// Creates a new instance of the network connection relying on the
@@ -38,7 +39,8 @@ namespace Leak.Networking
 
             this.remote = PeerAddress.Parse(remote);
 
-            buffer = new NetworkIncomingBuffer(listener, socket, identifier);
+            incoming = new NetworkIncomingBuffer(listener, socket, identifier);
+            outgoing = new NetworkOutgoingBuffer(listener, socket, identifier);
         }
 
         /// <summary>
@@ -50,14 +52,14 @@ namespace Leak.Networking
         /// <param name="configurer">The new configuration.</param>
         public NetworkPoolConnection(NetworkPoolConnection connection, NetworkConfiguration configurer)
         {
-            encryptor = configurer.Encryptor;
             listener = connection.listener;
             socket = connection.socket;
             remote = connection.remote;
             direction = connection.direction;
             identifier = connection.identifier;
 
-            buffer = new NetworkIncomingBuffer(connection.buffer, configurer.Decryptor);
+            incoming = new NetworkIncomingBuffer(connection.incoming, configurer.Decryptor);
+            outgoing = new NetworkOutgoingBuffer(connection.outgoing, configurer.Encryptor);
         }
 
         public long Identifier
@@ -88,7 +90,7 @@ namespace Leak.Networking
         /// <param name="handler">An instance of the incoming message handler.</param>
         public void Receive(NetworkIncomingMessageHandler handler)
         {
-            buffer.ReceiveOrCallback(handler);
+            incoming.ReceiveOrCallback(handler);
         }
 
         /// <summary>
@@ -97,14 +99,7 @@ namespace Leak.Networking
         /// <param name="message">An instance of the outgoing message.</param>
         public void Send(NetworkOutgoingMessage message)
         {
-            if (listener.IsAvailable(identifier))
-            {
-                DataBlock block = listener.Serialize(message);
-                encryptor?.Encrypt(block);
-
-                NetworkPoolSend task = new NetworkPoolSend(listener, identifier, socket, block);
-                listener.Schedule(task);
-            }
+            listener.Schedule(new NetworkPoolSend(identifier, outgoing, message));
         }
 
         /// <summary>
@@ -121,7 +116,8 @@ namespace Leak.Networking
         public void Dispose()
         {
             socket.Dispose();
-            buffer.Dispose();
+            incoming.Dispose();
+            outgoing.Dispose();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Leak.Negotiator
             get { return 49 + ProtocolName.Length; }
         }
 
-        public DataBlock ToBytes(DataBlockFactory factory)
+        public void ToBytes(DataBlock block)
         {
             int length = ProtocolName.Length;
             byte[] data = new byte[49 + length];
@@ -59,7 +59,14 @@ namespace Leak.Negotiator
             Array.Copy(hash.ToBytes(), 0, data, data.Length - 40, 20);
             Array.Copy(peer.ToBytes(), 0, data, data.Length - 20, 20);
 
-            return factory.Transcient(data, 0, data.Length);
+            block.With((buffer, offset, count) =>
+            {
+                Array.Copy(data, 0, buffer, offset, Length);
+            });
+        }
+
+        public void Release()
+        {
         }
     }
 }

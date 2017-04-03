@@ -25,15 +25,19 @@ namespace Leak.Communicator.Messages
             get { return data.Length + 5; }
         }
 
-        public DataBlock ToBytes(DataBlockFactory factory)
+        public void ToBytes(DataBlock block)
         {
-            return factory.Pooled(Length, (buffer, offset, count) =>
+            block.With((buffer, offset, count) =>
             {
                 buffer[offset + 4] = 0x05;
 
                 Bytes.Write(data.Length + 1, buffer, offset);
                 Array.Copy(data, 0, buffer, offset + 5, data.Length);
             });
+        }
+
+        public void Release()
+        {
         }
     }
 }

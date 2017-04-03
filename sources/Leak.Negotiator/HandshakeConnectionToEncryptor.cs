@@ -16,5 +16,10 @@ namespace Leak.Negotiator
         {
             key.Encrypt(block);
         }
+
+        public void Encrypt(byte[] data, int offset, int count)
+        {
+            key.Encrypt(data, offset, count);
+        }
     }
 }
