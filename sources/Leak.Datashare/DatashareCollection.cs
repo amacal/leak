@@ -12,21 +12,23 @@ namespace Leak.Data.Share
             byBlocks = new Dictionary<BlockIndex, List<DataShareEntry>>();
         }
 
-        public void Register(PeerHash peer, BlockIndex block)
+        public bool Register(PeerHash peer, BlockIndex block)
         {
             List<DataShareEntry> entries;
 
-            if (byBlocks.TryGetValue(block, out entries) == false)
-            {
-                entries = new List<DataShareEntry>();
-                byBlocks.Add(block, entries);
-            }
+            if (byBlocks.ContainsKey(block))
+                return false;
+
+            entries = new List<DataShareEntry>();
+            byBlocks.Add(block, entries);
 
             entries.Add(new DataShareEntry
             {
                 Peer = peer,
                 Block = block
             });
+
+            return true;
         }
 
         public IList<DataShareEntry> RemoveAll(BlockIndex block)

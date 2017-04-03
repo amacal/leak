@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Leak.Common;
 using Leak.Events;
 using Leak.Tasks;
@@ -68,8 +67,10 @@ namespace Leak.Data.Share
         {
             context.Queue.Add(() =>
             {
-                context.Collection.Register(data.Peer, data.Block);
-                context.Dependencies.DataStore.Read(data.Block);
+                if (context.Collection.Register(data.Peer, data.Block))
+                {
+                    context.Dependencies.DataStore.Read(data.Block);
+                }
             });
         }
 
@@ -78,17 +79,22 @@ namespace Leak.Data.Share
             context.Queue.Add(() =>
             {
                 IList<DataShareEntry> entries = context.Collection.RemoveAll(data.Block);
+                DataBlock payload = data.Payload.Shared(entries.Count);
 
                 for (int i = 1; i < entries.Count; i++)
                 {
-                    context.Dependencies.Glue.SendPiece(entries[i].Peer, data.Block, data.Payload);
+                    context.Dependencies.Glue.SendPiece(entries[i].Peer, data.Block, payload);
                     context.Hooks.CallBlockSent(context.Parameters.Hash, entries[i].Peer, data.Block);
                 }
 
                 if (entries.Count > 0)
                 {
-                    context.Dependencies.Glue.SendPiece(entries[0].Peer, data.Block, data.Payload);
+                    context.Dependencies.Glue.SendPiece(entries[0].Peer, data.Block, payload);
                     context.Hooks.CallBlockSent(context.Parameters.Hash, entries[0].Peer, data.Block);
+                }
+                else
+                {
+                    data.Payload.Release();
                 }
             });
         }

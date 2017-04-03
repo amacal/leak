@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataShareBlock.cs" />
     <Compile Include="DataShareBuilder.cs" />
     <Compile Include="DataShareCollection.cs" />
     <Compile Include="DataShareConfiguration.cs" />
