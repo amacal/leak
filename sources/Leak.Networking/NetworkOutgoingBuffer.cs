@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Leak.Common;
+using Leak.Networking.Core;
 using Leak.Sockets;
 
 namespace Leak.Networking

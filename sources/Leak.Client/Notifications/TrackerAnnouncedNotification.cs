@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Notifications
 {
@@ -8,9 +9,9 @@ namespace Leak.Client.Notifications
     {
         private readonly FileHash hash;
         private readonly string tracker;
-        private readonly PeerAddress[] peers;
+        private readonly NetworkAddress[] peers;
 
-        public TrackerAnnouncedNotification(FileHash hash, string tracker, PeerAddress[] peers)
+        public TrackerAnnouncedNotification(FileHash hash, string tracker, NetworkAddress[] peers)
         {
             this.hash = hash;
             this.tracker = tracker;
@@ -33,7 +34,7 @@ namespace Leak.Client.Notifications
 
             builder.AppendLine($"Tracker: announced; hash={Hash}; uri={Tracker};");
 
-            foreach (PeerAddress peer in Peers)
+            foreach (NetworkAddress peer in Peers)
             {
                 builder.AppendLine($"Tracker: peer={peer}");
             }
@@ -51,7 +52,7 @@ namespace Leak.Client.Notifications
             get { return tracker; }
         }
 
-        public PeerAddress[] Peers
+        public NetworkAddress[] Peers
         {
             get { return peers; }
         }

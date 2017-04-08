@@ -1,6 +1,7 @@
 ﻿using Leak.Common;
 using System;
 using System.Text;
+using Leak.Networking.Core;
 
 namespace Leak.Negotiator
 {

@@ -1,26 +1,26 @@
 ﻿using System.Net;
 
-namespace Leak.Common
+namespace Leak.Networking.Core
 {
-    public class PeerAddress
+    public class NetworkAddress
     {
         private readonly string host;
         private readonly int port;
 
-        public PeerAddress(string host, int port)
+        public NetworkAddress(string host, int port)
         {
             this.host = host;
             this.port = port;
         }
 
-        public static PeerAddress Parse(IPEndPoint remote)
+        public static NetworkAddress Parse(IPEndPoint remote)
         {
-            return new PeerAddress(remote.Address.ToString(), remote.Port);
+            return new NetworkAddress(remote.Address.ToString(), remote.Port);
         }
 
-        public static PeerAddress Parse(IPAddress address, int port)
+        public static NetworkAddress Parse(IPAddress address, int port)
         {
-            return new PeerAddress(address.ToString(), port);
+            return new NetworkAddress(address.ToString(), port);
         }
 
         public string Host
@@ -45,7 +45,7 @@ namespace Leak.Common
 
         public override bool Equals(object obj)
         {
-            PeerAddress other = obj as PeerAddress;
+            NetworkAddress other = obj as NetworkAddress;
 
             return other != null && other.host == host && other.port == port;
         }

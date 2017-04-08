@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Notifications
 {
@@ -34,9 +35,9 @@ namespace Leak.Client.Notifications
             get { return peer; }
         }
 
-        public PeerAddress Endpoint
+        public NetworkAddress Endpoint
         {
-            get { return PeerAddress.Parse(new IPEndPoint(IPAddress.Any, port)); }
+            get { return NetworkAddress.Parse(new IPEndPoint(IPAddress.Any, port)); }
         }
     }
 }

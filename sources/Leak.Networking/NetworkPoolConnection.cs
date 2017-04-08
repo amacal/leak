@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using Leak.Sockets;
+﻿using Leak.Sockets;
 using System;
 using System.Net;
+using Leak.Networking.Core;
 
 namespace Leak.Networking
 {
@@ -13,7 +13,7 @@ namespace Leak.Networking
     {
         private readonly long identifier;
         private readonly TcpSocket socket;
-        private readonly PeerAddress remote;
+        private readonly NetworkAddress remote;
 
         private readonly NetworkIncomingBuffer incoming;
         private readonly NetworkOutgoingBuffer outgoing;
@@ -37,7 +37,7 @@ namespace Leak.Networking
             this.direction = direction;
             this.identifier = identifier;
 
-            this.remote = PeerAddress.Parse(remote);
+            this.remote = NetworkAddress.Parse(remote);
 
             incoming = new NetworkIncomingBuffer(listener, socket, identifier);
             outgoing = new NetworkOutgoingBuffer(listener, socket, identifier);
@@ -70,7 +70,7 @@ namespace Leak.Networking
         /// <summary>
         /// Gets a text representation of the remote endpoint.
         /// </summary>
-        public PeerAddress Remote
+        public NetworkAddress Remote
         {
             get { return remote; }
         }

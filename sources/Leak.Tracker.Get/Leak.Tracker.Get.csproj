@@ -83,6 +83,10 @@
       <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
       <Name>Leak.Completion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6E385E2D-365A-46AA-AE93-01B375C4E48F}</Project>
       <Name>Leak.Sockets</Name>

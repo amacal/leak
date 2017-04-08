@@ -1,6 +1,7 @@
 ﻿using Leak.Common;
 using System;
 using System.Threading.Tasks;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Peer
 {
@@ -13,7 +14,7 @@ namespace Leak.Client.Peer
             runtime = new RuntimeInstance();
         }
 
-        public Task<PeerSession> ConnectAsync(FileHash hash, PeerAddress remote)
+        public Task<PeerSession> ConnectAsync(FileHash hash, NetworkAddress remote)
         {
             runtime.Start();
 

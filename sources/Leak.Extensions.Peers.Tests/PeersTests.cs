@@ -4,6 +4,7 @@ using Leak.Testing;
 using NUnit.Framework;
 using System.Net;
 using System.Threading.Tasks;
+using Leak.Networking.Core;
 
 namespace Leak.Extensions.Peers.Tests
 {
@@ -12,7 +13,7 @@ namespace Leak.Extensions.Peers.Tests
         [Test]
         public async Task ShouldTriggerPeersData()
         {
-            PeerAddress remote = PeerAddress.Parse(IPAddress.Loopback, 8345);
+            NetworkAddress remote = NetworkAddress.Parse(IPAddress.Loopback, 8345);
 
             using (PeersFixture fixture = new PeersFixture())
             using (PeersSession session = await fixture.Start())

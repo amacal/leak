@@ -62,6 +62,10 @@
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Glue</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

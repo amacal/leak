@@ -1,6 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Data.Share;
 using Leak.Glue;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Adapters
 {

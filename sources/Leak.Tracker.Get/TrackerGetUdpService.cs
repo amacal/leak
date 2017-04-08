@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Leak.Common;
+using Leak.Networking.Core;
 using Leak.Sockets;
 using Leak.Tasks;
 
@@ -180,7 +181,7 @@ namespace Leak.Tracker.Get
                 return;
             }
 
-            List<PeerAddress> peers = new List<PeerAddress>();
+            List<NetworkAddress> peers = new List<NetworkAddress>();
 
             int intervalInSeconds = Bytes.ReadInt32(data, 8);
             TimeSpan interval = TimeSpan.FromSeconds(intervalInSeconds);
@@ -203,7 +204,7 @@ namespace Leak.Tracker.Get
 
                 if (port > 0)
                 {
-                    peers.Add(new PeerAddress(address.ToString(), port));
+                    peers.Add(new NetworkAddress(address.ToString(), port));
                 }
             }
 

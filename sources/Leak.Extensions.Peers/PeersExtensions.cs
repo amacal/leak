@@ -2,12 +2,13 @@
 using Leak.Common;
 using Leak.Glue;
 using System;
+using Leak.Networking.Core;
 
 namespace Leak.Extensions.Peers
 {
     public static class PeersExtensions
     {
-        public static void CallPeersDataReceived(this PeersHooks hooks, FileHash hash, PeerHash peer, PeerAddress[] remotes)
+        public static void CallPeersDataReceived(this PeersHooks hooks, FileHash hash, PeerHash peer, NetworkAddress[] remotes)
         {
             hooks.OnPeersDataReceived?.Invoke(new PeersReceived
             {
@@ -17,7 +18,7 @@ namespace Leak.Extensions.Peers
             });
         }
 
-        public static void CallPeersDataSent(this PeersHooks hooks, FileHash hash, PeerHash peer, PeerAddress[] remotes)
+        public static void CallPeersDataSent(this PeersHooks hooks, FileHash hash, PeerHash peer, NetworkAddress[] remotes)
         {
             hooks.OnPeersDataSent?.Invoke(new PeersReceived
             {
@@ -27,7 +28,7 @@ namespace Leak.Extensions.Peers
             });
         }
 
-        public static void SendPeers(this GlueService glue, PeerHash peer, params PeerAddress[] remotes)
+        public static void SendPeers(this GlueService glue, PeerHash peer, params NetworkAddress[] remotes)
         {
             BencodedValue bencoded = new BencodedValue
             {
@@ -44,7 +45,7 @@ namespace Leak.Extensions.Peers
             glue.SendExtension(peer, PeersPlugin.Name, Bencoder.Encode(bencoded));
         }
 
-        private static BencodedData ToData(PeerAddress[] remotes)
+        private static BencodedData ToData(NetworkAddress[] remotes)
         {
             byte[] data = new byte[remotes.Length * 6];
 

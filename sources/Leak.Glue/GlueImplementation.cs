@@ -5,6 +5,7 @@ using Leak.Events;
 using Leak.Extensions;
 using Leak.Loop;
 using System;
+using Leak.Networking.Core;
 
 namespace Leak.Glue
 {
@@ -237,7 +238,7 @@ namespace Leak.Glue
             }
         }
 
-        public void ForEachPeer(Action<PeerHash, PeerAddress> callback)
+        public void ForEachPeer(Action<PeerHash, NetworkAddress> callback)
         {
             foreach (GlueEntry entry in collection.All())
             {
@@ -245,7 +246,7 @@ namespace Leak.Glue
             }
         }
 
-        public void ForEachPeer(Action<PeerHash, PeerAddress, NetworkDirection> callback)
+        public void ForEachPeer(Action<PeerHash, NetworkAddress, NetworkDirection> callback)
         {
             foreach (GlueEntry entry in collection.All())
             {

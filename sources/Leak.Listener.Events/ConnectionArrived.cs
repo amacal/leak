@@ -1,10 +1,11 @@
 ﻿using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Listener.Events
 {
     public class ConnectionArrived
     {
-        public PeerAddress Remote;
+        public NetworkAddress Remote;
 
         public NetworkConnection Connection;
     }

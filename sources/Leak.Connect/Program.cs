@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Leak.Client;
 using Leak.Client.Peer;
 using Leak.Common;
+using Leak.Networking.Core;
 using Pargos;
 
 namespace Leak.Connect
@@ -21,7 +22,7 @@ namespace Leak.Connect
             if (options.IsValid())
             {
                 FileHash hash = FileHash.Parse(options.Hash);
-                PeerAddress address = new PeerAddress(options.Host, Int32.Parse(options.Port));
+                NetworkAddress address = new NetworkAddress(options.Host, Int32.Parse(options.Port));
 
                 using (PeerClient client = new PeerClient())
                 {

@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Events;
+using Leak.Networking.Core;
 
 namespace Leak.Connector
 {
@@ -14,7 +15,7 @@ namespace Leak.Connector
             });
         }
 
-        public static void CallConnectionRejected(this PeerConnectorHooks hooks, PeerAddress remote)
+        public static void CallConnectionRejected(this PeerConnectorHooks hooks, NetworkAddress remote)
         {
             hooks.OnConnectionRejected?.Invoke(new ConnectionRejected
             {

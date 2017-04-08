@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using Leak.Bencoding;
 using Leak.Common;
+using Leak.Networking.Core;
 using Leak.Sockets;
 using Leak.Tasks;
 
@@ -253,7 +254,7 @@ namespace Leak.Tracker.Get
 
                         if (interval != null && peers.Text != null && peers.Text.Length % 6 == 0)
                         {
-                            List<PeerAddress> result = new List<PeerAddress>(peers.Text.Length / 6);
+                            List<NetworkAddress> result = new List<NetworkAddress>(peers.Text.Length / 6);
                             byte[] bytes = peers.Data.GetBytes();
 
                             for (int i = 0; i < bytes.Length; i += 6)
@@ -271,7 +272,7 @@ namespace Leak.Tracker.Get
 
                                 if (port > 0)
                                 {
-                                    result.Add(new PeerAddress(address.ToString(), port));
+                                    result.Add(new NetworkAddress(address.ToString(), port));
                                 }
                             }
 

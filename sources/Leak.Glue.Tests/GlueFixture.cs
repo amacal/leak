@@ -9,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Leak.Meta.Info;
+using Leak.Networking.Core;
 
 namespace Leak.Glue.Tests
 {

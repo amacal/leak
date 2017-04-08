@@ -1,21 +1,22 @@
 ﻿using System.Threading.Tasks;
 using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Peer
 {
     public static class PeerHelper
     {
-        public static void Download(string destination, FileHash hash, PeerAddress remote)
+        public static void Download(string destination, FileHash hash, NetworkAddress remote)
         {
             DownloadAsync(destination, hash, remote, null).Wait();
         }
 
-        public static void Download(string destination, FileHash hash, PeerAddress remote, NotificationCallback callback)
+        public static void Download(string destination, FileHash hash, NetworkAddress remote, NotificationCallback callback)
         {
             DownloadAsync(destination, hash, remote, callback).Wait();
         }
 
-        public static async Task DownloadAsync(string destination, FileHash hash, PeerAddress remote, NotificationCallback callback)
+        public static async Task DownloadAsync(string destination, FileHash hash, NetworkAddress remote, NotificationCallback callback)
         {
             using (PeerClient client = new PeerClient())
             {

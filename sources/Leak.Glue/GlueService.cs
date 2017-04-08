@@ -1,6 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Events;
 using System;
+using Leak.Networking.Core;
 
 namespace Leak.Glue
 {
@@ -46,8 +47,8 @@ namespace Leak.Glue
 
         void ForEachPeer(Action<PeerHash> callback);
 
-        void ForEachPeer(Action<PeerHash, PeerAddress> callback);
+        void ForEachPeer(Action<PeerHash, NetworkAddress> callback);
 
-        void ForEachPeer(Action<PeerHash, PeerAddress, NetworkDirection> callback);
+        void ForEachPeer(Action<PeerHash, NetworkAddress, NetworkDirection> callback);
     }
 }

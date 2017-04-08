@@ -1,4 +1,5 @@
 ﻿using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Extensions.Peers
 {
@@ -8,6 +9,6 @@ namespace Leak.Extensions.Peers
 
         public PeerHash Peer;
 
-        public PeerAddress[] Remotes;
+        public NetworkAddress[] Remotes;
     }
 }

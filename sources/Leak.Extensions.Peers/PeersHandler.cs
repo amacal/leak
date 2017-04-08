@@ -3,6 +3,7 @@ using Leak.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Leak.Networking.Core;
 
 namespace Leak.Extensions.Peers
 {
@@ -29,11 +30,11 @@ namespace Leak.Extensions.Peers
             Handle(hash, peer, payload, hooks.CallPeersDataSent);
         }
 
-        private static void Handle(FileHash hash, PeerHash peer, byte[] payload, Action<FileHash, PeerHash, PeerAddress[]> callback)
+        private static void Handle(FileHash hash, PeerHash peer, byte[] payload, Action<FileHash, PeerHash, NetworkAddress[]> callback)
         {
             BencodedValue value = Bencoder.Decode(payload);
             byte[] added = value.Find("added", x => x?.Data?.GetBytes());
-            List<PeerAddress> peers = new List<PeerAddress>();
+            List<NetworkAddress> peers = new List<NetworkAddress>();
 
             if (added != null)
             {
@@ -44,7 +45,7 @@ namespace Leak.Extensions.Peers
 
                     if (port > 0)
                     {
-                        peers.Add(new PeerAddress(host, port));
+                        peers.Add(new NetworkAddress(host, port));
                     }
                 }
             }

@@ -5,6 +5,7 @@ using Leak.Sockets;
 using Leak.Tasks;
 using System;
 using System.Threading.Tasks;
+using Leak.Networking.Core;
 
 namespace Leak.Negotiator.Tests
 {

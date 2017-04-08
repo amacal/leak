@@ -1,4 +1,5 @@
 ﻿using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Connector
 {
@@ -31,7 +32,7 @@ namespace Leak.Connector
             context.Dependencies.Pipeline.Register(context.Queue);
         }
 
-        public void ConnectTo(FileHash hash, PeerAddress peer)
+        public void ConnectTo(FileHash hash, NetworkAddress peer)
         {
             context.Queue.Add(new PeerConnectorTaskConnect(hash, peer));
         }

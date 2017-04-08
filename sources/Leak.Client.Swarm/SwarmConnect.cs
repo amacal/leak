@@ -25,6 +25,7 @@ using Leak.Meta.Share;
 using Leak.Meta.Store;
 using Leak.Negotiator;
 using Leak.Networking;
+using Leak.Networking.Core;
 using Leak.Tasks;
 using Leak.Tracker.Get;
 using Leak.Tracker.Get.Events;
@@ -47,7 +48,7 @@ namespace Leak.Client.Swarm
         public Metainfo Metainfo { get; set; }
 
         public HashSet<PeerHash> Peers { get; set; }
-        public HashSet<PeerAddress> Remotes { get; set; }
+        public HashSet<NetworkAddress> Remotes { get; set; }
 
         public NotificationCollection Notifications { get; set; }
         public TaskCompletionSource<SwarmSession> Completion { get; set; }
@@ -462,7 +463,7 @@ namespace Leak.Client.Swarm
 
         private void OnPeerDataReceived(PeersReceived data)
         {
-            foreach (PeerAddress peer in data.Remotes)
+            foreach (NetworkAddress peer in data.Remotes)
             {
                 if (Remotes.Add(peer))
                 {
@@ -524,7 +525,7 @@ namespace Leak.Client.Swarm
 
         private void OnAnnounced(TrackerAnnounced data)
         {
-            foreach (PeerAddress peer in data.Peers)
+            foreach (NetworkAddress peer in data.Peers)
             {
                 if (Remotes.Add(peer))
                 {

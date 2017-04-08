@@ -2,6 +2,7 @@ using Leak.Common;
 using Leak.Glue;
 using Leak.Memory;
 using System;
+using Leak.Networking.Core;
 
 namespace Leak.Extensions.Peers.Tests
 {

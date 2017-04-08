@@ -5,6 +5,7 @@ using Leak.Testing;
 using NUnit.Framework;
 using System.Net;
 using System.Threading.Tasks;
+using Leak.Networking.Core;
 
 namespace Leak.Networking.Tests
 {
@@ -34,7 +35,7 @@ namespace Leak.Networking.Tests
 
                 connection.Should().NotBeNull();
                 connection.Direction.Should().Be(direction);
-                connection.Remote.Should().Be(PeerAddress.Parse(remote));
+                connection.Remote.Should().Be(NetworkAddress.Parse(remote));
                 connection.Identifier.Should().BeGreaterThan(0);
             }
         }
@@ -69,7 +70,7 @@ namespace Leak.Networking.Tests
             {
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionAttached, data =>
                 {
-                    data.Remote.Should().Be(PeerAddress.Parse(remote));
+                    data.Remote.Should().Be(NetworkAddress.Parse(remote));
                     data.Connection.Should().NotBeNull();
                 });
 
@@ -93,7 +94,7 @@ namespace Leak.Networking.Tests
             {
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionTerminated, data =>
                 {
-                    data.Remote.Should().Be(PeerAddress.Parse(remote));
+                    data.Remote.Should().Be(NetworkAddress.Parse(remote));
                     data.Connection.Should().NotBeNull();
                 });
 
@@ -134,7 +135,7 @@ namespace Leak.Networking.Tests
                     NetworkConnection connection = fixture.Pool.Create(socket, direction, endpoint);
                     Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionTerminated, data =>
                     {
-                        data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                        data.Remote.Should().Be(NetworkAddress.Parse(endpoint));
                         data.Connection.Should().NotBeNull();
                     });
 
@@ -171,7 +172,7 @@ namespace Leak.Networking.Tests
                 NetworkConnection connection = fixture.Pool.Create(socket, direction, endpoint);
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionTerminated, data =>
                 {
-                    data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                    data.Remote.Should().Be(NetworkAddress.Parse(endpoint));
                     data.Connection.Should().NotBeNull();
                 });
 
@@ -207,7 +208,7 @@ namespace Leak.Networking.Tests
                 NetworkConnection connection = fixture.Pool.Create(socket, direction, endpoint);
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionSent, data =>
                 {
-                    data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                    data.Remote.Should().Be(NetworkAddress.Parse(endpoint));
                     data.Connection.Should().Be(connection);
                     data.Bytes.Should().Be(message.Length);
                 });
@@ -243,7 +244,7 @@ namespace Leak.Networking.Tests
 
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionReceived, data =>
                 {
-                    data.Remote.Should().Be(PeerAddress.Parse(endpoint));
+                    data.Remote.Should().Be(NetworkAddress.Parse(endpoint));
                     data.Connection.Should().NotBeNull();
                     data.Bytes.Should().Be(message.Length);
                 });

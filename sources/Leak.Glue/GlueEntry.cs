@@ -3,6 +3,7 @@ using Leak.Communicator;
 using Leak.Extensions;
 using Leak.Loop;
 using System;
+using Leak.Networking.Core;
 
 namespace Leak.Glue
 {
@@ -12,7 +13,7 @@ namespace Leak.Glue
 
         public PeerHash Peer;
 
-        public PeerAddress Remote;
+        public NetworkAddress Remote;
 
         public NetworkDirection Direction;
 

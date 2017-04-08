@@ -1,5 +1,6 @@
 ﻿using System;
 using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Tracker.Get.Events
 {
@@ -9,7 +10,7 @@ namespace Leak.Tracker.Get.Events
         public PeerHash Peer;
 
         public Uri Address;
-        public PeerAddress[] Peers;
+        public NetworkAddress[] Peers;
         public TimeSpan Interval;
 
         public int? Seeders;

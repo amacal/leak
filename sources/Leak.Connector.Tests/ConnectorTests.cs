@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Leak.Common;
+using Leak.Networking.Core;
 using Leak.Testing;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace Leak.Connector.Tests
             using (ConnectorSession session = fixture.Start())
             {
                 FileHash hash = FileHash.Random();
-                PeerAddress address = PeerAddress.Parse(session.Endpoint);
+                NetworkAddress address = NetworkAddress.Parse(session.Endpoint);
 
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionEstablished, data =>
                 {
@@ -37,7 +38,7 @@ namespace Leak.Connector.Tests
             using (ConnectorSession session = fixture.Start())
             {
                 FileHash hash = FileHash.Random();
-                PeerAddress address = PeerAddress.Parse(session.Endpoint);
+                NetworkAddress address = NetworkAddress.Parse(session.Endpoint);
 
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnConnectionEstablished, data =>
                 {

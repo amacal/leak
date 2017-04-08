@@ -6,6 +6,7 @@ using Leak.Tasks;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Leak.Networking.Core;
 
 namespace Leak.Extensions.Peers.Tests
 {

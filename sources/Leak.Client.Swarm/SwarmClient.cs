@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Swarm
 {
@@ -34,7 +35,7 @@ namespace Leak.Client.Swarm
                 Notifications = new NotificationCollection(),
                 Completion = new TaskCompletionSource<SwarmSession>(),
                 Peers = new HashSet<PeerHash>(),
-                Remotes = new HashSet<PeerAddress>(),
+                Remotes = new HashSet<NetworkAddress>(),
                 Pipeline = runtime.Pipeline,
                 Files = runtime.Files,
                 Worker = runtime.Worker

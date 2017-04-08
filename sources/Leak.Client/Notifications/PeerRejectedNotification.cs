@@ -1,12 +1,13 @@
 ﻿using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Notifications
 {
     public class PeerRejectedNotification : Notification
     {
-        private readonly PeerAddress remote;
+        private readonly NetworkAddress remote;
 
-        public PeerRejectedNotification(PeerAddress remote)
+        public PeerRejectedNotification(NetworkAddress remote)
         {
             this.remote = remote;
         }
@@ -26,7 +27,7 @@ namespace Leak.Client.Notifications
             return $"Peer: rejected; endpoint={Remote}";
         }
 
-        public PeerAddress Remote
+        public NetworkAddress Remote
         {
             get { return remote; }
         }

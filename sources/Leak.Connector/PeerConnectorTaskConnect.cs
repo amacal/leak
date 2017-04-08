@@ -2,15 +2,16 @@
 using Leak.Sockets;
 using Leak.Tasks;
 using System.Net;
+using Leak.Networking.Core;
 
 namespace Leak.Connector
 {
     public class PeerConnectorTaskConnect : LeakTask<PeerConnectorContext>
     {
         private readonly FileHash hash;
-        private readonly PeerAddress remote;
+        private readonly NetworkAddress remote;
 
-        public PeerConnectorTaskConnect(FileHash hash, PeerAddress remote)
+        public PeerConnectorTaskConnect(FileHash hash, NetworkAddress remote)
         {
             this.hash = hash;
             this.remote = remote;

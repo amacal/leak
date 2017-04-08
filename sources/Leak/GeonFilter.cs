@@ -5,6 +5,7 @@ using Geon.Readers;
 using Geon.Sources;
 using Leak.Client.Swarm;
 using Leak.Common;
+using Leak.Networking.Core;
 
 namespace Leak
 {
@@ -25,7 +26,7 @@ namespace Leak
             });
         }
 
-        public bool Accept(PeerAddress address)
+        public bool Accept(NetworkAddress address)
         {
             return acceptable.Contains(geo.Find(address.Host)?.Code);
         }

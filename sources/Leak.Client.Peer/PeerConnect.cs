@@ -18,6 +18,7 @@ using Leak.Completion;
 using Leak.Memory;
 using Leak.Memory.Events;
 using Leak.Networking;
+using Leak.Networking.Core;
 
 namespace Leak.Client.Peer
 {
@@ -33,7 +34,7 @@ namespace Leak.Client.Peer
         public FileHash Hash { get; set; }
         public PeerHash Peer { get; set; }
         public PeerHash Localhost { get; set; }
-        public PeerAddress Address { get; set; }
+        public NetworkAddress Address { get; set; }
         public Metainfo Metainfo { get; set; }
 
         public NotificationCollection Notifications { get; set; }
@@ -60,7 +61,7 @@ namespace Leak.Client.Peer
             StartDataMap();
         }
 
-        public void Connect(PeerAddress remote)
+        public void Connect(NetworkAddress remote)
         {
             Connector.ConnectTo(Hash, remote);
         }

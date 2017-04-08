@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Listener.Events;
+using Leak.Networking.Core;
 
 namespace Leak.Listener
 {
@@ -23,7 +24,7 @@ namespace Leak.Listener
             });
         }
 
-        public static void CallConnectionArrived(this PeerListenerHooks hooks, PeerAddress remote, NetworkConnection connection)
+        public static void CallConnectionArrived(this PeerListenerHooks hooks, NetworkAddress remote, NetworkConnection connection)
         {
             hooks.OnConnectionArrived?.Invoke(new ConnectionArrived
             {

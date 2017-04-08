@@ -2,6 +2,7 @@
 using Leak.Sockets;
 using System;
 using System.Net;
+using Leak.Networking.Core;
 
 namespace Leak.Listener
 {
@@ -74,7 +75,7 @@ namespace Leak.Listener
             if (data.Status == SocketStatus.OK)
             {
                 IPEndPoint endpoint = data.GetRemote();
-                PeerAddress remote = PeerAddress.Parse(endpoint);
+                NetworkAddress remote = NetworkAddress.Parse(endpoint);
 
                 NetworkDirection direction = NetworkDirection.Incoming;
                 NetworkConnection connection = dependencies.Network.Create(data.Connection, direction, endpoint);

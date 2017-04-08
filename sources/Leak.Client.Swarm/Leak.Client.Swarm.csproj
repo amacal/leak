@@ -119,6 +119,10 @@
       <Project>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</Project>
       <Name>Leak.Negotiator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4EA55CFB-72FD-4298-810A-65A5A3E2AD48}</Project>
       <Name>Leak.Networking</Name>

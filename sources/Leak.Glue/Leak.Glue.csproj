@@ -71,6 +71,10 @@
       <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
       <Name>Leak.Loop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
       <Name>Leak.Tasks</Name>

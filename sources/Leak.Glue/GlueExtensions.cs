@@ -2,6 +2,7 @@
 using Leak.Common;
 using Leak.Communicator.Messages;
 using Leak.Events;
+using Leak.Networking.Core;
 
 namespace Leak.Glue
 {
@@ -70,7 +71,7 @@ namespace Leak.Glue
             });
         }
 
-        public static void CallPeerDisconnected(this GlueHooks hooks, PeerHash peer, PeerAddress remote)
+        public static void CallPeerDisconnected(this GlueHooks hooks, PeerHash peer, NetworkAddress remote)
         {
             hooks.OnPeerDisconnected?.Invoke(new PeerDisconnected
             {

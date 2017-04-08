@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Communicator.Messages;
+using Leak.Networking.Core;
 
 namespace Leak.Communicator
 {

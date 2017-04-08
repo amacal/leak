@@ -1,13 +1,14 @@
 ﻿using Leak.Common;
+using Leak.Networking.Core;
 using Leak.Tasks;
 
 namespace Leak.Connector
 {
     public class PeerConnectorTaskReject : LeakTask<PeerConnectorContext>
     {
-        private readonly PeerAddress remote;
+        private readonly NetworkAddress remote;
 
-        public PeerConnectorTaskReject(PeerAddress remote)
+        public PeerConnectorTaskReject(NetworkAddress remote)
         {
             this.remote = remote;
         }

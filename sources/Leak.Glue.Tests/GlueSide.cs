@@ -1,5 +1,6 @@
 ﻿using Leak.Common;
 using System;
+using Leak.Networking.Core;
 
 namespace Leak.Glue.Tests
 {

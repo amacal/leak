@@ -104,6 +104,10 @@
       <Project>{EC53646C-960E-4DA4-8AFF-E12370ACCCAE}</Project>
       <Name>Leak.Meta.Share</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>
       <Name>Leak.Tasks</Name>
