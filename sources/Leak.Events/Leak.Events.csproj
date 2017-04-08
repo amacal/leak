@@ -40,13 +40,8 @@
     <Compile Include="BlockReserved.cs" />
     <Compile Include="BlockSent.cs" />
     <Compile Include="BlockWritten.cs" />
-    <Compile Include="ConnectionAttached.cs" />
-    <Compile Include="ConnectionEncrypted.cs" />
     <Compile Include="ConnectionEstablished.cs" />
-    <Compile Include="ConnectionReceived.cs" />
     <Compile Include="ConnectionRejected.cs" />
-    <Compile Include="ConnectionSent.cs" />
-    <Compile Include="ConnectionTerminated.cs" />
     <Compile Include="DataAllocated.cs" />
     <Compile Include="DataChanged.cs" />
     <Compile Include="DataCompleted.cs" />

@@ -19,6 +19,7 @@ using Leak.Memory;
 using Leak.Memory.Events;
 using Leak.Networking;
 using Leak.Networking.Core;
+using Leak.Networking.Events;
 
 namespace Leak.Client.Peer
 {

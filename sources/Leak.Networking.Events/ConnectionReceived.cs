@@ -1,9 +1,8 @@
-﻿using Leak.Common;
-using Leak.Networking.Core;
+﻿using Leak.Networking.Core;
 
-namespace Leak.Events
+namespace Leak.Networking.Events
 {
-    public class ConnectionSent
+    public class ConnectionReceived
     {
         public NetworkAddress Remote;
 

@@ -1,5 +1,5 @@
-﻿using Leak.Events;
-using Leak.Networking.Core;
+﻿using Leak.Networking.Core;
+using Leak.Networking.Events;
 
 namespace Leak.Networking
 {
