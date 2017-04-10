@@ -17,7 +17,7 @@ namespace Leak.Loop
         public void StartProcessing(PeerHash peer, NetworkConnection connection)
         {
             ConnectionLoopConnection wrapped = new ConnectionLoopConnection(connection);
-            ConnectionLoopHandler handler = new ConnectionLoopHandler(peer, wrapped, hooks);
+            ConnectionLoopHandler handler = new ConnectionLoopHandler(peer, wrapped, configuration, hooks);
 
             handler.Execute();
         }

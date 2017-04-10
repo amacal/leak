@@ -45,7 +45,7 @@ namespace Leak.Listener
 
             if (assignedPort == null)
             {
-                hooks.CallListenerFailed(configuration, $"Binding to the requested port failed.");
+                hooks.CallListenerFailed(configuration, assignedPort.Value, $"Binding to the requested port failed.");
             }
             else
             {

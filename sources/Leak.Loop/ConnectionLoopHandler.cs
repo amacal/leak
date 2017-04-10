@@ -7,13 +7,16 @@ namespace Leak.Loop
     {
         private readonly PeerHash peer;
         private readonly ConnectionLoopConnection connection;
+
+        private readonly ConnectionLoopConfiguration configuration;
         private readonly ConnectionLoopHooks hooks;
 
-        public ConnectionLoopHandler(PeerHash peer, ConnectionLoopConnection connection, ConnectionLoopHooks hooks)
+        public ConnectionLoopHandler(PeerHash peer, ConnectionLoopConnection connection, ConnectionLoopConfiguration configuration, ConnectionLoopHooks hooks)
         {
             this.peer = peer;
             this.hooks = hooks;
             this.connection = connection;
+            this.configuration = configuration;
         }
 
         public void Execute()
@@ -42,39 +45,12 @@ namespace Leak.Loop
 
             if (message.Length > 4)
             {
-                switch (message[4])
+                string name;
+                int id = message[4];
+
+                if (configuration.Messages.TryGetValue(id, out name))
                 {
-                    case 0:
-                        hooks.CallMessageReceived(peer, "choke", message.Restrict());
-                        break;
-
-                    case 1:
-                        hooks.CallMessageReceived(peer, "unchoke", message.Restrict());
-                        break;
-
-                    case 2:
-                        hooks.CallMessageReceived(peer, "interested", message.Restrict());
-                        break;
-
-                    case 4:
-                        hooks.CallMessageReceived(peer, "have", message.Restrict());
-                        break;
-
-                    case 5:
-                        hooks.CallMessageReceived(peer, "bitfield", message.Restrict());
-                        break;
-
-                    case 6:
-                        hooks.CallMessageReceived(peer, "request", message.Restrict());
-                        break;
-
-                    case 7:
-                        hooks.CallMessageReceived(peer, "piece", message.Restrict());
-                        break;
-
-                    case 20:
-                        hooks.CallMessageReceived(peer, "extended", message.Restrict());
-                        break;
+                    hooks.CallMessageReceived(peer, name, message.Restrict());
                 }
 
                 Acknowledge(message);

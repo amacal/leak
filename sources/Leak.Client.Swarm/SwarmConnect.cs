@@ -272,10 +272,8 @@ namespace Leak.Client.Swarm
 
                 Listener =
                     new PeerListenerBuilder()
-                        .WithPeer(Localhost)
                         .WithNetwork(Network)
                         .WithPort(Settings)
-                        .WithExtensions()
                         .Build(hooks);
 
                 Listener.Start();
@@ -436,13 +434,13 @@ namespace Leak.Client.Swarm
 
         private void OnListenerStarted(ListenerStarted data)
         {
-            Notifications.Enqueue(new ListenerStartedNotification(data.Peer, data.Port));
+            Notifications.Enqueue(new ListenerStartedNotification(Localhost, data.Port));
             Settings.ListenerPort = data.Port;
         }
 
         private void OnListenerFailed(ListenerFailed data)
         {
-            Notifications.Enqueue(new ListenerFailedNotification(data.Peer, data.Reason));
+            Notifications.Enqueue(new ListenerFailedNotification(Localhost, data.Reason));
         }
 
         private void OnMetadataPieceReceived(MetadataReceived data)

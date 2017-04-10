@@ -15,7 +15,6 @@ namespace Leak.Listener.Tests
                 Trigger handler = Trigger.Bind(ref fixture.Hooks.OnListenerStarted, data =>
                 {
                     data.Port.Should().BeGreaterThan(0);
-                    data.Peer.Should().NotBeNull();
                 });
 
                 await fixture.Start();

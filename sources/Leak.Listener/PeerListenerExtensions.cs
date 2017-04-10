@@ -6,11 +6,11 @@ namespace Leak.Listener
 {
     public static class PeerListenerExtensions
     {
-        public static void CallListenerFailed(this PeerListenerHooks hooks, PeerListenerConfiguration configuration, string reason)
+        public static void CallListenerFailed(this PeerListenerHooks hooks, PeerListenerConfiguration configuration, int requestedPort, string reason)
         {
             hooks.OnListenerFailed?.Invoke(new ListenerFailed
             {
-                Peer = configuration.Peer,
+                Port = requestedPort,
                 Reason = reason
             });
         }
@@ -19,7 +19,6 @@ namespace Leak.Listener
         {
             hooks.OnListenerStarted?.Invoke(new ListenerStarted
             {
-                Peer = configuration.Peer,
                 Port = assignedPort
             });
         }

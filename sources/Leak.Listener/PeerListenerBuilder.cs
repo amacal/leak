@@ -26,18 +26,6 @@ namespace Leak.Listener
             return this;
         }
 
-        public PeerListenerBuilder WithPeer(PeerHash peer)
-        {
-            configuration.Peer = peer;
-            return this;
-        }
-
-        public PeerListenerBuilder WithExtensions()
-        {
-            configuration.Extensions = true;
-            return this;
-        }
-
         public PeerListener Build()
         {
             return Build(new PeerListenerHooks());
