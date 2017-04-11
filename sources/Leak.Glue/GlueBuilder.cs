@@ -3,7 +3,7 @@ using Leak.Extensions;
 using Leak.Networking.Core;
 using Leak.Tasks;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public class GlueBuilder
     {

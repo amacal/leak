@@ -2,7 +2,7 @@
 using Leak.Events;
 using Leak.Networking.Core;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public static class HandshakeNegotiatorExtensions
     {

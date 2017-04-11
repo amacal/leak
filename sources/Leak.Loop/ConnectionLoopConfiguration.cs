@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Leak.Loop
+namespace Leak.Peer.Receiver
 {
     public class ConnectionLoopConfiguration
     {

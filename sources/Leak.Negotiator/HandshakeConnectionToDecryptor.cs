@@ -1,6 +1,6 @@
 ﻿using Leak.Networking;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public class HandshakeConnectionToDecryptor : NetworkIncomingDecryptor
     {

@@ -57,9 +57,9 @@
       <Project>{3348C6C0-81B0-4FB3-BA1D-6826968F028E}</Project>
       <Name>Leak.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+    <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
+      <Name>Leak.Peer.Coordinator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

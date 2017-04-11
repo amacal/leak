@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using Leak.Networking;
+﻿using Leak.Networking;
 using Leak.Networking.Core;
 
-namespace Leak.Loop.Tests
+namespace Leak.Peer.Receiver.Tests
 {
     public class LoopMemory : NetworkPoolMemory, DataBlockFactory
     {

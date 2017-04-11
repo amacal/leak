@@ -1,7 +1,7 @@
 ﻿using Leak.Extensions.Metadata;
 using Leak.Extensions.Peers;
-using Leak.Glue;
 using Leak.Listener;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Client.Swarm
 {

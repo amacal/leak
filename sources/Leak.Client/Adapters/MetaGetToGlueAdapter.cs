@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Leak.Common;
 using Leak.Extensions.Metadata;
-using Leak.Glue;
 using Leak.Meta.Get;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Client.Adapters
 {

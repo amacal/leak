@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using Leak.Networking;
+﻿using Leak.Networking;
 using Leak.Networking.Core;
 
-namespace Leak.Communicator.Tests
+namespace Leak.Peer.Communicator.Tests
 {
     public class CommunicatorMemory : NetworkPoolMemory, DataBlockFactory
     {

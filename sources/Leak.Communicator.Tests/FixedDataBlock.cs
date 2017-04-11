@@ -1,7 +1,6 @@
-﻿using Leak.Common;
-using Leak.Networking.Core;
+﻿using Leak.Networking.Core;
 
-namespace Leak.Communicator.Tests
+namespace Leak.Peer.Communicator.Tests
 {
     public class FixedDataBlock : DataBlock
     {

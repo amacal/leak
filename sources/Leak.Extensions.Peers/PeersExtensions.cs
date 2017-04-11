@@ -1,8 +1,8 @@
 ﻿using Leak.Bencoding;
 using Leak.Common;
-using Leak.Glue;
 using System;
 using Leak.Networking.Core;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Extensions.Peers
 {

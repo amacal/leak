@@ -3,11 +3,11 @@ using Leak.Data.Get;
 using Leak.Data.Map;
 using Leak.Data.Share;
 using Leak.Data.Store;
-using Leak.Glue;
 using Leak.Memory;
 using Leak.Meta.Get;
 using Leak.Meta.Store;
 using Leak.Networking;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Client
 {

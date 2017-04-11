@@ -1,7 +1,7 @@
-﻿using Leak.Extensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Leak.Extensions;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public class GlueConfiguration
     {

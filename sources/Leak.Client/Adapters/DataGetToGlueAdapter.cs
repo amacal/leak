@@ -1,6 +1,6 @@
 using Leak.Common;
 using Leak.Data.Get;
-using Leak.Glue;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Client.Adapters
 {

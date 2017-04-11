@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using Leak.Networking.Core;
 
-namespace Leak.Negotiator.Tests
+namespace Leak.Peer.Negotiator.Tests
 {
     public class NegotiatorFixturePair : IDisposable
     {

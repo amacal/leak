@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using Leak.Networking.Core;
 
-namespace Leak.Loop
+namespace Leak.Peer.Receiver
 {
     public class ConnectionLoopConnectionToBytes : NetworkIncomingMessageHandler
     {

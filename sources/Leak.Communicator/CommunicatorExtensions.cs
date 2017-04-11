@@ -2,7 +2,7 @@
 using Leak.Events;
 using Leak.Networking.Core;
 
-namespace Leak.Communicator
+namespace Leak.Peer.Communicator
 {
     public static class CommunicatorExtensions
     {

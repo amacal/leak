@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
-using Leak.Glue;
 using Leak.Meta.Store;
+using Leak.Peer.Coordinator;
 using Leak.Tasks;
 
 namespace Leak.Meta.Share

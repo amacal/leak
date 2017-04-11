@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using Leak.Networking;
+﻿using Leak.Networking;
 using Leak.Networking.Core;
 
-namespace Leak.Glue.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
     public class GlueMemory : NetworkPoolMemory, DataBlockFactory
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Leak.Glue.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
     public class GlueInstance : IDisposable
     {

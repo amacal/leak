@@ -1,4 +1,4 @@
-﻿namespace Leak.Communicator.Messages
+﻿namespace Leak.Peer.Communicator.Messages
 {
     public class Extended
     {

@@ -1,10 +1,10 @@
 ﻿using Leak.Bencoding;
 using Leak.Common;
-using Leak.Communicator.Messages;
 using Leak.Events;
 using Leak.Networking.Core;
+using Leak.Peer.Communicator.Messages;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public static class GlueExtensions
     {

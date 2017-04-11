@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public class HandshakeKeyScope : IDisposable
     {

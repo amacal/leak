@@ -95,9 +95,9 @@
       <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+    <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
+      <Name>Leak.Peer.Coordinator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
       <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>

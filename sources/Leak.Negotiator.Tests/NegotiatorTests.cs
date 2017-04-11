@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Leak.Common;
 using Leak.Testing;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Leak.Negotiator.Tests
+namespace Leak.Peer.Negotiator.Tests
 {
     public class NegotiatorTests
     {

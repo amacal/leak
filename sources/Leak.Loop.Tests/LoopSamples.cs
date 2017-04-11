@@ -1,4 +1,4 @@
-﻿namespace Leak.Loop.Tests
+﻿namespace Leak.Peer.Receiver.Tests
 {
     public class LoopSamples
     {

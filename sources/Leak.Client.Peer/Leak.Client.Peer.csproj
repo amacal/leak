@@ -72,9 +72,9 @@
       <Project>{C64C553C-1260-4097-8334-8979A3493EAB}</Project>
       <Name>Leak.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+    <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
+      <Name>Leak.Peer.Coordinator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Memory.Events\Leak.Memory.Events.csproj">
       <Project>{02D65FC6-E326-47EE-B7CB-B355AE421F73}</Project>
@@ -92,9 +92,9 @@
       <Project>{DA5EF2F2-7938-44CF-8869-4530DFC95B89}</Project>
       <Name>Leak.Meta.Get</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Negotiator\Leak.Negotiator.csproj">
+    <ProjectReference Include="..\Leak.Negotiator\Leak.Peer.Negotiator.csproj">
       <Project>{ACAE4BA0-3596-447C-822A-E9FCE74D6486}</Project>
-      <Name>Leak.Negotiator</Name>
+      <Name>Leak.Peer.Negotiator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
       <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>

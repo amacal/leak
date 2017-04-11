@@ -1,9 +1,9 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Networking;
-using System;
 using Leak.Networking.Core;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public class HandshakeConnection
     {

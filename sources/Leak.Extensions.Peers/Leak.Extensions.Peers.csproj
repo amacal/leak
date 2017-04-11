@@ -58,9 +58,9 @@
       <Project>{3348C6C0-81B0-4FB3-BA1D-6826968F028E}</Project>
       <Name>Leak.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+    <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
-      <Name>Leak.Glue</Name>
+      <Name>Leak.Peer.Coordinator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
       <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>

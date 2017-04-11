@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using Leak.Networking.Core;
 
-namespace Leak.Communicator.Tests
+namespace Leak.Peer.Communicator.Tests
 {
     public class CommunicatorSession : IDisposable
     {

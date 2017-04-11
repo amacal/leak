@@ -1,7 +1,7 @@
-﻿using Leak.Sockets;
-using System;
+﻿using System;
+using Leak.Sockets;
 
-namespace Leak.Loop.Tests
+namespace Leak.Peer.Receiver.Tests
 {
     public class LoopSession : IDisposable
     {

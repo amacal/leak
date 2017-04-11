@@ -1,4 +1,4 @@
-﻿namespace Leak.Communicator
+﻿namespace Leak.Peer.Communicator
 {
     public class CommunicatorConfiguration
     {

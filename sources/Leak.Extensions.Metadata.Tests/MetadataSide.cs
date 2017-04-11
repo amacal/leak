@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
-using Leak.Glue;
 using Leak.Memory;
 using System;
 using Leak.Networking.Core;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Extensions.Metadata.Tests
 {

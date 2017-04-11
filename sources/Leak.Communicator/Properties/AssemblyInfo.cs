@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Leak.Communicator")]
-[assembly: AssemblyProduct("Leak.Communicator")]
+[assembly: AssemblyTitle("Leak.Peer.Communicator")]
+[assembly: AssemblyProduct("Leak.Peer.Communicator")]
 [assembly: AssemblyCopyright("Copyright © Adrian Macal 2016")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

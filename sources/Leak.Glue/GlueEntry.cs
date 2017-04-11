@@ -1,11 +1,11 @@
-﻿using Leak.Common;
-using Leak.Communicator;
+﻿using System;
+using Leak.Common;
 using Leak.Extensions;
-using Leak.Loop;
-using System;
 using Leak.Networking.Core;
+using Leak.Peer.Communicator;
+using Leak.Peer.Receiver;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public class GlueEntry
     {

@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public class HandshakeMatch
     {

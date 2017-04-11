@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Leak.Testing;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Leak.Loop.Tests
+namespace Leak.Peer.Receiver.Tests
 {
     public class LoopyTests
     {

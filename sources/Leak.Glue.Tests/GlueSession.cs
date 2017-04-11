@@ -1,7 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Common;
 
-namespace Leak.Glue.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
     public class GlueSession : IDisposable
     {

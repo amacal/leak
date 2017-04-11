@@ -1,6 +1,6 @@
 ﻿using Leak.Networking.Core;
 
-namespace Leak.Loop
+namespace Leak.Peer.Receiver
 {
     public class ConnectionLoopMessage : NetworkIncomingMessage
     {

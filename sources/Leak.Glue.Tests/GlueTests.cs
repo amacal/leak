@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Leak.Common;
 using Leak.Events;
 using Leak.Testing;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Leak.Glue.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
     public class GlueTests
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public class HandshakeRivestCipher
     {

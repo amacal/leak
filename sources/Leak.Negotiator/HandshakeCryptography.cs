@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Numerics;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public static class HandshakeCryptography
     {

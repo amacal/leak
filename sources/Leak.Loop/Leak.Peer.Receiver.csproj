@@ -7,8 +7,8 @@
     <ProjectGuid>{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Loop</RootNamespace>
-    <AssemblyName>Leak.Loop</AssemblyName>
+    <RootNamespace>Leak.Peer.Receiver</RootNamespace>
+    <AssemblyName>Leak.Peer.Receiver</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

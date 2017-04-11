@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
-using Leak.Communicator.Messages;
 using Leak.Networking.Core;
+using Leak.Peer.Communicator.Messages;
 
-namespace Leak.Communicator
+namespace Leak.Peer.Communicator
 {
     public class CommunicatorService
     {

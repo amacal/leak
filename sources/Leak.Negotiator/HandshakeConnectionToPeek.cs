@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
 using Leak.Networking.Core;
 
-namespace Leak.Negotiator
+namespace Leak.Peer.Negotiator
 {
     public class HandshakeConnectionToPeek : NetworkIncomingMessageHandler
     {

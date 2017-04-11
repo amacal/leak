@@ -1,7 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Extensions;
 
-namespace Leak.Glue.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
     public class GlueNamedPlugin : MorePlugin, MoreHandler
     {

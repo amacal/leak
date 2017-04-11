@@ -1,8 +1,7 @@
-﻿using Leak.Common;
-using Leak.Networking.Core;
+﻿using Leak.Networking.Core;
 using Leak.Tasks;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public class GlueDependencies
     {

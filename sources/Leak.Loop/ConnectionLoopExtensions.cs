@@ -2,7 +2,7 @@
 using Leak.Events;
 using Leak.Networking.Core;
 
-namespace Leak.Loop
+namespace Leak.Peer.Receiver
 {
     public static class ConnectionLoopExtensions
     {

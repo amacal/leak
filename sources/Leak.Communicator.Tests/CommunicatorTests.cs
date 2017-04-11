@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Leak.Common;
-using Leak.Communicator.Messages;
+using Leak.Peer.Communicator.Messages;
 using Leak.Testing;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Leak.Communicator.Tests
+namespace Leak.Peer.Communicator.Tests
 {
     public class CommunicatorTests
     {

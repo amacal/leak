@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Loop
+namespace Leak.Peer.Receiver
 {
     public class ConnectionLoopHooks
     {

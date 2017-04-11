@@ -1,7 +1,7 @@
-﻿using Leak.Events;
-using System;
+﻿using System;
+using Leak.Events;
 
-namespace Leak.Communicator
+namespace Leak.Peer.Communicator
 {
     public class CommunicatorHooks
     {

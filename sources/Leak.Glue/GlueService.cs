@@ -1,9 +1,9 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Events;
-using System;
 using Leak.Networking.Core;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public interface GlueService
     {

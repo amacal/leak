@@ -58,9 +58,9 @@
       <Project>{49AC3ED3-5705-40A3-B38F-CBB0D1672FFB}</Project>
       <Name>Leak.Extensions.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Glue\Leak.Glue.csproj">
+    <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
-      <Name>Leak.Glue</Name>
+      <Name>Leak.Peer.Coordinator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Metafile\Leak.Meta.Store.csproj">
       <Project>{10B9B344-A0DB-4FFB-B661-7A8D0D4D4F81}</Project>

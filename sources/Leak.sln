@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Sockets", "Leak.Sockets\Leak.Sockets.csproj", "{6E385E2D-365A-46AA-AE93-01B375C4E48F}"
 EndProject
@@ -29,9 +29,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Networking.Tests", "Le
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Testing", "Leak.Testing\Leak.Testing.csproj", "{56E41A71-1AC5-49D0-A8EC-B0E4767C7BF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Negotiator", "Leak.Negotiator\Leak.Negotiator.csproj", "{ACAE4BA0-3596-447C-822A-E9FCE74D6486}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Negotiator", "Leak.Negotiator\Leak.Peer.Negotiator.csproj", "{ACAE4BA0-3596-447C-822A-E9FCE74D6486}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Negotiator.Tests", "Leak.Negotiator.Tests\Leak.Negotiator.Tests.csproj", "{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Negotiator.Tests", "Leak.Negotiator.Tests\Leak.Peer.Negotiator.Tests.csproj", "{A22E2C58-AB67-4AEE-B250-FECF6F46DB1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Listener", "Leak.Listener\Leak.Listener.csproj", "{B11E5E10-9F8D-4506-89A5-A4FB38BDBB65}"
 EndProject
@@ -41,17 +41,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Connector", "Leak.Conn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Connector.Tests", "Leak.Connector.Tests\Leak.Connector.Tests.csproj", "{876E00CE-1E86-480D-A541-36FAD5F39C64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Communicator", "Leak.Communicator\Leak.Communicator.csproj", "{D0A3E78E-32B1-4DB2-A6CB-58D47FDDFE75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Communicator", "Leak.Communicator\Leak.Peer.Communicator.csproj", "{D0A3E78E-32B1-4DB2-A6CB-58D47FDDFE75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Communicator.Tests", "Leak.Communicator.Tests\Leak.Communicator.Tests.csproj", "{930BCEEB-420F-4444-B057-4CE2C523A954}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Communicator.Tests", "Leak.Communicator.Tests\Leak.Peer.Communicator.Tests.csproj", "{930BCEEB-420F-4444-B057-4CE2C523A954}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Loop", "Leak.Loop\Leak.Loop.csproj", "{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Receiver", "Leak.Loop\Leak.Peer.Receiver.csproj", "{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Loop.Tests", "Leak.Loop.Tests\Leak.Loop.Tests.csproj", "{5AA372FC-F6D3-47B8-845C-7388A821ED67}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Receiver.Tests", "Leak.Loop.Tests\Leak.Peer.Receiver.Tests.csproj", "{5AA372FC-F6D3-47B8-845C-7388A821ED67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Glue", "Leak.Glue\Leak.Glue.csproj", "{A634E68E-F72F-42A5-ACB6-C99006FE24D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Coordinator", "Leak.Glue\Leak.Peer.Coordinator.csproj", "{A634E68E-F72F-42A5-ACB6-C99006FE24D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Glue.Tests", "Leak.Glue.Tests\Leak.Glue.Tests.csproj", "{9BB91390-4B55-44C0-A33F-8D7BCC016381}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Coordinator.Tests", "Leak.Glue.Tests\Leak.Peer.Coordinator.Tests.csproj", "{9BB91390-4B55-44C0-A33F-8D7BCC016381}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Bencoding", "Leak.Bencoding\Leak.Bencoding.csproj", "{8B5AEBE3-A280-4941-A934-F007087A11A8}"
 EndProject

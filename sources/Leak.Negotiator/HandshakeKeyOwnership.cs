@@ -1,4 +1,4 @@
-﻿namespace Leak.Negotiator
+﻿namespace Leak.Peer.Negotiator
 {
     public enum HandshakeKeyOwnership
     {

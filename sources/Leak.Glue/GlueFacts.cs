@@ -1,11 +1,11 @@
-﻿using Leak.Bencoding;
+﻿using System.Collections.Generic;
+using Leak.Bencoding;
 using Leak.Common;
-using Leak.Communicator.Messages;
 using Leak.Events;
 using Leak.Extensions;
-using System.Collections.Generic;
+using Leak.Peer.Communicator.Messages;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public class GlueFacts
     {

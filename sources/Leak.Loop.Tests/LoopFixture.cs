@@ -1,14 +1,14 @@
-﻿using Leak.Common;
-using Leak.Completion;
-using Leak.Networking;
-using Leak.Sockets;
-using Leak.Tasks;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Leak.Common;
+using Leak.Completion;
+using Leak.Networking;
 using Leak.Networking.Core;
+using Leak.Sockets;
+using Leak.Tasks;
 
-namespace Leak.Loop.Tests
+namespace Leak.Peer.Receiver.Tests
 {
     public class LoopFixture : IDisposable
     {

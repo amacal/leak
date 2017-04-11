@@ -1,6 +1,6 @@
 ﻿using Leak.Common;
 
-namespace Leak.Glue
+namespace Leak.Peer.Coordinator
 {
     public class GlueParameters
     {

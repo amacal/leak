@@ -1,17 +1,17 @@
-﻿using F2F.Sandbox;
-using Leak.Common;
-using Leak.Completion;
-using Leak.Networking;
-using Leak.Sockets;
-using Leak.Tasks;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using F2F.Sandbox;
+using Leak.Common;
+using Leak.Completion;
 using Leak.Meta.Info;
+using Leak.Networking;
 using Leak.Networking.Core;
+using Leak.Sockets;
+using Leak.Tasks;
 
-namespace Leak.Glue.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
     public class GlueFixture : IDisposable
     {

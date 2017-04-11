@@ -6,10 +6,8 @@ using Leak.Data.Store;
 using Leak.Events;
 using Leak.Extensions.Metadata;
 using Leak.Files;
-using Leak.Glue;
 using Leak.Meta.Get;
 using Leak.Meta.Store;
-using Leak.Negotiator;
 using Leak.Tasks;
 using System.IO;
 using System.Threading.Tasks;
@@ -20,6 +18,8 @@ using Leak.Memory.Events;
 using Leak.Networking;
 using Leak.Networking.Core;
 using Leak.Networking.Events;
+using Leak.Peer.Coordinator;
+using Leak.Peer.Negotiator;
 
 namespace Leak.Client.Peer
 {
