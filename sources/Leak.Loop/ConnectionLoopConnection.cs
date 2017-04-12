@@ -14,7 +14,7 @@ namespace Leak.Peer.Receiver
 
         public void Receive(Action<NetworkIncomingMessage> callback, int bytes)
         {
-            connection.Receive(new ConnectionLoopConnectionToBytes(callback, bytes));
+            connection.ReceiveIf(callback, bytes);
         }
     }
 }

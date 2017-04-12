@@ -36,11 +36,8 @@
   <ItemGroup>
     <Compile Include="HandshakeConnection.cs" />
     <Compile Include="HandshakeConnectionEncryptedMessage.cs" />
-    <Compile Include="HandshakeConnectionToBytes.cs" />
-    <Compile Include="HandshakeConnectionToCall.cs" />
     <Compile Include="HandshakeConnectionToDecryptor.cs" />
     <Compile Include="HandshakeConnectionToEncryptor.cs" />
-    <Compile Include="HandshakeConnectionToPeek.cs" />
     <Compile Include="HandshakeCredentials.cs" />
     <Compile Include="HandshakeCryptography.cs" />
     <Compile Include="HandshakeCryptoHashMessage.cs" />

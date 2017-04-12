@@ -36,8 +36,11 @@
     <Compile Include="DataBlock.cs" />
     <Compile Include="DataBlockCallback.cs" />
     <Compile Include="DataBlockFactory.cs" />
+    <Compile Include="NetworkPredicateHandler.cs" />
+    <Compile Include="NetworkBytesHandler.cs" />
     <Compile Include="NetworkConnection.cs" />
     <Compile Include="NetworkDirection.cs" />
+    <Compile Include="NetworkExtensions.cs" />
     <Compile Include="NetworkIncomingMessage.cs" />
     <Compile Include="NetworkIncomingMessageHandler.cs" />
     <Compile Include="NetworkOutgoingMessage.cs" />

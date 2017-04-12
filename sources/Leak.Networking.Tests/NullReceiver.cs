@@ -1,5 +1,4 @@
-﻿using Leak.Common;
-using Leak.Networking.Core;
+﻿using Leak.Networking.Core;
 
 namespace Leak.Networking.Tests
 {

@@ -18,24 +18,19 @@ namespace Leak.Peer.Negotiator
             this.hooks = hooks;
         }
 
-        public void Receive(Action<NetworkIncomingMessage> callback)
-        {
-            connection.Receive(new HandshakeConnectionToCall(hooks, callback));
-        }
-
         public void Receive(Action<NetworkIncomingMessage> callback, int bytes)
         {
-            connection.Receive(new HandshakeConnectionToBytes(hooks, callback, bytes));
+            connection.ReceiveIf(callback, bytes);
         }
 
         public void Receive<T>(Action<NetworkIncomingMessage, T> callback, int bytes, T parameter)
         {
-            connection.Receive(new HandshakeConnectionToBytes(hooks, x => callback.Invoke(x, parameter), bytes));
+            connection.ReceiveIf(x => callback.Invoke(x, parameter), bytes);
         }
 
         public void Receive(Action<NetworkIncomingMessage> callback, Func<NetworkIncomingMessage, bool> peek)
         {
-            connection.Receive(new HandshakeConnectionToPeek(this, callback, peek));
+            connection.ReceiveIf(callback, peek, CallHandshakeRejected);
         }
 
         public void Send(NetworkOutgoingMessage message)

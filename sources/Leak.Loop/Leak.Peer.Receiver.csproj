@@ -36,7 +36,6 @@
     <Compile Include="ConnectionLoop.cs" />
     <Compile Include="ConnectionLoopConfiguration.cs" />
     <Compile Include="ConnectionLoopConnection.cs" />
-    <Compile Include="ConnectionLoopConnectionToBytes.cs" />
     <Compile Include="ConnectionLoopExtensions.cs" />
     <Compile Include="ConnectionLoopHandler.cs" />
     <Compile Include="ConnectionLoopHooks.cs" />

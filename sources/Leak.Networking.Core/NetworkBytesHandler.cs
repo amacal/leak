@@ -1,14 +1,13 @@
 ﻿using System;
-using Leak.Networking.Core;
 
-namespace Leak.Peer.Receiver
+namespace Leak.Networking.Core
 {
-    public class ConnectionLoopConnectionToBytes : NetworkIncomingMessageHandler
+    public class NetworkBytesHandler : NetworkIncomingMessageHandler
     {
         private readonly Action<NetworkIncomingMessage> callback;
         private readonly int bytes;
 
-        public ConnectionLoopConnectionToBytes(Action<NetworkIncomingMessage> callback, int bytes)
+        public NetworkBytesHandler(Action<NetworkIncomingMessage> callback, int bytes)
         {
             this.callback = callback;
             this.bytes = bytes;
