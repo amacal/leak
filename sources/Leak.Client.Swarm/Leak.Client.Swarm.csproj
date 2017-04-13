@@ -95,6 +95,10 @@
       <Project>{B11E5E10-9F8D-4506-89A5-A4FB38BDBB65}</Project>
       <Name>Leak.Listener</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Loop\Leak.Peer.Receiver.csproj">
+      <Project>{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}</Project>
+      <Name>Leak.Peer.Receiver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Memory.Events\Leak.Memory.Events.csproj">
       <Project>{02D65FC6-E326-47EE-B7CB-B355AE421F73}</Project>
       <Name>Leak.Memory.Events</Name>

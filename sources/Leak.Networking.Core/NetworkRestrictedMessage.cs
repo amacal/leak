@@ -1,16 +1,14 @@
-﻿using Leak.Networking.Core;
-
-namespace Leak.Peer.Receiver
+﻿namespace Leak.Networking.Core
 {
-    public class ConnectionLoopMessage : NetworkIncomingMessage
+    public class NetworkRestrictedMessage : NetworkIncomingMessage
     {
         private readonly NetworkIncomingMessage inner;
         private readonly int size;
 
-        public ConnectionLoopMessage(NetworkIncomingMessage inner)
+        public NetworkRestrictedMessage(NetworkIncomingMessage inner, int size)
         {
             this.inner = inner;
-            this.size = inner.GetSize() + 4;
+            this.size = size;
         }
 
         public int Length

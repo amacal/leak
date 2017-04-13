@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Leak.Extensions;
+using Leak.Peer.Receiver;
 
 namespace Leak.Peer.Coordinator
 {
@@ -11,6 +12,7 @@ namespace Leak.Peer.Coordinator
             AnnounceBitfield = false;
         }
 
+        public ReceiverDefinition Definition;
         public List<MorePlugin> Plugins;
         public bool AnnounceBitfield;
     }

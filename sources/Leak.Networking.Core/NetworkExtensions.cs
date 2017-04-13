@@ -18,5 +18,10 @@ namespace Leak.Networking.Core
         {
             connection.Receive(new NetworkPredicateHandler(callback, predicate, onDisconnected));
         }
+
+        public static NetworkIncomingMessage Restricted(this NetworkIncomingMessage message, int size)
+        {
+            return new NetworkRestrictedMessage(message, size);
+        }
     }
 }

@@ -214,6 +214,7 @@ namespace Leak.Client.Swarm
                     .WithPipeline(Pipeline)
                     .WithMetadata(Settings, metadata)
                     .WithExchange(Settings, exchange)
+                    .WithDefinition(new MessageDefinition())
                     .Build(hooks);
 
             Glue.Start();

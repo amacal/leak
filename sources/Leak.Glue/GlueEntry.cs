@@ -27,7 +27,7 @@ namespace Leak.Peer.Coordinator
 
         public MoreContainer More;
 
-        public ConnectionLoop Loopy;
+        public Receiver.ReceiverService Loopy;
 
         public CommunicatorService Commy;
     }

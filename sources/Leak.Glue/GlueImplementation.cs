@@ -6,6 +6,7 @@ using Leak.Networking.Core;
 using Leak.Peer.Communicator;
 using Leak.Peer.Communicator.Messages;
 using Leak.Peer.Receiver;
+using Leak.Peer.Receiver.Events;
 
 namespace Leak.Peer.Coordinator
 {
@@ -76,7 +77,7 @@ namespace Leak.Peer.Coordinator
 
             if (entry != null)
             {
-                entry.Loopy = CreateLoopy();
+                entry.Loopy = CreateReceiver();
                 entry.Commy = CreateCommy(entry.Peer, connection);
 
                 entry.More = new MoreContainer();
@@ -254,17 +255,17 @@ namespace Leak.Peer.Coordinator
             }
         }
 
-        private ConnectionLoop CreateLoopy()
+        private ReceiverService CreateReceiver()
         {
-            ConnectionLoopHooks other = CreateLoopyHooks();
-            ConnectionLoopConfiguration config = new ConnectionLoopConfiguration();
-
-            return new ConnectionLoop(other, config);
+            return
+                new ReceiverBuilder()
+                    .WithDefinition(configuration.Definition)
+                    .Build(CreateLoopyHooks());
         }
 
-        private ConnectionLoopHooks CreateLoopyHooks()
+        private ReceiverHooks CreateLoopyHooks()
         {
-            return new ConnectionLoopHooks
+            return new ReceiverHooks
             {
                 OnMessageReceived = OnMessageReceived
             };

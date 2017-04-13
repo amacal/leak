@@ -143,6 +143,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Networking.Core", "Lea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Networking.Events", "Leak.Networking.Events\Leak.Networking.Events.csproj", "{3DEC319D-74FB-47C8-9E5E-20EDBD6C3A1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leak.Peer.Receiver.Events", "Leak.Peer.Receiver.Events\Leak.Peer.Receiver.Events.csproj", "{52574E78-5B0D-4375-86B3-82AED7EF9234}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -401,6 +403,10 @@ Global
 		{3DEC319D-74FB-47C8-9E5E-20EDBD6C3A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DEC319D-74FB-47C8-9E5E-20EDBD6C3A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DEC319D-74FB-47C8-9E5E-20EDBD6C3A1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52574E78-5B0D-4375-86B3-82AED7EF9234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52574E78-5B0D-4375-86B3-82AED7EF9234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52574E78-5B0D-4375-86B3-82AED7EF9234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52574E78-5B0D-4375-86B3-82AED7EF9234}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -468,5 +474,6 @@ Global
 		{B6CA84ED-F39B-49B2-801C-5402439F5F5B} = {8684A307-3205-4786-B679-8062883F35B4}
 		{46A28D26-45DB-4BCF-A428-ED26546692C0} = {8684A307-3205-4786-B679-8062883F35B4}
 		{3DEC319D-74FB-47C8-9E5E-20EDBD6C3A1F} = {8684A307-3205-4786-B679-8062883F35B4}
+		{52574E78-5B0D-4375-86B3-82AED7EF9234} = {8E9CBDAA-AD39-4B48-8F6A-2FFB53D53628}
 	EndGlobalSection
 EndGlobal

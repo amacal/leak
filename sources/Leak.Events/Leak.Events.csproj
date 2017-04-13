@@ -53,7 +53,6 @@
     <Compile Include="ExtensionListSent.cs" />
     <Compile Include="HandshakeCompleted.cs" />
     <Compile Include="HandshakeRejected.cs" />
-    <Compile Include="MessageReceived.cs" />
     <Compile Include="MessageSent.cs" />
     <Compile Include="MetadataShared.cs" />
     <Compile Include="MetafileMeasured.cs" />

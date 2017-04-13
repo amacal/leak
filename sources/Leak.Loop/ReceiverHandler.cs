@@ -1,17 +1,18 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Networking.Core;
 
 namespace Leak.Peer.Receiver
 {
-    public class ConnectionLoopHandler
+    public class ReceiverHandler
     {
         private readonly PeerHash peer;
-        private readonly ConnectionLoopConnection connection;
+        private readonly ReceiverConnection connection;
 
-        private readonly ConnectionLoopConfiguration configuration;
-        private readonly ConnectionLoopHooks hooks;
+        private readonly ReceiverConfiguration configuration;
+        private readonly ReceiverHooks hooks;
 
-        public ConnectionLoopHandler(PeerHash peer, ConnectionLoopConnection connection, ConnectionLoopConfiguration configuration, ConnectionLoopHooks hooks)
+        public ReceiverHandler(PeerHash peer, ReceiverConnection connection, ReceiverConfiguration configuration, ReceiverHooks hooks)
         {
             this.peer = peer;
             this.hooks = hooks;
@@ -35,7 +36,7 @@ namespace Leak.Peer.Receiver
             {
                 if (message[0] == 0 && message[1] == 0 && message[2] == 0 && message[3] == 0)
                 {
-                    hooks.CallMessageReceived(peer, "keep-alive", message.Restrict());
+                    hooks.CallKeepAliveReceived(peer);
                     message.Acknowledge(4);
 
                     Next();
@@ -45,12 +46,16 @@ namespace Leak.Peer.Receiver
 
             if (message.Length > 4)
             {
-                string name;
-                int id = message[4];
+                byte identifier = message[4];
+                string name = configuration.Definition?.GetName(identifier);
 
-                if (configuration.Messages.TryGetValue(id, out name))
+                if (String.IsNullOrWhiteSpace(name) == false)
                 {
-                    hooks.CallMessageReceived(peer, name, message.Restrict());
+                    hooks.CallMessageReceived(peer, name, message.Restricted());
+                }
+                else
+                {
+                    hooks.CallMessageIgnored(peer, identifier, message.Restricted());
                 }
 
                 Acknowledge(message);

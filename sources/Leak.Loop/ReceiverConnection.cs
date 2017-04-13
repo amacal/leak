@@ -3,11 +3,11 @@ using Leak.Networking.Core;
 
 namespace Leak.Peer.Receiver
 {
-    public class ConnectionLoopConnection
+    public class ReceiverConnection
     {
         private readonly NetworkConnection connection;
 
-        public ConnectionLoopConnection(NetworkConnection connection)
+        public ReceiverConnection(NetworkConnection connection)
         {
             this.connection = connection;
         }

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetadataMessages.cs" />
     <Compile Include="MetadataMemory.cs" />
     <Compile Include="MetadataFixture.cs" />
     <Compile Include="MetadataInstance.cs" />
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Peer.Coordinator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Loop\Leak.Peer.Receiver.csproj">
+      <Project>{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}</Project>
+      <Name>Leak.Peer.Receiver</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
       <Project>{6e91f6c7-b347-4618-9b9c-bcab07a83e89}</Project>

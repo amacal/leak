@@ -48,9 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoopFixture.cs" />
+    <Compile Include="LoopMessages.cs" />
     <Compile Include="LoopSamples.cs" />
     <Compile Include="LoopSession.cs" />
-    <Compile Include="LoopyTests.cs" />
+    <Compile Include="LoopTests.cs" />
     <Compile Include="LoopMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -63,10 +64,6 @@
       <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
       <Name>Leak.Completion</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
-      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
-      <Name>Leak.Events</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Loop\Leak.Peer.Receiver.csproj">
       <Project>{814c1638-d0dd-49f2-9b42-c2ccf37a3d7a}</Project>
       <Name>Leak.Peer.Receiver</Name>
@@ -78,6 +75,10 @@
     <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
       <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
       <Name>Leak.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Receiver.Events\Leak.Peer.Receiver.Events.csproj">
+      <Project>{52574E78-5B0D-4375-86B3-82AED7EF9234}</Project>
+      <Name>Leak.Peer.Receiver.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
       <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>

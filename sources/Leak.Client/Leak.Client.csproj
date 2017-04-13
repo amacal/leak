@@ -44,6 +44,7 @@
     <Compile Include="Adapters\MemoryToNetworkAdapter.cs" />
     <Compile Include="Adapters\MemoryToDataStoreAdapter.cs" />
     <Compile Include="Adapters\MetaGetToGlueAdapter.cs" />
+    <Compile Include="MessageDefinition.cs" />
     <Compile Include="NotificationCallback.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Notifications\DataAllocatedNotification.cs" />
@@ -98,6 +99,10 @@
     <ProjectReference Include="..\Leak.Glue\Leak.Peer.Coordinator.csproj">
       <Project>{A634E68E-F72F-42A5-ACB6-C99006FE24D2}</Project>
       <Name>Leak.Peer.Coordinator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Loop\Leak.Peer.Receiver.csproj">
+      <Project>{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}</Project>
+      <Name>Leak.Peer.Receiver</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Memory\Leak.Memory.csproj">
       <Project>{6E91F6C7-B347-4618-9B9C-BCAB07A83E89}</Project>

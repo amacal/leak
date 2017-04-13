@@ -160,6 +160,7 @@ namespace Leak.Client.Peer
                     .WithMemory(Memory)
                     .WithPipeline(Pipeline)
                     .WithPlugin(new MetadataPlugin(metadata))
+                    .WithDefinition(new MessageDefinition())
                     .Build(hooks);
 
             Glue.Start();

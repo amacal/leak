@@ -1,13 +1,13 @@
 ﻿using Leak.Common;
 using Leak.Networking.Core;
 
-namespace Leak.Events
+namespace Leak.Peer.Receiver.Events
 {
     public class MessageReceived
     {
-        public PeerHash Peer;
-
         public string Type;
+
+        public PeerHash Peer;
 
         public NetworkIncomingMessage Payload;
     }

@@ -6,9 +6,9 @@ namespace Leak.Peer.Receiver.Tests
     public class LoopSession : IDisposable
     {
         private readonly TcpSocket client;
-        private readonly ConnectionLoop loop;
+        private readonly ReceiverService loop;
 
-        public LoopSession(TcpSocket client, ConnectionLoop loop)
+        public LoopSession(TcpSocket client, ReceiverService loop)
         {
             this.client = client;
             this.loop = loop;
@@ -19,7 +19,7 @@ namespace Leak.Peer.Receiver.Tests
             get { return client; }
         }
 
-        public ConnectionLoop Loop
+        public ReceiverService Loop
         {
             get { return loop; }
         }

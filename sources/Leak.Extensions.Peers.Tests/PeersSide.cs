@@ -39,6 +39,7 @@ namespace Leak.Extensions.Peers.Tests
                     .WithHash(handshake.Hash)
                     .WithMemory(new MemoryBuilder().Build())
                     .WithPlugin(new PeersPlugin(peers))
+                    .WithDefinition(new PeersMessages())
                     .Build(hooks);
 
             return new PeersInstance(service);

@@ -16,7 +16,7 @@ namespace Leak.Peer.Receiver.Tests
         private readonly CompletionThread worker;
         private readonly NetworkPool pool;
 
-        private readonly ConnectionLoopHooks hooks;
+        private readonly ReceiverHooks hooks;
         private readonly LoopSamples samples;
 
         public LoopFixture()
@@ -36,11 +36,11 @@ namespace Leak.Peer.Receiver.Tests
 
             pool.Start();
 
-            hooks = new ConnectionLoopHooks();
+            hooks = new ReceiverHooks();
             samples = new LoopSamples();
         }
 
-        public ConnectionLoopHooks Hooks
+        public ReceiverHooks Hooks
         {
             get { return hooks; }
         }
@@ -54,8 +54,10 @@ namespace Leak.Peer.Receiver.Tests
         {
             int? port;
 
-            ConnectionLoopConfiguration configuration = new ConnectionLoopConfiguration();
-            ConnectionLoop loop = new ConnectionLoop(hooks, configuration);
+            ReceiverService loop =
+                new ReceiverBuilder()
+                    .WithDefinition(new LoopMessages())
+                    .Build(hooks);
 
             TcpSocket client = pool.New();
             TcpSocket server = pool.New();

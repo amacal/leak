@@ -39,6 +39,7 @@ namespace Leak.Extensions.Metadata.Tests
                     .WithHash(handshake.Hash)
                     .WithMemory(new MemoryBuilder().Build())
                     .WithPlugin(new MetadataPlugin(metadata))
+                    .WithDefinition(new MetadataMessages())
                     .Build(hooks);
 
             return new MetadataInstance(service);

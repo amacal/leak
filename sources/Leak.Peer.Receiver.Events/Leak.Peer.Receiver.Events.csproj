@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{46A28D26-45DB-4BCF-A428-ED26546692C0}</ProjectGuid>
+    <ProjectGuid>{52574E78-5B0D-4375-86B3-82AED7EF9234}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Networking.Core</RootNamespace>
-    <AssemblyName>Leak.Networking.Core</AssemblyName>
+    <RootNamespace>Leak.Peer.Receiver.Events</RootNamespace>
+    <AssemblyName>Leak.Peer.Receiver.Events</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,22 +31,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBlock.cs" />
-    <Compile Include="DataBlockCallback.cs" />
-    <Compile Include="DataBlockFactory.cs" />
-    <Compile Include="NetworkPredicateHandler.cs" />
-    <Compile Include="NetworkBytesHandler.cs" />
-    <Compile Include="NetworkConnection.cs" />
-    <Compile Include="NetworkDirection.cs" />
-    <Compile Include="NetworkExtensions.cs" />
-    <Compile Include="NetworkIncomingMessage.cs" />
-    <Compile Include="NetworkIncomingMessageHandler.cs" />
-    <Compile Include="NetworkOutgoingMessage.cs" />
-    <Compile Include="NetworkAddress.cs" />
-    <Compile Include="NetworkRestrictedMessage.cs" />
+    <Compile Include="KeepAliveReceived.cs" />
+    <Compile Include="MessageIgnored.cs" />
+    <Compile Include="MessageReceived.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

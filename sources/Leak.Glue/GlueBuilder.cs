@@ -1,6 +1,7 @@
 ﻿using Leak.Common;
 using Leak.Extensions;
 using Leak.Networking.Core;
+using Leak.Peer.Receiver;
 using Leak.Tasks;
 
 namespace Leak.Peer.Coordinator
@@ -39,6 +40,12 @@ namespace Leak.Peer.Coordinator
         public GlueBuilder WithPlugin(MorePlugin plugin)
         {
             configuration.Plugins.Add(plugin);
+            return this;
+        }
+
+        public GlueBuilder WithDefinition(ReceiverDefinition definition)
+        {
+            configuration.Definition = definition;
             return this;
         }
 

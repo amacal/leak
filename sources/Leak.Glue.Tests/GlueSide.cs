@@ -41,6 +41,7 @@ namespace Leak.Peer.Coordinator.Tests
                 builder
                     .WithHash(hash)
                     .WithMemory(new GlueMemory())
+                    .WithDefinition(new GlueMessages())
                     .Build(hooks);
 
             return new GlueInstance(service);
