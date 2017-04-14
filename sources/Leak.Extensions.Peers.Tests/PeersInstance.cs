@@ -5,14 +5,14 @@ namespace Leak.Extensions.Peers.Tests
 {
     public class PeersInstance : IDisposable
     {
-        private readonly GlueService service;
+        private readonly CoordinatorService service;
 
-        public PeersInstance(GlueService service)
+        public PeersInstance(CoordinatorService service)
         {
             this.service = service;
         }
 
-        public GlueService Service
+        public CoordinatorService Service
         {
             get { return service; }
         }

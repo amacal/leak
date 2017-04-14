@@ -1,8 +1,9 @@
 ﻿using Leak.Peer.Receiver;
+using Leak.Peer.Sender;
 
 namespace Leak.Peer.Coordinator.Tests
 {
-    public class GlueMessages : ReceiverDefinition
+    public class GlueMessages : ReceiverDefinition, SenderDefinition
     {
         public string GetName(byte identifier)
         {
@@ -31,6 +32,39 @@ namespace Leak.Peer.Coordinator.Tests
 
                 case 20:
                     return "extended";
+
+                default:
+                    return null;
+            }
+        }
+
+        public byte? GetIdentifier(string name)
+        {
+            switch (name)
+            {
+                case "choke":
+                    return 0;
+
+                case "unchoke":
+                    return 1;
+
+                case "interested":
+                    return 2;
+
+                case "have":
+                    return 4;
+
+                case "bitfield":
+                    return 5;
+
+                case "request":
+                    return 6;
+
+                case "piece":
+                    return 7;
+
+                case "extended":
+                    return 20;
 
                 default:
                     return null;

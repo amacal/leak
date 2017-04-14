@@ -8,9 +8,9 @@ namespace Leak.Client.Adapters
 {
     internal class MetaGetToGlueAdapter : MetagetGlue
     {
-        private readonly GlueService service;
+        private readonly CoordinatorService service;
 
-        public MetaGetToGlueAdapter(GlueService service)
+        public MetaGetToGlueAdapter(CoordinatorService service)
         {
             this.service = service;
         }

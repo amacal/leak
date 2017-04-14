@@ -7,9 +7,9 @@ namespace Leak.Client.Adapters
 {
     public class DataShareToGlueAdapter : DataShareToGlue
     {
-        private readonly GlueService service;
+        private readonly CoordinatorService service;
 
-        public DataShareToGlueAdapter(GlueService service)
+        public DataShareToGlueAdapter(CoordinatorService service)
         {
             this.service = service;
         }

@@ -28,7 +28,7 @@ namespace Leak.Extensions.Peers
             });
         }
 
-        public static void SendPeers(this GlueService glue, PeerHash peer, params NetworkAddress[] remotes)
+        public static void SendPeers(this CoordinatorService glue, PeerHash peer, params NetworkAddress[] remotes)
         {
             BencodedValue bencoded = new BencodedValue
             {

@@ -6,9 +6,9 @@ namespace Leak.Client.Adapters
 {
     internal class DataGetToGlueAdapter : DataGetToGlue
     {
-        private readonly GlueService service;
+        private readonly CoordinatorService service;
 
-        public DataGetToGlueAdapter(GlueService service)
+        public DataGetToGlueAdapter(CoordinatorService service)
         {
             this.service = service;
         }

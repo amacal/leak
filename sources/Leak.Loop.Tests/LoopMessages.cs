@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Leak.Peer.Receiver.Tests
+﻿namespace Leak.Peer.Receiver.Tests
 {
     public class LoopMessages : ReceiverDefinition
     {

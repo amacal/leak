@@ -13,7 +13,7 @@ namespace Leak.Client
 {
     public static class AdapterExtensions
     {
-        public static MetagetGlue AsMetaGet(this GlueService service)
+        public static MetagetGlue AsMetaGet(this CoordinatorService service)
         {
             return new MetaGetToGlueAdapter(service);
         }
@@ -23,7 +23,7 @@ namespace Leak.Client
             return new MetaGetToMetaStoreAdapter(service);
         }
 
-        public static DataGetToGlue AsDataGet(this GlueService service)
+        public static DataGetToGlue AsDataGet(this CoordinatorService service)
         {
             return new DataGetToGlueAdapter(service);
         }
@@ -48,7 +48,7 @@ namespace Leak.Client
             return new DataShareToDataStoreAdapter(service);
         }
 
-        public static DataShareToGlue AsDataShare(this GlueService service)
+        public static DataShareToGlue AsDataShare(this CoordinatorService service)
         {
             return new DataShareToGlueAdapter(service);
         }

@@ -43,7 +43,7 @@ namespace Leak.Client.Peer
 
         public PeerConnector Connector { get; set; }
         public HandshakeNegotiator Negotiator { get; set; }
-        public GlueService Glue { get; set; }
+        public CoordinatorService Glue { get; set; }
 
         public MetafileService MetaStore { get; set; }
         public MetagetService MetaGet { get; set; }
@@ -145,7 +145,7 @@ namespace Leak.Client.Peer
                 OnMetadataRequestSent = OnMetadataRequestSent
             };
 
-            GlueHooks hooks = new GlueHooks
+            CoordinatorHooks hooks = new CoordinatorHooks
             {
                 OnPeerConnected = OnPeerConnected,
                 OnPeerDisconnected = OnPeerDisconnected,
@@ -155,7 +155,7 @@ namespace Leak.Client.Peer
             };
 
             Glue =
-                new GlueBuilder()
+                new CoordinatorBuilder()
                     .WithHash(Hash)
                     .WithMemory(Memory)
                     .WithPipeline(Pipeline)

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{930BCEEB-420F-4444-B057-4CE2C523A954}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Leak.Peer.Sender.Tests</RootNamespace>
+    <AssemblyName>Leak.Peer.Sender.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentAssertions, Version=4.19.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.4.19.2\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.19.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentAssertions.4.19.2\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SenderFixture.cs" />
+    <Compile Include="SenderFound.cs" />
+    <Compile Include="SenderMemory.cs" />
+    <Compile Include="SenderMessages.cs" />
+    <Compile Include="SenderSession.cs" />
+    <Compile Include="SenderTests.cs" />
+    <Compile Include="FixedDataBlock.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SenderUnknown.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
+      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Name>Leak.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Communicator\Leak.Peer.Sender.csproj">
+      <Project>{d0a3e78e-32b1-4db2-a6cb-58d47fddfe75}</Project>
+      <Name>Leak.Peer.Sender</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
+      <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
+      <Name>Leak.Completion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
+      <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
+      <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
+      <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
+      <Name>Leak.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Sender.Core\Leak.Peer.Sender.Core.csproj">
+      <Project>{715DE207-2F68-449D-8B68-32F854FC421F}</Project>
+      <Name>Leak.Peer.Sender.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Sender.Events\Leak.Peer.Sender.Events.csproj">
+      <Project>{AC70E300-0C21-4583-BBCC-D7076B0E9886}</Project>
+      <Name>Leak.Peer.Sender.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
+      <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
+      <Name>Leak.Sockets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
+      <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
+      <Name>Leak.Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Testing\Leak.Testing.csproj">
+      <Project>{56e41a71-1ac5-49d0-a8ec-b0e4767c7bf7}</Project>
+      <Name>Leak.Testing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

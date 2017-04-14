@@ -53,8 +53,8 @@ namespace Leak.Meta.Share.Tests
 
             File.WriteAllBytes(destination + ".metainfo", bytes);
 
-            GlueService glue =
-                new GlueBuilder()
+            CoordinatorService glue =
+                new CoordinatorBuilder()
                     .WithHash(metainfo.Hash)
                     .WithMemory(new MemoryBuilder().Build())
                     .WithPlugin(new MetadataPlugin(new MetadataHooks()))

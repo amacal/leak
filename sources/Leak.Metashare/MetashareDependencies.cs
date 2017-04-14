@@ -8,7 +8,7 @@ namespace Leak.Meta.Share
     {
         public PipelineService Pipeline;
 
-        public GlueService Glue;
+        public CoordinatorService Glue;
 
         public MetafileService Metafile;
     }

@@ -27,7 +27,7 @@ namespace Leak.Extensions.Peers
             mapping.Add(Name, new PeersHandler(hooks));
         }
 
-        public void HandlePeerConnected(GlueService service, ExtensionListReceived data)
+        public void HandlePeerConnected(CoordinatorService service, ExtensionListReceived data)
         {
             if (data.Extensions.Contains(Name) == false)
                 return;

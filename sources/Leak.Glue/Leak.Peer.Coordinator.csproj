@@ -33,17 +33,28 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlueBuilder.cs" />
-    <Compile Include="GlueCollection.cs" />
-    <Compile Include="GlueConfiguration.cs" />
-    <Compile Include="GlueDependencies.cs" />
-    <Compile Include="GlueEntry.cs" />
-    <Compile Include="GlueExtensions.cs" />
-    <Compile Include="GlueFacts.cs" />
-    <Compile Include="GlueHooks.cs" />
-    <Compile Include="GlueImplementation.cs" />
-    <Compile Include="GlueParameters.cs" />
-    <Compile Include="GlueService.cs" />
+    <Compile Include="CoordinatorBitfieldMessage.cs" />
+    <Compile Include="CoordinatorBuilder.cs" />
+    <Compile Include="CoordinatorCollection.cs" />
+    <Compile Include="CoordinatorConfiguration.cs" />
+    <Compile Include="CoordinatorDependencies.cs" />
+    <Compile Include="CoordinatorEntry.cs" />
+    <Compile Include="CoordinatorExtendedMessage.cs" />
+    <Compile Include="CoordinatorExtensions.cs" />
+    <Compile Include="CoordinatorFacts.cs" />
+    <Compile Include="CoordinatorGenericMessage.cs" />
+    <Compile Include="CoordinatorHaveMessage.cs" />
+    <Compile Include="CoordinatorHooks.cs" />
+    <Compile Include="CoordinatorImplementation.cs" />
+    <Compile Include="CoordinatorParameters.cs" />
+    <Compile Include="CoordinatorPieceMessage.cs" />
+    <Compile Include="CoordinatorRequestMessage.cs" />
+    <Compile Include="CoordinatorService.cs" />
+    <Compile Include="Messages\BitfieldIncomingMessage.cs" />
+    <Compile Include="Messages\ExtendedIncomingMessage.cs" />
+    <Compile Include="Messages\HaveIncomingMessage.cs" />
+    <Compile Include="Messages\PieceIncomingMessage.cs" />
+    <Compile Include="Messages\RequestIncomingMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,9 +66,9 @@
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Communicator\Leak.Peer.Communicator.csproj">
+    <ProjectReference Include="..\Leak.Communicator\Leak.Peer.Sender.csproj">
       <Project>{d0a3e78e-32b1-4db2-a6cb-58d47fddfe75}</Project>
-      <Name>Leak.Peer.Communicator</Name>
+      <Name>Leak.Peer.Sender</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
@@ -75,9 +86,17 @@
       <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
       <Name>Leak.Networking.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Coordinator.Core\Leak.Peer.Coordinator.Core.csproj">
+      <Project>{64010DB1-FB78-401B-98F6-B32A89243380}</Project>
+      <Name>Leak.Peer.Coordinator.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Peer.Receiver.Events\Leak.Peer.Receiver.Events.csproj">
       <Project>{52574E78-5B0D-4375-86B3-82AED7EF9234}</Project>
       <Name>Leak.Peer.Receiver.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Sender.Core\Leak.Peer.Sender.Core.csproj">
+      <Project>{715DE207-2F68-449D-8B68-32F854FC421F}</Project>
+      <Name>Leak.Peer.Sender.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{FCE678FC-C5D3-4911-82F5-24FCB9F61D84}</Project>

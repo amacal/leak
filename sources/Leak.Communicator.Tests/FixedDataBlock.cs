@@ -1,6 +1,6 @@
 ﻿using Leak.Networking.Core;
 
-namespace Leak.Peer.Communicator.Tests
+namespace Leak.Peer.Sender.Tests
 {
     public class FixedDataBlock : DataBlock
     {

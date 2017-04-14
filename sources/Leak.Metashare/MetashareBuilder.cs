@@ -30,7 +30,7 @@ namespace Leak.Meta.Share
             return this;
         }
 
-        public MetashareBuilder WithGlue(GlueService glue)
+        public MetashareBuilder WithGlue(CoordinatorService glue)
         {
             dependencies.Glue = glue;
             return this;

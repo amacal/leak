@@ -8,13 +8,13 @@ namespace Leak.Peer.Coordinator.Tests
     {
         private readonly NetworkConnection connection;
         private readonly Handshake handshake;
-        private readonly GlueHooks hooks;
+        private readonly CoordinatorHooks hooks;
 
         public GlueSide(NetworkConnection connection, Handshake handshake)
         {
             this.connection = connection;
             this.handshake = handshake;
-            this.hooks = new GlueHooks();
+            this.hooks = new CoordinatorHooks();
         }
 
         public PeerHash Peer
@@ -30,14 +30,14 @@ namespace Leak.Peer.Coordinator.Tests
         public GlueInstance Build(params string[] plugins)
         {
             FileHash hash = FileHash.Random();
-            GlueBuilder builder = new GlueBuilder();
+            CoordinatorBuilder builder = new CoordinatorBuilder();
 
             foreach (string plugin in plugins)
             {
                 builder.WithPlugin(new GlueNamedPlugin(plugin));
             }
 
-            GlueService service =
+            CoordinatorService service =
                 builder
                     .WithHash(hash)
                     .WithMemory(new GlueMemory())
@@ -47,7 +47,7 @@ namespace Leak.Peer.Coordinator.Tests
             return new GlueInstance(service);
         }
 
-        public GlueHooks Hooks
+        public CoordinatorHooks Hooks
         {
             get { return hooks; }
         }

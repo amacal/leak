@@ -78,7 +78,7 @@ namespace Leak.Extensions.Metadata
             });
         }
 
-        public static void SendMetadataRequest(this GlueService glue, PeerHash peer, int piece)
+        public static void SendMetadataRequest(this CoordinatorService glue, PeerHash peer, int piece)
         {
             BencodedValue bencoded = new BencodedValue
             {
@@ -100,7 +100,7 @@ namespace Leak.Extensions.Metadata
             glue.SendExtension(peer, MetadataPlugin.Name, Bencoder.Encode(bencoded));
         }
 
-        public static void SendMetadataReject(this GlueService glue, PeerHash peer, int piece)
+        public static void SendMetadataReject(this CoordinatorService glue, PeerHash peer, int piece)
         {
             BencodedValue bencoded = new BencodedValue
             {
@@ -122,7 +122,7 @@ namespace Leak.Extensions.Metadata
             glue.SendExtension(peer, MetadataPlugin.Name, Bencoder.Encode(bencoded));
         }
 
-        public static void SendMetadataPiece(this GlueService glue, PeerHash peer, int piece, int total, byte[] data)
+        public static void SendMetadataPiece(this CoordinatorService glue, PeerHash peer, int piece, int total, byte[] data)
         {
             BencodedValue bencoded = new BencodedValue
             {

@@ -80,6 +80,10 @@
       <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Communicator\Leak.Peer.Sender.csproj">
+      <Project>{D0A3E78E-32B1-4DB2-A6CB-58D47FDDFE75}</Project>
+      <Name>Leak.Peer.Sender</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
       <Project>{D9740E22-D95D-40C9-958B-C7F8CE164784}</Project>
       <Name>Leak.Completion</Name>

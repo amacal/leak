@@ -5,14 +5,14 @@ namespace Leak.Extensions.Metadata.Tests
 {
     public class MetadataInstance : IDisposable
     {
-        private readonly GlueService service;
+        private readonly CoordinatorService service;
 
-        public MetadataInstance(GlueService service)
+        public MetadataInstance(CoordinatorService service)
         {
             this.service = service;
         }
 
-        public GlueService Service
+        public CoordinatorService Service
         {
             get { return service; }
         }

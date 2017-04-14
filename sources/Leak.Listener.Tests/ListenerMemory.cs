@@ -1,5 +1,4 @@
-﻿using Leak.Common;
-using Leak.Networking;
+﻿using Leak.Networking;
 using Leak.Networking.Core;
 
 namespace Leak.Listener.Tests

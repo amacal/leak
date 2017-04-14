@@ -17,7 +17,7 @@ namespace Leak.Client.Swarm
             return builder;
         }
 
-        internal static GlueBuilder WithMetadata(this GlueBuilder builder, SwarmSettings settings, MetadataHooks hooks)
+        internal static CoordinatorBuilder WithMetadata(this CoordinatorBuilder builder, SwarmSettings settings, MetadataHooks hooks)
         {
             if (settings.Metadata)
             {
@@ -27,7 +27,7 @@ namespace Leak.Client.Swarm
             return builder;
         }
 
-        internal static GlueBuilder WithExchange(this GlueBuilder builder, SwarmSettings settings, PeersHooks hooks)
+        internal static CoordinatorBuilder WithExchange(this CoordinatorBuilder builder, SwarmSettings settings, PeersHooks hooks)
         {
             if (settings.Metadata)
             {

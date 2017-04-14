@@ -11,7 +11,7 @@ namespace Leak.Extensions.Peers.Tests
         private readonly NetworkConnection connection;
         private readonly Handshake handshake;
         private readonly PeersHooks peers;
-        private readonly GlueHooks hooks;
+        private readonly CoordinatorHooks hooks;
 
         public PeersSide(NetworkConnection connection, Handshake handshake)
         {
@@ -19,7 +19,7 @@ namespace Leak.Extensions.Peers.Tests
             this.handshake = handshake;
 
             this.peers = new PeersHooks();
-            this.hooks = new GlueHooks();
+            this.hooks = new CoordinatorHooks();
         }
 
         public PeerHash Peer
@@ -34,8 +34,8 @@ namespace Leak.Extensions.Peers.Tests
 
         public PeersInstance Build()
         {
-            GlueService service =
-                new GlueBuilder()
+            CoordinatorService service =
+                new CoordinatorBuilder()
                     .WithHash(handshake.Hash)
                     .WithMemory(new MemoryBuilder().Build())
                     .WithPlugin(new PeersPlugin(peers))
@@ -55,7 +55,7 @@ namespace Leak.Extensions.Peers.Tests
             get { return connection; }
         }
 
-        public GlueHooks Hooks
+        public CoordinatorHooks Hooks
         {
             get { return hooks; }
         }

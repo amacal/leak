@@ -11,7 +11,7 @@ namespace Leak.Extensions.Metadata.Tests
         private readonly NetworkConnection connection;
         private readonly Handshake handshake;
         private readonly MetadataHooks metadata;
-        private readonly GlueHooks hooks;
+        private readonly CoordinatorHooks hooks;
 
         public MetadataSide(NetworkConnection connection, Handshake handshake)
         {
@@ -19,7 +19,7 @@ namespace Leak.Extensions.Metadata.Tests
             this.handshake = handshake;
 
             this.metadata = new MetadataHooks();
-            this.hooks = new GlueHooks();
+            this.hooks = new CoordinatorHooks();
         }
 
         public PeerHash Peer
@@ -34,8 +34,8 @@ namespace Leak.Extensions.Metadata.Tests
 
         public MetadataInstance Build()
         {
-            GlueService service =
-                new GlueBuilder()
+            CoordinatorService service =
+                new CoordinatorBuilder()
                     .WithHash(handshake.Hash)
                     .WithMemory(new MemoryBuilder().Build())
                     .WithPlugin(new MetadataPlugin(metadata))
@@ -55,7 +55,7 @@ namespace Leak.Extensions.Metadata.Tests
             get { return connection; }
         }
 
-        public GlueHooks Hooks
+        public CoordinatorHooks Hooks
         {
             get { return hooks; }
         }
