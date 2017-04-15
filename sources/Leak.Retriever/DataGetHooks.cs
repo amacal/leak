@@ -1,5 +1,6 @@
 ﻿using System;
 using Leak.Events;
+using Leak.Peer.Coordinator.Events;
 
 namespace Leak.Data.Get
 {

@@ -19,6 +19,7 @@ using Leak.Networking;
 using Leak.Networking.Core;
 using Leak.Networking.Events;
 using Leak.Peer.Coordinator;
+using Leak.Peer.Coordinator.Events;
 using Leak.Peer.Negotiator;
 
 namespace Leak.Client.Peer

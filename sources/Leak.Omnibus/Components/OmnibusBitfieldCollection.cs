@@ -2,6 +2,7 @@
 using System.Linq;
 using Leak.Common;
 using Leak.Events;
+using Leak.Peer.Coordinator.Events;
 
 namespace Leak.Data.Map.Components
 {

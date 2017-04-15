@@ -1,11 +1,10 @@
 ﻿using Leak.Common;
 
-namespace Leak.Events
+namespace Leak.Peer.Coordinator.Events
 {
-    public class ExtensionListReceived
+    public class ExtensionListSent
     {
         public PeerHash Peer;
-
         public string[] Extensions;
     }
 }

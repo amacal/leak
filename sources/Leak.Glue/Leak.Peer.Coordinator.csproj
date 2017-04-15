@@ -90,6 +90,10 @@
       <Project>{64010DB1-FB78-401B-98F6-B32A89243380}</Project>
       <Name>Leak.Peer.Coordinator.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Coordinator.Events\Leak.Peer.Coordinator.Events.csproj">
+      <Project>{A78A0462-183E-4E2D-97B1-5F79D674EAC7}</Project>
+      <Name>Leak.Peer.Coordinator.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Peer.Receiver.Events\Leak.Peer.Receiver.Events.csproj">
       <Project>{52574E78-5B0D-4375-86B3-82AED7EF9234}</Project>
       <Name>Leak.Peer.Receiver.Events</Name>

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9866F76F-64E9-4B0C-B2C5-34281B416803}</ProjectGuid>
+    <ProjectGuid>{A78A0462-183E-4E2D-97B1-5F79D674EAC7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Leak.Events</RootNamespace>
-    <AssemblyName>Leak.Events</AssemblyName>
+    <RootNamespace>Leak.Peer.Coordinator.Events</RootNamespace>
+    <AssemblyName>Leak.Peer.Coordinator.Events</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,37 +33,21 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockExpired.cs" />
-    <Compile Include="BlockHandled.cs" />
-    <Compile Include="BlockReserved.cs" />
-    <Compile Include="BlockSent.cs" />
-    <Compile Include="BlockWritten.cs" />
-    <Compile Include="ConnectionEstablished.cs" />
-    <Compile Include="ConnectionRejected.cs" />
-    <Compile Include="DataAllocated.cs" />
-    <Compile Include="DataChanged.cs" />
-    <Compile Include="DataCompleted.cs" />
-    <Compile Include="BlockRead.cs" />
-    <Compile Include="DataVerified.cs" />
-    <Compile Include="HandshakeCompleted.cs" />
-    <Compile Include="HandshakeRejected.cs" />
-    <Compile Include="MetadataShared.cs" />
-    <Compile Include="MetafileMeasured.cs" />
-    <Compile Include="MetafileRead.cs" />
-    <Compile Include="MetafileRejected.cs" />
-    <Compile Include="MetafileVerified.cs" />
-    <Compile Include="MetafileWritten.cs" />
-    <Compile Include="PieceAccepted.cs" />
-    <Compile Include="PieceCompleted.cs" />
-    <Compile Include="PieceReady.cs" />
-    <Compile Include="PieceRejected.cs" />
+    <Compile Include="BlockReceived.cs" />
+    <Compile Include="BlockRequested.cs" />
+    <Compile Include="ExtensionDataReceived.cs" />
+    <Compile Include="ExtensionDataSent.cs" />
+    <Compile Include="ExtensionListReceived.cs" />
+    <Compile Include="ExtensionListSent.cs" />
+    <Compile Include="PeerBitfieldChanged.cs" />
+    <Compile Include="PeerConnected.cs" />
+    <Compile Include="PeerDisconnected.cs" />
+    <Compile Include="PeerStatusChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskCompleted.cs" />
-    <Compile Include="TaskStarted.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
-      <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
+      <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
@@ -72,11 +56,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

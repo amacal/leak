@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Leak.Common;
 using Leak.Events;
+using Leak.Peer.Coordinator.Events;
 using Leak.Testing;
 using NUnit.Framework;
 

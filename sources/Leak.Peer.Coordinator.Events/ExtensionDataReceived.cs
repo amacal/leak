@@ -1,8 +1,8 @@
 ﻿using Leak.Common;
 
-namespace Leak.Events
+namespace Leak.Peer.Coordinator.Events
 {
-    public class ExtensionDataSent
+    public class ExtensionDataReceived
     {
         public PeerHash Peer;
         public string Extension;

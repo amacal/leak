@@ -4,6 +4,7 @@ using Leak.Common;
 using Leak.Data.Map.Components;
 using Leak.Data.Map.Tasks;
 using Leak.Events;
+using Leak.Peer.Coordinator.Events;
 using Leak.Tasks;
 
 namespace Leak.Data.Map

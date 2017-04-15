@@ -66,6 +66,10 @@
       <Project>{A69138D4-EAEB-4690-A040-5F612FEDDEB2}</Project>
       <Name>Leak.Data.Map</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Coordinator.Events\Leak.Peer.Coordinator.Events.csproj">
+      <Project>{A78A0462-183E-4E2D-97B1-5F79D674EAC7}</Project>
+      <Name>Leak.Peer.Coordinator.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>
       <Name>Leak.Tasks</Name>

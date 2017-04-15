@@ -3,6 +3,7 @@ using Leak.Common;
 using Leak.Events;
 using Leak.Networking.Core;
 using Leak.Peer.Coordinator.Core;
+using Leak.Peer.Coordinator.Events;
 using Leak.Peer.Coordinator.Messages;
 using Leak.Peer.Sender;
 

@@ -50,10 +50,6 @@
       <Project>{86CC7FFA-A1F0-4477-9D6F-CAC2FF3DD555}</Project>
       <Name>Leak.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
-      <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
-      <Name>Leak.Events</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Extensions\Leak.Extensions.csproj">
       <Project>{3348C6C0-81B0-4FB3-BA1D-6826968F028E}</Project>
       <Name>Leak.Extensions</Name>
@@ -65,6 +61,10 @@
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
       <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
       <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Coordinator.Events\Leak.Peer.Coordinator.Events.csproj">
+      <Project>{A78A0462-183E-4E2D-97B1-5F79D674EAC7}</Project>
+      <Name>Leak.Peer.Coordinator.Events</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
