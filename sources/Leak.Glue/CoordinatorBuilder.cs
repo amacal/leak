@@ -1,8 +1,6 @@
 ﻿using Leak.Common;
 using Leak.Extensions;
 using Leak.Networking.Core;
-using Leak.Peer.Receiver;
-using Leak.Peer.Sender;
 using Leak.Tasks;
 
 namespace Leak.Peer.Coordinator
@@ -44,15 +42,6 @@ namespace Leak.Peer.Coordinator
             return this;
         }
 
-        public CoordinatorBuilder WithDefinition<T>(T definition)
-            where T : SenderDefinition, ReceiverDefinition
-        {
-            configuration.ReceiverDefinition = definition;
-            configuration.SenderDefinition = definition;
-
-            return this;
-        }
-
         public CoordinatorService Build()
         {
             return Build(new CoordinatorHooks());
@@ -60,7 +49,7 @@ namespace Leak.Peer.Coordinator
 
         public CoordinatorService Build(CoordinatorHooks hooks)
         {
-            return new CoordinatorImplementation(parameters, dependencies, hooks, configuration);
+            return new CoordinatorService(parameters, dependencies, hooks, configuration);
         }
     }
 }

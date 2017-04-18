@@ -1,40 +1,31 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Extensions.Metadata.Tests
 {
     public class MetadataSession : IDisposable
     {
-        private readonly FileHash hash;
-        private readonly MetadataSide left;
-        private readonly MetadataSide right;
+        private readonly CoordinatorService coordinator;
+        private readonly MetadataPlugin plugin;
 
-        public MetadataSession(FileHash hash, MetadataSide left, MetadataSide right)
+        public MetadataSession(CoordinatorService coordinator, MetadataPlugin plugin)
         {
-            this.hash = hash;
-            this.left = left;
-            this.right = right;
+            this.coordinator = coordinator;
+            this.plugin = plugin;
         }
 
-        public MetadataSide Left
+        public CoordinatorService Coordinator
         {
-            get { return left; }
+            get { return coordinator; }
         }
 
-        public MetadataSide Right
+        public MetadataPlugin Plugin
         {
-            get { return right; }
-        }
-
-        public FileHash Hash
-        {
-            get { return hash; }
+            get { return plugin; }
         }
 
         public void Dispose()
         {
-            left.Dispose();
-            right.Dispose();
         }
     }
 }

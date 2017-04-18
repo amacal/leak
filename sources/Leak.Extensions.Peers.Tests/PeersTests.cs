@@ -1,50 +1,46 @@
 ﻿using FluentAssertions;
-using Leak.Common;
 using Leak.Testing;
 using NUnit.Framework;
 using System.Net;
-using System.Threading.Tasks;
+using FakeItEasy;
+using Leak.Common;
 using Leak.Networking.Core;
+using Leak.Peer.Receiver.Events;
 
 namespace Leak.Extensions.Peers.Tests
 {
     public class PeersTests
     {
         [Test]
-        public async Task ShouldTriggerPeersData()
+        public void ShouldTriggerPeersDataWhenLocal()
         {
             NetworkAddress remote = NetworkAddress.Parse(IPAddress.Loopback, 8345);
 
             using (PeersFixture fixture = new PeersFixture())
-            using (PeersSession session = await fixture.Start())
+            using (PeersSession session = fixture.Start())
             {
-                Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Peers.OnPeersDataReceived, data =>
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+                Handshake handshake = new Handshake(PeerHash.Random(), PeerHash.Random(), session.Coordinator.Hash, HandshakeOptions.Extended);
+
+                MessageReceived extended = new MessageReceived
                 {
-                    data.Peer.Should().Be(session.Right.Peer);
-                    data.Hash.Should().Be(session.Hash);
+                    Type = "extended",
+                    Peer = handshake.Remote,
+                    Payload = new PeersMessage("d1:md6:ut_pexi3eee")
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Plugin.Hooks.OnPeersDataSent, data =>
+                {
+                    data.Peer.Should().Be(handshake.Remote);
+                    data.Hash.Should().Be(session.Coordinator.Hash);
                     data.Remotes.Should().Contain(remote);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Peers.OnPeersDataSent, data =>
-                {
-                    data.Peer.Should().Be(session.Left.Peer);
-                    data.Hash.Should().Be(session.Hash);
-                    data.Remotes.Should().Contain(remote);
-                });
+                session.Coordinator.Connect(connection, handshake);
+                session.Coordinator.Handle(extended);
 
-                using (PeersInstance iLeft = session.Left.Build())
-                using (PeersInstance iRight = session.Right.Build())
-                {
-                    iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
-                    iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
-
-                    received.Wait().Should().BeTrue();
-                    iRight.Service.SendPeers(session.Left.Peer, remote);
-                }
-
-                left.Wait().Should().BeTrue();
-                right.Wait().Should().BeTrue();
+                session.Coordinator.SendPeers(handshake.Remote, remote);
+                handler.Wait().Should().BeTrue();
             }
         }
     }

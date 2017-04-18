@@ -1,33 +1,28 @@
-﻿using Leak.Common;
+﻿using System;
+using Leak.Common;
 using Leak.Tasks;
-using System;
-using Leak.Peer.Coordinator;
 
-namespace Leak.Extensions.Metadata.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
-    public class MetadataFixture : IDisposable
+    public class CoordinatorFixture : IDisposable
     {
         private readonly LeakPipeline pipeline;
 
-        public MetadataFixture()
+        public CoordinatorFixture()
         {
             pipeline = new LeakPipeline();
             pipeline.Start();
         }
 
-        public MetadataSession Start()
+        public CoordinatorSession Start()
         {
-            MetadataHooks hooks = new MetadataHooks();
-            MetadataPlugin plugin = new MetadataPlugin(hooks);
-
             CoordinatorService coordinator =
                 new CoordinatorBuilder()
                     .WithHash(FileHash.Random())
                     .WithPipeline(pipeline)
-                    .WithPlugin(plugin)
                     .Build();
 
-            return new MetadataSession(coordinator, plugin);
+            return new CoordinatorSession(coordinator);
         }
 
         public void Dispose()

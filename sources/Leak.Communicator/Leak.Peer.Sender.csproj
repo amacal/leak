@@ -33,12 +33,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SenderBuilder.cs" />
+    <Compile Include="SenderCollection.cs" />
     <Compile Include="SenderConfiguration.cs" />
+    <Compile Include="SenderContext.cs" />
     <Compile Include="SenderDefinition.cs" />
     <Compile Include="SenderExtensions.cs" />
     <Compile Include="SenderHooks.cs" />
     <Compile Include="SenderService.cs" />
-    <Compile Include="SenderKeepAliveMessage.cs" />
+    <Compile Include="SenderKeepAlive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -30,9 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="F2F.Sandbox, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\F2F.Sandbox.1.1.1.0\lib\net20\F2F.Sandbox.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FakeItEasy, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FakeItEasy.3.2.0\lib\net40\FakeItEasy.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.4.19.2\lib\net45\FluentAssertions.dll</HintPath>
@@ -51,28 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlueFixture.cs" />
-    <Compile Include="GlueInstance.cs" />
-    <Compile Include="GlueMemory.cs" />
-    <Compile Include="GlueMessages.cs" />
-    <Compile Include="GlueNamedPlugin.cs" />
-    <Compile Include="GlueSession.cs" />
-    <Compile Include="GlueSide.cs" />
-    <Compile Include="GlueTests.cs" />
+    <Compile Include="CoordinatorMessage.cs" />
+    <Compile Include="CoordinatorFixture.cs" />
+    <Compile Include="CoordinatorInstance.cs" />
+    <Compile Include="CoordinatorNamedPlugin.cs" />
+    <Compile Include="CoordinatorSession.cs" />
+    <Compile Include="CoordinatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Common\Leak.Common.csproj">
       <Project>{86cc7ffa-a1f0-4477-9d6f-cac2ff3dd555}</Project>
       <Name>Leak.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Communicator\Leak.Peer.Sender.csproj">
-      <Project>{D0A3E78E-32B1-4DB2-A6CB-58D47FDDFE75}</Project>
-      <Name>Leak.Peer.Sender</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Completion\Leak.Completion.csproj">
-      <Project>{d9740e22-d95d-40c9-958b-c7f8ce164784}</Project>
-      <Name>Leak.Completion</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Events\Leak.Events.csproj">
       <Project>{9866f76f-64e9-4b0c-b2c5-34281b416803}</Project>
@@ -86,29 +75,17 @@
       <Project>{a634e68e-f72f-42a5-acb6-c99006fe24d2}</Project>
       <Name>Leak.Peer.Coordinator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Loop\Leak.Peer.Receiver.csproj">
-      <Project>{814C1638-D0DD-49F2-9B42-C2CCF37A3D7A}</Project>
-      <Name>Leak.Peer.Receiver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Metadata\Leak.Meta.Info.csproj">
-      <Project>{73395DE7-5003-490C-8804-541DE647153D}</Project>
-      <Name>Leak.Meta.Info</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
       <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
       <Name>Leak.Networking.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Leak.Networking\Leak.Networking.csproj">
-      <Project>{4ea55cfb-72fd-4298-810a-65a5a3e2ad48}</Project>
-      <Name>Leak.Networking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Peer.Coordinator.Events\Leak.Peer.Coordinator.Events.csproj">
       <Project>{A78A0462-183E-4E2D-97B1-5F79D674EAC7}</Project>
       <Name>Leak.Peer.Coordinator.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Leak.Sockets\Leak.Sockets.csproj">
-      <Project>{6e385e2d-365a-46aa-ae93-01b375c4e48f}</Project>
-      <Name>Leak.Sockets</Name>
+    <ProjectReference Include="..\Leak.Peer.Receiver.Events\Leak.Peer.Receiver.Events.csproj">
+      <Project>{52574E78-5B0D-4375-86B3-82AED7EF9234}</Project>
+      <Name>Leak.Peer.Receiver.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Leak.Tasks\Leak.Tasks.csproj">
       <Project>{fce678fc-c5d3-4911-82f5-24fcb9f61d84}</Project>

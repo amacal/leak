@@ -15,6 +15,11 @@
             this.options = options;
         }
 
+        public static Handshake Random(FileHash hash)
+        {
+            return new Handshake(PeerHash.Random(), PeerHash.Random(), hash, HandshakeOptions.None);
+        }
+
         public PeerHash Local
         {
             get { return local; }

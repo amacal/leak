@@ -1,40 +1,31 @@
-﻿using Leak.Common;
-using System;
+﻿using System;
+using Leak.Peer.Coordinator;
 
 namespace Leak.Extensions.Peers.Tests
 {
     public class PeersSession : IDisposable
     {
-        private readonly FileHash hash;
-        private readonly PeersSide left;
-        private readonly PeersSide right;
+        private readonly CoordinatorService coordinator;
+        private readonly PeersPlugin plugin;
 
-        public PeersSession(FileHash hash, PeersSide left, PeersSide right)
+        public PeersSession(CoordinatorService coordinator, PeersPlugin plugin)
         {
-            this.hash = hash;
-            this.left = left;
-            this.right = right;
+            this.coordinator = coordinator;
+            this.plugin = plugin;
         }
 
-        public PeersSide Left
+        public CoordinatorService Coordinator
         {
-            get { return left; }
+            get { return coordinator; }
         }
 
-        public PeersSide Right
+        public PeersPlugin Plugin
         {
-            get { return right; }
-        }
-
-        public FileHash Hash
-        {
-            get { return hash; }
+            get { return plugin; }
         }
 
         public void Dispose()
         {
-            left.Dispose();
-            right.Dispose();
         }
     }
 }

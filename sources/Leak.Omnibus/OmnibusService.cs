@@ -85,7 +85,7 @@ namespace Leak.Data.Map
             });
         }
 
-        public void Handle(PeerBitfieldChanged data)
+        public void Handle(BitfieldChanged data)
         {
             context.Queue.Add(() =>
             {
@@ -93,7 +93,7 @@ namespace Leak.Data.Map
             });
         }
 
-        public void Handle(PeerStatusChanged data)
+        public void Handle(StatusChanged data)
         {
             context.Queue.Add(() =>
             {

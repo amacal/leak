@@ -21,6 +21,8 @@ using Leak.Networking.Events;
 using Leak.Peer.Coordinator;
 using Leak.Peer.Coordinator.Events;
 using Leak.Peer.Negotiator;
+using Leak.Peer.Receiver;
+using Leak.Peer.Sender;
 
 namespace Leak.Client.Peer
 {
@@ -44,7 +46,10 @@ namespace Leak.Client.Peer
 
         public PeerConnector Connector { get; set; }
         public HandshakeNegotiator Negotiator { get; set; }
-        public CoordinatorService Glue { get; set; }
+
+        public ReceiverService Receiver { get; set; }
+        public SenderService Sender { get; set; }
+        public CoordinatorService Coordinator { get; set; }
 
         public MetafileService MetaStore { get; set; }
         public MetagetService MetaGet { get; set; }
@@ -59,8 +64,11 @@ namespace Leak.Client.Peer
             StartNetwork();
             StartNegotiator();
             StartConnector();
-            StartGlue();
             StartDataMap();
+
+            StartReceiver();
+            StartSender();
+            StartCoordinator();
         }
 
         public void Connect(NetworkAddress remote)
@@ -137,7 +145,33 @@ namespace Leak.Client.Peer
             Connector.Start();
         }
 
-        private void StartGlue()
+        private void StartSender()
+        {
+            SenderHooks hooks = new SenderHooks
+            {
+            };
+
+            Sender =
+                new SenderBuilder()
+                    .WithHash(Hash)
+                    .WithDefinition(new MessageDefinition())
+                    .Build(hooks);
+        }
+
+        private void StartReceiver()
+        {
+            ReceiverHooks hooks = new ReceiverHooks
+            {
+                OnMessageReceived = data => Coordinator?.Handle(data)
+            };
+
+            Receiver =
+                new ReceiverBuilder()
+                    .WithDefinition(new MessageDefinition())
+                    .Build(hooks);
+        }
+
+        private void StartCoordinator()
         {
             MetadataHooks metadata = new MetadataHooks
             {
@@ -150,21 +184,22 @@ namespace Leak.Client.Peer
             {
                 OnPeerConnected = OnPeerConnected,
                 OnPeerDisconnected = OnPeerDisconnected,
-                OnPeerBitfieldChanged = OnPeerBitfieldChanged,
-                OnPeerStatusChanged = OnPeerStatusChanged,
-                OnBlockReceived = data => DataGet?.Handle(data)
+                OnBitfieldChanged = OnPeerBitfieldChanged,
+                OnStatusChanged = OnPeerStatusChanged,
+                OnBlockReceived = data => DataGet?.Handle(data),
+                OnMessageRequested = data => Sender?.Send(data.Peer, data.Message),
+                OnKeepAliveRequested = data => Sender?.SendKeepAlive(data.Peer)
             };
 
-            Glue =
+            Coordinator =
                 new CoordinatorBuilder()
                     .WithHash(Hash)
                     .WithMemory(Memory)
                     .WithPipeline(Pipeline)
                     .WithPlugin(new MetadataPlugin(metadata))
-                    .WithDefinition(new MessageDefinition())
                     .Build(hooks);
 
-            Glue.Start();
+            Coordinator.Start();
         }
 
         private void StartDataMap()
@@ -218,7 +253,7 @@ namespace Leak.Client.Peer
             MetaGet =
                 new MetagetBuilder()
                     .WithHash(Hash)
-                    .WithGlue(Glue.AsMetaGet())
+                    .WithGlue(Coordinator.AsMetaGet())
                     .WithPipeline(Pipeline)
                     .WithMetafile(MetaStore.AsMetaGet())
                     .Build(hooks);
@@ -260,7 +295,7 @@ namespace Leak.Client.Peer
                 new DataGetBuilder()
                     .WithHash(Hash)
                     .WithStrategy("sequential")
-                    .WithGlue(Glue.AsDataGet())
+                    .WithGlue(Coordinator.AsDataGet())
                     .WithPipeline(Pipeline)
                     .WithDataStore(DataStore.AsDataGet())
                     .WithDataMap(DataMap.AsDataGet())
@@ -280,7 +315,7 @@ namespace Leak.Client.Peer
 
         public void OnHandshakeCompleted(HandshakeCompleted data)
         {
-            Glue?.Connect(data.Connection, data.Handshake);
+            Coordinator?.Connect(data.Connection, data.Handshake);
         }
 
         public void OnHandshakeRejected(HandshakeRejected data)
@@ -293,21 +328,26 @@ namespace Leak.Client.Peer
             Completion.SetResult(new PeerSession(this));
 
             DataMap?.Handle(data);
+
+            Sender?.Add(data.Peer, data.Connection);
+            Receiver?.StartProcessing(data.Peer, data.Connection);
         }
 
         private void OnPeerDisconnected(PeerDisconnected data)
         {
             Notifications.Enqueue(new PeerDisconnectedNotification(data.Peer));
+
             DataMap?.Handle(data);
+            Sender?.Remove(data.Peer);
         }
 
-        private void OnPeerBitfieldChanged(PeerBitfieldChanged data)
+        private void OnPeerBitfieldChanged(BitfieldChanged data)
         {
             Notifications.Enqueue(new BitfieldChangedNotification(data.Peer, data.Bitfield));
             DataMap?.Handle(data);
         }
 
-        private void OnPeerStatusChanged(PeerStatusChanged data)
+        private void OnPeerStatusChanged(StatusChanged data)
         {
             Notifications.Enqueue(new StatusChangedNotification(data.Peer, data.State));
             DataMap?.Handle(data);
@@ -329,7 +369,7 @@ namespace Leak.Client.Peer
             Metainfo = data.Metainfo;
             Notifications.Enqueue(new MetafileCompletedNotification(Metainfo));
 
-            Glue?.Handle(data);
+            Coordinator?.Handle(data);
             DataStore?.Handle(data);
             DataMap?.Handle(data);
         }
@@ -386,7 +426,7 @@ namespace Leak.Client.Peer
 
         private void OnConnectionTerminated(ConnectionTerminated data)
         {
-            Glue?.Disconnect(data.Connection);
+            Coordinator?.Disconnect(data.Connection);
         }
 
         private void OnDataChanged(DataChanged data)

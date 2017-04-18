@@ -16,7 +16,7 @@ namespace Leak.Client.Adapters
 
         public void SendUnchoke(PeerHash peer)
         {
-            service.SendUnchoke(peer);
+            service.Unchoke(peer);
         }
 
         public void SendPiece(PeerHash peer, BlockIndex block, DataBlock payload)

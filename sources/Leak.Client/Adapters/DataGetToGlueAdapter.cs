@@ -15,7 +15,7 @@ namespace Leak.Client.Adapters
 
         public void SendInterested(PeerHash peer)
         {
-            service.SendInterested(peer);
+            service.Interested(peer);
         }
 
         public void SendRequest(PeerHash peer, BlockIndex block)

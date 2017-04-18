@@ -3,11 +3,11 @@ using Leak.Extensions;
 
 namespace Leak.Peer.Coordinator.Tests
 {
-    public class GlueNamedPlugin : MorePlugin, MoreHandler
+    public class CoordinatorNamedPlugin : MorePlugin, MoreHandler
     {
         private readonly string name;
 
-        public GlueNamedPlugin(string name)
+        public CoordinatorNamedPlugin(string name)
         {
             this.name = name;
         }

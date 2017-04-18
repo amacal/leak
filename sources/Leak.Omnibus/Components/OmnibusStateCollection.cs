@@ -33,7 +33,7 @@ namespace Leak.Data.Map.Components
             byPeer.Remove(data.Peer);
         }
 
-        public void Handle(PeerStatusChanged data)
+        public void Handle(StatusChanged data)
         {
             OmnibusStateEntry entry;
 

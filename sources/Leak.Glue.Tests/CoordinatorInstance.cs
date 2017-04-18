@@ -1,13 +1,12 @@
 ﻿using System;
-using Leak.Peer.Coordinator;
 
-namespace Leak.Extensions.Metadata.Tests
+namespace Leak.Peer.Coordinator.Tests
 {
-    public class MetadataInstance : IDisposable
+    public class CoordinatorInstance : IDisposable
     {
         private readonly CoordinatorService service;
 
-        public MetadataInstance(CoordinatorService service)
+        public CoordinatorInstance(CoordinatorService service)
         {
             this.service = service;
         }

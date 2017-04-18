@@ -1,5 +1,4 @@
-﻿using Leak.Common;
-using System.Linq;
+﻿using System.Linq;
 using Leak.Networking.Core;
 using Leak.Peer.Coordinator;
 using Leak.Peer.Coordinator.Events;

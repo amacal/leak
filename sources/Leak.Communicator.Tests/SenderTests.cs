@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using FakeItEasy;
 using FluentAssertions;
+using Leak.Common;
+using Leak.Networking.Core;
 using Leak.Testing;
 using NUnit.Framework;
 
@@ -8,53 +10,88 @@ namespace Leak.Peer.Sender.Tests
     public class SenderTests
     {
         [Test]
-        public async Task ShouldTriggerKeepAlive()
+        public void ShouldTriggerKeepAliveSent()
         {
             using (SenderFixture fixture = new SenderFixture())
-            using (SenderSession session = await fixture.Start())
+            using (SenderSession session = fixture.Start())
             {
-                Trigger handler = Trigger.Bind(ref fixture.Hooks.OnKeepAliveSent, data =>
+                PeerHash peer = PeerHash.Random();
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnKeepAliveSent, data =>
                 {
-                    data.Peer.Should().NotBeNull();
+                    data.Peer.Should().Be(peer);
                 });
 
-                session.Communicator.SendKeepAlive();
+                session.Sender.Add(peer, connection);
+                session.Sender.SendKeepAlive(peer);
+
                 handler.Wait().Should().BeTrue();
             }
         }
 
         [Test]
-        public async Task ShouldTriggerMessageSent()
+        public void ShouldTriggerMessageSent()
         {
             using (SenderFixture fixture = new SenderFixture())
-            using (SenderSession session = await fixture.Start())
+            using (SenderSession session = fixture.Start())
             {
-                Trigger handler = Trigger.Bind(ref fixture.Hooks.OnMessageSent, data =>
+                PeerHash peer = PeerHash.Random();
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnMessageSent, data =>
                 {
                     data.Peer.Should().NotBeNull();
                     data.Type.Should().Be("found");
                     data.Payload.Should().NotBeNull();
                 });
 
-                session.Communicator.Send(new SenderFound());
+                session.Sender.Add(peer, connection);
+                session.Sender.Send(peer, new SenderFound());
+
                 handler.Wait().Should().BeTrue();
             }
         }
 
         [Test]
-        public async Task ShouldTriggerMessageIgnored()
+        public void ShouldTriggerMessageIgnoredWhenMessageNotMapped()
         {
             using (SenderFixture fixture = new SenderFixture())
-            using (SenderSession session = await fixture.Start())
+            using (SenderSession session = fixture.Start())
             {
-                Trigger handler = Trigger.Bind(ref fixture.Hooks.OnMessageIgnored, data =>
+                PeerHash peer = PeerHash.Random();
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnMessageIgnored, data =>
                 {
                     data.Peer.Should().NotBeNull();
                     data.Type.Should().Be("unknown");
                     data.Payload.Should().NotBeNull();
                 });
 
-                session.Communicator.Send(new SenderUnknown());
+                session.Sender.Add(peer, connection);
+                session.Sender.Send(peer, new SenderUnknown());
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerMessageIgnoredWhenPeerNotFound()
+        {
+            using (SenderFixture fixture = new SenderFixture())
+            using (SenderSession session = fixture.Start())
+            {
+                PeerHash peer = PeerHash.Random();
+
+                Trigger handler = Trigger.Bind(ref session.Hooks.OnMessageIgnored, data =>
+                {
+                    data.Peer.Should().NotBeNull();
+                    data.Type.Should().Be("found");
+                    data.Payload.Should().NotBeNull();
+                });
+
+                session.Sender.Send(peer, new SenderFound());
                 handler.Wait().Should().BeTrue();
             }
         }

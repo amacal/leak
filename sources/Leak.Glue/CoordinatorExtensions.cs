@@ -1,11 +1,10 @@
 ﻿using Leak.Bencoding;
 using Leak.Common;
-using Leak.Events;
 using Leak.Networking.Core;
 using Leak.Peer.Coordinator.Core;
 using Leak.Peer.Coordinator.Events;
 using Leak.Peer.Coordinator.Messages;
-using Leak.Peer.Sender;
+using Leak.Peer.Sender.Core;
 
 namespace Leak.Peer.Coordinator
 {
@@ -66,51 +65,74 @@ namespace Leak.Peer.Coordinator
             return value;
         }
 
-        public static void SendBitfield(this SenderService sender, Bitfield bitfield)
+        public static void SendKeepAlive(this CoordinatorHooks hooks, PeerHash peer)
         {
-            sender.Send(new CoordinatorBitfieldMessage(bitfield));
+            hooks.CallKeeAliveRequested(peer);
         }
 
-        public static void SendHave(this SenderService sender, PieceInfo piece)
+        public static void SendBitfield(this CoordinatorHooks hooks, PeerHash peer, Bitfield bitfield)
         {
-            sender.Send(new CoordinatorHaveMessage(piece));
+            hooks.CallMessageRequested(peer, new CoordinatorBitfieldMessage(bitfield));
         }
 
-        public static void SendRequest(this SenderService sender, Request request)
+        public static void SendHave(this CoordinatorHooks hooks, PeerHash peer, PieceInfo piece)
         {
-            sender.Send(new CoordinatorRequestMessage(request));
+            hooks.CallMessageRequested(peer, new CoordinatorHaveMessage(piece));
         }
 
-        public static void SendPiece(this SenderService sender, Piece piece)
+        public static void SendRequest(this CoordinatorHooks hooks, PeerHash peer, Request request)
         {
-            sender.Send(new CoordinatorPieceMessage(piece));
+            hooks.CallMessageRequested(peer, new CoordinatorRequestMessage(request));
         }
 
-        public static void SendExtended(this SenderService sender, Extended extended)
+        public static void SendPiece(this CoordinatorHooks hooks, PeerHash peer, Piece piece)
         {
-            sender.Send(new CoordinatorExtendedMessage(extended));
+            hooks.CallMessageRequested(peer, new CoordinatorPieceMessage(piece));
         }
 
-        public static void SendChoke(this SenderService sender)
+        public static void SendExtended(this CoordinatorHooks hooks, PeerHash peer, Extended extended)
         {
-            sender.Send(new CoordinatorGenericMessage("choke"));
+            hooks.CallMessageRequested(peer, new CoordinatorExtendedMessage(extended));
         }
 
-        public static void SendUnchoke(this SenderService sender)
+        public static void SendChoke(this CoordinatorHooks hooks, PeerHash peer)
         {
-            sender.Send(new CoordinatorGenericMessage("unchoke"));
+            hooks.CallMessageRequested(peer, new CoordinatorGenericMessage("choke"));
         }
 
-        public static void SendInterested(this SenderService sender)
+        public static void SendUnchoke(this CoordinatorHooks hooks, PeerHash peer)
         {
-            sender.Send(new CoordinatorGenericMessage("interested"));
+            hooks.CallMessageRequested(peer, new CoordinatorGenericMessage("unchoke"));
         }
 
-        public static void CallPeerConnected(this CoordinatorHooks hooks, PeerHash peer)
+        public static void SendInterested(this CoordinatorHooks hooks, PeerHash peer)
+        {
+            hooks.CallMessageRequested(peer, new CoordinatorGenericMessage("interested"));
+        }
+
+        public static void CallPeerConnected(this CoordinatorHooks hooks, PeerHash peer, NetworkConnection connection)
         {
             hooks.OnPeerConnected?.Invoke(new PeerConnected
             {
+                Peer = peer,
+                Connection = connection
+            });
+        }
+
+        public static void CallKeeAliveRequested(this CoordinatorHooks hooks, PeerHash peer)
+        {
+            hooks.OnKeepAliveRequested?.Invoke(new KeepAliveRequested
+            {
                 Peer = peer
+            });
+        }
+
+        public static void CallMessageRequested(this CoordinatorHooks hooks, PeerHash peer, SenderOutgoingMessage message)
+        {
+            hooks.OnMessageRequested?.Invoke(new MessageRequested
+            {
+                Peer = peer,
+                Message = message
             });
         }
 
@@ -123,18 +145,18 @@ namespace Leak.Peer.Coordinator
             });
         }
 
-        public static void CallPeerBitfieldChanged(this CoordinatorHooks hooks, PeerHash peer, Bitfield bitfield)
+        public static void CallBitfieldChanged(this CoordinatorHooks hooks, PeerHash peer, Bitfield bitfield)
         {
-            hooks.OnPeerBitfieldChanged?.Invoke(new PeerBitfieldChanged
+            hooks.OnBitfieldChanged?.Invoke(new BitfieldChanged
             {
                 Peer = peer,
                 Bitfield = bitfield,
             });
         }
 
-        public static void CallPeerBitfieldChanged(this CoordinatorHooks hooks, PeerHash peer, Bitfield bitfield, PieceInfo affected)
+        public static void CallBitfieldChanged(this CoordinatorHooks hooks, PeerHash peer, Bitfield bitfield, PieceInfo affected)
         {
-            hooks.OnPeerBitfieldChanged?.Invoke(new PeerBitfieldChanged
+            hooks.OnBitfieldChanged?.Invoke(new BitfieldChanged
             {
                 Peer = peer,
                 Bitfield = bitfield,
@@ -163,9 +185,9 @@ namespace Leak.Peer.Coordinator
             });
         }
 
-        public static void CallPeerStatusChanged(this CoordinatorHooks hooks, PeerHash peer, PeerState state)
+        public static void CallStatusChanged(this CoordinatorHooks hooks, PeerHash peer, PeerState state)
         {
-            hooks.OnPeerStatusChanged?.Invoke(new PeerStatusChanged
+            hooks.OnStatusChanged?.Invoke(new StatusChanged
             {
                 Peer = peer,
                 State = state,

@@ -28,6 +28,8 @@ using Leak.Networking.Events;
 using Leak.Peer.Coordinator;
 using Leak.Peer.Coordinator.Events;
 using Leak.Peer.Negotiator;
+using Leak.Peer.Receiver;
+using Leak.Peer.Sender;
 using Leak.Tasks;
 using Leak.Tracker.Get;
 using Leak.Tracker.Get.Events;
@@ -59,7 +61,10 @@ namespace Leak.Client.Swarm
         public PeerConnector Connector { get; set; }
         public PeerListener Listener { get; set; }
         public HandshakeNegotiator Negotiator { get; set; }
-        public CoordinatorService Glue { get; set; }
+
+        public ReceiverService Receiver { get; set; }
+        public SenderService Sender { get; set; }
+        public CoordinatorService Coordinator { get; set; }
 
         public MetafileService MetaStore { get; set; }
         public MetagetService MetaGet { get; set; }
@@ -73,12 +78,17 @@ namespace Leak.Client.Swarm
         public void Start()
         {
             StartMemory();
+            StartDataMap();
+
             StartNetwork();
             StartNegotiator();
+
+            StartSender();
+            StartReceiver();
+            StartCoordinator();
+
             StartConnector();
             StartListener();
-            StartGlue();
-            StartDataMap();
             StartTrackerGet();
 
             Completion.SetResult(new SwarmSession(this));
@@ -116,7 +126,7 @@ namespace Leak.Client.Swarm
             StartDataGet();
             StartDataShare();
 
-            Glue.Configuration.AnnounceBitfield = true;
+            Coordinator.Configuration.AnnounceBitfield = true;
         }
 
         private void StartMemory()
@@ -183,7 +193,33 @@ namespace Leak.Client.Swarm
             }
         }
 
-        private void StartGlue()
+        private void StartSender()
+        {
+            SenderHooks hooks = new SenderHooks
+            {
+            };
+
+            Sender =
+                new SenderBuilder()
+                    .WithHash(Hash)
+                    .WithDefinition(new MessageDefinition())
+                    .Build(hooks);
+        }
+
+        private void StartReceiver()
+        {
+            ReceiverHooks hooks = new ReceiverHooks
+            {
+                OnMessageReceived = data => Coordinator?.Handle(data)
+            };
+
+            Receiver =
+                new ReceiverBuilder()
+                    .WithDefinition(new MessageDefinition())
+                    .Build(hooks);
+        }
+
+        private void StartCoordinator()
         {
             MetadataHooks metadata = new MetadataHooks
             {
@@ -202,23 +238,24 @@ namespace Leak.Client.Swarm
             {
                 OnPeerConnected = OnPeerConnected,
                 OnPeerDisconnected = OnPeerDisconnected,
-                OnPeerBitfieldChanged = OnPeerBitfieldChanged,
-                OnPeerStatusChanged = OnPeerStatusChanged,
+                OnBitfieldChanged = OnPeerBitfieldChanged,
+                OnStatusChanged = OnPeerStatusChanged,
                 OnBlockReceived = data => DataGet?.Handle(data),
-                OnBlockRequested = data => DataShare?.Handle(data)
+                OnBlockRequested = data => DataShare?.Handle(data),
+                OnMessageRequested = data => Sender?.Send(data.Peer, data.Message),
+                OnKeepAliveRequested = data => Sender?.SendKeepAlive(data.Peer)
             };
 
-            Glue =
+            Coordinator =
                 new CoordinatorBuilder()
                     .WithHash(Hash)
                     .WithMemory(Memory)
                     .WithPipeline(Pipeline)
                     .WithMetadata(Settings, metadata)
                     .WithExchange(Settings, exchange)
-                    .WithDefinition(new MessageDefinition())
                     .Build(hooks);
 
-            Glue.Start();
+            Coordinator.Start();
         }
 
         private void StartDataMap()
@@ -311,7 +348,7 @@ namespace Leak.Client.Swarm
             MetaGet =
                 new MetagetBuilder()
                     .WithHash(Hash)
-                    .WithGlue(Glue.AsMetaGet())
+                    .WithGlue(Coordinator.AsMetaGet())
                     .WithPipeline(Pipeline)
                     .WithMetafile(MetaStore.AsMetaGet())
                     .Build(hooks);
@@ -328,7 +365,7 @@ namespace Leak.Client.Swarm
             MetaShare =
                 new MetashareBuilder()
                     .WithHash(Hash)
-                    .WithGlue(Glue)
+                    .WithGlue(Coordinator)
                     .WithPipeline(Pipeline)
                     .WithMetafile(MetaStore)
                     .Build(hooks);
@@ -371,7 +408,7 @@ namespace Leak.Client.Swarm
                 new DataGetBuilder()
                     .WithHash(Hash)
                     .WithStrategy(Settings.Strategy)
-                    .WithGlue(Glue.AsDataGet())
+                    .WithGlue(Coordinator.AsDataGet())
                     .WithPipeline(Pipeline)
                     .WithDataStore(DataStore.AsDataGet())
                     .WithDataMap(DataMap.AsDataGet())
@@ -390,7 +427,7 @@ namespace Leak.Client.Swarm
                 new DataShareBuilder()
                     .WithHash(Hash)
                     .WithPipeline(Pipeline)
-                    .WithGlue(Glue.AsDataShare())
+                    .WithGlue(Coordinator.AsDataShare())
                     .WithDataStore(DataStore.AsDataShare())
                     .WithDataMap(DataMap.AsDataShare())
                     .Build(hooks);
@@ -405,12 +442,12 @@ namespace Leak.Client.Swarm
 
         private void OnConnectionTerminated(ConnectionTerminated data)
         {
-            Glue?.Disconnect(data.Connection);
+            Coordinator?.Disconnect(data.Connection);
         }
 
         private void OnHandshakeCompleted(HandshakeCompleted data)
         {
-            if (Glue.Connect(data.Connection, data.Handshake) == false)
+            if (Coordinator.Connect(data.Connection, data.Handshake) == false)
             {
                 data.Connection.Terminate();
             }
@@ -486,6 +523,9 @@ namespace Leak.Client.Swarm
 
             Peers.Add(data.Peer);
             DataMap?.Handle(data);
+
+            Sender?.Add(data.Peer, data.Connection);
+            Receiver?.StartProcessing(data.Peer, data.Connection);
         }
 
         private void OnPeerDisconnected(PeerDisconnected data)
@@ -495,15 +535,16 @@ namespace Leak.Client.Swarm
             Peers.Remove(data.Peer);
             Remotes.Remove(data.Remote);
             DataMap?.Handle(data);
+            Sender?.Remove(data.Peer);
         }
 
-        private void OnPeerBitfieldChanged(PeerBitfieldChanged data)
+        private void OnPeerBitfieldChanged(BitfieldChanged data)
         {
             Notifications.Enqueue(new BitfieldChangedNotification(data.Peer, data.Bitfield));
             DataMap?.Handle(data);
         }
 
-        private void OnPeerStatusChanged(PeerStatusChanged data)
+        private void OnPeerStatusChanged(StatusChanged data)
         {
             Notifications.Enqueue(new StatusChangedNotification(data.Peer, data.State));
             DataMap?.Handle(data);
@@ -547,7 +588,7 @@ namespace Leak.Client.Swarm
             Metainfo = data.Metainfo;
             Notifications.Enqueue(new MetafileCompletedNotification(Metainfo));
 
-            Glue?.Handle(data);
+            Coordinator?.Handle(data);
             DataStore?.Handle(data);
             DataMap?.Handle(data);
         }
@@ -571,7 +612,7 @@ namespace Leak.Client.Swarm
             DataGet?.Handle(data);
             DataShare?.Handle(data);
 
-            Glue?.Handle(data);
+            Coordinator?.Handle(data);
             TrackerGet.Announce(Hash);
         }
 

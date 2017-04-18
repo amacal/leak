@@ -22,7 +22,7 @@ namespace Leak.Data.Map.Components
             get { return ranking; }
         }
 
-        public void Handle(PeerBitfieldChanged data)
+        public void Handle(BitfieldChanged data)
         {
             byPeer[data.Peer] = data.Bitfield;
 

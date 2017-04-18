@@ -1,121 +1,109 @@
 ﻿using FluentAssertions;
 using Leak.Testing;
 using NUnit.Framework;
-using System.Threading.Tasks;
+using FakeItEasy;
+using Leak.Common;
+using Leak.Networking.Core;
+using Leak.Peer.Receiver.Events;
 
 namespace Leak.Extensions.Metadata.Tests
 {
     public class MetadataTests
     {
+        // ShouldTriggerMessageIgnoredWhenSpecificExtensionNotSupported
+        // ShouldTriggerMessageIgnoredWhenAllExtensionsDisabled
+
         [Test]
-        public async Task ShouldTriggerMetadataRequest()
+        public void ShouldTriggerMetadataRequestedWhenLocal()
         {
             using (MetadataFixture fixture = new MetadataFixture())
-            using (MetadataSession session = await fixture.Start())
+            using (MetadataSession session = fixture.Start())
             {
-                Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataRequestReceived, data =>
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+                Handshake handshake = new Handshake(PeerHash.Random(), PeerHash.Random(), session.Coordinator.Hash, HandshakeOptions.Extended);
+
+                MessageReceived extended = new MessageReceived
                 {
-                    data.Peer.Should().Be(session.Right.Peer);
-                    data.Hash.Should().Be(session.Hash);
+                    Type = "extended",
+                    Peer = handshake.Remote,
+                    Payload = new MetadataMessage("d1:md11:ut_metadatai3ee13:metadata_sizei31235ee")
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Plugin.Hooks.OnMetadataRequestSent, data =>
+                {
+                    data.Peer.Should().Be(handshake.Remote);
+                    data.Hash.Should().Be(session.Coordinator.Hash);
                     data.Piece.Should().Be(7);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataRequestSent, data =>
-                {
-                    data.Peer.Should().Be(session.Left.Peer);
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(7);
-                });
+                session.Coordinator.Connect(connection, handshake);
+                session.Coordinator.Handle(extended);
 
-                using (MetadataInstance iLeft = session.Left.Build())
-                using (MetadataInstance iRight = session.Right.Build())
-                {
-                    iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
-                    iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
-
-                    received.Wait().Should().BeTrue();
-                    iRight.Service.SendMetadataRequest(session.Left.Peer, 7);
-                }
-
-                left.Wait().Should().BeTrue();
-                right.Wait().Should().BeTrue();
+                session.Coordinator.SendMetadataRequest(handshake.Remote, 7);
+                handler.Wait().Should().BeTrue();
             }
         }
 
         [Test]
-        public async Task ShouldTriggerMetadataReject()
+        public void ShouldTriggerMetadataRejectWhenLocal()
         {
             using (MetadataFixture fixture = new MetadataFixture())
-            using (MetadataSession session = await fixture.Start())
+            using (MetadataSession session = fixture.Start())
             {
-                Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataRejectReceived, data =>
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+                Handshake handshake = new Handshake(PeerHash.Random(), PeerHash.Random(), session.Coordinator.Hash, HandshakeOptions.None);
+
+                MessageReceived extended = new MessageReceived
                 {
-                    data.Peer.Should().Be(session.Right.Peer);
-                    data.Hash.Should().Be(session.Hash);
+                    Type = "extended",
+                    Peer = handshake.Remote,
+                    Payload = new MetadataMessage("d1:md11:ut_metadatai3ee13:metadata_sizei31235ee")
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Plugin.Hooks.OnMetadataRejectSent, data =>
+                {
+                    data.Peer.Should().Be(handshake.Remote);
+                    data.Hash.Should().Be(session.Coordinator.Hash);
                     data.Piece.Should().Be(7);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataRejectSent, data =>
-                {
-                    data.Peer.Should().Be(session.Left.Peer);
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(7);
-                });
+                session.Coordinator.Connect(connection, handshake);
+                session.Coordinator.Handle(extended);
 
-                using (MetadataInstance iLeft = session.Left.Build())
-                using (MetadataInstance iRight = session.Right.Build())
-                {
-                    iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
-                    iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
-
-                    received.Wait().Should().BeTrue();
-                    iRight.Service.SendMetadataReject(session.Left.Peer, 7);
-                }
-
-                left.Wait().Should().BeTrue();
-                right.Wait().Should().BeTrue();
+                session.Coordinator.SendMetadataReject(handshake.Remote, 7);
+                handler.Wait().Should().BeTrue();
             }
         }
 
         [Test]
-        public async Task ShouldTriggerMetadataReceive()
+        public void ShouldTriggerMetadataReceiveWhenLocal()
         {
             using (MetadataFixture fixture = new MetadataFixture())
-            using (MetadataSession session = await fixture.Start())
+            using (MetadataSession session = fixture.Start())
             {
-                Trigger received = Trigger.Bind(ref session.Left.Hooks.OnExtensionListReceived);
-                Trigger left = Trigger.Bind(ref session.Left.Metadata.OnMetadataPieceReceived, data =>
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+                Handshake handshake = new Handshake(PeerHash.Random(), PeerHash.Random(), session.Coordinator.Hash, HandshakeOptions.None);
+
+                MessageReceived extended = new MessageReceived
                 {
-                    data.Peer.Should().Be(session.Right.Peer);
-                    data.Hash.Should().Be(session.Hash);
+                    Type = "extended",
+                    Peer = handshake.Remote,
+                    Payload = new MetadataMessage("d1:md11:ut_metadatai3ee13:metadata_sizei31235ee")
+                };
+
+                Trigger handler = Trigger.Bind(ref session.Plugin.Hooks.OnMetadataPieceSent, data =>
+                {
+                    data.Peer.Should().Be(handshake.Remote);
+                    data.Hash.Should().Be(session.Coordinator.Hash);
                     data.Piece.Should().Be(7);
-                    data.Data.Should().NotBeNull();
-                    data.Data.Length.Should().Be(1023);
+                    data.Data?.Length.Should().Be(1023);
                 });
 
-                Trigger right = Trigger.Bind(ref session.Right.Metadata.OnMetadataPieceSent, data =>
-                {
-                    data.Peer.Should().Be(session.Left.Peer);
-                    data.Hash.Should().Be(session.Hash);
-                    data.Piece.Should().Be(7);
-                    data.Data.Should().NotBeNull();
-                    data.Data.Length.Should().Be(1023);
-                });
+                session.Coordinator.Connect(connection, handshake);
+                session.Coordinator.Handle(extended);
 
-                using (MetadataInstance iLeft = session.Left.Build())
-                using (MetadataInstance iRight = session.Right.Build())
-                {
-                    iLeft.Service.Connect(session.Right.Connection, session.Right.Handshake);
-                    iRight.Service.Connect(session.Left.Connection, session.Left.Handshake);
-
-                    received.Wait().Should().BeTrue();
-                    iRight.Service.SendMetadataPiece(session.Left.Peer, 7, 128, new byte[1023]);
-                }
-
-                left.Wait().Should().BeTrue();
-                right.Wait().Should().BeTrue();
+                session.Coordinator.SendMetadataPiece(handshake.Remote, 7, 6 * 16384 + 1023, new byte[1023]);
+                handler.Wait().Should().BeTrue();
             }
         }
     }

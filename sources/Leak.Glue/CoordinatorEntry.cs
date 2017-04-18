@@ -2,8 +2,6 @@
 using Leak.Common;
 using Leak.Extensions;
 using Leak.Networking.Core;
-using Leak.Peer.Receiver;
-using Leak.Peer.Sender;
 
 namespace Leak.Peer.Coordinator
 {
@@ -26,9 +24,5 @@ namespace Leak.Peer.Coordinator
         public DateTime Timestamp;
 
         public MoreContainer More;
-
-        public Receiver.ReceiverService Loopy;
-
-        public SenderService Commy;
     }
 }

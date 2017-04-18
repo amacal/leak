@@ -2,10 +2,8 @@
 
 namespace Leak.Peer.Coordinator.Events
 {
-    public class PeerBitfieldChanged
+    public class KeepAliveRequested
     {
         public PeerHash Peer;
-        public Bitfield Bitfield;
-        public PieceInfo Affected;
     }
 }

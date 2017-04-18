@@ -105,7 +105,7 @@ namespace Leak.Data.Map.Tests
         [Test]
         public void ShouldTriggerBlockReserved()
         {
-            PeerBitfieldChanged bitfieldChanged = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChanged = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(false, true)
@@ -140,13 +140,13 @@ namespace Leak.Data.Map.Tests
         [Test]
         public void ShouldTriggerBlockReservedRarestFirst()
         {
-            PeerBitfieldChanged bitfieldChangedA = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedA = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, true)
             };
 
-            PeerBitfieldChanged bitfieldChangedB = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedB = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, false)
@@ -179,13 +179,13 @@ namespace Leak.Data.Map.Tests
         [Test]
         public void ShouldTriggerBlockReservedRarestFirstForNotCompletedPieces()
         {
-            PeerBitfieldChanged bitfieldChangedA = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedA = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, true)
             };
 
-            PeerBitfieldChanged bitfieldChangedB = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedB = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, false)
@@ -224,13 +224,13 @@ namespace Leak.Data.Map.Tests
         [Test]
         public void ShouldTriggerBlockReservedSequential()
         {
-            PeerBitfieldChanged bitfieldChangedA = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedA = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, true)
             };
 
-            PeerBitfieldChanged bitfieldChangedB = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedB = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, false)
@@ -263,13 +263,13 @@ namespace Leak.Data.Map.Tests
         [Test]
         public void ShouldTriggerBlockReservedSequentialForNotCompletedPieces()
         {
-            PeerBitfieldChanged bitfieldChangedA = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedA = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, true)
             };
 
-            PeerBitfieldChanged bitfieldChangedB = new PeerBitfieldChanged
+            BitfieldChanged bitfieldChangedB = new BitfieldChanged
             {
                 Peer = PeerHash.Random(),
                 Bitfield = Bitfield.Sequence(true, false)

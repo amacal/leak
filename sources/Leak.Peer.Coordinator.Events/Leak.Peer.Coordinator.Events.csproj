@@ -39,10 +39,12 @@
     <Compile Include="ExtensionDataSent.cs" />
     <Compile Include="ExtensionListReceived.cs" />
     <Compile Include="ExtensionListSent.cs" />
-    <Compile Include="PeerBitfieldChanged.cs" />
+    <Compile Include="BitfieldChanged.cs" />
+    <Compile Include="KeepAliveRequested.cs" />
+    <Compile Include="MessageRequested.cs" />
     <Compile Include="PeerConnected.cs" />
     <Compile Include="PeerDisconnected.cs" />
-    <Compile Include="PeerStatusChanged.cs" />
+    <Compile Include="StatusChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +55,10 @@
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">
       <Project>{46A28D26-45DB-4BCF-A428-ED26546692C0}</Project>
       <Name>Leak.Networking.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Sender.Core\Leak.Peer.Sender.Core.csproj">
+      <Project>{715DE207-2F68-449D-8B68-32F854FC421F}</Project>
+      <Name>Leak.Peer.Sender.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

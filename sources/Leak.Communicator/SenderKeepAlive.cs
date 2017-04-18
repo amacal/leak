@@ -3,7 +3,7 @@ using Leak.Networking.Core;
 
 namespace Leak.Peer.Sender
 {
-    public class SenderKeepAliveMessage : NetworkOutgoingMessage
+    public class SenderKeepAlive : NetworkOutgoingMessage
     {
         public int Length
         {

@@ -147,6 +147,14 @@
       <Project>{A78A0462-183E-4E2D-97B1-5F79D674EAC7}</Project>
       <Name>Leak.Peer.Coordinator.Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Receiver.Events\Leak.Peer.Receiver.Events.csproj">
+      <Project>{52574E78-5B0D-4375-86B3-82AED7EF9234}</Project>
+      <Name>Leak.Peer.Receiver.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leak.Peer.Sender.Core\Leak.Peer.Sender.Core.csproj">
+      <Project>{715DE207-2F68-449D-8B68-32F854FC421F}</Project>
+      <Name>Leak.Peer.Sender.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Leak.Repository\Leak.Data.Store.csproj">
       <Project>{F0889175-1FD9-40D1-BB9E-CFDD3DB8B59F}</Project>
       <Name>Leak.Data.Store</Name>

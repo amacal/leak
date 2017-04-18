@@ -1,30 +1,35 @@
 ﻿using System;
+using Leak.Common;
 using Leak.Networking.Core;
 
 namespace Leak.Peer.Sender.Tests
 {
     public class SenderSession : IDisposable
     {
-        private readonly SenderService communicator;
-        private readonly NetworkConnection sender;
-        private readonly NetworkConnection receiver;
+        private readonly SenderService sender;
 
-        public SenderSession(SenderService communicator, NetworkConnection sender, NetworkConnection receiver)
+        public SenderSession(SenderService sender)
         {
-            this.communicator = communicator;
             this.sender = sender;
-            this.receiver = receiver;
         }
 
-        public SenderService Communicator
+        public FileHash Hash
         {
-            get { return communicator; }
+            get { return FileHash.Random(); }
+        }
+
+        public SenderService Sender
+        {
+            get { return sender; }
+        }
+
+        public SenderHooks Hooks
+        {
+            get { return sender.Hooks; }
         }
 
         public void Dispose()
         {
-            sender.Terminate();
-            receiver.Terminate();
         }
     }
 }
