@@ -52,7 +52,7 @@ namespace Leak.Peer.Coordinator.Tests
         }
 
         [Test]
-        public void ShouldTriggerStatusChangedWhenLocalUnchoked()
+        public void ShouldTriggerStatusChangedWhenLocalHasUnchoked()
         {
             using (CoordinatorFixture fixture = new CoordinatorFixture())
             using (CoordinatorSession session = fixture.Start())
@@ -70,7 +70,34 @@ namespace Leak.Peer.Coordinator.Tests
                 });
 
                 session.Coordinator.Connect(connection, handshake);
-                session.Coordinator.Unchoke(handshake.Remote);
+                session.Coordinator.Choke(handshake.Remote, false);
+
+                handler.Wait().Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void ShouldTriggerStatusChangedWhenLocalHasChoked()
+        {
+            using (CoordinatorFixture fixture = new CoordinatorFixture())
+            using (CoordinatorSession session = fixture.Start())
+            {
+                NetworkConnection connection = A.Fake<NetworkConnection>();
+                Handshake handshake = new Handshake(PeerHash.Random(), PeerHash.Random(), session.Coordinator.Hash, HandshakeOptions.None);
+
+                session.Coordinator.Connect(connection, handshake);
+                session.Coordinator.Choke(handshake.Remote, false);
+
+                Trigger handler = Trigger.Bind(ref session.Coordinator.Hooks.OnStatusChanged, data =>
+                {
+                    data.Peer.Should().Be(handshake.Remote);
+                    data.State.IsLocalChokingRemote.Should().BeTrue();
+                    data.State.IsLocalInterestedInRemote.Should().BeFalse();
+                    data.State.IsRemoteChokingLocal.Should().BeTrue();
+                    data.State.IsRemoteInterestedInLocal.Should().BeFalse();
+                });
+
+                session.Coordinator.Choke(handshake.Remote, true);
 
                 handler.Wait().Should().BeTrue();
             }

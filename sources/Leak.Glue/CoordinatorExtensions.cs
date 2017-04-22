@@ -95,14 +95,12 @@ namespace Leak.Peer.Coordinator
             hooks.CallMessageRequested(peer, new CoordinatorExtendedMessage(extended));
         }
 
-        public static void SendChoke(this CoordinatorHooks hooks, PeerHash peer)
+        public static void SendChoke(this CoordinatorHooks hooks, PeerHash peer, bool value)
         {
-            hooks.CallMessageRequested(peer, new CoordinatorGenericMessage("choke"));
-        }
+            string type = value ? "choke" : "unchoke";
+            SenderOutgoingMessage message = new CoordinatorGenericMessage(type);
 
-        public static void SendUnchoke(this CoordinatorHooks hooks, PeerHash peer)
-        {
-            hooks.CallMessageRequested(peer, new CoordinatorGenericMessage("unchoke"));
+            hooks.CallMessageRequested(peer, message);
         }
 
         public static void SendInterested(this CoordinatorHooks hooks, PeerHash peer)

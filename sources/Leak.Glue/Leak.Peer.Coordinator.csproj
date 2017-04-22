@@ -37,6 +37,7 @@
     <Compile Include="CoordinatorBuilder.cs" />
     <Compile Include="CoordinatorCollection.cs" />
     <Compile Include="CoordinatorConfiguration.cs" />
+    <Compile Include="CoordinatorContext.cs" />
     <Compile Include="CoordinatorDependencies.cs" />
     <Compile Include="CoordinatorEntry.cs" />
     <Compile Include="CoordinatorExtendedMessage.cs" />

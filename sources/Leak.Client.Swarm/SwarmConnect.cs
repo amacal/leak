@@ -447,15 +447,12 @@ namespace Leak.Client.Swarm
 
         private void OnHandshakeCompleted(HandshakeCompleted data)
         {
-            if (Coordinator.Connect(data.Connection, data.Handshake) == false)
-            {
-                data.Connection.Terminate();
-            }
+            Coordinator?.Connect(data.Connection, data.Handshake);
         }
 
         public void OnConnectionEstablished(ConnectionEstablished data)
         {
-            Negotiator.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Localhost, Hash, HandshakeOptions.Extended));
+            Negotiator?.Start(data.Connection, new HandshakeNegotiatorActiveInstance(Localhost, Hash, HandshakeOptions.Extended));
         }
 
         private void OnConnectionArrived(ConnectionArrived data)

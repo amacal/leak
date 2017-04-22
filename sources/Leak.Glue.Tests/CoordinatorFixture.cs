@@ -1,17 +1,16 @@
 ﻿using System;
 using Leak.Common;
-using Leak.Tasks;
+using Leak.Testing;
 
 namespace Leak.Peer.Coordinator.Tests
 {
     public class CoordinatorFixture : IDisposable
     {
-        private readonly LeakPipeline pipeline;
+        private readonly PipelineSimulator pipeline;
 
         public CoordinatorFixture()
         {
-            pipeline = new LeakPipeline();
-            pipeline.Start();
+            pipeline = new PipelineSimulator();
         }
 
         public CoordinatorSession Start()
@@ -27,7 +26,6 @@ namespace Leak.Peer.Coordinator.Tests
 
         public void Dispose()
         {
-            pipeline?.Stop();
         }
     }
 }
