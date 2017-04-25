@@ -40,23 +40,33 @@ namespace Leak.Sockets
 
             Sockaddrs.Invoke(Buffer, Affected, 32, 32, out localAddr, out localAddrLength, out remoteAddr, out remoteAddrLength);
 
-            byte[] localData = new byte[localAddrLength];
-            byte[] remoteData = new byte[remoteAddrLength];
+            try
+            {
+                byte[] localData = new byte[localAddrLength];
+                byte[] remoteData = new byte[remoteAddrLength];
 
-            Marshal.Copy(remoteAddr, remoteData, 0, remoteAddrLength);
-            Marshal.Copy(localAddr, localData, 0, localAddrLength);
+                Marshal.Copy(remoteAddr, remoteData, 0, remoteAddrLength);
+                Marshal.Copy(localAddr, localData, 0, localAddrLength);
 
-            byte[] localAddress = new byte[4];
-            int localPort = 256 * localData[2] + localData[3];
+                byte[] localAddress = new byte[4];
+                int localPort = 256 * localData[2] + localData[3];
 
-            byte[] remoteAddress = new byte[4];
-            int remotePort = 256 * remoteData[2] + remoteData[3];
+                byte[] remoteAddress = new byte[4];
+                int remotePort = 256 * remoteData[2] + remoteData[3];
 
-            Array.Copy(localData, 4, localAddress, 0, 4);
-            Array.Copy(remoteData, 4, remoteAddress, 0, 4);
+                Array.Copy(localData, 4, localAddress, 0, 4);
+                Array.Copy(remoteData, 4, remoteAddress, 0, 4);
 
-            local = new IPEndPoint(new IPAddress(localAddress), localPort);
-            remote = new IPEndPoint(new IPAddress(remoteAddress), remotePort);
+                local = new IPEndPoint(new IPAddress(localAddress), localPort);
+                remote = new IPEndPoint(new IPAddress(remoteAddress), remotePort);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                string message = $"{ex.Message} local={localAddrLength} remote={remoteAddrLength}";
+                Exception target = new IndexOutOfRangeException(message, ex);
+
+                throw target;
+            }
         }
     }
 }

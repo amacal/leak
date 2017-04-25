@@ -24,13 +24,16 @@ namespace Leak.Data.Map.Components
 
         public void Handle(BitfieldChanged data)
         {
-            byPeer[data.Peer] = data.Bitfield;
-
-            if (data.Affected == null)
+            if (data.Bitfield != null)
+            {
+                byPeer[data.Peer] = data.Bitfield;
                 ranking.Add(data.Bitfield);
+            }
 
             if (data.Affected != null)
+            {
                 ranking.Add(data.Affected);
+            }
         }
 
         public void Handle(PeerDisconnected data)
