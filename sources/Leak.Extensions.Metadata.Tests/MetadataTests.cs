@@ -36,10 +36,12 @@ namespace Leak.Extensions.Metadata.Tests
                     data.Piece.Should().Be(7);
                 });
 
+                session.Coordinator.Start();
                 session.Coordinator.Connect(connection, handshake);
-                session.Coordinator.Handle(extended);
 
+                session.Coordinator.Handle(extended);
                 session.Coordinator.SendMetadataRequest(handshake.Remote, 7);
+
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -67,10 +69,12 @@ namespace Leak.Extensions.Metadata.Tests
                     data.Piece.Should().Be(7);
                 });
 
+                session.Coordinator.Start();
                 session.Coordinator.Connect(connection, handshake);
-                session.Coordinator.Handle(extended);
 
+                session.Coordinator.Handle(extended);
                 session.Coordinator.SendMetadataReject(handshake.Remote, 7);
+
                 handler.Wait().Should().BeTrue();
             }
         }
@@ -99,10 +103,12 @@ namespace Leak.Extensions.Metadata.Tests
                     data.Data?.Length.Should().Be(1023);
                 });
 
+                session.Coordinator.Start();
                 session.Coordinator.Connect(connection, handshake);
-                session.Coordinator.Handle(extended);
 
+                session.Coordinator.Handle(extended);
                 session.Coordinator.SendMetadataPiece(handshake.Remote, 7, 6 * 16384 + 1023, new byte[1023]);
+
                 handler.Wait().Should().BeTrue();
             }
         }

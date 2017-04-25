@@ -36,10 +36,12 @@ namespace Leak.Extensions.Peers.Tests
                     data.Remotes.Should().Contain(remote);
                 });
 
+                session.Coordinator.Start();
                 session.Coordinator.Connect(connection, handshake);
-                session.Coordinator.Handle(extended);
 
+                session.Coordinator.Handle(extended);
                 session.Coordinator.SendPeers(handshake.Remote, remote);
+
                 handler.Wait().Should().BeTrue();
             }
         }
