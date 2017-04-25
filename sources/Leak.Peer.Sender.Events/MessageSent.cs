@@ -9,6 +9,6 @@ namespace Leak.Peer.Sender.Events
 
         public string Type;
 
-        public SenderOutgoingMessage Payload;
+        public SenderMessage Payload;
     }
 }

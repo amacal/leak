@@ -5,7 +5,7 @@ using Leak.Peer.Sender.Core;
 
 namespace Leak.Peer.Coordinator
 {
-    public class CoordinatorBitfieldMessage : SenderOutgoingMessage
+    public class CoordinatorBitfieldMessage : SenderMessage
     {
         private readonly byte[] data;
 

@@ -6,6 +6,6 @@ namespace Leak.Peer.Coordinator.Events
     public class MessageRequested
     {
         public PeerHash Peer;
-        public SenderOutgoingMessage Message;
+        public SenderMessage Message;
     }
 }

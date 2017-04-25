@@ -90,7 +90,10 @@ namespace Leak.Networking
         /// <param name="handler">An instance of the incoming message handler.</param>
         public void Receive(NetworkIncomingMessageHandler handler)
         {
-            incoming.ReceiveOrCallback(handler);
+            if (listener.IsAvailable(identifier))
+            {
+                incoming.ReceiveOrCallback(handler);
+            }
         }
 
         /// <summary>
@@ -99,7 +102,14 @@ namespace Leak.Networking
         /// <param name="message">An instance of the outgoing message.</param>
         public void Send(NetworkOutgoingMessage message)
         {
-            listener.Schedule(new NetworkPoolSend(identifier, outgoing, message));
+            if (listener.IsAvailable(identifier))
+            {
+                listener.Schedule(new NetworkPoolSend(identifier, outgoing, message));
+            }
+            else
+            {
+                message.Release();
+            }
         }
 
         /// <summary>

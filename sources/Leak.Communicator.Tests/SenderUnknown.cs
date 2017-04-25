@@ -3,7 +3,7 @@ using Leak.Peer.Sender.Core;
 
 namespace Leak.Peer.Sender.Tests
 {
-    public class SenderUnknown : SenderOutgoingMessage, NetworkOutgoingMessage
+    public class SenderUnknown : SenderMessage, NetworkOutgoingMessage
     {
         public string Type
         {

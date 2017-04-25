@@ -79,7 +79,7 @@ namespace Leak.Networking
                 return connection;
             }
 
-            throw new InvalidOperationException();
+            return connection;
         }
     }
 }

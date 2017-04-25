@@ -4,7 +4,7 @@ using Leak.Peer.Sender.Core;
 
 namespace Leak.Peer.Coordinator
 {
-    public class CoordinatorGenericMessage : SenderOutgoingMessage
+    public class CoordinatorGenericMessage : SenderMessage
     {
         private readonly string type;
 

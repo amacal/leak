@@ -2,7 +2,7 @@
 
 namespace Leak.Peer.Sender.Core
 {
-    public interface SenderOutgoingMessage
+    public interface SenderMessage
     {
         string Type { get; }
 

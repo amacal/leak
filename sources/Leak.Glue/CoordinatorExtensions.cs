@@ -98,7 +98,7 @@ namespace Leak.Peer.Coordinator
         public static void SendChoke(this CoordinatorHooks hooks, PeerHash peer, bool value)
         {
             string type = value ? "choke" : "unchoke";
-            SenderOutgoingMessage message = new CoordinatorGenericMessage(type);
+            SenderMessage message = new CoordinatorGenericMessage(type);
 
             hooks.CallMessageRequested(peer, message);
         }
@@ -125,7 +125,7 @@ namespace Leak.Peer.Coordinator
             });
         }
 
-        public static void CallMessageRequested(this CoordinatorHooks hooks, PeerHash peer, SenderOutgoingMessage message)
+        public static void CallMessageRequested(this CoordinatorHooks hooks, PeerHash peer, SenderMessage message)
         {
             hooks.OnMessageRequested?.Invoke(new MessageRequested
             {

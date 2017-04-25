@@ -6,7 +6,7 @@ using Leak.Peer.Sender.Core;
 
 namespace Leak.Peer.Coordinator
 {
-    public class CoordinatorExtendedMessage : SenderOutgoingMessage
+    public class CoordinatorExtendedMessage : SenderMessage
     {
         private readonly Extended extended;
 

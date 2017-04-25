@@ -34,7 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SenderOutgoingMessage.cs" />
+    <Compile Include="SenderMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leak.Networking.Core\Leak.Networking.Core.csproj">

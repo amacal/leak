@@ -39,7 +39,7 @@ namespace Leak.Peer.Sender
             }
         }
 
-        public void Send(PeerHash peer, SenderOutgoingMessage message)
+        public void Send(PeerHash peer, SenderMessage message)
         {
             NetworkConnection connection = context.Collection.Find(peer);
             SenderDefinition definition = context.Configuration.Definition;
