@@ -86,10 +86,18 @@ Target "MergeApp" (fun _ ->
             info.Arguments <- sprintf "-target:library -verbose -wildcards -lib:%s -out:%s %s" ("./release/leak") ("./merge/Leak.Core.dll") ("./release/leak/Leak.*.dll")
             ) (TimeSpan.FromMinutes 5.)
 
+    let io =
+        ExecProcess (fun info ->
+            info.FileName <- "./build" @@ "tools" @@ "ILRepack" @@ "tools" @@ "ILRepack.exe"
+            info.WorkingDirectory <- "./build"
+            info.Arguments <- sprintf "-target:library -verbose -wildcards -lib:%s -out:%s %s %s %s" ("./release/leak") ("./merge/Leak.IO.dll") ("./release/leak/Leak.Completion.dll") ("./release/leak/Leak.Files.dll") ("./release/leak/Leak.Sockets.dll")
+            ) (TimeSpan.FromMinutes 5.)
+
     if leak <> 0 then failwithf "Error during ILRepack execution."
     if direct <> 0 then failwithf "Error during ILRepack execution."
     if tracker <> 0 then failwithf "Error during ILRepack execution."
     if core <> 0 then failwithf "Error during ILRepack execution."
+    if io <> 0 then failwithf "Error during ILRepack execution."
 )
 
 Target "CreatePackage" (fun _ ->
@@ -103,7 +111,17 @@ Target "CreatePackage" (fun _ ->
             WorkingDir = "./build/merge"
             Dependencies = []
             Files = [( "Leak.Core.dll", Some "lib\\net45", None )]
-            Publish = false }) "./build/build.nuspec")
+            Publish = false }) "./build/leak-core.nuspec"
+
+    NuGet (fun p ->
+        { p with
+            Version = (getBuildParamOrDefault "version" "1.0.0.dev")
+            OutputPath = "./build/package"
+            WorkingDir = "./build/merge"
+            Dependencies = []
+            Files = [( "Leak.IO.dll", Some "lib\\net45", None )]
+            Publish = false }) "./build/leak-io.nuspec"
+)
 
 Target "Default" (fun _ ->
     trace "Build completed."

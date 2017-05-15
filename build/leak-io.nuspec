@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <id>Leak.IO</id>
+  <title>Leak.IO</title>
+  <version>1.0</version>
+  <authors>Adrian Macal</authors>
+  <owners>Adrian Macal</owners>
+  <summary>Leak IO Library</summary>
+  <licenseUrl>https://raw.githubusercontent.com/amacal/leak/master/LICENSE.txt</licenseUrl>
+  <projectUrl>https://github.com/amacal/leak</projectUrl>
+  <iconUrl>https://raw.githubusercontent.com/amacal/leakmaster/icon.png</iconUrl>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <description>IO layer to fully benefit from use of windows completion ports.</description>
+  <copyright>Copyright Adrian Macal 2017</copyright>
+  <tags>iocp library</tags>
+  @dependencies@
+  @references@
+  </metadata>
+  @files@
+</package>
